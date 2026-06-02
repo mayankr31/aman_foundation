@@ -1,11 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useAppContext } from "@/context/AppContext";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { Loader2 } from "lucide-react";
 
 export default function LayoutWrapper({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { token, isInitializing } = useAppContext();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const isAuthPage = pathname === "/login" || pathname === "/register";
+
+  useEffect(() => {
+    if (isInitializing) return;
+
+    if (!token && !isAuthPage) {
+      router.push("/login");
+    } else if (token && isAuthPage) {
+      router.push("/");
+    }
+  }, [token, isInitializing, isAuthPage, pathname]);
+
+  if (isInitializing) {
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen bg-surface">
+        <Loader2 className="w-8 h-8 animate-spin text-[#1a7a5e]" />
+      </div>
+    );
+  }
+
+  // Redirecting state bypass
+  if (!token && !isAuthPage) {
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen bg-surface">
+        <Loader2 className="w-8 h-8 animate-spin text-[#1a7a5e]" />
+      </div>
+    );
+  }
+
+  // Render auth views without layout wraps
+  if (isAuthPage) {
+    return <div className="w-full min-h-screen">{children}</div>;
+  }
 
   return (
     <div className="flex w-full min-h-screen">
@@ -25,19 +65,19 @@ export default function LayoutWrapper({ children }) {
             </div>
             <div className="flex gap-6">
               <a
-                className="text-slate-400 hover:text-emerald-600 transition-opacity duration-300 text-xs tracking-normal"
+                className="text-slate-400 hover:text-[#1a7a5e] transition-colors duration-300 text-xs tracking-normal"
                 href="#"
               >
                 Privacy Policy
               </a>
               <a
-                className="text-slate-400 hover:text-emerald-600 transition-opacity duration-300 text-xs tracking-normal"
+                className="text-slate-400 hover:text-[#1a7a5e] transition-colors duration-300 text-xs tracking-normal"
                 href="#"
               >
                 Terms of Service
               </a>
               <a
-                className="text-slate-400 hover:text-emerald-600 transition-opacity duration-300 text-xs tracking-normal"
+                className="text-slate-400 hover:text-[#1a7a5e] transition-colors duration-300 text-xs tracking-normal"
                 href="#"
               >
                 Impact Data Transparency
@@ -49,3 +89,4 @@ export default function LayoutWrapper({ children }) {
     </div>
   );
 }
+

@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useAppContext } from "@/context/AppContext";
 
 export default function Sidebar({ isOpen, onClose }) {
   const pathname = usePathname();
+  const { user, logout } = useAppContext();
   
   // Dropdown states
   const [eduOpen, setEduOpen] = useState(false);
@@ -226,14 +228,16 @@ export default function Sidebar({ isOpen, onClose }) {
           </Link>
 
           {/* Admin & Access */}
-          <Link
-            href="/admin"
-            className={navItemClass(pathname === "/admin")}
-            onClick={onClose}
-          >
-            <span className="material-symbols-outlined">admin_panel_settings</span>
-            Admin &amp; Access
-          </Link>
+          {user?.roleName === 'ADMIN' && (
+            <Link
+              href="/admin"
+              className={navItemClass(pathname === "/admin")}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">admin_panel_settings</span>
+              Admin &amp; Access
+            </Link>
+          )}
         </div>
 
         {/* Bottom utility links */}
@@ -245,13 +249,16 @@ export default function Sidebar({ isOpen, onClose }) {
             <span className="material-symbols-outlined">help</span>
             Help
           </a>
-          <a
-            className="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-full transition-all font-medium"
-            href="#"
+          <button
+            onClick={() => {
+              logout();
+              onClose();
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-full transition-all font-medium w-full text-left bg-transparent border-none cursor-pointer outline-none"
           >
             <span className="material-symbols-outlined">logout</span>
             Logout
-          </a>
+          </button>
         </div>
       </nav>
     </>

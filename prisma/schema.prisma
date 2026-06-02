@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  BLOCKED
+  INACTIVE
+}
+
+enum Action {
+  READ
+  WRITE
+}
+
+enum PermissionType {
+  GRANT
+  DENY
+}
+
+model Role {
+  id                String           @id @default(uuid())
+  name              String           @unique
+  description       String?
+  displayInRegister Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  users             User[]
+  permissions       RolePermission[]
+}
+
+model User {
+  id          String           @id @default(uuid())
+  name        String
+  username    String           @unique
+  email       String           @unique
+  password    String
+  mobile      String?
+  roleId      String
+  status      UserStatus       @default(PENDING)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  role        Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  permissions UserPermission[]
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  app       String
+  page      String
+  action    Action
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roles RolePermission[]
+  users UserPermission[]
+
+  @@unique([app, page, action])
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model UserPermission {
+  id           String         @id @default(uuid())
+  userId       String
+  permissionId String
+  type         PermissionType @default(GRANT)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permissionId])
+}

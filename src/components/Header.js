@@ -1,6 +1,15 @@
 "use client";
 
+import { useAppContext } from "@/context/AppContext";
+
 export default function Header({ onMenuToggle }) {
+  const { user } = useAppContext();
+
+  // Extract name initials, e.g. "SA" for Super Admin
+  const initials = user?.name
+    ? user.name.split(" ").map(n => n.charAt(0)).join("").toUpperCase().slice(0, 2)
+    : "U";
+
   return (
     <header className="bg-white/85 dark:bg-slate-950/85 backdrop-blur-md text-teal-700 dark:text-teal-400 font-sans text-sm tracking-wide uppercase font-semibold sticky top-0 z-40 w-full flex justify-between items-center h-16 px-8 border-b border-surface-container/50 transition-all duration-300 flex-shrink-0">
       <div className="flex items-center gap-4">
@@ -23,14 +32,23 @@ export default function Header({ onMenuToggle }) {
             <span className="material-symbols-outlined">settings</span>
           </button>
         </div>
-        <div className="w-8 h-8 rounded-full bg-surface-container overflow-hidden shrink-0">
-          <img
-            alt="User profile avatar"
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy0YC_TGbMxUogj7u6FlVKznrRAyySoM1Wk5t86itV9-_WFTvj8S0Yzjr9GbBo8Bfm5nmRm_UZNvqkNLAOwajxpIHTPsvU3uWB_8oQCTDeLlTy5FFvFEdJbGbOLV8T87s7JItDrrR2LELtEkIRHVgt-MZ4wCsnMNliGHkwJgzEzPmZLJ3RyksBBrHyBQUOrsN9TswbWGEUCWg7Kct8wDcojEkOb4jbZtq_alD8mtnNZfS9PFgwiRKdk4k-6T8WSccDJBrvSEgUpobq"
-          />
+        
+        {/* Dynamic User Profile Container */}
+        <div className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4 h-8">
+          <div className="flex flex-col text-right hidden sm:flex">
+            <span className="text-xs font-bold text-slate-800 dark:text-white normal-case tracking-normal">
+              {user?.name || "Guest User"}
+            </span>
+            <span className="text-[10px] text-slate-400 normal-case tracking-normal leading-none mt-0.5">
+              {user?.email || "no-email@amanfoundation.org"}
+            </span>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-black text-xs shrink-0 border border-[#1a7a5e]/10">
+            {initials}
+          </div>
         </div>
       </div>
     </header>
   );
 }
+

@@ -1,446 +1,462 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState } from "react";
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus } from 'lucide-react';
+import { useAppContext } from '@/context/AppContext';
+import { useToast } from '@/context/ToastContext';
+import UserPermissionsModal from '@/components/users/UserPermissionsModal';
+import RolePermissionsModal from '@/components/users/RolePermissionsModal';
+import AddRoleModal from '@/components/users/AddRoleModal';
 
-export default function AdminAccessControl() {
-  const [simulatedRole, setSimulatedRole] = useState("Super Admin");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [activeTab, setActiveTab] = useState("User Management");
+export default function AdminPage() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actionLoading, setActionLoading] = useState(null);
+  
+  // Tab control
+  const [activeTab, setActiveTab] = useState('users'); // 'users' | 'approvals' | 'roles'
+  const [roles, setRoles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Modals state
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
 
-  // Audit Logs
-  const [auditLogs, setAuditLogs] = useState([
-    {
-      icon: "key",
-      iconColor: "text-primary border-primary",
-      title: "Role Elevated",
-      detail: (
-        <>
-          Super Admin <span className="font-semibold text-on-surface">J. Doe</span> changed role of{" "}
-          <span className="font-semibold text-on-surface">T. Smith</span> to Program Mgr.
-        </>
-      ),
-      time: "10 mins ago",
-    },
-    {
-      icon: "warning",
-      iconColor: "text-secondary border-secondary",
-      title: "Failed Login Attempt",
-      detail: (
-        <>
-          3 failed attempts detected from IP 192.168.1.45 for user{" "}
-          <span className="font-semibold text-on-surface">admin_root</span>.
-        </>
-      ),
-      time: "1 hour ago",
-    },
-    {
-      icon: "person_add",
-      iconColor: "text-on-surface-variant border-surface-variant",
-      title: "New User Invited",
-      detail: (
-        <>
-          System sent invitation email to{" "}
-          <span className="font-semibold text-on-surface">new.hire@aman.org</span>.
-        </>
-      ),
-      time: "3 hours ago",
-    },
-  ]);
+  const { token, user: currentUser, pendingApprovalsCount, refreshPendingCount } = useAppContext();
+  const toast = useToast();
 
-  const [users, setUsers] = useState([
-    {
-      initials: "AS",
-      name: "Aisha Sharma",
-      email: "aisha.s@aman.org",
-      role: "Program Mgr",
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-    },
-    {
-      initials: "RK",
-      name: "Rahul Kumar",
-      email: "rahul.k@aman.org",
-      role: "Field Officer",
-      status: "On Leave",
-      statusClass: "bg-secondary-fixed text-on-secondary-fixed",
-    },
-    {
-      initials: "MF",
-      name: "Maria Fernandez",
-      email: "maria.f@aman.org",
-      role: "Super Admin",
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-    },
-  ]);
+  const isDarkMode = true; // Match premium dark theme of dashboard panels
 
-  // Form states
-  const [newUserName, setNewUserName] = useState("");
-  const [newUserEmail, setNewUserEmail] = useState("");
-  const [newUserRole, setNewUserRole] = useState("Program Mgr");
+  useEffect(() => {
+    if (token) {
+      fetchUsers();
+      fetchRoles();
+    }
+  }, [token]);
 
-  const handleInviteUser = (e) => {
-    e.preventDefault();
-    if (!newUserName || !newUserEmail) return;
-
-    const initials = newUserName
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2);
-
-    const newUser = {
-      initials,
-      name: newUserName,
-      email: newUserEmail,
-      role: newUserRole,
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-    };
-
-    setUsers([newUser, ...users]);
-
-    // Add security audit trail log
-    const newLog = {
-      icon: "person_add",
-      iconColor: "text-primary border-primary",
-      title: "New User Invited",
-      detail: (
-        <>
-          System Admin invited <span className="font-semibold text-on-surface">{newUserName}</span> (
-          {newUserEmail}) as {newUserRole}.
-        </>
-      ),
-      time: "Just now",
-    };
-    setAuditLogs([newLog, ...auditLogs]);
-
-    setNewUserName("");
-    setNewUserEmail("");
-    setNewUserRole("Program Mgr");
-    setShowInviteModal(false);
+  const fetchUsers = async () => {
+    if (!token) return;
+    try {
+      setLoading(true);
+      const res = await fetch('/api/users', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch users');
+      setUsers(data.data || []);
+      refreshPendingCount();
+    } catch (err) {
+      setError(err.message);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filteredUsers = users.filter(
-    (u) =>
-      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const fetchRoles = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch('/api/roles?all=true', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setRoles(data.data || []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch roles:', err);
+    }
+  };
+
+  const handleStatusUpdate = async (userId, newStatus) => {
+    try {
+      setActionLoading(userId);
+      const res = await fetch(`/api/users/${userId}/status`, {
+        method: 'PATCH',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `Failed to update status`);
+
+      toast.success(`User status updated to ${newStatus}.`);
+      setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
+      refreshPendingCount();
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleDeleteRole = async (roleId) => {
+    if (!window.confirm("Are you sure you want to delete this role? This action is permanent.")) return;
+
+    try {
+      const res = await fetch(`/api/roles/${roleId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete role');
+
+      toast.success("Role deleted successfully!");
+      setRoles(prev => prev.filter(r => r.id !== roleId));
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Filtered lists
+  const pendingUsers = useMemo(() => users.filter(u => u.status === 'PENDING'), [users]);
+  const activeOrInactiveUsers = useMemo(() => users.filter(u => u.status !== 'PENDING'), [users]);
+
+  const filteredUsers = useMemo(() => {
+    const list = activeTab === 'approvals' ? pendingUsers : activeOrInactiveUsers;
+    if (!searchQuery.trim()) return list;
+
+    const q = searchQuery.toLowerCase();
+    return list.filter(
+      u =>
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        u.username.toLowerCase().includes(q) ||
+        u.email.toLowerCase().includes(q) ||
+        (u.mobile && u.mobile.includes(q))
+    );
+  }, [activeTab, pendingUsers, activeOrInactiveUsers, searchQuery]);
+
+  if (currentUser?.roleName !== 'ADMIN') {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh] flex-col gap-3 font-sans">
+        <ShieldAlert className="w-12 h-12 text-rose-500 animate-pulse" />
+        <p className="text-rose-500 font-bold uppercase tracking-widest text-sm">Access Denied</p>
+        <p className="text-xs text-slate-500">Administrator authorization is required to access this system.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full p-6 md:p-10 pb-24">
-      {/* Back Link */}
-      <Link
-        href="/"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
-      >
-        <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
-          arrow_back
-        </span>
-        <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-          Back to Dashboard
-        </span>
-      </Link>
-
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+    <div className="p-8 max-w-7xl mx-auto w-full space-y-8 font-sans">
+      
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">
-            Administration Module
-          </p>
-          <h2 className="text-3xl md:text-[2.75rem] font-headline font-semibold tracking-tight leading-none text-on-surface">
-            Control Center &amp; Access Controls
-          </h2>
-          <p className="text-on-surface-variant font-body mt-2 text-sm">
-            Simulate multi-level access hierarchies, manage users, configure default settings, and track system audits.
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Admin Portal
+          </h1>
+          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mt-2">
+            Dynamic access parameters & user authorization dashboard
           </p>
         </div>
-      </div>
 
-      {/* Role Switcher Simulator (Proposal Section 2.10) */}
-      <div className="bg-primary/5 rounded-xl p-6 border border-primary/20 mb-8 font-sans flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full"></div>
-        <div className="relative z-10">
-          <h3 className="font-bold text-base text-on-surface">Access Role Simulator Switcher</h3>
-          <p className="text-xs text-on-surface-variant mt-1">Select a role to simulate permissions and data visibility limits across panels.</p>
-        </div>
-        <div className="relative z-10 font-sans text-sm">
-          <select
-            value={simulatedRole}
-            onChange={(e) => setSimulatedRole(e.target.value)}
-            className="px-4 py-2 border rounded-full focus:outline-none focus:border-primary border-outline-variant bg-transparent font-semibold cursor-pointer dark:bg-slate-900 text-on-surface"
-          >
-            <option value="Super Admin">Super Admin (All Access)</option>
-            <option value="Program Manager">Program Manager (Read-Write Hubs)</option>
-            <option value="Field Officer">Field Officer (View Only Hubs)</option>
-            <option value="Viewer">Viewer (Read Only Overview)</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Dynamic Role Capability Warning Banner */}
-      <div className="p-4 rounded-xl flex items-center justify-between border font-sans mb-8 bg-secondary-container/20 border-secondary/30 text-secondary">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined shrink-0 text-secondary">shield_person</span>
-          <p className="text-xs md:text-sm font-semibold">
-            <strong>[{simulatedRole} Permissions Active]</strong> {
-              simulatedRole === "Super Admin" ? "Full administration privileges. All system actions, user invites, settings adjustments, and audit reports are unlocked." :
-              simulatedRole === "Program Manager" ? "Moderate access. You can register beneficiaries and launch programs, but system-wide setting configurations and database resets are locked." :
-              simulatedRole === "Field Officer" ? "Standard access. You can view records and input details in Livelihood/Education hubs, but user invitation and leave approvals are locked." :
-              "Read-only visibility across hubs. No write or approval actions can be executed."
-            }
-          </p>
+          {activeTab === 'roles' && (
+            <button
+              onClick={() => setIsAddRoleOpen(true)}
+              className="px-5 py-2.5 rounded-full bg-[#1a7a5e] hover:bg-[#135d47] text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
+            >
+              <Plus size={14} /> Add Role
+            </button>
+          )}
+
+          <div className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <UsersIcon size={14} />
+            {activeOrInactiveUsers.length} Users
+          </div>
+          
+          <button
+            onClick={() => setActiveTab('approvals')}
+            className={`relative px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all border ${
+              activeTab === 'approvals'
+                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                : 'bg-slate-50 hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:border-white/10 text-slate-600 border-slate-200'
+            }`}
+          >
+            Pending Approvals <ArrowRight size={14} />
+            {pendingApprovalsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-[9px] font-black">
+                {pendingApprovalsCount}
+              </span>
+            )}
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["User Management", "Simulated Donor Progress View", "System settings & alerts", "Security Audit Logs"].map((tab) => {
-          const isActive = activeTab === tab;
-          return (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
-                isActive
-                  ? "font-semibold text-primary border-b-2 border-primary"
-                  : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
-              }`}
-            >
-              {tab}
-            </button>
-          );
-        })}
+      <div className="flex gap-2 p-1 rounded-xl bg-slate-100 dark:bg-white/5 w-fit">
+        <button
+          onClick={() => setActiveTab('users')}
+          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+            activeTab === 'users'
+              ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+          }`}
+        >
+          <Users size={14} />
+          Active Users
+        </button>
+        <button
+          onClick={() => setActiveTab('approvals')}
+          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+            activeTab === 'approvals'
+              ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+          }`}
+        >
+          <UserCheck size={14} />
+          Approvals Queue
+        </button>
+        <button
+          onClick={() => setActiveTab('roles')}
+          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+            activeTab === 'roles'
+              ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+          }`}
+        >
+          <Shield size={14} />
+          Role Switches
+        </button>
       </div>
 
-      {/* Tab Contents */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Main Panel */}
-        <div className="lg:col-span-8 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
-          {activeTab === "User Management" && (
-            <div>
-              <div className="flex justify-between items-center mb-6 bg-surface-container-lowest">
-                <h3 className="font-headline text-lg font-semibold text-on-surface">User Directory</h3>
-                {simulatedRole === "Super Admin" && (
-                  <button
-                    onClick={() => setShowInviteModal(true)}
-                    className="bg-primary text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-primary-container transition-colors font-sans cursor-pointer"
-                  >
-                    Invite User
-                  </button>
-                )}
-              </div>
-              <div className="w-full overflow-x-auto">
-                <table className="w-full text-left border-collapse font-sans text-sm">
-                  <thead>
-                    <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                      <th className="py-3 px-4">Name</th>
-                      <th className="py-3 px-4">Role</th>
-                      <th className="py-3 px-4 text-right">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredUsers.map((u, i) => (
-                      <tr key={i} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                        <td className="py-4 px-4 font-bold text-on-surface">{u.name}</td>
-                        <td className="py-4 px-4 text-on-surface-variant">{u.role}</td>
-                        <td className="py-4 px-4 text-right">
-                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${u.statusClass}`}>
-                            {u.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "Simulated Donor Progress View" && (
-            <div className="space-y-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface mb-6">Simulated Donor Dashboards View</h3>
-              
-              {/* Financial Support card */}
-              <div className="bg-surface p-5 rounded-lg border border-surface-container-high grid grid-cols-1 md:grid-cols-2 gap-4 font-sans text-sm">
-                <div>
-                  <span className="text-on-surface-variant block mb-1 font-medium">Total Grant Funding Support</span>
-                  <span className="font-headline text-2xl font-black text-primary">$250,000</span>
-                </div>
-                <div>
-                  <span className="text-on-surface-variant block mb-1 font-medium">Linked Active Programs</span>
-                  <span className="font-semibold text-on-surface">Education Phonics Drive, Sugarcane Phase 2</span>
-                </div>
-              </div>
-
-              {/* Progress Milestones */}
-              <div className="space-y-3 pl-2 border-l-2 border-surface-container">
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Funded Program Goals</p>
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-sm text-primary">check_box</span>
-                  <span className="text-sm text-on-surface-variant">Classrooms builds at Oakridge Academy completed</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-sm text-primary">check_box</span>
-                  <span className="text-sm text-on-surface-variant">45 fellows deployed in North District</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-sm text-on-surface-variant">check_box_outline_blank</span>
-                  <span className="text-sm text-on-surface">Water drip setups in Wardha Maharashtra (75% Complete)</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "System settings & alerts" && (
-            <div className="space-y-6 font-sans">
-              <h3 className="font-headline font-bold text-xl text-on-surface">System Configuration &amp; Alert settings</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Default Alert Notification Channel</label>
-                  <select className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface">
-                    <option>Email and Portal Alerts</option>
-                    <option>SMS and Email</option>
-                    <option>Portal Alerts Only</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Daily database Auto-Backup</label>
-                  <select className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface">
-                    <option>Enabled (02:00 AM)</option>
-                    <option>Disabled</option>
-                  </select>
-                </div>
-              </div>
-              <button className="bg-primary text-white text-xs font-semibold px-6 py-2.5 rounded-full hover:bg-primary-container transition-colors cursor-pointer">
-                Save System Configurations
-              </button>
-            </div>
-          )}
-
-          {activeTab === "Security Audit Logs" && (
-            <div className="space-y-6 relative pl-4 border-l-2 border-surface-container font-sans text-sm">
-              <h3 className="font-headline font-bold text-xl text-on-surface mb-6">Security Audit logs</h3>
-              {auditLogs.map((log, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <div className={`w-8 h-8 rounded-full bg-surface-container-lowest border-2 flex items-center justify-center relative z-10 shrink-0 ${log.iconColor}`}>
-                    <span className="material-symbols-outlined text-[16px]">{log.icon}</span>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-on-surface">{log.title}</div>
-                    <div className="text-xs text-on-surface-variant mt-1 leading-relaxed">{log.detail}</div>
-                    <div className="text-[10px] font-label uppercase tracking-widest text-outline mt-2">
-                      {log.time}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+      {loading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-emerald-600 dark:text-teal-400" />
         </div>
-
-        {/* Sidebar Status Info */}
-        <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 font-sans text-sm">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-4 font-sans">Role distribution</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Super Admins</span>
-                <span className="font-bold text-on-surface">2 Active</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Program Managers</span>
-                <span className="font-bold text-on-surface">12 Active</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Field Officers</span>
-                <span className="font-bold text-on-surface">34 Active</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Invite Staff Modal */}
-      {showInviteModal && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Invite New Staff / User</h3>
-              <button
-                onClick={() => setShowInviteModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleInviteUser} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Full Name
-                </label>
+      ) : (
+        <div className="space-y-6">
+          
+          {/* USERS / APPROVALS TAB */}
+          {(activeTab === 'users' || activeTab === 'approvals') && (
+            <>
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
-                  required
-                  placeholder="e.g. Timothy Smith"
-                  value={newUserName}
-                  onChange={(e) => setNewUserName(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  placeholder={`Search ${activeTab === 'users' ? 'users' : 'pending approvals'} by name, email...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3.5 rounded-2xl text-xs font-medium border outline-none transition-all bg-white dark:bg-[#0d1320] dark:border-white/5 border-slate-200 dark:text-white text-slate-900 placeholder-slate-400 dark:placeholder-slate-600 focus:border-[#1a7a5e] shadow-sm"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Corporate Email
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="e.g. timothy.s@aman.org"
-                  value={newUserEmail}
-                  onChange={(e) => setNewUserEmail(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Account Role
-                </label>
-                <select
-                  value={newUserRole}
-                  onChange={(e) => setNewUserRole(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
-                >
-                  <option value="Program Mgr">Program Mgr</option>
-                  <option value="Field Officer">Field Officer</option>
-                  <option value="System Admin">System Admin</option>
-                </select>
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowInviteModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Invite User
-                </button>
-              </div>
-            </form>
-          </div>
+
+              {filteredUsers.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 rounded-3xl border border-dashed dark:border-white/5 border-slate-200 bg-white dark:bg-[#0d1320] text-center">
+                  <div className="w-16 h-16 rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 flex items-center justify-center mb-4">
+                    <CheckCircle2 size={32} />
+                  </div>
+                  <h3 className="text-base font-bold dark:text-white text-slate-800">No entries found</h3>
+                  <p className="text-xs text-slate-400 max-w-xs mt-1">There are no matches for your query in this section.</p>
+                </div>
+              ) : (
+                <div className="bg-white dark:bg-[#0d1320] border border-slate-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[900px] text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-50 dark:bg-white/[0.02] text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                          <th className="py-4 px-6">Name</th>
+                          <th className="py-4 px-6">Username</th>
+                          <th className="py-4 px-6">Email Address</th>
+                          <th className="py-4 px-6">Mobile</th>
+                          <th className="py-4 px-6">Role</th>
+                          <th className="py-4 px-6">Status</th>
+                          <th className="py-4 px-6 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredUsers.map((item, idx) => (
+                          <motion.tr
+                            key={item.id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.02 }}
+                            className="border-t border-slate-200 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.01] transition-colors"
+                          >
+                            <td className="py-4 px-6 font-bold dark:text-white text-slate-800">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-bold">
+                                  {item.name ? item.name.charAt(0).toUpperCase() : item.username.charAt(0).toUpperCase()}
+                                </div>
+                                {item.name || item.username}
+                              </div>
+                            </td>
+                            <td className="py-4 px-6 text-slate-500">@{item.username}</td>
+                            <td className="py-4 px-6 text-slate-500">{item.email}</td>
+                            <td className="py-4 px-6 text-slate-500">{item.mobile || '—'}</td>
+                            <td className="py-4 px-6 font-semibold dark:text-gray-300 text-slate-700">
+                              <span className="px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px]">
+                                {item.role?.name?.replace('_', ' ')}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
+                                item.status === 'ACTIVE'
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                  : item.status === 'PENDING'
+                                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                              }`}>
+                                {item.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="flex items-center justify-end gap-2">
+                                {activeTab === 'approvals' ? (
+                                  <>
+                                    <button
+                                      onClick={() => handleStatusUpdate(item.id, 'ACTIVE')}
+                                      disabled={actionLoading === item.id}
+                                      className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all hover:scale-105 active:scale-100"
+                                    >
+                                      {actionLoading === item.id ? <Loader2 size={12} className="animate-spin" /> : <UserCheck size={12} />}
+                                      Approve
+                                    </button>
+                                    <button
+                                      onClick={() => handleStatusUpdate(item.id, 'REJECTED')}
+                                      disabled={actionLoading === item.id}
+                                      className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 transition-all hover:scale-105 active:scale-100"
+                                    >
+                                      {actionLoading === item.id ? <Loader2 size={12} className="animate-spin" /> : <UserX size={12} />}
+                                      Reject
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    {item.status !== 'ACTIVE' ? (
+                                      <button
+                                        onClick={() => handleStatusUpdate(item.id, 'ACTIVE')}
+                                        disabled={actionLoading === item.id}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all hover:scale-105"
+                                      >
+                                        {actionLoading === item.id ? <Loader2 size={12} className="animate-spin" /> : <UserCheck size={12} />}
+                                        Activate
+                                      </button>
+                                    ) : (
+                                      <button
+                                        onClick={() => handleStatusUpdate(item.id, 'INACTIVE')}
+                                        disabled={actionLoading === item.id}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-slate-500/10 hover:bg-slate-500/20 text-slate-500 border border-slate-500/20 transition-all hover:scale-105"
+                                      >
+                                        {actionLoading === item.id ? <Loader2 size={12} className="animate-spin" /> : <UserX size={12} />}
+                                        Deactivate
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={() => setSelectedUser(item)}
+                                      className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:border-white/10 border border-slate-200 text-slate-600 transition-all hover:scale-105"
+                                    >
+                                      <ShieldAlert size={12} />
+                                      Edit Permissions
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          </motion.tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ROLES TAB */}
+          {activeTab === 'roles' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {roles.map(roleItem => {
+                const isAdmin = roleItem.name === 'ADMIN';
+
+                return (
+                  <motion.div
+                    key={roleItem.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-6 rounded-3xl border dark:border-white/5 border-slate-200 bg-white dark:bg-[#0d1320] flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div>
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                          <Shield size={20} />
+                        </div>
+                        <span className={`px-2.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                          roleItem.displayInRegister
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                            : 'bg-slate-500/10 text-slate-500'
+                        }`}>
+                          {roleItem.displayInRegister ? 'Register Visible' : 'Hidden Role'}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-extrabold dark:text-white text-slate-800">
+                        {roleItem.name.replace('_', ' ')}
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+                        {roleItem.description || 'Provides default capability profile inside system apps.'}
+                      </p>
+                    </div>
+
+                    {!isAdmin && (
+                      <div className="flex gap-2 mt-6">
+                        <button
+                          onClick={() => setSelectedRole(roleItem)}
+                          className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-[#1a7a5e]/15 text-[#1a7a5e] hover:bg-[#1a7a5e]/25 border border-[#1a7a5e]/10 transition-colors"
+                        >
+                          <ShieldAlert size={12} />
+                          Permissions
+                        </button>
+                        <button
+                          onClick={() => handleDeleteRole(roleItem.id)}
+                          className="py-2 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/10 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+
         </div>
       )}
+
+      {/* Permissions modals */}
+      <UserPermissionsModal
+        isOpen={!!selectedUser}
+        onClose={() => setSelectedUser(null)}
+        user={selectedUser}
+        isDarkMode={isDarkMode}
+        token={token}
+      />
+
+      <RolePermissionsModal
+        isOpen={!!selectedRole}
+        onClose={() => setSelectedRole(null)}
+        role={selectedRole}
+        isDarkMode={isDarkMode}
+        token={token}
+      />
+
+      <AddRoleModal
+        isOpen={isAddRoleOpen}
+        onClose={() => setIsAddRoleOpen(false)}
+        isDarkMode={isDarkMode}
+        token={token}
+        onRoleAdded={(newRole) => setRoles(prev => [...prev, newRole])}
+      />
+      
     </div>
   );
 }
