@@ -2,84 +2,82 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { DEFAULT_STUDENTS, DEFAULT_SCHOOLS } from "@/lib/schoolsData";
 
 export default function StudentsModule() {
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeFilter, setGradeFilter] = useState("All Grades");
   const [performanceFilter, setPerformanceFilter] = useState("All Performance");
-  const [districtFilter, setDistrictFilter] = useState("All Districts");
+  const [schoolFilter, setSchoolFilter] = useState("All Schools");
+  const [showAddModal, setShowAddModal] = useState(false);
 
-  const [students, setStudents] = useState([
-    {
-      initials: "AK",
-      bgClass: "bg-primary-container text-on-primary-container",
-      name: "Aarav Kumar",
-      id: "STU-2023-089",
-      school: "Vidya Mandir High School",
-      grade: "Grade 8",
-      gradeGroup: "Middle (6-8)",
-      district: "North District",
-      attendance: 92,
-      attendanceColor: "text-primary",
-      barColor: "bg-primary",
-      hasGlow: true,
-      status: "On Track",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-    },
-    {
-      initials: "PS",
-      bgClass: "bg-secondary-container text-on-secondary-container",
-      name: "Priya Singh",
-      id: "STU-2023-142",
-      school: "Saraswati Vidya Peeth",
-      grade: "Grade 5",
-      gradeGroup: "Primary (1-5)",
-      district: "East District",
-      attendance: 68,
-      attendanceColor: "text-secondary",
-      barColor: "bg-secondary",
-      hasGlow: false,
-      status: "Needs Attention",
-      statusClass: "bg-error-container text-on-error-container",
-    },
-    {
-      initials: "RD",
-      bgClass: "bg-surface-variant text-on-surface",
-      name: "Rahul Desai",
-      id: "STU-2022-401",
-      school: "Global Vision Academy",
-      grade: "Grade 10",
-      gradeGroup: "High (9-10)",
-      district: "South District",
-      attendance: 98,
-      attendanceColor: "text-primary",
-      barColor: "bg-primary",
-      hasGlow: true,
-      status: "Excelling",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-    },
-    {
-      initials: "MP",
-      bgClass: "bg-tertiary-container text-on-tertiary-container",
-      name: "Meera Patel",
-      id: "STU-2024-012",
-      school: "Vidya Mandir High School",
-      grade: "Grade 6",
-      gradeGroup: "Middle (6-8)",
-      district: "North District",
-      attendance: 85,
-      attendanceColor: "text-on-surface-variant",
-      barColor: "bg-surface-tint",
-      hasGlow: false,
-      status: "Satisfactory",
-      statusClass: "bg-surface-container text-on-surface-variant",
-    },
-  ]);
+  const [students, setStudents] = useState(DEFAULT_STUDENTS);
+
+  // Form states for adding a student
+  const [newStudentName, setNewStudentName] = useState("");
+  const [newStudentId, setNewStudentId] = useState("");
+  const [newStudentSchool, setNewStudentSchool] = useState("");
+  const [newStudentGrade, setNewStudentGrade] = useState("Grade 8");
+  const [newStudentGradeGroup, setNewStudentGradeGroup] = useState("Middle (6-8)");
+  const [newStudentAttendance, setNewStudentAttendance] = useState("");
+  const [newStudentStatus, setNewStudentStatus] = useState("On Track");
+
+  const handleAddStudent = (e) => {
+    e.preventDefault();
+    if (!newStudentName || !newStudentSchool || !newStudentAttendance) return;
+
+    const initials = newStudentName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2) || "ST";
+    const bgClasses = [
+      "bg-primary-container text-on-primary-container",
+      "bg-secondary-container text-on-secondary-container",
+      "bg-tertiary-container text-on-tertiary-container",
+      "bg-surface-variant text-on-surface"
+    ];
+    const bgClass = bgClasses[newStudentName.length % bgClasses.length];
+
+    const att = parseInt(newStudentAttendance);
+    const attendanceColor = att > 85 ? "text-primary" : att > 70 ? "text-on-surface-variant" : "text-secondary";
+    const barColor = att > 85 ? "bg-primary" : att > 70 ? "bg-surface-tint" : "bg-secondary";
+
+    const statusClasses = {
+      "On Track": "bg-primary-fixed text-on-primary-fixed",
+      "Satisfactory": "bg-surface-container text-on-surface-variant",
+      "Needs Attention": "bg-error-container text-on-error-container",
+      "Excelling": "bg-primary-fixed text-on-primary-fixed"
+    };
+
+    const newStudent = {
+      initials,
+      bgClass,
+      name: newStudentName,
+      id: newStudentId || `STU-2026-${Math.floor(100 + Math.random() * 900)}`,
+      school: newStudentSchool,
+      grade: newStudentGrade,
+      gradeGroup: newStudentGradeGroup,
+      district: newStudentSchool.split(",")[0].trim().split(" ")[0] || "Kalgachia",
+      attendance: att,
+      attendanceColor,
+      barColor,
+      hasGlow: att > 90,
+      status: newStudentStatus,
+      statusClass: statusClasses[newStudentStatus] || "bg-surface-container text-on-surface-variant",
+    };
+
+    setStudents([newStudent, ...students]);
+    setNewStudentName("");
+    setNewStudentId("");
+    setNewStudentSchool("");
+    setNewStudentGrade("Grade 8");
+    setNewStudentGradeGroup("Middle (6-8)");
+    setNewStudentAttendance("");
+    setNewStudentStatus("On Track");
+    setShowAddModal(false);
+  };
 
   const clearFilters = () => {
     setGradeFilter("All Grades");
     setPerformanceFilter("All Performance");
-    setDistrictFilter("All Districts");
+    setSchoolFilter("All Schools");
     setSearchQuery("");
   };
 
@@ -99,10 +97,10 @@ export default function StudentsModule() {
         (s.status === "On Track" || s.status === "Satisfactory")) ||
       (performanceFilter === "Needs Attention" && s.status === "Needs Attention");
 
-    const matchesDistrict =
-      districtFilter === "All Districts" || s.district === districtFilter;
+    const matchesSchool =
+      schoolFilter === "All Schools" || s.school === schoolFilter;
 
-    return matchesSearch && matchesGrade && matchesPerformance && matchesDistrict;
+    return matchesSearch && matchesGrade && matchesPerformance && matchesSchool;
   });
 
   return (
@@ -129,8 +127,8 @@ export default function StudentsModule() {
             Manage enrolled students, track academic progress, and monitor school linkages across all program areas.
           </p>
         </div>
-        <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
-          <div className="relative w-full md:w-64">
+        <div className="flex items-center gap-3 w-full md:w-auto shrink-0 flex-wrap">
+          <div className="relative w-full sm:w-64">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
               search
             </span>
@@ -142,9 +140,16 @@ export default function StudentsModule() {
               type="text"
             />
           </div>
-          <button className="flex items-center justify-center gap-2 px-6 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-medium text-sm flex-shrink-0 font-sans">
-            <span className="material-symbols-outlined text-sm">download</span>
-            Export
+          <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer">
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            <span className="whitespace-nowrap">Export</span>
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-all font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)]"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            <span className="whitespace-nowrap">Add Student</span>
           </button>
         </div>
       </div>
@@ -190,14 +195,14 @@ export default function StudentsModule() {
             <option>Needs Attention</option>
           </select>
           <select
-            value={districtFilter}
-            onChange={(e) => setDistrictFilter(e.target.value)}
+            value={schoolFilter}
+            onChange={(e) => setSchoolFilter(e.target.value)}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
-            <option>All Districts</option>
-            <option>North District</option>
-            <option>South District</option>
-            <option>East District</option>
+            <option>All Schools</option>
+            {Array.from(new Set(students.map((s) => s.school))).map((sch) => (
+              <option key={sch}>{sch}</option>
+            ))}
           </select>
           <button
             onClick={clearFilters}
@@ -320,6 +325,143 @@ export default function StudentsModule() {
           </div>
         </div>
       </div>
+      
+      {/* Add Student Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Add New Student Record</h3>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleAddStudent} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Student Full Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Aarav Kumar"
+                  value={newStudentName}
+                  onChange={(e) => setNewStudentName(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Student ID (Optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. STU-2026-101 (Leave blank to auto-generate)"
+                  value={newStudentId}
+                  onChange={(e) => setNewStudentId(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Partner School Linkage
+                </label>
+                <select
+                  required
+                  value={newStudentSchool}
+                  onChange={(e) => setNewStudentSchool(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                >
+                  <option value="" disabled>Select partner school...</option>
+                  {DEFAULT_SCHOOLS.map(sch => (
+                    <option key={sch.name} value={sch.name}>{sch.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Grade Group
+                  </label>
+                  <select
+                    value={newStudentGradeGroup}
+                    onChange={(e) => setNewStudentGradeGroup(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  >
+                    <option>Primary (1-5)</option>
+                    <option>Middle (6-8)</option>
+                    <option>High (9-10)</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Specific Grade
+                  </label>
+                  <select
+                    value={newStudentGrade}
+                    onChange={(e) => setNewStudentGrade(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  >
+                    {Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`).map(g => (
+                      <option key={g}>{g}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Attendance (%)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    required
+                    placeholder="e.g. 95"
+                    value={newStudentAttendance}
+                    onChange={(e) => setNewStudentAttendance(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Academic Status
+                  </label>
+                  <select
+                    value={newStudentStatus}
+                    onChange={(e) => setNewStudentStatus(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  >
+                    <option>On Track</option>
+                    <option>Satisfactory</option>
+                    <option>Needs Attention</option>
+                    <option>Excelling</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                >
+                  Add Student
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

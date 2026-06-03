@@ -9,49 +9,102 @@ export default function SugarcaneCultivation() {
   const [farmers, setFarmers] = useState([
     {
       id: 1,
-      initials: "AK",
+      initials: "AB",
       bgInitials: "bg-primary-container text-on-primary-container",
-      name: "Amina Kariuki",
-      location: "Rift Valley, Region 1",
+      name: "Amina Begum",
+      location: "Bartari, Kalgachia",
       parcel: 4.5,
       stage: "Growing",
       stageClass: "bg-primary/10 text-primary",
       soilType: "Clay Loam",
       waterSource: "Drip Irrigation",
       estYield: 202.5, // 4.5 * 45
-      estIncome: 5670, // 202.5 * 28
+      estIncome: 631800, // 202.5 * 3120
     },
     {
       id: 2,
-      initials: "JM",
+      initials: "JA",
       bgInitials: "bg-secondary-container text-on-secondary-container",
-      name: "John Mutua",
-      location: "Central Province, Region 2",
+      name: "Joynal Abedin",
+      location: "Digjani, Kalgachia",
       parcel: 2.1,
       stage: "Harvesting",
       stageClass: "bg-tertiary-container/20 text-tertiary",
       soilType: "Sandy Soil",
       waterSource: "Rainfed",
       estYield: 94.5, // 2.1 * 45
-      estIncome: 2646,
+      estIncome: 294840, // 94.5 * 3120
     },
     {
       id: 3,
-      initials: "SO",
+      initials: "SD",
       bgInitials: "bg-surface-variant text-on-surface-variant",
-      name: "Sarah Ochieng",
-      location: "Western Belt, Region 3",
+      name: "Sawpan Das",
+      location: "Sawpur, Kalgachia",
       parcel: 8.0,
       stage: "Planting",
       stageClass: "bg-inverse-primary/20 text-primary-container",
       soilType: "Alluvial Soil",
       waterSource: "Canal Linkage",
       estYield: 360.0,
-      estIncome: 10080,
+      estIncome: 1123200, // 360 * 3120
+    },
+    {
+      id: 4,
+      initials: "RA",
+      bgInitials: "bg-primary-container text-on-primary-container",
+      name: "Rahmat Ali",
+      location: "Balikuri, Kalgachia",
+      parcel: 5.2,
+      stage: "Growing",
+      stageClass: "bg-primary/10 text-primary",
+      soilType: "Clay Loam",
+      waterSource: "Drip Irrigation",
+      estYield: 234.0, // 5.2 * 45
+      estIncome: 730080, // 234 * 3120
+    },
+    {
+      id: 5,
+      initials: "BD",
+      bgInitials: "bg-secondary-container text-on-secondary-container",
+      name: "Bhanu Das",
+      location: "Gunialguri, Kalgachia",
+      parcel: 3.8,
+      stage: "Planting",
+      stageClass: "bg-inverse-primary/20 text-primary-container",
+      soilType: "Alluvial Soil",
+      waterSource: "Canal Linkage",
+      estYield: 171.0, // 3.8 * 45
+      estIncome: 533520, // 171 * 3120
+    },
+    {
+      id: 6,
+      initials: "AB",
+      bgInitials: "bg-surface-variant text-on-surface-variant",
+      name: "Abdul Baten",
+      location: "Moinbari, Kalgachia",
+      parcel: 2.5,
+      stage: "Harvesting",
+      stageClass: "bg-tertiary-container/20 text-tertiary",
+      soilType: "Sandy Soil",
+      waterSource: "Rainfed",
+      estYield: 112.5, // 2.5 * 45
+      estIncome: 351000, // 112.5 * 3120
     },
   ]);
 
-  const [selectedFarmer, setSelectedFarmer] = useState(farmers[0]);
+  const [selectedFarmer, setSelectedFarmer] = useState(null);
+
+  // Initialize selected farmer once farmers state is loaded
+  if (selectedFarmer === null && farmers.length > 0) {
+    setSelectedFarmer(farmers[0]);
+  }
+
+  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedStage, setSelectedStage] = useState("All");
+
+  const locations = ["All", ...new Set(farmers.map((f) => f.location.split(",")[0].trim()))];
+  const stages = ["All", "Planting", "Growing", "Harvesting"];
 
   // Form states
   const [newFarmerName, setNewFarmerName] = useState("");
@@ -74,7 +127,7 @@ export default function SugarcaneCultivation() {
 
     const hectares = parseFloat(newParcel);
     const tons = hectares * 45;
-    const income = tons * 28;
+    const income = tons * 3120; // Rupee standard rate multiplier
 
     const newFarmer = {
       id: farmers.length + 1,
@@ -109,10 +162,13 @@ export default function SugarcaneCultivation() {
     setShowEnrollModal(false);
   };
 
-  const filteredFarmers = farmers.filter((f) =>
-    f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    f.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredFarmers = farmers.filter((f) => {
+    const matchesSearch = f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          f.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLocation = selectedLocation === "All" || f.location.includes(selectedLocation);
+    const matchesStage = selectedStage === "All" || f.stage === selectedStage;
+    return matchesSearch && matchesLocation && matchesStage;
+  });
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto w-full flex flex-col gap-8">
@@ -185,7 +241,7 @@ export default function SugarcaneCultivation() {
           <div className="text-4xl font-headline tracking-[-0.02em] text-on-surface mb-1">
             {farmers.reduce((acc, f) => acc + f.parcel, 0).toFixed(1)} <span className="text-xl text-on-surface-variant">Hectares</span>
           </div>
-          <p className="text-sm text-on-surface-variant">Across 3 regions</p>
+          <p className="text-sm text-on-surface-variant">Across Kalgachia circle</p>
         </div>
 
         <div className="md:col-span-4 bg-surface-container-lowest rounded-lg p-6 impact-glow pt-8 pl-8 relative overflow-hidden">
@@ -212,9 +268,9 @@ export default function SugarcaneCultivation() {
           </div>
           <div className="relative flex-1 min-h-[300px] bg-surface-container text-on-surface">
             <img
-              alt="Map view"
+              alt="Map view of sugarcane plots near Kalgachia, Assam"
               className="w-full h-full object-cover opacity-80"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL6YIvSJjbDOaXe_dNGxzZ2ZapEXWOVxYwCvqNNsmVKFKoHiGLRpZ0a0Ve1yxbpzupcOJXQNXwQpRUQNPiKiwAQSOk3tZl0nEqckbvl8KprxA-Ra7UW-LYKKgivhbVAilpZvGr5QjpY-5h53CGZRUNO99OKXRjPSgDLtLi0RuZBHd2rO34kC1dGEbke1yLRLo1KqXZitp9UGiwaWCfhNmn_gS9pHJvwoKYHw_989HbgvKsuAUgNZqPtWhRT93cSwrGIr35oLuxlMX_"
+              src="/sugarcane_map_kalgachia.png"
             />
             {/* Floating Map Legend */}
             <div className="absolute bottom-6 right-6 glass-panel p-4 rounded-lg impact-glow w-48 bg-white/80">
@@ -342,11 +398,11 @@ export default function SugarcaneCultivation() {
                 </div>
                 <div className="flex justify-between py-2 border-b border-surface-container-high">
                   <span>Sugarcane Standard Market Rate</span>
-                  <span className="font-semibold">$28 / Ton</span>
+                  <span className="font-semibold">₹3,120 / Ton</span>
                 </div>
                 <div className="flex justify-between py-2 mt-4 pt-2">
                   <span className="font-bold">Projected Net Income</span>
-                  <span className="font-headline text-xl font-black text-primary">${selectedFarmer.estIncome.toFixed(2)}</span>
+                  <span className="font-headline text-xl font-black text-primary">₹{selectedFarmer.estIncome.toLocaleString('en-IN')}</span>
                 </div>
               </div>
             </div>
@@ -355,21 +411,59 @@ export default function SugarcaneCultivation() {
 
         {/* Recent Enrolments Table */}
         <div className="md:col-span-12 bg-surface-container-lowest rounded-lg impact-glow overflow-hidden">
-          <div className="p-6 pb-4 pt-8 pl-8 flex justify-between items-center bg-surface-container-lowest border-b border-surface-container-highest">
+          <div className="p-6 pb-4 pt-8 pl-8 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center bg-surface-container-lowest border-b border-surface-container-highest">
             <div>
               <h3 className="text-lg font-semibold text-on-surface">Recent Farmer Enrolments</h3>
               <p className="text-sm text-on-surface-variant mt-1">
                 Latest registered beneficiaries and parcel data. Click on any row to view full file and calculator.
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
               <input
                 type="text"
                 placeholder="Search farmers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-4 py-1.5 rounded-full border border-outline-variant text-xs focus:outline-none focus:border-primary w-48 md:w-64 font-sans bg-transparent text-on-surface"
+                className="px-4 py-1.5 rounded-full border border-outline-variant text-xs focus:outline-none focus:border-primary w-full md:w-48 font-sans bg-transparent text-on-surface"
               />
+              
+              {/* Location Filter */}
+              <div className="relative w-full sm:w-auto">
+                <select
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="w-full sm:w-auto pl-3 pr-8 py-1.5 bg-surface-container text-on-surface rounded-full border-none focus:ring-1 focus:ring-primary text-xs cursor-pointer appearance-none font-sans font-medium"
+                >
+                  <option value="All" className="bg-surface-container text-on-surface">All Villages</option>
+                  {locations.filter(loc => loc !== "All").map((loc) => (
+                    <option key={loc} value={loc} className="bg-surface-container text-on-surface">
+                      {loc}
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[16px]">
+                  expand_more
+                </span>
+              </div>
+
+              {/* Stage Filter */}
+              <div className="relative w-full sm:w-auto">
+                <select
+                  value={selectedStage}
+                  onChange={(e) => setSelectedStage(e.target.value)}
+                  className="w-full sm:w-auto pl-3 pr-8 py-1.5 bg-surface-container text-on-surface rounded-full border-none focus:ring-1 focus:ring-primary text-xs cursor-pointer appearance-none font-sans font-medium"
+                >
+                  <option value="All" className="bg-surface-container text-on-surface">All Stages</option>
+                  {stages.filter(st => st !== "All").map((st) => (
+                    <option key={st} value={st} className="bg-surface-container text-on-surface">
+                      {st}
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[16px]">
+                  expand_more
+                </span>
+              </div>
             </div>
           </div>
           <div className="w-full overflow-x-auto">
@@ -473,7 +567,7 @@ export default function SugarcaneCultivation() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Rift Valley, Region 4"
+                  placeholder="e.g. Sawpur, Kalgachia"
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"

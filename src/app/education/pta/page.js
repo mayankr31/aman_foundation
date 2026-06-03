@@ -51,12 +51,144 @@ export default function PtaPrograms() {
       date: "Nov 12, 2026 • 11:30 AM",
       location: "Riverside Classroom B",
     },
+    {
+      id: 103,
+      title: "PTA Monthly Planning Meeting",
+      status: "Scheduled",
+      statusClass: "bg-primary-fixed text-on-primary-fixed",
+      description: "Discussing summer camp preparations and baseline literacy goals.",
+      date: "Jun 10, 2026 • 09:30 AM",
+      location: "Kalgachia Circle Office",
+    },
+    {
+      id: 104,
+      title: "Community Reading Circle Launch",
+      status: "Scheduled",
+      statusClass: "bg-primary-fixed text-on-primary-fixed",
+      description: "Launching the outdoor reading circle initiative for primary students.",
+      date: "Jun 24, 2026 • 02:00 PM",
+      location: "Bartari Village Common",
+    },
   ]);
+
+  // Calendar states and logic
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 5, 3)); // June 2026
+  const [selectedCell, setSelectedCell] = useState(null);
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  const calendarCells = [];
+
+  // Padding days from previous month
+  for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+    calendarCells.push({
+      day: daysInPrevMonth - i,
+      month: month === 0 ? 11 : month - 1,
+      year: month === 0 ? year - 1 : year,
+      isCurrentMonth: false,
+    });
+  }
+
+  // Current month days
+  for (let i = 1; i <= daysInMonth; i++) {
+    calendarCells.push({
+      day: i,
+      month: month,
+      year: year,
+      isCurrentMonth: true,
+    });
+  }
+
+  // Padding days from next month
+  const totalCellsNeeded = calendarCells.length <= 35 ? 35 : 42;
+  const nextMonthPaddingCount = totalCellsNeeded - calendarCells.length;
+  for (let i = 1; i <= nextMonthPaddingCount; i++) {
+    calendarCells.push({
+      day: i,
+      month: month === 11 ? 0 : month + 1,
+      year: month === 11 ? year + 1 : year,
+      isCurrentMonth: false,
+    });
+  }
+
+  const parseEventDate = (dateStr) => {
+    try {
+      const parts = dateStr.split(" • ");
+      const datePart = parts[0];
+      const dateObj = new Date(datePart);
+      if (isNaN(dateObj.getTime())) return null;
+      return dateObj;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  const getEventsForDay = (cell) => {
+    return events.filter((e) => {
+      const d = parseEventDate(e.date);
+      if (!d) return false;
+      return (
+        d.getDate() === cell.day &&
+        d.getMonth() === cell.month &&
+        d.getFullYear() === cell.year
+      );
+    });
+  };
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
+    setSelectedCell(null);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+    setSelectedCell(null);
+  };
+
+  const formatEventDate = (dateStr, timeStr) => {
+    if (!dateStr) return "TBD";
+    const dateObj = new Date(dateStr);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthName = months[dateObj.getMonth()];
+    const day = dateObj.getDate();
+    const yr = dateObj.getFullYear();
+    
+    let timeFormatted = "";
+    if (timeStr) {
+      const [hourStr, minStr] = timeStr.split(":");
+      let hour = parseInt(hourStr);
+      const ampm = hour >= 12 ? "PM" : "AM";
+      hour = hour % 12;
+      hour = hour ? hour : 12;
+      timeFormatted = ` • ${hour}:${minStr} ${ampm}`;
+    }
+    return `${monthName} ${day}, ${yr}${timeFormatted}`;
+  };
+
+  const displayedEvents = selectedCell 
+    ? getEventsForDay(selectedCell)
+    : events.filter((e) => {
+        const d = parseEventDate(e.date);
+        if (!d) return false;
+        return d.getMonth() === month && d.getFullYear() === year;
+      });
 
   // Form states
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [newDate, setNewDate] = useState("");
+  const [newEventDate, setNewEventDate] = useState("");
+  const [newEventTime, setNewEventTime] = useState("");
   const [newLoc, setNewLoc] = useState("");
   const [newPriority, setNewPriority] = useState("Active");
 
@@ -78,13 +210,14 @@ export default function PtaPrograms() {
       };
       setPrograms([...programs, newProg]);
     } else {
+      const formattedDate = formatEventDate(newEventDate, newEventTime);
       const newEvent = {
         id: events.length + 101,
         title: newName,
         status: newPriority === "Active" ? "Scheduled" : "Completed",
         statusClass: newPriority === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant",
         description: newDesc,
-        date: newDate || "TBD",
+        date: formattedDate,
         location: newLoc || "TBD",
       };
       setEvents([...events, newEvent]);
@@ -93,6 +226,8 @@ export default function PtaPrograms() {
     setNewName("");
     setNewDesc("");
     setNewDate("");
+    setNewEventDate("");
+    setNewEventTime("");
     setNewLoc("");
     setNewPriority("Active");
     setShowAddModal(false);
@@ -209,33 +344,124 @@ export default function PtaPrograms() {
             </div>
           </div>
 
-          {/* Column Right: Events & PTA Meetings */}
+          {/* Column Right: Events & PTA Meetings Calendar */}
           <div className="lg:col-span-6 space-y-6">
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
               <h3 className="font-headline font-bold text-xl text-on-surface mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">diversity_3</span>
-                Events &amp; PTA Meetings
+                <span className="material-symbols-outlined text-secondary">calendar_month</span>
+                Events &amp; Meetings Calendar
               </h3>
-              <div className="space-y-4">
-                {events.map((e) => (
-                  <Link
-                    key={e.id}
-                    href={`/education/pta/event/${e.id}`}
-                    className="p-4 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
+              
+              {/* Calendar Control Header */}
+              <div className="flex items-center justify-between mb-4 font-sans">
+                <span className="text-md font-semibold text-on-surface">
+                  {monthNames[month]} {year}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button 
+                    onClick={handlePrevMonth}
+                    className="p-1.5 hover:bg-surface-container rounded-full text-on-surface transition-colors cursor-pointer"
                   >
-                    <div className="flex justify-between items-start mb-2 font-sans">
-                      <h4 className="font-bold text-on-surface text-base group-hover:text-primary transition-colors">{e.title}</h4>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${e.statusClass}`}>
-                        {e.status}
-                      </span>
-                    </div>
-                    <p className="text-sm text-on-surface-variant leading-relaxed mb-4">{e.description}</p>
-                    <div className="flex justify-between text-xs text-slate-500 font-sans mt-2 pt-2 border-t border-surface-container">
-                      <span>{e.date}</span>
-                      <span className="font-medium">{e.location}</span>
-                    </div>
-                  </Link>
+                    <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+                  </button>
+                  <button 
+                    onClick={handleNextMonth}
+                    className="p-1.5 hover:bg-surface-container rounded-full text-on-surface transition-colors cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-1 text-center font-sans text-xs mb-6">
+                {/* Weekday Labels */}
+                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((dayName) => (
+                  <div key={dayName} className="font-bold text-on-surface-variant py-2">
+                    {dayName}
+                  </div>
                 ))}
+                
+                {/* Calendar Cells */}
+                {calendarCells.map((cell, idx) => {
+                  const dayEvents = getEventsForDay(cell);
+                  const isToday = cell.day === 3 && cell.month === 5 && cell.year === 2026; // June 3, 2026
+                  const isSelected = selectedCell && 
+                                     selectedCell.day === cell.day && 
+                                     selectedCell.month === cell.month && 
+                                     selectedCell.year === cell.year;
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        if (isSelected) {
+                          setSelectedCell(null);
+                        } else {
+                          setSelectedCell(cell);
+                        }
+                      }}
+                      className={`h-10 rounded-lg flex flex-col items-center justify-center relative transition-all cursor-pointer ${
+                        !cell.isCurrentMonth 
+                          ? "text-on-surface-variant/40 hover:bg-surface-container/50" 
+                          : "text-on-surface hover:bg-surface-container"
+                      } ${isSelected ? "bg-primary text-white hover:bg-primary-container" : ""} ${
+                        isToday && !isSelected ? "border border-primary font-bold" : ""
+                      }`}
+                    >
+                      <span>{cell.day}</span>
+                      {dayEvents.length > 0 && (
+                        <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? "bg-white" : "bg-primary"}`}></span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Event Listings for Month/Day */}
+              <div className="border-t border-surface-container-highest pt-4">
+                <h4 className="font-bold text-sm text-on-surface mb-4 flex items-center justify-between font-sans">
+                  <span>
+                    {selectedCell 
+                      ? `Events on ${monthNames[selectedCell.month]} ${selectedCell.day}, ${selectedCell.year}` 
+                      : `Events in ${monthNames[month]} ${year}`}
+                  </span>
+                  {selectedCell && (
+                    <button 
+                      onClick={() => setSelectedCell(null)}
+                      className="text-primary hover:text-primary-container text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      Show All Month
+                    </button>
+                  )}
+                </h4>
+
+                <div className="space-y-3">
+                  {displayedEvents.map((e) => (
+                    <Link
+                      key={e.id}
+                      href={`/education/pta/event/${e.id}`}
+                      className="p-3 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
+                    >
+                      <div className="flex justify-between items-start mb-1 font-sans">
+                        <h5 className="font-bold text-on-surface text-sm group-hover:text-primary transition-colors">{e.title}</h5>
+                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider ${e.statusClass}`}>
+                          {e.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-on-surface-variant leading-relaxed mb-2">{e.description}</p>
+                      <div className="flex justify-between text-[10px] text-slate-500 font-sans mt-1 pt-1 border-t border-surface-container">
+                        <span>{e.date}</span>
+                        <span className="font-medium">{e.location}</span>
+                      </div>
+                    </Link>
+                  ))}
+                  {displayedEvents.length === 0 && (
+                    <p className="text-center py-6 text-xs text-slate-400 font-sans">
+                      No events scheduled for this period.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -282,19 +508,48 @@ export default function PtaPrograms() {
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent resize-none"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  {modalType === "Program" ? "Planned Duration (e.g. 6 Months)" : "Schedule Date & Time"}
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder={`e.g. ${modalType === "Program" ? "4 Months" : "Nov 12, 2026 • 10:00 AM"}`}
-                  value={newDate}
-                  onChange={(e) => setNewDate(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
+              {modalType === "Program" ? (
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Planned Duration (e.g. 6 Months)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 4 Months"
+                    value={newDate}
+                    onChange={(e) => setNewDate(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Event Date
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={newEventDate}
+                      onChange={(e) => setNewEventDate(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Event Time
+                    </label>
+                    <input
+                      type="time"
+                      required
+                      value={newEventTime}
+                      onChange={(e) => setNewEventTime(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    />
+                  </div>
+                </div>
+              )}
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   {modalType === "Program" ? "Expected Participants (e.g. 150 Enrolled)" : "Location / Venue"}

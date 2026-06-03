@@ -4,81 +4,78 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function DisasterRelief() {
-  const [activeAlert, setActiveAlert] = useState({
-    severity: "Critical",
-    message: "Supply shortage logged for Sector 4 Medical station. Urgent restock requested.",
-  });
+  const [activeAlert, setActiveAlert] = useState(null);
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [broadcastMsg, setBroadcastMsg] = useState("");
   const [broadcastSeverity, setBroadcastSeverity] = useState("Urgent");
 
   const [activeTab, setActiveTab] = useState("Affected Registry");
 
-  // Registry of Help Providers
+  // Registry of Help Providers localized to Kalgachia/Assam
   const [providers, setProviders] = useState([
     {
       id: "PROV-401",
-      name: "Team Alpha Medical",
-      type: "Responders (Medical)",
-      contact: "Dr. Sarah (+91 99887 76655)",
-      status: "Active in Sector 4",
+      name: "Kalgachia Hospital Medical Unit",
+      type: "Responders (Medical & Health)",
+      contact: "Dr. A. Rahman (+91 94350 xxxxx)",
+      status: "Active in Bartari Camp",
       statusClass: "bg-primary-fixed text-on-primary-fixed",
     },
     {
       id: "PROV-112",
-      name: "Logistics Convoy B",
-      type: "Responders (Logistics)",
-      contact: "convoy_lead@relief.org",
-      status: "Loading supplies",
+      name: "Aman Foundation Relief Convoy",
+      type: "Responders (Logistics & Food)",
+      contact: "H. Ali (convoy_lead@amanassam.org)",
+      status: "Dispatched to Moinbari Char",
       statusClass: "bg-secondary-container text-on-secondary-fixed",
     },
     {
       id: "PROV-908",
-      name: "Rotary Volunteer Cohort",
-      type: "Volunteers (Food)",
-      contact: "Volunteer Group",
+      name: "Kalgachia Student Volunteer Cohort",
+      type: "Volunteers (Distribution)",
+      contact: "College Volunteer Group",
       status: "Standby / Rest",
       statusClass: "bg-surface-container text-on-surface-variant",
     },
   ]);
 
-  // Registry of Affected People
+  // Registry of Affected People localized to Kalgachia/Assam
   const [affected, setAffected] = useState([
     {
       id: "AFF-102",
-      family: "Garcia Family",
-      location: "Sector 4 Evac Center",
+      family: "Ahmed Family",
+      location: "Bartari School Shelter, Kalgachia",
       size: 5,
-      requirement: "Medical, Blankets",
+      requirement: "Dry Rations, Tarpaulins",
       status: "High Priority",
       statusClass: "bg-error-container text-on-error-container",
     },
     {
       id: "AFF-884",
-      family: "Elderly Cohort",
-      location: "Sector 2 Base",
+      family: "Sawpur Char Evacuees",
+      location: "Sawpur High School, Kalgachia",
       size: 8,
-      requirement: "Warm Meals, Water",
+      requirement: "Medical Aid, Mosquito Nets",
       status: "Completed",
       statusClass: "bg-primary-fixed text-on-primary-fixed",
     },
     {
       id: "AFF-394",
-      family: "Patel Household",
-      location: "Temporary Shelter 3",
+      family: "Brahmaputra Bank Displaced",
+      location: "Moinbari Embankment Camp",
       size: 4,
-      requirement: "Baby Food, Hydration",
+      requirement: "Baby Food, Clean Drinking Water",
       status: "In Progress",
       statusClass: "bg-secondary-container text-on-secondary-fixed",
     },
   ]);
 
-  // Supply Stock Ledger
+  // Supply Stock Ledger localized to Kalgachia/Assam
   const [inventory, setInventory] = useState([
-    { item: "MRE Food Packages", stock: 1200, unit: "Boxes", status: "Optimal" },
-    { item: "Drinking Water Tanks", stock: 14, unit: "Liters (1k each)", status: "Critical Shortage" },
-    { item: "Medical Trauma Kits", stock: 45, unit: "Kits", status: "Optimal" },
-    { item: "Blankets & Warm Wear", stock: 250, unit: "Packs", status: "Restock Requested" },
+    { item: "Assam Rice & Dal Ration Packs", stock: 1200, unit: "Packs", status: "Optimal" },
+    { item: "Drinking Water Halogen Tablets & Tanks", stock: 14000, unit: "Liters / Tablets", status: "Critical Shortage" },
+    { item: "First Aid & Anti-Venom Kits", stock: 45, unit: "Kits", status: "Optimal" },
+    { item: "Tarpaulins & Mosquito Nets", stock: 250, unit: "Packs", status: "Restock Requested" },
   ]);
 
   const handleBroadcast = (e) => {
@@ -135,7 +132,7 @@ export default function DisasterRelief() {
           <div className="flex flex-wrap gap-3 font-sans shrink-0">
             <button
               onClick={() => setShowBroadcastModal(true)}
-              className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer border-none"
             >
               <span className="material-symbols-outlined text-[18px]">add_alert</span>
               <span className="whitespace-nowrap">Broadcast Alert</span>
@@ -151,17 +148,22 @@ export default function DisasterRelief() {
           {/* Map Overlay & Inventory */}
           <div className="lg:col-span-8 space-y-8">
             
-            {/* Impact Map */}
+            {/* Impact Map using Kalgachia Assam Google Maps embed */}
             <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
               <div className="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-low">
-                <img
-                  alt="Impact Map Coordinate"
-                  className="w-full h-full object-cover opacity-70"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCohJz_BffipmMDya16uh_HOFp_4k0SIvfDYfUmf5d_eHfBiL4_30hOALTOEPzHfj-Q6qAzgbrdBRcrvw03_eABEZReM4mFz0Aas9dg3_x0A7WXUum0u6klvnvhfI0dytRHz5WjiuQYj1c1Vp5p4YLvUdjJfO-mav08NQ8k2GlmxF0l4EUgXebassFs9Bde0VfR7qVRZlW5XoFNpmNtEtiV-UeN-APWXuSTSt6fTrMXR1I8fBzVgFYxtWbpUVRna4Xus3BOIy7fPynl"
-                />
-                <div className="absolute top-4 left-4 glass-panel px-4 py-2 bg-white/80 rounded-lg shadow-sm border border-white/20 font-sans">
-                  <p className="text-xs text-on-surface-variant font-bold">Sector Alpha Operations</p>
-                  <p className="font-semibold text-xs text-on-surface mt-1">4 Active Dispatch Convoy routes</p>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57201.27218685167!2d90.82823611394142!3d26.373111053151877!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3759a1c24aaa3a29%3A0x1bb2df4d8a1c97a4!2sKalgachia%2C%20Assam%20781319!5e0!3m2!1sen!2sin!4v1717430000000!5m2!1sen!2sin"
+                  width="100%"
+                  height="320"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-[320px] rounded-lg border-none"
+                ></iframe>
+                <div className="absolute top-4 left-4 glass-panel px-4 py-2 bg-white/80 dark:bg-slate-900/80 rounded-lg shadow-sm border border-white/20 font-sans z-10">
+                  <p className="text-xs text-on-surface-variant font-bold">Kalgachia &amp; Beki River Circle</p>
+                  <p className="font-semibold text-xs text-on-surface mt-1">3 Active Flood Relief camps</p>
                 </div>
               </div>
             </div>
@@ -291,22 +293,22 @@ export default function DisasterRelief() {
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
               <h3 className="font-headline font-bold text-base text-on-surface mb-2">Relief Distribution Logs</h3>
               <p className="text-xs text-on-surface-variant mb-6 font-sans">Synced Realtime</p>
-              <div className="relative border-l border-surface-container ml-3 space-y-6 font-sans text-sm">
+              <div className="relative border-l border-surface-container ml-3 space-y-6 font-sans text-sm font-medium">
                 <div className="relative pl-6">
                   <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
                   <div className="text-[10px] text-slate-400 font-bold mb-1">10:42 AM</div>
-                  <div className="font-bold text-on-surface">500 MRE Kits Delivered</div>
+                  <div className="font-bold text-on-surface">500 Rice &amp; Ration Kits Distributed</div>
                   <div className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                    Sector 4 station, signed by Aisha Rahman.
+                    Bartari School Shelter, signed by Aisha Rahman.
                   </div>
                 </div>
 
                 <div className="relative pl-6">
                   <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-surface-container ring-4 ring-surface-container-lowest"></div>
                   <div className="text-[10px] text-slate-400 font-bold mb-1">Yesterday</div>
-                  <div className="font-bold text-on-surface">Water Tanker Dispatched</div>
+                  <div className="font-bold text-on-surface">Water &amp; Halogen Tablets Dispatched</div>
                   <div className="text-xs text-on-surface-variant mt-1 leading-relaxed">
-                    Logistics Convoy B routed to Sector 2 evac point.
+                    Relief Convoy routed to Moinbari Char Embankment camp.
                   </div>
                 </div>
               </div>
@@ -318,7 +320,7 @@ export default function DisasterRelief() {
       {/* Broadcast Alert Modal */}
       {showBroadcastModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Broadcast Regional Emergency Alert</h3>
               <button
@@ -336,7 +338,7 @@ export default function DisasterRelief() {
                 <textarea
                   required
                   rows="3"
-                  placeholder="e.g. Flash flood warning issued for Sector 4."
+                  placeholder="e.g. Beki River water levels rising. Residents in Bartari advised to move to school shelter."
                   value={broadcastMsg}
                   onChange={(e) => setBroadcastMsg(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent resize-none text-on-surface"
@@ -360,13 +362,13 @@ export default function DisasterRelief() {
                 <button
                   type="button"
                   onClick={() => setShowBroadcastModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Broadcast Now
                 </button>

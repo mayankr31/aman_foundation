@@ -7,12 +7,14 @@ export default function FellowsModule() {
   const [viewMode, setViewMode] = useState("Grid"); // "Grid" or "List"
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedCohort, setSelectedCohort] = useState("All");
+  const [selectedDistrict, setSelectedDistrict] = useState("All");
   const [fellows, setFellows] = useState([
     {
       avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7gMo5puf1sV4uTm3qk1tT-zVJzNDhR17iH7pqq5iCccFjIOCE8W3EHYIp9rK3D066Q9ZkVjeLVtNwSBF9m1-hvbOUGfnjJRGIchuJ3Eh6rp7nQKBpqZJzMPBwV1Qz0kmOpVSOMreor-iUVKwSv67qJNrwuROO0mgJdvBeUHMDI7zmdq1qTUV0QVFCkkSQdtuaqu2lruZIChfw5S3KIqkr12xKbUERZvogsBdHSPGMGD5RG1KZ_J33Im7k3p4NaNTFC6WFYrzLKONE",
       name: "Aisha Rahman",
       cohort: "Cohort '23",
-      location: "Karachi South",
+      location: "Bartari, Kalgachia",
       progress: 85,
       milestones: [
         { done: true, text: "Completed Advanced Phonics Module" },
@@ -24,7 +26,7 @@ export default function FellowsModule() {
       avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAyU2sk7MSF4O2N4v8tJyIJNfFFC-6k-MyJtM5UWnT68i4JIYVkOBu1pyvnRVdCmTIJDnx-PfGfOEnCJQ0R8CExOGEexqyfB1z4fmKGD0ZZpppomizo-LBDvgJ8cSyY7UCjxoCUf783rsdV_XGiKoyguceMlyb-QzZCf9Gl9MgF3zpl4Q4Y7qPKZ5wjhJdmNIwaFQ7oS2PR9wLYxjBEnkfftf-mWeb4t8u9qmDaop-LQNHejgvZkDUN_y3R2yStAL7Yvw-mXwMoaQdf",
       name: "Fatima Tariq",
       cohort: "Cohort '24",
-      location: "Lahore Central",
+      location: "Digjani, Kalgachia",
       progress: 42,
       milestones: [
         { done: true, text: "Initial Assessment Setup" },
@@ -36,7 +38,7 @@ export default function FellowsModule() {
       initials: "BK",
       name: "Bilal Khan",
       cohort: "Cohort '23",
-      location: "Multan East",
+      location: "Sawpur, Kalgachia",
       progress: 95,
       milestones: [
         { done: true, text: "Final Impact Report Submitted" },
@@ -83,10 +85,15 @@ export default function FellowsModule() {
     setShowAddModal(false);
   };
 
+  const cohorts = ["All", ...new Set(fellows.map((f) => f.cohort))];
+  const districts = ["All", ...new Set(fellows.map((f) => f.location))];
+
   const filteredFellows = fellows.filter(
     (f) =>
-      f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      f.location.toLowerCase().includes(searchQuery.toLowerCase())
+      (f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        f.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedCohort === "All" || f.cohort === selectedCohort) &&
+      (selectedDistrict === "All" || f.location === selectedDistrict)
   );
 
   return (
@@ -104,67 +111,102 @@ export default function FellowsModule() {
         </span>
       </Link>
 
-      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 mb-10">
-        <div>
-          <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
-            Fellows Progress Tracking
-          </h2>
-          <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
-            Monitor cohort advancement, individual literacy goals, and milestone achievements across all active educational districts.
-          </p>
+      {/* Header Section */}
+      <div className="mb-6">
+        <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+          Fellows Progress Tracking
+        </h2>
+        <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
+          Monitor cohort advancement, individual literacy goals, and milestone achievements across all active educational districts near Kalgachia, Assam.
+        </p>
+      </div>
+
+      {/* Action Controls */}
+      <div className="flex flex-wrap items-center gap-4 w-full mb-10 shrink-0">
+        <div className="relative w-full sm:w-64">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
+            search
+          </span>
+          <input
+            className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
+            placeholder="Search fellows..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            type="text"
+          />
         </div>
-        {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto shrink-0">
-          <div className="relative w-full sm:w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
-              search
-            </span>
-            <input
-              className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
-              placeholder="Search fellows..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              type="text"
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="bg-surface-container-low rounded-full p-1 flex border border-surface-container-highest">
-              <button
-                onClick={() => setViewMode("Grid")}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
-                  viewMode === "Grid"
-                    ? "bg-surface-container-lowest text-on-surface shadow-sm"
-                    : "text-on-surface-variant hover:text-on-surface"
-                }`}
-              >
-                <span className="material-symbols-outlined text-[18px]">grid_view</span>
-                Grid
-              </button>
-              <button
-                onClick={() => setViewMode("List")}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
-                  viewMode === "List"
-                    ? "bg-surface-container-lowest text-on-surface shadow-sm"
-                    : "text-on-surface-variant hover:text-on-surface"
-                }`}
-              >
-                <span className="material-symbols-outlined text-[18px]">view_list</span>
-                List
-              </button>
-            </div>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 shadow-lg shadow-primary/20 whitespace-nowrap cursor-pointer hover:bg-primary-container"
-            >
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              Add Fellow
-            </button>
-            <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-semibold hover:shadow-[0_4px_12px_rgba(0,104,87,0.2)] transition-all flex items-center gap-2 whitespace-nowrap">
-              <span className="material-symbols-outlined text-[18px]">download</span>
-              Export Report
-            </button>
-          </div>
+
+        {/* Cohort Filter */}
+        <div className="relative w-full sm:w-auto">
+          <select
+            value={selectedCohort}
+            onChange={(e) => setSelectedCohort(e.target.value)}
+            className="w-full sm:w-auto pl-4 pr-10 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm transition-shadow appearance-none cursor-pointer text-on-surface font-sans font-medium"
+          >
+            {cohorts.map((c) => (
+              <option key={c} value={c} className="bg-surface-container text-on-surface">
+                {c === "All" ? "All Cohorts" : c}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
+            expand_more
+          </span>
         </div>
+
+        {/* District Filter */}
+        <div className="relative w-full sm:w-auto">
+          <select
+            value={selectedDistrict}
+            onChange={(e) => setSelectedDistrict(e.target.value)}
+            className="w-full sm:w-auto pl-4 pr-10 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm transition-shadow appearance-none cursor-pointer text-on-surface font-sans font-medium"
+          >
+            {districts.map((d) => (
+              <option key={d} value={d} className="bg-surface-container text-on-surface">
+                {d === "All" ? "All Districts" : d}
+              </option>
+            ))}
+          </select>
+          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
+            expand_more
+          </span>
+        </div>
+
+        <div className="bg-surface-container-low rounded-full p-1 flex border border-surface-container-highest w-fit">
+          <button
+            onClick={() => setViewMode("Grid")}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              viewMode === "Grid"
+                ? "bg-surface-container-lowest text-on-surface shadow-sm"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">grid_view</span>
+            Grid
+          </button>
+          <button
+            onClick={() => setViewMode("List")}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
+              viewMode === "List"
+                ? "bg-surface-container-lowest text-on-surface shadow-sm"
+                : "text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">view_list</span>
+            List
+          </button>
+        </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 shadow-lg shadow-primary/20 whitespace-nowrap cursor-pointer hover:bg-primary-container"
+        >
+          <span className="material-symbols-outlined text-[18px]">add</span>
+          Add Fellow
+        </button>
+        <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-semibold hover:shadow-[0_4px_12px_rgba(0,104,87,0.2)] transition-all flex items-center gap-2 whitespace-nowrap">
+          <span className="material-symbols-outlined text-[18px]">download</span>
+          Export Report
+        </button>
       </div>
 
       {/* Metrics Summary Cards */}
@@ -434,7 +476,7 @@ export default function FellowsModule() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Multan East"
+                  placeholder="e.g. Balikuri, Kalgachia"
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"

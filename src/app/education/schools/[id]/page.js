@@ -3,10 +3,25 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { DEFAULT_SCHOOLS } from "@/lib/schoolsData";
 
 export default function SchoolProfileDetail() {
   const { id } = useParams();
   const name = decodeURIComponent(id || "Oakridge Academy").replace(/-/g, " ");
+
+  const school = DEFAULT_SCHOOLS.find(s => s.name.toLowerCase() === name.toLowerCase()) || {
+    name: name,
+    location: "Kalgachia, Barpeta",
+    address: "Kalgachia, Barpeta-781319, Assam",
+    enrolled: "980",
+    programs: 4,
+    goal: 85,
+    status: "Active",
+    latitude: "26.3575° N",
+    longitude: "90.8708° E",
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3575.0416084059693!2d90.87077687542042!3d26.35751617698246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3759a1653dc76b4b%3A0x63c8798832bf4693!2sAman%20Foundation!5e0!3m2!1sen!2sin!4v1780501000127!5m2!1sen!2sin",
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd0x1ztc9iuj8nay2xC1_MH-xTSmAKr8IhFrASNZRkSKkt-Y4BunC5I9iqvTLQ0_8lmU0zaYnPjqddtwFcC75fjZRBUU-N_7DG60EY9HluYt_nZMGUi1MCuGMs9ZtR2iM2AGFyw2MvZhg-RlW1as3xPOOXef7qU9OwfisCQeoCv_6chJeBZbBMdmknEG_LLtMl_EWluwSEWTOAEkWm2p31lCjaolK7bQHfqtZzT6CLsbLoare9Nu918oPHFj07H0LgIShvW4giB6YL"
+  };
 
   const [programs] = useState([
     { name: "Standard 3 Literacy Drive", status: "Active", lead: "Aisha Rahman", reach: "120 Students" },
@@ -44,29 +59,34 @@ export default function SchoolProfileDetail() {
             <img
               alt="School avatar"
               className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd0x1ztc9iuj8nay2xC1_MH-xTSmAKr8IhFrASNZRkSKkt-Y4BunC5I9iqvTLQ0_8lmU0zaYnPjqddtwFcC75fjZRBUU-N_7DG60EY9HluYt_nZMGUi1MCuGMs9ZtR2iM2AGFyw2MvZhg-RlW1as3xPOOXef7qU9OwfisCQeoCv_6chJeBZbBMdmknEG_LLtMl_EWluwSEWTOAEkWm2p31lCjaolK7bQHfqtZzT6CLsbLoare9Nu918oPHFj07H0LgIShvW4giB6YL"
+              src={school.img}
             />
           </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h2 className="text-3xl font-headline font-black text-on-surface capitalize leading-tight">
-                {name}
+                {school.name}
               </h2>
               <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                Active
+                {school.status}
               </span>
             </div>
-            <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
+            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">location_on</span>
-              North District • Regional Impact Rank #4
+              {school.location} • Regional Impact Partner
             </p>
-            <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
+            <div className="flex flex-col gap-2 mt-2 text-xs font-medium text-slate-500 font-sans">
               <div>
-                <span className="font-bold text-on-surface">Contact Person:</span> Principal Margaret (admin@oakridge.edu)
+                <span className="font-bold text-on-surface">Address:</span> {school.address}
               </div>
-              <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
-              <div>
-                <span className="font-bold text-on-surface">Phone:</span> +91 99887 76655
+              <div className="flex flex-wrap gap-4">
+                <div>
+                  <span className="font-bold text-on-surface">Contact Person:</span> Principal Margaret (admin@school.edu)
+                </div>
+                <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                <div>
+                  <span className="font-bold text-on-surface">Phone:</span> +91 99887 76655
+                </div>
               </div>
             </div>
           </div>
@@ -89,18 +109,19 @@ export default function SchoolProfileDetail() {
         {/* Left Column: Geographic Map & Programs */}
         <div className="lg:col-span-8 space-y-8">
           
-          {/* Geographic coordinates */}
+          {/* Geographic coordinates & Interactive Map */}
           <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
             <div className="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-low">
-              <img
-                alt="Map coordinate crop"
-                className="w-full h-full object-cover opacity-70"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhgWm2vbsWbyDUbD4mgsvy1AZrwUyaiSKySgBqDHHlYkuLQwP-vjNxO27FlcDq4xFb_i7bwUmlloXU3F1Ap--g8q8PUL4Mj9e9hiR3WG80ydnAUMQsc_qxkQfGSO972p9-bEXnAjs_4VE08f6AZ3NY1XyUJ4GBG1GjcSfHzAS6ZOyR4MlYzQAnkAEPLdjNmFGDt2uKxIyztLZVPJepz6xt_K_oPjuInIri-dGYQB8FF-GH1KrrO_74MMPX4I5S8WHSniXDxxpbP2ZO"
-              />
-              <div className="absolute top-4 left-4 glass-panel px-4 py-2 rounded-lg bg-white/80 backdrop-blur-sm border border-white/20 shadow-sm font-sans">
-                <p className="text-xs text-on-surface-variant uppercase tracking-wider font-bold">GIS Impact Coordinates</p>
-                <p className="font-semibold text-sm text-on-surface mt-0.5">Latitude: 28.61° N • Longitude: 77.20° E</p>
-              </div>
+              <iframe
+                src={school.mapUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full"
+              ></iframe>
             </div>
           </div>
 
@@ -141,7 +162,7 @@ export default function SchoolProfileDetail() {
             <div className="space-y-4 font-sans text-sm">
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Total Enrolled Students</span>
-                <span className="font-bold text-on-surface">1,240 Students</span>
+                <span className="font-bold text-on-surface">{school.enrolled} Students</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Class Grade Range</span>
@@ -153,7 +174,7 @@ export default function SchoolProfileDetail() {
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Active Programs</span>
-                <span className="font-bold text-primary">4 Programs</span>
+                <span className="font-bold text-primary">{school.programs} Programs</span>
               </div>
             </div>
           </div>

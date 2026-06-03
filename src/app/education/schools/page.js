@@ -2,42 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { DEFAULT_SCHOOLS, AMAN_FOUNDATION_MAP } from "@/lib/schoolsData";
 
 export default function SchoolsModule() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [schools, setSchools] = useState([
-    {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd0x1ztc9iuj8nay2xC1_MH-xTSmAKr8IhFrASNZRkSKkt-Y4BunC5I9iqvTLQ0_8lmU0zaYnPjqddtwFcC75fjZRBUU-N_7DG60EY9HluYt_nZMGUi1MCuGMs9ZtR2iM2AGFyw2MvZhg-RlW1as3xPOOXef7qU9OwfisCQeoCv_6chJeBZbBMdmknEG_LLtMl_EWluwSEWTOAEkWm2p31lCjaolK7bQHfqtZzT6CLsbLoare9Nu918oPHFj07H0LgIShvW4giB6YL",
-      name: "Oakridge Academy",
-      location: "North District",
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      enrolled: "1,240",
-      programs: 4,
-      goal: 85,
-    },
-    {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCz5AwPFuwFIR2gamqHGmS3Z3IdTDQwW83VVeH6b9NJQeyhwstun166F-NBJdmvRxVedIL-KvP2kSfrxII7pBp79OmeBVj_J6PnuiUawZodfc0uJXAvWrakkcwnw4Hqf3XMp1L_FWf3gbWbnqajq_B2L9R61bXpsmng6PGHQ1DhYHPRtNj0FIVW9oXuywykoMFb8kYgru_HD_DkySGwo1b-jcWzvibQ5MZ6R3bzcPgSiBKeu0Rk1ETZRc61Hdu6z3xj1KNhL2dgFdP5",
-      name: "Riverside Public",
-      location: "East Valley",
-      status: "Review",
-      statusClass: "bg-surface-container-high text-on-surface-variant",
-      enrolled: "850",
-      programs: 2,
-      goal: 42,
-    },
-    {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB3JsQ8gLDGjXcAskdAgUZD_gbTWPDpCHJ32DnFoopdp-_p5I_tgEYtvw4dOCafH7MyasL1dS3wak_92AIaWlwMwG3sj4MjB1WuLlaXIrD_Pgmeuj-7QDOpOBBGV61QzLmn-ToK-R2LhxD-uDv5RiRqzcVeF6dzd8NDuP0UxUs4_6vkZrksOHYi1xW4AxQWl2kD1120kSJ72va_hR5sAs4V-2ir50bTZl6Oc9Rb9HATjyWanXkUOJDd6GDhhJaAsICMPa-8RFXRUFJx",
-      name: "Summit Prep",
-      location: "West Highlands",
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      enrolled: "2,100",
-      programs: 7,
-      goal: 94,
-    },
-  ]);
+  const [schools, setSchools] = useState(DEFAULT_SCHOOLS);
 
   // Form states
   const [newSchoolName, setNewSchoolName] = useState("");
@@ -70,11 +40,17 @@ export default function SchoolsModule() {
     setShowAddModal(false);
   };
 
-  const filteredSchools = schools.filter(
-    (s) =>
+  const [selectedLocation, setSelectedLocation] = useState("All");
+
+  const filteredSchools = schools.filter((s) => {
+    const matchesSearch =
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      s.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLocation =
+      selectedLocation === "All" ||
+      s.location.toLowerCase().startsWith(selectedLocation.toLowerCase());
+    return matchesSearch && matchesLocation;
+  });
 
   return (
     <div className="p-6 lg:p-10 flex flex-col gap-10 max-w-[1600px] mx-auto w-full">
@@ -99,45 +75,23 @@ export default function SchoolsModule() {
             Monitoring school profiles, program participation, and geographic impact across targeted regions.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4 w-full xl:w-auto mt-4 xl:mt-0">
-          <div className="relative w-full sm:w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
-              search
-            </span>
-            <input
-              className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
-              placeholder="Search schools..."
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-            <button className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer">
-              <span className="material-symbols-outlined text-[18px]">download</span>
-              <span className="whitespace-nowrap">Export Data</span>
-            </button>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)] cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              <span className="whitespace-nowrap">Add School</span>
-            </button>
-          </div>
-        </div>
       </div>
       {/* Bento Grid Layout */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Map View (Hero Card) */}
-        <div className="xl:col-span-8 bg-surface-container-low rounded-[1rem] relative overflow-hidden h-[500px] flex group">
-          <img
-            alt="Geographic mapping of schools"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhgWm2vbsWbyDUbD4mgsvy1AZrwUyaiSKySgBqDHHlYkuLQwP-vjNxO27FlcDq4xFb_i7bwUmlloXU3F1Ap--g8q8PUL4Mj9e9hiR3WG80ydnAUMQsc_qxkQfGSO972p9-bEXnAjs_4VE08f6AZ3NY1XyUJ4GBG1GjcSfHzAS6ZOyR4MlYzQAnkAEPLdjNmFGDt2uKxIyztLZVPJepz6xt_K_oPjuInIri-dGYQB8FF-GH1KrrO_74MMPX4I5S8WHSniXDxxpbP2ZO"
-          />
+        <div className="xl:col-span-8 bg-surface-container-low rounded-[1rem] relative overflow-hidden h-[500px] flex group border border-outline-variant/10 shadow-inner">
+          <iframe
+            src={AMAN_FOUNDATION_MAP.embedUrl}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full h-full"
+          ></iframe>
           {/* Glassmorphism Stats Overlay */}
-          <div className="absolute bottom-6 left-6 right-6 md:right-auto md:w-[340px] bg-surface-container-lowest/85 backdrop-blur-[12px] p-6 rounded-[1rem] shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)]">
+          <div className="absolute bottom-6 left-6 right-6 md:right-auto md:w-[340px] bg-surface-container-lowest/85 backdrop-blur-[12px] p-6 rounded-[1rem] shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] pointer-events-none">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-headline text-lg text-on-surface tracking-tight">Regional Impact</h3>
               <span className="material-symbols-outlined text-primary">public</span>
@@ -147,13 +101,15 @@ export default function SchoolsModule() {
                 <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
                   Total Schools
                 </p>
-                <p className="font-headline text-2xl text-on-surface">{schools.length + 121}</p>
+                <p className="font-headline text-2xl text-on-surface">{schools.length}</p>
               </div>
               <div>
                 <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
                   Active Students
                 </p>
-                <p className="font-headline text-2xl text-primary">45.2k</p>
+                <p className="font-headline text-2xl text-primary">
+                  {schools.reduce((acc, s) => acc + parseInt(s.enrolled.toString().replace(/,/g, "")), 0).toLocaleString()}
+                </p>
               </div>
             </div>
           </div>
@@ -220,14 +176,64 @@ export default function SchoolsModule() {
           </div>
         </div>
       </div>
+
+      {/* Toolbar: Search & Action Buttons */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-surface-container-low p-5 rounded-2xl border border-outline-variant/10">
+        <div className="relative w-full md:w-80">
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">
+            search
+          </span>
+          <input
+            className="w-full pl-11 pr-4 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
+            placeholder="Search schools..."
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <button className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/10">
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            <span className="whitespace-nowrap">Export Data</span>
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)] cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            <span className="whitespace-nowrap">Add School</span>
+          </button>
+        </div>
+      </div>
+
       {/* School Profile Cards Section */}
       <div className="mt-4">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-headline text-2xl tracking-tight text-on-surface">Featured Profiles</h3>
-          <button className="text-primary font-label text-sm uppercase tracking-widest hover:underline flex items-center gap-1 cursor-pointer">
-            View All Directory{" "}
-            <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-          </button>
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 border-b border-surface-variant/20 pb-4">
+          <div>
+            <h3 className="font-headline text-2xl tracking-tight text-on-surface">Featured Profiles</h3>
+            <p className="text-xs text-on-surface-variant mt-1 font-body">Showing {filteredSchools.length} partner schools</p>
+          </div>
+          
+          {/* Premium Location Dropdown */}
+          <div className="relative min-w-[220px] w-full sm:w-auto">
+            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
+              location_on
+            </span>
+            <select
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              className="w-full pl-11 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-xs font-label uppercase tracking-widest text-on-surface appearance-none cursor-pointer transition-shadow"
+            >
+              {["All Locations", ...Array.from(new Set(schools.map(s => s.location.split(",")[0].trim())))].map((loc) => (
+                <option key={loc} value={loc === "All Locations" ? "All" : loc}>
+                  {loc}
+                </option>
+              ))}
+            </select>
+            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
+              keyboard_arrow_down
+            </span>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSchools.map((s, index) => (

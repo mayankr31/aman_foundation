@@ -174,11 +174,11 @@ export default function GoatRearing() {
               </svg>
             </div>
             <div className="flex justify-between text-xs text-on-surface-variant mt-4 px-4 border-t border-surface-container pt-4">
-              <span>Village Alpha</span>
-              <span>Village Beta</span>
-              <span>Village Gamma</span>
-              <span>Village Delta</span>
-              <span>Village Epsilon</span>
+              <span>Bartari</span>
+              <span>Digjani</span>
+              <span>Sawpur</span>
+              <span>Balikuri</span>
+              <span>Gunialguri</span>
             </div>
           </div>
 

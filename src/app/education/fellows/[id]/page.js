@@ -64,6 +64,14 @@ export default function FellowProfileDetail() {
 
   const name = decodeURIComponent(id || "Aisha Rahman").replace(/-/g, " ");
 
+  const fellowsDb = {
+    "Aisha Rahman": { location: "Bartari, Kalgachia", cohort: "Cohort '23" },
+    "Fatima Tariq": { location: "Digjani, Kalgachia", cohort: "Cohort '24" },
+    "Bilal Khan": { location: "Sawpur, Kalgachia", cohort: "Cohort '23" },
+  };
+
+  const fellowInfo = fellowsDb[name] || { location: "Bartari, Kalgachia", cohort: "Cohort '24" };
+
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back Link */}
@@ -96,12 +104,12 @@ export default function FellowProfileDetail() {
                 {name}
               </h2>
               <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                Cohort '24
+                {fellowInfo.cohort}
               </span>
             </div>
             <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">location_on</span>
-              Karachi South District • 3 Active Placements
+              {fellowInfo.location} • 3 Active Placements
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
               <div>

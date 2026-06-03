@@ -3,10 +3,20 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { DEFAULT_STUDENTS } from "@/lib/schoolsData";
 
 export default function StudentProfileDetail() {
   const { id } = useParams();
   const name = decodeURIComponent(id || "Aarav Kumar").replace(/-/g, " ");
+
+  const student = DEFAULT_STUDENTS.find(s => s.name.toLowerCase() === name.toLowerCase()) || {
+    name: name,
+    id: "STU-2026-999",
+    school: "Raiyan Academy Bartary",
+    grade: "Grade 8",
+    district: "Bartari",
+    status: "On Track"
+  };
 
   const [attendanceLogs] = useState([
     { month: "Jan", present: 20, total: 22, percentage: 90 },
@@ -48,23 +58,23 @@ export default function StudentProfileDetail() {
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h2 className="text-3xl font-headline font-black text-on-surface capitalize">
-                {name}
+                {student.name}
               </h2>
               <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                On Track
+                {student.status}
               </span>
             </div>
             <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">school</span>
-              Vidya Mandir High School • Grade 8
+              {student.school} • {student.grade}
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
               <div>
-                <span className="font-bold text-on-surface">Student ID:</span> STU-2023-089
+                <span className="font-bold text-on-surface">Student ID:</span> {student.id}
               </div>
               <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
               <div>
-                <span className="font-bold text-on-surface">District:</span> North District
+                <span className="font-bold text-on-surface">District:</span> {student.district}
               </div>
             </div>
           </div>
@@ -115,7 +125,7 @@ export default function StudentProfileDetail() {
               </div>
               <div className="border-b border-surface-container pb-3">
                 <p className="text-on-surface-variant mb-1 font-medium">Home Location</p>
-                <p className="font-semibold text-on-surface">Ward 4, North District</p>
+                <p className="font-semibold text-on-surface">Ward 4, {student.district}</p>
               </div>
             </div>
           </div>
@@ -181,8 +191,8 @@ export default function StudentProfileDetail() {
             <div className="space-y-4 font-sans text-sm">
               <div className="p-4 bg-surface rounded-lg">
                 <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Partner Institution</p>
-                <Link href="/education/schools" className="font-semibold text-primary hover:underline">
-                  Vidya Mandir High School
+                <Link href={`/education/schools/${encodeURIComponent(student.school.replace(/\s+/g, '-'))}`} className="font-semibold text-primary hover:underline">
+                  {student.school}
                 </Link>
                 <p className="text-xs text-on-surface-variant mt-1">Status: Active Partnership</p>
               </div>
