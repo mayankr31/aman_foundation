@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "@/lib/useAuth";
+import AttendanceModal from "@/components/AttendanceModal";
 
 export default function Dashboard() {
   const [activeYear, setActiveYear] = useState(2024);
+  const { user } = useAuth();
+  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
 
   // Mock data for years
   const metrics = {
@@ -42,6 +46,15 @@ export default function Dashboard() {
           <p className="text-on-surface-variant text-sm mt-2">Data updated: Today, 09:41 AM</p>
         </div>
         <div className="flex gap-3">
+          {user && user.role?.name !== 'ADMIN' && (
+            <button 
+              onClick={() => setIsAttendanceModalOpen(true)}
+              className="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-[0_8px_24px_rgba(5,150,105,0.2)] hover:shadow-[0_4px_12px_rgba(5,150,105,0.3)] hover:bg-emerald-700 transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-lg">co_present</span>
+              Daily Attendance
+            </button>
+          )}
           <button className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface text-sm font-medium hover:bg-surface-container transition-colors flex items-center gap-2">
             <span className="material-symbols-outlined text-lg">download</span>
             Export Report
@@ -248,6 +261,11 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
+
+      <AttendanceModal 
+        isOpen={isAttendanceModalOpen} 
+        onClose={() => setIsAttendanceModalOpen(false)} 
+      />
     </div>
   );
 }

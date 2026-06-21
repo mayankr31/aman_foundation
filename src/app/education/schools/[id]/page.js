@@ -2,72 +2,269 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import { DEFAULT_SCHOOLS } from "@/lib/schoolsData";
+import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+
+function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      {options ? (
+        <select name={name} value={value} onChange={onChange}
+          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+          {options.map(o => <option key={o} value={o}>{o}</option>)}
+        </select>
+      ) : (
+        <input type={type} name={name} value={value} onChange={onChange} required={required}
+          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+      )}
+    </div>
+  );
+}
+
+function Modal({ title, onClose, children }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
+          <h3 className="text-lg font-bold font-headline text-on-surface">{title}</h3>
+          <button onClick={onClose} className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer">
+            <span className="material-symbols-outlined text-on-surface-variant">close</span>
+          </button>
+        </div>
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function SchoolProfileDetail() {
   const { id } = useParams();
-  const name = decodeURIComponent(id || "Oakridge Academy").replace(/-/g, " ");
+  const { token, isInitializing } = useAuth();
+  const toast = useToast();
+  const [school, setSchool] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance'
 
-  const school = DEFAULT_SCHOOLS.find(s => s.name.toLowerCase() === name.toLowerCase()) || {
-    name: name,
-    location: "Kalgachia, Barpeta",
-    address: "Kalgachia, Barpeta-781319, Assam",
-    enrolled: "980",
-    programs: 4,
-    goal: 85,
-    status: "Active",
-    latitude: "26.3575° N",
-    longitude: "90.8708° E",
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3575.0416084059693!2d90.87077687542042!3d26.35751617698246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3759a1653dc76b4b%3A0x63c8798832bf4693!2sAman%20Foundation!5e0!3m2!1sen!2sin!4v1780501000127!5m2!1sen!2sin",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd0x1ztc9iuj8nay2xC1_MH-xTSmAKr8IhFrASNZRkSKkt-Y4BunC5I9iqvTLQ0_8lmU0zaYnPjqddtwFcC75fjZRBUU-N_7DG60EY9HluYt_nZMGUi1MCuGMs9ZtR2iM2AGFyw2MvZhg-RlW1as3xPOOXef7qU9OwfisCQeoCv_6chJeBZbBMdmknEG_LLtMl_EWluwSEWTOAEkWm2p31lCjaolK7bQHfqtZzT6CLsbLoare9Nu918oPHFj07H0LgIShvW4giB6YL"
-  };
+  // For assignment modals
+  const [allStudents, setAllStudents] = useState([]);
+  const [allFellows, setAllFellows] = useState([]);
+  const [allPrograms, setAllPrograms] = useState([]);
+  const [searchQ, setSearchQ] = useState("");
 
-  const [programs] = useState([
-    { name: "Standard 3 Literacy Drive", status: "Active", lead: "Aisha Rahman", reach: "120 Students" },
-    { name: "Parent Teacher Assembly", status: "Active", lead: "Parent Committee", reach: "85 Families" },
-    { name: "Primary Math Block Kit", status: "Active", lead: "Aisha Rahman", reach: "140 Students" },
-    { name: "After School Sports Linkage", status: "Completed", lead: "External Coach", reach: "45 Students" },
-  ]);
+  const [attendanceDate, setAttendanceDate] = useState("");
+  const [attendanceSelection, setAttendanceSelection] = useState(new Set());
+  const [isEditingAttendance, setIsEditingAttendance] = useState(false);
+  const [attendanceReviewMode, setAttendanceReviewMode] = useState(false);
+  const [attendanceAction, setAttendanceAction] = useState(""); // "Present" or "Absent"
 
-  const [studentDirectory] = useState([
-    { name: "Aarav Kumar", id: "STU-2023-089", grade: "Grade 8", status: "On Track" },
-    { name: "Meera Patel", id: "STU-2024-012", grade: "Grade 6", status: "Satisfactory" },
-    { name: "Devendra Joshi", id: "STU-2024-114", grade: "Grade 8", status: "On Track" },
-  ]);
+  const [editForm, setEditForm] = useState({});
+
+  const authHeaders = useCallback(() => ({
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  }), [token]);
+
+  const loadSchool = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/schools/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+      const json = await res.json();
+      if (json.success) {
+        const s = json.data;
+        setSchool(s);
+        setEditForm({
+          name: s.name || "",
+          principalName: s.principalName || "",
+          email: s.email || "",
+          phone: s.phone || "",
+          address: s.address || "",
+          location: s.location || "",
+          status: s.status || "Active",
+          latitude: s.latitude || "",
+          longitude: s.longitude || "",
+          mapUrl: s.mapUrl || "",
+          goal: s.goal || 80,
+        });
+      }
+    } catch (err) { console.error("Failed to load school:", err); }
+    finally { setLoading(false); }
+  }, [id, token]);
+
+  useEffect(() => {
+    if (!isInitializing) {
+      loadSchool();
+    }
+  }, [loadSchool, isInitializing]);
+
+  // Load relevant lists when modals open
+  useEffect(() => {
+    if (!modal) return;
+    const h = token ? { Authorization: `Bearer ${token}` } : {};
+    if (modal === "students") {
+      fetch("/api/students", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllStudents(j.data); });
+    }
+    if (modal === "fellows") {
+      fetch("/api/fellows", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllFellows(j.data); });
+    }
+    if (modal === "programs") {
+      fetch("/api/programs", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllPrograms(j.data); });
+    }
+  }, [modal, token]);
+
+  const loadExistingAttendance = useCallback(async (date) => {
+    if (!date) return;
+    try {
+      const res = await fetch(`/api/schools/${id}/attendance?date=${date}`, { headers: authHeaders() });
+      const json = await res.json();
+      if (json.success && json.data.length > 0) {
+        setIsEditingAttendance(true);
+        const presentIds = new Set(json.data.filter(d => d.status === "Present" || d.status === "Late" || d.status === "Excused").map(d => d.studentId));
+        setAttendanceSelection(presentIds);
+      } else {
+        setIsEditingAttendance(false);
+        setAttendanceSelection(new Set(school?.students?.map(s => s.id) || []));
+      }
+    } catch (err) {
+      console.error("Failed to load existing attendance");
+    }
+  }, [id, authHeaders, school?.students]);
+
+  useEffect(() => {
+    if (modal === "attendance" && attendanceDate && !attendanceReviewMode) {
+      loadExistingAttendance(attendanceDate);
+    }
+  }, [attendanceDate, modal, attendanceReviewMode, loadExistingAttendance]);
+
+  // ─── Handlers ────────────────────────────────────────────────────────────────
+
+  async function handleEditSave(e) {
+    e.preventDefault(); setSaving(true);
+    try {
+      const res = await fetch(`/api/schools/${id}`, { method: "PATCH", headers: authHeaders(), body: JSON.stringify(editForm) });
+      const json = await res.json();
+      if (json.success) { await loadSchool(); setModal(null); toast.success("Profile saved"); }
+      else { toast.error(json.error || "Failed to save"); alert(json.error || "Failed to save"); }
+    } finally { setSaving(false); }
+  }
+
+  async function handleAssignStudent(studentId) {
+    await fetch(`/api/schools/${id}/students`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    await loadSchool();
+  }
+
+  async function handleRemoveStudent(studentId) {
+    if (!confirm("Remove this student from the school?")) return;
+    await fetch(`/api/schools/${id}/students`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ studentId }) });
+    await loadSchool();
+  }
+
+  async function handleAssignFellow(fellowId) {
+    await fetch(`/api/schools/${id}/fellows`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    await loadSchool();
+  }
+
+  async function handleRemoveFellow(fellowId) {
+    if (!confirm("Remove this fellow from the school?")) return;
+    await fetch(`/api/schools/${id}/fellows`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ fellowId }) });
+    await loadSchool();
+  }
+
+  async function handleAssignProgram(programId) {
+    await fetch(`/api/schools/${id}/programs`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    await loadSchool();
+  }
+
+  async function handleRemoveProgram(programId) {
+    if (!confirm("Remove this program from the school?")) return;
+    await fetch(`/api/schools/${id}/programs`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ programId }) });
+    await loadSchool();
+  }
+
+  function handleReviewAttendance(e, statusAction) {
+    e.preventDefault();
+    setAttendanceAction(statusAction);
+    setAttendanceReviewMode(true);
+  }
+
+  async function handleConfirmAttendance() {
+    setSaving(true);
+    try {
+      const studentStatuses = (school?.students || []).map(s => ({
+        studentId: s.id,
+        status: attendanceSelection.has(s.id) ? attendanceAction : (attendanceAction === "Present" ? "Absent" : "Present")
+      }));
+      const res = await fetch(`/api/schools/${id}/attendance`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ date: attendanceDate, studentStatuses })
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success(isEditingAttendance ? "Attendance updated successfully!" : "Attendance marked successfully!");
+        setModal(null);
+        setAttendanceReviewMode(false);
+        await loadSchool();
+      } else {
+        toast.error(json.error || "Failed to mark attendance");
+      }
+    } catch (err) {
+      toast.error("An error occurred while marking attendance.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (isInitializing || loading) return (
+    <div className="p-8 flex justify-center items-center h-96">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+    </div>
+  );
+  if (!school) return <div className="p-8 text-center text-on-surface-variant font-medium">School not found</div>;
+
+  const enrolledStudents = school.students || [];
+  const assignedFellows = school.fellows || [];
+  const assignedPrograms = school.programs || [];
+  const { totalEnrolled = 0, genderRatio = {} } = school;
+  const maleCount = genderRatio.male || 0;
+  const femaleCount = genderRatio.female || 0;
+  const malePercent = totalEnrolled > 0 ? Math.round((maleCount / totalEnrolled) * 100) : 0;
+  const femalePercent = totalEnrolled > 0 ? Math.round((femaleCount / totalEnrolled) * 100) : 0;
+
+  const schoolStudentIds = new Set(enrolledStudents.map(s => s.id));
+  const schoolFellowIds = new Set(assignedFellows.map(f => f.fellowId));
+  const schoolProgramIds = new Set(assignedPrograms.map(p => p.programId));
+
+  const filteredStudents = allStudents.filter(s => s.name.toLowerCase().includes(searchQ.toLowerCase()) || s.studentId?.includes(searchQ));
+  const filteredFellows = allFellows.filter(f => f.name.toLowerCase().includes(searchQ.toLowerCase()));
+  const filteredPrograms = allPrograms.filter(p => p.title.toLowerCase().includes(searchQ.toLowerCase()));
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
-      {/* Back Link */}
-      <Link
-        href="/education/schools"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
-      >
-        <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
-          arrow_back
-        </span>
-        <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-          Back to Schools Directory
-        </span>
+      {/* Back */}
+      <Link href="/education/schools" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+        <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Schools Directory</span>
       </Link>
 
       {/* Hero Header */}
       <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-surface-container overflow-hidden shrink-0 border-4 border-surface shadow-md">
-            <img
-              alt="School avatar"
-              className="w-full h-full object-cover"
-              src={school.img}
-            />
-          </div>
+          {school.img ? (
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-surface-container overflow-hidden shrink-0 border-4 border-surface shadow-md">
+              <img alt="School" className="w-full h-full object-cover" src={school.img} />
+            </div>
+          ) : (
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center text-4xl font-bold shrink-0 border-4 border-surface shadow-md">
+              {school.name[0]}
+            </div>
+          )}
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize leading-tight">
-                {school.name}
-              </h2>
-              <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
+              <h2 className="text-3xl font-headline font-black text-on-surface capitalize leading-tight">{school.name}</h2>
+              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${school.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                 {school.status}
               </span>
             </div>
@@ -76,133 +273,449 @@ export default function SchoolProfileDetail() {
               {school.location} • Regional Impact Partner
             </p>
             <div className="flex flex-col gap-2 mt-2 text-xs font-medium text-slate-500 font-sans">
-              <div>
-                <span className="font-bold text-on-surface">Address:</span> {school.address}
-              </div>
+              <div><span className="font-bold text-on-surface">Principal:</span> {school.principalName || "—"}</div>
               <div className="flex flex-wrap gap-4">
-                <div>
-                  <span className="font-bold text-on-surface">Contact Person:</span> Principal Margaret (admin@school.edu)
-                </div>
+                <div><span className="font-bold text-on-surface">Email:</span> {school.email || "—"}</div>
                 <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
-                <div>
-                  <span className="font-bold text-on-surface">Phone:</span> +91 99887 76655
-                </div>
+                <div><span className="font-bold text-on-surface">Phone:</span> {school.phone || "—"}</div>
               </div>
+              {school.address && <div><span className="font-bold text-on-surface">Address:</span> {school.address}</div>}
             </div>
           </div>
         </div>
-        <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start">
-          <button className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
-            <span className="material-symbols-outlined text-[18px]">edit</span>
-            Edit Profile
+        <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
+          <button onClick={() => setModal("edit")}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+            <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
           </button>
           <button className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
-            <span className="material-symbols-outlined text-[18px]">download</span>
-            Export Impact Report
+            <span className="material-symbols-outlined text-[18px]">download</span> Export Report
           </button>
         </div>
       </header>
 
-      {/* Bento Layout Grid */}
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Left Column: Geographic Map & Programs */}
+
+        {/* Left: Map & Programs */}
         <div className="lg:col-span-8 space-y-8">
-          
-          {/* Geographic coordinates & Interactive Map */}
-          <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
-            <div className="relative w-full h-[320px] rounded-lg overflow-hidden bg-surface-container-low">
-              <iframe
-                src={school.mapUrl}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full"
-              ></iframe>
+
+          {/* Map */}
+          {school.mapUrl && (
+            <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
+              <div className="relative w-full h-[280px] rounded-lg overflow-hidden bg-surface-container-low">
+                <iframe src={school.mapUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full"></iframe>
+              </div>
             </div>
+          )}
+
+          {/* Programs */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">campaign</span>
+                Active Program Participation
+              </h3>
+              <button onClick={() => { setModal("programs"); setSearchQ(""); }}
+                className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
+                <span className="material-symbols-outlined text-[16px]">add</span> Manage Programs
+              </button>
+            </div>
+            {assignedPrograms.length === 0 ? (
+              <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No programs linked. Click "Manage Programs" to add one.</p>
+            ) : (
+              <div className="space-y-4">
+                {assignedPrograms.map(({ program, programId }) => (
+                  <div key={programId} className="p-4 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                      <h4 className="font-bold text-on-surface text-base">{program.title}</h4>
+                      <p className="text-xs text-on-surface-variant mt-1">{program.description}</p>
+                    </div>
+                    <div className="flex items-center gap-3 self-end md:self-auto shrink-0 font-sans">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${program.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
+                        {program.status}
+                      </span>
+                      <Link href={`/education/pta/program/${programId}`} className="text-xs text-primary hover:underline font-medium">View</Link>
+                      <button onClick={() => handleRemoveProgram(programId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                        <span className="material-symbols-outlined text-[14px]">remove_circle</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Program Participation */}
+          {/* Enrolled Students */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-xl text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">campaign</span>
-              Active Program Participation
-            </h3>
-            <div className="space-y-4">
-              {programs.map((prog, idx) => (
-                <div key={idx} className="p-4 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div>
-                    <h4 className="font-bold text-on-surface text-base">{prog.name}</h4>
-                    <p className="text-xs text-on-surface-variant mt-1">Lead Fellow: {prog.lead}</p>
-                  </div>
-                  <div className="flex items-center gap-6 self-end md:self-auto shrink-0 font-sans">
-                    <div className="text-right">
-                      <p className="text-xs text-on-surface-variant font-medium">Reaches</p>
-                      <p className="font-bold text-on-surface">{prog.reach}</p>
-                    </div>
-                    <span className="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded">
-                      {prog.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">groups</span>
+                Enrolled Students ({totalEnrolled})
+              </h3>
+              <div className="flex gap-2">
+                <button onClick={() => { setModal("attendance"); setAttendanceDate(new Date().toISOString().split("T")[0]); setAttendanceReviewMode(false); setSearchQ(""); }}
+                  className="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-semibold hover:bg-secondary-container/80 transition-colors flex items-center gap-1.5 cursor-pointer">
+                  <span className="material-symbols-outlined text-[16px]">how_to_reg</span> Mark Attendance
+                </button>
+                <button onClick={() => { setModal("students"); setSearchQ(""); }}
+                  className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
+                  <span className="material-symbols-outlined text-[16px]">manage_accounts</span> Manage Students
+                </button>
+              </div>
             </div>
+            {enrolledStudents.length === 0 ? (
+              <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No students enrolled. Click "Manage Students" to assign.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left font-sans text-sm">
+                  <thead>
+                    <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
+                      <th className="py-3 px-3">Name</th>
+                      <th className="py-3 px-3">Student ID</th>
+                      <th className="py-3 px-3">Grade</th>
+                      <th className="py-3 px-3">Status</th>
+                      <th className="py-3 px-3 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {enrolledStudents.map(s => (
+                      <tr key={s.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
+                        <td className="py-3 px-3">
+                          <Link href={`/education/students/${s.id}`} className="font-semibold text-primary hover:underline">{s.name}</Link>
+                        </td>
+                        <td className="py-3 px-3 text-on-surface-variant">{s.studentId}</td>
+                        <td className="py-3 px-3 text-on-surface-variant">{s.grade}</td>
+                        <td className="py-3 px-3">
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${s.status === "On Track" ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"}`}>
+                            {s.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <button onClick={() => handleRemoveStudent(s.id)} className="text-error hover:underline text-xs font-medium cursor-pointer">Remove</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Column: Statistics & Student Link */}
+        {/* Right: Metrics, Fellows */}
         <div className="lg:col-span-4 space-y-8">
-          
-          {/* Institutional Metrics */}
+
+          {/* School Metrics */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-6">School Metrics</h3>
             <div className="space-y-4 font-sans text-sm">
               <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Total Enrolled Students</span>
-                <span className="font-bold text-on-surface">{school.enrolled} Students</span>
+                <span className="text-on-surface-variant font-medium">Total Enrolled</span>
+                <span className="font-bold text-on-surface">{totalEnrolled} Students</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Class Grade Range</span>
-                <span className="font-bold text-on-surface">Grade 1 to Grade 10</span>
+                <span className="text-on-surface-variant font-medium">Enrollment Goal</span>
+                <span className="font-bold text-on-surface">{school.goal} Students</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Student-to-Teacher Ratio</span>
-                <span className="font-bold text-on-surface">28 : 1</span>
+                <span className="text-on-surface-variant font-medium">Active Fellows</span>
+                <span className="font-bold text-primary">{assignedFellows.length}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Active Programs</span>
-                <span className="font-bold text-primary">{school.programs} Programs</span>
+                <span className="font-bold text-primary">{assignedPrograms.length}</span>
               </div>
             </div>
           </div>
 
-          {/* Assigned Students */}
+          {/* Gender Ratio */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">groups</span>
-              Enrolled Beneficiaries
-            </h3>
-            <div className="space-y-4">
-              {studentDirectory.map((stud, idx) => (
-                <div key={idx} className="flex justify-between items-center py-2 border-b border-surface-container last:border-none font-sans text-sm">
-                  <div>
-                    <Link href={`/education/students/${encodeURIComponent(stud.name.replace(/\s+/g, '-'))}`} className="font-semibold text-primary hover:underline">
-                      {stud.name}
-                    </Link>
-                    <p className="text-xs text-on-surface-variant mt-0.5">ID: {stud.id} • {stud.grade}</p>
+            <h3 className="font-headline font-bold text-base text-on-surface mb-4">Gender Ratio</h3>
+            {totalEnrolled === 0 ? (
+              <p className="text-sm text-on-surface-variant text-center py-4">No students enrolled yet.</p>
+            ) : (
+              <div className="space-y-4 font-sans text-sm">
+                <div>
+                  <div className="flex justify-between mb-1.5 font-medium">
+                    <span className="text-primary">Male</span>
+                    <span className="text-on-surface">{maleCount} ({malePercent}%)</span>
                   </div>
-                  <span className="bg-primary-fixed text-on-primary-fixed text-[9px] font-bold tracking-wider px-2 py-0.5 rounded uppercase">
-                    {stud.status}
-                  </span>
+                  <div className="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full rounded-full" style={{ width: `${malePercent}%` }}></div>
+                  </div>
                 </div>
-              ))}
+                <div>
+                  <div className="flex justify-between mb-1.5 font-medium">
+                    <span className="text-secondary">Female</span>
+                    <span className="text-on-surface">{femaleCount} ({femalePercent}%)</span>
+                  </div>
+                  <div className="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+                    <div className="bg-secondary h-full rounded-full" style={{ width: `${femalePercent}%` }}></div>
+                  </div>
+                </div>
+                {genderRatio.other > 0 && (
+                  <div>
+                    <div className="flex justify-between mb-1.5 font-medium">
+                      <span className="text-tertiary">Other</span>
+                      <span className="text-on-surface">{genderRatio.other} ({100 - malePercent - femalePercent}%)</span>
+                    </div>
+                    <div className="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+                      <div className="bg-tertiary h-full rounded-full" style={{ width: `${100 - malePercent - femalePercent}%` }}></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Assigned Fellows */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">people</span>
+                Fellows ({assignedFellows.length})
+              </h3>
+              <button onClick={() => { setModal("fellows"); setSearchQ(""); }}
+                className="bg-primary/10 text-primary p-1.5 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer">
+                <span className="material-symbols-outlined text-[16px]">edit</span>
+              </button>
             </div>
+            {assignedFellows.length === 0 ? (
+              <p className="text-sm text-on-surface-variant text-center py-4">No fellows assigned yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {assignedFellows.map(fs => (
+                  <div key={fs.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none font-sans text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                        {fs.fellow?.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                      <div>
+                        <Link href={`/education/fellows/${fs.fellowId}`} className="font-semibold text-primary hover:underline text-sm">
+                          {fs.fellow?.name || "—"}
+                        </Link>
+                        <p className="text-xs text-on-surface-variant">{fs.fellow?.cohort || ""}</p>
+                      </div>
+                    </div>
+                    <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                      <span className="material-symbols-outlined text-[14px]">remove_circle</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* ─── MODALS ──────────────────────────────────────────────────────────────── */}
+
+      {/* Mark Attendance Modal */}
+      {modal === "attendance" && (
+        <Modal title={isEditingAttendance ? "Edit Attendance" : "Bulk Mark Attendance"} onClose={() => { setModal(null); setAttendanceReviewMode(false); }}>
+          {!attendanceReviewMode ? (
+            <div className="space-y-4">
+              <div className="flex gap-4 items-center">
+                <InputField label="Attendance Date" name="date" type="date" value={attendanceDate} onChange={e => setAttendanceDate(e.target.value)} required />
+              </div>
+              <p className="text-sm text-on-surface-variant mb-4">Select students below, then choose an action. Unselected students will be marked with the opposite status.</p>
+              <input type="text" placeholder="Search enrolled students..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+                className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-2" />
+              
+              <div className="flex items-center gap-2 mb-2 text-sm">
+                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set(enrolledStudents.map(s => s.id)))}>Select All</button>
+                <span className="text-on-surface-variant">|</span>
+                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set())}>Clear All</button>
+                <span className="ml-auto font-bold text-on-surface">{attendanceSelection.size} selected</span>
+              </div>
+
+              <div className="space-y-2 max-h-60 overflow-y-auto mb-4 border border-outline-variant/30 rounded-lg p-2">
+                {enrolledStudents.filter(s => s.name.toLowerCase().includes(searchQ.toLowerCase()) || s.studentId?.includes(searchQ)).map(s => (
+                  <label key={s.id} className="flex items-center gap-3 p-2 hover:bg-surface-container rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" checked={attendanceSelection.has(s.id)} onChange={(e) => {
+                      const newSet = new Set(attendanceSelection);
+                      if (e.target.checked) newSet.add(s.id);
+                      else newSet.delete(s.id);
+                      setAttendanceSelection(newSet);
+                    }} className="w-4 h-4 text-primary focus:ring-primary border-outline-variant rounded" />
+                    <div>
+                      <p className="font-semibold text-on-surface text-sm">{s.name}</p>
+                      <p className="text-xs text-on-surface-variant">{s.studentId} • Grade {s.grade}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
+
+              <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
+                <button type="button" onClick={() => { setModal(null); setAttendanceReviewMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+                <div className="flex gap-2">
+                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Absent")} className="px-5 py-2 rounded-full bg-error text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                    Review as Absent
+                  </button>
+                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Present")} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                    Review as Present
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <h4 className="font-bold text-lg text-on-surface mb-2">Review Attendance - {attendanceDate}</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="border border-outline-variant/30 rounded-lg p-3">
+                  <h5 className="font-bold text-primary mb-2 border-b border-outline-variant/20 pb-2">Present ({attendanceAction === "Present" ? attendanceSelection.size : enrolledStudents.length - attendanceSelection.size})</h5>
+                  <ul className="text-sm space-y-1 max-h-48 overflow-y-auto pl-4 list-disc text-on-surface-variant">
+                    {enrolledStudents.filter(s => (attendanceAction === "Present" ? attendanceSelection.has(s.id) : !attendanceSelection.has(s.id))).map(s => (
+                      <li key={s.id}>{s.name}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border border-outline-variant/30 rounded-lg p-3">
+                  <h5 className="font-bold text-error mb-2 border-b border-outline-variant/20 pb-2">Absent ({attendanceAction === "Absent" ? attendanceSelection.size : enrolledStudents.length - attendanceSelection.size})</h5>
+                  <ul className="text-sm space-y-1 max-h-48 overflow-y-auto pl-4 list-disc text-on-surface-variant">
+                    {enrolledStudents.filter(s => (attendanceAction === "Absent" ? attendanceSelection.has(s.id) : !attendanceSelection.has(s.id))).map(s => (
+                      <li key={s.id}>{s.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+                <button type="button" disabled={saving} onClick={() => setAttendanceReviewMode(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50">Back</button>
+                <button type="button" disabled={saving} onClick={handleConfirmAttendance} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                  {saving ? "Saving..." : (isEditingAttendance ? "Update Attendance" : "Mark Attendance")}
+                </button>
+              </div>
+            </div>
+          )}
+        </Modal>
+      )}
+
+      {/* Edit School Profile */}
+      {modal === "edit" && (
+        <Modal title="Edit School Profile" onClose={() => setModal(null)}>
+          <form onSubmit={handleEditSave} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <InputField label="School Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
+              <InputField label="Principal Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} />
+              <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
+              <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+              <InputField label="Location/City" name="location" value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} />
+              <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
+              <InputField label="Enrolment Goal" name="goal" type="number" value={editForm.goal} onChange={e => setEditForm(f => ({ ...f, goal: e.target.value }))} />
+              <InputField label="Latitude" name="latitude" value={editForm.latitude} onChange={e => setEditForm(f => ({ ...f, latitude: e.target.value }))} />
+              <InputField label="Longitude" name="longitude" value={editForm.longitude} onChange={e => setEditForm(f => ({ ...f, longitude: e.target.value }))} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>
+              <textarea value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} rows="2"
+                className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL</label>
+              <input value={editForm.mapUrl} onChange={e => setEditForm(f => ({ ...f, mapUrl: e.target.value }))}
+                placeholder="https://maps.google.com/embed?..."
+                className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                {saving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Manage Students */}
+      {modal === "students" && (
+        <Modal title="Manage Students" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Assign or remove students from this school. Unassigned students are highlighted.</p>
+          <input type="text" placeholder="Search students..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {filteredStudents.map(s => {
+              const isAssigned = schoolStudentIds.has(s.id);
+              return (
+                <div key={s.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                  <div>
+                    <p className="font-semibold text-on-surface text-sm">{s.name}</p>
+                    <p className="text-xs text-on-surface-variant">{s.studentId} • {s.grade} • {s.schoolId ? (isAssigned ? "This School" : "Other School") : "Unassigned"}</p>
+                  </div>
+                  <button
+                    onClick={() => isAssigned ? handleRemoveStudent(s.id) : handleAssignStudent(s.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                  >
+                    {isAssigned ? "Remove" : "Assign"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
+
+      {/* Manage Fellows */}
+      {modal === "fellows" && (
+        <Modal title="Manage Fellows" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Assign or remove fellows from this school. A fellow can be in multiple schools.</p>
+          <input type="text" placeholder="Search fellows..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {filteredFellows.map(f => {
+              const isAssigned = schoolFellowIds.has(f.id);
+              return (
+                <div key={f.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                      {f.name[0].toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-on-surface text-sm">{f.name}</p>
+                      <p className="text-xs text-on-surface-variant">Cohort: {f.cohort} • {f.email || "—"}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => isAssigned ? handleRemoveFellow(f.id) : handleAssignFellow(f.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                  >
+                    {isAssigned ? "Remove" : "Assign"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
+
+      {/* Manage Programs */}
+      {modal === "programs" && (
+        <Modal title="Manage Programs" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Assign or remove programs from this school.</p>
+          <input type="text" placeholder="Search programs..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {filteredPrograms.map(p => {
+              const isAssigned = schoolProgramIds.has(p.id);
+              return (
+                <div key={p.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                  <div>
+                    <p className="font-semibold text-on-surface text-sm">{p.title}</p>
+                    <p className="text-xs text-on-surface-variant">{p.status} • {p.duration || "—"}</p>
+                  </div>
+                  <button
+                    onClick={() => isAssigned ? handleRemoveProgram(p.id) : handleAssignProgram(p.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                  >
+                    {isAssigned ? "Remove" : "Assign"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

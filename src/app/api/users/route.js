@@ -20,6 +20,7 @@ export async function GET(req) {
         email: true,
         mobile: true,
         status: true,
+        department: true,
         role: {
           select: {
             id: true,

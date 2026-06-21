@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAppContext } from '@/context/AppContext';
+import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../globals_auth.css';
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAppContext();
+  const { login } = useAuth();
   const toast = useToast();
   const router = useRouter();
 

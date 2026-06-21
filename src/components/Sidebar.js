@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useAppContext } from "@/context/AppContext";
+import { useAuth } from "@/lib/useAuth";
 
 export default function Sidebar({ isOpen, onClose }) {
   const pathname = usePathname();
-  const { user, logout } = useAppContext();
+  const { user, logout } = useAuth();
   
   // Dropdown states
   const [eduOpen, setEduOpen] = useState(false);
@@ -115,20 +115,24 @@ export default function Sidebar({ isOpen, onClose }) {
             
             {eduOpen && (
               <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
-                <Link
-                  className={sublinkClass(pathname === "/education")}
-                  href="/education"
-                  onClick={onClose}
-                >
-                  Hub Overview
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/education/fellows")}
-                  href="/education/fellows"
-                  onClick={onClose}
-                >
-                  Fellows
-                </Link>
+                {user?.roleName !== "FELLOW" && (
+                  <Link
+                    className={sublinkClass(pathname === "/education")}
+                    href="/education"
+                    onClick={onClose}
+                  >
+                    Hub Overview
+                  </Link>
+                )}
+                {user?.roleName !== "FELLOW" && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/fellows")}
+                    href="/education/fellows"
+                    onClick={onClose}
+                  >
+                    Fellows
+                  </Link>
+                )}
                 <Link
                   className={sublinkClass(pathname === "/education/students")}
                   href="/education/students"
@@ -143,89 +147,111 @@ export default function Sidebar({ isOpen, onClose }) {
                 >
                   Schools
                 </Link>
-                <Link
-                  className={sublinkClass(pathname === "/education/pta")}
-                  href="/education/pta"
-                  onClick={onClose}
-                >
-                  PTA and Programs
-                </Link>
+                {user?.roleName !== "FELLOW" && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/pta")}
+                    href="/education/pta"
+                    onClick={onClose}
+                  >
+                    PTA and Programs
+                  </Link>
+                )}
               </div>
             )}
           </div>
 
           {/* Livelihood Submenu */}
-          <div className="flex flex-col gap-1">
-            <button
-              onClick={() => setLivelihoodOpen(!livelihoodOpen)}
-              className="flex items-center justify-between gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium"
-            >
-              <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined">agriculture</span>
-                Livelihood
-              </div>
-              <span
-                className={`material-symbols-outlined transition-transform duration-300 ${
-                  livelihoodOpen ? "rotate-180" : ""
-                }`}
+          {user?.roleName !== "FELLOW" && (
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => setLivelihoodOpen(!livelihoodOpen)}
+                className="flex items-center justify-between gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium"
               >
-                expand_more
-              </span>
-            </button>
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined">agriculture</span>
+                  Livelihood
+                </div>
+                <span
+                  className={`material-symbols-outlined transition-transform duration-300 ${
+                    livelihoodOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  expand_more
+                </span>
+              </button>
 
-            {livelihoodOpen && (
-              <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
-                <Link
-                  className={sublinkClass(pathname === "/livelihood")}
-                  href="/livelihood"
-                  onClick={onClose}
-                >
-                  Hub Overview
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/livelihood/goat-rearing")}
-                  href="/livelihood/goat-rearing"
-                  onClick={onClose}
-                >
-                  Goat Rearing
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/livelihood/sugarcane")}
-                  href="/livelihood/sugarcane"
-                  onClick={onClose}
-                >
-                  Sugarcane Cultivation
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/beneficiaries")}
-                  href="/beneficiaries"
-                  onClick={onClose}
-                >
-                  Beneficiaries
-                </Link>
-              </div>
-            )}
-          </div>
+              {livelihoodOpen && (
+                <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
+                  <Link
+                    className={sublinkClass(pathname === "/livelihood")}
+                    href="/livelihood"
+                    onClick={onClose}
+                  >
+                    Hub Overview
+                  </Link>
+                  <Link
+                    className={sublinkClass(pathname === "/livelihood/goat-rearing")}
+                    href="/livelihood/goat-rearing"
+                    onClick={onClose}
+                  >
+                    Goat Rearing
+                  </Link>
+                  <Link
+                    className={sublinkClass(pathname === "/livelihood/sugarcane")}
+                    href="/livelihood/sugarcane"
+                    onClick={onClose}
+                  >
+                    Sugarcane Cultivation
+                  </Link>
+                  <Link
+                    className={sublinkClass(pathname === "/beneficiaries")}
+                    href="/beneficiaries"
+                    onClick={onClose}
+                  >
+                    Beneficiaries
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Fellow Workspace removed, now accessed via Dashboard Modal */}
 
           {/* Disaster Relief */}
-          <Link
-            href="/disaster-relief"
-            className={navItemClass(pathname === "/disaster-relief")}
-            onClick={onClose}
-          >
-            <span className="material-symbols-outlined">emergency</span>
-            Disaster Relief
-          </Link>
+          {user?.roleName !== "FELLOW" && (
+            <Link
+              href="/disaster-relief"
+              className={navItemClass(pathname === "/disaster-relief")}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">emergency</span>
+              Disaster Relief
+            </Link>
+          )}
+
+          {/* Leaves */}
+          {user?.roleName !== "ADMIN" && (
+            <Link
+              href={user?.roleName === "HR" ? "/hr/leaves" : "/hr/leaves/apply"}
+              className={navItemClass(pathname.includes("/leaves"))}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">event_note</span>
+              Leaves
+            </Link>
+          )}
 
           {/* HR Management */}
-          <Link
-            href="/hr"
-            className={navItemClass(pathname === "/hr")}
-            onClick={onClose}
-          >
-            <span className="material-symbols-outlined">group</span>
-            HR Management
-          </Link>
+          {user?.roleName !== "FELLOW" && (
+            <Link
+              href="/hr"
+              className={navItemClass(pathname === "/hr")}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">group</span>
+              HR Management
+            </Link>
+          )}
 
           {/* Admin & Access */}
           {user?.roleName === 'ADMIN' && (

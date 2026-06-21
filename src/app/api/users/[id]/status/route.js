@@ -14,16 +14,21 @@ export async function PATCH(req, context) {
 
     const { id } = await context.params;
     const body = await req.json();
-    const { status } = body;
+    const { status, department } = body;
 
     const validStatuses = ["PENDING", "ACTIVE", "REJECTED", "BLOCKED", "INACTIVE"];
     if (!validStatuses.includes(status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
+    const dataToUpdate = { status };
+    if (department !== undefined) {
+      dataToUpdate.department = department;
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { status },
+      data: dataToUpdate,
       select: {
         id: true,
         username: true,

@@ -18,6 +18,12 @@ enum UserStatus {
   INACTIVE
 }
 
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum Action {
   READ
   WRITE
@@ -41,19 +47,27 @@ model Role {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  name      String
-  username  String     @unique
-  email     String     @unique
-  password  String
-  mobile    String?
-  roleId    String
-  status    UserStatus @default(PENDING)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id              String     @id @default(uuid())
+  name            String
+  username        String     @unique
+  email           String     @unique
+  password        String
+  mobile          String?
+  roleId          String
+  status          UserStatus @default(PENDING)
+  department      String?
+  leavesTaken     Int        @default(0)
+  leavesRemaining Int        @default(15)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
   role        Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
   permissions UserPermission[]
+
+  fellow               Fellow?
+  leaves               Leave[]
+  verifiedTransactions InventoryLedger[]
+  attendanceLogs       AttendanceLog[]
 }
 
 model Permission {
@@ -95,4 +109,469 @@ model UserPermission {
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, permissionId])
+}
+
+model School {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  principalName String?
+  email         String?
+  phone         String?
+  address       String?
+  location      String?
+  status        String   @default("Active")
+  latitude      String?
+  longitude     String?
+  mapUrl        String?
+  img           String?
+  goal          Int      @default(80)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  fellows  FellowSchool[]
+  students Student[]
+  programs SchoolProgram[]
+}
+
+model Fellow {
+  id               String    @id @default(uuid())
+  name             String
+  dob              DateTime?
+  gender           String?
+  email            String?   @unique
+  phone            String?
+  address          String?
+  cohort           String
+  avatar           String?
+  progress         Int       @default(0)
+  evaluationRating Float?
+  userId           String?   @unique
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user     User?          @relation(fields: [userId], references: [id])
+  schools  FellowSchool[]
+  students Student[]
+  goals    FellowGoal[]
+  reviews  FellowReview[]
+}
+
+model FellowGoal {
+  id         String    @id @default(uuid())
+  fellowId   String
+  title      String
+  targetDate DateTime?
+  status     String    @default("In Progress")
+  review     String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  fellow     Fellow                @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  milestones FellowGoalMilestone[]
+}
+
+model FellowGoalMilestone {
+  id        String   @id @default(uuid())
+  goalId    String
+  text      String
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  goal FellowGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+}
+
+model FellowReview {
+  id           String   @id @default(uuid())
+  fellowId     String
+  period       String
+  evaluation   String
+  rating       Float?
+  reviewerName String
+  date         DateTime @default(now())
+  status       String   @default("Completed")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  fellow Fellow @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+}
+
+model Student {
+  id              String    @id @default(uuid())
+  studentId       String    @unique
+  name            String
+  dob             DateTime?
+  gender          String?
+  email           String?
+  phone           String?
+  address         String?
+  grade           String
+  gradeGroup      String
+  district        String?
+  attendance      Float     @default(0.0)
+  guardianName    String?
+  guardianPhone   String?
+  enrolmentDate   DateTime?
+  primaryLanguage String?
+  status          String    @default("On Track")
+  schoolId        String?
+  fellowId        String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  school         School?                @relation(fields: [schoolId], references: [id])
+  fellow         Fellow?                @relation(fields: [fellowId], references: [id])
+  subjectMarks   StudentSubjectMark[]
+  attendanceLogs StudentAttendanceLog[]
+}
+
+model StudentSubjectMark {
+  id        String   @id @default(uuid())
+  studentId String
+  subject   String
+  score     Float
+  grade     String
+  remarks   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentAttendanceLog {
+  id         String   @id @default(uuid())
+  studentId  String
+  month      String
+  present    Int
+  total      Int
+  percentage Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  student Student                   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  dayLogs StudentAttendanceDayLog[]
+}
+
+model StudentAttendanceDayLog {
+  id        String   @id @default(uuid())
+  logId     String
+  date      DateTime
+  status    String   @default("Present") // Present, Absent, Late, Excused
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  log StudentAttendanceLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+
+  @@unique([logId, date])
+}
+
+model FellowSchool {
+  id        String   @id @default(uuid())
+  fellowId  String
+  schoolId  String
+  createdAt DateTime @default(now())
+
+  fellow Fellow @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  school School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([fellowId, schoolId])
+}
+
+model Program {
+  id               String   @id @default(uuid())
+  title            String
+  description      String?
+  duration         String?
+  participantsText String?
+  status           String   @default("Planning")
+  icon             String?
+  iconBg           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  schools SchoolProgram[]
+  events  ProgramEvent[]
+}
+
+model SchoolProgram {
+  id        String @id @default(uuid())
+  schoolId  String
+  programId String
+
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, programId])
+}
+
+model ProgramEvent {
+  id          String   @id @default(uuid())
+  programId   String?
+  title       String
+  description String?
+  date        DateTime
+  location    String?
+  status      String   @default("Scheduled")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  program Program? @relation(fields: [programId], references: [id])
+}
+
+model Beneficiary {
+  id                String    @id @default(uuid())
+  enrolmentId       String    @unique
+  name              String
+  dob               DateTime?
+  panCard           String?
+  aadhar            String?
+  rationCard        String?
+  mobNumber         String?
+  resilienceScore   Int       @default(50)
+  annualIncome      Float?
+  monthlyIncome     Float?
+  caste             String?
+  religion          String?
+  address           String?
+  householdSize     Int       @default(4)
+  primaryIncomeType String?
+  tier              String    @default("Tier 2")
+  tierPercent       Int       @default(50)
+  bankName          String?
+  bankAccountNo     String?
+  bankIfsc          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  familyMembers      FamilyMember[]
+  livestock          Livestock[]
+  schemeEnrollments  SchemeEnrollment[]
+  goatRearingDetails BeneficiaryGoatRearing[]
+  sugarcaneDetails   BeneficiarySugarcane[]
+}
+
+model FamilyMember {
+  id            String    @id @default(uuid())
+  beneficiaryId String
+  name          String
+  relation      String
+  dob           DateTime?
+  contactInfo   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model Livestock {
+  id            String   @id @default(uuid())
+  beneficiaryId String
+  tagNumber     String   @unique
+  animalType    String
+  breed         String?
+  ageMonths     Int?
+  healthStatus  String   @default("Healthy")
+  assignedAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  beneficiary Beneficiary          @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  healthLogs  LivestockHealthLog[]
+}
+
+model LivestockHealthLog {
+  id          String   @id @default(uuid())
+  livestockId String
+  checkupDate DateTime @default(now())
+  status      String
+  notes       String?
+  performedBy String?
+  createdAt   DateTime @default(now())
+
+  livestock Livestock @relation(fields: [livestockId], references: [id], onDelete: Cascade)
+}
+
+model Scheme {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  enrollments SchemeEnrollment[]
+}
+
+model SchemeEnrollment {
+  id            String   @id @default(uuid())
+  beneficiaryId String
+  schemeId      String
+  enrolledAt    DateTime @default(now())
+
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  scheme      Scheme      @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+
+  @@unique([beneficiaryId, schemeId])
+}
+
+model BeneficiaryGoatRearing {
+  id                   String   @id @default(uuid())
+  beneficiaryId        String
+  goatsAssigned        Int      @default(0)
+  investment           Float?
+  returnsAmount        Float?
+  roiPercentage        Float?
+  advantagesLog        String?
+  notes                String?
+  goatRearingProgramId String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  beneficiary        Beneficiary         @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  goatRearingProgram GoatRearingProgram? @relation(fields: [goatRearingProgramId], references: [id], onDelete: SetNull)
+}
+
+model GoatRearingProgram {
+  id            String                   @id @default(uuid())
+  name          String
+  description   String?
+  totalGoats    Int                      @default(0)
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  beneficiaries BeneficiaryGoatRearing[]
+}
+
+model BeneficiarySugarcane {
+  id                     String   @id @default(uuid())
+  beneficiaryId          String
+  hectaresAllotted       Float    @default(0.0)
+  soilType               String?
+  waterSource            String?
+  cropStage              String   @default("Planting")
+  estimatedYieldTons     Float    @default(0.0)
+  actualYieldTons        Float?
+  fertilizersDistributed String?
+  estimatedRevenue       Float?
+  actualRevenue          Float?
+  sugarcaneProgramId     String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  beneficiary      Beneficiary       @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  sugarcaneProgram SugarcaneProgram? @relation(fields: [sugarcaneProgramId], references: [id], onDelete: SetNull)
+}
+
+model SugarcaneProgram {
+  id                String                 @id @default(uuid())
+  name              String
+  description       String?
+  totalLandHectares Float                  @default(0.0)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  beneficiaries     BeneficiarySugarcane[]
+}
+
+model DisasterIncident {
+  id        String   @id @default(uuid())
+  name      String
+  location  String
+  type      String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  resourceNeeds IncidentResourceNeed[]
+
+  expectedFamiliesAffected Int   @default(0)
+  humanLossDied            Int   @default(0)
+  humanLossInjured         Int   @default(0)
+  humanLossMissing         Int   @default(0)
+  propertyLossEstimate     Float @default(0.0)
+}
+
+model HelpProvider {
+  id             String   @id @default(uuid())
+  name           String   @unique
+  capabilityType String
+  contactDetails String
+  status         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ResourceItem {
+  id             String   @id @default(uuid())
+  itemName       String   @unique
+  availableStock Float    @default(0.0)
+  unit           String
+  status         String   @default("Optimal")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  ledgerTransactions InventoryLedger[]
+  incidentNeeds      IncidentResourceNeed[]
+}
+
+model InventoryLedger {
+  id                     String   @id @default(uuid())
+  resourceItemId         String
+  transactionType        String
+  quantity               Float
+  handledByUserId        String?
+  incidentResourceNeedId String?
+  notes                  String?
+  createdAt              DateTime @default(now())
+
+  resourceItem         ResourceItem          @relation(fields: [resourceItemId], references: [id], onDelete: Cascade)
+  handledByUser        User?                 @relation(fields: [handledByUserId], references: [id])
+  incidentResourceNeed IncidentResourceNeed? @relation(fields: [incidentResourceNeedId], references: [id], onDelete: Cascade)
+}
+
+model AttendanceLog {
+  id         String   @id @default(uuid())
+  userId     String
+  email      String?
+  logdate    String?
+  intimelog  String?
+  outtimelog String?
+  workhours  String?
+  workstatus String?
+  ef1        String?
+  ef2        String?
+  logininfo  String?
+  logoutinfo String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Leave {
+  id        String      @id @default(uuid())
+  userId    String
+  type      String?
+  dates     String?
+  reason    String?
+  status    LeaveStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model IncidentResourceNeed {
+  id                String   @id @default(uuid())
+  incidentId        String
+  resourceItemId    String
+  quantityNeeded    Float    @default(0.0)
+  quantityReceived  Float    @default(0.0)
+  transactionsCount Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  incident     DisasterIncident  @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  resourceItem ResourceItem      @relation(fields: [resourceItemId], references: [id], onDelete: Cascade)
+  transactions InventoryLedger[]
+
+  @@unique([incidentId, resourceItemId])
 }

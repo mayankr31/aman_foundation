@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/lib/useAuth";
 
 export default function BeneficiaryMasterDirectory() {
   const toast = useToast();
+  const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("All Tiers");
   const [programFilter, setProgramFilter] = useState("All Programs");
@@ -18,83 +20,49 @@ export default function BeneficiaryMasterDirectory() {
   const [importProgress, setImportProgress] = useState(0);
   const [importStepText, setImportStepText] = useState("");
 
-  const defaultBeneficiaries = [
-    {
-      id: "BEN-482-A",
-      name: "Amina Patel",
-      location: "Bartari, Kalgachia, Assam",
-      householdSize: 5,
-      income: "Agriculture",
-      tier: "Tier 2",
-      tierPercent: 65,
-      programs: ["Goat Rearing", "Sugarcane"],
-      resilienceScore: 82,
-    },
-    {
-      id: "BEN-104-B",
-      name: "Rajesh Gond",
-      location: "Digjani, Kalgachia, Assam",
-      householdSize: 4,
-      income: "Livestock",
-      tier: "Tier 1",
-      tierPercent: 40,
-      programs: ["Goat Rearing"],
-      resilienceScore: 58,
-    },
-    {
-      id: "BEN-902-C",
-      name: "Savitri Bai",
-      location: "Sawpur, Kalgachia, Assam",
-      householdSize: 6,
-      income: "Agriculture",
-      tier: "Tier 3",
-      tierPercent: 90,
-      programs: ["Sugarcane"],
-      resilienceScore: 92,
-    },
-    {
-      id: "BEN-304-D",
-      name: "Rahim Ali",
-      location: "Balikuri, Kalgachia, Assam",
-      householdSize: 5,
-      income: "Agriculture",
-      tier: "Tier 2",
-      tierPercent: 70,
-      programs: ["Sugarcane", "Goat Rearing"],
-      resilienceScore: 78,
-    },
-    {
-      id: "BEN-705-E",
-      name: "Jahanara Begum",
-      location: "Moinbari, Kalgachia, Assam",
-      householdSize: 7,
-      income: "Livestock",
-      tier: "Tier 1",
-      tierPercent: 35,
-      programs: ["Goat Rearing"],
-      resilienceScore: 52,
-    }
-  ];
-
-  const [beneficiaries, setBeneficiaries] = useState(defaultBeneficiaries);
+  const [beneficiaries, setBeneficiaries] = useState([]);
+  const [sugarcanePrograms, setSugarcanePrograms] = useState([]);
+  const [goatRearingPrograms, setGoatRearingPrograms] = useState([]);
+  const [hasGoatChecked, setHasGoatChecked] = useState(false);
+  const [hasSugarcaneChecked, setHasSugarcaneChecked] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("aman_beneficiaries");
-    if (stored) {
+    async function loadData() {
       try {
-        setBeneficiaries(JSON.parse(stored));
-      } catch (e) {
-        localStorage.setItem("aman_beneficiaries", JSON.stringify(defaultBeneficiaries));
-      }
-    } else {
-      localStorage.setItem("aman_beneficiaries", JSON.stringify(defaultBeneficiaries));
-    }
-  }, []);
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const [res, progRes] = await Promise.all([
+          fetch("/api/beneficiaries", { headers }),
+          fetch("/api/livelihood/programs", { headers })
+        ]);
+        const json = await res.json();
+        const progJson = await progRes.json();
 
-  const updateBeneficiariesState = (newBatch) => {
-    setBeneficiaries(newBatch);
-    localStorage.setItem("aman_beneficiaries", JSON.stringify(newBatch));
-  };
+        if (progJson.success) {
+          setSugarcanePrograms(progJson.data.sugarcanePrograms || []);
+          setGoatRearingPrograms(progJson.data.goatRearingPrograms || []);
+        }
+
+        if (json.success) {
+          const mapped = json.data.map(b => ({
+            id: b.id,
+            enrolmentId: b.enrolmentId,
+            name: b.name,
+            location: b.address || "Bartari, Kalgachia, Assam",
+            householdSize: b.householdSize || 4,
+            income: b.primaryIncomeType || "Agriculture",
+            tier: b.tier,
+            tierPercent: b.tierPercent,
+            programs: (b.schemeEnrollments || []).map(se => se.scheme.name),
+            resilienceScore: b.resilienceScore,
+          }));
+          setBeneficiaries(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to load data:", err);
+      }
+    }
+    loadData();
+  }, [token]);
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -103,7 +71,7 @@ export default function BeneficiaryMasterDirectory() {
     setLocationFilter("All Locations");
   };
 
-  const handleAddBeneficiary = (e) => {
+  const handleAddBeneficiary = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const name = formData.get("name").trim();
@@ -125,25 +93,70 @@ export default function BeneficiaryMasterDirectory() {
 
     const randomNum = Math.floor(100 + Math.random() * 900);
     const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    const newId = `BEN-${randomNum}-${randomLetter}`;
+    const enrolmentId = `BEN-${randomNum}-${randomLetter}`;
 
-    const newRecord = {
-      id: newId,
-      name,
-      location: `${locationVal}, Kalgachia, Assam`,
-      householdSize,
-      income,
-      tier,
-      tierPercent,
-      programs,
-      resilienceScore,
-    };
-
-    const updated = [newRecord, ...beneficiaries];
-    updateBeneficiariesState(updated);
-    
-    toast.success(`Registered new beneficiary: ${name}`);
-    setShowAddModal(false);
+    try {
+      const res = await fetch("/api/beneficiaries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          enrolmentId,
+          name,
+          dob: formData.get("dob") || null,
+          mobNumber: formData.get("mobNumber") || null,
+          caste: formData.get("caste") || null,
+          religion: formData.get("religion") || null,
+          address: `${locationVal}, Kalgachia, Assam`,
+          householdSize,
+          primaryIncomeType: income,
+          annualIncome: formData.get("annualIncome") ? parseFloat(formData.get("annualIncome")) : null,
+          monthlyIncome: formData.get("monthlyIncome") ? parseFloat(formData.get("monthlyIncome")) : null,
+          tier,
+          tierPercent,
+          resilienceScore,
+          aadhar: formData.get("aadhar") || null,
+          panCard: formData.get("panCard") || null,
+          rationCard: formData.get("rationCard") || null,
+          bankName: formData.get("bankName") || null,
+          bankAccountNo: formData.get("bankAccountNo") || null,
+          bankIfsc: formData.get("bankIfsc") || null,
+          schemes: programs
+        })
+      });
+        if (json.success) {
+        // reload beneficiaries list
+        const loadRes = await fetch("/api/beneficiaries", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const loadJson = await loadRes.json();
+        if (loadJson.success) {
+          const remapped = loadJson.data.map(b => ({
+            id: b.id,
+            enrolmentId: b.enrolmentId,
+            name: b.name,
+            location: b.address || "Bartari, Kalgachia, Assam",
+            householdSize: b.householdSize || 4,
+            income: b.primaryIncomeType || "Agriculture",
+            tier: b.tier,
+            tierPercent: b.tierPercent,
+            programs: (b.schemeEnrollments || []).map(se => se.scheme.name),
+            resilienceScore: b.resilienceScore,
+          }));
+          setBeneficiaries(remapped);
+        }
+        toast.success(`Registered new beneficiary: ${name}`);
+        setHasGoatChecked(false);
+        setHasSugarcaneChecked(false);
+        setShowAddModal(false);
+      } else {
+        alert(json.error || "Failed to register beneficiary");
+      }
+    } catch (err) {
+      console.error("Failed to add beneficiary:", err);
+    }
   };
 
   const simulateBulkImport = () => {
@@ -171,6 +184,7 @@ export default function BeneficiaryMasterDirectory() {
             const imported = [
               {
                 id: "BEN-511-N",
+                enrolmentId: "BEN-511-N",
                 name: "Rupjan Nessa",
                 location: "Gunialguri, Kalgachia, Assam",
                 householdSize: 5,
@@ -182,6 +196,7 @@ export default function BeneficiaryMasterDirectory() {
               },
               {
                 id: "BEN-839-K",
+                enrolmentId: "BEN-839-K",
                 name: "Abul Kalam",
                 location: "Bartari, Kalgachia, Assam",
                 householdSize: 6,
@@ -193,6 +208,7 @@ export default function BeneficiaryMasterDirectory() {
               },
               {
                 id: "BEN-293-X",
+                enrolmentId: "BEN-293-X",
                 name: "Khadija Khatun",
                 location: "Moinbari, Kalgachia, Assam",
                 householdSize: 7,
@@ -205,7 +221,7 @@ export default function BeneficiaryMasterDirectory() {
             ];
             
             const updated = [...imported, ...beneficiaries];
-            updateBeneficiariesState(updated);
+            setBeneficiaries(updated);
             
             toast.success("Bulk import complete: 3 new Kalgachia beneficiaries registered successfully!");
             setImporting(false);
@@ -220,7 +236,8 @@ export default function BeneficiaryMasterDirectory() {
     const matchesSearch =
       b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       b.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.id.toLowerCase().includes(searchQuery.toLowerCase());
+      (b.enrolmentId && b.enrolmentId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (b.id && b.id.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesTier = tierFilter === "All Tiers" || b.tier === tierFilter;
 
@@ -387,7 +404,7 @@ export default function BeneficiaryMasterDirectory() {
                       </div>
                       <div>
                         <div className="font-bold text-on-surface">{b.name}</div>
-                        <div className="text-xs text-on-surface-variant mt-0.5">ID: {b.id}</div>
+                        <div className="text-xs text-on-surface-variant mt-0.5">ID: {b.enrolmentId}</div>
                       </div>
                     </div>
                   </td>
@@ -420,7 +437,7 @@ export default function BeneficiaryMasterDirectory() {
                   </td>
                   <td className="px-6 py-5 text-right">
                     <Link
-                      href={`/beneficiaries/${encodeURIComponent(b.name.replace(/\s+/g, '-'))}`}
+                      href={`/beneficiaries/${encodeURIComponent(b.id)}`}
                       className="text-primary hover:bg-primary/5 px-4 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline cursor-pointer"
                     >
                       View File
@@ -491,6 +508,149 @@ export default function BeneficiaryMasterDirectory() {
 
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Date of Birth
+                  </label>
+                  <input
+                    type="date"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="dob"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Mobile Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. +91 99887 71122"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="mobNumber"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Caste
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. General, SC, ST"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="caste"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Religion
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Islam, Hinduism"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="religion"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Annual Income (₹)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="e.g. 45000"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="annualIncome"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Monthly Income (₹)
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="e.g. 3750"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="monthlyIncome"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Aadhar Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 1234 5678 9012"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="aadhar"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    PAN Card
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ABCDE1234F"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="panCard"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Ration Card
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. SFY-AS-4029"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="rationCard"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Bank Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. State Bank of India"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="bankName"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Bank Account Number
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 30928409184"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="bankAccountNo"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                    Bank IFSC Code
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. SBIN0007421"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                    name="bankIfsc"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
                     Household Size
                   </label>
                   <input
@@ -499,7 +659,7 @@ export default function BeneficiaryMasterDirectory() {
                     max="20"
                     defaultValue="4"
                     required
-                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
                     name="householdSize"
                   />
                 </div>
@@ -510,7 +670,7 @@ export default function BeneficiaryMasterDirectory() {
                   </label>
                   <select
                     name="income"
-                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-xs"
                   >
                     <option value="Agriculture">Agriculture</option>
                     <option value="Livestock">Livestock</option>
@@ -525,7 +685,7 @@ export default function BeneficiaryMasterDirectory() {
                   </label>
                   <select
                     name="tier"
-                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-xs"
                   >
                     <option value="Tier 1">Tier 1 (Critical)</option>
                     <option value="Tier 2">Tier 2 (Progressing)</option>
@@ -543,7 +703,7 @@ export default function BeneficiaryMasterDirectory() {
                     max="100"
                     defaultValue="50"
                     required
-                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface"
+                    className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs"
                     name="resilienceScore"
                   />
                 </div>
@@ -558,6 +718,8 @@ export default function BeneficiaryMasterDirectory() {
                     <input
                       type="checkbox"
                       name="program_goat"
+                      checked={hasGoatChecked}
+                      onChange={(e) => setHasGoatChecked(e.target.checked)}
                       className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
                     />
                     <span>Goat Rearing</span>
@@ -566,12 +728,20 @@ export default function BeneficiaryMasterDirectory() {
                     <input
                       type="checkbox"
                       name="program_sugarcane"
+                      checked={hasSugarcaneChecked}
+                      onChange={(e) => setHasSugarcaneChecked(e.target.checked)}
                       className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
                     />
                     <span>Sugarcane Cultivation</span>
                   </label>
                 </div>
               </div>
+
+              {(hasGoatChecked || hasSugarcaneChecked) && (
+                <p className="text-xs text-on-surface-variant italic p-3 bg-surface-container-low/30 rounded-xl border border-outline-variant/10">
+                  Specific program parameters (like goats assigned, land allotted) can be configured from the respective Program Detail pages after registration.
+                </p>
+              )}
 
               <div className="flex justify-end gap-3 pt-4 border-t border-surface-container mt-6">
                 <button

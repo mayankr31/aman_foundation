@@ -1,43 +1,72 @@
 "use client";
-
+ 
 import Link from "next/link";
-import { useState } from "react";
-import { DEFAULT_SCHOOLS, AMAN_FOUNDATION_MAP } from "@/lib/schoolsData";
-
+import { useState, useEffect } from "react";
+import { AMAN_FOUNDATION_MAP } from "@/lib/schoolsData";
+import { useAuth } from "@/lib/useAuth";
+ 
 export default function SchoolsModule() {
+  const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [schools, setSchools] = useState(DEFAULT_SCHOOLS);
-
+  const [schools, setSchools] = useState([]);
+ 
   // Form states
+  const [currentPage, setCurrentPage] = useState(1);
   const [newSchoolName, setNewSchoolName] = useState("");
   const [newLocation, setNewLocation] = useState("");
-  const [newEnrolled, setNewEnrolled] = useState("");
   const [newPrograms, setNewPrograms] = useState("");
   const [newGoal, setNewGoal] = useState(60);
 
-  const handleAddSchool = (e) => {
+  useEffect(() => {
+    async function loadSchools() {
+      try {
+        const res = await fetch("/api/schools", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setSchools(json.data);
+        }
+      } catch (err) {
+        console.error("Failed to load schools:", err);
+      }
+    }
+    loadSchools();
+  }, [token]);
+ 
+  const handleAddSchool = async (e) => {
     e.preventDefault();
-    if (!newSchoolName || !newLocation || !newEnrolled || !newPrograms) return;
-
-    const newSchool = {
-      img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd0x1ztc9iuj8nay2xC1_MH-xTSmAKr8IhFrASNZRkSKkt-Y4BunC5I9iqvTLQ0_8lmU0zaYnPjqddtwFcC75fjZRBUU-N_7DG60EY9HluYt_nZMGUi1MCuGMs9ZtR2iM2AGFyw2MvZhg-RlW1as3xPOOXef7qU9OwfisCQeoCv_6chJeBZbBMdmknEG_LLtMl_EWluwSEWTOAEkWm2p31lCjaolK7bQHfqtZzT6CLsbLoare9Nu918oPHFj07H0LgIShvW4giB6YL",
-      name: newSchoolName,
-      location: newLocation,
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      enrolled: parseInt(newEnrolled).toLocaleString(),
-      programs: parseInt(newPrograms),
-      goal: parseInt(newGoal),
-    };
-
-    setSchools([newSchool, ...schools]);
-    setNewSchoolName("");
-    setNewLocation("");
-    setNewEnrolled("");
-    setNewPrograms("");
-    setNewGoal(60);
-    setShowAddModal(false);
+    if (!newSchoolName || !newLocation) return;
+ 
+    try {
+      const res = await fetch("/api/schools", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          name: newSchoolName,
+          location: newLocation,
+          goal: parseInt(newGoal),
+          status: "Active"
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setSchools([json.data, ...schools]);
+        setNewSchoolName("");
+        setNewLocation("");
+        setNewPrograms("");
+        setNewGoal(60);
+        setShowAddModal(false);
+      } else {
+        alert(json.error || "Failed to add school");
+      }
+    } catch (err) {
+      console.error("Failed to add school:", err);
+    }
   };
 
   const [selectedLocation, setSelectedLocation] = useState("All");
@@ -51,6 +80,17 @@ export default function SchoolsModule() {
       s.location.toLowerCase().startsWith(selectedLocation.toLowerCase());
     return matchesSearch && matchesLocation;
   });
+
+  const ITEMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(filteredSchools.length / ITEMS_PER_PAGE);
+  const paginatedSchools = filteredSchools.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedLocation]);
 
   return (
     <div className="p-6 lg:p-10 flex flex-col gap-10 max-w-[1600px] mx-auto w-full">
@@ -108,7 +148,7 @@ export default function SchoolsModule() {
                   Active Students
                 </p>
                 <p className="font-headline text-2xl text-primary">
-                  {schools.reduce((acc, s) => acc + parseInt(s.enrolled.toString().replace(/,/g, "")), 0).toLocaleString()}
+                  {schools.reduce((acc, s) => acc + (s.enrolled ?? 0), 0).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -236,10 +276,10 @@ export default function SchoolsModule() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSchools.map((s, index) => (
+          {paginatedSchools.map((s, index) => (
             <Link
               key={index}
-              href={`/education/schools/${encodeURIComponent(s.name.replace(/\s+/g, '-'))}`}
+              href={`/education/schools/${s.id}`}
               className="bg-surface-container-lowest p-6 rounded-[1rem] hover:shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] transition-all duration-300 flex flex-col group cursor-pointer"
             >
               <div className="flex items-start justify-between mb-6">
@@ -272,7 +312,7 @@ export default function SchoolsModule() {
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
                     Enrolled
                   </p>
-                  <p className="font-headline text-xl text-on-surface">{s.enrolled}</p>
+                  <p className="font-headline text-xl text-on-surface">{s.enrolled ?? 0}</p>
                 </div>
                 <div>
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
@@ -307,6 +347,58 @@ export default function SchoolsModule() {
             </p>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center items-center gap-2 font-sans">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 rounded-lg border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              Prev
+            </button>
+            <div className="flex items-center gap-1 mx-2">
+              {(() => {
+                const pages = [];
+                if (totalPages <= 5) {
+                  for (let i = 1; i <= totalPages; i++) pages.push(i);
+                } else {
+                  if (currentPage <= 3) {
+                    pages.push(1, 2, 3, '...', totalPages);
+                  } else if (currentPage >= totalPages - 2) {
+                    pages.push(1, '...', totalPages - 2, totalPages - 1, totalPages);
+                  } else {
+                    pages.push(1, '...', currentPage, '...', totalPages);
+                  }
+                }
+                return pages.map((page, index) => (
+                  <button
+                    key={index}
+                    onClick={() => typeof page === 'number' && setCurrentPage(page)}
+                    disabled={page === '...'}
+                    className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
+                      page === currentPage
+                        ? 'bg-primary text-white shadow-sm'
+                        : page === '...'
+                        ? 'text-on-surface-variant cursor-default'
+                        : 'text-on-surface hover:bg-surface-container-high cursor-pointer'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ));
+              })()}
+            </div>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 rounded-lg border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Add School Modal */}
@@ -346,32 +438,6 @@ export default function SchoolsModule() {
                   placeholder="e.g. North District"
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Total Enrolled Students
-                </label>
-                <input
-                  type="number"
-                  required
-                  placeholder="e.g. 1200"
-                  value={newEnrolled}
-                  onChange={(e) => setNewEnrolled(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Active Programs
-                </label>
-                <input
-                  type="number"
-                  required
-                  placeholder="e.g. 4"
-                  value={newPrograms}
-                  onChange={(e) => setNewPrograms(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
                 />
               </div>

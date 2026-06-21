@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useAuth } from "@/lib/useAuth";
 
 export default function EducationHub() {
+  const { user } = useAuth();
+
   return (
     <div className="flex-1 p-8 lg:p-12">
       {/* Back link */}
@@ -32,28 +37,52 @@ export default function EducationHub() {
 
       {/* Bento Grid Layout for Sub-modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl">
-        {/* Fellows Module Card */}
-        <Link
-          className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
-          href="/education/fellows"
-        >
-          <div className="absolute right-0 top-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
-          <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6 z-10 group-hover:bg-primary/10 transition-colors">
-            <span className="material-symbols-outlined text-3xl text-primary">groups</span>
-          </div>
-          <h3 className="text-xl font-semibold text-on-surface mb-3 z-10 group-hover:text-primary transition-colors">
-            Fellows Module
-          </h3>
-          <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
-            Manage cohort data, track professional development, and monitor the placement and performance of our educational fellows across all operating regions.
-          </p>
-          <div className="flex items-center gap-2 text-primary font-medium text-sm mt-auto z-10 font-sans">
-            <span>Access Module</span>
-            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
-              arrow_forward
-            </span>
-          </div>
-        </Link>
+        {/* Fellows Module / My Profile Card */}
+        {user?.roleName === "FELLOW" ? (
+          <Link
+            className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
+            href="/profile"
+          >
+            <div className="absolute right-0 top-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6 z-10 group-hover:bg-primary/10 transition-colors">
+              <span className="material-symbols-outlined text-3xl text-primary">account_circle</span>
+            </div>
+            <h3 className="text-xl font-semibold text-on-surface mb-3 z-10 group-hover:text-primary transition-colors">
+              My Profile
+            </h3>
+            <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
+              View your school assignment, cohort metrics, classroom performance evaluations, and manage your teaching goals.
+            </p>
+            <div className="flex items-center gap-2 text-primary font-medium text-sm mt-auto z-10 font-sans">
+              <span>View Profile</span>
+              <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+                arrow_forward
+              </span>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
+            href="/education/fellows"
+          >
+            <div className="absolute right-0 top-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+            <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6 z-10 group-hover:bg-primary/10 transition-colors">
+              <span className="material-symbols-outlined text-3xl text-primary">groups</span>
+            </div>
+            <h3 className="text-xl font-semibold text-on-surface mb-3 z-10 group-hover:text-primary transition-colors">
+              Fellows Module
+            </h3>
+            <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
+              Manage cohort data, track professional development, and monitor the placement and performance of our educational fellows across all operating regions.
+            </p>
+            <div className="flex items-center gap-2 text-primary font-medium text-sm mt-auto z-10 font-sans">
+              <span>Access Module</span>
+              <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+                arrow_forward
+              </span>
+            </div>
+          </Link>
+        )}
 
         {/* Students Module Card */}
         <Link

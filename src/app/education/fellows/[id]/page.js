@@ -1,58 +1,83 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/useAuth";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import { useToast } from "@/context/ToastContext";
 
 export default function FellowProfileDetail() {
   const { id } = useParams();
-  const [goals, setGoals] = useState([
-    {
-      id: 1,
-      title: "Improve Standard 3 Reading Proficiency",
-      targetDate: "Nov 30, 2026",
-      status: "In Progress",
-      statusColor: "bg-secondary-container text-on-secondary-container",
-      review: "Progressing well. 75% of kids now recognize standard phonics syllables.",
-      milestones: [
-        { id: 101, text: "Administer Baseline Phonics Assessment", done: true },
-        { id: 102, text: "Weekly Group Phonics Drills", done: true },
-        { id: 103, text: "Conduct Mid-Term Reading Evaluation", done: false },
-      ],
-    },
-    {
-      id: 2,
-      title: "Establish PTA Attendance Benchmark at 80%",
-      targetDate: "Dec 15, 2026",
-      status: "Completed",
-      statusColor: "bg-primary-fixed text-on-primary-fixed",
-      review: "PTA attendance reached 84% in the last meeting. Excellent parent engagement.",
-      milestones: [
-        { id: 201, text: "Send SMS notifications 3 days in advance", done: true },
-        { id: 202, text: "Design parent feedback registry sheets", done: true },
-      ],
-    },
-    {
-      id: 3,
-      title: "Integrate Interactive Math Activities",
-      targetDate: "Jan 10, 2027",
-      status: "Not Started",
-      statusColor: "bg-surface-variant text-on-surface-variant",
-      review: "Scheduled for next month. Teaching kits and blocks ordered.",
-      milestones: [
-        { id: 301, text: "Develop Lesson Plan for Hands-on Algebra", done: false },
-        { id: 302, text: "Acquire Math Kits", done: false },
-      ],
-    },
-  ]);
-
+  const { token, user, isInitializing } = useAuth();
+  const router = useRouter();
+  const toast = useToast();
+  const [fellow, setFellow] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [goals, setGoals] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [activeTab, setActiveTab] = useState("Goals");
 
-  const toggleMilestone = (goalId, milestoneId) => {
+  // Form states for adding new goals
+  const [showAddGoalModal, setShowAddGoalModal] = useState(false);
+  const [newGoalTitle, setNewGoalTitle] = useState("");
+  const [newGoalTargetDate, setNewGoalTargetDate] = useState("");
+  const [newGoalMilestones, setNewGoalMilestones] = useState([""]);
+
+  // Form states for adding new reviews
+  const [editingReviewGoalId, setEditingReviewGoalId] = useState(null);
+  const [reviewText, setReviewText] = useState("");
+
+  // Form states for 6-month evaluations reviews
+  const [showAddReviewModal, setShowAddReviewModal] = useState(false);
+  const [newReviewPeriod, setNewReviewPeriod] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState("");
+  const [newReviewerName, setNewReviewerName] = useState("");
+  const [newReviewEvaluation, setNewReviewEvaluation] = useState("");
+
+  // Delete modal state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [deleteItemType, setDeleteItemType] = useState(""); // "goal" | "review"
+
+  // Redirection check: Fellows can only view their profile under /profile, not here
+  useEffect(() => {
+    if (user?.roleName === "FELLOW") {
+      router.replace("/profile");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    async function loadFellowDetail() {
+      try {
+        const res = await fetch(`/api/fellows/${id}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setFellow(json.data);
+          setGoals(json.data.goals || []);
+          setReviews(json.data.reviews || []);
+        }
+      } catch (err) {
+        console.error("Failed to load fellow detail:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (!isInitializing) {
+      loadFellowDetail();
+    }
+  }, [id, token, isInitializing]);
+
+  const toggleMilestone = async (goalId, milestoneId, currentDone) => {
+    const newDone = !currentDone;
+    
+    // Update local state first for instant responsiveness
     const updated = goals.map((goal) => {
       if (goal.id === goalId) {
         const updatedMilestones = goal.milestones.map((m) => {
-          if (m.id === milestoneId) return { ...m, done: !m.done };
+          if (m.id === milestoneId) return { ...m, done: newDone };
           return m;
         });
         return { ...goal, milestones: updatedMilestones };
@@ -60,64 +85,265 @@ export default function FellowProfileDetail() {
       return goal;
     });
     setGoals(updated);
+
+    try {
+      await fetch(`/api/fellows/${id}/goals`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          type: "TOGGLE_MILESTONE",
+          milestoneId,
+          done: newDone
+        })
+      });
+    } catch (err) {
+      console.error("Failed to persist milestone toggle:", err);
+    }
   };
 
-  const name = decodeURIComponent(id || "Aisha Rahman").replace(/-/g, " ");
+  const handleAddGoal = async (e) => {
+    e.preventDefault();
+    if (!newGoalTitle) return;
 
-  const fellowsDb = {
-    "Aisha Rahman": { location: "Bartari, Kalgachia", cohort: "Cohort '23" },
-    "Fatima Tariq": { location: "Digjani, Kalgachia", cohort: "Cohort '24" },
-    "Bilal Khan": { location: "Sawpur, Kalgachia", cohort: "Cohort '23" },
+    try {
+      const filteredMilestones = newGoalMilestones.filter(m => m.trim() !== "");
+      const res = await fetch(`/api/fellows/${id}/goals`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          title: newGoalTitle,
+          targetDate: newGoalTargetDate || null,
+          milestones: filteredMilestones
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setGoals(prev => [...prev, json.data]);
+        setNewGoalTitle("");
+        setNewGoalTargetDate("");
+        setNewGoalMilestones([""]);
+        setShowAddGoalModal(false);
+        toast.success("Goal created successfully!");
+      } else {
+        toast.error(json.error || "Failed to create goal");
+      }
+    } catch (err) {
+      console.error("Failed to add goal:", err);
+      toast.error("An error occurred while creating the goal.");
+    }
   };
 
-  const fellowInfo = fellowsDb[name] || { location: "Bartari, Kalgachia", cohort: "Cohort '24" };
+  const handleDeleteGoal = (goalId) => {
+    setDeleteItemId(goalId);
+    setDeleteItemType("goal");
+    setDeleteModalOpen(true);
+  };
+
+  const handleSaveReview = async (goalId) => {
+    try {
+      const res = await fetch(`/api/fellows/${id}/goals`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          type: "UPDATE_REVIEW",
+          goalId,
+          review: reviewText
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        // Update local state
+        const updated = goals.map((goal) => {
+          if (goal.id === goalId) {
+            return { ...goal, review: reviewText };
+          }
+          return goal;
+        });
+        setGoals(updated);
+        setEditingReviewGoalId(null);
+        setReviewText("");
+        toast.success("Progress review updated successfully!");
+      } else {
+        toast.error(json.error || "Failed to save review");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("An error occurred while saving the review.");
+    }
+  };
+
+  const handleAddReview = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/fellows/${id}/reviews`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          period: newReviewPeriod,
+          rating: newReviewRating ? parseFloat(newReviewRating) : null,
+          reviewerName: newReviewerName,
+          evaluation: newReviewEvaluation
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setReviews(prev => [json.data, ...prev]);
+        setNewReviewPeriod("");
+        setNewReviewRating("");
+        setNewReviewerName("");
+        setNewReviewEvaluation("");
+        setShowAddReviewModal(false);
+        toast.success("Evaluation review saved successfully!");
+      } else {
+        toast.error(json.error || "Failed to save evaluation");
+      }
+    } catch (err) {
+      toast.error("An error occurred while saving the evaluation.");
+    }
+  };
+
+  const handleDeleteReview = (reviewId) => {
+    setDeleteItemId(reviewId);
+    setDeleteItemType("review");
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteItemId) return;
+
+    if (deleteItemType === "goal") {
+      try {
+        const res = await fetch(`/api/fellows/${id}/goals?goalId=${deleteItemId}`, {
+          method: "DELETE",
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setGoals(prev => prev.filter(g => g.id !== deleteItemId));
+          toast.success("Goal deleted successfully!");
+        } else {
+          toast.error(json.error || "Failed to delete goal");
+        }
+      } catch (err) {
+        console.error("Failed to delete goal:", err);
+        toast.error("An error occurred while deleting the goal.");
+      }
+    } else if (deleteItemType === "review") {
+      try {
+        const res = await fetch(`/api/fellows/${id}/reviews?reviewId=${deleteItemId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (json.success) {
+          setReviews(prev => prev.filter(r => r.id !== deleteItemId));
+          toast.success("Evaluation review deleted successfully!");
+        } else {
+          toast.error(json.error || "Failed to delete review");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("An error occurred while deleting the review.");
+      }
+    }
+    setDeleteModalOpen(false);
+    setDeleteItemId(null);
+    setDeleteItemType("");
+  };
+
+  if (isInitializing || loading) {
+    return (
+      <div className="p-8 flex justify-center items-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!fellow) {
+    return <div className="p-8 text-center text-on-surface-variant font-medium">Fellow not found</div>;
+  }
+
+  const assignedSchool = fellow.schools && fellow.schools.length > 0 ? fellow.schools[0].school : null;
+  const fellowLocation = fellow.address || (assignedSchool ? assignedSchool.location : "Kalgachia");
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back Link */}
-      <Link
-        href="/education/fellows"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
-      >
-        <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
-          arrow_back
-        </span>
-        <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-          Back to Fellows Tracker
-        </span>
-      </Link>
+      {user?.roleName !== "FELLOW" ? (
+        <Link
+          href="/education/fellows"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        >
+          <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
+            arrow_back
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
+            Back to Fellows Tracker
+          </span>
+        </Link>
+      ) : (
+        <Link
+          href="/education"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        >
+          <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
+            arrow_back
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
+            Back to Education Hub
+          </span>
+        </Link>
+      )}
 
       {/* Hero Section */}
       <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md">
-            <img
-              alt="Fellow avatar"
-              className="w-full h-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7gMo5puf1sV4uTm3qk1tT-zVJzNDhR17iH7pqq5iCccFjIOCE8W3EHYIp9rK3D066Q9ZkVjeLVtNwSBF9m1-hvbOUGfnjJRGIchuJ3Eh6rp7nQKBpqZJzMPBwV1Qz0kmOpVSOMreor-iUVKwSv67qJNrwuROO0mgJdvBeUHMDI7zmdq1qTUV0QVFCkkSQdtuaqu2lruZIChfw5S3KIqkr12xKbUERZvogsBdHSPGMGD5RG1KZ_J33Im7k3p4NaNTFC6WFYrzLKONE"
-            />
+            {fellow.avatar ? (
+              <img
+                alt="Fellow avatar"
+                className="w-full h-full object-cover"
+                src={fellow.avatar}
+              />
+            ) : (
+              <div className="w-full h-full bg-surface-container-high flex items-center justify-center text-on-surface-variant text-3xl font-bold font-headline">
+                {fellow.name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)}
+              </div>
+            )}
           </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h2 className="text-3xl font-headline font-black text-on-surface capitalize">
-                {name}
+                {fellow.name}
               </h2>
               <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                {fellowInfo.cohort}
+                {fellow.cohort}
               </span>
             </div>
             <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">location_on</span>
-              {fellowInfo.location} • 3 Active Placements
+              {fellowLocation} • {fellow.students ? fellow.students.length : 0} Assigned Students
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
               <div>
-                <span className="font-bold text-on-surface">Email:</span> aisha.r@aman.org
+                <span className="font-bold text-on-surface">Email:</span> {fellow.email || "fellow@aman.org"}
               </div>
               <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
               <div>
-                <span className="font-bold text-on-surface">Assigned School:</span> Oakridge Academy
+                <span className="font-bold text-on-surface">Assigned School:</span> {assignedSchool ? assignedSchool.name : "Unassigned"}
               </div>
             </div>
           </div>
@@ -159,46 +385,124 @@ export default function FellowProfileDetail() {
         <div className="lg:col-span-2">
           {activeTab === "Goals" && (
             <div className="space-y-6">
-              {goals.map((g) => (
-                <div key={g.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-                  <div className="flex justify-between items-start mb-4 gap-4">
-                    <div>
-                      <h3 className="font-headline font-bold text-lg text-on-surface">{g.title}</h3>
-                      <p className="text-xs text-on-surface-variant mt-1">Target Date: {g.targetDate}</p>
-                    </div>
-                    <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${g.statusColor}`}>
-                      {g.status}
-                    </span>
-                  </div>
-                  
-                  {/* Milestones Checklist */}
-                  <div className="space-y-3 pl-2 mt-4 border-l-2 border-surface-container">
-                    <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Goal Milestones</p>
-                    {g.milestones.map((m) => (
-                      <div
-                        key={m.id}
-                        onClick={() => toggleMilestone(g.id, m.id)}
-                        className="flex items-center gap-3 cursor-pointer group"
-                      >
-                        <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${
-                          m.done ? "bg-primary border-primary text-white" : "border-outline-variant group-hover:border-primary"
-                        }`}>
-                          {m.done && <span className="material-symbols-outlined text-[14px]">check</span>}
-                        </div>
-                        <span className={`text-sm ${m.done ? "line-through text-on-surface-variant" : "text-on-surface"}`}>
-                          {m.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Goals Tab Header */}
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-headline font-bold text-xl text-on-surface">Fellow Learning Goals</h3>
+                <button
+                  onClick={() => setShowAddGoalModal(true)}
+                  className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[16px]">add</span>
+                  Add New Goal
+                </button>
+              </div>
 
-                  {/* Review Outcome */}
-                  <div className="mt-6 p-4 bg-surface-container-low rounded-lg">
-                    <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Progress Review</p>
-                    <p className="text-sm text-on-surface leading-relaxed">{g.review}</p>
-                  </div>
+              {goals.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                  No learning goals have been set yet. Click "Add New Goal" to start.
                 </div>
-              ))}
+              ) : (
+                goals.map((g) => (
+                  <div key={g.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group">
+                    <div className="flex justify-between items-start mb-4 gap-4">
+                      <div>
+                        <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
+                          {g.title}
+                          <button
+                            onClick={() => handleDeleteGoal(g.id)}
+                            className="text-on-surface-variant hover:text-red-600 transition-colors ml-2"
+                            title="Delete goal"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        </h3>
+                        <p className="text-xs text-on-surface-variant mt-1">
+                          Target Date: {g.targetDate ? new Date(g.targetDate).toLocaleDateString() : "No date set"}
+                        </p>
+                      </div>
+                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                        g.status === "Completed" ? "bg-primary-fixed text-on-primary-fixed" :
+                        g.status === "In Progress" ? "bg-secondary-container text-on-secondary-container" :
+                        "bg-surface-variant text-on-surface-variant"
+                      }`}>
+                        {g.status}
+                      </span>
+                    </div>
+
+                    {/* Milestones Checklist */}
+                    <div className="space-y-3 pl-2 mt-4 border-l-2 border-surface-container">
+                      <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Goal Milestones</p>
+                      {g.milestones && g.milestones.map((m) => (
+                        <div
+                          key={m.id}
+                          onClick={() => toggleMilestone(g.id, m.id, m.done)}
+                          className="flex items-center gap-3 cursor-pointer group/item"
+                        >
+                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${
+                            m.done ? "bg-primary border-primary text-white" : "border-outline-variant group-hover/item:border-primary"
+                          }`}>
+                            {m.done && <span className="material-symbols-outlined text-[14px]">check</span>}
+                          </div>
+                          <span className={`text-sm ${m.done ? "line-through text-on-surface-variant" : "text-on-surface"}`}>
+                            {m.text}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Review Outcome & Editor */}
+                    <div className="mt-6 p-4 bg-surface-container-low rounded-lg relative group/review font-sans">
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Progress Review</p>
+                        {user?.roleName === "ADMIN" && (
+                          <button
+                            onClick={() => {
+                              setEditingReviewGoalId(g.id);
+                              setReviewText(g.review || "");
+                            }}
+                            className="text-xs text-primary font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-xs">edit</span>
+                            {g.review ? "Edit Review" : "Write Review"}
+                          </button>
+                        )}
+                      </div>
+                      
+                      {editingReviewGoalId === g.id ? (
+                        <div className="space-y-3 mt-2">
+                          <textarea
+                            value={reviewText}
+                            onChange={(e) => setReviewText(e.target.value)}
+                            placeholder="Write your progress review here..."
+                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface"
+                            rows={3}
+                          />
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => setEditingReviewGoalId(null)}
+                              className="px-3 py-1.5 rounded-full border border-outline-variant text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={() => handleSaveReview(g.id)}
+                              className="px-4 py-1.5 rounded-full bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                            >
+                              Save Review
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        g.review ? (
+                          <p className="text-sm text-on-surface leading-relaxed">{g.review}</p>
+                        ) : (
+                          <p className="text-xs text-slate-400 italic">No review submitted yet.</p>
+                        )
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
 
@@ -211,10 +515,10 @@ export default function FellowProfileDetail() {
                 <div>
                   <div className="flex justify-between text-sm font-semibold mb-2">
                     <span>Student Literacy Level Improvement</span>
-                    <span className="text-primary">+34% Progress</span>
+                    <span className="text-primary">+{fellow.progress || 34}% Progress</span>
                   </div>
                   <div className="w-full bg-surface-container h-3 rounded-full overflow-hidden relative">
-                    <div className="bg-primary h-full rounded-full w-[84%]"></div>
+                    <div className="bg-primary h-full rounded-full" style={{ width: `${fellow.progress || 34}%` }}></div>
                   </div>
                   <p className="text-xs text-on-surface-variant mt-2">Target: +40% improvement in writing by Q4</p>
                 </div>
@@ -261,7 +565,7 @@ export default function FellowProfileDetail() {
                     { month: "May", val: 84 },
                   ].map((d, i) => (
                     <div key={i} className="flex-1 flex flex-col items-center group max-w-[50px] relative">
-                      <div className="absolute bottom-full mb-2 bg-on-surface text-surface text-[10px] px-2 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute bottom-full mb-2 bg-on-surface text-surface text-[10px] px-2.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
                         {d.val}%
                       </div>
                       <div
@@ -278,35 +582,52 @@ export default function FellowProfileDetail() {
 
           {activeTab === "6-Month Progress Reviews" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface">6-Month Comprehensive Evaluations</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-headline font-bold text-xl text-on-surface">6-Month Comprehensive Evaluations</h3>
+                {user?.roleName === "ADMIN" && (
+                  <button
+                    onClick={() => setShowAddReviewModal(true)}
+                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">add</span>
+                    Add Evaluation Review
+                  </button>
+                )}
+              </div>
               <div className="space-y-6">
-                <div className="p-5 border border-surface-container rounded-lg">
-                  <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-on-surface">Mid-Cohort Review (Period: Jan - Jun)</h4>
-                    <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">Passed Evaluation</span>
+                {reviews.length === 0 ? (
+                  <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                    No progress evaluations have been added yet. Click "Add Evaluation Review" to start.
                   </div>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
-                    "Aisha has demonstrated exceptional lesson planning capabilities. Her implementation of the interactive phonics cards resulted in standard 3 reading scores increasing by 34% in 4 months. She maintains robust communications logs with the school headmasters and has successfully normalized PTA assemblies."
-                  </p>
-                  <div className="mt-4 flex gap-4 text-xs text-slate-400 font-sans">
-                    <div>Reviewed by: <span className="font-bold text-on-surface">Sarah Jenkins (Operations Lead)</span></div>
-                    <div>Date: Jun 22, 2026</div>
+                ) : (
+                  reviews.map((rev) => (
+                  <div key={rev.id} className="p-5 border border-surface-container rounded-lg relative group/review-card font-sans">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-bold text-on-surface flex items-center gap-2">
+                        {rev.period}
+                        {user?.roleName === "ADMIN" && rev.id !== "default-1" && (
+                          <button
+                            onClick={() => handleDeleteReview(rev.id)}
+                            className="text-on-surface-variant hover:text-red-600 transition-colors ml-2"
+                            title="Delete evaluation review"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
+                      </h4>
+                      <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">{rev.status}</span>
+                    </div>
+                    <p className="text-sm text-on-surface-variant leading-relaxed">
+                      "{rev.evaluation}"
+                    </p>
+                    <div className="mt-4 flex gap-4 text-xs text-slate-400 font-sans">
+                      <div>Reviewed by: <span className="font-bold text-on-surface">{rev.reviewerName}</span></div>
+                      <div>Date: {new Date(rev.date).toLocaleDateString()}</div>
+                      {rev.rating && <div>Rating: <span className="font-bold text-primary">{rev.rating} / 5.0</span></div>}
+                    </div>
                   </div>
-                </div>
-
-                <div className="p-5 border border-surface-container rounded-lg opacity-60">
-                  <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-on-surface">Baseline Onboarding Review</h4>
-                    <span className="text-xs font-bold text-on-surface-variant bg-surface-container px-2 py-1 rounded">Completed</span>
-                  </div>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
-                    "Initial orientation and mapping evaluation finished. Placement set at Oakridge Academy. Baseline math proficiency logged at 45% for Standard 3."
-                  </p>
-                  <div className="mt-4 flex gap-4 text-xs text-slate-400 font-sans">
-                    <div>Reviewed by: <span className="font-bold text-on-surface">David Chen (Coordinator)</span></div>
-                    <div>Date: Jan 05, 2026</div>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
           )}
@@ -319,7 +640,7 @@ export default function FellowProfileDetail() {
             <div className="space-y-4 font-sans text-sm">
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Active Placement</span>
-                <span className="font-semibold text-on-surface">Oakridge Academy</span>
+                <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Class Grades</span>
@@ -327,11 +648,11 @@ export default function FellowProfileDetail() {
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Assigned Students</span>
-                <span className="font-semibold text-on-surface">76 Students</span>
+                <span className="font-semibold text-on-surface">{fellow.students ? fellow.students.length : 0} Students</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Evaluation Rating</span>
-                <span className="font-semibold text-primary">4.8 / 5.0</span>
+                <span className="font-semibold text-primary">{fellow.evaluationRating || "4.8"} / 5.0</span>
               </div>
             </div>
           </div>
@@ -348,6 +669,210 @@ export default function FellowProfileDetail() {
           </div>
         </div>
       </div>
+
+      {/* Add Goal Modal */}
+      {showAddGoalModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Add New Learning Goal</h3>
+              <button
+                onClick={() => setShowAddGoalModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleAddGoal} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Goal Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Conduct 5 remedial math sessions"
+                  value={newGoalTitle}
+                  onChange={(e) => setNewGoalTitle(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Target Date
+                </label>
+                <input
+                  type="date"
+                  value={newGoalTargetDate}
+                  onChange={(e) => setNewGoalTargetDate(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Milestones
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setNewGoalMilestones([...newGoalMilestones, ""])}
+                    className="text-xs text-primary font-semibold hover:underline flex items-center gap-1"
+                  >
+                    + Add Milestone
+                  </button>
+                </div>
+                {newGoalMilestones.map((milestone, idx) => (
+                  <div key={idx} className="flex gap-2 items-center mb-2">
+                    <input
+                      type="text"
+                      required
+                      placeholder={`Milestone #${idx + 1}`}
+                      value={milestone}
+                      onChange={(e) => {
+                        const updated = [...newGoalMilestones];
+                        updated[idx] = e.target.value;
+                        setNewGoalMilestones(updated);
+                      }}
+                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                    {newGoalMilestones.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [...newGoalMilestones];
+                          updated.splice(idx, 1);
+                          setNewGoalMilestones(updated);
+                        }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddGoalModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                >
+                  Create Goal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Add Evaluation Review Modal */}
+      {showAddReviewModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Add 6-Month Progress Evaluation</h3>
+              <button
+                onClick={() => setShowAddReviewModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleAddReview} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Evaluation Period
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Mid-Cohort Review (Period: Jan - Jun)"
+                  value={newReviewPeriod}
+                  onChange={(e) => setNewReviewPeriod(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Rating (optional, 1.0 to 5.0)
+                </label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="1"
+                  max="5"
+                  placeholder="e.g. 4.8"
+                  value={newReviewRating}
+                  onChange={(e) => setNewReviewRating(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Reviewer Name & Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Sarah Jenkins (Operations Lead)"
+                  value={newReviewerName}
+                  onChange={(e) => setNewReviewerName(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Evaluation Comments
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Provide details about the fellow's performance..."
+                  value={newReviewEvaluation}
+                  onChange={(e) => setNewReviewEvaluation(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddReviewModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                >
+                  Save Evaluation
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <ConfirmDeleteModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setDeleteItemId(null);
+          setDeleteItemType("");
+        }}
+        onConfirm={handleConfirmDelete}
+        title={deleteItemType === "goal" ? "Delete Goal" : "Delete Evaluation Review"}
+        message={
+          deleteItemType === "goal"
+            ? "Are you sure you want to delete this goal? This action is permanent and cannot be undone."
+            : "Are you sure you want to delete this evaluation review? This action is permanent and cannot be undone."
+        }
+      />
     </div>
   );
 }

@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus } from 'lucide-react';
-import { useAppContext } from '@/context/AppContext';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2 } from 'lucide-react';
+import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
 import RolePermissionsModal from '@/components/users/RolePermissionsModal';
 import AddRoleModal from '@/components/users/AddRoleModal';
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 
 export default function AdminPage() {
   const [users, setUsers] = useState([]);
@@ -19,13 +20,25 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('users'); // 'users' | 'approvals' | 'roles'
   const [roles, setRoles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDepartments, setSelectedDepartments] = useState({});
+  
+  const handleDepartmentChange = (userId, value) => {
+    setSelectedDepartments(prev => ({ ...prev, [userId]: value }));
+  };
   
   // Modals state
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState(null);
 
-  const { token, user: currentUser, pendingApprovalsCount, refreshPendingCount } = useAppContext();
+  const { token, user: currentUser } = useAuth();
+  const pendingApprovalsCount = useMemo(() => {
+    return users.filter(u => u.status === 'PENDING').length;
+  }, [users]);
   const toast = useToast();
 
   const isDarkMode = true; // Match premium dark theme of dashboard panels
@@ -47,7 +60,6 @@ export default function AdminPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to fetch users');
       setUsers(data.data || []);
-      refreshPendingCount();
     } catch (err) {
       setError(err.message);
       toast.error(err.message);
@@ -74,13 +86,18 @@ export default function AdminPage() {
   const handleStatusUpdate = async (userId, newStatus) => {
     try {
       setActionLoading(userId);
+      const body = { status: newStatus };
+      if (newStatus === 'ACTIVE' && selectedDepartments[userId]) {
+        body.department = selectedDepartments[userId];
+      }
+      
       const res = await fetch(`/api/users/${userId}/status`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}` 
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify(body)
       });
 
       const data = await res.json();
@@ -88,7 +105,6 @@ export default function AdminPage() {
 
       toast.success(`User status updated to ${newStatus}.`);
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
-      refreshPendingCount();
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -96,11 +112,16 @@ export default function AdminPage() {
     }
   };
 
-  const handleDeleteRole = async (roleId) => {
-    if (!window.confirm("Are you sure you want to delete this role? This action is permanent.")) return;
+  const handleDeleteRole = (roleId) => {
+    setDeleteItemId(roleId);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDeleteRole = async () => {
+    if (!deleteItemId) return;
 
     try {
-      const res = await fetch(`/api/roles/${roleId}`, {
+      const res = await fetch(`/api/roles/${deleteItemId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`
@@ -111,10 +132,42 @@ export default function AdminPage() {
       if (!res.ok) throw new Error(data.error || 'Failed to delete role');
 
       toast.success("Role deleted successfully!");
-      setRoles(prev => prev.filter(r => r.id !== roleId));
+      setRoles(prev => prev.filter(r => r.id !== deleteItemId));
     } catch (error) {
       toast.error(error.message);
     }
+    setDeleteModalOpen(false);
+    setDeleteItemId(null);
+  };
+
+  const handleDeleteUser = (userId) => {
+    setDeleteUserId(userId);
+    setDeleteUserModalOpen(true);
+  };
+
+  const handleConfirmDeleteUser = async () => {
+    if (!deleteUserId) return;
+    try {
+      setActionLoading(deleteUserId);
+      const res = await fetch(`/api/users/${deleteUserId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete user');
+
+      toast.success("User and all associated profile records deleted successfully!");
+      setUsers(prev => prev.filter(u => u.id !== deleteUserId));
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setActionLoading(null);
+    }
+    setDeleteUserModalOpen(false);
+    setDeleteUserId(null);
   };
 
   // Filtered lists
@@ -313,8 +366,26 @@ export default function AdminPage() {
                               <div className="flex items-center justify-end gap-2">
                                 {activeTab === 'approvals' ? (
                                   <>
+                                    <select
+                                      value={selectedDepartments[item.id] || ''}
+                                      onChange={(e) => handleDepartmentChange(item.id, e.target.value)}
+                                      className="py-1.5 px-2 rounded-lg text-[10px] font-bold tracking-wider bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 outline-none"
+                                    >
+                                      <option value="" disabled>Select Dept</option>
+                                      <option value="Operations">Operations</option>
+                                      <option value="Logistics">Logistics</option>
+                                      <option value="Education">Education</option>
+                                      <option value="HR">HR</option>
+                                      <option value="Finance">Finance</option>
+                                    </select>
                                     <button
-                                      onClick={() => handleStatusUpdate(item.id, 'ACTIVE')}
+                                      onClick={() => {
+                                        if (!selectedDepartments[item.id]) {
+                                          toast.error("Please select a department before approving.");
+                                          return;
+                                        }
+                                        handleStatusUpdate(item.id, 'ACTIVE');
+                                      }}
                                       disabled={actionLoading === item.id}
                                       className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 transition-all hover:scale-105 active:scale-100"
                                     >
@@ -329,6 +400,16 @@ export default function AdminPage() {
                                       {actionLoading === item.id ? <Loader2 size={12} className="animate-spin" /> : <UserX size={12} />}
                                       Reject
                                     </button>
+                                    {item.id !== currentUser?.id && (
+                                      <button
+                                        onClick={() => handleDeleteUser(item.id)}
+                                        disabled={actionLoading === item.id}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-[#f43f5e]/10 hover:bg-[#f43f5e]/20 text-[#f43f5e] border border-[#f43f5e]/20 transition-all hover:scale-105 cursor-pointer"
+                                      >
+                                        <Trash2 size={12} />
+                                        Delete
+                                      </button>
+                                    )}
                                   </>
                                 ) : (
                                   <>
@@ -358,6 +439,16 @@ export default function AdminPage() {
                                       <ShieldAlert size={12} />
                                       Edit Permissions
                                     </button>
+                                    {item.id !== currentUser?.id && (
+                                      <button
+                                        onClick={() => handleDeleteUser(item.id)}
+                                        disabled={actionLoading === item.id}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-[#f43f5e]/10 hover:bg-[#f43f5e]/20 text-[#f43f5e] border border-[#f43f5e]/20 transition-all hover:scale-105 cursor-pointer"
+                                      >
+                                        <Trash2 size={12} />
+                                        Delete
+                                      </button>
+                                    )}
                                   </>
                                 )}
                               </div>
@@ -455,6 +546,28 @@ export default function AdminPage() {
         isDarkMode={isDarkMode}
         token={token}
         onRoleAdded={(newRole) => setRoles(prev => [...prev, newRole])}
+      />
+
+      <ConfirmDeleteModal
+        isOpen={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+          setDeleteItemId(null);
+        }}
+        onConfirm={handleConfirmDeleteRole}
+        title="Delete Role"
+        message="Are you sure you want to delete this role? This action is permanent and cannot be undone."
+      />
+
+      <ConfirmDeleteModal
+        isOpen={deleteUserModalOpen}
+        onClose={() => {
+          setDeleteUserModalOpen(false);
+          setDeleteUserId(null);
+        }}
+        onConfirm={handleConfirmDeleteUser}
+        title="Delete User Account"
+        message="Are you sure you want to delete this user? All corresponding profile records, goals, and evaluations will be permanently deleted. This action cannot be undone."
       />
       
     </div>

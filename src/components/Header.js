@@ -1,9 +1,10 @@
 "use client";
 
-import { useAppContext } from "@/context/AppContext";
+import Link from "next/link";
+import { useAuth } from "@/lib/useAuth";
 
 export default function Header({ onMenuToggle }) {
-  const { user } = useAppContext();
+  const { user } = useAuth();
 
   // Extract name initials, e.g. "SA" for Super Admin
   const initials = user?.name
@@ -33,8 +34,7 @@ export default function Header({ onMenuToggle }) {
           </button>
         </div>
         
-        {/* Dynamic User Profile Container */}
-        <div className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4 h-8">
+        <Link href="/profile" className="flex items-center gap-3 border-l border-slate-200 dark:border-slate-800 pl-4 h-8 hover:opacity-85 transition-opacity">
           <div className="flex flex-col text-right hidden sm:flex">
             <span className="text-xs font-bold text-slate-800 dark:text-white normal-case tracking-normal">
               {user?.name || "Guest User"}
@@ -46,7 +46,7 @@ export default function Header({ onMenuToggle }) {
           <div className="w-8 h-8 rounded-full bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-black text-xs shrink-0 border border-[#1a7a5e]/10">
             {initials}
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

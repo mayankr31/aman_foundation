@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useAppContext } from "@/context/AppContext";
+import { useAuth } from "@/lib/useAuth";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Loader2 } from "lucide-react";
 
 export default function LayoutWrapper({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { token, isInitializing } = useAppContext();
+  const { token, isInitializing } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 

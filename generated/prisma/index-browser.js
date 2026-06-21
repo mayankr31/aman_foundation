@@ -138,6 +138,9 @@ exports.Prisma.UserScalarFieldEnum = {
   mobile: 'mobile',
   roleId: 'roleId',
   status: 'status',
+  department: 'department',
+  leavesTaken: 'leavesTaken',
+  leavesRemaining: 'leavesRemaining',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -164,6 +167,377 @@ exports.Prisma.UserPermissionScalarFieldEnum = {
   userId: 'userId',
   permissionId: 'permissionId',
   type: 'type',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SchoolScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  principalName: 'principalName',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  location: 'location',
+  status: 'status',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  mapUrl: 'mapUrl',
+  img: 'img',
+  goal: 'goal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  dob: 'dob',
+  gender: 'gender',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  cohort: 'cohort',
+  avatar: 'avatar',
+  progress: 'progress',
+  evaluationRating: 'evaluationRating',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowGoalScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  title: 'title',
+  targetDate: 'targetDate',
+  status: 'status',
+  review: 'review',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowGoalMilestoneScalarFieldEnum = {
+  id: 'id',
+  goalId: 'goalId',
+  text: 'text',
+  done: 'done',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowReviewScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  period: 'period',
+  evaluation: 'evaluation',
+  rating: 'rating',
+  reviewerName: 'reviewerName',
+  date: 'date',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  name: 'name',
+  dob: 'dob',
+  gender: 'gender',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  grade: 'grade',
+  gradeGroup: 'gradeGroup',
+  district: 'district',
+  attendance: 'attendance',
+  guardianName: 'guardianName',
+  guardianPhone: 'guardianPhone',
+  enrolmentDate: 'enrolmentDate',
+  primaryLanguage: 'primaryLanguage',
+  status: 'status',
+  schoolId: 'schoolId',
+  fellowId: 'fellowId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentSubjectMarkScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  subject: 'subject',
+  score: 'score',
+  grade: 'grade',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAttendanceLogScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  month: 'month',
+  present: 'present',
+  total: 'total',
+  percentage: 'percentage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAttendanceDayLogScalarFieldEnum = {
+  id: 'id',
+  logId: 'logId',
+  date: 'date',
+  status: 'status',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowSchoolScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  schoolId: 'schoolId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProgramScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  duration: 'duration',
+  participantsText: 'participantsText',
+  status: 'status',
+  icon: 'icon',
+  iconBg: 'iconBg',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SchoolProgramScalarFieldEnum = {
+  id: 'id',
+  schoolId: 'schoolId',
+  programId: 'programId'
+};
+
+exports.Prisma.ProgramEventScalarFieldEnum = {
+  id: 'id',
+  programId: 'programId',
+  title: 'title',
+  description: 'description',
+  date: 'date',
+  location: 'location',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BeneficiaryScalarFieldEnum = {
+  id: 'id',
+  enrolmentId: 'enrolmentId',
+  name: 'name',
+  dob: 'dob',
+  panCard: 'panCard',
+  aadhar: 'aadhar',
+  rationCard: 'rationCard',
+  mobNumber: 'mobNumber',
+  resilienceScore: 'resilienceScore',
+  annualIncome: 'annualIncome',
+  monthlyIncome: 'monthlyIncome',
+  caste: 'caste',
+  religion: 'religion',
+  address: 'address',
+  householdSize: 'householdSize',
+  primaryIncomeType: 'primaryIncomeType',
+  tier: 'tier',
+  tierPercent: 'tierPercent',
+  bankName: 'bankName',
+  bankAccountNo: 'bankAccountNo',
+  bankIfsc: 'bankIfsc',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FamilyMemberScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  name: 'name',
+  relation: 'relation',
+  dob: 'dob',
+  contactInfo: 'contactInfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LivestockScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  tagNumber: 'tagNumber',
+  animalType: 'animalType',
+  breed: 'breed',
+  ageMonths: 'ageMonths',
+  healthStatus: 'healthStatus',
+  assignedAt: 'assignedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LivestockHealthLogScalarFieldEnum = {
+  id: 'id',
+  livestockId: 'livestockId',
+  checkupDate: 'checkupDate',
+  status: 'status',
+  notes: 'notes',
+  performedBy: 'performedBy',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SchemeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SchemeEnrollmentScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  schemeId: 'schemeId',
+  enrolledAt: 'enrolledAt'
+};
+
+exports.Prisma.BeneficiaryGoatRearingScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  goatsAssigned: 'goatsAssigned',
+  investment: 'investment',
+  returnsAmount: 'returnsAmount',
+  roiPercentage: 'roiPercentage',
+  advantagesLog: 'advantagesLog',
+  notes: 'notes',
+  goatRearingProgramId: 'goatRearingProgramId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GoatRearingProgramScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  totalGoats: 'totalGoats',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BeneficiarySugarcaneScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  hectaresAllotted: 'hectaresAllotted',
+  soilType: 'soilType',
+  waterSource: 'waterSource',
+  cropStage: 'cropStage',
+  estimatedYieldTons: 'estimatedYieldTons',
+  actualYieldTons: 'actualYieldTons',
+  fertilizersDistributed: 'fertilizersDistributed',
+  estimatedRevenue: 'estimatedRevenue',
+  actualRevenue: 'actualRevenue',
+  sugarcaneProgramId: 'sugarcaneProgramId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SugarcaneProgramScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  totalLandHectares: 'totalLandHectares',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DisasterIncidentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  location: 'location',
+  type: 'type',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  expectedFamiliesAffected: 'expectedFamiliesAffected',
+  humanLossDied: 'humanLossDied',
+  humanLossInjured: 'humanLossInjured',
+  humanLossMissing: 'humanLossMissing',
+  propertyLossEstimate: 'propertyLossEstimate'
+};
+
+exports.Prisma.HelpProviderScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  capabilityType: 'capabilityType',
+  contactDetails: 'contactDetails',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ResourceItemScalarFieldEnum = {
+  id: 'id',
+  itemName: 'itemName',
+  availableStock: 'availableStock',
+  unit: 'unit',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InventoryLedgerScalarFieldEnum = {
+  id: 'id',
+  resourceItemId: 'resourceItemId',
+  transactionType: 'transactionType',
+  quantity: 'quantity',
+  handledByUserId: 'handledByUserId',
+  incidentResourceNeedId: 'incidentResourceNeedId',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AttendanceLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  email: 'email',
+  logdate: 'logdate',
+  intimelog: 'intimelog',
+  outtimelog: 'outtimelog',
+  workhours: 'workhours',
+  workstatus: 'workstatus',
+  ef1: 'ef1',
+  ef2: 'ef2',
+  logininfo: 'logininfo',
+  logoutinfo: 'logoutinfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeaveScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  dates: 'dates',
+  reason: 'reason',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IncidentResourceNeedScalarFieldEnum = {
+  id: 'id',
+  incidentId: 'incidentId',
+  resourceItemId: 'resourceItemId',
+  quantityNeeded: 'quantityNeeded',
+  quantityReceived: 'quantityReceived',
+  transactionsCount: 'transactionsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -200,12 +574,48 @@ exports.PermissionType = exports.$Enums.PermissionType = {
   DENY: 'DENY'
 };
 
+exports.LeaveStatus = exports.$Enums.LeaveStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
   Permission: 'Permission',
   RolePermission: 'RolePermission',
-  UserPermission: 'UserPermission'
+  UserPermission: 'UserPermission',
+  School: 'School',
+  Fellow: 'Fellow',
+  FellowGoal: 'FellowGoal',
+  FellowGoalMilestone: 'FellowGoalMilestone',
+  FellowReview: 'FellowReview',
+  Student: 'Student',
+  StudentSubjectMark: 'StudentSubjectMark',
+  StudentAttendanceLog: 'StudentAttendanceLog',
+  StudentAttendanceDayLog: 'StudentAttendanceDayLog',
+  FellowSchool: 'FellowSchool',
+  Program: 'Program',
+  SchoolProgram: 'SchoolProgram',
+  ProgramEvent: 'ProgramEvent',
+  Beneficiary: 'Beneficiary',
+  FamilyMember: 'FamilyMember',
+  Livestock: 'Livestock',
+  LivestockHealthLog: 'LivestockHealthLog',
+  Scheme: 'Scheme',
+  SchemeEnrollment: 'SchemeEnrollment',
+  BeneficiaryGoatRearing: 'BeneficiaryGoatRearing',
+  GoatRearingProgram: 'GoatRearingProgram',
+  BeneficiarySugarcane: 'BeneficiarySugarcane',
+  SugarcaneProgram: 'SugarcaneProgram',
+  DisasterIncident: 'DisasterIncident',
+  HelpProvider: 'HelpProvider',
+  ResourceItem: 'ResourceItem',
+  InventoryLedger: 'InventoryLedger',
+  AttendanceLog: 'AttendanceLog',
+  Leave: 'Leave',
+  IncidentResourceNeed: 'IncidentResourceNeed'
 };
 
 /**

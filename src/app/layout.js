@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import LayoutWrapper from "@/components/LayoutWrapper";
-import { AppProvider } from "@/context/AppContext";
 import { ToastProvider } from "@/context/ToastContext";
 import "./globals.css";
 
@@ -31,11 +30,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-full flex bg-surface text-on-surface">
-        <AppProvider>
-          <ToastProvider>
-            <LayoutWrapper>{children}</LayoutWrapper>
-          </ToastProvider>
-        </AppProvider>
+        <ToastProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </ToastProvider>
       </body>
     </html>
   );

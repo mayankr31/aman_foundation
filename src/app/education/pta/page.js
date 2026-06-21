@@ -1,75 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/useAuth";
 
 export default function PtaPrograms() {
+  const { token } = useAuth();
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalType, setModalType] = useState("Program"); // "Program" or "Event"
 
-  const [programs, setPrograms] = useState([
-    {
-      id: 1,
-      icon: "campaign",
-      iconBg: "bg-primary/10 text-primary",
-      title: "Annual Literacy Drive",
-      status: "Active",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      description: "Comprehensive reading initiative targeting Standard 3 students.",
-      duration: "6 Months",
-      participants: "450 Students Enrolled",
-    },
-    {
-      id: 2,
-      icon: "computer",
-      iconBg: "bg-secondary-fixed text-on-secondary-container",
-      title: "Digital Literacy Course",
-      status: "Planning",
-      statusClass: "bg-secondary-container text-on-secondary-fixed",
-      description: "Basic computing classes for standard 8 students in partner schools.",
-      duration: "3 Months",
-      participants: "Planning (120 Expected)",
-    },
-  ]);
-
-  const [events, setEvents] = useState([
-    {
-      id: 101,
-      title: "Q3 PTA General Assembly",
-      status: "Completed",
-      statusClass: "bg-surface-container text-on-surface-variant",
-      description: "Review of student outcomes, infrastructure needs, and parent feedback.",
-      date: "Oct 24, 2026 • 10:00 AM",
-      location: "Oakridge Main Hall",
-    },
-    {
-      id: 102,
-      title: "Fellow-Parent Welcome Committee",
-      status: "Scheduled",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      description: "Orientation session welcoming Cohort '24 fellows to the district.",
-      date: "Nov 12, 2026 • 11:30 AM",
-      location: "Riverside Classroom B",
-    },
-    {
-      id: 103,
-      title: "PTA Monthly Planning Meeting",
-      status: "Scheduled",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      description: "Discussing summer camp preparations and baseline literacy goals.",
-      date: "Jun 10, 2026 • 09:30 AM",
-      location: "Kalgachia Circle Office",
-    },
-    {
-      id: 104,
-      title: "Community Reading Circle Launch",
-      status: "Scheduled",
-      statusClass: "bg-primary-fixed text-on-primary-fixed",
-      description: "Launching the outdoor reading circle initiative for primary students.",
-      date: "Jun 24, 2026 • 02:00 PM",
-      location: "Bartari Village Common",
-    },
-  ]);
+  const [programs, setPrograms] = useState([]);
+  const [events, setEvents] = useState([]);
 
   // Calendar states and logic
   const [currentDate, setCurrentDate] = useState(new Date(2026, 5, 3)); // June 2026
@@ -120,6 +61,37 @@ export default function PtaPrograms() {
       isCurrentMonth: false,
     });
   }
+
+  useEffect(() => {
+    async function loadProgramsAndEvents() {
+      try {
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const res = await fetch("/api/programs", { headers });
+        const json = await res.json();
+        if (json.success) {
+          setPrograms(json.data);
+        }
+        
+        const eventRes = await fetch("/api/events", { headers });
+        const eventJson = await eventRes.json();
+        if (eventJson.success) {
+          setEvents(eventJson.data.map(ev => ({
+            id: ev.id,
+            title: ev.title,
+            status: ev.status,
+            statusClass: ev.status === "Completed" ? "bg-surface-container text-on-surface-variant" : "bg-primary-fixed text-on-primary-fixed",
+            description: ev.description,
+            date: new Date(ev.date).toLocaleDateString() + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+            location: ev.location,
+            programId: ev.programId
+          })));
+        }
+      } catch (err) {
+        console.error("Failed to load programs/events:", err);
+      }
+    }
+    loadProgramsAndEvents();
+  }, [token]);
 
   const parseEventDate = (dateStr) => {
     try {
@@ -191,36 +163,84 @@ export default function PtaPrograms() {
   const [newEventTime, setNewEventTime] = useState("");
   const [newLoc, setNewLoc] = useState("");
   const [newPriority, setNewPriority] = useState("Active");
+  const [newProgramId, setNewProgramId] = useState("");
 
-  const handleAddSubmit = (e) => {
+  const handleAddSubmit = async (e) => {
     e.preventDefault();
     if (!newName || !newDesc) return;
 
-    if (modalType === "Program") {
-      const newProg = {
-        id: programs.length + 1,
-        icon: "campaign",
-        iconBg: "bg-primary/10 text-primary",
-        title: newName,
-        status: newPriority,
-        statusClass: newPriority === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-secondary-container text-on-secondary-fixed",
-        description: newDesc,
-        duration: newDate || "Indefinite",
-        participants: newLoc || "0 Enrolled",
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
       };
-      setPrograms([...programs, newProg]);
-    } else {
-      const formattedDate = formatEventDate(newEventDate, newEventTime);
-      const newEvent = {
-        id: events.length + 101,
-        title: newName,
-        status: newPriority === "Active" ? "Scheduled" : "Completed",
-        statusClass: newPriority === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant",
-        description: newDesc,
-        date: formattedDate,
-        location: newLoc || "TBD",
-      };
-      setEvents([...events, newEvent]);
+
+      if (modalType === "Program") {
+        const res = await fetch("/api/programs", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            title: newName,
+            description: newDesc,
+            duration: newDate || "Indefinite",
+            participantsText: newLoc || "0 Enrolled",
+            status: newPriority || "Planning",
+            icon: "campaign",
+            iconBg: "bg-primary/10 text-primary"
+          })
+        });
+        const json = await res.json();
+        if (json.success) {
+          const loadRes = await fetch("/api/programs", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+          const loadJson = await loadRes.json();
+          if (loadJson.success) {
+            setPrograms(loadJson.data);
+          }
+        } else {
+          alert(json.error || "Failed to add program");
+        }
+      } else {
+        let isoDate = new Date().toISOString();
+        if (newEventDate && newEventTime) {
+          isoDate = new Date(`${newEventDate}T${newEventTime}:00`).toISOString();
+        } else if (newEventDate) {
+          isoDate = new Date(newEventDate).toISOString();
+        }
+        
+        const res = await fetch("/api/events", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            title: newName,
+            description: newDesc,
+            date: isoDate,
+            location: newLoc || "TBD",
+            status: newPriority === "Active" ? "Scheduled" : "Completed",
+            programId: newProgramId || "None"
+          })
+        });
+        const json = await res.json();
+        if (json.success) {
+          const loadRes = await fetch("/api/events", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+          const loadJson = await loadRes.json();
+          if (loadJson.success) {
+            setEvents(loadJson.data.map(ev => ({
+              id: ev.id,
+              title: ev.title,
+              status: ev.status,
+              statusClass: ev.status === "Completed" ? "bg-surface-container text-on-surface-variant" : "bg-primary-fixed text-on-primary-fixed",
+              description: ev.description,
+              date: new Date(ev.date).toLocaleDateString() + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+              location: ev.location,
+              programId: ev.programId
+            })));
+          }
+        } else {
+          alert(json.error || "Failed to add event");
+        }
+      }
+    } catch (err) {
+      console.error("Failed to add program/event:", err);
     }
 
     setNewName("");
@@ -230,6 +250,7 @@ export default function PtaPrograms() {
     setNewEventTime("");
     setNewLoc("");
     setNewPriority("Active");
+    setNewProgramId("");
     setShowAddModal(false);
   };
 
@@ -329,14 +350,14 @@ export default function PtaPrograms() {
                   >
                     <div className="flex justify-between items-start mb-2 font-sans">
                       <h4 className="font-bold text-on-surface text-base group-hover:text-primary transition-colors">{p.title}</h4>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${p.statusClass}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${p.statusClass || (p.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-secondary-container text-on-secondary-fixed")}`}>
                         {p.status}
                       </span>
                     </div>
                     <p className="text-sm text-on-surface-variant leading-relaxed mb-4">{p.description}</p>
                     <div className="flex justify-between text-xs text-slate-500 font-sans mt-2 pt-2 border-t border-surface-container">
                       <span>Duration: {p.duration}</span>
-                      <span className="font-semibold text-primary">{p.participants}</span>
+                      <span className="font-semibold text-primary">{p.participantsText || p.participants}</span>
                     </div>
                   </Link>
                 ))}
@@ -563,6 +584,23 @@ export default function PtaPrograms() {
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
                 />
               </div>
+              {modalType === "Event" && (
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Linked Program (Optional)
+                  </label>
+                  <select
+                    value={newProgramId}
+                    onChange={(e) => setNewProgramId(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                  >
+                    <option value="">None (Independent Event)</option>
+                    {programs.map(p => (
+                      <option key={p.id} value={p.id}>{p.title}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"

@@ -1,52 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/useAuth";
 
 export default function FellowsModule() {
-  const [viewMode, setViewMode] = useState("Grid"); // "Grid" or "List"
+  const { token, user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user?.roleName === "FELLOW") {
+      router.replace("/profile");
+    }
+  }, [user, router]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedCohort, setSelectedCohort] = useState("All");
   const [selectedDistrict, setSelectedDistrict] = useState("All");
-  const [fellows, setFellows] = useState([
-    {
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7gMo5puf1sV4uTm3qk1tT-zVJzNDhR17iH7pqq5iCccFjIOCE8W3EHYIp9rK3D066Q9ZkVjeLVtNwSBF9m1-hvbOUGfnjJRGIchuJ3Eh6rp7nQKBpqZJzMPBwV1Qz0kmOpVSOMreor-iUVKwSv67qJNrwuROO0mgJdvBeUHMDI7zmdq1qTUV0QVFCkkSQdtuaqu2lruZIChfw5S3KIqkr12xKbUERZvogsBdHSPGMGD5RG1KZ_J33Im7k3p4NaNTFC6WFYrzLKONE",
-      name: "Aisha Rahman",
-      cohort: "Cohort '23",
-      location: "Bartari, Kalgachia",
-      progress: 85,
-      milestones: [
-        { done: true, text: "Completed Advanced Phonics Module" },
-        { done: false, text: "Pending: Classroom Observation #3" },
-      ],
-      lastUpdated: "2d ago",
-    },
-    {
-      avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAyU2sk7MSF4O2N4v8tJyIJNfFFC-6k-MyJtM5UWnT68i4JIYVkOBu1pyvnRVdCmTIJDnx-PfGfOEnCJQ0R8CExOGEexqyfB1z4fmKGD0ZZpppomizo-LBDvgJ8cSyY7UCjxoCUf783rsdV_XGiKoyguceMlyb-QzZCf9Gl9MgF3zpl4Q4Y7qPKZ5wjhJdmNIwaFQ7oS2PR9wLYxjBEnkfftf-mWeb4t8u9qmDaop-LQNHejgvZkDUN_y3R2yStAL7Yvw-mXwMoaQdf",
-      name: "Fatima Tariq",
-      cohort: "Cohort '24",
-      location: "Digjani, Kalgachia",
-      progress: 42,
-      milestones: [
-        { done: true, text: "Initial Assessment Setup" },
-        { done: false, text: "Action Required: Submit Lesson Plan" },
-      ],
-      lastUpdated: "5h ago",
-    },
-    {
-      initials: "BK",
-      name: "Bilal Khan",
-      cohort: "Cohort '23",
-      location: "Sawpur, Kalgachia",
-      progress: 95,
-      milestones: [
-        { done: true, text: "Final Impact Report Submitted" },
-        { done: true, text: "Community Engagement Workshop" },
-      ],
-      lastUpdated: "1w ago",
-    },
-  ]);
+  const [fellows, setFellows] = useState([]);
 
   // Form states
   const [newFellowName, setNewFellowName] = useState("");
@@ -54,47 +27,105 @@ export default function FellowsModule() {
   const [newLocation, setNewLocation] = useState("");
   const [newProgress, setNewProgress] = useState(50);
 
-  const handleAddFellow = (e) => {
+  useEffect(() => {
+    async function loadFellows() {
+      try {
+        const res = await fetch("/api/fellows", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setFellows(json.data);
+        }
+      } catch (err) {
+        console.error("Failed to load fellows:", err);
+      }
+    }
+    loadFellows();
+  }, [token]);
+
+  const handleAddFellow = async (e) => {
     e.preventDefault();
     if (!newFellowName || !newLocation) return;
 
-    const initials = newFellowName
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2);
-
-    const newFellow = {
-      initials,
-      name: newFellowName,
-      cohort: newCohort,
-      location: newLocation,
-      progress: parseInt(newProgress),
-      milestones: [
-        { done: true, text: "Initial Assessment & Placement Completed" },
-        { done: false, text: "Pending: Cohort Orientation Session" },
-      ],
-      lastUpdated: "Just now",
-    };
-
-    setFellows([newFellow, ...fellows]);
-    setNewFellowName("");
-    setNewLocation("");
-    setNewProgress(50);
-    setShowAddModal(false);
+    try {
+      const res = await fetch("/api/fellows", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          name: newFellowName,
+          cohort: newCohort,
+          address: newLocation,
+          progress: parseInt(newProgress)
+        })
+      });
+      const json = await res.json();
+      if (json.success) {
+        const loadRes = await fetch("/api/fellows", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const loadJson = await loadRes.json();
+        if (loadJson.success) {
+          setFellows(loadJson.data);
+        } else {
+          const initials = newFellowName
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase()
+            .substring(0, 2);
+          const manualFellow = {
+            id: json.data.id,
+            initials,
+            name: newFellowName,
+            cohort: newCohort,
+            location: newLocation,
+            progress: parseInt(newProgress),
+            milestones: [
+              { done: true, text: "Initial Assessment & Placement Completed" },
+              { done: false, text: "Pending: Cohort Orientation Session" }
+            ],
+            lastUpdated: "Just now"
+          };
+          setFellows([manualFellow, ...fellows]);
+        }
+        setNewFellowName("");
+        setNewLocation("");
+        setNewProgress(50);
+        setShowAddModal(false);
+      } else {
+        alert(json.error || "Failed to add fellow");
+      }
+    } catch (err) {
+      console.error("Failed to add fellow:", err);
+    }
   };
 
   const cohorts = ["All", ...new Set(fellows.map((f) => f.cohort))];
-  const districts = ["All", ...new Set(fellows.map((f) => f.location))];
+  const districts = ["All", ...new Set(fellows.map((f) => f.location || f.address))];
 
   const filteredFellows = fellows.filter(
     (f) =>
       (f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        f.location.toLowerCase().includes(searchQuery.toLowerCase())) &&
+        (f.location && f.location.toLowerCase().includes(searchQuery.toLowerCase()))) &&
       (selectedCohort === "All" || f.cohort === selectedCohort) &&
       (selectedDistrict === "All" || f.location === selectedDistrict)
   );
+
+  const ITEMS_PER_PAGE = 10;
+  const totalPages = Math.ceil(filteredFellows.length / ITEMS_PER_PAGE);
+  const paginatedFellows = filteredFellows.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCohort, selectedDistrict]);
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -172,30 +203,7 @@ export default function FellowsModule() {
           </span>
         </div>
 
-        <div className="bg-surface-container-low rounded-full p-1 flex border border-surface-container-highest w-fit">
-          <button
-            onClick={() => setViewMode("Grid")}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              viewMode === "Grid"
-                ? "bg-surface-container-lowest text-on-surface shadow-sm"
-                : "text-on-surface-variant hover:text-on-surface"
-            }`}
-          >
-            <span className="material-symbols-outlined text-[18px]">grid_view</span>
-            Grid
-          </button>
-          <button
-            onClick={() => setViewMode("List")}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 transition-all cursor-pointer ${
-              viewMode === "List"
-                ? "bg-surface-container-lowest text-on-surface shadow-sm"
-                : "text-on-surface-variant hover:text-on-surface"
-            }`}
-          >
-            <span className="material-symbols-outlined text-[18px]">view_list</span>
-            List
-          </button>
-        </div>
+
         <button
           onClick={() => setShowAddModal(true)}
           className="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 shadow-lg shadow-primary/20 whitespace-nowrap cursor-pointer hover:bg-primary-container"
@@ -251,125 +259,7 @@ export default function FellowsModule() {
         </div>
       </div>
 
-      {/* Grid View */}
-      {viewMode === "Grid" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredFellows.map((f, i) => (
-            <article
-              key={i}
-              className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-hidden flex flex-col pt-8 pl-8 pr-6 pb-6 border border-surface-container-lowest hover:border-outline-variant/30 transition-all duration-300"
-            >
-              <div className="flex justify-between items-start mb-6">
-                <div className="flex gap-4">
-                  {f.avatar ? (
-                    <img
-                      alt="Fellow Profile"
-                      className="w-14 h-14 rounded-full object-cover shadow-sm"
-                      src={f.avatar}
-                    />
-                  ) : (
-                    <div className="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant text-xl font-bold font-headline shadow-sm">
-                      {f.initials}
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-lg font-bold text-on-surface leading-tight mb-1">{f.name}</h3>
-                    <div className="flex items-center gap-2 font-sans">
-                      <span className="text-[0.75rem] uppercase tracking-[0.05em] text-primary font-semibold bg-primary-container/10 px-2 py-0.5 rounded">
-                        {f.cohort}
-                      </span>
-                      <span className="w-1 h-1 bg-surface-container-highest rounded-full"></span>
-                      <span className="text-xs text-on-surface-variant">{f.location}</span>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  aria-label="More options"
-                  className="text-on-surface-variant hover:text-primary transition-colors p-1"
-                >
-                  <span className="material-symbols-outlined">more_vert</span>
-                </button>
-              </div>
-
-              <div className="mb-6 flex-1">
-                <div className="flex justify-between items-end mb-2">
-                  <span className="text-sm font-medium text-on-surface">Improve Literacy Goal</span>
-                  <span
-                    className={`text-sm font-bold ${
-                      f.progress > 50 ? "text-primary" : "text-secondary-container"
-                    }`}
-                  >
-                    {f.progress}%
-                  </span>
-                </div>
-                {/* Progress Bar */}
-                <div className="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden relative">
-                  <div
-                    className={`h-full rounded-full relative ${
-                      f.progress > 50 ? "bg-gradient-to-r from-primary to-primary-container" : "bg-secondary-container"
-                    }`}
-                    style={{ width: `${f.progress}%` }}
-                  >
-                    {f.progress > 50 && (
-                      <div className="absolute right-0 top-0 bottom-0 w-2 bg-white/30 blur-[1px]"></div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 mb-6 font-sans">
-                <p className="text-[0.75rem] uppercase tracking-[0.05em] text-on-surface-variant font-semibold">
-                  Recent Milestones
-                </p>
-                <ul className="space-y-3">
-                  {f.milestones.map((m, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                          m.done
-                            ? "bg-primary-fixed"
-                            : m.text.includes("Action Required")
-                            ? "bg-secondary-container/20 text-secondary-container"
-                            : "bg-surface-container-high"
-                        }`}
-                      >
-                        <span
-                          className={`text-[12px] ${m.done ? "material-symbols-outlined text-on-primary-fixed icon-filled" : "material-symbols-outlined text-on-surface-variant"}`}
-                        >
-                          {m.done ? "check" : m.text.includes("Action Required") ? "warning" : "schedule"}
-                        </span>
-                      </div>
-                      <span
-                        className={`text-sm leading-snug ${
-                          m.done ? "text-on-surface" : "text-on-surface-variant"
-                        }`}
-                      >
-                        {m.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-auto pt-4 border-t border-surface-container-low flex justify-between items-center font-sans">
-                <span className="text-xs text-on-surface-variant">Last updated: {f.lastUpdated}</span>
-                <Link
-                  className="text-sm font-semibold text-primary hover:text-primary-container transition-colors flex items-center gap-1 group"
-                  href={`/education/fellows/${encodeURIComponent(f.name.replace(/\s+/g, '-'))}`}
-                >
-                  View Profile
-                  <span className="material-symbols-outlined text-[16px] group-hover:translate-x-0.5 transition-transform">
-                    arrow_forward
-                  </span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
-
       {/* List View */}
-      {viewMode === "List" && (
         <div className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-hidden border border-surface-container-highest">
           <table className="w-full text-left border-collapse font-sans">
             <thead>
@@ -383,7 +273,7 @@ export default function FellowsModule() {
               </tr>
             </thead>
             <tbody>
-              {filteredFellows.map((f, i) => (
+              {paginatedFellows.map((f, i) => (
                 <tr
                   key={i}
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors"
@@ -416,14 +306,58 @@ export default function FellowsModule() {
             </tbody>
           </table>
         </div>
-      )}
 
-      {/* Pagination / Load More (Simple representation) */}
-      <div className="mt-10 flex justify-center">
-        <button className="px-6 py-2.5 rounded-full border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors">
-          Load More Fellows
-        </button>
-      </div>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center items-center gap-2 font-sans">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 rounded-lg border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            Prev
+          </button>
+          <div className="flex items-center gap-1 mx-2">
+            {(() => {
+              const pages = [];
+              if (totalPages <= 5) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+              } else {
+                if (currentPage <= 3) {
+                  pages.push(1, 2, 3, '...', totalPages);
+                } else if (currentPage >= totalPages - 2) {
+                  pages.push(1, '...', totalPages - 2, totalPages - 1, totalPages);
+                } else {
+                  pages.push(1, '...', currentPage, '...', totalPages);
+                }
+              }
+              return pages.map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() => typeof page === 'number' && setCurrentPage(page)}
+                  disabled={page === '...'}
+                  className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-semibold transition-colors ${
+                    page === currentPage
+                      ? 'bg-primary text-white shadow-sm'
+                      : page === '...'
+                      ? 'text-on-surface-variant cursor-default'
+                      : 'text-on-surface hover:bg-surface-container-high cursor-pointer'
+                  }`}
+                >
+                  {page}
+                </button>
+              ));
+            })()}
+          </div>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 rounded-lg border border-outline-variant text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {filteredFellows.length === 0 && (
         <p className="text-center py-12 text-xs text-slate-400 font-sans">No fellows match your search.</p>

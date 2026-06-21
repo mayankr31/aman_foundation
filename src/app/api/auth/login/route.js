@@ -24,7 +24,8 @@ export async function POST(req) {
         ]
       },
       include: {
-        role: true
+        role: true,
+        fellow: true
       }
     });
 
@@ -76,6 +77,8 @@ export async function POST(req) {
           roleId: user.roleId,
           roleName: user.role.name,
           name: user.name,
+          fellowId: user.fellow?.id || null,
+          fellowName: user.fellow?.name || null,
         }
       }
     });
