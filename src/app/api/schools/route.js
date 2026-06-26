@@ -54,6 +54,7 @@ export async function POST(req) {
     const {
       name,
       principalName,
+      udiseCode,
       email,
       phone,
       address,
@@ -74,6 +75,7 @@ export async function POST(req) {
       data: {
         name,
         principalName,
+        udiseCode,
         email,
         phone,
         address,

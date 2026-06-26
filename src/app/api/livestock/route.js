@@ -35,8 +35,8 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
     }
 
     const body = await req.json();

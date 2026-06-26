@@ -12,6 +12,7 @@ export default function BeneficiaryMasterDirectory() {
   const [tierFilter, setTierFilter] = useState("All Tiers");
   const [programFilter, setProgramFilter] = useState("All Programs");
   const [locationFilter, setLocationFilter] = useState("All Locations");
+  const [migratedFilter, setMigratedFilter] = useState("All");
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -54,6 +55,7 @@ export default function BeneficiaryMasterDirectory() {
             tierPercent: b.tierPercent,
             programs: (b.schemeEnrollments || []).map(se => se.scheme.name),
             resilienceScore: b.resilienceScore,
+            isMigrated: b.isMigrated,
           }));
           setBeneficiaries(mapped);
         }
@@ -69,6 +71,7 @@ export default function BeneficiaryMasterDirectory() {
     setTierFilter("All Tiers");
     setProgramFilter("All Programs");
     setLocationFilter("All Locations");
+    setMigratedFilter("All");
   };
 
   const handleAddBeneficiary = async (e) => {
@@ -144,6 +147,7 @@ export default function BeneficiaryMasterDirectory() {
             tierPercent: b.tierPercent,
             programs: (b.schemeEnrollments || []).map(se => se.scheme.name),
             resilienceScore: b.resilienceScore,
+            isMigrated: b.isMigrated,
           }));
           setBeneficiaries(remapped);
         }
@@ -247,7 +251,12 @@ export default function BeneficiaryMasterDirectory() {
     const matchesLocation =
       locationFilter === "All Locations" || b.location.toLowerCase().includes(locationFilter.toLowerCase());
 
-    return matchesSearch && matchesTier && matchesProgram && matchesLocation;
+    const matchesMigrated =
+      migratedFilter === "All" ||
+      (migratedFilter === "Migrated" && b.isMigrated === true) ||
+      (migratedFilter === "Not Migrated" && !b.isMigrated);
+
+    return matchesSearch && matchesTier && matchesProgram && matchesLocation && matchesMigrated;
   });
 
   return (
@@ -364,6 +373,16 @@ export default function BeneficiaryMasterDirectory() {
             <option value="All Programs">All Sub-Programs</option>
             <option value="Goat Rearing">Goat Rearing</option>
             <option value="Sugarcane">Sugarcane Cultivation</option>
+          </select>
+          
+          <select
+            value={migratedFilter}
+            onChange={(e) => setMigratedFilter(e.target.value)}
+            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
+          >
+            <option value="All">All Status</option>
+            <option value="Not Migrated">Not Migrated</option>
+            <option value="Migrated">Migrated</option>
           </select>
           
           <button

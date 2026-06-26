@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, Fragment } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 
@@ -34,6 +34,23 @@ export default function GoatRearingProgramDetail({ params }) {
   const [editRoi, setEditRoi] = useState("");
   const [editAdvantages, setEditAdvantages] = useState("");
   const [editNotes, setEditNotes] = useState("");
+
+  // Log Event Modal States
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [eventAssignmentId, setEventAssignmentId] = useState("");
+  const [eventBeneficiaryName, setEventBeneficiaryName] = useState("");
+  const [eventType, setEventType] = useState("Death");
+  const [eventDate, setEventDate] = useState(new Date().toISOString().split("T")[0]);
+  const [eventQuantity, setEventQuantity] = useState("1");
+  const [eventNotes, setEventNotes] = useState("");
+  const [eventPhoto, setEventPhoto] = useState(null);
+  const [eventRecordedBy, setEventRecordedBy] = useState("");
+
+  // Expanded rows for event history
+  const [expandedRows, setExpandedRows] = useState(new Set());
+
+  // Photo lightbox
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   useEffect(() => {
     async function loadData() {
@@ -87,6 +104,7 @@ export default function GoatRearingProgramDetail({ params }) {
       roi: assign.roiPercentage || 0,
       advantages: assign.advantagesLog || "",
       notes: assign.notes || "",
+      events: assign.events || [],
       rawAssignment: assign
     };
   });
@@ -177,6 +195,58 @@ export default function GoatRearingProgramDetail({ params }) {
     } catch (err) {
       console.error("Update assignment error:", err);
       toast.error("An error occurred while updating the assignment.");
+    }
+  };
+
+  const handleLogEvent = async (e) => {
+    e.preventDefault();
+    if (!eventAssignmentId || !eventType) return;
+
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const formData = new FormData();
+      formData.append("beneficiaryGoatRearingId", eventAssignmentId);
+      formData.append("eventType", eventType);
+      formData.append("eventDate", eventDate);
+      formData.append("quantity", eventQuantity);
+      if (eventNotes) formData.append("notes", eventNotes);
+      if (eventRecordedBy) formData.append("recordedBy", eventRecordedBy);
+      if (eventPhoto) formData.append("photo", eventPhoto);
+
+      const res = await fetch("/api/livelihood/goat-events", {
+        method: "POST",
+        headers,
+        body: formData,
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success(`${eventType} event logged successfully.`);
+        setRefreshTrigger(prev => prev + 1);
+        setShowEventModal(false);
+      } else {
+        toast.error(json.error || "Failed to log event");
+      }
+    } catch (err) {
+      console.error("Log event error:", err);
+      toast.error("An error occurred while logging the event.");
+    }
+  };
+
+  const getEventIcon = (type) => {
+    switch (type) {
+      case "Death": return "skull";
+      case "Pregnancy": return "pregnant_woman";
+      case "ChildBirth": return "crib";
+      default: return "event";
+    }
+  };
+
+  const getEventColor = (type) => {
+    switch (type) {
+      case "Death": return "text-red-500 bg-red-50";
+      case "Pregnancy": return "text-amber-500 bg-amber-50";
+      case "ChildBirth": return "text-green-500 bg-green-50";
+      default: return "text-slate-500 bg-slate-50";
     }
   };
 
@@ -334,12 +404,25 @@ export default function GoatRearingProgramDetail({ params }) {
               </thead>
               <tbody className="text-sm font-medium">
                 {filteredFarmers.map((f, i) => (
+                  <Fragment key={f.id}>
                   <tr
-                    key={f.id}
                     className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors"
                   >
                     <td className="px-8 py-4">
                       <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => {
+                            const next = new Set(expandedRows);
+                            if (next.has(f.assignmentId)) next.delete(f.assignmentId);
+                            else next.add(f.assignmentId);
+                            setExpandedRows(next);
+                          }}
+                          className="p-1 rounded-full hover:bg-surface-container-highest transition-colors cursor-pointer border-none bg-transparent"
+                        >
+                          <span className="material-symbols-outlined text-on-surface-variant text-lg">
+                            {expandedRows.has(f.assignmentId) ? "expand_less" : "expand_more"}
+                          </span>
+                        </button>
                         <div
                           className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${f.bgInitials}`}
                         >
@@ -359,36 +442,120 @@ export default function GoatRearingProgramDetail({ params }) {
                         {f.roi ? `${f.roi}%` : "N/A"}
                       </span>
                     </td>
-                    <td className="px-8 py-4 text-right flex justify-end gap-3 items-center">
-                      <button
-                        onClick={() => {
-                          setEditFarmerId(f.id);
-                          setEditFarmerName(f.name);
-                          setEditGoats(f.goats);
-                          setEditInvestment(f.investment || "");
-                          setEditReturns(f.returns || "");
-                          setEditRoi(f.roi || "");
-                          setEditAdvantages(f.advantages || "");
-                          setEditNotes(f.notes || "");
-                          setShowEditAssignModal(true);
-                        }}
-                        className="text-secondary hover:text-secondary-container transition-colors cursor-pointer font-sans text-xs font-bold hover:underline bg-transparent border-none"
-                      >
-                        Edit Assignment
-                      </button>
-                      <span className="text-slate-300">|</span>
-                      <Link
-                        href={`/beneficiaries/${f.id}`}
-                        className="text-primary hover:text-primary-container transition-colors cursor-pointer font-sans text-xs font-bold hover:underline"
-                      >
-                        View Profile
-                      </Link>
+                    <td className="px-8 py-4 text-right">
+                      <div className="flex justify-end gap-3 items-center">
+                        <button
+                          onClick={() => {
+                            setEventAssignmentId(f.assignmentId);
+                            setEventBeneficiaryName(f.name);
+                            setEventType("Death");
+                            setEventDate(new Date().toISOString().split("T")[0]);
+                            setEventQuantity("1");
+                            setEventNotes("");
+                            setEventPhoto(null);
+                            setEventRecordedBy("");
+                            setShowEventModal(true);
+                          }}
+                          className="text-tertiary hover:text-tertiary-container transition-colors cursor-pointer font-sans text-xs font-bold hover:underline bg-transparent border-none"
+                        >
+                          Log Event
+                        </button>
+                        <span className="text-slate-300">|</span>
+                        <button
+                          onClick={() => {
+                            setEditFarmerId(f.id);
+                            setEditFarmerName(f.name);
+                            setEditGoats(f.goats);
+                            setEditInvestment(f.investment || "");
+                            setEditReturns(f.returns || "");
+                            setEditRoi(f.roi || "");
+                            setEditAdvantages(f.advantages || "");
+                            setEditNotes(f.notes || "");
+                            setShowEditAssignModal(true);
+                          }}
+                          className="text-secondary hover:text-secondary-container transition-colors cursor-pointer font-sans text-xs font-bold hover:underline bg-transparent border-none"
+                        >
+                          Edit Assignment
+                        </button>
+                        <span className="text-slate-300">|</span>
+                        <Link
+                          href={`/beneficiaries/${f.id}`}
+                          className="text-primary hover:text-primary-container transition-colors cursor-pointer font-sans text-xs font-bold hover:underline"
+                        >
+                          View Profile
+                        </Link>
+                      </div>
                     </td>
                   </tr>
+                  {expandedRows.has(f.assignmentId) && (
+                    <tr key={`events-${f.assignmentId}`} className="bg-surface-container-lowest">
+                      <td colSpan="7" className="px-8 py-4">
+                        <div className="space-y-3">
+                          <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">
+                            Goat Lifecycle Events
+                          </h4>
+                          {(!f.events || f.events.length === 0) ? (
+                            <p className="text-xs text-on-surface-variant/60 italic">
+                              No events logged yet for this beneficiary.
+                            </p>
+                          ) : (
+                            <div className="space-y-2">
+                              {f.events.map((evt) => (
+                                <div
+                                  key={evt.id}
+                                  className="flex items-start gap-3 p-3 bg-surface-container-low rounded-lg border border-outline-variant/10"
+                                >
+                                  <span
+                                    className={`material-symbols-outlined text-lg p-1.5 rounded-full ${getEventColor(evt.eventType)}`}
+                                  >
+                                    {getEventIcon(evt.eventType)}
+                                  </span>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="text-xs font-bold text-on-surface">
+                                        {evt.eventType}
+                                      </span>
+                                      <span className="text-[10px] text-on-surface-variant">
+                                        {new Date(evt.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                                      </span>
+                                      <span className="text-[10px] text-on-surface-variant">
+                                        Qty: {evt.quantity}
+                                      </span>
+                                    </div>
+                                    {evt.notes && (
+                                      <p className="text-xs text-on-surface-variant mt-1">{evt.notes}</p>
+                                    )}
+                                    {evt.recordedBy && (
+                                      <p className="text-[10px] text-on-surface-variant/60 mt-0.5">
+                                        Recorded by: {evt.recordedBy}
+                                      </p>
+                                    )}
+                                  </div>
+                                  {evt.photoUrl && (
+                                    <button
+                                      onClick={() => setLightboxPhoto(evt.photoUrl)}
+                                      className="shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0"
+                                    >
+                                      <img
+                                        src={evt.photoUrl}
+                                        alt={`${evt.eventType} evidence`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </button>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  </Fragment>
                 ))}
                 {filteredFarmers.length === 0 && (
                   <tr>
-                    <td colSpan="6" className="text-center py-8 text-xs text-slate-400 font-sans font-semibold">
+                    <td colSpan="7" className="text-center py-8 text-xs text-slate-400 font-sans font-semibold">
                       No beneficiaries match your criteria.
                     </td>
                   </tr>
@@ -594,6 +761,152 @@ export default function GoatRearingProgramDetail({ params }) {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Log Event Modal */}
+      {showEventModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-bold text-on-surface">Log Goat Lifecycle Event</h3>
+                <p className="text-xs text-on-surface-variant mt-1">Record death, pregnancy, or child birth of goats for {eventBeneficiaryName}.</p>
+              </div>
+              <button
+                onClick={() => setShowEventModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleLogEvent} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Event Type
+                </label>
+                <select
+                  required
+                  value={eventType}
+                  onChange={(e) => setEventType(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface cursor-pointer"
+                >
+                  <option value="Death">Death</option>
+                  <option value="Pregnancy">Pregnancy</option>
+                  <option value="ChildBirth">Child Birth</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Event Date
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    No. of Goats
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={eventQuantity}
+                    onChange={(e) => setEventQuantity(e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Notes
+                </label>
+                <textarea
+                  value={eventNotes}
+                  onChange={(e) => setEventNotes(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface resize-none font-sans"
+                  rows="2"
+                  placeholder="Optional details about the event..."
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Photo Evidence
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setEventPhoto(e.target.files?.[0] || null)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface text-xs file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-secondary file:text-white file:cursor-pointer"
+                />
+                {eventPhoto && (
+                  <p className="text-[10px] text-on-surface-variant mt-1">
+                    Selected: {eventPhoto.name}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Recorded By
+                </label>
+                <input
+                  type="text"
+                  value={eventRecordedBy}
+                  onChange={(e) => setEventRecordedBy(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-outline-variant bg-transparent text-on-surface"
+                  placeholder="Name of the staff member"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-surface-container">
+                <button
+                  type="button"
+                  onClick={() => setShowEventModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer bg-transparent"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-tertiary text-white font-semibold hover:bg-tertiary-container transition-colors cursor-pointer border-none shadow-glow"
+                >
+                  Log Event
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Photo Lightbox */}
+      {lightboxPhoto && (
+        <div
+          className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-8 cursor-pointer"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button
+            onClick={() => setLightboxPhoto(null)}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors cursor-pointer border-none text-white"
+          >
+            <span className="material-symbols-outlined text-2xl">close</span>
+          </button>
+          <img
+            src={lightboxPhoto}
+            alt="Event evidence"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
 

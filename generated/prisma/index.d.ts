@@ -144,6 +144,11 @@ export type BeneficiaryGoatRearing = $Result.DefaultSelection<Prisma.$Beneficiar
  */
 export type GoatRearingProgram = $Result.DefaultSelection<Prisma.$GoatRearingProgramPayload>
 /**
+ * Model GoatRearingEvent
+ * 
+ */
+export type GoatRearingEvent = $Result.DefaultSelection<Prisma.$GoatRearingEventPayload>
+/**
  * Model BeneficiarySugarcane
  * 
  */
@@ -188,6 +193,46 @@ export type Leave = $Result.DefaultSelection<Prisma.$LeavePayload>
  * 
  */
 export type IncidentResourceNeed = $Result.DefaultSelection<Prisma.$IncidentResourceNeedPayload>
+/**
+ * Model FellowTask
+ * 
+ */
+export type FellowTask = $Result.DefaultSelection<Prisma.$FellowTaskPayload>
+/**
+ * Model FellowTaskComment
+ * 
+ */
+export type FellowTaskComment = $Result.DefaultSelection<Prisma.$FellowTaskCommentPayload>
+/**
+ * Model ResilienceSurvey
+ * 
+ */
+export type ResilienceSurvey = $Result.DefaultSelection<Prisma.$ResilienceSurveyPayload>
+/**
+ * Model AdaptiveCapacitySurvey
+ * 
+ */
+export type AdaptiveCapacitySurvey = $Result.DefaultSelection<Prisma.$AdaptiveCapacitySurveyPayload>
+/**
+ * Model AbsorptiveCapacitySurvey
+ * 
+ */
+export type AbsorptiveCapacitySurvey = $Result.DefaultSelection<Prisma.$AbsorptiveCapacitySurveyPayload>
+/**
+ * Model TransformativeCapacitySurvey
+ * 
+ */
+export type TransformativeCapacitySurvey = $Result.DefaultSelection<Prisma.$TransformativeCapacitySurveyPayload>
+/**
+ * Model VulnerabilitySurvey
+ * 
+ */
+export type VulnerabilitySurvey = $Result.DefaultSelection<Prisma.$VulnerabilitySurveyPayload>
+/**
+ * Model SolutionPlan
+ * 
+ */
+export type SolutionPlan = $Result.DefaultSelection<Prisma.$SolutionPlanPayload>
 
 /**
  * Enums
@@ -628,6 +673,16 @@ export class PrismaClient<
   get goatRearingProgram(): Prisma.GoatRearingProgramDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.goatRearingEvent`: Exposes CRUD operations for the **GoatRearingEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GoatRearingEvents
+    * const goatRearingEvents = await prisma.goatRearingEvent.findMany()
+    * ```
+    */
+  get goatRearingEvent(): Prisma.GoatRearingEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.beneficiarySugarcane`: Exposes CRUD operations for the **BeneficiarySugarcane** model.
     * Example usage:
     * ```ts
@@ -716,6 +771,86 @@ export class PrismaClient<
     * ```
     */
   get incidentResourceNeed(): Prisma.IncidentResourceNeedDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fellowTask`: Exposes CRUD operations for the **FellowTask** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FellowTasks
+    * const fellowTasks = await prisma.fellowTask.findMany()
+    * ```
+    */
+  get fellowTask(): Prisma.FellowTaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fellowTaskComment`: Exposes CRUD operations for the **FellowTaskComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FellowTaskComments
+    * const fellowTaskComments = await prisma.fellowTaskComment.findMany()
+    * ```
+    */
+  get fellowTaskComment(): Prisma.FellowTaskCommentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.resilienceSurvey`: Exposes CRUD operations for the **ResilienceSurvey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ResilienceSurveys
+    * const resilienceSurveys = await prisma.resilienceSurvey.findMany()
+    * ```
+    */
+  get resilienceSurvey(): Prisma.ResilienceSurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.adaptiveCapacitySurvey`: Exposes CRUD operations for the **AdaptiveCapacitySurvey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdaptiveCapacitySurveys
+    * const adaptiveCapacitySurveys = await prisma.adaptiveCapacitySurvey.findMany()
+    * ```
+    */
+  get adaptiveCapacitySurvey(): Prisma.AdaptiveCapacitySurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.absorptiveCapacitySurvey`: Exposes CRUD operations for the **AbsorptiveCapacitySurvey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AbsorptiveCapacitySurveys
+    * const absorptiveCapacitySurveys = await prisma.absorptiveCapacitySurvey.findMany()
+    * ```
+    */
+  get absorptiveCapacitySurvey(): Prisma.AbsorptiveCapacitySurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transformativeCapacitySurvey`: Exposes CRUD operations for the **TransformativeCapacitySurvey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TransformativeCapacitySurveys
+    * const transformativeCapacitySurveys = await prisma.transformativeCapacitySurvey.findMany()
+    * ```
+    */
+  get transformativeCapacitySurvey(): Prisma.TransformativeCapacitySurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.vulnerabilitySurvey`: Exposes CRUD operations for the **VulnerabilitySurvey** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VulnerabilitySurveys
+    * const vulnerabilitySurveys = await prisma.vulnerabilitySurvey.findMany()
+    * ```
+    */
+  get vulnerabilitySurvey(): Prisma.VulnerabilitySurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.solutionPlan`: Exposes CRUD operations for the **SolutionPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SolutionPlans
+    * const solutionPlans = await prisma.solutionPlan.findMany()
+    * ```
+    */
+  get solutionPlan(): Prisma.SolutionPlanDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1176,6 +1311,7 @@ export namespace Prisma {
     SchemeEnrollment: 'SchemeEnrollment',
     BeneficiaryGoatRearing: 'BeneficiaryGoatRearing',
     GoatRearingProgram: 'GoatRearingProgram',
+    GoatRearingEvent: 'GoatRearingEvent',
     BeneficiarySugarcane: 'BeneficiarySugarcane',
     SugarcaneProgram: 'SugarcaneProgram',
     DisasterIncident: 'DisasterIncident',
@@ -1184,7 +1320,15 @@ export namespace Prisma {
     InventoryLedger: 'InventoryLedger',
     AttendanceLog: 'AttendanceLog',
     Leave: 'Leave',
-    IncidentResourceNeed: 'IncidentResourceNeed'
+    IncidentResourceNeed: 'IncidentResourceNeed',
+    FellowTask: 'FellowTask',
+    FellowTaskComment: 'FellowTaskComment',
+    ResilienceSurvey: 'ResilienceSurvey',
+    AdaptiveCapacitySurvey: 'AdaptiveCapacitySurvey',
+    AbsorptiveCapacitySurvey: 'AbsorptiveCapacitySurvey',
+    TransformativeCapacitySurvey: 'TransformativeCapacitySurvey',
+    VulnerabilitySurvey: 'VulnerabilitySurvey',
+    SolutionPlan: 'SolutionPlan'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1200,7 +1344,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "fellowGoal" | "fellowGoalMilestone" | "fellowReview" | "student" | "studentSubjectMark" | "studentAttendanceLog" | "studentAttendanceDayLog" | "fellowSchool" | "program" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "beneficiarySugarcane" | "sugarcaneProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed"
+      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "fellowGoal" | "fellowGoalMilestone" | "fellowReview" | "student" | "studentSubjectMark" | "studentAttendanceLog" | "studentAttendanceDayLog" | "fellowSchool" | "program" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3128,6 +3272,80 @@ export namespace Prisma {
           }
         }
       }
+      GoatRearingEvent: {
+        payload: Prisma.$GoatRearingEventPayload<ExtArgs>
+        fields: Prisma.GoatRearingEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GoatRearingEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GoatRearingEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          findFirst: {
+            args: Prisma.GoatRearingEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GoatRearingEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          findMany: {
+            args: Prisma.GoatRearingEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>[]
+          }
+          create: {
+            args: Prisma.GoatRearingEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          createMany: {
+            args: Prisma.GoatRearingEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GoatRearingEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>[]
+          }
+          delete: {
+            args: Prisma.GoatRearingEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          update: {
+            args: Prisma.GoatRearingEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.GoatRearingEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GoatRearingEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GoatRearingEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.GoatRearingEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GoatRearingEventPayload>
+          }
+          aggregate: {
+            args: Prisma.GoatRearingEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGoatRearingEvent>
+          }
+          groupBy: {
+            args: Prisma.GoatRearingEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GoatRearingEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GoatRearingEventCountArgs<ExtArgs>
+            result: $Utils.Optional<GoatRearingEventCountAggregateOutputType> | number
+          }
+        }
+      }
       BeneficiarySugarcane: {
         payload: Prisma.$BeneficiarySugarcanePayload<ExtArgs>
         fields: Prisma.BeneficiarySugarcaneFieldRefs
@@ -3794,6 +4012,598 @@ export namespace Prisma {
           }
         }
       }
+      FellowTask: {
+        payload: Prisma.$FellowTaskPayload<ExtArgs>
+        fields: Prisma.FellowTaskFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FellowTaskFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FellowTaskFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          findFirst: {
+            args: Prisma.FellowTaskFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FellowTaskFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          findMany: {
+            args: Prisma.FellowTaskFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>[]
+          }
+          create: {
+            args: Prisma.FellowTaskCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          createMany: {
+            args: Prisma.FellowTaskCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FellowTaskCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>[]
+          }
+          delete: {
+            args: Prisma.FellowTaskDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          update: {
+            args: Prisma.FellowTaskUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          deleteMany: {
+            args: Prisma.FellowTaskDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FellowTaskUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FellowTaskUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>[]
+          }
+          upsert: {
+            args: Prisma.FellowTaskUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskPayload>
+          }
+          aggregate: {
+            args: Prisma.FellowTaskAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFellowTask>
+          }
+          groupBy: {
+            args: Prisma.FellowTaskGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FellowTaskGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FellowTaskCountArgs<ExtArgs>
+            result: $Utils.Optional<FellowTaskCountAggregateOutputType> | number
+          }
+        }
+      }
+      FellowTaskComment: {
+        payload: Prisma.$FellowTaskCommentPayload<ExtArgs>
+        fields: Prisma.FellowTaskCommentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FellowTaskCommentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FellowTaskCommentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          findFirst: {
+            args: Prisma.FellowTaskCommentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FellowTaskCommentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          findMany: {
+            args: Prisma.FellowTaskCommentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>[]
+          }
+          create: {
+            args: Prisma.FellowTaskCommentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          createMany: {
+            args: Prisma.FellowTaskCommentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FellowTaskCommentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>[]
+          }
+          delete: {
+            args: Prisma.FellowTaskCommentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          update: {
+            args: Prisma.FellowTaskCommentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          deleteMany: {
+            args: Prisma.FellowTaskCommentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FellowTaskCommentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FellowTaskCommentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>[]
+          }
+          upsert: {
+            args: Prisma.FellowTaskCommentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowTaskCommentPayload>
+          }
+          aggregate: {
+            args: Prisma.FellowTaskCommentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFellowTaskComment>
+          }
+          groupBy: {
+            args: Prisma.FellowTaskCommentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FellowTaskCommentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FellowTaskCommentCountArgs<ExtArgs>
+            result: $Utils.Optional<FellowTaskCommentCountAggregateOutputType> | number
+          }
+        }
+      }
+      ResilienceSurvey: {
+        payload: Prisma.$ResilienceSurveyPayload<ExtArgs>
+        fields: Prisma.ResilienceSurveyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ResilienceSurveyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ResilienceSurveyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          findFirst: {
+            args: Prisma.ResilienceSurveyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ResilienceSurveyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          findMany: {
+            args: Prisma.ResilienceSurveyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>[]
+          }
+          create: {
+            args: Prisma.ResilienceSurveyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          createMany: {
+            args: Prisma.ResilienceSurveyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ResilienceSurveyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>[]
+          }
+          delete: {
+            args: Prisma.ResilienceSurveyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          update: {
+            args: Prisma.ResilienceSurveyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          deleteMany: {
+            args: Prisma.ResilienceSurveyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ResilienceSurveyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ResilienceSurveyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>[]
+          }
+          upsert: {
+            args: Prisma.ResilienceSurveyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ResilienceSurveyPayload>
+          }
+          aggregate: {
+            args: Prisma.ResilienceSurveyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateResilienceSurvey>
+          }
+          groupBy: {
+            args: Prisma.ResilienceSurveyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ResilienceSurveyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ResilienceSurveyCountArgs<ExtArgs>
+            result: $Utils.Optional<ResilienceSurveyCountAggregateOutputType> | number
+          }
+        }
+      }
+      AdaptiveCapacitySurvey: {
+        payload: Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>
+        fields: Prisma.AdaptiveCapacitySurveyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdaptiveCapacitySurveyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdaptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          findFirst: {
+            args: Prisma.AdaptiveCapacitySurveyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdaptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          findMany: {
+            args: Prisma.AdaptiveCapacitySurveyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>[]
+          }
+          create: {
+            args: Prisma.AdaptiveCapacitySurveyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          createMany: {
+            args: Prisma.AdaptiveCapacitySurveyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdaptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>[]
+          }
+          delete: {
+            args: Prisma.AdaptiveCapacitySurveyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          update: {
+            args: Prisma.AdaptiveCapacitySurveyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdaptiveCapacitySurveyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdaptiveCapacitySurveyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdaptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdaptiveCapacitySurveyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdaptiveCapacitySurveyPayload>
+          }
+          aggregate: {
+            args: Prisma.AdaptiveCapacitySurveyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdaptiveCapacitySurvey>
+          }
+          groupBy: {
+            args: Prisma.AdaptiveCapacitySurveyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdaptiveCapacitySurveyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdaptiveCapacitySurveyCountArgs<ExtArgs>
+            result: $Utils.Optional<AdaptiveCapacitySurveyCountAggregateOutputType> | number
+          }
+        }
+      }
+      AbsorptiveCapacitySurvey: {
+        payload: Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>
+        fields: Prisma.AbsorptiveCapacitySurveyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AbsorptiveCapacitySurveyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AbsorptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          findFirst: {
+            args: Prisma.AbsorptiveCapacitySurveyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AbsorptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          findMany: {
+            args: Prisma.AbsorptiveCapacitySurveyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>[]
+          }
+          create: {
+            args: Prisma.AbsorptiveCapacitySurveyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          createMany: {
+            args: Prisma.AbsorptiveCapacitySurveyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AbsorptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>[]
+          }
+          delete: {
+            args: Prisma.AbsorptiveCapacitySurveyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          update: {
+            args: Prisma.AbsorptiveCapacitySurveyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          deleteMany: {
+            args: Prisma.AbsorptiveCapacitySurveyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AbsorptiveCapacitySurveyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AbsorptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>[]
+          }
+          upsert: {
+            args: Prisma.AbsorptiveCapacitySurveyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AbsorptiveCapacitySurveyPayload>
+          }
+          aggregate: {
+            args: Prisma.AbsorptiveCapacitySurveyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAbsorptiveCapacitySurvey>
+          }
+          groupBy: {
+            args: Prisma.AbsorptiveCapacitySurveyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AbsorptiveCapacitySurveyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AbsorptiveCapacitySurveyCountArgs<ExtArgs>
+            result: $Utils.Optional<AbsorptiveCapacitySurveyCountAggregateOutputType> | number
+          }
+        }
+      }
+      TransformativeCapacitySurvey: {
+        payload: Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>
+        fields: Prisma.TransformativeCapacitySurveyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransformativeCapacitySurveyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransformativeCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          findFirst: {
+            args: Prisma.TransformativeCapacitySurveyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransformativeCapacitySurveyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          findMany: {
+            args: Prisma.TransformativeCapacitySurveyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>[]
+          }
+          create: {
+            args: Prisma.TransformativeCapacitySurveyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          createMany: {
+            args: Prisma.TransformativeCapacitySurveyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransformativeCapacitySurveyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>[]
+          }
+          delete: {
+            args: Prisma.TransformativeCapacitySurveyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          update: {
+            args: Prisma.TransformativeCapacitySurveyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransformativeCapacitySurveyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransformativeCapacitySurveyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransformativeCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransformativeCapacitySurveyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransformativeCapacitySurveyPayload>
+          }
+          aggregate: {
+            args: Prisma.TransformativeCapacitySurveyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransformativeCapacitySurvey>
+          }
+          groupBy: {
+            args: Prisma.TransformativeCapacitySurveyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransformativeCapacitySurveyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransformativeCapacitySurveyCountArgs<ExtArgs>
+            result: $Utils.Optional<TransformativeCapacitySurveyCountAggregateOutputType> | number
+          }
+        }
+      }
+      VulnerabilitySurvey: {
+        payload: Prisma.$VulnerabilitySurveyPayload<ExtArgs>
+        fields: Prisma.VulnerabilitySurveyFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VulnerabilitySurveyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VulnerabilitySurveyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          findFirst: {
+            args: Prisma.VulnerabilitySurveyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VulnerabilitySurveyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          findMany: {
+            args: Prisma.VulnerabilitySurveyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>[]
+          }
+          create: {
+            args: Prisma.VulnerabilitySurveyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          createMany: {
+            args: Prisma.VulnerabilitySurveyCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VulnerabilitySurveyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>[]
+          }
+          delete: {
+            args: Prisma.VulnerabilitySurveyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          update: {
+            args: Prisma.VulnerabilitySurveyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          deleteMany: {
+            args: Prisma.VulnerabilitySurveyDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VulnerabilitySurveyUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VulnerabilitySurveyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>[]
+          }
+          upsert: {
+            args: Prisma.VulnerabilitySurveyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VulnerabilitySurveyPayload>
+          }
+          aggregate: {
+            args: Prisma.VulnerabilitySurveyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVulnerabilitySurvey>
+          }
+          groupBy: {
+            args: Prisma.VulnerabilitySurveyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VulnerabilitySurveyGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VulnerabilitySurveyCountArgs<ExtArgs>
+            result: $Utils.Optional<VulnerabilitySurveyCountAggregateOutputType> | number
+          }
+        }
+      }
+      SolutionPlan: {
+        payload: Prisma.$SolutionPlanPayload<ExtArgs>
+        fields: Prisma.SolutionPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SolutionPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SolutionPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.SolutionPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SolutionPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          findMany: {
+            args: Prisma.SolutionPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>[]
+          }
+          create: {
+            args: Prisma.SolutionPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          createMany: {
+            args: Prisma.SolutionPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SolutionPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.SolutionPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          update: {
+            args: Prisma.SolutionPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.SolutionPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SolutionPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SolutionPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.SolutionPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolutionPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.SolutionPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSolutionPlan>
+          }
+          groupBy: {
+            args: Prisma.SolutionPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SolutionPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SolutionPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<SolutionPlanCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3928,6 +4738,7 @@ export namespace Prisma {
     schemeEnrollment?: SchemeEnrollmentOmit
     beneficiaryGoatRearing?: BeneficiaryGoatRearingOmit
     goatRearingProgram?: GoatRearingProgramOmit
+    goatRearingEvent?: GoatRearingEventOmit
     beneficiarySugarcane?: BeneficiarySugarcaneOmit
     sugarcaneProgram?: SugarcaneProgramOmit
     disasterIncident?: DisasterIncidentOmit
@@ -3937,6 +4748,14 @@ export namespace Prisma {
     attendanceLog?: AttendanceLogOmit
     leave?: LeaveOmit
     incidentResourceNeed?: IncidentResourceNeedOmit
+    fellowTask?: FellowTaskOmit
+    fellowTaskComment?: FellowTaskCommentOmit
+    resilienceSurvey?: ResilienceSurveyOmit
+    adaptiveCapacitySurvey?: AdaptiveCapacitySurveyOmit
+    absorptiveCapacitySurvey?: AbsorptiveCapacitySurveyOmit
+    transformativeCapacitySurvey?: TransformativeCapacitySurveyOmit
+    vulnerabilitySurvey?: VulnerabilitySurveyOmit
+    solutionPlan?: SolutionPlanOmit
   }
 
   /* Types for Logging */
@@ -4061,6 +4880,7 @@ export namespace Prisma {
     leaves: number
     verifiedTransactions: number
     attendanceLogs: number
+    taskComments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4068,6 +4888,7 @@ export namespace Prisma {
     leaves?: boolean | UserCountOutputTypeCountLeavesArgs
     verifiedTransactions?: boolean | UserCountOutputTypeCountVerifiedTransactionsArgs
     attendanceLogs?: boolean | UserCountOutputTypeCountAttendanceLogsArgs
+    taskComments?: boolean | UserCountOutputTypeCountTaskCommentsArgs
   }
 
   // Custom InputTypes
@@ -4107,6 +4928,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAttendanceLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AttendanceLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTaskCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowTaskCommentWhereInput
   }
 
 
@@ -4208,6 +5036,7 @@ export namespace Prisma {
     students: number
     goals: number
     reviews: number
+    tasks: number
   }
 
   export type FellowCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4215,6 +5044,7 @@ export namespace Prisma {
     students?: boolean | FellowCountOutputTypeCountStudentsArgs
     goals?: boolean | FellowCountOutputTypeCountGoalsArgs
     reviews?: boolean | FellowCountOutputTypeCountReviewsArgs
+    tasks?: boolean | FellowCountOutputTypeCountTasksArgs
   }
 
   // Custom InputTypes
@@ -4254,6 +5084,13 @@ export namespace Prisma {
    */
   export type FellowCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FellowReviewWhereInput
+  }
+
+  /**
+   * FellowCountOutputType without action
+   */
+  export type FellowCountOutputTypeCountTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowTaskWhereInput
   }
 
 
@@ -4409,6 +5246,12 @@ export namespace Prisma {
     schemeEnrollments: number
     goatRearingDetails: number
     sugarcaneDetails: number
+    resilienceSurveys: number
+    adaptiveCapacitySurveys: number
+    absorptiveCapacitySurveys: number
+    transformativeSurveys: number
+    vulnerabilitySurveys: number
+    solutionPlans: number
   }
 
   export type BeneficiaryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4417,6 +5260,12 @@ export namespace Prisma {
     schemeEnrollments?: boolean | BeneficiaryCountOutputTypeCountSchemeEnrollmentsArgs
     goatRearingDetails?: boolean | BeneficiaryCountOutputTypeCountGoatRearingDetailsArgs
     sugarcaneDetails?: boolean | BeneficiaryCountOutputTypeCountSugarcaneDetailsArgs
+    resilienceSurveys?: boolean | BeneficiaryCountOutputTypeCountResilienceSurveysArgs
+    adaptiveCapacitySurveys?: boolean | BeneficiaryCountOutputTypeCountAdaptiveCapacitySurveysArgs
+    absorptiveCapacitySurveys?: boolean | BeneficiaryCountOutputTypeCountAbsorptiveCapacitySurveysArgs
+    transformativeSurveys?: boolean | BeneficiaryCountOutputTypeCountTransformativeSurveysArgs
+    vulnerabilitySurveys?: boolean | BeneficiaryCountOutputTypeCountVulnerabilitySurveysArgs
+    solutionPlans?: boolean | BeneficiaryCountOutputTypeCountSolutionPlansArgs
   }
 
   // Custom InputTypes
@@ -4463,6 +5312,48 @@ export namespace Prisma {
    */
   export type BeneficiaryCountOutputTypeCountSugarcaneDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BeneficiarySugarcaneWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountResilienceSurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ResilienceSurveyWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountAdaptiveCapacitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdaptiveCapacitySurveyWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountAbsorptiveCapacitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AbsorptiveCapacitySurveyWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountTransformativeSurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransformativeCapacitySurveyWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountVulnerabilitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VulnerabilitySurveyWhereInput
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountSolutionPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolutionPlanWhereInput
   }
 
 
@@ -4525,6 +5416,37 @@ export namespace Prisma {
    */
   export type SchemeCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SchemeEnrollmentWhereInput
+  }
+
+
+  /**
+   * Count Type BeneficiaryGoatRearingCountOutputType
+   */
+
+  export type BeneficiaryGoatRearingCountOutputType = {
+    events: number
+  }
+
+  export type BeneficiaryGoatRearingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    events?: boolean | BeneficiaryGoatRearingCountOutputTypeCountEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BeneficiaryGoatRearingCountOutputType without action
+   */
+  export type BeneficiaryGoatRearingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryGoatRearingCountOutputType
+     */
+    select?: BeneficiaryGoatRearingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BeneficiaryGoatRearingCountOutputType without action
+   */
+  export type BeneficiaryGoatRearingCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoatRearingEventWhereInput
   }
 
 
@@ -4689,6 +5611,37 @@ export namespace Prisma {
    */
   export type IncidentResourceNeedCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryLedgerWhereInput
+  }
+
+
+  /**
+   * Count Type FellowTaskCountOutputType
+   */
+
+  export type FellowTaskCountOutputType = {
+    comments: number
+  }
+
+  export type FellowTaskCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    comments?: boolean | FellowTaskCountOutputTypeCountCommentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FellowTaskCountOutputType without action
+   */
+  export type FellowTaskCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskCountOutputType
+     */
+    select?: FellowTaskCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FellowTaskCountOutputType without action
+   */
+  export type FellowTaskCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowTaskCommentWhereInput
   }
 
 
@@ -6084,6 +7037,7 @@ export namespace Prisma {
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
     attendanceLogs?: boolean | User$attendanceLogsArgs<ExtArgs>
+    taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6145,6 +7099,7 @@ export namespace Prisma {
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
     attendanceLogs?: boolean | User$attendanceLogsArgs<ExtArgs>
+    taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6163,6 +7118,7 @@ export namespace Prisma {
       leaves: Prisma.$LeavePayload<ExtArgs>[]
       verifiedTransactions: Prisma.$InventoryLedgerPayload<ExtArgs>[]
       attendanceLogs: Prisma.$AttendanceLogPayload<ExtArgs>[]
+      taskComments: Prisma.$FellowTaskCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6578,6 +7534,7 @@ export namespace Prisma {
     leaves<T extends User$leavesArgs<ExtArgs> = {}>(args?: Subset<T, User$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verifiedTransactions<T extends User$verifiedTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendanceLogs<T extends User$attendanceLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$attendanceLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    taskComments<T extends User$taskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7133,6 +8090,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttendanceLogScalarFieldEnum | AttendanceLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.taskComments
+   */
+  export type User$taskCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    where?: FellowTaskCommentWhereInput
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    cursor?: FellowTaskCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowTaskCommentScalarFieldEnum | FellowTaskCommentScalarFieldEnum[]
   }
 
   /**
@@ -10449,6 +11430,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     principalName: string | null
+    udiseCode: string | null
     email: string | null
     phone: string | null
     address: string | null
@@ -10467,6 +11449,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     principalName: string | null
+    udiseCode: string | null
     email: string | null
     phone: string | null
     address: string | null
@@ -10485,6 +11468,7 @@ export namespace Prisma {
     id: number
     name: number
     principalName: number
+    udiseCode: number
     email: number
     phone: number
     address: number
@@ -10513,6 +11497,7 @@ export namespace Prisma {
     id?: true
     name?: true
     principalName?: true
+    udiseCode?: true
     email?: true
     phone?: true
     address?: true
@@ -10531,6 +11516,7 @@ export namespace Prisma {
     id?: true
     name?: true
     principalName?: true
+    udiseCode?: true
     email?: true
     phone?: true
     address?: true
@@ -10549,6 +11535,7 @@ export namespace Prisma {
     id?: true
     name?: true
     principalName?: true
+    udiseCode?: true
     email?: true
     phone?: true
     address?: true
@@ -10654,6 +11641,7 @@ export namespace Prisma {
     id: string
     name: string
     principalName: string | null
+    udiseCode: string | null
     email: string | null
     phone: string | null
     address: string | null
@@ -10691,6 +11679,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     principalName?: boolean
+    udiseCode?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
@@ -10713,6 +11702,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     principalName?: boolean
+    udiseCode?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
@@ -10731,6 +11721,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     principalName?: boolean
+    udiseCode?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
@@ -10749,6 +11740,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     principalName?: boolean
+    udiseCode?: boolean
     email?: boolean
     phone?: boolean
     address?: boolean
@@ -10763,7 +11755,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "principalName" | "email" | "phone" | "address" | "location" | "status" | "latitude" | "longitude" | "mapUrl" | "img" | "goal" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
+  export type SchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "principalName" | "udiseCode" | "email" | "phone" | "address" | "location" | "status" | "latitude" | "longitude" | "mapUrl" | "img" | "goal" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
   export type SchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fellows?: boolean | School$fellowsArgs<ExtArgs>
     students?: boolean | School$studentsArgs<ExtArgs>
@@ -10784,6 +11776,7 @@ export namespace Prisma {
       id: string
       name: string
       principalName: string | null
+      udiseCode: string | null
       email: string | null
       phone: string | null
       address: string | null
@@ -11225,6 +12218,7 @@ export namespace Prisma {
     readonly id: FieldRef<"School", 'String'>
     readonly name: FieldRef<"School", 'String'>
     readonly principalName: FieldRef<"School", 'String'>
+    readonly udiseCode: FieldRef<"School", 'String'>
     readonly email: FieldRef<"School", 'String'>
     readonly phone: FieldRef<"School", 'String'>
     readonly address: FieldRef<"School", 'String'>
@@ -11999,6 +12993,7 @@ export namespace Prisma {
     students?: boolean | Fellow$studentsArgs<ExtArgs>
     goals?: boolean | Fellow$goalsArgs<ExtArgs>
     reviews?: boolean | Fellow$reviewsArgs<ExtArgs>
+    tasks?: boolean | Fellow$tasksArgs<ExtArgs>
     _count?: boolean | FellowCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fellow"]>
 
@@ -12062,6 +13057,7 @@ export namespace Prisma {
     students?: boolean | Fellow$studentsArgs<ExtArgs>
     goals?: boolean | Fellow$goalsArgs<ExtArgs>
     reviews?: boolean | Fellow$reviewsArgs<ExtArgs>
+    tasks?: boolean | Fellow$tasksArgs<ExtArgs>
     _count?: boolean | FellowCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FellowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12079,6 +13075,7 @@ export namespace Prisma {
       students: Prisma.$StudentPayload<ExtArgs>[]
       goals: Prisma.$FellowGoalPayload<ExtArgs>[]
       reviews: Prisma.$FellowReviewPayload<ExtArgs>[]
+      tasks: Prisma.$FellowTaskPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12494,6 +13491,7 @@ export namespace Prisma {
     students<T extends Fellow$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goals<T extends Fellow$goalsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$goalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowGoalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reviews<T extends Fellow$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tasks<T extends Fellow$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13050,6 +14048,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FellowReviewScalarFieldEnum | FellowReviewScalarFieldEnum[]
+  }
+
+  /**
+   * Fellow.tasks
+   */
+  export type Fellow$tasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    where?: FellowTaskWhereInput
+    orderBy?: FellowTaskOrderByWithRelationInput | FellowTaskOrderByWithRelationInput[]
+    cursor?: FellowTaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowTaskScalarFieldEnum | FellowTaskScalarFieldEnum[]
   }
 
   /**
@@ -16481,6 +17503,7 @@ export namespace Prisma {
     status: string | null
     schoolId: string | null
     fellowId: string | null
+    isMigrated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16505,6 +17528,7 @@ export namespace Prisma {
     status: string | null
     schoolId: string | null
     fellowId: string | null
+    isMigrated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -16529,6 +17553,7 @@ export namespace Prisma {
     status: number
     schoolId: number
     fellowId: number
+    isMigrated: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -16563,6 +17588,7 @@ export namespace Prisma {
     status?: true
     schoolId?: true
     fellowId?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16587,6 +17613,7 @@ export namespace Prisma {
     status?: true
     schoolId?: true
     fellowId?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -16611,6 +17638,7 @@ export namespace Prisma {
     status?: true
     schoolId?: true
     fellowId?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -16722,6 +17750,7 @@ export namespace Prisma {
     status: string
     schoolId: string | null
     fellowId: string | null
+    isMigrated: boolean
     createdAt: Date
     updatedAt: Date
     _count: StudentCountAggregateOutputType | null
@@ -16765,6 +17794,7 @@ export namespace Prisma {
     status?: boolean
     schoolId?: boolean
     fellowId?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | Student$schoolArgs<ExtArgs>
@@ -16794,6 +17824,7 @@ export namespace Prisma {
     status?: boolean
     schoolId?: boolean
     fellowId?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | Student$schoolArgs<ExtArgs>
@@ -16820,6 +17851,7 @@ export namespace Prisma {
     status?: boolean
     schoolId?: boolean
     fellowId?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | Student$schoolArgs<ExtArgs>
@@ -16846,11 +17878,12 @@ export namespace Prisma {
     status?: boolean
     schoolId?: boolean
     fellowId?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     school?: boolean | Student$schoolArgs<ExtArgs>
     fellow?: boolean | Student$fellowArgs<ExtArgs>
@@ -16895,6 +17928,7 @@ export namespace Prisma {
       status: string
       schoolId: string | null
       fellowId: string | null
+      isMigrated: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["student"]>
@@ -17343,6 +18377,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Student", 'String'>
     readonly schoolId: FieldRef<"Student", 'String'>
     readonly fellowId: FieldRef<"Student", 'String'>
+    readonly isMigrated: FieldRef<"Student", 'Boolean'>
     readonly createdAt: FieldRef<"Student", 'DateTime'>
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
   }
@@ -25704,6 +26739,7 @@ export namespace Prisma {
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
+    isMigrated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25730,6 +26766,7 @@ export namespace Prisma {
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
+    isMigrated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25756,6 +26793,7 @@ export namespace Prisma {
     bankName: number
     bankAccountNo: number
     bankIfsc: number
+    isMigrated: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -25800,6 +26838,7 @@ export namespace Prisma {
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25826,6 +26865,7 @@ export namespace Prisma {
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25852,6 +26892,7 @@ export namespace Prisma {
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
+    isMigrated?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -25965,6 +27006,7 @@ export namespace Prisma {
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
+    isMigrated: boolean
     createdAt: Date
     updatedAt: Date
     _count: BeneficiaryCountAggregateOutputType | null
@@ -26010,6 +27052,7 @@ export namespace Prisma {
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
@@ -26017,6 +27060,12 @@ export namespace Prisma {
     schemeEnrollments?: boolean | Beneficiary$schemeEnrollmentsArgs<ExtArgs>
     goatRearingDetails?: boolean | Beneficiary$goatRearingDetailsArgs<ExtArgs>
     sugarcaneDetails?: boolean | Beneficiary$sugarcaneDetailsArgs<ExtArgs>
+    resilienceSurveys?: boolean | Beneficiary$resilienceSurveysArgs<ExtArgs>
+    adaptiveCapacitySurveys?: boolean | Beneficiary$adaptiveCapacitySurveysArgs<ExtArgs>
+    absorptiveCapacitySurveys?: boolean | Beneficiary$absorptiveCapacitySurveysArgs<ExtArgs>
+    transformativeSurveys?: boolean | Beneficiary$transformativeSurveysArgs<ExtArgs>
+    vulnerabilitySurveys?: boolean | Beneficiary$vulnerabilitySurveysArgs<ExtArgs>
+    solutionPlans?: boolean | Beneficiary$solutionPlansArgs<ExtArgs>
     _count?: boolean | BeneficiaryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["beneficiary"]>
 
@@ -26042,6 +27091,7 @@ export namespace Prisma {
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["beneficiary"]>
@@ -26068,6 +27118,7 @@ export namespace Prisma {
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["beneficiary"]>
@@ -26094,17 +27145,24 @@ export namespace Prisma {
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
+    isMigrated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "rationCard" | "mobNumber" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "householdSize" | "primaryIncomeType" | "tier" | "tierPercent" | "bankName" | "bankAccountNo" | "bankIfsc" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
+  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "rationCard" | "mobNumber" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "householdSize" | "primaryIncomeType" | "tier" | "tierPercent" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
   export type BeneficiaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
     livestock?: boolean | Beneficiary$livestockArgs<ExtArgs>
     schemeEnrollments?: boolean | Beneficiary$schemeEnrollmentsArgs<ExtArgs>
     goatRearingDetails?: boolean | Beneficiary$goatRearingDetailsArgs<ExtArgs>
     sugarcaneDetails?: boolean | Beneficiary$sugarcaneDetailsArgs<ExtArgs>
+    resilienceSurveys?: boolean | Beneficiary$resilienceSurveysArgs<ExtArgs>
+    adaptiveCapacitySurveys?: boolean | Beneficiary$adaptiveCapacitySurveysArgs<ExtArgs>
+    absorptiveCapacitySurveys?: boolean | Beneficiary$absorptiveCapacitySurveysArgs<ExtArgs>
+    transformativeSurveys?: boolean | Beneficiary$transformativeSurveysArgs<ExtArgs>
+    vulnerabilitySurveys?: boolean | Beneficiary$vulnerabilitySurveysArgs<ExtArgs>
+    solutionPlans?: boolean | Beneficiary$solutionPlansArgs<ExtArgs>
     _count?: boolean | BeneficiaryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BeneficiaryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -26118,6 +27176,12 @@ export namespace Prisma {
       schemeEnrollments: Prisma.$SchemeEnrollmentPayload<ExtArgs>[]
       goatRearingDetails: Prisma.$BeneficiaryGoatRearingPayload<ExtArgs>[]
       sugarcaneDetails: Prisma.$BeneficiarySugarcanePayload<ExtArgs>[]
+      resilienceSurveys: Prisma.$ResilienceSurveyPayload<ExtArgs>[]
+      adaptiveCapacitySurveys: Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>[]
+      absorptiveCapacitySurveys: Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>[]
+      transformativeSurveys: Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>[]
+      vulnerabilitySurveys: Prisma.$VulnerabilitySurveyPayload<ExtArgs>[]
+      solutionPlans: Prisma.$SolutionPlanPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -26141,6 +27205,7 @@ export namespace Prisma {
       bankName: string | null
       bankAccountNo: string | null
       bankIfsc: string | null
+      isMigrated: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["beneficiary"]>
@@ -26542,6 +27607,12 @@ export namespace Prisma {
     schemeEnrollments<T extends Beneficiary$schemeEnrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$schemeEnrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchemeEnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     goatRearingDetails<T extends Beneficiary$goatRearingDetailsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$goatRearingDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryGoatRearingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sugarcaneDetails<T extends Beneficiary$sugarcaneDetailsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$sugarcaneDetailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiarySugarcanePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    resilienceSurveys<T extends Beneficiary$resilienceSurveysArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$resilienceSurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    adaptiveCapacitySurveys<T extends Beneficiary$adaptiveCapacitySurveysArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$adaptiveCapacitySurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    absorptiveCapacitySurveys<T extends Beneficiary$absorptiveCapacitySurveysArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$absorptiveCapacitySurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transformativeSurveys<T extends Beneficiary$transformativeSurveysArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$transformativeSurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    vulnerabilitySurveys<T extends Beneficiary$vulnerabilitySurveysArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$vulnerabilitySurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    solutionPlans<T extends Beneficiary$solutionPlansArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$solutionPlansArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26592,6 +27663,7 @@ export namespace Prisma {
     readonly bankName: FieldRef<"Beneficiary", 'String'>
     readonly bankAccountNo: FieldRef<"Beneficiary", 'String'>
     readonly bankIfsc: FieldRef<"Beneficiary", 'String'>
+    readonly isMigrated: FieldRef<"Beneficiary", 'Boolean'>
     readonly createdAt: FieldRef<"Beneficiary", 'DateTime'>
     readonly updatedAt: FieldRef<"Beneficiary", 'DateTime'>
   }
@@ -27104,6 +28176,150 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BeneficiarySugarcaneScalarFieldEnum | BeneficiarySugarcaneScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.resilienceSurveys
+   */
+  export type Beneficiary$resilienceSurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    where?: ResilienceSurveyWhereInput
+    orderBy?: ResilienceSurveyOrderByWithRelationInput | ResilienceSurveyOrderByWithRelationInput[]
+    cursor?: ResilienceSurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ResilienceSurveyScalarFieldEnum | ResilienceSurveyScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.adaptiveCapacitySurveys
+   */
+  export type Beneficiary$adaptiveCapacitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    where?: AdaptiveCapacitySurveyWhereInput
+    orderBy?: AdaptiveCapacitySurveyOrderByWithRelationInput | AdaptiveCapacitySurveyOrderByWithRelationInput[]
+    cursor?: AdaptiveCapacitySurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdaptiveCapacitySurveyScalarFieldEnum | AdaptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.absorptiveCapacitySurveys
+   */
+  export type Beneficiary$absorptiveCapacitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    where?: AbsorptiveCapacitySurveyWhereInput
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithRelationInput | AbsorptiveCapacitySurveyOrderByWithRelationInput[]
+    cursor?: AbsorptiveCapacitySurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AbsorptiveCapacitySurveyScalarFieldEnum | AbsorptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.transformativeSurveys
+   */
+  export type Beneficiary$transformativeSurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    where?: TransformativeCapacitySurveyWhereInput
+    orderBy?: TransformativeCapacitySurveyOrderByWithRelationInput | TransformativeCapacitySurveyOrderByWithRelationInput[]
+    cursor?: TransformativeCapacitySurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransformativeCapacitySurveyScalarFieldEnum | TransformativeCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.vulnerabilitySurveys
+   */
+  export type Beneficiary$vulnerabilitySurveysArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    where?: VulnerabilitySurveyWhereInput
+    orderBy?: VulnerabilitySurveyOrderByWithRelationInput | VulnerabilitySurveyOrderByWithRelationInput[]
+    cursor?: VulnerabilitySurveyWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VulnerabilitySurveyScalarFieldEnum | VulnerabilitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary.solutionPlans
+   */
+  export type Beneficiary$solutionPlansArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    where?: SolutionPlanWhereInput
+    orderBy?: SolutionPlanOrderByWithRelationInput | SolutionPlanOrderByWithRelationInput[]
+    cursor?: SolutionPlanWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SolutionPlanScalarFieldEnum | SolutionPlanScalarFieldEnum[]
   }
 
   /**
@@ -32901,6 +34117,8 @@ export namespace Prisma {
     updatedAt?: boolean
     beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
     goatRearingProgram?: boolean | BeneficiaryGoatRearing$goatRearingProgramArgs<ExtArgs>
+    events?: boolean | BeneficiaryGoatRearing$eventsArgs<ExtArgs>
+    _count?: boolean | BeneficiaryGoatRearingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["beneficiaryGoatRearing"]>
 
   export type BeneficiaryGoatRearingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -32953,6 +34171,8 @@ export namespace Prisma {
   export type BeneficiaryGoatRearingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
     goatRearingProgram?: boolean | BeneficiaryGoatRearing$goatRearingProgramArgs<ExtArgs>
+    events?: boolean | BeneficiaryGoatRearing$eventsArgs<ExtArgs>
+    _count?: boolean | BeneficiaryGoatRearingCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BeneficiaryGoatRearingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
@@ -32968,6 +34188,7 @@ export namespace Prisma {
     objects: {
       beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
       goatRearingProgram: Prisma.$GoatRearingProgramPayload<ExtArgs> | null
+      events: Prisma.$GoatRearingEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -33377,6 +34598,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     goatRearingProgram<T extends BeneficiaryGoatRearing$goatRearingProgramArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryGoatRearing$goatRearingProgramArgs<ExtArgs>>): Prisma__GoatRearingProgramClient<$Result.GetResult<Prisma.$GoatRearingProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    events<T extends BeneficiaryGoatRearing$eventsArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryGoatRearing$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -33834,6 +35056,30 @@ export namespace Prisma {
      */
     include?: GoatRearingProgramInclude<ExtArgs> | null
     where?: GoatRearingProgramWhereInput
+  }
+
+  /**
+   * BeneficiaryGoatRearing.events
+   */
+  export type BeneficiaryGoatRearing$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    where?: GoatRearingEventWhereInput
+    orderBy?: GoatRearingEventOrderByWithRelationInput | GoatRearingEventOrderByWithRelationInput[]
+    cursor?: GoatRearingEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GoatRearingEventScalarFieldEnum | GoatRearingEventScalarFieldEnum[]
   }
 
   /**
@@ -34974,6 +36220,1168 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: GoatRearingProgramInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GoatRearingEvent
+   */
+
+  export type AggregateGoatRearingEvent = {
+    _count: GoatRearingEventCountAggregateOutputType | null
+    _avg: GoatRearingEventAvgAggregateOutputType | null
+    _sum: GoatRearingEventSumAggregateOutputType | null
+    _min: GoatRearingEventMinAggregateOutputType | null
+    _max: GoatRearingEventMaxAggregateOutputType | null
+  }
+
+  export type GoatRearingEventAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type GoatRearingEventSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type GoatRearingEventMinAggregateOutputType = {
+    id: string | null
+    beneficiaryGoatRearingId: string | null
+    eventType: string | null
+    eventDate: Date | null
+    quantity: number | null
+    notes: string | null
+    photoUrl: string | null
+    recordedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GoatRearingEventMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryGoatRearingId: string | null
+    eventType: string | null
+    eventDate: Date | null
+    quantity: number | null
+    notes: string | null
+    photoUrl: string | null
+    recordedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GoatRearingEventCountAggregateOutputType = {
+    id: number
+    beneficiaryGoatRearingId: number
+    eventType: number
+    eventDate: number
+    quantity: number
+    notes: number
+    photoUrl: number
+    recordedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GoatRearingEventAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type GoatRearingEventSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type GoatRearingEventMinAggregateInputType = {
+    id?: true
+    beneficiaryGoatRearingId?: true
+    eventType?: true
+    eventDate?: true
+    quantity?: true
+    notes?: true
+    photoUrl?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GoatRearingEventMaxAggregateInputType = {
+    id?: true
+    beneficiaryGoatRearingId?: true
+    eventType?: true
+    eventDate?: true
+    quantity?: true
+    notes?: true
+    photoUrl?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GoatRearingEventCountAggregateInputType = {
+    id?: true
+    beneficiaryGoatRearingId?: true
+    eventType?: true
+    eventDate?: true
+    quantity?: true
+    notes?: true
+    photoUrl?: true
+    recordedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GoatRearingEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoatRearingEvent to aggregate.
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoatRearingEvents to fetch.
+     */
+    orderBy?: GoatRearingEventOrderByWithRelationInput | GoatRearingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GoatRearingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoatRearingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoatRearingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GoatRearingEvents
+    **/
+    _count?: true | GoatRearingEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GoatRearingEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GoatRearingEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GoatRearingEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GoatRearingEventMaxAggregateInputType
+  }
+
+  export type GetGoatRearingEventAggregateType<T extends GoatRearingEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateGoatRearingEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGoatRearingEvent[P]>
+      : GetScalarType<T[P], AggregateGoatRearingEvent[P]>
+  }
+
+
+
+
+  export type GoatRearingEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GoatRearingEventWhereInput
+    orderBy?: GoatRearingEventOrderByWithAggregationInput | GoatRearingEventOrderByWithAggregationInput[]
+    by: GoatRearingEventScalarFieldEnum[] | GoatRearingEventScalarFieldEnum
+    having?: GoatRearingEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GoatRearingEventCountAggregateInputType | true
+    _avg?: GoatRearingEventAvgAggregateInputType
+    _sum?: GoatRearingEventSumAggregateInputType
+    _min?: GoatRearingEventMinAggregateInputType
+    _max?: GoatRearingEventMaxAggregateInputType
+  }
+
+  export type GoatRearingEventGroupByOutputType = {
+    id: string
+    beneficiaryGoatRearingId: string
+    eventType: string
+    eventDate: Date
+    quantity: number
+    notes: string | null
+    photoUrl: string | null
+    recordedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: GoatRearingEventCountAggregateOutputType | null
+    _avg: GoatRearingEventAvgAggregateOutputType | null
+    _sum: GoatRearingEventSumAggregateOutputType | null
+    _min: GoatRearingEventMinAggregateOutputType | null
+    _max: GoatRearingEventMaxAggregateOutputType | null
+  }
+
+  type GetGoatRearingEventGroupByPayload<T extends GoatRearingEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GoatRearingEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GoatRearingEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GoatRearingEventGroupByOutputType[P]>
+            : GetScalarType<T[P], GoatRearingEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GoatRearingEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryGoatRearingId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    quantity?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goatRearingEvent"]>
+
+  export type GoatRearingEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryGoatRearingId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    quantity?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goatRearingEvent"]>
+
+  export type GoatRearingEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryGoatRearingId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    quantity?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["goatRearingEvent"]>
+
+  export type GoatRearingEventSelectScalar = {
+    id?: boolean
+    beneficiaryGoatRearingId?: boolean
+    eventType?: boolean
+    eventDate?: boolean
+    quantity?: boolean
+    notes?: boolean
+    photoUrl?: boolean
+    recordedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GoatRearingEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryGoatRearingId" | "eventType" | "eventDate" | "quantity" | "notes" | "photoUrl" | "recordedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["goatRearingEvent"]>
+  export type GoatRearingEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }
+  export type GoatRearingEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }
+  export type GoatRearingEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiaryGoatRearing?: boolean | BeneficiaryGoatRearingDefaultArgs<ExtArgs>
+  }
+
+  export type $GoatRearingEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GoatRearingEvent"
+    objects: {
+      beneficiaryGoatRearing: Prisma.$BeneficiaryGoatRearingPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryGoatRearingId: string
+      eventType: string
+      eventDate: Date
+      quantity: number
+      notes: string | null
+      photoUrl: string | null
+      recordedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["goatRearingEvent"]>
+    composites: {}
+  }
+
+  type GoatRearingEventGetPayload<S extends boolean | null | undefined | GoatRearingEventDefaultArgs> = $Result.GetResult<Prisma.$GoatRearingEventPayload, S>
+
+  type GoatRearingEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GoatRearingEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GoatRearingEventCountAggregateInputType | true
+    }
+
+  export interface GoatRearingEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GoatRearingEvent'], meta: { name: 'GoatRearingEvent' } }
+    /**
+     * Find zero or one GoatRearingEvent that matches the filter.
+     * @param {GoatRearingEventFindUniqueArgs} args - Arguments to find a GoatRearingEvent
+     * @example
+     * // Get one GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GoatRearingEventFindUniqueArgs>(args: SelectSubset<T, GoatRearingEventFindUniqueArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GoatRearingEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GoatRearingEventFindUniqueOrThrowArgs} args - Arguments to find a GoatRearingEvent
+     * @example
+     * // Get one GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GoatRearingEventFindUniqueOrThrowArgs>(args: SelectSubset<T, GoatRearingEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoatRearingEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventFindFirstArgs} args - Arguments to find a GoatRearingEvent
+     * @example
+     * // Get one GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GoatRearingEventFindFirstArgs>(args?: SelectSubset<T, GoatRearingEventFindFirstArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GoatRearingEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventFindFirstOrThrowArgs} args - Arguments to find a GoatRearingEvent
+     * @example
+     * // Get one GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GoatRearingEventFindFirstOrThrowArgs>(args?: SelectSubset<T, GoatRearingEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GoatRearingEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GoatRearingEvents
+     * const goatRearingEvents = await prisma.goatRearingEvent.findMany()
+     * 
+     * // Get first 10 GoatRearingEvents
+     * const goatRearingEvents = await prisma.goatRearingEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const goatRearingEventWithIdOnly = await prisma.goatRearingEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GoatRearingEventFindManyArgs>(args?: SelectSubset<T, GoatRearingEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GoatRearingEvent.
+     * @param {GoatRearingEventCreateArgs} args - Arguments to create a GoatRearingEvent.
+     * @example
+     * // Create one GoatRearingEvent
+     * const GoatRearingEvent = await prisma.goatRearingEvent.create({
+     *   data: {
+     *     // ... data to create a GoatRearingEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends GoatRearingEventCreateArgs>(args: SelectSubset<T, GoatRearingEventCreateArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GoatRearingEvents.
+     * @param {GoatRearingEventCreateManyArgs} args - Arguments to create many GoatRearingEvents.
+     * @example
+     * // Create many GoatRearingEvents
+     * const goatRearingEvent = await prisma.goatRearingEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GoatRearingEventCreateManyArgs>(args?: SelectSubset<T, GoatRearingEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GoatRearingEvents and returns the data saved in the database.
+     * @param {GoatRearingEventCreateManyAndReturnArgs} args - Arguments to create many GoatRearingEvents.
+     * @example
+     * // Create many GoatRearingEvents
+     * const goatRearingEvent = await prisma.goatRearingEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GoatRearingEvents and only return the `id`
+     * const goatRearingEventWithIdOnly = await prisma.goatRearingEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GoatRearingEventCreateManyAndReturnArgs>(args?: SelectSubset<T, GoatRearingEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GoatRearingEvent.
+     * @param {GoatRearingEventDeleteArgs} args - Arguments to delete one GoatRearingEvent.
+     * @example
+     * // Delete one GoatRearingEvent
+     * const GoatRearingEvent = await prisma.goatRearingEvent.delete({
+     *   where: {
+     *     // ... filter to delete one GoatRearingEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GoatRearingEventDeleteArgs>(args: SelectSubset<T, GoatRearingEventDeleteArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GoatRearingEvent.
+     * @param {GoatRearingEventUpdateArgs} args - Arguments to update one GoatRearingEvent.
+     * @example
+     * // Update one GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GoatRearingEventUpdateArgs>(args: SelectSubset<T, GoatRearingEventUpdateArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GoatRearingEvents.
+     * @param {GoatRearingEventDeleteManyArgs} args - Arguments to filter GoatRearingEvents to delete.
+     * @example
+     * // Delete a few GoatRearingEvents
+     * const { count } = await prisma.goatRearingEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GoatRearingEventDeleteManyArgs>(args?: SelectSubset<T, GoatRearingEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoatRearingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GoatRearingEvents
+     * const goatRearingEvent = await prisma.goatRearingEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GoatRearingEventUpdateManyArgs>(args: SelectSubset<T, GoatRearingEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GoatRearingEvents and returns the data updated in the database.
+     * @param {GoatRearingEventUpdateManyAndReturnArgs} args - Arguments to update many GoatRearingEvents.
+     * @example
+     * // Update many GoatRearingEvents
+     * const goatRearingEvent = await prisma.goatRearingEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GoatRearingEvents and only return the `id`
+     * const goatRearingEventWithIdOnly = await prisma.goatRearingEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GoatRearingEventUpdateManyAndReturnArgs>(args: SelectSubset<T, GoatRearingEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GoatRearingEvent.
+     * @param {GoatRearingEventUpsertArgs} args - Arguments to update or create a GoatRearingEvent.
+     * @example
+     * // Update or create a GoatRearingEvent
+     * const goatRearingEvent = await prisma.goatRearingEvent.upsert({
+     *   create: {
+     *     // ... data to create a GoatRearingEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GoatRearingEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GoatRearingEventUpsertArgs>(args: SelectSubset<T, GoatRearingEventUpsertArgs<ExtArgs>>): Prisma__GoatRearingEventClient<$Result.GetResult<Prisma.$GoatRearingEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GoatRearingEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventCountArgs} args - Arguments to filter GoatRearingEvents to count.
+     * @example
+     * // Count the number of GoatRearingEvents
+     * const count = await prisma.goatRearingEvent.count({
+     *   where: {
+     *     // ... the filter for the GoatRearingEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends GoatRearingEventCountArgs>(
+      args?: Subset<T, GoatRearingEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GoatRearingEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GoatRearingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GoatRearingEventAggregateArgs>(args: Subset<T, GoatRearingEventAggregateArgs>): Prisma.PrismaPromise<GetGoatRearingEventAggregateType<T>>
+
+    /**
+     * Group by GoatRearingEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GoatRearingEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GoatRearingEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GoatRearingEventGroupByArgs['orderBy'] }
+        : { orderBy?: GoatRearingEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GoatRearingEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGoatRearingEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GoatRearingEvent model
+   */
+  readonly fields: GoatRearingEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GoatRearingEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GoatRearingEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiaryGoatRearing<T extends BeneficiaryGoatRearingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryGoatRearingDefaultArgs<ExtArgs>>): Prisma__BeneficiaryGoatRearingClient<$Result.GetResult<Prisma.$BeneficiaryGoatRearingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GoatRearingEvent model
+   */
+  interface GoatRearingEventFieldRefs {
+    readonly id: FieldRef<"GoatRearingEvent", 'String'>
+    readonly beneficiaryGoatRearingId: FieldRef<"GoatRearingEvent", 'String'>
+    readonly eventType: FieldRef<"GoatRearingEvent", 'String'>
+    readonly eventDate: FieldRef<"GoatRearingEvent", 'DateTime'>
+    readonly quantity: FieldRef<"GoatRearingEvent", 'Int'>
+    readonly notes: FieldRef<"GoatRearingEvent", 'String'>
+    readonly photoUrl: FieldRef<"GoatRearingEvent", 'String'>
+    readonly recordedBy: FieldRef<"GoatRearingEvent", 'String'>
+    readonly createdAt: FieldRef<"GoatRearingEvent", 'DateTime'>
+    readonly updatedAt: FieldRef<"GoatRearingEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GoatRearingEvent findUnique
+   */
+  export type GoatRearingEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which GoatRearingEvent to fetch.
+     */
+    where: GoatRearingEventWhereUniqueInput
+  }
+
+  /**
+   * GoatRearingEvent findUniqueOrThrow
+   */
+  export type GoatRearingEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which GoatRearingEvent to fetch.
+     */
+    where: GoatRearingEventWhereUniqueInput
+  }
+
+  /**
+   * GoatRearingEvent findFirst
+   */
+  export type GoatRearingEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which GoatRearingEvent to fetch.
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoatRearingEvents to fetch.
+     */
+    orderBy?: GoatRearingEventOrderByWithRelationInput | GoatRearingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoatRearingEvents.
+     */
+    cursor?: GoatRearingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoatRearingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoatRearingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoatRearingEvents.
+     */
+    distinct?: GoatRearingEventScalarFieldEnum | GoatRearingEventScalarFieldEnum[]
+  }
+
+  /**
+   * GoatRearingEvent findFirstOrThrow
+   */
+  export type GoatRearingEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which GoatRearingEvent to fetch.
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoatRearingEvents to fetch.
+     */
+    orderBy?: GoatRearingEventOrderByWithRelationInput | GoatRearingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GoatRearingEvents.
+     */
+    cursor?: GoatRearingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoatRearingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoatRearingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoatRearingEvents.
+     */
+    distinct?: GoatRearingEventScalarFieldEnum | GoatRearingEventScalarFieldEnum[]
+  }
+
+  /**
+   * GoatRearingEvent findMany
+   */
+  export type GoatRearingEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter, which GoatRearingEvents to fetch.
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GoatRearingEvents to fetch.
+     */
+    orderBy?: GoatRearingEventOrderByWithRelationInput | GoatRearingEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GoatRearingEvents.
+     */
+    cursor?: GoatRearingEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GoatRearingEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GoatRearingEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GoatRearingEvents.
+     */
+    distinct?: GoatRearingEventScalarFieldEnum | GoatRearingEventScalarFieldEnum[]
+  }
+
+  /**
+   * GoatRearingEvent create
+   */
+  export type GoatRearingEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GoatRearingEvent.
+     */
+    data: XOR<GoatRearingEventCreateInput, GoatRearingEventUncheckedCreateInput>
+  }
+
+  /**
+   * GoatRearingEvent createMany
+   */
+  export type GoatRearingEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GoatRearingEvents.
+     */
+    data: GoatRearingEventCreateManyInput | GoatRearingEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GoatRearingEvent createManyAndReturn
+   */
+  export type GoatRearingEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many GoatRearingEvents.
+     */
+    data: GoatRearingEventCreateManyInput | GoatRearingEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoatRearingEvent update
+   */
+  export type GoatRearingEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GoatRearingEvent.
+     */
+    data: XOR<GoatRearingEventUpdateInput, GoatRearingEventUncheckedUpdateInput>
+    /**
+     * Choose, which GoatRearingEvent to update.
+     */
+    where: GoatRearingEventWhereUniqueInput
+  }
+
+  /**
+   * GoatRearingEvent updateMany
+   */
+  export type GoatRearingEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GoatRearingEvents.
+     */
+    data: XOR<GoatRearingEventUpdateManyMutationInput, GoatRearingEventUncheckedUpdateManyInput>
+    /**
+     * Filter which GoatRearingEvents to update
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * Limit how many GoatRearingEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoatRearingEvent updateManyAndReturn
+   */
+  export type GoatRearingEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * The data used to update GoatRearingEvents.
+     */
+    data: XOR<GoatRearingEventUpdateManyMutationInput, GoatRearingEventUncheckedUpdateManyInput>
+    /**
+     * Filter which GoatRearingEvents to update
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * Limit how many GoatRearingEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GoatRearingEvent upsert
+   */
+  export type GoatRearingEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GoatRearingEvent to update in case it exists.
+     */
+    where: GoatRearingEventWhereUniqueInput
+    /**
+     * In case the GoatRearingEvent found by the `where` argument doesn't exist, create a new GoatRearingEvent with this data.
+     */
+    create: XOR<GoatRearingEventCreateInput, GoatRearingEventUncheckedCreateInput>
+    /**
+     * In case the GoatRearingEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GoatRearingEventUpdateInput, GoatRearingEventUncheckedUpdateInput>
+  }
+
+  /**
+   * GoatRearingEvent delete
+   */
+  export type GoatRearingEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
+    /**
+     * Filter which GoatRearingEvent to delete.
+     */
+    where: GoatRearingEventWhereUniqueInput
+  }
+
+  /**
+   * GoatRearingEvent deleteMany
+   */
+  export type GoatRearingEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GoatRearingEvents to delete
+     */
+    where?: GoatRearingEventWhereInput
+    /**
+     * Limit how many GoatRearingEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GoatRearingEvent without action
+   */
+  export type GoatRearingEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GoatRearingEvent
+     */
+    select?: GoatRearingEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GoatRearingEvent
+     */
+    omit?: GoatRearingEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GoatRearingEventInclude<ExtArgs> | null
   }
 
 
@@ -41957,8 +44365,24 @@ export namespace Prisma {
 
   export type AggregateAttendanceLog = {
     _count: AttendanceLogCountAggregateOutputType | null
+    _avg: AttendanceLogAvgAggregateOutputType | null
+    _sum: AttendanceLogSumAggregateOutputType | null
     _min: AttendanceLogMinAggregateOutputType | null
     _max: AttendanceLogMaxAggregateOutputType | null
+  }
+
+  export type AttendanceLogAvgAggregateOutputType = {
+    checkInLat: number | null
+    checkInLng: number | null
+    checkOutLat: number | null
+    checkOutLng: number | null
+  }
+
+  export type AttendanceLogSumAggregateOutputType = {
+    checkInLat: number | null
+    checkInLng: number | null
+    checkOutLat: number | null
+    checkOutLng: number | null
   }
 
   export type AttendanceLogMinAggregateOutputType = {
@@ -41974,6 +44398,10 @@ export namespace Prisma {
     ef2: string | null
     logininfo: string | null
     logoutinfo: string | null
+    checkInLat: number | null
+    checkInLng: number | null
+    checkOutLat: number | null
+    checkOutLng: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -41991,6 +44419,10 @@ export namespace Prisma {
     ef2: string | null
     logininfo: string | null
     logoutinfo: string | null
+    checkInLat: number | null
+    checkInLng: number | null
+    checkOutLat: number | null
+    checkOutLng: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -42008,11 +44440,29 @@ export namespace Prisma {
     ef2: number
     logininfo: number
     logoutinfo: number
+    checkInLat: number
+    checkInLng: number
+    checkOutLat: number
+    checkOutLng: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type AttendanceLogAvgAggregateInputType = {
+    checkInLat?: true
+    checkInLng?: true
+    checkOutLat?: true
+    checkOutLng?: true
+  }
+
+  export type AttendanceLogSumAggregateInputType = {
+    checkInLat?: true
+    checkInLng?: true
+    checkOutLat?: true
+    checkOutLng?: true
+  }
 
   export type AttendanceLogMinAggregateInputType = {
     id?: true
@@ -42027,6 +44477,10 @@ export namespace Prisma {
     ef2?: true
     logininfo?: true
     logoutinfo?: true
+    checkInLat?: true
+    checkInLng?: true
+    checkOutLat?: true
+    checkOutLng?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -42044,6 +44498,10 @@ export namespace Prisma {
     ef2?: true
     logininfo?: true
     logoutinfo?: true
+    checkInLat?: true
+    checkInLng?: true
+    checkOutLat?: true
+    checkOutLng?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -42061,6 +44519,10 @@ export namespace Prisma {
     ef2?: true
     logininfo?: true
     logoutinfo?: true
+    checkInLat?: true
+    checkInLng?: true
+    checkOutLat?: true
+    checkOutLng?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -42104,6 +44566,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: AttendanceLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AttendanceLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: AttendanceLogMinAggregateInputType
@@ -42134,6 +44608,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: AttendanceLogCountAggregateInputType | true
+    _avg?: AttendanceLogAvgAggregateInputType
+    _sum?: AttendanceLogSumAggregateInputType
     _min?: AttendanceLogMinAggregateInputType
     _max?: AttendanceLogMaxAggregateInputType
   }
@@ -42151,9 +44627,15 @@ export namespace Prisma {
     ef2: string | null
     logininfo: string | null
     logoutinfo: string | null
+    checkInLat: number | null
+    checkInLng: number | null
+    checkOutLat: number | null
+    checkOutLng: number | null
     createdAt: Date
     updatedAt: Date
     _count: AttendanceLogCountAggregateOutputType | null
+    _avg: AttendanceLogAvgAggregateOutputType | null
+    _sum: AttendanceLogSumAggregateOutputType | null
     _min: AttendanceLogMinAggregateOutputType | null
     _max: AttendanceLogMaxAggregateOutputType | null
   }
@@ -42185,6 +44667,10 @@ export namespace Prisma {
     ef2?: boolean
     logininfo?: boolean
     logoutinfo?: boolean
+    checkInLat?: boolean
+    checkInLng?: boolean
+    checkOutLat?: boolean
+    checkOutLng?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -42203,6 +44689,10 @@ export namespace Prisma {
     ef2?: boolean
     logininfo?: boolean
     logoutinfo?: boolean
+    checkInLat?: boolean
+    checkInLng?: boolean
+    checkOutLat?: boolean
+    checkOutLng?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -42221,6 +44711,10 @@ export namespace Prisma {
     ef2?: boolean
     logininfo?: boolean
     logoutinfo?: boolean
+    checkInLat?: boolean
+    checkInLng?: boolean
+    checkOutLat?: boolean
+    checkOutLng?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -42239,11 +44733,15 @@ export namespace Prisma {
     ef2?: boolean
     logininfo?: boolean
     logoutinfo?: boolean
+    checkInLat?: boolean
+    checkInLng?: boolean
+    checkOutLat?: boolean
+    checkOutLng?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
+  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "checkInLat" | "checkInLng" | "checkOutLat" | "checkOutLng" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
   export type AttendanceLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -42272,6 +44770,10 @@ export namespace Prisma {
       ef2: string | null
       logininfo: string | null
       logoutinfo: string | null
+      checkInLat: number | null
+      checkInLng: number | null
+      checkOutLat: number | null
+      checkOutLng: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["attendanceLog"]>
@@ -42710,6 +45212,10 @@ export namespace Prisma {
     readonly ef2: FieldRef<"AttendanceLog", 'String'>
     readonly logininfo: FieldRef<"AttendanceLog", 'String'>
     readonly logoutinfo: FieldRef<"AttendanceLog", 'String'>
+    readonly checkInLat: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkInLng: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkOutLat: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkOutLng: FieldRef<"AttendanceLog", 'Float'>
     readonly createdAt: FieldRef<"AttendanceLog", 'DateTime'>
     readonly updatedAt: FieldRef<"AttendanceLog", 'DateTime'>
   }
@@ -43147,6 +45653,7 @@ export namespace Prisma {
     type: string | null
     dates: string | null
     reason: string | null
+    rejectionReason: string | null
     status: $Enums.LeaveStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -43158,6 +45665,7 @@ export namespace Prisma {
     type: string | null
     dates: string | null
     reason: string | null
+    rejectionReason: string | null
     status: $Enums.LeaveStatus | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -43169,6 +45677,7 @@ export namespace Prisma {
     type: number
     dates: number
     reason: number
+    rejectionReason: number
     status: number
     createdAt: number
     updatedAt: number
@@ -43182,6 +45691,7 @@ export namespace Prisma {
     type?: true
     dates?: true
     reason?: true
+    rejectionReason?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -43193,6 +45703,7 @@ export namespace Prisma {
     type?: true
     dates?: true
     reason?: true
+    rejectionReason?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -43204,6 +45715,7 @@ export namespace Prisma {
     type?: true
     dates?: true
     reason?: true
+    rejectionReason?: true
     status?: true
     createdAt?: true
     updatedAt?: true
@@ -43288,6 +45800,7 @@ export namespace Prisma {
     type: string | null
     dates: string | null
     reason: string | null
+    rejectionReason: string | null
     status: $Enums.LeaveStatus
     createdAt: Date
     updatedAt: Date
@@ -43316,6 +45829,7 @@ export namespace Prisma {
     type?: boolean
     dates?: boolean
     reason?: boolean
+    rejectionReason?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -43328,6 +45842,7 @@ export namespace Prisma {
     type?: boolean
     dates?: boolean
     reason?: boolean
+    rejectionReason?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -43340,6 +45855,7 @@ export namespace Prisma {
     type?: boolean
     dates?: boolean
     reason?: boolean
+    rejectionReason?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -43352,12 +45868,13 @@ export namespace Prisma {
     type?: boolean
     dates?: boolean
     reason?: boolean
+    rejectionReason?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LeaveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "dates" | "reason" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["leave"]>
+  export type LeaveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "dates" | "reason" | "rejectionReason" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["leave"]>
   export type LeaveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -43379,6 +45896,7 @@ export namespace Prisma {
       type: string | null
       dates: string | null
       reason: string | null
+      rejectionReason: string | null
       status: $Enums.LeaveStatus
       createdAt: Date
       updatedAt: Date
@@ -43811,6 +46329,7 @@ export namespace Prisma {
     readonly type: FieldRef<"Leave", 'String'>
     readonly dates: FieldRef<"Leave", 'String'>
     readonly reason: FieldRef<"Leave", 'String'>
+    readonly rejectionReason: FieldRef<"Leave", 'String'>
     readonly status: FieldRef<"Leave", 'LeaveStatus'>
     readonly createdAt: FieldRef<"Leave", 'DateTime'>
     readonly updatedAt: FieldRef<"Leave", 'DateTime'>
@@ -45416,6 +47935,9042 @@ export namespace Prisma {
 
 
   /**
+   * Model FellowTask
+   */
+
+  export type AggregateFellowTask = {
+    _count: FellowTaskCountAggregateOutputType | null
+    _min: FellowTaskMinAggregateOutputType | null
+    _max: FellowTaskMaxAggregateOutputType | null
+  }
+
+  export type FellowTaskMinAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    title: string | null
+    description: string | null
+    plannedDate: Date | null
+    status: string | null
+    isPlanned: boolean | null
+    completionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowTaskMaxAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    title: string | null
+    description: string | null
+    plannedDate: Date | null
+    status: string | null
+    isPlanned: boolean | null
+    completionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowTaskCountAggregateOutputType = {
+    id: number
+    fellowId: number
+    title: number
+    description: number
+    plannedDate: number
+    status: number
+    isPlanned: number
+    completionDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FellowTaskMinAggregateInputType = {
+    id?: true
+    fellowId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowTaskMaxAggregateInputType = {
+    id?: true
+    fellowId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowTaskCountAggregateInputType = {
+    id?: true
+    fellowId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FellowTaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowTask to aggregate.
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTasks to fetch.
+     */
+    orderBy?: FellowTaskOrderByWithRelationInput | FellowTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FellowTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FellowTasks
+    **/
+    _count?: true | FellowTaskCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FellowTaskMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FellowTaskMaxAggregateInputType
+  }
+
+  export type GetFellowTaskAggregateType<T extends FellowTaskAggregateArgs> = {
+        [P in keyof T & keyof AggregateFellowTask]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFellowTask[P]>
+      : GetScalarType<T[P], AggregateFellowTask[P]>
+  }
+
+
+
+
+  export type FellowTaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowTaskWhereInput
+    orderBy?: FellowTaskOrderByWithAggregationInput | FellowTaskOrderByWithAggregationInput[]
+    by: FellowTaskScalarFieldEnum[] | FellowTaskScalarFieldEnum
+    having?: FellowTaskScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FellowTaskCountAggregateInputType | true
+    _min?: FellowTaskMinAggregateInputType
+    _max?: FellowTaskMaxAggregateInputType
+  }
+
+  export type FellowTaskGroupByOutputType = {
+    id: string
+    fellowId: string
+    title: string
+    description: string | null
+    plannedDate: Date
+    status: string
+    isPlanned: boolean
+    completionDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FellowTaskCountAggregateOutputType | null
+    _min: FellowTaskMinAggregateOutputType | null
+    _max: FellowTaskMaxAggregateOutputType | null
+  }
+
+  type GetFellowTaskGroupByPayload<T extends FellowTaskGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FellowTaskGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FellowTaskGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FellowTaskGroupByOutputType[P]>
+            : GetScalarType<T[P], FellowTaskGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FellowTaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    comments?: boolean | FellowTask$commentsArgs<ExtArgs>
+    _count?: boolean | FellowTaskCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTask"]>
+
+  export type FellowTaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTask"]>
+
+  export type FellowTaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTask"]>
+
+  export type FellowTaskSelectScalar = {
+    id?: boolean
+    fellowId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FellowTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "title" | "description" | "plannedDate" | "status" | "isPlanned" | "completionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowTask"]>
+  export type FellowTaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    comments?: boolean | FellowTask$commentsArgs<ExtArgs>
+    _count?: boolean | FellowTaskCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FellowTaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+  }
+  export type FellowTaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+  }
+
+  export type $FellowTaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FellowTask"
+    objects: {
+      fellow: Prisma.$FellowPayload<ExtArgs>
+      comments: Prisma.$FellowTaskCommentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fellowId: string
+      title: string
+      description: string | null
+      plannedDate: Date
+      status: string
+      isPlanned: boolean
+      completionDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fellowTask"]>
+    composites: {}
+  }
+
+  type FellowTaskGetPayload<S extends boolean | null | undefined | FellowTaskDefaultArgs> = $Result.GetResult<Prisma.$FellowTaskPayload, S>
+
+  type FellowTaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FellowTaskFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FellowTaskCountAggregateInputType | true
+    }
+
+  export interface FellowTaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FellowTask'], meta: { name: 'FellowTask' } }
+    /**
+     * Find zero or one FellowTask that matches the filter.
+     * @param {FellowTaskFindUniqueArgs} args - Arguments to find a FellowTask
+     * @example
+     * // Get one FellowTask
+     * const fellowTask = await prisma.fellowTask.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FellowTaskFindUniqueArgs>(args: SelectSubset<T, FellowTaskFindUniqueArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FellowTask that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FellowTaskFindUniqueOrThrowArgs} args - Arguments to find a FellowTask
+     * @example
+     * // Get one FellowTask
+     * const fellowTask = await prisma.fellowTask.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FellowTaskFindUniqueOrThrowArgs>(args: SelectSubset<T, FellowTaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowTask that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskFindFirstArgs} args - Arguments to find a FellowTask
+     * @example
+     * // Get one FellowTask
+     * const fellowTask = await prisma.fellowTask.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FellowTaskFindFirstArgs>(args?: SelectSubset<T, FellowTaskFindFirstArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowTask that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskFindFirstOrThrowArgs} args - Arguments to find a FellowTask
+     * @example
+     * // Get one FellowTask
+     * const fellowTask = await prisma.fellowTask.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FellowTaskFindFirstOrThrowArgs>(args?: SelectSubset<T, FellowTaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FellowTasks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FellowTasks
+     * const fellowTasks = await prisma.fellowTask.findMany()
+     * 
+     * // Get first 10 FellowTasks
+     * const fellowTasks = await prisma.fellowTask.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fellowTaskWithIdOnly = await prisma.fellowTask.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FellowTaskFindManyArgs>(args?: SelectSubset<T, FellowTaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FellowTask.
+     * @param {FellowTaskCreateArgs} args - Arguments to create a FellowTask.
+     * @example
+     * // Create one FellowTask
+     * const FellowTask = await prisma.fellowTask.create({
+     *   data: {
+     *     // ... data to create a FellowTask
+     *   }
+     * })
+     * 
+     */
+    create<T extends FellowTaskCreateArgs>(args: SelectSubset<T, FellowTaskCreateArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FellowTasks.
+     * @param {FellowTaskCreateManyArgs} args - Arguments to create many FellowTasks.
+     * @example
+     * // Create many FellowTasks
+     * const fellowTask = await prisma.fellowTask.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FellowTaskCreateManyArgs>(args?: SelectSubset<T, FellowTaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FellowTasks and returns the data saved in the database.
+     * @param {FellowTaskCreateManyAndReturnArgs} args - Arguments to create many FellowTasks.
+     * @example
+     * // Create many FellowTasks
+     * const fellowTask = await prisma.fellowTask.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FellowTasks and only return the `id`
+     * const fellowTaskWithIdOnly = await prisma.fellowTask.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FellowTaskCreateManyAndReturnArgs>(args?: SelectSubset<T, FellowTaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FellowTask.
+     * @param {FellowTaskDeleteArgs} args - Arguments to delete one FellowTask.
+     * @example
+     * // Delete one FellowTask
+     * const FellowTask = await prisma.fellowTask.delete({
+     *   where: {
+     *     // ... filter to delete one FellowTask
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FellowTaskDeleteArgs>(args: SelectSubset<T, FellowTaskDeleteArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FellowTask.
+     * @param {FellowTaskUpdateArgs} args - Arguments to update one FellowTask.
+     * @example
+     * // Update one FellowTask
+     * const fellowTask = await prisma.fellowTask.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FellowTaskUpdateArgs>(args: SelectSubset<T, FellowTaskUpdateArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FellowTasks.
+     * @param {FellowTaskDeleteManyArgs} args - Arguments to filter FellowTasks to delete.
+     * @example
+     * // Delete a few FellowTasks
+     * const { count } = await prisma.fellowTask.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FellowTaskDeleteManyArgs>(args?: SelectSubset<T, FellowTaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowTasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FellowTasks
+     * const fellowTask = await prisma.fellowTask.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FellowTaskUpdateManyArgs>(args: SelectSubset<T, FellowTaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowTasks and returns the data updated in the database.
+     * @param {FellowTaskUpdateManyAndReturnArgs} args - Arguments to update many FellowTasks.
+     * @example
+     * // Update many FellowTasks
+     * const fellowTask = await prisma.fellowTask.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FellowTasks and only return the `id`
+     * const fellowTaskWithIdOnly = await prisma.fellowTask.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FellowTaskUpdateManyAndReturnArgs>(args: SelectSubset<T, FellowTaskUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FellowTask.
+     * @param {FellowTaskUpsertArgs} args - Arguments to update or create a FellowTask.
+     * @example
+     * // Update or create a FellowTask
+     * const fellowTask = await prisma.fellowTask.upsert({
+     *   create: {
+     *     // ... data to create a FellowTask
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FellowTask we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FellowTaskUpsertArgs>(args: SelectSubset<T, FellowTaskUpsertArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FellowTasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCountArgs} args - Arguments to filter FellowTasks to count.
+     * @example
+     * // Count the number of FellowTasks
+     * const count = await prisma.fellowTask.count({
+     *   where: {
+     *     // ... the filter for the FellowTasks we want to count
+     *   }
+     * })
+    **/
+    count<T extends FellowTaskCountArgs>(
+      args?: Subset<T, FellowTaskCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FellowTaskCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FellowTask.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FellowTaskAggregateArgs>(args: Subset<T, FellowTaskAggregateArgs>): Prisma.PrismaPromise<GetFellowTaskAggregateType<T>>
+
+    /**
+     * Group by FellowTask.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FellowTaskGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FellowTaskGroupByArgs['orderBy'] }
+        : { orderBy?: FellowTaskGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FellowTaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFellowTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FellowTask model
+   */
+  readonly fields: FellowTaskFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FellowTask.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FellowTaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fellow<T extends FellowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FellowDefaultArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    comments<T extends FellowTask$commentsArgs<ExtArgs> = {}>(args?: Subset<T, FellowTask$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FellowTask model
+   */
+  interface FellowTaskFieldRefs {
+    readonly id: FieldRef<"FellowTask", 'String'>
+    readonly fellowId: FieldRef<"FellowTask", 'String'>
+    readonly title: FieldRef<"FellowTask", 'String'>
+    readonly description: FieldRef<"FellowTask", 'String'>
+    readonly plannedDate: FieldRef<"FellowTask", 'DateTime'>
+    readonly status: FieldRef<"FellowTask", 'String'>
+    readonly isPlanned: FieldRef<"FellowTask", 'Boolean'>
+    readonly completionDate: FieldRef<"FellowTask", 'DateTime'>
+    readonly createdAt: FieldRef<"FellowTask", 'DateTime'>
+    readonly updatedAt: FieldRef<"FellowTask", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FellowTask findUnique
+   */
+  export type FellowTaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTask to fetch.
+     */
+    where: FellowTaskWhereUniqueInput
+  }
+
+  /**
+   * FellowTask findUniqueOrThrow
+   */
+  export type FellowTaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTask to fetch.
+     */
+    where: FellowTaskWhereUniqueInput
+  }
+
+  /**
+   * FellowTask findFirst
+   */
+  export type FellowTaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTask to fetch.
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTasks to fetch.
+     */
+    orderBy?: FellowTaskOrderByWithRelationInput | FellowTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowTasks.
+     */
+    cursor?: FellowTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTasks.
+     */
+    distinct?: FellowTaskScalarFieldEnum | FellowTaskScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTask findFirstOrThrow
+   */
+  export type FellowTaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTask to fetch.
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTasks to fetch.
+     */
+    orderBy?: FellowTaskOrderByWithRelationInput | FellowTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowTasks.
+     */
+    cursor?: FellowTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTasks.
+     */
+    distinct?: FellowTaskScalarFieldEnum | FellowTaskScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTask findMany
+   */
+  export type FellowTaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTasks to fetch.
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTasks to fetch.
+     */
+    orderBy?: FellowTaskOrderByWithRelationInput | FellowTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FellowTasks.
+     */
+    cursor?: FellowTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTasks.
+     */
+    distinct?: FellowTaskScalarFieldEnum | FellowTaskScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTask create
+   */
+  export type FellowTaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FellowTask.
+     */
+    data: XOR<FellowTaskCreateInput, FellowTaskUncheckedCreateInput>
+  }
+
+  /**
+   * FellowTask createMany
+   */
+  export type FellowTaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FellowTasks.
+     */
+    data: FellowTaskCreateManyInput | FellowTaskCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FellowTask createManyAndReturn
+   */
+  export type FellowTaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * The data used to create many FellowTasks.
+     */
+    data: FellowTaskCreateManyInput | FellowTaskCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowTask update
+   */
+  export type FellowTaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FellowTask.
+     */
+    data: XOR<FellowTaskUpdateInput, FellowTaskUncheckedUpdateInput>
+    /**
+     * Choose, which FellowTask to update.
+     */
+    where: FellowTaskWhereUniqueInput
+  }
+
+  /**
+   * FellowTask updateMany
+   */
+  export type FellowTaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FellowTasks.
+     */
+    data: XOR<FellowTaskUpdateManyMutationInput, FellowTaskUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowTasks to update
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * Limit how many FellowTasks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowTask updateManyAndReturn
+   */
+  export type FellowTaskUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * The data used to update FellowTasks.
+     */
+    data: XOR<FellowTaskUpdateManyMutationInput, FellowTaskUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowTasks to update
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * Limit how many FellowTasks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowTask upsert
+   */
+  export type FellowTaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FellowTask to update in case it exists.
+     */
+    where: FellowTaskWhereUniqueInput
+    /**
+     * In case the FellowTask found by the `where` argument doesn't exist, create a new FellowTask with this data.
+     */
+    create: XOR<FellowTaskCreateInput, FellowTaskUncheckedCreateInput>
+    /**
+     * In case the FellowTask was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FellowTaskUpdateInput, FellowTaskUncheckedUpdateInput>
+  }
+
+  /**
+   * FellowTask delete
+   */
+  export type FellowTaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+    /**
+     * Filter which FellowTask to delete.
+     */
+    where: FellowTaskWhereUniqueInput
+  }
+
+  /**
+   * FellowTask deleteMany
+   */
+  export type FellowTaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowTasks to delete
+     */
+    where?: FellowTaskWhereInput
+    /**
+     * Limit how many FellowTasks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowTask.comments
+   */
+  export type FellowTask$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    where?: FellowTaskCommentWhereInput
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    cursor?: FellowTaskCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowTaskCommentScalarFieldEnum | FellowTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTask without action
+   */
+  export type FellowTaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTask
+     */
+    select?: FellowTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTask
+     */
+    omit?: FellowTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FellowTaskComment
+   */
+
+  export type AggregateFellowTaskComment = {
+    _count: FellowTaskCommentCountAggregateOutputType | null
+    _min: FellowTaskCommentMinAggregateOutputType | null
+    _max: FellowTaskCommentMaxAggregateOutputType | null
+  }
+
+  export type FellowTaskCommentMinAggregateOutputType = {
+    id: string | null
+    taskId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowTaskCommentMaxAggregateOutputType = {
+    id: string | null
+    taskId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowTaskCommentCountAggregateOutputType = {
+    id: number
+    taskId: number
+    authorId: number
+    text: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FellowTaskCommentMinAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowTaskCommentMaxAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowTaskCommentCountAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FellowTaskCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowTaskComment to aggregate.
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTaskComments to fetch.
+     */
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FellowTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FellowTaskComments
+    **/
+    _count?: true | FellowTaskCommentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FellowTaskCommentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FellowTaskCommentMaxAggregateInputType
+  }
+
+  export type GetFellowTaskCommentAggregateType<T extends FellowTaskCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateFellowTaskComment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFellowTaskComment[P]>
+      : GetScalarType<T[P], AggregateFellowTaskComment[P]>
+  }
+
+
+
+
+  export type FellowTaskCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowTaskCommentWhereInput
+    orderBy?: FellowTaskCommentOrderByWithAggregationInput | FellowTaskCommentOrderByWithAggregationInput[]
+    by: FellowTaskCommentScalarFieldEnum[] | FellowTaskCommentScalarFieldEnum
+    having?: FellowTaskCommentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FellowTaskCommentCountAggregateInputType | true
+    _min?: FellowTaskCommentMinAggregateInputType
+    _max?: FellowTaskCommentMaxAggregateInputType
+  }
+
+  export type FellowTaskCommentGroupByOutputType = {
+    id: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FellowTaskCommentCountAggregateOutputType | null
+    _min: FellowTaskCommentMinAggregateOutputType | null
+    _max: FellowTaskCommentMaxAggregateOutputType | null
+  }
+
+  type GetFellowTaskCommentGroupByPayload<T extends FellowTaskCommentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FellowTaskCommentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FellowTaskCommentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FellowTaskCommentGroupByOutputType[P]>
+            : GetScalarType<T[P], FellowTaskCommentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FellowTaskCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTaskComment"]>
+
+  export type FellowTaskCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTaskComment"]>
+
+  export type FellowTaskCommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowTaskComment"]>
+
+  export type FellowTaskCommentSelectScalar = {
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FellowTaskCommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "taskId" | "authorId" | "text" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowTaskComment"]>
+  export type FellowTaskCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FellowTaskCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FellowTaskCommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | FellowTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FellowTaskCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FellowTaskComment"
+    objects: {
+      task: Prisma.$FellowTaskPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      taskId: string
+      authorId: string
+      text: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fellowTaskComment"]>
+    composites: {}
+  }
+
+  type FellowTaskCommentGetPayload<S extends boolean | null | undefined | FellowTaskCommentDefaultArgs> = $Result.GetResult<Prisma.$FellowTaskCommentPayload, S>
+
+  type FellowTaskCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FellowTaskCommentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FellowTaskCommentCountAggregateInputType | true
+    }
+
+  export interface FellowTaskCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FellowTaskComment'], meta: { name: 'FellowTaskComment' } }
+    /**
+     * Find zero or one FellowTaskComment that matches the filter.
+     * @param {FellowTaskCommentFindUniqueArgs} args - Arguments to find a FellowTaskComment
+     * @example
+     * // Get one FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FellowTaskCommentFindUniqueArgs>(args: SelectSubset<T, FellowTaskCommentFindUniqueArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FellowTaskComment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FellowTaskCommentFindUniqueOrThrowArgs} args - Arguments to find a FellowTaskComment
+     * @example
+     * // Get one FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FellowTaskCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, FellowTaskCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowTaskComment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentFindFirstArgs} args - Arguments to find a FellowTaskComment
+     * @example
+     * // Get one FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FellowTaskCommentFindFirstArgs>(args?: SelectSubset<T, FellowTaskCommentFindFirstArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowTaskComment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentFindFirstOrThrowArgs} args - Arguments to find a FellowTaskComment
+     * @example
+     * // Get one FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FellowTaskCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, FellowTaskCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FellowTaskComments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FellowTaskComments
+     * const fellowTaskComments = await prisma.fellowTaskComment.findMany()
+     * 
+     * // Get first 10 FellowTaskComments
+     * const fellowTaskComments = await prisma.fellowTaskComment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fellowTaskCommentWithIdOnly = await prisma.fellowTaskComment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FellowTaskCommentFindManyArgs>(args?: SelectSubset<T, FellowTaskCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FellowTaskComment.
+     * @param {FellowTaskCommentCreateArgs} args - Arguments to create a FellowTaskComment.
+     * @example
+     * // Create one FellowTaskComment
+     * const FellowTaskComment = await prisma.fellowTaskComment.create({
+     *   data: {
+     *     // ... data to create a FellowTaskComment
+     *   }
+     * })
+     * 
+     */
+    create<T extends FellowTaskCommentCreateArgs>(args: SelectSubset<T, FellowTaskCommentCreateArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FellowTaskComments.
+     * @param {FellowTaskCommentCreateManyArgs} args - Arguments to create many FellowTaskComments.
+     * @example
+     * // Create many FellowTaskComments
+     * const fellowTaskComment = await prisma.fellowTaskComment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FellowTaskCommentCreateManyArgs>(args?: SelectSubset<T, FellowTaskCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FellowTaskComments and returns the data saved in the database.
+     * @param {FellowTaskCommentCreateManyAndReturnArgs} args - Arguments to create many FellowTaskComments.
+     * @example
+     * // Create many FellowTaskComments
+     * const fellowTaskComment = await prisma.fellowTaskComment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FellowTaskComments and only return the `id`
+     * const fellowTaskCommentWithIdOnly = await prisma.fellowTaskComment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FellowTaskCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, FellowTaskCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FellowTaskComment.
+     * @param {FellowTaskCommentDeleteArgs} args - Arguments to delete one FellowTaskComment.
+     * @example
+     * // Delete one FellowTaskComment
+     * const FellowTaskComment = await prisma.fellowTaskComment.delete({
+     *   where: {
+     *     // ... filter to delete one FellowTaskComment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FellowTaskCommentDeleteArgs>(args: SelectSubset<T, FellowTaskCommentDeleteArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FellowTaskComment.
+     * @param {FellowTaskCommentUpdateArgs} args - Arguments to update one FellowTaskComment.
+     * @example
+     * // Update one FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FellowTaskCommentUpdateArgs>(args: SelectSubset<T, FellowTaskCommentUpdateArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FellowTaskComments.
+     * @param {FellowTaskCommentDeleteManyArgs} args - Arguments to filter FellowTaskComments to delete.
+     * @example
+     * // Delete a few FellowTaskComments
+     * const { count } = await prisma.fellowTaskComment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FellowTaskCommentDeleteManyArgs>(args?: SelectSubset<T, FellowTaskCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowTaskComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FellowTaskComments
+     * const fellowTaskComment = await prisma.fellowTaskComment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FellowTaskCommentUpdateManyArgs>(args: SelectSubset<T, FellowTaskCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowTaskComments and returns the data updated in the database.
+     * @param {FellowTaskCommentUpdateManyAndReturnArgs} args - Arguments to update many FellowTaskComments.
+     * @example
+     * // Update many FellowTaskComments
+     * const fellowTaskComment = await prisma.fellowTaskComment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FellowTaskComments and only return the `id`
+     * const fellowTaskCommentWithIdOnly = await prisma.fellowTaskComment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FellowTaskCommentUpdateManyAndReturnArgs>(args: SelectSubset<T, FellowTaskCommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FellowTaskComment.
+     * @param {FellowTaskCommentUpsertArgs} args - Arguments to update or create a FellowTaskComment.
+     * @example
+     * // Update or create a FellowTaskComment
+     * const fellowTaskComment = await prisma.fellowTaskComment.upsert({
+     *   create: {
+     *     // ... data to create a FellowTaskComment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FellowTaskComment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FellowTaskCommentUpsertArgs>(args: SelectSubset<T, FellowTaskCommentUpsertArgs<ExtArgs>>): Prisma__FellowTaskCommentClient<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FellowTaskComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentCountArgs} args - Arguments to filter FellowTaskComments to count.
+     * @example
+     * // Count the number of FellowTaskComments
+     * const count = await prisma.fellowTaskComment.count({
+     *   where: {
+     *     // ... the filter for the FellowTaskComments we want to count
+     *   }
+     * })
+    **/
+    count<T extends FellowTaskCommentCountArgs>(
+      args?: Subset<T, FellowTaskCommentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FellowTaskCommentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FellowTaskComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FellowTaskCommentAggregateArgs>(args: Subset<T, FellowTaskCommentAggregateArgs>): Prisma.PrismaPromise<GetFellowTaskCommentAggregateType<T>>
+
+    /**
+     * Group by FellowTaskComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowTaskCommentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FellowTaskCommentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FellowTaskCommentGroupByArgs['orderBy'] }
+        : { orderBy?: FellowTaskCommentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FellowTaskCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFellowTaskCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FellowTaskComment model
+   */
+  readonly fields: FellowTaskCommentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FellowTaskComment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FellowTaskCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    task<T extends FellowTaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FellowTaskDefaultArgs<ExtArgs>>): Prisma__FellowTaskClient<$Result.GetResult<Prisma.$FellowTaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FellowTaskComment model
+   */
+  interface FellowTaskCommentFieldRefs {
+    readonly id: FieldRef<"FellowTaskComment", 'String'>
+    readonly taskId: FieldRef<"FellowTaskComment", 'String'>
+    readonly authorId: FieldRef<"FellowTaskComment", 'String'>
+    readonly text: FieldRef<"FellowTaskComment", 'String'>
+    readonly createdAt: FieldRef<"FellowTaskComment", 'DateTime'>
+    readonly updatedAt: FieldRef<"FellowTaskComment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FellowTaskComment findUnique
+   */
+  export type FellowTaskCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTaskComment to fetch.
+     */
+    where: FellowTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * FellowTaskComment findUniqueOrThrow
+   */
+  export type FellowTaskCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTaskComment to fetch.
+     */
+    where: FellowTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * FellowTaskComment findFirst
+   */
+  export type FellowTaskCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTaskComment to fetch.
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTaskComments to fetch.
+     */
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowTaskComments.
+     */
+    cursor?: FellowTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTaskComments.
+     */
+    distinct?: FellowTaskCommentScalarFieldEnum | FellowTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTaskComment findFirstOrThrow
+   */
+  export type FellowTaskCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTaskComment to fetch.
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTaskComments to fetch.
+     */
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowTaskComments.
+     */
+    cursor?: FellowTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTaskComments.
+     */
+    distinct?: FellowTaskCommentScalarFieldEnum | FellowTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTaskComment findMany
+   */
+  export type FellowTaskCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowTaskComments to fetch.
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowTaskComments to fetch.
+     */
+    orderBy?: FellowTaskCommentOrderByWithRelationInput | FellowTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FellowTaskComments.
+     */
+    cursor?: FellowTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowTaskComments.
+     */
+    distinct?: FellowTaskCommentScalarFieldEnum | FellowTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * FellowTaskComment create
+   */
+  export type FellowTaskCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FellowTaskComment.
+     */
+    data: XOR<FellowTaskCommentCreateInput, FellowTaskCommentUncheckedCreateInput>
+  }
+
+  /**
+   * FellowTaskComment createMany
+   */
+  export type FellowTaskCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FellowTaskComments.
+     */
+    data: FellowTaskCommentCreateManyInput | FellowTaskCommentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FellowTaskComment createManyAndReturn
+   */
+  export type FellowTaskCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * The data used to create many FellowTaskComments.
+     */
+    data: FellowTaskCommentCreateManyInput | FellowTaskCommentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowTaskComment update
+   */
+  export type FellowTaskCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FellowTaskComment.
+     */
+    data: XOR<FellowTaskCommentUpdateInput, FellowTaskCommentUncheckedUpdateInput>
+    /**
+     * Choose, which FellowTaskComment to update.
+     */
+    where: FellowTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * FellowTaskComment updateMany
+   */
+  export type FellowTaskCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FellowTaskComments.
+     */
+    data: XOR<FellowTaskCommentUpdateManyMutationInput, FellowTaskCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowTaskComments to update
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * Limit how many FellowTaskComments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowTaskComment updateManyAndReturn
+   */
+  export type FellowTaskCommentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * The data used to update FellowTaskComments.
+     */
+    data: XOR<FellowTaskCommentUpdateManyMutationInput, FellowTaskCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowTaskComments to update
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * Limit how many FellowTaskComments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowTaskComment upsert
+   */
+  export type FellowTaskCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FellowTaskComment to update in case it exists.
+     */
+    where: FellowTaskCommentWhereUniqueInput
+    /**
+     * In case the FellowTaskComment found by the `where` argument doesn't exist, create a new FellowTaskComment with this data.
+     */
+    create: XOR<FellowTaskCommentCreateInput, FellowTaskCommentUncheckedCreateInput>
+    /**
+     * In case the FellowTaskComment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FellowTaskCommentUpdateInput, FellowTaskCommentUncheckedUpdateInput>
+  }
+
+  /**
+   * FellowTaskComment delete
+   */
+  export type FellowTaskCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter which FellowTaskComment to delete.
+     */
+    where: FellowTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * FellowTaskComment deleteMany
+   */
+  export type FellowTaskCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowTaskComments to delete
+     */
+    where?: FellowTaskCommentWhereInput
+    /**
+     * Limit how many FellowTaskComments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowTaskComment without action
+   */
+  export type FellowTaskCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowTaskComment
+     */
+    select?: FellowTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowTaskComment
+     */
+    omit?: FellowTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowTaskCommentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ResilienceSurvey
+   */
+
+  export type AggregateResilienceSurvey = {
+    _count: ResilienceSurveyCountAggregateOutputType | null
+    _avg: ResilienceSurveyAvgAggregateOutputType | null
+    _sum: ResilienceSurveySumAggregateOutputType | null
+    _min: ResilienceSurveyMinAggregateOutputType | null
+    _max: ResilienceSurveyMaxAggregateOutputType | null
+  }
+
+  export type ResilienceSurveyAvgAggregateOutputType = {
+    lifeSatisfactionScore: number | null
+    planningScore: number | null
+    disasterReadinessScore: number | null
+    disasterBeliefsScore: number | null
+    disasterMindsetScore: number | null
+    financialResilienceScore: number | null
+    healthResilienceScore: number | null
+    socialConnectednessScore: number | null
+    socialProtectionScore: number | null
+    disasterWarningScore: number | null
+    vulnerabilityScore: number | null
+    overallScore: number | null
+  }
+
+  export type ResilienceSurveySumAggregateOutputType = {
+    lifeSatisfactionScore: number | null
+    planningScore: number | null
+    disasterReadinessScore: number | null
+    disasterBeliefsScore: number | null
+    disasterMindsetScore: number | null
+    financialResilienceScore: number | null
+    healthResilienceScore: number | null
+    socialConnectednessScore: number | null
+    socialProtectionScore: number | null
+    disasterWarningScore: number | null
+    vulnerabilityScore: number | null
+    overallScore: number | null
+  }
+
+  export type ResilienceSurveyMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    lifeSatisfactionScore: number | null
+    planningScore: number | null
+    disasterReadinessScore: number | null
+    disasterBeliefsScore: number | null
+    disasterMindsetScore: number | null
+    financialResilienceScore: number | null
+    healthResilienceScore: number | null
+    socialConnectednessScore: number | null
+    socialProtectionScore: number | null
+    disasterWarningScore: number | null
+    vulnerabilityScore: number | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ResilienceSurveyMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    lifeSatisfactionScore: number | null
+    planningScore: number | null
+    disasterReadinessScore: number | null
+    disasterBeliefsScore: number | null
+    disasterMindsetScore: number | null
+    financialResilienceScore: number | null
+    healthResilienceScore: number | null
+    socialConnectednessScore: number | null
+    socialProtectionScore: number | null
+    disasterWarningScore: number | null
+    vulnerabilityScore: number | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ResilienceSurveyCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    surveyDate: number
+    responses: number
+    lifeSatisfactionScore: number
+    planningScore: number
+    disasterReadinessScore: number
+    disasterBeliefsScore: number
+    disasterMindsetScore: number
+    financialResilienceScore: number
+    healthResilienceScore: number
+    socialConnectednessScore: number
+    socialProtectionScore: number
+    disasterWarningScore: number
+    vulnerabilityScore: number
+    overallScore: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ResilienceSurveyAvgAggregateInputType = {
+    lifeSatisfactionScore?: true
+    planningScore?: true
+    disasterReadinessScore?: true
+    disasterBeliefsScore?: true
+    disasterMindsetScore?: true
+    financialResilienceScore?: true
+    healthResilienceScore?: true
+    socialConnectednessScore?: true
+    socialProtectionScore?: true
+    disasterWarningScore?: true
+    vulnerabilityScore?: true
+    overallScore?: true
+  }
+
+  export type ResilienceSurveySumAggregateInputType = {
+    lifeSatisfactionScore?: true
+    planningScore?: true
+    disasterReadinessScore?: true
+    disasterBeliefsScore?: true
+    disasterMindsetScore?: true
+    financialResilienceScore?: true
+    healthResilienceScore?: true
+    socialConnectednessScore?: true
+    socialProtectionScore?: true
+    disasterWarningScore?: true
+    vulnerabilityScore?: true
+    overallScore?: true
+  }
+
+  export type ResilienceSurveyMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    lifeSatisfactionScore?: true
+    planningScore?: true
+    disasterReadinessScore?: true
+    disasterBeliefsScore?: true
+    disasterMindsetScore?: true
+    financialResilienceScore?: true
+    healthResilienceScore?: true
+    socialConnectednessScore?: true
+    socialProtectionScore?: true
+    disasterWarningScore?: true
+    vulnerabilityScore?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ResilienceSurveyMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    lifeSatisfactionScore?: true
+    planningScore?: true
+    disasterReadinessScore?: true
+    disasterBeliefsScore?: true
+    disasterMindsetScore?: true
+    financialResilienceScore?: true
+    healthResilienceScore?: true
+    socialConnectednessScore?: true
+    socialProtectionScore?: true
+    disasterWarningScore?: true
+    vulnerabilityScore?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ResilienceSurveyCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    responses?: true
+    lifeSatisfactionScore?: true
+    planningScore?: true
+    disasterReadinessScore?: true
+    disasterBeliefsScore?: true
+    disasterMindsetScore?: true
+    financialResilienceScore?: true
+    healthResilienceScore?: true
+    socialConnectednessScore?: true
+    socialProtectionScore?: true
+    disasterWarningScore?: true
+    vulnerabilityScore?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ResilienceSurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ResilienceSurvey to aggregate.
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResilienceSurveys to fetch.
+     */
+    orderBy?: ResilienceSurveyOrderByWithRelationInput | ResilienceSurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ResilienceSurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResilienceSurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResilienceSurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ResilienceSurveys
+    **/
+    _count?: true | ResilienceSurveyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ResilienceSurveyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ResilienceSurveySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ResilienceSurveyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ResilienceSurveyMaxAggregateInputType
+  }
+
+  export type GetResilienceSurveyAggregateType<T extends ResilienceSurveyAggregateArgs> = {
+        [P in keyof T & keyof AggregateResilienceSurvey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateResilienceSurvey[P]>
+      : GetScalarType<T[P], AggregateResilienceSurvey[P]>
+  }
+
+
+
+
+  export type ResilienceSurveyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ResilienceSurveyWhereInput
+    orderBy?: ResilienceSurveyOrderByWithAggregationInput | ResilienceSurveyOrderByWithAggregationInput[]
+    by: ResilienceSurveyScalarFieldEnum[] | ResilienceSurveyScalarFieldEnum
+    having?: ResilienceSurveyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ResilienceSurveyCountAggregateInputType | true
+    _avg?: ResilienceSurveyAvgAggregateInputType
+    _sum?: ResilienceSurveySumAggregateInputType
+    _min?: ResilienceSurveyMinAggregateInputType
+    _max?: ResilienceSurveyMaxAggregateInputType
+  }
+
+  export type ResilienceSurveyGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    surveyDate: Date
+    responses: JsonValue
+    lifeSatisfactionScore: number
+    planningScore: number
+    disasterReadinessScore: number
+    disasterBeliefsScore: number
+    disasterMindsetScore: number
+    financialResilienceScore: number
+    healthResilienceScore: number
+    socialConnectednessScore: number
+    socialProtectionScore: number
+    disasterWarningScore: number
+    vulnerabilityScore: number
+    overallScore: number
+    createdAt: Date
+    updatedAt: Date
+    _count: ResilienceSurveyCountAggregateOutputType | null
+    _avg: ResilienceSurveyAvgAggregateOutputType | null
+    _sum: ResilienceSurveySumAggregateOutputType | null
+    _min: ResilienceSurveyMinAggregateOutputType | null
+    _max: ResilienceSurveyMaxAggregateOutputType | null
+  }
+
+  type GetResilienceSurveyGroupByPayload<T extends ResilienceSurveyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ResilienceSurveyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ResilienceSurveyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ResilienceSurveyGroupByOutputType[P]>
+            : GetScalarType<T[P], ResilienceSurveyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ResilienceSurveySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    lifeSatisfactionScore?: boolean
+    planningScore?: boolean
+    disasterReadinessScore?: boolean
+    disasterBeliefsScore?: boolean
+    disasterMindsetScore?: boolean
+    financialResilienceScore?: boolean
+    healthResilienceScore?: boolean
+    socialConnectednessScore?: boolean
+    socialProtectionScore?: boolean
+    disasterWarningScore?: boolean
+    vulnerabilityScore?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["resilienceSurvey"]>
+
+  export type ResilienceSurveySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    lifeSatisfactionScore?: boolean
+    planningScore?: boolean
+    disasterReadinessScore?: boolean
+    disasterBeliefsScore?: boolean
+    disasterMindsetScore?: boolean
+    financialResilienceScore?: boolean
+    healthResilienceScore?: boolean
+    socialConnectednessScore?: boolean
+    socialProtectionScore?: boolean
+    disasterWarningScore?: boolean
+    vulnerabilityScore?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["resilienceSurvey"]>
+
+  export type ResilienceSurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    lifeSatisfactionScore?: boolean
+    planningScore?: boolean
+    disasterReadinessScore?: boolean
+    disasterBeliefsScore?: boolean
+    disasterMindsetScore?: boolean
+    financialResilienceScore?: boolean
+    healthResilienceScore?: boolean
+    socialConnectednessScore?: boolean
+    socialProtectionScore?: boolean
+    disasterWarningScore?: boolean
+    vulnerabilityScore?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["resilienceSurvey"]>
+
+  export type ResilienceSurveySelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    lifeSatisfactionScore?: boolean
+    planningScore?: boolean
+    disasterReadinessScore?: boolean
+    disasterBeliefsScore?: boolean
+    disasterMindsetScore?: boolean
+    financialResilienceScore?: boolean
+    healthResilienceScore?: boolean
+    socialConnectednessScore?: boolean
+    socialProtectionScore?: boolean
+    disasterWarningScore?: boolean
+    vulnerabilityScore?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ResilienceSurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "surveyDate" | "responses" | "lifeSatisfactionScore" | "planningScore" | "disasterReadinessScore" | "disasterBeliefsScore" | "disasterMindsetScore" | "financialResilienceScore" | "healthResilienceScore" | "socialConnectednessScore" | "socialProtectionScore" | "disasterWarningScore" | "vulnerabilityScore" | "overallScore" | "createdAt" | "updatedAt", ExtArgs["result"]["resilienceSurvey"]>
+  export type ResilienceSurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type ResilienceSurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type ResilienceSurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $ResilienceSurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ResilienceSurvey"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      surveyDate: Date
+      responses: Prisma.JsonValue
+      lifeSatisfactionScore: number
+      planningScore: number
+      disasterReadinessScore: number
+      disasterBeliefsScore: number
+      disasterMindsetScore: number
+      financialResilienceScore: number
+      healthResilienceScore: number
+      socialConnectednessScore: number
+      socialProtectionScore: number
+      disasterWarningScore: number
+      vulnerabilityScore: number
+      overallScore: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["resilienceSurvey"]>
+    composites: {}
+  }
+
+  type ResilienceSurveyGetPayload<S extends boolean | null | undefined | ResilienceSurveyDefaultArgs> = $Result.GetResult<Prisma.$ResilienceSurveyPayload, S>
+
+  type ResilienceSurveyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ResilienceSurveyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ResilienceSurveyCountAggregateInputType | true
+    }
+
+  export interface ResilienceSurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ResilienceSurvey'], meta: { name: 'ResilienceSurvey' } }
+    /**
+     * Find zero or one ResilienceSurvey that matches the filter.
+     * @param {ResilienceSurveyFindUniqueArgs} args - Arguments to find a ResilienceSurvey
+     * @example
+     * // Get one ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ResilienceSurveyFindUniqueArgs>(args: SelectSubset<T, ResilienceSurveyFindUniqueArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ResilienceSurvey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ResilienceSurveyFindUniqueOrThrowArgs} args - Arguments to find a ResilienceSurvey
+     * @example
+     * // Get one ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ResilienceSurveyFindUniqueOrThrowArgs>(args: SelectSubset<T, ResilienceSurveyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ResilienceSurvey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyFindFirstArgs} args - Arguments to find a ResilienceSurvey
+     * @example
+     * // Get one ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ResilienceSurveyFindFirstArgs>(args?: SelectSubset<T, ResilienceSurveyFindFirstArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ResilienceSurvey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyFindFirstOrThrowArgs} args - Arguments to find a ResilienceSurvey
+     * @example
+     * // Get one ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ResilienceSurveyFindFirstOrThrowArgs>(args?: SelectSubset<T, ResilienceSurveyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ResilienceSurveys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ResilienceSurveys
+     * const resilienceSurveys = await prisma.resilienceSurvey.findMany()
+     * 
+     * // Get first 10 ResilienceSurveys
+     * const resilienceSurveys = await prisma.resilienceSurvey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const resilienceSurveyWithIdOnly = await prisma.resilienceSurvey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ResilienceSurveyFindManyArgs>(args?: SelectSubset<T, ResilienceSurveyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ResilienceSurvey.
+     * @param {ResilienceSurveyCreateArgs} args - Arguments to create a ResilienceSurvey.
+     * @example
+     * // Create one ResilienceSurvey
+     * const ResilienceSurvey = await prisma.resilienceSurvey.create({
+     *   data: {
+     *     // ... data to create a ResilienceSurvey
+     *   }
+     * })
+     * 
+     */
+    create<T extends ResilienceSurveyCreateArgs>(args: SelectSubset<T, ResilienceSurveyCreateArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ResilienceSurveys.
+     * @param {ResilienceSurveyCreateManyArgs} args - Arguments to create many ResilienceSurveys.
+     * @example
+     * // Create many ResilienceSurveys
+     * const resilienceSurvey = await prisma.resilienceSurvey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ResilienceSurveyCreateManyArgs>(args?: SelectSubset<T, ResilienceSurveyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ResilienceSurveys and returns the data saved in the database.
+     * @param {ResilienceSurveyCreateManyAndReturnArgs} args - Arguments to create many ResilienceSurveys.
+     * @example
+     * // Create many ResilienceSurveys
+     * const resilienceSurvey = await prisma.resilienceSurvey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ResilienceSurveys and only return the `id`
+     * const resilienceSurveyWithIdOnly = await prisma.resilienceSurvey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ResilienceSurveyCreateManyAndReturnArgs>(args?: SelectSubset<T, ResilienceSurveyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ResilienceSurvey.
+     * @param {ResilienceSurveyDeleteArgs} args - Arguments to delete one ResilienceSurvey.
+     * @example
+     * // Delete one ResilienceSurvey
+     * const ResilienceSurvey = await prisma.resilienceSurvey.delete({
+     *   where: {
+     *     // ... filter to delete one ResilienceSurvey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ResilienceSurveyDeleteArgs>(args: SelectSubset<T, ResilienceSurveyDeleteArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ResilienceSurvey.
+     * @param {ResilienceSurveyUpdateArgs} args - Arguments to update one ResilienceSurvey.
+     * @example
+     * // Update one ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ResilienceSurveyUpdateArgs>(args: SelectSubset<T, ResilienceSurveyUpdateArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ResilienceSurveys.
+     * @param {ResilienceSurveyDeleteManyArgs} args - Arguments to filter ResilienceSurveys to delete.
+     * @example
+     * // Delete a few ResilienceSurveys
+     * const { count } = await prisma.resilienceSurvey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ResilienceSurveyDeleteManyArgs>(args?: SelectSubset<T, ResilienceSurveyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ResilienceSurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ResilienceSurveys
+     * const resilienceSurvey = await prisma.resilienceSurvey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ResilienceSurveyUpdateManyArgs>(args: SelectSubset<T, ResilienceSurveyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ResilienceSurveys and returns the data updated in the database.
+     * @param {ResilienceSurveyUpdateManyAndReturnArgs} args - Arguments to update many ResilienceSurveys.
+     * @example
+     * // Update many ResilienceSurveys
+     * const resilienceSurvey = await prisma.resilienceSurvey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ResilienceSurveys and only return the `id`
+     * const resilienceSurveyWithIdOnly = await prisma.resilienceSurvey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ResilienceSurveyUpdateManyAndReturnArgs>(args: SelectSubset<T, ResilienceSurveyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ResilienceSurvey.
+     * @param {ResilienceSurveyUpsertArgs} args - Arguments to update or create a ResilienceSurvey.
+     * @example
+     * // Update or create a ResilienceSurvey
+     * const resilienceSurvey = await prisma.resilienceSurvey.upsert({
+     *   create: {
+     *     // ... data to create a ResilienceSurvey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ResilienceSurvey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ResilienceSurveyUpsertArgs>(args: SelectSubset<T, ResilienceSurveyUpsertArgs<ExtArgs>>): Prisma__ResilienceSurveyClient<$Result.GetResult<Prisma.$ResilienceSurveyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ResilienceSurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyCountArgs} args - Arguments to filter ResilienceSurveys to count.
+     * @example
+     * // Count the number of ResilienceSurveys
+     * const count = await prisma.resilienceSurvey.count({
+     *   where: {
+     *     // ... the filter for the ResilienceSurveys we want to count
+     *   }
+     * })
+    **/
+    count<T extends ResilienceSurveyCountArgs>(
+      args?: Subset<T, ResilienceSurveyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ResilienceSurveyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ResilienceSurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ResilienceSurveyAggregateArgs>(args: Subset<T, ResilienceSurveyAggregateArgs>): Prisma.PrismaPromise<GetResilienceSurveyAggregateType<T>>
+
+    /**
+     * Group by ResilienceSurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ResilienceSurveyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ResilienceSurveyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ResilienceSurveyGroupByArgs['orderBy'] }
+        : { orderBy?: ResilienceSurveyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ResilienceSurveyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetResilienceSurveyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ResilienceSurvey model
+   */
+  readonly fields: ResilienceSurveyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ResilienceSurvey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ResilienceSurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ResilienceSurvey model
+   */
+  interface ResilienceSurveyFieldRefs {
+    readonly id: FieldRef<"ResilienceSurvey", 'String'>
+    readonly beneficiaryId: FieldRef<"ResilienceSurvey", 'String'>
+    readonly surveyDate: FieldRef<"ResilienceSurvey", 'DateTime'>
+    readonly responses: FieldRef<"ResilienceSurvey", 'Json'>
+    readonly lifeSatisfactionScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly planningScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly disasterReadinessScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly disasterBeliefsScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly disasterMindsetScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly financialResilienceScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly healthResilienceScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly socialConnectednessScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly socialProtectionScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly disasterWarningScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly vulnerabilityScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly overallScore: FieldRef<"ResilienceSurvey", 'Float'>
+    readonly createdAt: FieldRef<"ResilienceSurvey", 'DateTime'>
+    readonly updatedAt: FieldRef<"ResilienceSurvey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ResilienceSurvey findUnique
+   */
+  export type ResilienceSurveyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which ResilienceSurvey to fetch.
+     */
+    where: ResilienceSurveyWhereUniqueInput
+  }
+
+  /**
+   * ResilienceSurvey findUniqueOrThrow
+   */
+  export type ResilienceSurveyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which ResilienceSurvey to fetch.
+     */
+    where: ResilienceSurveyWhereUniqueInput
+  }
+
+  /**
+   * ResilienceSurvey findFirst
+   */
+  export type ResilienceSurveyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which ResilienceSurvey to fetch.
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResilienceSurveys to fetch.
+     */
+    orderBy?: ResilienceSurveyOrderByWithRelationInput | ResilienceSurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ResilienceSurveys.
+     */
+    cursor?: ResilienceSurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResilienceSurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResilienceSurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ResilienceSurveys.
+     */
+    distinct?: ResilienceSurveyScalarFieldEnum | ResilienceSurveyScalarFieldEnum[]
+  }
+
+  /**
+   * ResilienceSurvey findFirstOrThrow
+   */
+  export type ResilienceSurveyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which ResilienceSurvey to fetch.
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResilienceSurveys to fetch.
+     */
+    orderBy?: ResilienceSurveyOrderByWithRelationInput | ResilienceSurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ResilienceSurveys.
+     */
+    cursor?: ResilienceSurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResilienceSurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResilienceSurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ResilienceSurveys.
+     */
+    distinct?: ResilienceSurveyScalarFieldEnum | ResilienceSurveyScalarFieldEnum[]
+  }
+
+  /**
+   * ResilienceSurvey findMany
+   */
+  export type ResilienceSurveyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which ResilienceSurveys to fetch.
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ResilienceSurveys to fetch.
+     */
+    orderBy?: ResilienceSurveyOrderByWithRelationInput | ResilienceSurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ResilienceSurveys.
+     */
+    cursor?: ResilienceSurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ResilienceSurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ResilienceSurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ResilienceSurveys.
+     */
+    distinct?: ResilienceSurveyScalarFieldEnum | ResilienceSurveyScalarFieldEnum[]
+  }
+
+  /**
+   * ResilienceSurvey create
+   */
+  export type ResilienceSurveyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ResilienceSurvey.
+     */
+    data: XOR<ResilienceSurveyCreateInput, ResilienceSurveyUncheckedCreateInput>
+  }
+
+  /**
+   * ResilienceSurvey createMany
+   */
+  export type ResilienceSurveyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ResilienceSurveys.
+     */
+    data: ResilienceSurveyCreateManyInput | ResilienceSurveyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ResilienceSurvey createManyAndReturn
+   */
+  export type ResilienceSurveyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * The data used to create many ResilienceSurveys.
+     */
+    data: ResilienceSurveyCreateManyInput | ResilienceSurveyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ResilienceSurvey update
+   */
+  export type ResilienceSurveyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ResilienceSurvey.
+     */
+    data: XOR<ResilienceSurveyUpdateInput, ResilienceSurveyUncheckedUpdateInput>
+    /**
+     * Choose, which ResilienceSurvey to update.
+     */
+    where: ResilienceSurveyWhereUniqueInput
+  }
+
+  /**
+   * ResilienceSurvey updateMany
+   */
+  export type ResilienceSurveyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ResilienceSurveys.
+     */
+    data: XOR<ResilienceSurveyUpdateManyMutationInput, ResilienceSurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which ResilienceSurveys to update
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * Limit how many ResilienceSurveys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ResilienceSurvey updateManyAndReturn
+   */
+  export type ResilienceSurveyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * The data used to update ResilienceSurveys.
+     */
+    data: XOR<ResilienceSurveyUpdateManyMutationInput, ResilienceSurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which ResilienceSurveys to update
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * Limit how many ResilienceSurveys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ResilienceSurvey upsert
+   */
+  export type ResilienceSurveyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ResilienceSurvey to update in case it exists.
+     */
+    where: ResilienceSurveyWhereUniqueInput
+    /**
+     * In case the ResilienceSurvey found by the `where` argument doesn't exist, create a new ResilienceSurvey with this data.
+     */
+    create: XOR<ResilienceSurveyCreateInput, ResilienceSurveyUncheckedCreateInput>
+    /**
+     * In case the ResilienceSurvey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ResilienceSurveyUpdateInput, ResilienceSurveyUncheckedUpdateInput>
+  }
+
+  /**
+   * ResilienceSurvey delete
+   */
+  export type ResilienceSurveyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+    /**
+     * Filter which ResilienceSurvey to delete.
+     */
+    where: ResilienceSurveyWhereUniqueInput
+  }
+
+  /**
+   * ResilienceSurvey deleteMany
+   */
+  export type ResilienceSurveyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ResilienceSurveys to delete
+     */
+    where?: ResilienceSurveyWhereInput
+    /**
+     * Limit how many ResilienceSurveys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ResilienceSurvey without action
+   */
+  export type ResilienceSurveyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResilienceSurvey
+     */
+    select?: ResilienceSurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResilienceSurvey
+     */
+    omit?: ResilienceSurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResilienceSurveyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AdaptiveCapacitySurvey
+   */
+
+  export type AggregateAdaptiveCapacitySurvey = {
+    _count: AdaptiveCapacitySurveyCountAggregateOutputType | null
+    _avg: AdaptiveCapacitySurveyAvgAggregateOutputType | null
+    _sum: AdaptiveCapacitySurveySumAggregateOutputType | null
+    _min: AdaptiveCapacitySurveyMinAggregateOutputType | null
+    _max: AdaptiveCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  export type AdaptiveCapacitySurveyAvgAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type AdaptiveCapacitySurveySumAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type AdaptiveCapacitySurveyMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdaptiveCapacitySurveyMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AdaptiveCapacitySurveyCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    surveyDate: number
+    responses: number
+    overallScore: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AdaptiveCapacitySurveyAvgAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type AdaptiveCapacitySurveySumAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type AdaptiveCapacitySurveyMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdaptiveCapacitySurveyMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AdaptiveCapacitySurveyCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    responses?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AdaptiveCapacitySurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdaptiveCapacitySurvey to aggregate.
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdaptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AdaptiveCapacitySurveyOrderByWithRelationInput | AdaptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdaptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdaptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdaptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdaptiveCapacitySurveys
+    **/
+    _count?: true | AdaptiveCapacitySurveyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdaptiveCapacitySurveyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdaptiveCapacitySurveySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdaptiveCapacitySurveyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdaptiveCapacitySurveyMaxAggregateInputType
+  }
+
+  export type GetAdaptiveCapacitySurveyAggregateType<T extends AdaptiveCapacitySurveyAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdaptiveCapacitySurvey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdaptiveCapacitySurvey[P]>
+      : GetScalarType<T[P], AggregateAdaptiveCapacitySurvey[P]>
+  }
+
+
+
+
+  export type AdaptiveCapacitySurveyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdaptiveCapacitySurveyWhereInput
+    orderBy?: AdaptiveCapacitySurveyOrderByWithAggregationInput | AdaptiveCapacitySurveyOrderByWithAggregationInput[]
+    by: AdaptiveCapacitySurveyScalarFieldEnum[] | AdaptiveCapacitySurveyScalarFieldEnum
+    having?: AdaptiveCapacitySurveyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdaptiveCapacitySurveyCountAggregateInputType | true
+    _avg?: AdaptiveCapacitySurveyAvgAggregateInputType
+    _sum?: AdaptiveCapacitySurveySumAggregateInputType
+    _min?: AdaptiveCapacitySurveyMinAggregateInputType
+    _max?: AdaptiveCapacitySurveyMaxAggregateInputType
+  }
+
+  export type AdaptiveCapacitySurveyGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    surveyDate: Date
+    responses: JsonValue
+    overallScore: number
+    createdAt: Date
+    updatedAt: Date
+    _count: AdaptiveCapacitySurveyCountAggregateOutputType | null
+    _avg: AdaptiveCapacitySurveyAvgAggregateOutputType | null
+    _sum: AdaptiveCapacitySurveySumAggregateOutputType | null
+    _min: AdaptiveCapacitySurveyMinAggregateOutputType | null
+    _max: AdaptiveCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  type GetAdaptiveCapacitySurveyGroupByPayload<T extends AdaptiveCapacitySurveyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdaptiveCapacitySurveyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdaptiveCapacitySurveyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdaptiveCapacitySurveyGroupByOutputType[P]>
+            : GetScalarType<T[P], AdaptiveCapacitySurveyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdaptiveCapacitySurveySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adaptiveCapacitySurvey"]>
+
+  export type AdaptiveCapacitySurveySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adaptiveCapacitySurvey"]>
+
+  export type AdaptiveCapacitySurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adaptiveCapacitySurvey"]>
+
+  export type AdaptiveCapacitySurveySelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AdaptiveCapacitySurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "surveyDate" | "responses" | "overallScore" | "createdAt" | "updatedAt", ExtArgs["result"]["adaptiveCapacitySurvey"]>
+  export type AdaptiveCapacitySurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type AdaptiveCapacitySurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type AdaptiveCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $AdaptiveCapacitySurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdaptiveCapacitySurvey"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      surveyDate: Date
+      responses: Prisma.JsonValue
+      overallScore: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["adaptiveCapacitySurvey"]>
+    composites: {}
+  }
+
+  type AdaptiveCapacitySurveyGetPayload<S extends boolean | null | undefined | AdaptiveCapacitySurveyDefaultArgs> = $Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload, S>
+
+  type AdaptiveCapacitySurveyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdaptiveCapacitySurveyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdaptiveCapacitySurveyCountAggregateInputType | true
+    }
+
+  export interface AdaptiveCapacitySurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdaptiveCapacitySurvey'], meta: { name: 'AdaptiveCapacitySurvey' } }
+    /**
+     * Find zero or one AdaptiveCapacitySurvey that matches the filter.
+     * @param {AdaptiveCapacitySurveyFindUniqueArgs} args - Arguments to find a AdaptiveCapacitySurvey
+     * @example
+     * // Get one AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdaptiveCapacitySurveyFindUniqueArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyFindUniqueArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdaptiveCapacitySurvey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdaptiveCapacitySurveyFindUniqueOrThrowArgs} args - Arguments to find a AdaptiveCapacitySurvey
+     * @example
+     * // Get one AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdaptiveCapacitySurveyFindUniqueOrThrowArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdaptiveCapacitySurvey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyFindFirstArgs} args - Arguments to find a AdaptiveCapacitySurvey
+     * @example
+     * // Get one AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdaptiveCapacitySurveyFindFirstArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyFindFirstArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdaptiveCapacitySurvey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyFindFirstOrThrowArgs} args - Arguments to find a AdaptiveCapacitySurvey
+     * @example
+     * // Get one AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdaptiveCapacitySurveyFindFirstOrThrowArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdaptiveCapacitySurveys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurveys = await prisma.adaptiveCapacitySurvey.findMany()
+     * 
+     * // Get first 10 AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurveys = await prisma.adaptiveCapacitySurvey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adaptiveCapacitySurveyWithIdOnly = await prisma.adaptiveCapacitySurvey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdaptiveCapacitySurveyFindManyArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdaptiveCapacitySurvey.
+     * @param {AdaptiveCapacitySurveyCreateArgs} args - Arguments to create a AdaptiveCapacitySurvey.
+     * @example
+     * // Create one AdaptiveCapacitySurvey
+     * const AdaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.create({
+     *   data: {
+     *     // ... data to create a AdaptiveCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdaptiveCapacitySurveyCreateArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyCreateArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdaptiveCapacitySurveys.
+     * @param {AdaptiveCapacitySurveyCreateManyArgs} args - Arguments to create many AdaptiveCapacitySurveys.
+     * @example
+     * // Create many AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdaptiveCapacitySurveyCreateManyArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdaptiveCapacitySurveys and returns the data saved in the database.
+     * @param {AdaptiveCapacitySurveyCreateManyAndReturnArgs} args - Arguments to create many AdaptiveCapacitySurveys.
+     * @example
+     * // Create many AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdaptiveCapacitySurveys and only return the `id`
+     * const adaptiveCapacitySurveyWithIdOnly = await prisma.adaptiveCapacitySurvey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdaptiveCapacitySurveyCreateManyAndReturnArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdaptiveCapacitySurvey.
+     * @param {AdaptiveCapacitySurveyDeleteArgs} args - Arguments to delete one AdaptiveCapacitySurvey.
+     * @example
+     * // Delete one AdaptiveCapacitySurvey
+     * const AdaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.delete({
+     *   where: {
+     *     // ... filter to delete one AdaptiveCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdaptiveCapacitySurveyDeleteArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyDeleteArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdaptiveCapacitySurvey.
+     * @param {AdaptiveCapacitySurveyUpdateArgs} args - Arguments to update one AdaptiveCapacitySurvey.
+     * @example
+     * // Update one AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdaptiveCapacitySurveyUpdateArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyUpdateArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdaptiveCapacitySurveys.
+     * @param {AdaptiveCapacitySurveyDeleteManyArgs} args - Arguments to filter AdaptiveCapacitySurveys to delete.
+     * @example
+     * // Delete a few AdaptiveCapacitySurveys
+     * const { count } = await prisma.adaptiveCapacitySurvey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdaptiveCapacitySurveyDeleteManyArgs>(args?: SelectSubset<T, AdaptiveCapacitySurveyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdaptiveCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdaptiveCapacitySurveyUpdateManyArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdaptiveCapacitySurveys and returns the data updated in the database.
+     * @param {AdaptiveCapacitySurveyUpdateManyAndReturnArgs} args - Arguments to update many AdaptiveCapacitySurveys.
+     * @example
+     * // Update many AdaptiveCapacitySurveys
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdaptiveCapacitySurveys and only return the `id`
+     * const adaptiveCapacitySurveyWithIdOnly = await prisma.adaptiveCapacitySurvey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdaptiveCapacitySurveyUpdateManyAndReturnArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdaptiveCapacitySurvey.
+     * @param {AdaptiveCapacitySurveyUpsertArgs} args - Arguments to update or create a AdaptiveCapacitySurvey.
+     * @example
+     * // Update or create a AdaptiveCapacitySurvey
+     * const adaptiveCapacitySurvey = await prisma.adaptiveCapacitySurvey.upsert({
+     *   create: {
+     *     // ... data to create a AdaptiveCapacitySurvey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdaptiveCapacitySurvey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdaptiveCapacitySurveyUpsertArgs>(args: SelectSubset<T, AdaptiveCapacitySurveyUpsertArgs<ExtArgs>>): Prisma__AdaptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AdaptiveCapacitySurveyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdaptiveCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyCountArgs} args - Arguments to filter AdaptiveCapacitySurveys to count.
+     * @example
+     * // Count the number of AdaptiveCapacitySurveys
+     * const count = await prisma.adaptiveCapacitySurvey.count({
+     *   where: {
+     *     // ... the filter for the AdaptiveCapacitySurveys we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdaptiveCapacitySurveyCountArgs>(
+      args?: Subset<T, AdaptiveCapacitySurveyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdaptiveCapacitySurveyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdaptiveCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdaptiveCapacitySurveyAggregateArgs>(args: Subset<T, AdaptiveCapacitySurveyAggregateArgs>): Prisma.PrismaPromise<GetAdaptiveCapacitySurveyAggregateType<T>>
+
+    /**
+     * Group by AdaptiveCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdaptiveCapacitySurveyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdaptiveCapacitySurveyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdaptiveCapacitySurveyGroupByArgs['orderBy'] }
+        : { orderBy?: AdaptiveCapacitySurveyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdaptiveCapacitySurveyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdaptiveCapacitySurveyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdaptiveCapacitySurvey model
+   */
+  readonly fields: AdaptiveCapacitySurveyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdaptiveCapacitySurvey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdaptiveCapacitySurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdaptiveCapacitySurvey model
+   */
+  interface AdaptiveCapacitySurveyFieldRefs {
+    readonly id: FieldRef<"AdaptiveCapacitySurvey", 'String'>
+    readonly beneficiaryId: FieldRef<"AdaptiveCapacitySurvey", 'String'>
+    readonly surveyDate: FieldRef<"AdaptiveCapacitySurvey", 'DateTime'>
+    readonly responses: FieldRef<"AdaptiveCapacitySurvey", 'Json'>
+    readonly overallScore: FieldRef<"AdaptiveCapacitySurvey", 'Float'>
+    readonly createdAt: FieldRef<"AdaptiveCapacitySurvey", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdaptiveCapacitySurvey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdaptiveCapacitySurvey findUnique
+   */
+  export type AdaptiveCapacitySurveyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AdaptiveCapacitySurvey to fetch.
+     */
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AdaptiveCapacitySurvey findUniqueOrThrow
+   */
+  export type AdaptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AdaptiveCapacitySurvey to fetch.
+     */
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AdaptiveCapacitySurvey findFirst
+   */
+  export type AdaptiveCapacitySurveyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AdaptiveCapacitySurvey to fetch.
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdaptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AdaptiveCapacitySurveyOrderByWithRelationInput | AdaptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdaptiveCapacitySurveys.
+     */
+    cursor?: AdaptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdaptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdaptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdaptiveCapacitySurveys.
+     */
+    distinct?: AdaptiveCapacitySurveyScalarFieldEnum | AdaptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AdaptiveCapacitySurvey findFirstOrThrow
+   */
+  export type AdaptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AdaptiveCapacitySurvey to fetch.
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdaptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AdaptiveCapacitySurveyOrderByWithRelationInput | AdaptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdaptiveCapacitySurveys.
+     */
+    cursor?: AdaptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdaptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdaptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdaptiveCapacitySurveys.
+     */
+    distinct?: AdaptiveCapacitySurveyScalarFieldEnum | AdaptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AdaptiveCapacitySurvey findMany
+   */
+  export type AdaptiveCapacitySurveyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AdaptiveCapacitySurveys to fetch.
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdaptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AdaptiveCapacitySurveyOrderByWithRelationInput | AdaptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdaptiveCapacitySurveys.
+     */
+    cursor?: AdaptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdaptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdaptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdaptiveCapacitySurveys.
+     */
+    distinct?: AdaptiveCapacitySurveyScalarFieldEnum | AdaptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AdaptiveCapacitySurvey create
+   */
+  export type AdaptiveCapacitySurveyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdaptiveCapacitySurvey.
+     */
+    data: XOR<AdaptiveCapacitySurveyCreateInput, AdaptiveCapacitySurveyUncheckedCreateInput>
+  }
+
+  /**
+   * AdaptiveCapacitySurvey createMany
+   */
+  export type AdaptiveCapacitySurveyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdaptiveCapacitySurveys.
+     */
+    data: AdaptiveCapacitySurveyCreateManyInput | AdaptiveCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdaptiveCapacitySurvey createManyAndReturn
+   */
+  export type AdaptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdaptiveCapacitySurveys.
+     */
+    data: AdaptiveCapacitySurveyCreateManyInput | AdaptiveCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdaptiveCapacitySurvey update
+   */
+  export type AdaptiveCapacitySurveyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdaptiveCapacitySurvey.
+     */
+    data: XOR<AdaptiveCapacitySurveyUpdateInput, AdaptiveCapacitySurveyUncheckedUpdateInput>
+    /**
+     * Choose, which AdaptiveCapacitySurvey to update.
+     */
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AdaptiveCapacitySurvey updateMany
+   */
+  export type AdaptiveCapacitySurveyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdaptiveCapacitySurveys.
+     */
+    data: XOR<AdaptiveCapacitySurveyUpdateManyMutationInput, AdaptiveCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which AdaptiveCapacitySurveys to update
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AdaptiveCapacitySurveys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdaptiveCapacitySurvey updateManyAndReturn
+   */
+  export type AdaptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to update AdaptiveCapacitySurveys.
+     */
+    data: XOR<AdaptiveCapacitySurveyUpdateManyMutationInput, AdaptiveCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which AdaptiveCapacitySurveys to update
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AdaptiveCapacitySurveys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdaptiveCapacitySurvey upsert
+   */
+  export type AdaptiveCapacitySurveyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdaptiveCapacitySurvey to update in case it exists.
+     */
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+    /**
+     * In case the AdaptiveCapacitySurvey found by the `where` argument doesn't exist, create a new AdaptiveCapacitySurvey with this data.
+     */
+    create: XOR<AdaptiveCapacitySurveyCreateInput, AdaptiveCapacitySurveyUncheckedCreateInput>
+    /**
+     * In case the AdaptiveCapacitySurvey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdaptiveCapacitySurveyUpdateInput, AdaptiveCapacitySurveyUncheckedUpdateInput>
+  }
+
+  /**
+   * AdaptiveCapacitySurvey delete
+   */
+  export type AdaptiveCapacitySurveyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter which AdaptiveCapacitySurvey to delete.
+     */
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AdaptiveCapacitySurvey deleteMany
+   */
+  export type AdaptiveCapacitySurveyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdaptiveCapacitySurveys to delete
+     */
+    where?: AdaptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AdaptiveCapacitySurveys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdaptiveCapacitySurvey without action
+   */
+  export type AdaptiveCapacitySurveyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdaptiveCapacitySurvey
+     */
+    select?: AdaptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdaptiveCapacitySurvey
+     */
+    omit?: AdaptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdaptiveCapacitySurveyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AbsorptiveCapacitySurvey
+   */
+
+  export type AggregateAbsorptiveCapacitySurvey = {
+    _count: AbsorptiveCapacitySurveyCountAggregateOutputType | null
+    _avg: AbsorptiveCapacitySurveyAvgAggregateOutputType | null
+    _sum: AbsorptiveCapacitySurveySumAggregateOutputType | null
+    _min: AbsorptiveCapacitySurveyMinAggregateOutputType | null
+    _max: AbsorptiveCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  export type AbsorptiveCapacitySurveyAvgAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type AbsorptiveCapacitySurveySumAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type AbsorptiveCapacitySurveyMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AbsorptiveCapacitySurveyMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AbsorptiveCapacitySurveyCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    surveyDate: number
+    responses: number
+    overallScore: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AbsorptiveCapacitySurveyAvgAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type AbsorptiveCapacitySurveySumAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type AbsorptiveCapacitySurveyMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AbsorptiveCapacitySurveyMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AbsorptiveCapacitySurveyCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    responses?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AbsorptiveCapacitySurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AbsorptiveCapacitySurvey to aggregate.
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AbsorptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithRelationInput | AbsorptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AbsorptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AbsorptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AbsorptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AbsorptiveCapacitySurveys
+    **/
+    _count?: true | AbsorptiveCapacitySurveyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AbsorptiveCapacitySurveyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AbsorptiveCapacitySurveySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AbsorptiveCapacitySurveyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AbsorptiveCapacitySurveyMaxAggregateInputType
+  }
+
+  export type GetAbsorptiveCapacitySurveyAggregateType<T extends AbsorptiveCapacitySurveyAggregateArgs> = {
+        [P in keyof T & keyof AggregateAbsorptiveCapacitySurvey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAbsorptiveCapacitySurvey[P]>
+      : GetScalarType<T[P], AggregateAbsorptiveCapacitySurvey[P]>
+  }
+
+
+
+
+  export type AbsorptiveCapacitySurveyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AbsorptiveCapacitySurveyWhereInput
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithAggregationInput | AbsorptiveCapacitySurveyOrderByWithAggregationInput[]
+    by: AbsorptiveCapacitySurveyScalarFieldEnum[] | AbsorptiveCapacitySurveyScalarFieldEnum
+    having?: AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AbsorptiveCapacitySurveyCountAggregateInputType | true
+    _avg?: AbsorptiveCapacitySurveyAvgAggregateInputType
+    _sum?: AbsorptiveCapacitySurveySumAggregateInputType
+    _min?: AbsorptiveCapacitySurveyMinAggregateInputType
+    _max?: AbsorptiveCapacitySurveyMaxAggregateInputType
+  }
+
+  export type AbsorptiveCapacitySurveyGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    surveyDate: Date
+    responses: JsonValue
+    overallScore: number
+    createdAt: Date
+    updatedAt: Date
+    _count: AbsorptiveCapacitySurveyCountAggregateOutputType | null
+    _avg: AbsorptiveCapacitySurveyAvgAggregateOutputType | null
+    _sum: AbsorptiveCapacitySurveySumAggregateOutputType | null
+    _min: AbsorptiveCapacitySurveyMinAggregateOutputType | null
+    _max: AbsorptiveCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  type GetAbsorptiveCapacitySurveyGroupByPayload<T extends AbsorptiveCapacitySurveyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AbsorptiveCapacitySurveyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AbsorptiveCapacitySurveyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AbsorptiveCapacitySurveyGroupByOutputType[P]>
+            : GetScalarType<T[P], AbsorptiveCapacitySurveyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AbsorptiveCapacitySurveySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["absorptiveCapacitySurvey"]>
+
+  export type AbsorptiveCapacitySurveySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["absorptiveCapacitySurvey"]>
+
+  export type AbsorptiveCapacitySurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["absorptiveCapacitySurvey"]>
+
+  export type AbsorptiveCapacitySurveySelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AbsorptiveCapacitySurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "surveyDate" | "responses" | "overallScore" | "createdAt" | "updatedAt", ExtArgs["result"]["absorptiveCapacitySurvey"]>
+  export type AbsorptiveCapacitySurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type AbsorptiveCapacitySurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type AbsorptiveCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $AbsorptiveCapacitySurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AbsorptiveCapacitySurvey"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      surveyDate: Date
+      responses: Prisma.JsonValue
+      overallScore: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["absorptiveCapacitySurvey"]>
+    composites: {}
+  }
+
+  type AbsorptiveCapacitySurveyGetPayload<S extends boolean | null | undefined | AbsorptiveCapacitySurveyDefaultArgs> = $Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload, S>
+
+  type AbsorptiveCapacitySurveyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AbsorptiveCapacitySurveyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AbsorptiveCapacitySurveyCountAggregateInputType | true
+    }
+
+  export interface AbsorptiveCapacitySurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AbsorptiveCapacitySurvey'], meta: { name: 'AbsorptiveCapacitySurvey' } }
+    /**
+     * Find zero or one AbsorptiveCapacitySurvey that matches the filter.
+     * @param {AbsorptiveCapacitySurveyFindUniqueArgs} args - Arguments to find a AbsorptiveCapacitySurvey
+     * @example
+     * // Get one AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AbsorptiveCapacitySurveyFindUniqueArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyFindUniqueArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AbsorptiveCapacitySurvey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AbsorptiveCapacitySurveyFindUniqueOrThrowArgs} args - Arguments to find a AbsorptiveCapacitySurvey
+     * @example
+     * // Get one AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AbsorptiveCapacitySurveyFindUniqueOrThrowArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AbsorptiveCapacitySurvey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyFindFirstArgs} args - Arguments to find a AbsorptiveCapacitySurvey
+     * @example
+     * // Get one AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AbsorptiveCapacitySurveyFindFirstArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyFindFirstArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AbsorptiveCapacitySurvey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyFindFirstOrThrowArgs} args - Arguments to find a AbsorptiveCapacitySurvey
+     * @example
+     * // Get one AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AbsorptiveCapacitySurveyFindFirstOrThrowArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AbsorptiveCapacitySurveys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurveys = await prisma.absorptiveCapacitySurvey.findMany()
+     * 
+     * // Get first 10 AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurveys = await prisma.absorptiveCapacitySurvey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const absorptiveCapacitySurveyWithIdOnly = await prisma.absorptiveCapacitySurvey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AbsorptiveCapacitySurveyFindManyArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AbsorptiveCapacitySurvey.
+     * @param {AbsorptiveCapacitySurveyCreateArgs} args - Arguments to create a AbsorptiveCapacitySurvey.
+     * @example
+     * // Create one AbsorptiveCapacitySurvey
+     * const AbsorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.create({
+     *   data: {
+     *     // ... data to create a AbsorptiveCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    create<T extends AbsorptiveCapacitySurveyCreateArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyCreateArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AbsorptiveCapacitySurveys.
+     * @param {AbsorptiveCapacitySurveyCreateManyArgs} args - Arguments to create many AbsorptiveCapacitySurveys.
+     * @example
+     * // Create many AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AbsorptiveCapacitySurveyCreateManyArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AbsorptiveCapacitySurveys and returns the data saved in the database.
+     * @param {AbsorptiveCapacitySurveyCreateManyAndReturnArgs} args - Arguments to create many AbsorptiveCapacitySurveys.
+     * @example
+     * // Create many AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AbsorptiveCapacitySurveys and only return the `id`
+     * const absorptiveCapacitySurveyWithIdOnly = await prisma.absorptiveCapacitySurvey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AbsorptiveCapacitySurveyCreateManyAndReturnArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AbsorptiveCapacitySurvey.
+     * @param {AbsorptiveCapacitySurveyDeleteArgs} args - Arguments to delete one AbsorptiveCapacitySurvey.
+     * @example
+     * // Delete one AbsorptiveCapacitySurvey
+     * const AbsorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.delete({
+     *   where: {
+     *     // ... filter to delete one AbsorptiveCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AbsorptiveCapacitySurveyDeleteArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyDeleteArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AbsorptiveCapacitySurvey.
+     * @param {AbsorptiveCapacitySurveyUpdateArgs} args - Arguments to update one AbsorptiveCapacitySurvey.
+     * @example
+     * // Update one AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AbsorptiveCapacitySurveyUpdateArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyUpdateArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AbsorptiveCapacitySurveys.
+     * @param {AbsorptiveCapacitySurveyDeleteManyArgs} args - Arguments to filter AbsorptiveCapacitySurveys to delete.
+     * @example
+     * // Delete a few AbsorptiveCapacitySurveys
+     * const { count } = await prisma.absorptiveCapacitySurvey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AbsorptiveCapacitySurveyDeleteManyArgs>(args?: SelectSubset<T, AbsorptiveCapacitySurveyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AbsorptiveCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AbsorptiveCapacitySurveyUpdateManyArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AbsorptiveCapacitySurveys and returns the data updated in the database.
+     * @param {AbsorptiveCapacitySurveyUpdateManyAndReturnArgs} args - Arguments to update many AbsorptiveCapacitySurveys.
+     * @example
+     * // Update many AbsorptiveCapacitySurveys
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AbsorptiveCapacitySurveys and only return the `id`
+     * const absorptiveCapacitySurveyWithIdOnly = await prisma.absorptiveCapacitySurvey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AbsorptiveCapacitySurveyUpdateManyAndReturnArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AbsorptiveCapacitySurvey.
+     * @param {AbsorptiveCapacitySurveyUpsertArgs} args - Arguments to update or create a AbsorptiveCapacitySurvey.
+     * @example
+     * // Update or create a AbsorptiveCapacitySurvey
+     * const absorptiveCapacitySurvey = await prisma.absorptiveCapacitySurvey.upsert({
+     *   create: {
+     *     // ... data to create a AbsorptiveCapacitySurvey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AbsorptiveCapacitySurvey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AbsorptiveCapacitySurveyUpsertArgs>(args: SelectSubset<T, AbsorptiveCapacitySurveyUpsertArgs<ExtArgs>>): Prisma__AbsorptiveCapacitySurveyClient<$Result.GetResult<Prisma.$AbsorptiveCapacitySurveyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AbsorptiveCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyCountArgs} args - Arguments to filter AbsorptiveCapacitySurveys to count.
+     * @example
+     * // Count the number of AbsorptiveCapacitySurveys
+     * const count = await prisma.absorptiveCapacitySurvey.count({
+     *   where: {
+     *     // ... the filter for the AbsorptiveCapacitySurveys we want to count
+     *   }
+     * })
+    **/
+    count<T extends AbsorptiveCapacitySurveyCountArgs>(
+      args?: Subset<T, AbsorptiveCapacitySurveyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AbsorptiveCapacitySurveyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AbsorptiveCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AbsorptiveCapacitySurveyAggregateArgs>(args: Subset<T, AbsorptiveCapacitySurveyAggregateArgs>): Prisma.PrismaPromise<GetAbsorptiveCapacitySurveyAggregateType<T>>
+
+    /**
+     * Group by AbsorptiveCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AbsorptiveCapacitySurveyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AbsorptiveCapacitySurveyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AbsorptiveCapacitySurveyGroupByArgs['orderBy'] }
+        : { orderBy?: AbsorptiveCapacitySurveyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AbsorptiveCapacitySurveyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAbsorptiveCapacitySurveyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AbsorptiveCapacitySurvey model
+   */
+  readonly fields: AbsorptiveCapacitySurveyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AbsorptiveCapacitySurvey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AbsorptiveCapacitySurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AbsorptiveCapacitySurvey model
+   */
+  interface AbsorptiveCapacitySurveyFieldRefs {
+    readonly id: FieldRef<"AbsorptiveCapacitySurvey", 'String'>
+    readonly beneficiaryId: FieldRef<"AbsorptiveCapacitySurvey", 'String'>
+    readonly surveyDate: FieldRef<"AbsorptiveCapacitySurvey", 'DateTime'>
+    readonly responses: FieldRef<"AbsorptiveCapacitySurvey", 'Json'>
+    readonly overallScore: FieldRef<"AbsorptiveCapacitySurvey", 'Float'>
+    readonly createdAt: FieldRef<"AbsorptiveCapacitySurvey", 'DateTime'>
+    readonly updatedAt: FieldRef<"AbsorptiveCapacitySurvey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AbsorptiveCapacitySurvey findUnique
+   */
+  export type AbsorptiveCapacitySurveyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AbsorptiveCapacitySurvey to fetch.
+     */
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey findUniqueOrThrow
+   */
+  export type AbsorptiveCapacitySurveyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AbsorptiveCapacitySurvey to fetch.
+     */
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey findFirst
+   */
+  export type AbsorptiveCapacitySurveyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AbsorptiveCapacitySurvey to fetch.
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AbsorptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithRelationInput | AbsorptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AbsorptiveCapacitySurveys.
+     */
+    cursor?: AbsorptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AbsorptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AbsorptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AbsorptiveCapacitySurveys.
+     */
+    distinct?: AbsorptiveCapacitySurveyScalarFieldEnum | AbsorptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey findFirstOrThrow
+   */
+  export type AbsorptiveCapacitySurveyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AbsorptiveCapacitySurvey to fetch.
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AbsorptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithRelationInput | AbsorptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AbsorptiveCapacitySurveys.
+     */
+    cursor?: AbsorptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AbsorptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AbsorptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AbsorptiveCapacitySurveys.
+     */
+    distinct?: AbsorptiveCapacitySurveyScalarFieldEnum | AbsorptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey findMany
+   */
+  export type AbsorptiveCapacitySurveyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which AbsorptiveCapacitySurveys to fetch.
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AbsorptiveCapacitySurveys to fetch.
+     */
+    orderBy?: AbsorptiveCapacitySurveyOrderByWithRelationInput | AbsorptiveCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AbsorptiveCapacitySurveys.
+     */
+    cursor?: AbsorptiveCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AbsorptiveCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AbsorptiveCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AbsorptiveCapacitySurveys.
+     */
+    distinct?: AbsorptiveCapacitySurveyScalarFieldEnum | AbsorptiveCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey create
+   */
+  export type AbsorptiveCapacitySurveyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AbsorptiveCapacitySurvey.
+     */
+    data: XOR<AbsorptiveCapacitySurveyCreateInput, AbsorptiveCapacitySurveyUncheckedCreateInput>
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey createMany
+   */
+  export type AbsorptiveCapacitySurveyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AbsorptiveCapacitySurveys.
+     */
+    data: AbsorptiveCapacitySurveyCreateManyInput | AbsorptiveCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey createManyAndReturn
+   */
+  export type AbsorptiveCapacitySurveyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to create many AbsorptiveCapacitySurveys.
+     */
+    data: AbsorptiveCapacitySurveyCreateManyInput | AbsorptiveCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey update
+   */
+  export type AbsorptiveCapacitySurveyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AbsorptiveCapacitySurvey.
+     */
+    data: XOR<AbsorptiveCapacitySurveyUpdateInput, AbsorptiveCapacitySurveyUncheckedUpdateInput>
+    /**
+     * Choose, which AbsorptiveCapacitySurvey to update.
+     */
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey updateMany
+   */
+  export type AbsorptiveCapacitySurveyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AbsorptiveCapacitySurveys.
+     */
+    data: XOR<AbsorptiveCapacitySurveyUpdateManyMutationInput, AbsorptiveCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which AbsorptiveCapacitySurveys to update
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AbsorptiveCapacitySurveys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey updateManyAndReturn
+   */
+  export type AbsorptiveCapacitySurveyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to update AbsorptiveCapacitySurveys.
+     */
+    data: XOR<AbsorptiveCapacitySurveyUpdateManyMutationInput, AbsorptiveCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which AbsorptiveCapacitySurveys to update
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AbsorptiveCapacitySurveys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey upsert
+   */
+  export type AbsorptiveCapacitySurveyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AbsorptiveCapacitySurvey to update in case it exists.
+     */
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+    /**
+     * In case the AbsorptiveCapacitySurvey found by the `where` argument doesn't exist, create a new AbsorptiveCapacitySurvey with this data.
+     */
+    create: XOR<AbsorptiveCapacitySurveyCreateInput, AbsorptiveCapacitySurveyUncheckedCreateInput>
+    /**
+     * In case the AbsorptiveCapacitySurvey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AbsorptiveCapacitySurveyUpdateInput, AbsorptiveCapacitySurveyUncheckedUpdateInput>
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey delete
+   */
+  export type AbsorptiveCapacitySurveyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter which AbsorptiveCapacitySurvey to delete.
+     */
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey deleteMany
+   */
+  export type AbsorptiveCapacitySurveyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AbsorptiveCapacitySurveys to delete
+     */
+    where?: AbsorptiveCapacitySurveyWhereInput
+    /**
+     * Limit how many AbsorptiveCapacitySurveys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AbsorptiveCapacitySurvey without action
+   */
+  export type AbsorptiveCapacitySurveyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AbsorptiveCapacitySurvey
+     */
+    select?: AbsorptiveCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AbsorptiveCapacitySurvey
+     */
+    omit?: AbsorptiveCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AbsorptiveCapacitySurveyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TransformativeCapacitySurvey
+   */
+
+  export type AggregateTransformativeCapacitySurvey = {
+    _count: TransformativeCapacitySurveyCountAggregateOutputType | null
+    _avg: TransformativeCapacitySurveyAvgAggregateOutputType | null
+    _sum: TransformativeCapacitySurveySumAggregateOutputType | null
+    _min: TransformativeCapacitySurveyMinAggregateOutputType | null
+    _max: TransformativeCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  export type TransformativeCapacitySurveyAvgAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type TransformativeCapacitySurveySumAggregateOutputType = {
+    overallScore: number | null
+  }
+
+  export type TransformativeCapacitySurveyMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransformativeCapacitySurveyMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    overallScore: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransformativeCapacitySurveyCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    surveyDate: number
+    responses: number
+    overallScore: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TransformativeCapacitySurveyAvgAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type TransformativeCapacitySurveySumAggregateInputType = {
+    overallScore?: true
+  }
+
+  export type TransformativeCapacitySurveyMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransformativeCapacitySurveyMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransformativeCapacitySurveyCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    responses?: true
+    overallScore?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TransformativeCapacitySurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransformativeCapacitySurvey to aggregate.
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransformativeCapacitySurveys to fetch.
+     */
+    orderBy?: TransformativeCapacitySurveyOrderByWithRelationInput | TransformativeCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransformativeCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransformativeCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransformativeCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TransformativeCapacitySurveys
+    **/
+    _count?: true | TransformativeCapacitySurveyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransformativeCapacitySurveyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransformativeCapacitySurveySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransformativeCapacitySurveyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransformativeCapacitySurveyMaxAggregateInputType
+  }
+
+  export type GetTransformativeCapacitySurveyAggregateType<T extends TransformativeCapacitySurveyAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransformativeCapacitySurvey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransformativeCapacitySurvey[P]>
+      : GetScalarType<T[P], AggregateTransformativeCapacitySurvey[P]>
+  }
+
+
+
+
+  export type TransformativeCapacitySurveyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransformativeCapacitySurveyWhereInput
+    orderBy?: TransformativeCapacitySurveyOrderByWithAggregationInput | TransformativeCapacitySurveyOrderByWithAggregationInput[]
+    by: TransformativeCapacitySurveyScalarFieldEnum[] | TransformativeCapacitySurveyScalarFieldEnum
+    having?: TransformativeCapacitySurveyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransformativeCapacitySurveyCountAggregateInputType | true
+    _avg?: TransformativeCapacitySurveyAvgAggregateInputType
+    _sum?: TransformativeCapacitySurveySumAggregateInputType
+    _min?: TransformativeCapacitySurveyMinAggregateInputType
+    _max?: TransformativeCapacitySurveyMaxAggregateInputType
+  }
+
+  export type TransformativeCapacitySurveyGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    surveyDate: Date
+    responses: JsonValue
+    overallScore: number
+    createdAt: Date
+    updatedAt: Date
+    _count: TransformativeCapacitySurveyCountAggregateOutputType | null
+    _avg: TransformativeCapacitySurveyAvgAggregateOutputType | null
+    _sum: TransformativeCapacitySurveySumAggregateOutputType | null
+    _min: TransformativeCapacitySurveyMinAggregateOutputType | null
+    _max: TransformativeCapacitySurveyMaxAggregateOutputType | null
+  }
+
+  type GetTransformativeCapacitySurveyGroupByPayload<T extends TransformativeCapacitySurveyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransformativeCapacitySurveyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransformativeCapacitySurveyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransformativeCapacitySurveyGroupByOutputType[P]>
+            : GetScalarType<T[P], TransformativeCapacitySurveyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransformativeCapacitySurveySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transformativeCapacitySurvey"]>
+
+  export type TransformativeCapacitySurveySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transformativeCapacitySurvey"]>
+
+  export type TransformativeCapacitySurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transformativeCapacitySurvey"]>
+
+  export type TransformativeCapacitySurveySelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    overallScore?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TransformativeCapacitySurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "surveyDate" | "responses" | "overallScore" | "createdAt" | "updatedAt", ExtArgs["result"]["transformativeCapacitySurvey"]>
+  export type TransformativeCapacitySurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type TransformativeCapacitySurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type TransformativeCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $TransformativeCapacitySurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TransformativeCapacitySurvey"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      surveyDate: Date
+      responses: Prisma.JsonValue
+      overallScore: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["transformativeCapacitySurvey"]>
+    composites: {}
+  }
+
+  type TransformativeCapacitySurveyGetPayload<S extends boolean | null | undefined | TransformativeCapacitySurveyDefaultArgs> = $Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload, S>
+
+  type TransformativeCapacitySurveyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransformativeCapacitySurveyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransformativeCapacitySurveyCountAggregateInputType | true
+    }
+
+  export interface TransformativeCapacitySurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TransformativeCapacitySurvey'], meta: { name: 'TransformativeCapacitySurvey' } }
+    /**
+     * Find zero or one TransformativeCapacitySurvey that matches the filter.
+     * @param {TransformativeCapacitySurveyFindUniqueArgs} args - Arguments to find a TransformativeCapacitySurvey
+     * @example
+     * // Get one TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransformativeCapacitySurveyFindUniqueArgs>(args: SelectSubset<T, TransformativeCapacitySurveyFindUniqueArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TransformativeCapacitySurvey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransformativeCapacitySurveyFindUniqueOrThrowArgs} args - Arguments to find a TransformativeCapacitySurvey
+     * @example
+     * // Get one TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransformativeCapacitySurveyFindUniqueOrThrowArgs>(args: SelectSubset<T, TransformativeCapacitySurveyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransformativeCapacitySurvey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyFindFirstArgs} args - Arguments to find a TransformativeCapacitySurvey
+     * @example
+     * // Get one TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransformativeCapacitySurveyFindFirstArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyFindFirstArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransformativeCapacitySurvey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyFindFirstOrThrowArgs} args - Arguments to find a TransformativeCapacitySurvey
+     * @example
+     * // Get one TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransformativeCapacitySurveyFindFirstOrThrowArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TransformativeCapacitySurveys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TransformativeCapacitySurveys
+     * const transformativeCapacitySurveys = await prisma.transformativeCapacitySurvey.findMany()
+     * 
+     * // Get first 10 TransformativeCapacitySurveys
+     * const transformativeCapacitySurveys = await prisma.transformativeCapacitySurvey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transformativeCapacitySurveyWithIdOnly = await prisma.transformativeCapacitySurvey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransformativeCapacitySurveyFindManyArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TransformativeCapacitySurvey.
+     * @param {TransformativeCapacitySurveyCreateArgs} args - Arguments to create a TransformativeCapacitySurvey.
+     * @example
+     * // Create one TransformativeCapacitySurvey
+     * const TransformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.create({
+     *   data: {
+     *     // ... data to create a TransformativeCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransformativeCapacitySurveyCreateArgs>(args: SelectSubset<T, TransformativeCapacitySurveyCreateArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TransformativeCapacitySurveys.
+     * @param {TransformativeCapacitySurveyCreateManyArgs} args - Arguments to create many TransformativeCapacitySurveys.
+     * @example
+     * // Create many TransformativeCapacitySurveys
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransformativeCapacitySurveyCreateManyArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TransformativeCapacitySurveys and returns the data saved in the database.
+     * @param {TransformativeCapacitySurveyCreateManyAndReturnArgs} args - Arguments to create many TransformativeCapacitySurveys.
+     * @example
+     * // Create many TransformativeCapacitySurveys
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TransformativeCapacitySurveys and only return the `id`
+     * const transformativeCapacitySurveyWithIdOnly = await prisma.transformativeCapacitySurvey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransformativeCapacitySurveyCreateManyAndReturnArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TransformativeCapacitySurvey.
+     * @param {TransformativeCapacitySurveyDeleteArgs} args - Arguments to delete one TransformativeCapacitySurvey.
+     * @example
+     * // Delete one TransformativeCapacitySurvey
+     * const TransformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.delete({
+     *   where: {
+     *     // ... filter to delete one TransformativeCapacitySurvey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransformativeCapacitySurveyDeleteArgs>(args: SelectSubset<T, TransformativeCapacitySurveyDeleteArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TransformativeCapacitySurvey.
+     * @param {TransformativeCapacitySurveyUpdateArgs} args - Arguments to update one TransformativeCapacitySurvey.
+     * @example
+     * // Update one TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransformativeCapacitySurveyUpdateArgs>(args: SelectSubset<T, TransformativeCapacitySurveyUpdateArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TransformativeCapacitySurveys.
+     * @param {TransformativeCapacitySurveyDeleteManyArgs} args - Arguments to filter TransformativeCapacitySurveys to delete.
+     * @example
+     * // Delete a few TransformativeCapacitySurveys
+     * const { count } = await prisma.transformativeCapacitySurvey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransformativeCapacitySurveyDeleteManyArgs>(args?: SelectSubset<T, TransformativeCapacitySurveyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransformativeCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TransformativeCapacitySurveys
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransformativeCapacitySurveyUpdateManyArgs>(args: SelectSubset<T, TransformativeCapacitySurveyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransformativeCapacitySurveys and returns the data updated in the database.
+     * @param {TransformativeCapacitySurveyUpdateManyAndReturnArgs} args - Arguments to update many TransformativeCapacitySurveys.
+     * @example
+     * // Update many TransformativeCapacitySurveys
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TransformativeCapacitySurveys and only return the `id`
+     * const transformativeCapacitySurveyWithIdOnly = await prisma.transformativeCapacitySurvey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransformativeCapacitySurveyUpdateManyAndReturnArgs>(args: SelectSubset<T, TransformativeCapacitySurveyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TransformativeCapacitySurvey.
+     * @param {TransformativeCapacitySurveyUpsertArgs} args - Arguments to update or create a TransformativeCapacitySurvey.
+     * @example
+     * // Update or create a TransformativeCapacitySurvey
+     * const transformativeCapacitySurvey = await prisma.transformativeCapacitySurvey.upsert({
+     *   create: {
+     *     // ... data to create a TransformativeCapacitySurvey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TransformativeCapacitySurvey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransformativeCapacitySurveyUpsertArgs>(args: SelectSubset<T, TransformativeCapacitySurveyUpsertArgs<ExtArgs>>): Prisma__TransformativeCapacitySurveyClient<$Result.GetResult<Prisma.$TransformativeCapacitySurveyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TransformativeCapacitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyCountArgs} args - Arguments to filter TransformativeCapacitySurveys to count.
+     * @example
+     * // Count the number of TransformativeCapacitySurveys
+     * const count = await prisma.transformativeCapacitySurvey.count({
+     *   where: {
+     *     // ... the filter for the TransformativeCapacitySurveys we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransformativeCapacitySurveyCountArgs>(
+      args?: Subset<T, TransformativeCapacitySurveyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransformativeCapacitySurveyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TransformativeCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransformativeCapacitySurveyAggregateArgs>(args: Subset<T, TransformativeCapacitySurveyAggregateArgs>): Prisma.PrismaPromise<GetTransformativeCapacitySurveyAggregateType<T>>
+
+    /**
+     * Group by TransformativeCapacitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransformativeCapacitySurveyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransformativeCapacitySurveyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransformativeCapacitySurveyGroupByArgs['orderBy'] }
+        : { orderBy?: TransformativeCapacitySurveyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransformativeCapacitySurveyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransformativeCapacitySurveyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TransformativeCapacitySurvey model
+   */
+  readonly fields: TransformativeCapacitySurveyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TransformativeCapacitySurvey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransformativeCapacitySurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TransformativeCapacitySurvey model
+   */
+  interface TransformativeCapacitySurveyFieldRefs {
+    readonly id: FieldRef<"TransformativeCapacitySurvey", 'String'>
+    readonly beneficiaryId: FieldRef<"TransformativeCapacitySurvey", 'String'>
+    readonly surveyDate: FieldRef<"TransformativeCapacitySurvey", 'DateTime'>
+    readonly responses: FieldRef<"TransformativeCapacitySurvey", 'Json'>
+    readonly overallScore: FieldRef<"TransformativeCapacitySurvey", 'Float'>
+    readonly createdAt: FieldRef<"TransformativeCapacitySurvey", 'DateTime'>
+    readonly updatedAt: FieldRef<"TransformativeCapacitySurvey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TransformativeCapacitySurvey findUnique
+   */
+  export type TransformativeCapacitySurveyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which TransformativeCapacitySurvey to fetch.
+     */
+    where: TransformativeCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * TransformativeCapacitySurvey findUniqueOrThrow
+   */
+  export type TransformativeCapacitySurveyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which TransformativeCapacitySurvey to fetch.
+     */
+    where: TransformativeCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * TransformativeCapacitySurvey findFirst
+   */
+  export type TransformativeCapacitySurveyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which TransformativeCapacitySurvey to fetch.
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransformativeCapacitySurveys to fetch.
+     */
+    orderBy?: TransformativeCapacitySurveyOrderByWithRelationInput | TransformativeCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransformativeCapacitySurveys.
+     */
+    cursor?: TransformativeCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransformativeCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransformativeCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransformativeCapacitySurveys.
+     */
+    distinct?: TransformativeCapacitySurveyScalarFieldEnum | TransformativeCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * TransformativeCapacitySurvey findFirstOrThrow
+   */
+  export type TransformativeCapacitySurveyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which TransformativeCapacitySurvey to fetch.
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransformativeCapacitySurveys to fetch.
+     */
+    orderBy?: TransformativeCapacitySurveyOrderByWithRelationInput | TransformativeCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransformativeCapacitySurveys.
+     */
+    cursor?: TransformativeCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransformativeCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransformativeCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransformativeCapacitySurveys.
+     */
+    distinct?: TransformativeCapacitySurveyScalarFieldEnum | TransformativeCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * TransformativeCapacitySurvey findMany
+   */
+  export type TransformativeCapacitySurveyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which TransformativeCapacitySurveys to fetch.
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransformativeCapacitySurveys to fetch.
+     */
+    orderBy?: TransformativeCapacitySurveyOrderByWithRelationInput | TransformativeCapacitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TransformativeCapacitySurveys.
+     */
+    cursor?: TransformativeCapacitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransformativeCapacitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransformativeCapacitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransformativeCapacitySurveys.
+     */
+    distinct?: TransformativeCapacitySurveyScalarFieldEnum | TransformativeCapacitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * TransformativeCapacitySurvey create
+   */
+  export type TransformativeCapacitySurveyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TransformativeCapacitySurvey.
+     */
+    data: XOR<TransformativeCapacitySurveyCreateInput, TransformativeCapacitySurveyUncheckedCreateInput>
+  }
+
+  /**
+   * TransformativeCapacitySurvey createMany
+   */
+  export type TransformativeCapacitySurveyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TransformativeCapacitySurveys.
+     */
+    data: TransformativeCapacitySurveyCreateManyInput | TransformativeCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TransformativeCapacitySurvey createManyAndReturn
+   */
+  export type TransformativeCapacitySurveyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to create many TransformativeCapacitySurveys.
+     */
+    data: TransformativeCapacitySurveyCreateManyInput | TransformativeCapacitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransformativeCapacitySurvey update
+   */
+  export type TransformativeCapacitySurveyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TransformativeCapacitySurvey.
+     */
+    data: XOR<TransformativeCapacitySurveyUpdateInput, TransformativeCapacitySurveyUncheckedUpdateInput>
+    /**
+     * Choose, which TransformativeCapacitySurvey to update.
+     */
+    where: TransformativeCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * TransformativeCapacitySurvey updateMany
+   */
+  export type TransformativeCapacitySurveyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TransformativeCapacitySurveys.
+     */
+    data: XOR<TransformativeCapacitySurveyUpdateManyMutationInput, TransformativeCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which TransformativeCapacitySurveys to update
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * Limit how many TransformativeCapacitySurveys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransformativeCapacitySurvey updateManyAndReturn
+   */
+  export type TransformativeCapacitySurveyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to update TransformativeCapacitySurveys.
+     */
+    data: XOR<TransformativeCapacitySurveyUpdateManyMutationInput, TransformativeCapacitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which TransformativeCapacitySurveys to update
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * Limit how many TransformativeCapacitySurveys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransformativeCapacitySurvey upsert
+   */
+  export type TransformativeCapacitySurveyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TransformativeCapacitySurvey to update in case it exists.
+     */
+    where: TransformativeCapacitySurveyWhereUniqueInput
+    /**
+     * In case the TransformativeCapacitySurvey found by the `where` argument doesn't exist, create a new TransformativeCapacitySurvey with this data.
+     */
+    create: XOR<TransformativeCapacitySurveyCreateInput, TransformativeCapacitySurveyUncheckedCreateInput>
+    /**
+     * In case the TransformativeCapacitySurvey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransformativeCapacitySurveyUpdateInput, TransformativeCapacitySurveyUncheckedUpdateInput>
+  }
+
+  /**
+   * TransformativeCapacitySurvey delete
+   */
+  export type TransformativeCapacitySurveyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter which TransformativeCapacitySurvey to delete.
+     */
+    where: TransformativeCapacitySurveyWhereUniqueInput
+  }
+
+  /**
+   * TransformativeCapacitySurvey deleteMany
+   */
+  export type TransformativeCapacitySurveyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransformativeCapacitySurveys to delete
+     */
+    where?: TransformativeCapacitySurveyWhereInput
+    /**
+     * Limit how many TransformativeCapacitySurveys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransformativeCapacitySurvey without action
+   */
+  export type TransformativeCapacitySurveyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransformativeCapacitySurvey
+     */
+    select?: TransformativeCapacitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransformativeCapacitySurvey
+     */
+    omit?: TransformativeCapacitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransformativeCapacitySurveyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model VulnerabilitySurvey
+   */
+
+  export type AggregateVulnerabilitySurvey = {
+    _count: VulnerabilitySurveyCountAggregateOutputType | null
+    _min: VulnerabilitySurveyMinAggregateOutputType | null
+    _max: VulnerabilitySurveyMaxAggregateOutputType | null
+  }
+
+  export type VulnerabilitySurveyMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VulnerabilitySurveyMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    surveyDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VulnerabilitySurveyCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    surveyDate: number
+    responses: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VulnerabilitySurveyMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VulnerabilitySurveyMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VulnerabilitySurveyCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    surveyDate?: true
+    responses?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VulnerabilitySurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VulnerabilitySurvey to aggregate.
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VulnerabilitySurveys to fetch.
+     */
+    orderBy?: VulnerabilitySurveyOrderByWithRelationInput | VulnerabilitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VulnerabilitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VulnerabilitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VulnerabilitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VulnerabilitySurveys
+    **/
+    _count?: true | VulnerabilitySurveyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VulnerabilitySurveyMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VulnerabilitySurveyMaxAggregateInputType
+  }
+
+  export type GetVulnerabilitySurveyAggregateType<T extends VulnerabilitySurveyAggregateArgs> = {
+        [P in keyof T & keyof AggregateVulnerabilitySurvey]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVulnerabilitySurvey[P]>
+      : GetScalarType<T[P], AggregateVulnerabilitySurvey[P]>
+  }
+
+
+
+
+  export type VulnerabilitySurveyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VulnerabilitySurveyWhereInput
+    orderBy?: VulnerabilitySurveyOrderByWithAggregationInput | VulnerabilitySurveyOrderByWithAggregationInput[]
+    by: VulnerabilitySurveyScalarFieldEnum[] | VulnerabilitySurveyScalarFieldEnum
+    having?: VulnerabilitySurveyScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VulnerabilitySurveyCountAggregateInputType | true
+    _min?: VulnerabilitySurveyMinAggregateInputType
+    _max?: VulnerabilitySurveyMaxAggregateInputType
+  }
+
+  export type VulnerabilitySurveyGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    surveyDate: Date
+    responses: JsonValue
+    createdAt: Date
+    updatedAt: Date
+    _count: VulnerabilitySurveyCountAggregateOutputType | null
+    _min: VulnerabilitySurveyMinAggregateOutputType | null
+    _max: VulnerabilitySurveyMaxAggregateOutputType | null
+  }
+
+  type GetVulnerabilitySurveyGroupByPayload<T extends VulnerabilitySurveyGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VulnerabilitySurveyGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VulnerabilitySurveyGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VulnerabilitySurveyGroupByOutputType[P]>
+            : GetScalarType<T[P], VulnerabilitySurveyGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VulnerabilitySurveySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vulnerabilitySurvey"]>
+
+  export type VulnerabilitySurveySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vulnerabilitySurvey"]>
+
+  export type VulnerabilitySurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vulnerabilitySurvey"]>
+
+  export type VulnerabilitySurveySelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    surveyDate?: boolean
+    responses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VulnerabilitySurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "surveyDate" | "responses" | "createdAt" | "updatedAt", ExtArgs["result"]["vulnerabilitySurvey"]>
+  export type VulnerabilitySurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type VulnerabilitySurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type VulnerabilitySurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $VulnerabilitySurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VulnerabilitySurvey"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      surveyDate: Date
+      responses: Prisma.JsonValue
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["vulnerabilitySurvey"]>
+    composites: {}
+  }
+
+  type VulnerabilitySurveyGetPayload<S extends boolean | null | undefined | VulnerabilitySurveyDefaultArgs> = $Result.GetResult<Prisma.$VulnerabilitySurveyPayload, S>
+
+  type VulnerabilitySurveyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VulnerabilitySurveyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VulnerabilitySurveyCountAggregateInputType | true
+    }
+
+  export interface VulnerabilitySurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VulnerabilitySurvey'], meta: { name: 'VulnerabilitySurvey' } }
+    /**
+     * Find zero or one VulnerabilitySurvey that matches the filter.
+     * @param {VulnerabilitySurveyFindUniqueArgs} args - Arguments to find a VulnerabilitySurvey
+     * @example
+     * // Get one VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VulnerabilitySurveyFindUniqueArgs>(args: SelectSubset<T, VulnerabilitySurveyFindUniqueArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VulnerabilitySurvey that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VulnerabilitySurveyFindUniqueOrThrowArgs} args - Arguments to find a VulnerabilitySurvey
+     * @example
+     * // Get one VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VulnerabilitySurveyFindUniqueOrThrowArgs>(args: SelectSubset<T, VulnerabilitySurveyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VulnerabilitySurvey that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyFindFirstArgs} args - Arguments to find a VulnerabilitySurvey
+     * @example
+     * // Get one VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VulnerabilitySurveyFindFirstArgs>(args?: SelectSubset<T, VulnerabilitySurveyFindFirstArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VulnerabilitySurvey that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyFindFirstOrThrowArgs} args - Arguments to find a VulnerabilitySurvey
+     * @example
+     * // Get one VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VulnerabilitySurveyFindFirstOrThrowArgs>(args?: SelectSubset<T, VulnerabilitySurveyFindFirstOrThrowArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VulnerabilitySurveys that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VulnerabilitySurveys
+     * const vulnerabilitySurveys = await prisma.vulnerabilitySurvey.findMany()
+     * 
+     * // Get first 10 VulnerabilitySurveys
+     * const vulnerabilitySurveys = await prisma.vulnerabilitySurvey.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vulnerabilitySurveyWithIdOnly = await prisma.vulnerabilitySurvey.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VulnerabilitySurveyFindManyArgs>(args?: SelectSubset<T, VulnerabilitySurveyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VulnerabilitySurvey.
+     * @param {VulnerabilitySurveyCreateArgs} args - Arguments to create a VulnerabilitySurvey.
+     * @example
+     * // Create one VulnerabilitySurvey
+     * const VulnerabilitySurvey = await prisma.vulnerabilitySurvey.create({
+     *   data: {
+     *     // ... data to create a VulnerabilitySurvey
+     *   }
+     * })
+     * 
+     */
+    create<T extends VulnerabilitySurveyCreateArgs>(args: SelectSubset<T, VulnerabilitySurveyCreateArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VulnerabilitySurveys.
+     * @param {VulnerabilitySurveyCreateManyArgs} args - Arguments to create many VulnerabilitySurveys.
+     * @example
+     * // Create many VulnerabilitySurveys
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VulnerabilitySurveyCreateManyArgs>(args?: SelectSubset<T, VulnerabilitySurveyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VulnerabilitySurveys and returns the data saved in the database.
+     * @param {VulnerabilitySurveyCreateManyAndReturnArgs} args - Arguments to create many VulnerabilitySurveys.
+     * @example
+     * // Create many VulnerabilitySurveys
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VulnerabilitySurveys and only return the `id`
+     * const vulnerabilitySurveyWithIdOnly = await prisma.vulnerabilitySurvey.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VulnerabilitySurveyCreateManyAndReturnArgs>(args?: SelectSubset<T, VulnerabilitySurveyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VulnerabilitySurvey.
+     * @param {VulnerabilitySurveyDeleteArgs} args - Arguments to delete one VulnerabilitySurvey.
+     * @example
+     * // Delete one VulnerabilitySurvey
+     * const VulnerabilitySurvey = await prisma.vulnerabilitySurvey.delete({
+     *   where: {
+     *     // ... filter to delete one VulnerabilitySurvey
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VulnerabilitySurveyDeleteArgs>(args: SelectSubset<T, VulnerabilitySurveyDeleteArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VulnerabilitySurvey.
+     * @param {VulnerabilitySurveyUpdateArgs} args - Arguments to update one VulnerabilitySurvey.
+     * @example
+     * // Update one VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VulnerabilitySurveyUpdateArgs>(args: SelectSubset<T, VulnerabilitySurveyUpdateArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VulnerabilitySurveys.
+     * @param {VulnerabilitySurveyDeleteManyArgs} args - Arguments to filter VulnerabilitySurveys to delete.
+     * @example
+     * // Delete a few VulnerabilitySurveys
+     * const { count } = await prisma.vulnerabilitySurvey.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VulnerabilitySurveyDeleteManyArgs>(args?: SelectSubset<T, VulnerabilitySurveyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VulnerabilitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VulnerabilitySurveys
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VulnerabilitySurveyUpdateManyArgs>(args: SelectSubset<T, VulnerabilitySurveyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VulnerabilitySurveys and returns the data updated in the database.
+     * @param {VulnerabilitySurveyUpdateManyAndReturnArgs} args - Arguments to update many VulnerabilitySurveys.
+     * @example
+     * // Update many VulnerabilitySurveys
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VulnerabilitySurveys and only return the `id`
+     * const vulnerabilitySurveyWithIdOnly = await prisma.vulnerabilitySurvey.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VulnerabilitySurveyUpdateManyAndReturnArgs>(args: SelectSubset<T, VulnerabilitySurveyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VulnerabilitySurvey.
+     * @param {VulnerabilitySurveyUpsertArgs} args - Arguments to update or create a VulnerabilitySurvey.
+     * @example
+     * // Update or create a VulnerabilitySurvey
+     * const vulnerabilitySurvey = await prisma.vulnerabilitySurvey.upsert({
+     *   create: {
+     *     // ... data to create a VulnerabilitySurvey
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VulnerabilitySurvey we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VulnerabilitySurveyUpsertArgs>(args: SelectSubset<T, VulnerabilitySurveyUpsertArgs<ExtArgs>>): Prisma__VulnerabilitySurveyClient<$Result.GetResult<Prisma.$VulnerabilitySurveyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VulnerabilitySurveys.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyCountArgs} args - Arguments to filter VulnerabilitySurveys to count.
+     * @example
+     * // Count the number of VulnerabilitySurveys
+     * const count = await prisma.vulnerabilitySurvey.count({
+     *   where: {
+     *     // ... the filter for the VulnerabilitySurveys we want to count
+     *   }
+     * })
+    **/
+    count<T extends VulnerabilitySurveyCountArgs>(
+      args?: Subset<T, VulnerabilitySurveyCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VulnerabilitySurveyCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VulnerabilitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VulnerabilitySurveyAggregateArgs>(args: Subset<T, VulnerabilitySurveyAggregateArgs>): Prisma.PrismaPromise<GetVulnerabilitySurveyAggregateType<T>>
+
+    /**
+     * Group by VulnerabilitySurvey.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VulnerabilitySurveyGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VulnerabilitySurveyGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VulnerabilitySurveyGroupByArgs['orderBy'] }
+        : { orderBy?: VulnerabilitySurveyGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VulnerabilitySurveyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVulnerabilitySurveyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VulnerabilitySurvey model
+   */
+  readonly fields: VulnerabilitySurveyFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VulnerabilitySurvey.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VulnerabilitySurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VulnerabilitySurvey model
+   */
+  interface VulnerabilitySurveyFieldRefs {
+    readonly id: FieldRef<"VulnerabilitySurvey", 'String'>
+    readonly beneficiaryId: FieldRef<"VulnerabilitySurvey", 'String'>
+    readonly surveyDate: FieldRef<"VulnerabilitySurvey", 'DateTime'>
+    readonly responses: FieldRef<"VulnerabilitySurvey", 'Json'>
+    readonly createdAt: FieldRef<"VulnerabilitySurvey", 'DateTime'>
+    readonly updatedAt: FieldRef<"VulnerabilitySurvey", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VulnerabilitySurvey findUnique
+   */
+  export type VulnerabilitySurveyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which VulnerabilitySurvey to fetch.
+     */
+    where: VulnerabilitySurveyWhereUniqueInput
+  }
+
+  /**
+   * VulnerabilitySurvey findUniqueOrThrow
+   */
+  export type VulnerabilitySurveyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which VulnerabilitySurvey to fetch.
+     */
+    where: VulnerabilitySurveyWhereUniqueInput
+  }
+
+  /**
+   * VulnerabilitySurvey findFirst
+   */
+  export type VulnerabilitySurveyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which VulnerabilitySurvey to fetch.
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VulnerabilitySurveys to fetch.
+     */
+    orderBy?: VulnerabilitySurveyOrderByWithRelationInput | VulnerabilitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VulnerabilitySurveys.
+     */
+    cursor?: VulnerabilitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VulnerabilitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VulnerabilitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VulnerabilitySurveys.
+     */
+    distinct?: VulnerabilitySurveyScalarFieldEnum | VulnerabilitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * VulnerabilitySurvey findFirstOrThrow
+   */
+  export type VulnerabilitySurveyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which VulnerabilitySurvey to fetch.
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VulnerabilitySurveys to fetch.
+     */
+    orderBy?: VulnerabilitySurveyOrderByWithRelationInput | VulnerabilitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VulnerabilitySurveys.
+     */
+    cursor?: VulnerabilitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VulnerabilitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VulnerabilitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VulnerabilitySurveys.
+     */
+    distinct?: VulnerabilitySurveyScalarFieldEnum | VulnerabilitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * VulnerabilitySurvey findMany
+   */
+  export type VulnerabilitySurveyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter, which VulnerabilitySurveys to fetch.
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VulnerabilitySurveys to fetch.
+     */
+    orderBy?: VulnerabilitySurveyOrderByWithRelationInput | VulnerabilitySurveyOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VulnerabilitySurveys.
+     */
+    cursor?: VulnerabilitySurveyWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VulnerabilitySurveys from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VulnerabilitySurveys.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VulnerabilitySurveys.
+     */
+    distinct?: VulnerabilitySurveyScalarFieldEnum | VulnerabilitySurveyScalarFieldEnum[]
+  }
+
+  /**
+   * VulnerabilitySurvey create
+   */
+  export type VulnerabilitySurveyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to create a VulnerabilitySurvey.
+     */
+    data: XOR<VulnerabilitySurveyCreateInput, VulnerabilitySurveyUncheckedCreateInput>
+  }
+
+  /**
+   * VulnerabilitySurvey createMany
+   */
+  export type VulnerabilitySurveyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VulnerabilitySurveys.
+     */
+    data: VulnerabilitySurveyCreateManyInput | VulnerabilitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VulnerabilitySurvey createManyAndReturn
+   */
+  export type VulnerabilitySurveyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to create many VulnerabilitySurveys.
+     */
+    data: VulnerabilitySurveyCreateManyInput | VulnerabilitySurveyCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VulnerabilitySurvey update
+   */
+  export type VulnerabilitySurveyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * The data needed to update a VulnerabilitySurvey.
+     */
+    data: XOR<VulnerabilitySurveyUpdateInput, VulnerabilitySurveyUncheckedUpdateInput>
+    /**
+     * Choose, which VulnerabilitySurvey to update.
+     */
+    where: VulnerabilitySurveyWhereUniqueInput
+  }
+
+  /**
+   * VulnerabilitySurvey updateMany
+   */
+  export type VulnerabilitySurveyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VulnerabilitySurveys.
+     */
+    data: XOR<VulnerabilitySurveyUpdateManyMutationInput, VulnerabilitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which VulnerabilitySurveys to update
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * Limit how many VulnerabilitySurveys to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VulnerabilitySurvey updateManyAndReturn
+   */
+  export type VulnerabilitySurveyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * The data used to update VulnerabilitySurveys.
+     */
+    data: XOR<VulnerabilitySurveyUpdateManyMutationInput, VulnerabilitySurveyUncheckedUpdateManyInput>
+    /**
+     * Filter which VulnerabilitySurveys to update
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * Limit how many VulnerabilitySurveys to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VulnerabilitySurvey upsert
+   */
+  export type VulnerabilitySurveyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * The filter to search for the VulnerabilitySurvey to update in case it exists.
+     */
+    where: VulnerabilitySurveyWhereUniqueInput
+    /**
+     * In case the VulnerabilitySurvey found by the `where` argument doesn't exist, create a new VulnerabilitySurvey with this data.
+     */
+    create: XOR<VulnerabilitySurveyCreateInput, VulnerabilitySurveyUncheckedCreateInput>
+    /**
+     * In case the VulnerabilitySurvey was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VulnerabilitySurveyUpdateInput, VulnerabilitySurveyUncheckedUpdateInput>
+  }
+
+  /**
+   * VulnerabilitySurvey delete
+   */
+  export type VulnerabilitySurveyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+    /**
+     * Filter which VulnerabilitySurvey to delete.
+     */
+    where: VulnerabilitySurveyWhereUniqueInput
+  }
+
+  /**
+   * VulnerabilitySurvey deleteMany
+   */
+  export type VulnerabilitySurveyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VulnerabilitySurveys to delete
+     */
+    where?: VulnerabilitySurveyWhereInput
+    /**
+     * Limit how many VulnerabilitySurveys to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VulnerabilitySurvey without action
+   */
+  export type VulnerabilitySurveyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VulnerabilitySurvey
+     */
+    select?: VulnerabilitySurveySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VulnerabilitySurvey
+     */
+    omit?: VulnerabilitySurveyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VulnerabilitySurveyInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SolutionPlan
+   */
+
+  export type AggregateSolutionPlan = {
+    _count: SolutionPlanCountAggregateOutputType | null
+    _min: SolutionPlanMinAggregateOutputType | null
+    _max: SolutionPlanMaxAggregateOutputType | null
+  }
+
+  export type SolutionPlanMinAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SolutionPlanMaxAggregateOutputType = {
+    id: string | null
+    beneficiaryId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SolutionPlanCountAggregateOutputType = {
+    id: number
+    beneficiaryId: number
+    createdAt: number
+    updatedAt: number
+    planData: number
+    _all: number
+  }
+
+
+  export type SolutionPlanMinAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SolutionPlanMaxAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SolutionPlanCountAggregateInputType = {
+    id?: true
+    beneficiaryId?: true
+    createdAt?: true
+    updatedAt?: true
+    planData?: true
+    _all?: true
+  }
+
+  export type SolutionPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SolutionPlan to aggregate.
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolutionPlans to fetch.
+     */
+    orderBy?: SolutionPlanOrderByWithRelationInput | SolutionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SolutionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolutionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolutionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SolutionPlans
+    **/
+    _count?: true | SolutionPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SolutionPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SolutionPlanMaxAggregateInputType
+  }
+
+  export type GetSolutionPlanAggregateType<T extends SolutionPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateSolutionPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSolutionPlan[P]>
+      : GetScalarType<T[P], AggregateSolutionPlan[P]>
+  }
+
+
+
+
+  export type SolutionPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolutionPlanWhereInput
+    orderBy?: SolutionPlanOrderByWithAggregationInput | SolutionPlanOrderByWithAggregationInput[]
+    by: SolutionPlanScalarFieldEnum[] | SolutionPlanScalarFieldEnum
+    having?: SolutionPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SolutionPlanCountAggregateInputType | true
+    _min?: SolutionPlanMinAggregateInputType
+    _max?: SolutionPlanMaxAggregateInputType
+  }
+
+  export type SolutionPlanGroupByOutputType = {
+    id: string
+    beneficiaryId: string
+    createdAt: Date
+    updatedAt: Date
+    planData: JsonValue
+    _count: SolutionPlanCountAggregateOutputType | null
+    _min: SolutionPlanMinAggregateOutputType | null
+    _max: SolutionPlanMaxAggregateOutputType | null
+  }
+
+  type GetSolutionPlanGroupByPayload<T extends SolutionPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SolutionPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SolutionPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SolutionPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], SolutionPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SolutionPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planData?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["solutionPlan"]>
+
+  export type SolutionPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planData?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["solutionPlan"]>
+
+  export type SolutionPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    beneficiaryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planData?: boolean
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["solutionPlan"]>
+
+  export type SolutionPlanSelectScalar = {
+    id?: boolean
+    beneficiaryId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    planData?: boolean
+  }
+
+  export type SolutionPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "createdAt" | "updatedAt" | "planData", ExtArgs["result"]["solutionPlan"]>
+  export type SolutionPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type SolutionPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+  export type SolutionPlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
+  }
+
+  export type $SolutionPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SolutionPlan"
+    objects: {
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      beneficiaryId: string
+      createdAt: Date
+      updatedAt: Date
+      planData: Prisma.JsonValue
+    }, ExtArgs["result"]["solutionPlan"]>
+    composites: {}
+  }
+
+  type SolutionPlanGetPayload<S extends boolean | null | undefined | SolutionPlanDefaultArgs> = $Result.GetResult<Prisma.$SolutionPlanPayload, S>
+
+  type SolutionPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SolutionPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SolutionPlanCountAggregateInputType | true
+    }
+
+  export interface SolutionPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SolutionPlan'], meta: { name: 'SolutionPlan' } }
+    /**
+     * Find zero or one SolutionPlan that matches the filter.
+     * @param {SolutionPlanFindUniqueArgs} args - Arguments to find a SolutionPlan
+     * @example
+     * // Get one SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SolutionPlanFindUniqueArgs>(args: SelectSubset<T, SolutionPlanFindUniqueArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SolutionPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SolutionPlanFindUniqueOrThrowArgs} args - Arguments to find a SolutionPlan
+     * @example
+     * // Get one SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SolutionPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, SolutionPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SolutionPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanFindFirstArgs} args - Arguments to find a SolutionPlan
+     * @example
+     * // Get one SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SolutionPlanFindFirstArgs>(args?: SelectSubset<T, SolutionPlanFindFirstArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SolutionPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanFindFirstOrThrowArgs} args - Arguments to find a SolutionPlan
+     * @example
+     * // Get one SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SolutionPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, SolutionPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SolutionPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SolutionPlans
+     * const solutionPlans = await prisma.solutionPlan.findMany()
+     * 
+     * // Get first 10 SolutionPlans
+     * const solutionPlans = await prisma.solutionPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const solutionPlanWithIdOnly = await prisma.solutionPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SolutionPlanFindManyArgs>(args?: SelectSubset<T, SolutionPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SolutionPlan.
+     * @param {SolutionPlanCreateArgs} args - Arguments to create a SolutionPlan.
+     * @example
+     * // Create one SolutionPlan
+     * const SolutionPlan = await prisma.solutionPlan.create({
+     *   data: {
+     *     // ... data to create a SolutionPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends SolutionPlanCreateArgs>(args: SelectSubset<T, SolutionPlanCreateArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SolutionPlans.
+     * @param {SolutionPlanCreateManyArgs} args - Arguments to create many SolutionPlans.
+     * @example
+     * // Create many SolutionPlans
+     * const solutionPlan = await prisma.solutionPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SolutionPlanCreateManyArgs>(args?: SelectSubset<T, SolutionPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SolutionPlans and returns the data saved in the database.
+     * @param {SolutionPlanCreateManyAndReturnArgs} args - Arguments to create many SolutionPlans.
+     * @example
+     * // Create many SolutionPlans
+     * const solutionPlan = await prisma.solutionPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SolutionPlans and only return the `id`
+     * const solutionPlanWithIdOnly = await prisma.solutionPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SolutionPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, SolutionPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SolutionPlan.
+     * @param {SolutionPlanDeleteArgs} args - Arguments to delete one SolutionPlan.
+     * @example
+     * // Delete one SolutionPlan
+     * const SolutionPlan = await prisma.solutionPlan.delete({
+     *   where: {
+     *     // ... filter to delete one SolutionPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SolutionPlanDeleteArgs>(args: SelectSubset<T, SolutionPlanDeleteArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SolutionPlan.
+     * @param {SolutionPlanUpdateArgs} args - Arguments to update one SolutionPlan.
+     * @example
+     * // Update one SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SolutionPlanUpdateArgs>(args: SelectSubset<T, SolutionPlanUpdateArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SolutionPlans.
+     * @param {SolutionPlanDeleteManyArgs} args - Arguments to filter SolutionPlans to delete.
+     * @example
+     * // Delete a few SolutionPlans
+     * const { count } = await prisma.solutionPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SolutionPlanDeleteManyArgs>(args?: SelectSubset<T, SolutionPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SolutionPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SolutionPlans
+     * const solutionPlan = await prisma.solutionPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SolutionPlanUpdateManyArgs>(args: SelectSubset<T, SolutionPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SolutionPlans and returns the data updated in the database.
+     * @param {SolutionPlanUpdateManyAndReturnArgs} args - Arguments to update many SolutionPlans.
+     * @example
+     * // Update many SolutionPlans
+     * const solutionPlan = await prisma.solutionPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SolutionPlans and only return the `id`
+     * const solutionPlanWithIdOnly = await prisma.solutionPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SolutionPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, SolutionPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SolutionPlan.
+     * @param {SolutionPlanUpsertArgs} args - Arguments to update or create a SolutionPlan.
+     * @example
+     * // Update or create a SolutionPlan
+     * const solutionPlan = await prisma.solutionPlan.upsert({
+     *   create: {
+     *     // ... data to create a SolutionPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SolutionPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SolutionPlanUpsertArgs>(args: SelectSubset<T, SolutionPlanUpsertArgs<ExtArgs>>): Prisma__SolutionPlanClient<$Result.GetResult<Prisma.$SolutionPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SolutionPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanCountArgs} args - Arguments to filter SolutionPlans to count.
+     * @example
+     * // Count the number of SolutionPlans
+     * const count = await prisma.solutionPlan.count({
+     *   where: {
+     *     // ... the filter for the SolutionPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends SolutionPlanCountArgs>(
+      args?: Subset<T, SolutionPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SolutionPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SolutionPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SolutionPlanAggregateArgs>(args: Subset<T, SolutionPlanAggregateArgs>): Prisma.PrismaPromise<GetSolutionPlanAggregateType<T>>
+
+    /**
+     * Group by SolutionPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolutionPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SolutionPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SolutionPlanGroupByArgs['orderBy'] }
+        : { orderBy?: SolutionPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SolutionPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSolutionPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SolutionPlan model
+   */
+  readonly fields: SolutionPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SolutionPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SolutionPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    beneficiary<T extends BeneficiaryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BeneficiaryDefaultArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SolutionPlan model
+   */
+  interface SolutionPlanFieldRefs {
+    readonly id: FieldRef<"SolutionPlan", 'String'>
+    readonly beneficiaryId: FieldRef<"SolutionPlan", 'String'>
+    readonly createdAt: FieldRef<"SolutionPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"SolutionPlan", 'DateTime'>
+    readonly planData: FieldRef<"SolutionPlan", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SolutionPlan findUnique
+   */
+  export type SolutionPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which SolutionPlan to fetch.
+     */
+    where: SolutionPlanWhereUniqueInput
+  }
+
+  /**
+   * SolutionPlan findUniqueOrThrow
+   */
+  export type SolutionPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which SolutionPlan to fetch.
+     */
+    where: SolutionPlanWhereUniqueInput
+  }
+
+  /**
+   * SolutionPlan findFirst
+   */
+  export type SolutionPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which SolutionPlan to fetch.
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolutionPlans to fetch.
+     */
+    orderBy?: SolutionPlanOrderByWithRelationInput | SolutionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SolutionPlans.
+     */
+    cursor?: SolutionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolutionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolutionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SolutionPlans.
+     */
+    distinct?: SolutionPlanScalarFieldEnum | SolutionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SolutionPlan findFirstOrThrow
+   */
+  export type SolutionPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which SolutionPlan to fetch.
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolutionPlans to fetch.
+     */
+    orderBy?: SolutionPlanOrderByWithRelationInput | SolutionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SolutionPlans.
+     */
+    cursor?: SolutionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolutionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolutionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SolutionPlans.
+     */
+    distinct?: SolutionPlanScalarFieldEnum | SolutionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SolutionPlan findMany
+   */
+  export type SolutionPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which SolutionPlans to fetch.
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolutionPlans to fetch.
+     */
+    orderBy?: SolutionPlanOrderByWithRelationInput | SolutionPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SolutionPlans.
+     */
+    cursor?: SolutionPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolutionPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolutionPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SolutionPlans.
+     */
+    distinct?: SolutionPlanScalarFieldEnum | SolutionPlanScalarFieldEnum[]
+  }
+
+  /**
+   * SolutionPlan create
+   */
+  export type SolutionPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SolutionPlan.
+     */
+    data: XOR<SolutionPlanCreateInput, SolutionPlanUncheckedCreateInput>
+  }
+
+  /**
+   * SolutionPlan createMany
+   */
+  export type SolutionPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SolutionPlans.
+     */
+    data: SolutionPlanCreateManyInput | SolutionPlanCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SolutionPlan createManyAndReturn
+   */
+  export type SolutionPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many SolutionPlans.
+     */
+    data: SolutionPlanCreateManyInput | SolutionPlanCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SolutionPlan update
+   */
+  export type SolutionPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SolutionPlan.
+     */
+    data: XOR<SolutionPlanUpdateInput, SolutionPlanUncheckedUpdateInput>
+    /**
+     * Choose, which SolutionPlan to update.
+     */
+    where: SolutionPlanWhereUniqueInput
+  }
+
+  /**
+   * SolutionPlan updateMany
+   */
+  export type SolutionPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SolutionPlans.
+     */
+    data: XOR<SolutionPlanUpdateManyMutationInput, SolutionPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which SolutionPlans to update
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * Limit how many SolutionPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SolutionPlan updateManyAndReturn
+   */
+  export type SolutionPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update SolutionPlans.
+     */
+    data: XOR<SolutionPlanUpdateManyMutationInput, SolutionPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which SolutionPlans to update
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * Limit how many SolutionPlans to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SolutionPlan upsert
+   */
+  export type SolutionPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SolutionPlan to update in case it exists.
+     */
+    where: SolutionPlanWhereUniqueInput
+    /**
+     * In case the SolutionPlan found by the `where` argument doesn't exist, create a new SolutionPlan with this data.
+     */
+    create: XOR<SolutionPlanCreateInput, SolutionPlanUncheckedCreateInput>
+    /**
+     * In case the SolutionPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SolutionPlanUpdateInput, SolutionPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * SolutionPlan delete
+   */
+  export type SolutionPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+    /**
+     * Filter which SolutionPlan to delete.
+     */
+    where: SolutionPlanWhereUniqueInput
+  }
+
+  /**
+   * SolutionPlan deleteMany
+   */
+  export type SolutionPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SolutionPlans to delete
+     */
+    where?: SolutionPlanWhereInput
+    /**
+     * Limit how many SolutionPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SolutionPlan without action
+   */
+  export type SolutionPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolutionPlan
+     */
+    select?: SolutionPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolutionPlan
+     */
+    omit?: SolutionPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolutionPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -45499,6 +57054,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     principalName: 'principalName',
+    udiseCode: 'udiseCode',
     email: 'email',
     phone: 'phone',
     address: 'address',
@@ -45598,6 +57154,7 @@ export namespace Prisma {
     status: 'status',
     schoolId: 'schoolId',
     fellowId: 'fellowId',
+    isMigrated: 'isMigrated',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -45718,6 +57275,7 @@ export namespace Prisma {
     bankName: 'bankName',
     bankAccountNo: 'bankAccountNo',
     bankIfsc: 'bankIfsc',
+    isMigrated: 'isMigrated',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -45816,6 +57374,22 @@ export namespace Prisma {
   };
 
   export type GoatRearingProgramScalarFieldEnum = (typeof GoatRearingProgramScalarFieldEnum)[keyof typeof GoatRearingProgramScalarFieldEnum]
+
+
+  export const GoatRearingEventScalarFieldEnum: {
+    id: 'id',
+    beneficiaryGoatRearingId: 'beneficiaryGoatRearingId',
+    eventType: 'eventType',
+    eventDate: 'eventDate',
+    quantity: 'quantity',
+    notes: 'notes',
+    photoUrl: 'photoUrl',
+    recordedBy: 'recordedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GoatRearingEventScalarFieldEnum = (typeof GoatRearingEventScalarFieldEnum)[keyof typeof GoatRearingEventScalarFieldEnum]
 
 
   export const BeneficiarySugarcaneScalarFieldEnum: {
@@ -45921,6 +57495,10 @@ export namespace Prisma {
     ef2: 'ef2',
     logininfo: 'logininfo',
     logoutinfo: 'logoutinfo',
+    checkInLat: 'checkInLat',
+    checkInLng: 'checkInLng',
+    checkOutLat: 'checkOutLat',
+    checkOutLng: 'checkOutLng',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -45934,6 +57512,7 @@ export namespace Prisma {
     type: 'type',
     dates: 'dates',
     reason: 'reason',
+    rejectionReason: 'rejectionReason',
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -45956,12 +57535,133 @@ export namespace Prisma {
   export type IncidentResourceNeedScalarFieldEnum = (typeof IncidentResourceNeedScalarFieldEnum)[keyof typeof IncidentResourceNeedScalarFieldEnum]
 
 
+  export const FellowTaskScalarFieldEnum: {
+    id: 'id',
+    fellowId: 'fellowId',
+    title: 'title',
+    description: 'description',
+    plannedDate: 'plannedDate',
+    status: 'status',
+    isPlanned: 'isPlanned',
+    completionDate: 'completionDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FellowTaskScalarFieldEnum = (typeof FellowTaskScalarFieldEnum)[keyof typeof FellowTaskScalarFieldEnum]
+
+
+  export const FellowTaskCommentScalarFieldEnum: {
+    id: 'id',
+    taskId: 'taskId',
+    authorId: 'authorId',
+    text: 'text',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FellowTaskCommentScalarFieldEnum = (typeof FellowTaskCommentScalarFieldEnum)[keyof typeof FellowTaskCommentScalarFieldEnum]
+
+
+  export const ResilienceSurveyScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    surveyDate: 'surveyDate',
+    responses: 'responses',
+    lifeSatisfactionScore: 'lifeSatisfactionScore',
+    planningScore: 'planningScore',
+    disasterReadinessScore: 'disasterReadinessScore',
+    disasterBeliefsScore: 'disasterBeliefsScore',
+    disasterMindsetScore: 'disasterMindsetScore',
+    financialResilienceScore: 'financialResilienceScore',
+    healthResilienceScore: 'healthResilienceScore',
+    socialConnectednessScore: 'socialConnectednessScore',
+    socialProtectionScore: 'socialProtectionScore',
+    disasterWarningScore: 'disasterWarningScore',
+    vulnerabilityScore: 'vulnerabilityScore',
+    overallScore: 'overallScore',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ResilienceSurveyScalarFieldEnum = (typeof ResilienceSurveyScalarFieldEnum)[keyof typeof ResilienceSurveyScalarFieldEnum]
+
+
+  export const AdaptiveCapacitySurveyScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    surveyDate: 'surveyDate',
+    responses: 'responses',
+    overallScore: 'overallScore',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AdaptiveCapacitySurveyScalarFieldEnum = (typeof AdaptiveCapacitySurveyScalarFieldEnum)[keyof typeof AdaptiveCapacitySurveyScalarFieldEnum]
+
+
+  export const AbsorptiveCapacitySurveyScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    surveyDate: 'surveyDate',
+    responses: 'responses',
+    overallScore: 'overallScore',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AbsorptiveCapacitySurveyScalarFieldEnum = (typeof AbsorptiveCapacitySurveyScalarFieldEnum)[keyof typeof AbsorptiveCapacitySurveyScalarFieldEnum]
+
+
+  export const TransformativeCapacitySurveyScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    surveyDate: 'surveyDate',
+    responses: 'responses',
+    overallScore: 'overallScore',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TransformativeCapacitySurveyScalarFieldEnum = (typeof TransformativeCapacitySurveyScalarFieldEnum)[keyof typeof TransformativeCapacitySurveyScalarFieldEnum]
+
+
+  export const VulnerabilitySurveyScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    surveyDate: 'surveyDate',
+    responses: 'responses',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VulnerabilitySurveyScalarFieldEnum = (typeof VulnerabilitySurveyScalarFieldEnum)[keyof typeof VulnerabilitySurveyScalarFieldEnum]
+
+
+  export const SolutionPlanScalarFieldEnum: {
+    id: 'id',
+    beneficiaryId: 'beneficiaryId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    planData: 'planData'
+  };
+
+  export type SolutionPlanScalarFieldEnum = (typeof SolutionPlanScalarFieldEnum)[keyof typeof SolutionPlanScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -45978,6 +57678,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -46102,6 +57811,20 @@ export namespace Prisma {
    */
   export type ListEnumLeaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeaveStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
   /**
    * Deep Input Types
    */
@@ -46193,6 +57916,7 @@ export namespace Prisma {
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
     attendanceLogs?: AttendanceLogListRelationFilter
+    taskComments?: FellowTaskCommentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -46215,6 +57939,7 @@ export namespace Prisma {
     leaves?: LeaveOrderByRelationAggregateInput
     verifiedTransactions?: InventoryLedgerOrderByRelationAggregateInput
     attendanceLogs?: AttendanceLogOrderByRelationAggregateInput
+    taskComments?: FellowTaskCommentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -46240,6 +57965,7 @@ export namespace Prisma {
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
     attendanceLogs?: AttendanceLogListRelationFilter
+    taskComments?: FellowTaskCommentListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -46476,6 +58202,7 @@ export namespace Prisma {
     id?: StringFilter<"School"> | string
     name?: StringFilter<"School"> | string
     principalName?: StringNullableFilter<"School"> | string | null
+    udiseCode?: StringNullableFilter<"School"> | string | null
     email?: StringNullableFilter<"School"> | string | null
     phone?: StringNullableFilter<"School"> | string | null
     address?: StringNullableFilter<"School"> | string | null
@@ -46497,6 +58224,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     principalName?: SortOrderInput | SortOrder
+    udiseCode?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
@@ -46521,6 +58249,7 @@ export namespace Prisma {
     OR?: SchoolWhereInput[]
     NOT?: SchoolWhereInput | SchoolWhereInput[]
     principalName?: StringNullableFilter<"School"> | string | null
+    udiseCode?: StringNullableFilter<"School"> | string | null
     email?: StringNullableFilter<"School"> | string | null
     phone?: StringNullableFilter<"School"> | string | null
     address?: StringNullableFilter<"School"> | string | null
@@ -46542,6 +58271,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     principalName?: SortOrderInput | SortOrder
+    udiseCode?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
@@ -46568,6 +58298,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"School"> | string
     name?: StringWithAggregatesFilter<"School"> | string
     principalName?: StringNullableWithAggregatesFilter<"School"> | string | null
+    udiseCode?: StringNullableWithAggregatesFilter<"School"> | string | null
     email?: StringNullableWithAggregatesFilter<"School"> | string | null
     phone?: StringNullableWithAggregatesFilter<"School"> | string | null
     address?: StringNullableWithAggregatesFilter<"School"> | string | null
@@ -46605,6 +58336,7 @@ export namespace Prisma {
     students?: StudentListRelationFilter
     goals?: FellowGoalListRelationFilter
     reviews?: FellowReviewListRelationFilter
+    tasks?: FellowTaskListRelationFilter
   }
 
   export type FellowOrderByWithRelationInput = {
@@ -46627,6 +58359,7 @@ export namespace Prisma {
     students?: StudentOrderByRelationAggregateInput
     goals?: FellowGoalOrderByRelationAggregateInput
     reviews?: FellowReviewOrderByRelationAggregateInput
+    tasks?: FellowTaskOrderByRelationAggregateInput
   }
 
   export type FellowWhereUniqueInput = Prisma.AtLeast<{
@@ -46652,6 +58385,7 @@ export namespace Prisma {
     students?: StudentListRelationFilter
     goals?: FellowGoalListRelationFilter
     reviews?: FellowReviewListRelationFilter
+    tasks?: FellowTaskListRelationFilter
   }, "id" | "email" | "userId">
 
   export type FellowOrderByWithAggregationInput = {
@@ -46934,6 +58668,7 @@ export namespace Prisma {
     status?: StringFilter<"Student"> | string
     schoolId?: StringNullableFilter<"Student"> | string | null
     fellowId?: StringNullableFilter<"Student"> | string | null
+    isMigrated?: BoolFilter<"Student"> | boolean
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     school?: XOR<SchoolNullableScalarRelationFilter, SchoolWhereInput> | null
@@ -46962,6 +58697,7 @@ export namespace Prisma {
     status?: SortOrder
     schoolId?: SortOrderInput | SortOrder
     fellowId?: SortOrderInput | SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     school?: SchoolOrderByWithRelationInput
@@ -46993,6 +58729,7 @@ export namespace Prisma {
     status?: StringFilter<"Student"> | string
     schoolId?: StringNullableFilter<"Student"> | string | null
     fellowId?: StringNullableFilter<"Student"> | string | null
+    isMigrated?: BoolFilter<"Student"> | boolean
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
     school?: XOR<SchoolNullableScalarRelationFilter, SchoolWhereInput> | null
@@ -47021,6 +58758,7 @@ export namespace Prisma {
     status?: SortOrder
     schoolId?: SortOrderInput | SortOrder
     fellowId?: SortOrderInput | SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: StudentCountOrderByAggregateInput
@@ -47053,6 +58791,7 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"Student"> | string
     schoolId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     fellowId?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    isMigrated?: BoolWithAggregatesFilter<"Student"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
   }
@@ -47556,6 +59295,7 @@ export namespace Prisma {
     bankName?: StringNullableFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableFilter<"Beneficiary"> | string | null
+    isMigrated?: BoolFilter<"Beneficiary"> | boolean
     createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
     familyMembers?: FamilyMemberListRelationFilter
@@ -47563,6 +59303,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentListRelationFilter
     goatRearingDetails?: BeneficiaryGoatRearingListRelationFilter
     sugarcaneDetails?: BeneficiarySugarcaneListRelationFilter
+    resilienceSurveys?: ResilienceSurveyListRelationFilter
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyListRelationFilter
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyListRelationFilter
+    transformativeSurveys?: TransformativeCapacitySurveyListRelationFilter
+    vulnerabilitySurveys?: VulnerabilitySurveyListRelationFilter
+    solutionPlans?: SolutionPlanListRelationFilter
   }
 
   export type BeneficiaryOrderByWithRelationInput = {
@@ -47587,6 +59333,7 @@ export namespace Prisma {
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     familyMembers?: FamilyMemberOrderByRelationAggregateInput
@@ -47594,6 +59341,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentOrderByRelationAggregateInput
     goatRearingDetails?: BeneficiaryGoatRearingOrderByRelationAggregateInput
     sugarcaneDetails?: BeneficiarySugarcaneOrderByRelationAggregateInput
+    resilienceSurveys?: ResilienceSurveyOrderByRelationAggregateInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyOrderByRelationAggregateInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyOrderByRelationAggregateInput
+    transformativeSurveys?: TransformativeCapacitySurveyOrderByRelationAggregateInput
+    vulnerabilitySurveys?: VulnerabilitySurveyOrderByRelationAggregateInput
+    solutionPlans?: SolutionPlanOrderByRelationAggregateInput
   }
 
   export type BeneficiaryWhereUniqueInput = Prisma.AtLeast<{
@@ -47621,6 +59374,7 @@ export namespace Prisma {
     bankName?: StringNullableFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableFilter<"Beneficiary"> | string | null
+    isMigrated?: BoolFilter<"Beneficiary"> | boolean
     createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
     familyMembers?: FamilyMemberListRelationFilter
@@ -47628,6 +59382,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentListRelationFilter
     goatRearingDetails?: BeneficiaryGoatRearingListRelationFilter
     sugarcaneDetails?: BeneficiarySugarcaneListRelationFilter
+    resilienceSurveys?: ResilienceSurveyListRelationFilter
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyListRelationFilter
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyListRelationFilter
+    transformativeSurveys?: TransformativeCapacitySurveyListRelationFilter
+    vulnerabilitySurveys?: VulnerabilitySurveyListRelationFilter
+    solutionPlans?: SolutionPlanListRelationFilter
   }, "id" | "enrolmentId">
 
   export type BeneficiaryOrderByWithAggregationInput = {
@@ -47652,6 +59412,7 @@ export namespace Prisma {
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BeneficiaryCountOrderByAggregateInput
@@ -47686,6 +59447,7 @@ export namespace Prisma {
     bankName?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    isMigrated?: BoolWithAggregatesFilter<"Beneficiary"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
   }
@@ -48036,6 +59798,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BeneficiaryGoatRearing"> | Date | string
     beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
     goatRearingProgram?: XOR<GoatRearingProgramNullableScalarRelationFilter, GoatRearingProgramWhereInput> | null
+    events?: GoatRearingEventListRelationFilter
   }
 
   export type BeneficiaryGoatRearingOrderByWithRelationInput = {
@@ -48052,6 +59815,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     beneficiary?: BeneficiaryOrderByWithRelationInput
     goatRearingProgram?: GoatRearingProgramOrderByWithRelationInput
+    events?: GoatRearingEventOrderByRelationAggregateInput
   }
 
   export type BeneficiaryGoatRearingWhereUniqueInput = Prisma.AtLeast<{
@@ -48071,6 +59835,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BeneficiaryGoatRearing"> | Date | string
     beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
     goatRearingProgram?: XOR<GoatRearingProgramNullableScalarRelationFilter, GoatRearingProgramWhereInput> | null
+    events?: GoatRearingEventListRelationFilter
   }, "id">
 
   export type BeneficiaryGoatRearingOrderByWithAggregationInput = {
@@ -48169,6 +59934,88 @@ export namespace Prisma {
     totalGoats?: IntWithAggregatesFilter<"GoatRearingProgram"> | number
     createdAt?: DateTimeWithAggregatesFilter<"GoatRearingProgram"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GoatRearingProgram"> | Date | string
+  }
+
+  export type GoatRearingEventWhereInput = {
+    AND?: GoatRearingEventWhereInput | GoatRearingEventWhereInput[]
+    OR?: GoatRearingEventWhereInput[]
+    NOT?: GoatRearingEventWhereInput | GoatRearingEventWhereInput[]
+    id?: StringFilter<"GoatRearingEvent"> | string
+    beneficiaryGoatRearingId?: StringFilter<"GoatRearingEvent"> | string
+    eventType?: StringFilter<"GoatRearingEvent"> | string
+    eventDate?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    quantity?: IntFilter<"GoatRearingEvent"> | number
+    notes?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    photoUrl?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    recordedBy?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    createdAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    beneficiaryGoatRearing?: XOR<BeneficiaryGoatRearingScalarRelationFilter, BeneficiaryGoatRearingWhereInput>
+  }
+
+  export type GoatRearingEventOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryGoatRearingId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    recordedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiaryGoatRearing?: BeneficiaryGoatRearingOrderByWithRelationInput
+  }
+
+  export type GoatRearingEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: GoatRearingEventWhereInput | GoatRearingEventWhereInput[]
+    OR?: GoatRearingEventWhereInput[]
+    NOT?: GoatRearingEventWhereInput | GoatRearingEventWhereInput[]
+    beneficiaryGoatRearingId?: StringFilter<"GoatRearingEvent"> | string
+    eventType?: StringFilter<"GoatRearingEvent"> | string
+    eventDate?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    quantity?: IntFilter<"GoatRearingEvent"> | number
+    notes?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    photoUrl?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    recordedBy?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    createdAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    beneficiaryGoatRearing?: XOR<BeneficiaryGoatRearingScalarRelationFilter, BeneficiaryGoatRearingWhereInput>
+  }, "id">
+
+  export type GoatRearingEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryGoatRearingId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
+    recordedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GoatRearingEventCountOrderByAggregateInput
+    _avg?: GoatRearingEventAvgOrderByAggregateInput
+    _max?: GoatRearingEventMaxOrderByAggregateInput
+    _min?: GoatRearingEventMinOrderByAggregateInput
+    _sum?: GoatRearingEventSumOrderByAggregateInput
+  }
+
+  export type GoatRearingEventScalarWhereWithAggregatesInput = {
+    AND?: GoatRearingEventScalarWhereWithAggregatesInput | GoatRearingEventScalarWhereWithAggregatesInput[]
+    OR?: GoatRearingEventScalarWhereWithAggregatesInput[]
+    NOT?: GoatRearingEventScalarWhereWithAggregatesInput | GoatRearingEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GoatRearingEvent"> | string
+    beneficiaryGoatRearingId?: StringWithAggregatesFilter<"GoatRearingEvent"> | string
+    eventType?: StringWithAggregatesFilter<"GoatRearingEvent"> | string
+    eventDate?: DateTimeWithAggregatesFilter<"GoatRearingEvent"> | Date | string
+    quantity?: IntWithAggregatesFilter<"GoatRearingEvent"> | number
+    notes?: StringNullableWithAggregatesFilter<"GoatRearingEvent"> | string | null
+    photoUrl?: StringNullableWithAggregatesFilter<"GoatRearingEvent"> | string | null
+    recordedBy?: StringNullableWithAggregatesFilter<"GoatRearingEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GoatRearingEvent"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GoatRearingEvent"> | Date | string
   }
 
   export type BeneficiarySugarcaneWhereInput = {
@@ -48656,6 +60503,10 @@ export namespace Prisma {
     ef2?: StringNullableFilter<"AttendanceLog"> | string | null
     logininfo?: StringNullableFilter<"AttendanceLog"> | string | null
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
+    checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     createdAt?: DateTimeFilter<"AttendanceLog"> | Date | string
     updatedAt?: DateTimeFilter<"AttendanceLog"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -48674,6 +60525,10 @@ export namespace Prisma {
     ef2?: SortOrderInput | SortOrder
     logininfo?: SortOrderInput | SortOrder
     logoutinfo?: SortOrderInput | SortOrder
+    checkInLat?: SortOrderInput | SortOrder
+    checkInLng?: SortOrderInput | SortOrder
+    checkOutLat?: SortOrderInput | SortOrder
+    checkOutLng?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -48695,6 +60550,10 @@ export namespace Prisma {
     ef2?: StringNullableFilter<"AttendanceLog"> | string | null
     logininfo?: StringNullableFilter<"AttendanceLog"> | string | null
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
+    checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     createdAt?: DateTimeFilter<"AttendanceLog"> | Date | string
     updatedAt?: DateTimeFilter<"AttendanceLog"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -48713,11 +60572,17 @@ export namespace Prisma {
     ef2?: SortOrderInput | SortOrder
     logininfo?: SortOrderInput | SortOrder
     logoutinfo?: SortOrderInput | SortOrder
+    checkInLat?: SortOrderInput | SortOrder
+    checkInLng?: SortOrderInput | SortOrder
+    checkOutLat?: SortOrderInput | SortOrder
+    checkOutLng?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AttendanceLogCountOrderByAggregateInput
+    _avg?: AttendanceLogAvgOrderByAggregateInput
     _max?: AttendanceLogMaxOrderByAggregateInput
     _min?: AttendanceLogMinOrderByAggregateInput
+    _sum?: AttendanceLogSumOrderByAggregateInput
   }
 
   export type AttendanceLogScalarWhereWithAggregatesInput = {
@@ -48736,6 +60601,10 @@ export namespace Prisma {
     ef2?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     logininfo?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     logoutinfo?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
+    checkInLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkInLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkOutLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkOutLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"AttendanceLog"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AttendanceLog"> | Date | string
   }
@@ -48749,6 +60618,7 @@ export namespace Prisma {
     type?: StringNullableFilter<"Leave"> | string | null
     dates?: StringNullableFilter<"Leave"> | string | null
     reason?: StringNullableFilter<"Leave"> | string | null
+    rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
     createdAt?: DateTimeFilter<"Leave"> | Date | string
     updatedAt?: DateTimeFilter<"Leave"> | Date | string
@@ -48761,6 +60631,7 @@ export namespace Prisma {
     type?: SortOrderInput | SortOrder
     dates?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48776,6 +60647,7 @@ export namespace Prisma {
     type?: StringNullableFilter<"Leave"> | string | null
     dates?: StringNullableFilter<"Leave"> | string | null
     reason?: StringNullableFilter<"Leave"> | string | null
+    rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
     createdAt?: DateTimeFilter<"Leave"> | Date | string
     updatedAt?: DateTimeFilter<"Leave"> | Date | string
@@ -48788,6 +60660,7 @@ export namespace Prisma {
     type?: SortOrderInput | SortOrder
     dates?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48805,6 +60678,7 @@ export namespace Prisma {
     type?: StringNullableWithAggregatesFilter<"Leave"> | string | null
     dates?: StringNullableWithAggregatesFilter<"Leave"> | string | null
     reason?: StringNullableWithAggregatesFilter<"Leave"> | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Leave"> | string | null
     status?: EnumLeaveStatusWithAggregatesFilter<"Leave"> | $Enums.LeaveStatus
     createdAt?: DateTimeWithAggregatesFilter<"Leave"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Leave"> | Date | string
@@ -48887,6 +60761,590 @@ export namespace Prisma {
     transactionsCount?: IntWithAggregatesFilter<"IncidentResourceNeed"> | number
     createdAt?: DateTimeWithAggregatesFilter<"IncidentResourceNeed"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"IncidentResourceNeed"> | Date | string
+  }
+
+  export type FellowTaskWhereInput = {
+    AND?: FellowTaskWhereInput | FellowTaskWhereInput[]
+    OR?: FellowTaskWhereInput[]
+    NOT?: FellowTaskWhereInput | FellowTaskWhereInput[]
+    id?: StringFilter<"FellowTask"> | string
+    fellowId?: StringFilter<"FellowTask"> | string
+    title?: StringFilter<"FellowTask"> | string
+    description?: StringNullableFilter<"FellowTask"> | string | null
+    plannedDate?: DateTimeFilter<"FellowTask"> | Date | string
+    status?: StringFilter<"FellowTask"> | string
+    isPlanned?: BoolFilter<"FellowTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"FellowTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"FellowTask"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTask"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    comments?: FellowTaskCommentListRelationFilter
+  }
+
+  export type FellowTaskOrderByWithRelationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    fellow?: FellowOrderByWithRelationInput
+    comments?: FellowTaskCommentOrderByRelationAggregateInput
+  }
+
+  export type FellowTaskWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FellowTaskWhereInput | FellowTaskWhereInput[]
+    OR?: FellowTaskWhereInput[]
+    NOT?: FellowTaskWhereInput | FellowTaskWhereInput[]
+    fellowId?: StringFilter<"FellowTask"> | string
+    title?: StringFilter<"FellowTask"> | string
+    description?: StringNullableFilter<"FellowTask"> | string | null
+    plannedDate?: DateTimeFilter<"FellowTask"> | Date | string
+    status?: StringFilter<"FellowTask"> | string
+    isPlanned?: BoolFilter<"FellowTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"FellowTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"FellowTask"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTask"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    comments?: FellowTaskCommentListRelationFilter
+  }, "id">
+
+  export type FellowTaskOrderByWithAggregationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FellowTaskCountOrderByAggregateInput
+    _max?: FellowTaskMaxOrderByAggregateInput
+    _min?: FellowTaskMinOrderByAggregateInput
+  }
+
+  export type FellowTaskScalarWhereWithAggregatesInput = {
+    AND?: FellowTaskScalarWhereWithAggregatesInput | FellowTaskScalarWhereWithAggregatesInput[]
+    OR?: FellowTaskScalarWhereWithAggregatesInput[]
+    NOT?: FellowTaskScalarWhereWithAggregatesInput | FellowTaskScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FellowTask"> | string
+    fellowId?: StringWithAggregatesFilter<"FellowTask"> | string
+    title?: StringWithAggregatesFilter<"FellowTask"> | string
+    description?: StringNullableWithAggregatesFilter<"FellowTask"> | string | null
+    plannedDate?: DateTimeWithAggregatesFilter<"FellowTask"> | Date | string
+    status?: StringWithAggregatesFilter<"FellowTask"> | string
+    isPlanned?: BoolWithAggregatesFilter<"FellowTask"> | boolean
+    completionDate?: DateTimeNullableWithAggregatesFilter<"FellowTask"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FellowTask"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FellowTask"> | Date | string
+  }
+
+  export type FellowTaskCommentWhereInput = {
+    AND?: FellowTaskCommentWhereInput | FellowTaskCommentWhereInput[]
+    OR?: FellowTaskCommentWhereInput[]
+    NOT?: FellowTaskCommentWhereInput | FellowTaskCommentWhereInput[]
+    id?: StringFilter<"FellowTaskComment"> | string
+    taskId?: StringFilter<"FellowTaskComment"> | string
+    authorId?: StringFilter<"FellowTaskComment"> | string
+    text?: StringFilter<"FellowTaskComment"> | string
+    createdAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
+    task?: XOR<FellowTaskScalarRelationFilter, FellowTaskWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FellowTaskCommentOrderByWithRelationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    task?: FellowTaskOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type FellowTaskCommentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FellowTaskCommentWhereInput | FellowTaskCommentWhereInput[]
+    OR?: FellowTaskCommentWhereInput[]
+    NOT?: FellowTaskCommentWhereInput | FellowTaskCommentWhereInput[]
+    taskId?: StringFilter<"FellowTaskComment"> | string
+    authorId?: StringFilter<"FellowTaskComment"> | string
+    text?: StringFilter<"FellowTaskComment"> | string
+    createdAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
+    task?: XOR<FellowTaskScalarRelationFilter, FellowTaskWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type FellowTaskCommentOrderByWithAggregationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FellowTaskCommentCountOrderByAggregateInput
+    _max?: FellowTaskCommentMaxOrderByAggregateInput
+    _min?: FellowTaskCommentMinOrderByAggregateInput
+  }
+
+  export type FellowTaskCommentScalarWhereWithAggregatesInput = {
+    AND?: FellowTaskCommentScalarWhereWithAggregatesInput | FellowTaskCommentScalarWhereWithAggregatesInput[]
+    OR?: FellowTaskCommentScalarWhereWithAggregatesInput[]
+    NOT?: FellowTaskCommentScalarWhereWithAggregatesInput | FellowTaskCommentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FellowTaskComment"> | string
+    taskId?: StringWithAggregatesFilter<"FellowTaskComment"> | string
+    authorId?: StringWithAggregatesFilter<"FellowTaskComment"> | string
+    text?: StringWithAggregatesFilter<"FellowTaskComment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FellowTaskComment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FellowTaskComment"> | Date | string
+  }
+
+  export type ResilienceSurveyWhereInput = {
+    AND?: ResilienceSurveyWhereInput | ResilienceSurveyWhereInput[]
+    OR?: ResilienceSurveyWhereInput[]
+    NOT?: ResilienceSurveyWhereInput | ResilienceSurveyWhereInput[]
+    id?: StringFilter<"ResilienceSurvey"> | string
+    beneficiaryId?: StringFilter<"ResilienceSurvey"> | string
+    surveyDate?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    responses?: JsonFilter<"ResilienceSurvey">
+    lifeSatisfactionScore?: FloatFilter<"ResilienceSurvey"> | number
+    planningScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterReadinessScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterBeliefsScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterMindsetScore?: FloatFilter<"ResilienceSurvey"> | number
+    financialResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    healthResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialConnectednessScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialProtectionScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterWarningScore?: FloatFilter<"ResilienceSurvey"> | number
+    vulnerabilityScore?: FloatFilter<"ResilienceSurvey"> | number
+    overallScore?: FloatFilter<"ResilienceSurvey"> | number
+    createdAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type ResilienceSurveyOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type ResilienceSurveyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ResilienceSurveyWhereInput | ResilienceSurveyWhereInput[]
+    OR?: ResilienceSurveyWhereInput[]
+    NOT?: ResilienceSurveyWhereInput | ResilienceSurveyWhereInput[]
+    beneficiaryId?: StringFilter<"ResilienceSurvey"> | string
+    surveyDate?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    responses?: JsonFilter<"ResilienceSurvey">
+    lifeSatisfactionScore?: FloatFilter<"ResilienceSurvey"> | number
+    planningScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterReadinessScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterBeliefsScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterMindsetScore?: FloatFilter<"ResilienceSurvey"> | number
+    financialResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    healthResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialConnectednessScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialProtectionScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterWarningScore?: FloatFilter<"ResilienceSurvey"> | number
+    vulnerabilityScore?: FloatFilter<"ResilienceSurvey"> | number
+    overallScore?: FloatFilter<"ResilienceSurvey"> | number
+    createdAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type ResilienceSurveyOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ResilienceSurveyCountOrderByAggregateInput
+    _avg?: ResilienceSurveyAvgOrderByAggregateInput
+    _max?: ResilienceSurveyMaxOrderByAggregateInput
+    _min?: ResilienceSurveyMinOrderByAggregateInput
+    _sum?: ResilienceSurveySumOrderByAggregateInput
+  }
+
+  export type ResilienceSurveyScalarWhereWithAggregatesInput = {
+    AND?: ResilienceSurveyScalarWhereWithAggregatesInput | ResilienceSurveyScalarWhereWithAggregatesInput[]
+    OR?: ResilienceSurveyScalarWhereWithAggregatesInput[]
+    NOT?: ResilienceSurveyScalarWhereWithAggregatesInput | ResilienceSurveyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ResilienceSurvey"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"ResilienceSurvey"> | string
+    surveyDate?: DateTimeWithAggregatesFilter<"ResilienceSurvey"> | Date | string
+    responses?: JsonWithAggregatesFilter<"ResilienceSurvey">
+    lifeSatisfactionScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    planningScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    disasterReadinessScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    disasterBeliefsScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    disasterMindsetScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    financialResilienceScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    healthResilienceScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    socialConnectednessScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    socialProtectionScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    disasterWarningScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    vulnerabilityScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    overallScore?: FloatWithAggregatesFilter<"ResilienceSurvey"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ResilienceSurvey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ResilienceSurvey"> | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyWhereInput = {
+    AND?: AdaptiveCapacitySurveyWhereInput | AdaptiveCapacitySurveyWhereInput[]
+    OR?: AdaptiveCapacitySurveyWhereInput[]
+    NOT?: AdaptiveCapacitySurveyWhereInput | AdaptiveCapacitySurveyWhereInput[]
+    id?: StringFilter<"AdaptiveCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"AdaptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AdaptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AdaptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type AdaptiveCapacitySurveyOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type AdaptiveCapacitySurveyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AdaptiveCapacitySurveyWhereInput | AdaptiveCapacitySurveyWhereInput[]
+    OR?: AdaptiveCapacitySurveyWhereInput[]
+    NOT?: AdaptiveCapacitySurveyWhereInput | AdaptiveCapacitySurveyWhereInput[]
+    beneficiaryId?: StringFilter<"AdaptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AdaptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AdaptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type AdaptiveCapacitySurveyOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AdaptiveCapacitySurveyCountOrderByAggregateInput
+    _avg?: AdaptiveCapacitySurveyAvgOrderByAggregateInput
+    _max?: AdaptiveCapacitySurveyMaxOrderByAggregateInput
+    _min?: AdaptiveCapacitySurveyMinOrderByAggregateInput
+    _sum?: AdaptiveCapacitySurveySumOrderByAggregateInput
+  }
+
+  export type AdaptiveCapacitySurveyScalarWhereWithAggregatesInput = {
+    AND?: AdaptiveCapacitySurveyScalarWhereWithAggregatesInput | AdaptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    OR?: AdaptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    NOT?: AdaptiveCapacitySurveyScalarWhereWithAggregatesInput | AdaptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdaptiveCapacitySurvey"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"AdaptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeWithAggregatesFilter<"AdaptiveCapacitySurvey"> | Date | string
+    responses?: JsonWithAggregatesFilter<"AdaptiveCapacitySurvey">
+    overallScore?: FloatWithAggregatesFilter<"AdaptiveCapacitySurvey"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"AdaptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdaptiveCapacitySurvey"> | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyWhereInput = {
+    AND?: AbsorptiveCapacitySurveyWhereInput | AbsorptiveCapacitySurveyWhereInput[]
+    OR?: AbsorptiveCapacitySurveyWhereInput[]
+    NOT?: AbsorptiveCapacitySurveyWhereInput | AbsorptiveCapacitySurveyWhereInput[]
+    id?: StringFilter<"AbsorptiveCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"AbsorptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AbsorptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AbsorptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type AbsorptiveCapacitySurveyOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type AbsorptiveCapacitySurveyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AbsorptiveCapacitySurveyWhereInput | AbsorptiveCapacitySurveyWhereInput[]
+    OR?: AbsorptiveCapacitySurveyWhereInput[]
+    NOT?: AbsorptiveCapacitySurveyWhereInput | AbsorptiveCapacitySurveyWhereInput[]
+    beneficiaryId?: StringFilter<"AbsorptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AbsorptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AbsorptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type AbsorptiveCapacitySurveyOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AbsorptiveCapacitySurveyCountOrderByAggregateInput
+    _avg?: AbsorptiveCapacitySurveyAvgOrderByAggregateInput
+    _max?: AbsorptiveCapacitySurveyMaxOrderByAggregateInput
+    _min?: AbsorptiveCapacitySurveyMinOrderByAggregateInput
+    _sum?: AbsorptiveCapacitySurveySumOrderByAggregateInput
+  }
+
+  export type AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput = {
+    AND?: AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput | AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    OR?: AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    NOT?: AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput | AbsorptiveCapacitySurveyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    responses?: JsonWithAggregatesFilter<"AbsorptiveCapacitySurvey">
+    overallScore?: FloatWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AbsorptiveCapacitySurvey"> | Date | string
+  }
+
+  export type TransformativeCapacitySurveyWhereInput = {
+    AND?: TransformativeCapacitySurveyWhereInput | TransformativeCapacitySurveyWhereInput[]
+    OR?: TransformativeCapacitySurveyWhereInput[]
+    NOT?: TransformativeCapacitySurveyWhereInput | TransformativeCapacitySurveyWhereInput[]
+    id?: StringFilter<"TransformativeCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"TransformativeCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"TransformativeCapacitySurvey">
+    overallScore?: FloatFilter<"TransformativeCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type TransformativeCapacitySurveyOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type TransformativeCapacitySurveyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TransformativeCapacitySurveyWhereInput | TransformativeCapacitySurveyWhereInput[]
+    OR?: TransformativeCapacitySurveyWhereInput[]
+    NOT?: TransformativeCapacitySurveyWhereInput | TransformativeCapacitySurveyWhereInput[]
+    beneficiaryId?: StringFilter<"TransformativeCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"TransformativeCapacitySurvey">
+    overallScore?: FloatFilter<"TransformativeCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type TransformativeCapacitySurveyOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TransformativeCapacitySurveyCountOrderByAggregateInput
+    _avg?: TransformativeCapacitySurveyAvgOrderByAggregateInput
+    _max?: TransformativeCapacitySurveyMaxOrderByAggregateInput
+    _min?: TransformativeCapacitySurveyMinOrderByAggregateInput
+    _sum?: TransformativeCapacitySurveySumOrderByAggregateInput
+  }
+
+  export type TransformativeCapacitySurveyScalarWhereWithAggregatesInput = {
+    AND?: TransformativeCapacitySurveyScalarWhereWithAggregatesInput | TransformativeCapacitySurveyScalarWhereWithAggregatesInput[]
+    OR?: TransformativeCapacitySurveyScalarWhereWithAggregatesInput[]
+    NOT?: TransformativeCapacitySurveyScalarWhereWithAggregatesInput | TransformativeCapacitySurveyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TransformativeCapacitySurvey"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"TransformativeCapacitySurvey"> | string
+    surveyDate?: DateTimeWithAggregatesFilter<"TransformativeCapacitySurvey"> | Date | string
+    responses?: JsonWithAggregatesFilter<"TransformativeCapacitySurvey">
+    overallScore?: FloatWithAggregatesFilter<"TransformativeCapacitySurvey"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"TransformativeCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TransformativeCapacitySurvey"> | Date | string
+  }
+
+  export type VulnerabilitySurveyWhereInput = {
+    AND?: VulnerabilitySurveyWhereInput | VulnerabilitySurveyWhereInput[]
+    OR?: VulnerabilitySurveyWhereInput[]
+    NOT?: VulnerabilitySurveyWhereInput | VulnerabilitySurveyWhereInput[]
+    id?: StringFilter<"VulnerabilitySurvey"> | string
+    beneficiaryId?: StringFilter<"VulnerabilitySurvey"> | string
+    surveyDate?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    responses?: JsonFilter<"VulnerabilitySurvey">
+    createdAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type VulnerabilitySurveyOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type VulnerabilitySurveyWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VulnerabilitySurveyWhereInput | VulnerabilitySurveyWhereInput[]
+    OR?: VulnerabilitySurveyWhereInput[]
+    NOT?: VulnerabilitySurveyWhereInput | VulnerabilitySurveyWhereInput[]
+    beneficiaryId?: StringFilter<"VulnerabilitySurvey"> | string
+    surveyDate?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    responses?: JsonFilter<"VulnerabilitySurvey">
+    createdAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type VulnerabilitySurveyOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VulnerabilitySurveyCountOrderByAggregateInput
+    _max?: VulnerabilitySurveyMaxOrderByAggregateInput
+    _min?: VulnerabilitySurveyMinOrderByAggregateInput
+  }
+
+  export type VulnerabilitySurveyScalarWhereWithAggregatesInput = {
+    AND?: VulnerabilitySurveyScalarWhereWithAggregatesInput | VulnerabilitySurveyScalarWhereWithAggregatesInput[]
+    OR?: VulnerabilitySurveyScalarWhereWithAggregatesInput[]
+    NOT?: VulnerabilitySurveyScalarWhereWithAggregatesInput | VulnerabilitySurveyScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"VulnerabilitySurvey"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"VulnerabilitySurvey"> | string
+    surveyDate?: DateTimeWithAggregatesFilter<"VulnerabilitySurvey"> | Date | string
+    responses?: JsonWithAggregatesFilter<"VulnerabilitySurvey">
+    createdAt?: DateTimeWithAggregatesFilter<"VulnerabilitySurvey"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"VulnerabilitySurvey"> | Date | string
+  }
+
+  export type SolutionPlanWhereInput = {
+    AND?: SolutionPlanWhereInput | SolutionPlanWhereInput[]
+    OR?: SolutionPlanWhereInput[]
+    NOT?: SolutionPlanWhereInput | SolutionPlanWhereInput[]
+    id?: StringFilter<"SolutionPlan"> | string
+    beneficiaryId?: StringFilter<"SolutionPlan"> | string
+    createdAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    planData?: JsonFilter<"SolutionPlan">
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }
+
+  export type SolutionPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planData?: SortOrder
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+  }
+
+  export type SolutionPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SolutionPlanWhereInput | SolutionPlanWhereInput[]
+    OR?: SolutionPlanWhereInput[]
+    NOT?: SolutionPlanWhereInput | SolutionPlanWhereInput[]
+    beneficiaryId?: StringFilter<"SolutionPlan"> | string
+    createdAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    planData?: JsonFilter<"SolutionPlan">
+    beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
+  }, "id">
+
+  export type SolutionPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planData?: SortOrder
+    _count?: SolutionPlanCountOrderByAggregateInput
+    _max?: SolutionPlanMaxOrderByAggregateInput
+    _min?: SolutionPlanMinOrderByAggregateInput
+  }
+
+  export type SolutionPlanScalarWhereWithAggregatesInput = {
+    AND?: SolutionPlanScalarWhereWithAggregatesInput | SolutionPlanScalarWhereWithAggregatesInput[]
+    OR?: SolutionPlanScalarWhereWithAggregatesInput[]
+    NOT?: SolutionPlanScalarWhereWithAggregatesInput | SolutionPlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SolutionPlan"> | string
+    beneficiaryId?: StringWithAggregatesFilter<"SolutionPlan"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SolutionPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SolutionPlan"> | Date | string
+    planData?: JsonWithAggregatesFilter<"SolutionPlan">
   }
 
   export type RoleCreateInput = {
@@ -48979,6 +61437,7 @@ export namespace Prisma {
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -49000,6 +61459,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -49021,6 +61481,7 @@ export namespace Prisma {
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -49042,6 +61503,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -49281,6 +61743,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -49302,6 +61765,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -49323,6 +61787,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49344,6 +61809,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49365,6 +61831,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -49383,6 +61850,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49401,6 +61869,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49434,6 +61903,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutFellowInput
     goals?: FellowGoalCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateInput = {
@@ -49455,6 +61925,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutFellowInput
     goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUpdateInput = {
@@ -49476,6 +61947,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateInput = {
@@ -49497,6 +61969,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowCreateManyInput = {
@@ -49799,6 +62272,7 @@ export namespace Prisma {
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     school?: SchoolCreateNestedOneWithoutStudentsInput
@@ -49827,6 +62301,7 @@ export namespace Prisma {
     status?: string
     schoolId?: string | null
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectMarks?: StudentSubjectMarkUncheckedCreateNestedManyWithoutStudentInput
@@ -49851,6 +62326,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneWithoutStudentsNestedInput
@@ -49879,6 +62355,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectMarks?: StudentSubjectMarkUncheckedUpdateManyWithoutStudentNestedInput
@@ -49905,6 +62382,7 @@ export namespace Prisma {
     status?: string
     schoolId?: string | null
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49927,6 +62405,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -49951,6 +62430,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -50471,6 +62951,7 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
@@ -50478,6 +62959,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateInput = {
@@ -50502,6 +62989,7 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
@@ -50509,6 +62997,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUpdateInput = {
@@ -50533,6 +63027,7 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
@@ -50540,6 +63035,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateInput = {
@@ -50564,6 +63065,7 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
@@ -50571,6 +63073,12 @@ export namespace Prisma {
     schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryCreateManyInput = {
@@ -50595,6 +63103,7 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -50621,6 +63130,7 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -50647,6 +63157,7 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51009,6 +63520,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     beneficiary: BeneficiaryCreateNestedOneWithoutGoatRearingDetailsInput
     goatRearingProgram?: GoatRearingProgramCreateNestedOneWithoutBeneficiariesInput
+    events?: GoatRearingEventCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingUncheckedCreateInput = {
@@ -51023,6 +63535,7 @@ export namespace Prisma {
     goatRearingProgramId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    events?: GoatRearingEventUncheckedCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingUpdateInput = {
@@ -51037,6 +63550,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     beneficiary?: BeneficiaryUpdateOneRequiredWithoutGoatRearingDetailsNestedInput
     goatRearingProgram?: GoatRearingProgramUpdateOneWithoutBeneficiariesNestedInput
+    events?: GoatRearingEventUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingUncheckedUpdateInput = {
@@ -51051,6 +63565,7 @@ export namespace Prisma {
     goatRearingProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingCreateManyInput = {
@@ -51156,6 +63671,96 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     totalGoats?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoatRearingEventCreateInput = {
+    id?: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiaryGoatRearing: BeneficiaryGoatRearingCreateNestedOneWithoutEventsInput
+  }
+
+  export type GoatRearingEventUncheckedCreateInput = {
+    id?: string
+    beneficiaryGoatRearingId: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GoatRearingEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiaryGoatRearing?: BeneficiaryGoatRearingUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type GoatRearingEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryGoatRearingId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoatRearingEventCreateManyInput = {
+    id?: string
+    beneficiaryGoatRearingId: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GoatRearingEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoatRearingEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryGoatRearingId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51687,6 +64292,10 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutAttendanceLogsInput
@@ -51705,6 +64314,10 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51721,6 +64334,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutAttendanceLogsNestedInput
@@ -51739,6 +64356,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51756,6 +64377,10 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51772,6 +64397,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51789,6 +64418,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51798,6 +64431,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51810,6 +64444,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51820,6 +64455,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51832,6 +64468,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51843,6 +64480,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -51853,6 +64491,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51864,6 +64503,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51946,6 +64586,631 @@ export namespace Prisma {
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutTasksInput
+    comments?: FellowTaskCommentCreateNestedManyWithoutTaskInput
+  }
+
+  export type FellowTaskUncheckedCreateInput = {
+    id?: string
+    fellowId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: FellowTaskCommentUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type FellowTaskUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutTasksNestedInput
+    comments?: FellowTaskCommentUpdateManyWithoutTaskNestedInput
+  }
+
+  export type FellowTaskUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: FellowTaskCommentUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type FellowTaskCreateManyInput = {
+    id?: string
+    fellowId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentCreateInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    task: FellowTaskCreateNestedOneWithoutCommentsInput
+    author: UserCreateNestedOneWithoutTaskCommentsInput
+  }
+
+  export type FellowTaskCommentUncheckedCreateInput = {
+    id?: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: FellowTaskUpdateOneRequiredWithoutCommentsNestedInput
+    author?: UserUpdateOneRequiredWithoutTaskCommentsNestedInput
+  }
+
+  export type FellowTaskCommentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentCreateManyInput = {
+    id?: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ResilienceSurveyCreateInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutResilienceSurveysInput
+  }
+
+  export type ResilienceSurveyUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ResilienceSurveyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutResilienceSurveysNestedInput
+  }
+
+  export type ResilienceSurveyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ResilienceSurveyCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ResilienceSurveyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ResilienceSurveyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyCreateInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutAdaptiveCapacitySurveysInput
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutAdaptiveCapacitySurveysNestedInput
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyCreateInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutAbsorptiveCapacitySurveysInput
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutAbsorptiveCapacitySurveysNestedInput
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyCreateInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutTransformativeSurveysInput
+  }
+
+  export type TransformativeCapacitySurveyUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransformativeCapacitySurveyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutTransformativeSurveysNestedInput
+  }
+
+  export type TransformativeCapacitySurveyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransformativeCapacitySurveyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyCreateInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutVulnerabilitySurveysInput
+  }
+
+  export type VulnerabilitySurveyUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VulnerabilitySurveyUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutVulnerabilitySurveysNestedInput
+  }
+
+  export type VulnerabilitySurveyUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VulnerabilitySurveyUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolutionPlanCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+    beneficiary: BeneficiaryCreateNestedOneWithoutSolutionPlansInput
+  }
+
+  export type SolutionPlanUncheckedCreateInput = {
+    id?: string
+    beneficiaryId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutSolutionPlansNestedInput
+  }
+
+  export type SolutionPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanCreateManyInput = {
+    id?: string
+    beneficiaryId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -52156,6 +65421,12 @@ export namespace Prisma {
     none?: AttendanceLogWhereInput
   }
 
+  export type FellowTaskCommentListRelationFilter = {
+    every?: FellowTaskCommentWhereInput
+    some?: FellowTaskCommentWhereInput
+    none?: FellowTaskCommentWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -52169,6 +65440,10 @@ export namespace Prisma {
   }
 
   export type AttendanceLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FellowTaskCommentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -52428,6 +65703,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     principalName?: SortOrder
+    udiseCode?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
@@ -52450,6 +65726,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     principalName?: SortOrder
+    udiseCode?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
@@ -52468,6 +65745,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     principalName?: SortOrder
+    udiseCode?: SortOrder
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
@@ -52525,11 +65803,21 @@ export namespace Prisma {
     none?: FellowReviewWhereInput
   }
 
+  export type FellowTaskListRelationFilter = {
+    every?: FellowTaskWhereInput
+    some?: FellowTaskWhereInput
+    none?: FellowTaskWhereInput
+  }
+
   export type FellowGoalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type FellowReviewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FellowTaskOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -52807,6 +66095,7 @@ export namespace Prisma {
     status?: SortOrder
     schoolId?: SortOrder
     fellowId?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -52835,6 +66124,7 @@ export namespace Prisma {
     status?: SortOrder
     schoolId?: SortOrder
     fellowId?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -52859,6 +66149,7 @@ export namespace Prisma {
     status?: SortOrder
     schoolId?: SortOrder
     fellowId?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53203,6 +66494,42 @@ export namespace Prisma {
     none?: BeneficiarySugarcaneWhereInput
   }
 
+  export type ResilienceSurveyListRelationFilter = {
+    every?: ResilienceSurveyWhereInput
+    some?: ResilienceSurveyWhereInput
+    none?: ResilienceSurveyWhereInput
+  }
+
+  export type AdaptiveCapacitySurveyListRelationFilter = {
+    every?: AdaptiveCapacitySurveyWhereInput
+    some?: AdaptiveCapacitySurveyWhereInput
+    none?: AdaptiveCapacitySurveyWhereInput
+  }
+
+  export type AbsorptiveCapacitySurveyListRelationFilter = {
+    every?: AbsorptiveCapacitySurveyWhereInput
+    some?: AbsorptiveCapacitySurveyWhereInput
+    none?: AbsorptiveCapacitySurveyWhereInput
+  }
+
+  export type TransformativeCapacitySurveyListRelationFilter = {
+    every?: TransformativeCapacitySurveyWhereInput
+    some?: TransformativeCapacitySurveyWhereInput
+    none?: TransformativeCapacitySurveyWhereInput
+  }
+
+  export type VulnerabilitySurveyListRelationFilter = {
+    every?: VulnerabilitySurveyWhereInput
+    some?: VulnerabilitySurveyWhereInput
+    none?: VulnerabilitySurveyWhereInput
+  }
+
+  export type SolutionPlanListRelationFilter = {
+    every?: SolutionPlanWhereInput
+    some?: SolutionPlanWhereInput
+    none?: SolutionPlanWhereInput
+  }
+
   export type FamilyMemberOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -53220,6 +66547,30 @@ export namespace Prisma {
   }
 
   export type BeneficiarySugarcaneOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ResilienceSurveyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdaptiveCapacitySurveyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type VulnerabilitySurveyOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SolutionPlanOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -53245,6 +66596,7 @@ export namespace Prisma {
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53279,6 +66631,7 @@ export namespace Prisma {
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53305,6 +66658,7 @@ export namespace Prisma {
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
+    isMigrated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53534,6 +66888,16 @@ export namespace Prisma {
     isNot?: GoatRearingProgramWhereInput | null
   }
 
+  export type GoatRearingEventListRelationFilter = {
+    every?: GoatRearingEventWhereInput
+    some?: GoatRearingEventWhereInput
+    none?: GoatRearingEventWhereInput
+  }
+
+  export type GoatRearingEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type BeneficiaryGoatRearingCountOrderByAggregateInput = {
     id?: SortOrder
     beneficiaryId?: SortOrder
@@ -53623,6 +66987,58 @@ export namespace Prisma {
 
   export type GoatRearingProgramSumOrderByAggregateInput = {
     totalGoats?: SortOrder
+  }
+
+  export type BeneficiaryGoatRearingScalarRelationFilter = {
+    is?: BeneficiaryGoatRearingWhereInput
+    isNot?: BeneficiaryGoatRearingWhereInput
+  }
+
+  export type GoatRearingEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryGoatRearingId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GoatRearingEventAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type GoatRearingEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryGoatRearingId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GoatRearingEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryGoatRearingId?: SortOrder
+    eventType?: SortOrder
+    eventDate?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+    photoUrl?: SortOrder
+    recordedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GoatRearingEventSumOrderByAggregateInput = {
+    quantity?: SortOrder
   }
 
   export type SugarcaneProgramNullableScalarRelationFilter = {
@@ -53935,8 +67351,19 @@ export namespace Prisma {
     ef2?: SortOrder
     logininfo?: SortOrder
     logoutinfo?: SortOrder
+    checkInLat?: SortOrder
+    checkInLng?: SortOrder
+    checkOutLat?: SortOrder
+    checkOutLng?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AttendanceLogAvgOrderByAggregateInput = {
+    checkInLat?: SortOrder
+    checkInLng?: SortOrder
+    checkOutLat?: SortOrder
+    checkOutLng?: SortOrder
   }
 
   export type AttendanceLogMaxOrderByAggregateInput = {
@@ -53952,6 +67379,10 @@ export namespace Prisma {
     ef2?: SortOrder
     logininfo?: SortOrder
     logoutinfo?: SortOrder
+    checkInLat?: SortOrder
+    checkInLng?: SortOrder
+    checkOutLat?: SortOrder
+    checkOutLng?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -53969,8 +67400,19 @@ export namespace Prisma {
     ef2?: SortOrder
     logininfo?: SortOrder
     logoutinfo?: SortOrder
+    checkInLat?: SortOrder
+    checkInLng?: SortOrder
+    checkOutLat?: SortOrder
+    checkOutLng?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type AttendanceLogSumOrderByAggregateInput = {
+    checkInLat?: SortOrder
+    checkInLng?: SortOrder
+    checkOutLat?: SortOrder
+    checkOutLng?: SortOrder
   }
 
   export type EnumLeaveStatusFilter<$PrismaModel = never> = {
@@ -53986,6 +67428,7 @@ export namespace Prisma {
     type?: SortOrder
     dates?: SortOrder
     reason?: SortOrder
+    rejectionReason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -53997,6 +67440,7 @@ export namespace Prisma {
     type?: SortOrder
     dates?: SortOrder
     reason?: SortOrder
+    rejectionReason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -54008,6 +67452,7 @@ export namespace Prisma {
     type?: SortOrder
     dates?: SortOrder
     reason?: SortOrder
+    rejectionReason?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -54076,6 +67521,372 @@ export namespace Prisma {
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
     transactionsCount?: SortOrder
+  }
+
+  export type FellowTaskCountOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowTaskMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowTaskMinOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowTaskScalarRelationFilter = {
+    is?: FellowTaskWhereInput
+    isNot?: FellowTaskWhereInput
+  }
+
+  export type FellowTaskCommentCountOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowTaskCommentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowTaskCommentMinOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type ResilienceSurveyCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ResilienceSurveyAvgOrderByAggregateInput = {
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+  }
+
+  export type ResilienceSurveyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ResilienceSurveyMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ResilienceSurveySumOrderByAggregateInput = {
+    lifeSatisfactionScore?: SortOrder
+    planningScore?: SortOrder
+    disasterReadinessScore?: SortOrder
+    disasterBeliefsScore?: SortOrder
+    disasterMindsetScore?: SortOrder
+    financialResilienceScore?: SortOrder
+    healthResilienceScore?: SortOrder
+    socialConnectednessScore?: SortOrder
+    socialProtectionScore?: SortOrder
+    disasterWarningScore?: SortOrder
+    vulnerabilityScore?: SortOrder
+    overallScore?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type AdaptiveCapacitySurveyCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdaptiveCapacitySurveyAvgOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type AdaptiveCapacitySurveyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdaptiveCapacitySurveyMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AdaptiveCapacitySurveySumOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveyCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveyAvgOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveyMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AbsorptiveCapacitySurveySumOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveyCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveyAvgOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveyMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    overallScore?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransformativeCapacitySurveySumOrderByAggregateInput = {
+    overallScore?: SortOrder
+  }
+
+  export type VulnerabilitySurveyCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    responses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VulnerabilitySurveyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VulnerabilitySurveyMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    surveyDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SolutionPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    planData?: SortOrder
+  }
+
+  export type SolutionPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SolutionPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    beneficiaryId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserCreateNestedManyWithoutRoleInput = {
@@ -54218,6 +68029,13 @@ export namespace Prisma {
     connect?: AttendanceLogWhereUniqueInput | AttendanceLogWhereUniqueInput[]
   }
 
+  export type FellowTaskCommentCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput> | FellowTaskCommentCreateWithoutAuthorInput[] | FellowTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutAuthorInput | FellowTaskCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: FellowTaskCommentCreateManyAuthorInputEnvelope
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+  }
+
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -54250,6 +68068,13 @@ export namespace Prisma {
     connectOrCreate?: AttendanceLogCreateOrConnectWithoutUserInput | AttendanceLogCreateOrConnectWithoutUserInput[]
     createMany?: AttendanceLogCreateManyUserInputEnvelope
     connect?: AttendanceLogWhereUniqueInput | AttendanceLogWhereUniqueInput[]
+  }
+
+  export type FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput> | FellowTaskCommentCreateWithoutAuthorInput[] | FellowTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutAuthorInput | FellowTaskCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: FellowTaskCommentCreateManyAuthorInputEnvelope
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
   }
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -54338,6 +68163,20 @@ export namespace Prisma {
     deleteMany?: AttendanceLogScalarWhereInput | AttendanceLogScalarWhereInput[]
   }
 
+  export type FellowTaskCommentUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput> | FellowTaskCommentCreateWithoutAuthorInput[] | FellowTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutAuthorInput | FellowTaskCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: FellowTaskCommentUpsertWithWhereUniqueWithoutAuthorInput | FellowTaskCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: FellowTaskCommentCreateManyAuthorInputEnvelope
+    set?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    disconnect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    delete?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    update?: FellowTaskCommentUpdateWithWhereUniqueWithoutAuthorInput | FellowTaskCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: FellowTaskCommentUpdateManyWithWhereWithoutAuthorInput | FellowTaskCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
+  }
+
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -54402,6 +68241,20 @@ export namespace Prisma {
     update?: AttendanceLogUpdateWithWhereUniqueWithoutUserInput | AttendanceLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AttendanceLogUpdateManyWithWhereWithoutUserInput | AttendanceLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AttendanceLogScalarWhereInput | AttendanceLogScalarWhereInput[]
+  }
+
+  export type FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput> | FellowTaskCommentCreateWithoutAuthorInput[] | FellowTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutAuthorInput | FellowTaskCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: FellowTaskCommentUpsertWithWhereUniqueWithoutAuthorInput | FellowTaskCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: FellowTaskCommentCreateManyAuthorInputEnvelope
+    set?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    disconnect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    delete?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    update?: FellowTaskCommentUpdateWithWhereUniqueWithoutAuthorInput | FellowTaskCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: FellowTaskCommentUpdateManyWithWhereWithoutAuthorInput | FellowTaskCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
   }
 
   export type RolePermissionCreateNestedManyWithoutPermissionInput = {
@@ -54712,6 +68565,13 @@ export namespace Prisma {
     connect?: FellowReviewWhereUniqueInput | FellowReviewWhereUniqueInput[]
   }
 
+  export type FellowTaskCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput> | FellowTaskCreateWithoutFellowInput[] | FellowTaskUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutFellowInput | FellowTaskCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowTaskCreateManyFellowInputEnvelope
+    connect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+  }
+
   export type FellowSchoolUncheckedCreateNestedManyWithoutFellowInput = {
     create?: XOR<FellowSchoolCreateWithoutFellowInput, FellowSchoolUncheckedCreateWithoutFellowInput> | FellowSchoolCreateWithoutFellowInput[] | FellowSchoolUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutFellowInput | FellowSchoolCreateOrConnectWithoutFellowInput[]
@@ -54738,6 +68598,13 @@ export namespace Prisma {
     connectOrCreate?: FellowReviewCreateOrConnectWithoutFellowInput | FellowReviewCreateOrConnectWithoutFellowInput[]
     createMany?: FellowReviewCreateManyFellowInputEnvelope
     connect?: FellowReviewWhereUniqueInput | FellowReviewWhereUniqueInput[]
+  }
+
+  export type FellowTaskUncheckedCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput> | FellowTaskCreateWithoutFellowInput[] | FellowTaskUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutFellowInput | FellowTaskCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowTaskCreateManyFellowInputEnvelope
+    connect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -54818,6 +68685,20 @@ export namespace Prisma {
     deleteMany?: FellowReviewScalarWhereInput | FellowReviewScalarWhereInput[]
   }
 
+  export type FellowTaskUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput> | FellowTaskCreateWithoutFellowInput[] | FellowTaskUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutFellowInput | FellowTaskCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowTaskUpsertWithWhereUniqueWithoutFellowInput | FellowTaskUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowTaskCreateManyFellowInputEnvelope
+    set?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    disconnect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    delete?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    connect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    update?: FellowTaskUpdateWithWhereUniqueWithoutFellowInput | FellowTaskUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowTaskUpdateManyWithWhereWithoutFellowInput | FellowTaskUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowTaskScalarWhereInput | FellowTaskScalarWhereInput[]
+  }
+
   export type FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput = {
     create?: XOR<FellowSchoolCreateWithoutFellowInput, FellowSchoolUncheckedCreateWithoutFellowInput> | FellowSchoolCreateWithoutFellowInput[] | FellowSchoolUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutFellowInput | FellowSchoolCreateOrConnectWithoutFellowInput[]
@@ -54872,6 +68753,20 @@ export namespace Prisma {
     update?: FellowReviewUpdateWithWhereUniqueWithoutFellowInput | FellowReviewUpdateWithWhereUniqueWithoutFellowInput[]
     updateMany?: FellowReviewUpdateManyWithWhereWithoutFellowInput | FellowReviewUpdateManyWithWhereWithoutFellowInput[]
     deleteMany?: FellowReviewScalarWhereInput | FellowReviewScalarWhereInput[]
+  }
+
+  export type FellowTaskUncheckedUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput> | FellowTaskCreateWithoutFellowInput[] | FellowTaskUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutFellowInput | FellowTaskCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowTaskUpsertWithWhereUniqueWithoutFellowInput | FellowTaskUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowTaskCreateManyFellowInputEnvelope
+    set?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    disconnect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    delete?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    connect?: FellowTaskWhereUniqueInput | FellowTaskWhereUniqueInput[]
+    update?: FellowTaskUpdateWithWhereUniqueWithoutFellowInput | FellowTaskUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowTaskUpdateManyWithWhereWithoutFellowInput | FellowTaskUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowTaskScalarWhereInput | FellowTaskScalarWhereInput[]
   }
 
   export type FellowCreateNestedOneWithoutGoalsInput = {
@@ -55357,6 +69252,48 @@ export namespace Prisma {
     connect?: BeneficiarySugarcaneWhereUniqueInput | BeneficiarySugarcaneWhereUniqueInput[]
   }
 
+  export type ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput> | ResilienceSurveyCreateWithoutBeneficiaryInput[] | ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput | ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: ResilienceSurveyCreateManyBeneficiaryInputEnvelope
+    connect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+  }
+
+  export type AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: AdaptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: AbsorptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | TransformativeCapacitySurveyCreateWithoutBeneficiaryInput[] | TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: TransformativeCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput> | VulnerabilitySurveyCreateWithoutBeneficiaryInput[] | VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput | VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: VulnerabilitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+  }
+
+  export type SolutionPlanCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput> | SolutionPlanCreateWithoutBeneficiaryInput[] | SolutionPlanUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: SolutionPlanCreateOrConnectWithoutBeneficiaryInput | SolutionPlanCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: SolutionPlanCreateManyBeneficiaryInputEnvelope
+    connect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+  }
+
   export type FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput = {
     create?: XOR<FamilyMemberCreateWithoutBeneficiaryInput, FamilyMemberUncheckedCreateWithoutBeneficiaryInput> | FamilyMemberCreateWithoutBeneficiaryInput[] | FamilyMemberUncheckedCreateWithoutBeneficiaryInput[]
     connectOrCreate?: FamilyMemberCreateOrConnectWithoutBeneficiaryInput | FamilyMemberCreateOrConnectWithoutBeneficiaryInput[]
@@ -55390,6 +69327,48 @@ export namespace Prisma {
     connectOrCreate?: BeneficiarySugarcaneCreateOrConnectWithoutBeneficiaryInput | BeneficiarySugarcaneCreateOrConnectWithoutBeneficiaryInput[]
     createMany?: BeneficiarySugarcaneCreateManyBeneficiaryInputEnvelope
     connect?: BeneficiarySugarcaneWhereUniqueInput | BeneficiarySugarcaneWhereUniqueInput[]
+  }
+
+  export type ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput> | ResilienceSurveyCreateWithoutBeneficiaryInput[] | ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput | ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: ResilienceSurveyCreateManyBeneficiaryInputEnvelope
+    connect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: AdaptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: AbsorptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | TransformativeCapacitySurveyCreateWithoutBeneficiaryInput[] | TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: TransformativeCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+  }
+
+  export type VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput> | VulnerabilitySurveyCreateWithoutBeneficiaryInput[] | VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput | VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: VulnerabilitySurveyCreateManyBeneficiaryInputEnvelope
+    connect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+  }
+
+  export type SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput> | SolutionPlanCreateWithoutBeneficiaryInput[] | SolutionPlanUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: SolutionPlanCreateOrConnectWithoutBeneficiaryInput | SolutionPlanCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: SolutionPlanCreateManyBeneficiaryInputEnvelope
+    connect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
   }
 
   export type FamilyMemberUpdateManyWithoutBeneficiaryNestedInput = {
@@ -55462,6 +69441,90 @@ export namespace Prisma {
     deleteMany?: BeneficiarySugarcaneScalarWhereInput | BeneficiarySugarcaneScalarWhereInput[]
   }
 
+  export type ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput> | ResilienceSurveyCreateWithoutBeneficiaryInput[] | ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput | ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: ResilienceSurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | ResilienceSurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: ResilienceSurveyCreateManyBeneficiaryInputEnvelope
+    set?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    disconnect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    delete?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    connect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    update?: ResilienceSurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | ResilienceSurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: ResilienceSurveyUpdateManyWithWhereWithoutBeneficiaryInput | ResilienceSurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: ResilienceSurveyScalarWhereInput | ResilienceSurveyScalarWhereInput[]
+  }
+
+  export type AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: AdaptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: AdaptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    disconnect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    delete?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    connect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    update?: AdaptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: AdaptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: AdaptiveCapacitySurveyScalarWhereInput | AdaptiveCapacitySurveyScalarWhereInput[]
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: AbsorptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: AbsorptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    disconnect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    delete?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    connect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    update?: AbsorptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: AbsorptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: AbsorptiveCapacitySurveyScalarWhereInput | AbsorptiveCapacitySurveyScalarWhereInput[]
+  }
+
+  export type TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | TransformativeCapacitySurveyCreateWithoutBeneficiaryInput[] | TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: TransformativeCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | TransformativeCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: TransformativeCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    disconnect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    delete?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    connect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    update?: TransformativeCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | TransformativeCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: TransformativeCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | TransformativeCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: TransformativeCapacitySurveyScalarWhereInput | TransformativeCapacitySurveyScalarWhereInput[]
+  }
+
+  export type VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput> | VulnerabilitySurveyCreateWithoutBeneficiaryInput[] | VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput | VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: VulnerabilitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | VulnerabilitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: VulnerabilitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    disconnect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    delete?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    connect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    update?: VulnerabilitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | VulnerabilitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: VulnerabilitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | VulnerabilitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: VulnerabilitySurveyScalarWhereInput | VulnerabilitySurveyScalarWhereInput[]
+  }
+
+  export type SolutionPlanUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput> | SolutionPlanCreateWithoutBeneficiaryInput[] | SolutionPlanUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: SolutionPlanCreateOrConnectWithoutBeneficiaryInput | SolutionPlanCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: SolutionPlanUpsertWithWhereUniqueWithoutBeneficiaryInput | SolutionPlanUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: SolutionPlanCreateManyBeneficiaryInputEnvelope
+    set?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    disconnect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    delete?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    connect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    update?: SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput | SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput | SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: SolutionPlanScalarWhereInput | SolutionPlanScalarWhereInput[]
+  }
+
   export type FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
     create?: XOR<FamilyMemberCreateWithoutBeneficiaryInput, FamilyMemberUncheckedCreateWithoutBeneficiaryInput> | FamilyMemberCreateWithoutBeneficiaryInput[] | FamilyMemberUncheckedCreateWithoutBeneficiaryInput[]
     connectOrCreate?: FamilyMemberCreateOrConnectWithoutBeneficiaryInput | FamilyMemberCreateOrConnectWithoutBeneficiaryInput[]
@@ -55530,6 +69593,90 @@ export namespace Prisma {
     update?: BeneficiarySugarcaneUpdateWithWhereUniqueWithoutBeneficiaryInput | BeneficiarySugarcaneUpdateWithWhereUniqueWithoutBeneficiaryInput[]
     updateMany?: BeneficiarySugarcaneUpdateManyWithWhereWithoutBeneficiaryInput | BeneficiarySugarcaneUpdateManyWithWhereWithoutBeneficiaryInput[]
     deleteMany?: BeneficiarySugarcaneScalarWhereInput | BeneficiarySugarcaneScalarWhereInput[]
+  }
+
+  export type ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput> | ResilienceSurveyCreateWithoutBeneficiaryInput[] | ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput | ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: ResilienceSurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | ResilienceSurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: ResilienceSurveyCreateManyBeneficiaryInputEnvelope
+    set?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    disconnect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    delete?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    connect?: ResilienceSurveyWhereUniqueInput | ResilienceSurveyWhereUniqueInput[]
+    update?: ResilienceSurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | ResilienceSurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: ResilienceSurveyUpdateManyWithWhereWithoutBeneficiaryInput | ResilienceSurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: ResilienceSurveyScalarWhereInput | ResilienceSurveyScalarWhereInput[]
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: AdaptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: AdaptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    disconnect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    delete?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    connect?: AdaptiveCapacitySurveyWhereUniqueInput | AdaptiveCapacitySurveyWhereUniqueInput[]
+    update?: AdaptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: AdaptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | AdaptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: AdaptiveCapacitySurveyScalarWhereInput | AdaptiveCapacitySurveyScalarWhereInput[]
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput[] | AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: AbsorptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: AbsorptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    disconnect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    delete?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    connect?: AbsorptiveCapacitySurveyWhereUniqueInput | AbsorptiveCapacitySurveyWhereUniqueInput[]
+    update?: AbsorptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: AbsorptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | AbsorptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: AbsorptiveCapacitySurveyScalarWhereInput | AbsorptiveCapacitySurveyScalarWhereInput[]
+  }
+
+  export type TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput> | TransformativeCapacitySurveyCreateWithoutBeneficiaryInput[] | TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput | TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: TransformativeCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | TransformativeCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: TransformativeCapacitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    disconnect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    delete?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    connect?: TransformativeCapacitySurveyWhereUniqueInput | TransformativeCapacitySurveyWhereUniqueInput[]
+    update?: TransformativeCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | TransformativeCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: TransformativeCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | TransformativeCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: TransformativeCapacitySurveyScalarWhereInput | TransformativeCapacitySurveyScalarWhereInput[]
+  }
+
+  export type VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput> | VulnerabilitySurveyCreateWithoutBeneficiaryInput[] | VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput | VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: VulnerabilitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput | VulnerabilitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: VulnerabilitySurveyCreateManyBeneficiaryInputEnvelope
+    set?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    disconnect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    delete?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    connect?: VulnerabilitySurveyWhereUniqueInput | VulnerabilitySurveyWhereUniqueInput[]
+    update?: VulnerabilitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput | VulnerabilitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: VulnerabilitySurveyUpdateManyWithWhereWithoutBeneficiaryInput | VulnerabilitySurveyUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: VulnerabilitySurveyScalarWhereInput | VulnerabilitySurveyScalarWhereInput[]
+  }
+
+  export type SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput> | SolutionPlanCreateWithoutBeneficiaryInput[] | SolutionPlanUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: SolutionPlanCreateOrConnectWithoutBeneficiaryInput | SolutionPlanCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: SolutionPlanUpsertWithWhereUniqueWithoutBeneficiaryInput | SolutionPlanUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: SolutionPlanCreateManyBeneficiaryInputEnvelope
+    set?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    disconnect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    delete?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    connect?: SolutionPlanWhereUniqueInput | SolutionPlanWhereUniqueInput[]
+    update?: SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput | SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput | SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: SolutionPlanScalarWhereInput | SolutionPlanScalarWhereInput[]
   }
 
   export type BeneficiaryCreateNestedOneWithoutFamilyMembersInput = {
@@ -55706,6 +69853,20 @@ export namespace Prisma {
     connect?: GoatRearingProgramWhereUniqueInput
   }
 
+  export type GoatRearingEventCreateNestedManyWithoutBeneficiaryGoatRearingInput = {
+    create?: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput> | GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput[] | GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput[]
+    connectOrCreate?: GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput | GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput[]
+    createMany?: GoatRearingEventCreateManyBeneficiaryGoatRearingInputEnvelope
+    connect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+  }
+
+  export type GoatRearingEventUncheckedCreateNestedManyWithoutBeneficiaryGoatRearingInput = {
+    create?: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput> | GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput[] | GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput[]
+    connectOrCreate?: GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput | GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput[]
+    createMany?: GoatRearingEventCreateManyBeneficiaryGoatRearingInputEnvelope
+    connect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+  }
+
   export type BeneficiaryUpdateOneRequiredWithoutGoatRearingDetailsNestedInput = {
     create?: XOR<BeneficiaryCreateWithoutGoatRearingDetailsInput, BeneficiaryUncheckedCreateWithoutGoatRearingDetailsInput>
     connectOrCreate?: BeneficiaryCreateOrConnectWithoutGoatRearingDetailsInput
@@ -55722,6 +69883,34 @@ export namespace Prisma {
     delete?: GoatRearingProgramWhereInput | boolean
     connect?: GoatRearingProgramWhereUniqueInput
     update?: XOR<XOR<GoatRearingProgramUpdateToOneWithWhereWithoutBeneficiariesInput, GoatRearingProgramUpdateWithoutBeneficiariesInput>, GoatRearingProgramUncheckedUpdateWithoutBeneficiariesInput>
+  }
+
+  export type GoatRearingEventUpdateManyWithoutBeneficiaryGoatRearingNestedInput = {
+    create?: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput> | GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput[] | GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput[]
+    connectOrCreate?: GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput | GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput[]
+    upsert?: GoatRearingEventUpsertWithWhereUniqueWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpsertWithWhereUniqueWithoutBeneficiaryGoatRearingInput[]
+    createMany?: GoatRearingEventCreateManyBeneficiaryGoatRearingInputEnvelope
+    set?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    disconnect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    delete?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    connect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    update?: GoatRearingEventUpdateWithWhereUniqueWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpdateWithWhereUniqueWithoutBeneficiaryGoatRearingInput[]
+    updateMany?: GoatRearingEventUpdateManyWithWhereWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpdateManyWithWhereWithoutBeneficiaryGoatRearingInput[]
+    deleteMany?: GoatRearingEventScalarWhereInput | GoatRearingEventScalarWhereInput[]
+  }
+
+  export type GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingNestedInput = {
+    create?: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput> | GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput[] | GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput[]
+    connectOrCreate?: GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput | GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput[]
+    upsert?: GoatRearingEventUpsertWithWhereUniqueWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpsertWithWhereUniqueWithoutBeneficiaryGoatRearingInput[]
+    createMany?: GoatRearingEventCreateManyBeneficiaryGoatRearingInputEnvelope
+    set?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    disconnect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    delete?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    connect?: GoatRearingEventWhereUniqueInput | GoatRearingEventWhereUniqueInput[]
+    update?: GoatRearingEventUpdateWithWhereUniqueWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpdateWithWhereUniqueWithoutBeneficiaryGoatRearingInput[]
+    updateMany?: GoatRearingEventUpdateManyWithWhereWithoutBeneficiaryGoatRearingInput | GoatRearingEventUpdateManyWithWhereWithoutBeneficiaryGoatRearingInput[]
+    deleteMany?: GoatRearingEventScalarWhereInput | GoatRearingEventScalarWhereInput[]
   }
 
   export type BeneficiaryGoatRearingCreateNestedManyWithoutGoatRearingProgramInput = {
@@ -55764,6 +69953,20 @@ export namespace Prisma {
     update?: BeneficiaryGoatRearingUpdateWithWhereUniqueWithoutGoatRearingProgramInput | BeneficiaryGoatRearingUpdateWithWhereUniqueWithoutGoatRearingProgramInput[]
     updateMany?: BeneficiaryGoatRearingUpdateManyWithWhereWithoutGoatRearingProgramInput | BeneficiaryGoatRearingUpdateManyWithWhereWithoutGoatRearingProgramInput[]
     deleteMany?: BeneficiaryGoatRearingScalarWhereInput | BeneficiaryGoatRearingScalarWhereInput[]
+  }
+
+  export type BeneficiaryGoatRearingCreateNestedOneWithoutEventsInput = {
+    create?: XOR<BeneficiaryGoatRearingCreateWithoutEventsInput, BeneficiaryGoatRearingUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: BeneficiaryGoatRearingCreateOrConnectWithoutEventsInput
+    connect?: BeneficiaryGoatRearingWhereUniqueInput
+  }
+
+  export type BeneficiaryGoatRearingUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<BeneficiaryGoatRearingCreateWithoutEventsInput, BeneficiaryGoatRearingUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: BeneficiaryGoatRearingCreateOrConnectWithoutEventsInput
+    upsert?: BeneficiaryGoatRearingUpsertWithoutEventsInput
+    connect?: BeneficiaryGoatRearingWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryGoatRearingUpdateToOneWithWhereWithoutEventsInput, BeneficiaryGoatRearingUpdateWithoutEventsInput>, BeneficiaryGoatRearingUncheckedUpdateWithoutEventsInput>
   }
 
   export type BeneficiaryCreateNestedOneWithoutSugarcaneDetailsInput = {
@@ -56112,6 +70315,174 @@ export namespace Prisma {
     deleteMany?: InventoryLedgerScalarWhereInput | InventoryLedgerScalarWhereInput[]
   }
 
+  export type FellowCreateNestedOneWithoutTasksInput = {
+    create?: XOR<FellowCreateWithoutTasksInput, FellowUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutTasksInput
+    connect?: FellowWhereUniqueInput
+  }
+
+  export type FellowTaskCommentCreateNestedManyWithoutTaskInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput> | FellowTaskCommentCreateWithoutTaskInput[] | FellowTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutTaskInput | FellowTaskCommentCreateOrConnectWithoutTaskInput[]
+    createMany?: FellowTaskCommentCreateManyTaskInputEnvelope
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+  }
+
+  export type FellowTaskCommentUncheckedCreateNestedManyWithoutTaskInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput> | FellowTaskCommentCreateWithoutTaskInput[] | FellowTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutTaskInput | FellowTaskCommentCreateOrConnectWithoutTaskInput[]
+    createMany?: FellowTaskCommentCreateManyTaskInputEnvelope
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+  }
+
+  export type FellowUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<FellowCreateWithoutTasksInput, FellowUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutTasksInput
+    upsert?: FellowUpsertWithoutTasksInput
+    connect?: FellowWhereUniqueInput
+    update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutTasksInput, FellowUpdateWithoutTasksInput>, FellowUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type FellowTaskCommentUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput> | FellowTaskCommentCreateWithoutTaskInput[] | FellowTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutTaskInput | FellowTaskCommentCreateOrConnectWithoutTaskInput[]
+    upsert?: FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput | FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: FellowTaskCommentCreateManyTaskInputEnvelope
+    set?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    disconnect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    delete?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    update?: FellowTaskCommentUpdateWithWhereUniqueWithoutTaskInput | FellowTaskCommentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: FellowTaskCommentUpdateManyWithWhereWithoutTaskInput | FellowTaskCommentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
+  }
+
+  export type FellowTaskCommentUncheckedUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput> | FellowTaskCommentCreateWithoutTaskInput[] | FellowTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: FellowTaskCommentCreateOrConnectWithoutTaskInput | FellowTaskCommentCreateOrConnectWithoutTaskInput[]
+    upsert?: FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput | FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: FellowTaskCommentCreateManyTaskInputEnvelope
+    set?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    disconnect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    delete?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    connect?: FellowTaskCommentWhereUniqueInput | FellowTaskCommentWhereUniqueInput[]
+    update?: FellowTaskCommentUpdateWithWhereUniqueWithoutTaskInput | FellowTaskCommentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: FellowTaskCommentUpdateManyWithWhereWithoutTaskInput | FellowTaskCommentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
+  }
+
+  export type FellowTaskCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<FellowTaskCreateWithoutCommentsInput, FellowTaskUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutCommentsInput
+    connect?: FellowTaskWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTaskCommentsInput = {
+    create?: XOR<UserCreateWithoutTaskCommentsInput, UserUncheckedCreateWithoutTaskCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTaskCommentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FellowTaskUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<FellowTaskCreateWithoutCommentsInput, FellowTaskUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: FellowTaskCreateOrConnectWithoutCommentsInput
+    upsert?: FellowTaskUpsertWithoutCommentsInput
+    connect?: FellowTaskWhereUniqueInput
+    update?: XOR<XOR<FellowTaskUpdateToOneWithWhereWithoutCommentsInput, FellowTaskUpdateWithoutCommentsInput>, FellowTaskUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutTaskCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutTaskCommentsInput, UserUncheckedCreateWithoutTaskCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTaskCommentsInput
+    upsert?: UserUpsertWithoutTaskCommentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskCommentsInput, UserUpdateWithoutTaskCommentsInput>, UserUncheckedUpdateWithoutTaskCommentsInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutResilienceSurveysInput = {
+    create?: XOR<BeneficiaryCreateWithoutResilienceSurveysInput, BeneficiaryUncheckedCreateWithoutResilienceSurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutResilienceSurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutResilienceSurveysNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutResilienceSurveysInput, BeneficiaryUncheckedCreateWithoutResilienceSurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutResilienceSurveysInput
+    upsert?: BeneficiaryUpsertWithoutResilienceSurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutResilienceSurveysInput, BeneficiaryUpdateWithoutResilienceSurveysInput>, BeneficiaryUncheckedUpdateWithoutResilienceSurveysInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutAdaptiveCapacitySurveysInput = {
+    create?: XOR<BeneficiaryCreateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAdaptiveCapacitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutAdaptiveCapacitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutAdaptiveCapacitySurveysNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAdaptiveCapacitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutAdaptiveCapacitySurveysInput
+    upsert?: BeneficiaryUpsertWithoutAdaptiveCapacitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutAdaptiveCapacitySurveysInput, BeneficiaryUpdateWithoutAdaptiveCapacitySurveysInput>, BeneficiaryUncheckedUpdateWithoutAdaptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutAbsorptiveCapacitySurveysInput = {
+    create?: XOR<BeneficiaryCreateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAbsorptiveCapacitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutAbsorptiveCapacitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutAbsorptiveCapacitySurveysNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAbsorptiveCapacitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutAbsorptiveCapacitySurveysInput
+    upsert?: BeneficiaryUpsertWithoutAbsorptiveCapacitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUpdateWithoutAbsorptiveCapacitySurveysInput>, BeneficiaryUncheckedUpdateWithoutAbsorptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutTransformativeSurveysInput = {
+    create?: XOR<BeneficiaryCreateWithoutTransformativeSurveysInput, BeneficiaryUncheckedCreateWithoutTransformativeSurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutTransformativeSurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutTransformativeSurveysNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutTransformativeSurveysInput, BeneficiaryUncheckedCreateWithoutTransformativeSurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutTransformativeSurveysInput
+    upsert?: BeneficiaryUpsertWithoutTransformativeSurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutTransformativeSurveysInput, BeneficiaryUpdateWithoutTransformativeSurveysInput>, BeneficiaryUncheckedUpdateWithoutTransformativeSurveysInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutVulnerabilitySurveysInput = {
+    create?: XOR<BeneficiaryCreateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedCreateWithoutVulnerabilitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutVulnerabilitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutVulnerabilitySurveysNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedCreateWithoutVulnerabilitySurveysInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutVulnerabilitySurveysInput
+    upsert?: BeneficiaryUpsertWithoutVulnerabilitySurveysInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutVulnerabilitySurveysInput, BeneficiaryUpdateWithoutVulnerabilitySurveysInput>, BeneficiaryUncheckedUpdateWithoutVulnerabilitySurveysInput>
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutSolutionPlansInput = {
+    create?: XOR<BeneficiaryCreateWithoutSolutionPlansInput, BeneficiaryUncheckedCreateWithoutSolutionPlansInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutSolutionPlansInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type BeneficiaryUpdateOneRequiredWithoutSolutionPlansNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutSolutionPlansInput, BeneficiaryUncheckedCreateWithoutSolutionPlansInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutSolutionPlansInput
+    upsert?: BeneficiaryUpsertWithoutSolutionPlansInput
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutSolutionPlansInput, BeneficiaryUpdateWithoutSolutionPlansInput>, BeneficiaryUncheckedUpdateWithoutSolutionPlansInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -56412,6 +70783,29 @@ export namespace Prisma {
     _min?: NestedEnumLeaveStatusFilter<$PrismaModel>
     _max?: NestedEnumLeaveStatusFilter<$PrismaModel>
   }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type UserCreateWithoutRoleInput = {
     id?: string
@@ -56431,6 +70825,7 @@ export namespace Prisma {
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -56451,6 +70846,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -56618,6 +71014,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutFellowInput
     goals?: FellowGoalCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutUserInput = {
@@ -56638,6 +71035,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutFellowInput
     goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutUserInput = {
@@ -56650,6 +71048,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56660,6 +71059,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56717,6 +71117,10 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56733,6 +71137,10 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -56744,6 +71152,32 @@ export namespace Prisma {
 
   export type AttendanceLogCreateManyUserInputEnvelope = {
     data: AttendanceLogCreateManyUserInput | AttendanceLogCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FellowTaskCommentCreateWithoutAuthorInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    task: FellowTaskCreateNestedOneWithoutCommentsInput
+  }
+
+  export type FellowTaskCommentUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    taskId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentCreateOrConnectWithoutAuthorInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    create: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type FellowTaskCommentCreateManyAuthorInputEnvelope = {
+    data: FellowTaskCommentCreateManyAuthorInput | FellowTaskCommentCreateManyAuthorInput[]
     skipDuplicates?: boolean
   }
 
@@ -56835,6 +71269,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutUserInput = {
@@ -56855,6 +71290,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type LeaveUpsertWithWhereUniqueWithoutUserInput = {
@@ -56882,6 +71318,7 @@ export namespace Prisma {
     type?: StringNullableFilter<"Leave"> | string | null
     dates?: StringNullableFilter<"Leave"> | string | null
     reason?: StringNullableFilter<"Leave"> | string | null
+    rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
     createdAt?: DateTimeFilter<"Leave"> | Date | string
     updatedAt?: DateTimeFilter<"Leave"> | Date | string
@@ -56949,8 +71386,40 @@ export namespace Prisma {
     ef2?: StringNullableFilter<"AttendanceLog"> | string | null
     logininfo?: StringNullableFilter<"AttendanceLog"> | string | null
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
+    checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     createdAt?: DateTimeFilter<"AttendanceLog"> | Date | string
     updatedAt?: DateTimeFilter<"AttendanceLog"> | Date | string
+  }
+
+  export type FellowTaskCommentUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    update: XOR<FellowTaskCommentUpdateWithoutAuthorInput, FellowTaskCommentUncheckedUpdateWithoutAuthorInput>
+    create: XOR<FellowTaskCommentCreateWithoutAuthorInput, FellowTaskCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type FellowTaskCommentUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    data: XOR<FellowTaskCommentUpdateWithoutAuthorInput, FellowTaskCommentUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type FellowTaskCommentUpdateManyWithWhereWithoutAuthorInput = {
+    where: FellowTaskCommentScalarWhereInput
+    data: XOR<FellowTaskCommentUpdateManyMutationInput, FellowTaskCommentUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type FellowTaskCommentScalarWhereInput = {
+    AND?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
+    OR?: FellowTaskCommentScalarWhereInput[]
+    NOT?: FellowTaskCommentScalarWhereInput | FellowTaskCommentScalarWhereInput[]
+    id?: StringFilter<"FellowTaskComment"> | string
+    taskId?: StringFilter<"FellowTaskComment"> | string
+    authorId?: StringFilter<"FellowTaskComment"> | string
+    text?: StringFilter<"FellowTaskComment"> | string
+    createdAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTaskComment"> | Date | string
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -57165,6 +71634,7 @@ export namespace Prisma {
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -57185,6 +71655,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -57246,6 +71717,7 @@ export namespace Prisma {
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -57266,6 +71738,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -57339,6 +71812,7 @@ export namespace Prisma {
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     fellow?: FellowCreateNestedOneWithoutStudentsInput
@@ -57365,6 +71839,7 @@ export namespace Prisma {
     primaryLanguage?: string | null
     status?: string
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectMarks?: StudentSubjectMarkUncheckedCreateNestedManyWithoutStudentInput
@@ -57466,6 +71941,7 @@ export namespace Prisma {
     status?: StringFilter<"Student"> | string
     schoolId?: StringNullableFilter<"Student"> | string | null
     fellowId?: StringNullableFilter<"Student"> | string | null
+    isMigrated?: BoolFilter<"Student"> | boolean
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
   }
@@ -57513,6 +71989,7 @@ export namespace Prisma {
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -57533,6 +72010,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -57580,6 +72058,7 @@ export namespace Prisma {
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     school?: SchoolCreateNestedOneWithoutStudentsInput
@@ -57606,6 +72085,7 @@ export namespace Prisma {
     primaryLanguage?: string | null
     status?: string
     schoolId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectMarks?: StudentSubjectMarkUncheckedCreateNestedManyWithoutStudentInput
@@ -57688,6 +72168,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FellowTaskCreateWithoutFellowInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: FellowTaskCommentCreateNestedManyWithoutTaskInput
+  }
+
+  export type FellowTaskUncheckedCreateWithoutFellowInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: FellowTaskCommentUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type FellowTaskCreateOrConnectWithoutFellowInput = {
+    where: FellowTaskWhereUniqueInput
+    create: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowTaskCreateManyFellowInputEnvelope = {
+    data: FellowTaskCreateManyFellowInput | FellowTaskCreateManyFellowInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutFellowInput = {
     update: XOR<UserUpdateWithoutFellowInput, UserUncheckedUpdateWithoutFellowInput>
     create: XOR<UserCreateWithoutFellowInput, UserUncheckedCreateWithoutFellowInput>
@@ -57717,6 +72233,7 @@ export namespace Prisma {
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -57737,6 +72254,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -57833,6 +72351,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FellowReview"> | Date | string
   }
 
+  export type FellowTaskUpsertWithWhereUniqueWithoutFellowInput = {
+    where: FellowTaskWhereUniqueInput
+    update: XOR<FellowTaskUpdateWithoutFellowInput, FellowTaskUncheckedUpdateWithoutFellowInput>
+    create: XOR<FellowTaskCreateWithoutFellowInput, FellowTaskUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowTaskUpdateWithWhereUniqueWithoutFellowInput = {
+    where: FellowTaskWhereUniqueInput
+    data: XOR<FellowTaskUpdateWithoutFellowInput, FellowTaskUncheckedUpdateWithoutFellowInput>
+  }
+
+  export type FellowTaskUpdateManyWithWhereWithoutFellowInput = {
+    where: FellowTaskScalarWhereInput
+    data: XOR<FellowTaskUpdateManyMutationInput, FellowTaskUncheckedUpdateManyWithoutFellowInput>
+  }
+
+  export type FellowTaskScalarWhereInput = {
+    AND?: FellowTaskScalarWhereInput | FellowTaskScalarWhereInput[]
+    OR?: FellowTaskScalarWhereInput[]
+    NOT?: FellowTaskScalarWhereInput | FellowTaskScalarWhereInput[]
+    id?: StringFilter<"FellowTask"> | string
+    fellowId?: StringFilter<"FellowTask"> | string
+    title?: StringFilter<"FellowTask"> | string
+    description?: StringNullableFilter<"FellowTask"> | string | null
+    plannedDate?: DateTimeFilter<"FellowTask"> | Date | string
+    status?: StringFilter<"FellowTask"> | string
+    isPlanned?: BoolFilter<"FellowTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"FellowTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"FellowTask"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowTask"> | Date | string
+  }
+
   export type FellowCreateWithoutGoalsInput = {
     id?: string
     name: string
@@ -57851,6 +72401,7 @@ export namespace Prisma {
     schools?: FellowSchoolCreateNestedManyWithoutFellowInput
     students?: StudentCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutGoalsInput = {
@@ -57871,6 +72422,7 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
     students?: StudentUncheckedCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutGoalsInput = {
@@ -57933,6 +72485,7 @@ export namespace Prisma {
     schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
     students?: StudentUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutGoalsInput = {
@@ -57953,6 +72506,7 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
     students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowGoalMilestoneUpsertWithWhereUniqueWithoutGoalInput = {
@@ -58061,6 +72615,7 @@ export namespace Prisma {
     schools?: FellowSchoolCreateNestedManyWithoutFellowInput
     students?: StudentCreateNestedManyWithoutFellowInput
     goals?: FellowGoalCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutReviewsInput = {
@@ -58081,6 +72636,7 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
     students?: StudentUncheckedCreateNestedManyWithoutFellowInput
     goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutReviewsInput = {
@@ -58117,6 +72673,7 @@ export namespace Prisma {
     schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
     students?: StudentUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutReviewsInput = {
@@ -58137,12 +72694,14 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
     students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type SchoolCreateWithoutStudentsInput = {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -58163,6 +72722,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -58202,6 +72762,7 @@ export namespace Prisma {
     schools?: FellowSchoolCreateNestedManyWithoutFellowInput
     goals?: FellowGoalCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutStudentsInput = {
@@ -58222,6 +72783,7 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
     goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutStudentsInput = {
@@ -58306,6 +72868,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58326,6 +72889,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58371,6 +72935,7 @@ export namespace Prisma {
     schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutStudentsInput = {
@@ -58391,6 +72956,7 @@ export namespace Prisma {
     schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type StudentSubjectMarkUpsertWithWhereUniqueWithoutStudentInput = {
@@ -58471,6 +73037,7 @@ export namespace Prisma {
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     school?: SchoolCreateNestedOneWithoutStudentsInput
@@ -58498,6 +73065,7 @@ export namespace Prisma {
     status?: string
     schoolId?: string | null
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceLogs?: StudentAttendanceLogUncheckedCreateNestedManyWithoutStudentInput
@@ -58537,6 +73105,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneWithoutStudentsNestedInput
@@ -58564,6 +73133,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceLogs?: StudentAttendanceLogUncheckedUpdateManyWithoutStudentNestedInput
@@ -58587,6 +73157,7 @@ export namespace Prisma {
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     school?: SchoolCreateNestedOneWithoutStudentsInput
@@ -58614,6 +73185,7 @@ export namespace Prisma {
     status?: string
     schoolId?: string | null
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectMarks?: StudentSubjectMarkUncheckedCreateNestedManyWithoutStudentInput
@@ -58681,6 +73253,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneWithoutStudentsNestedInput
@@ -58708,6 +73281,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectMarks?: StudentSubjectMarkUncheckedUpdateManyWithoutStudentNestedInput
@@ -58820,6 +73394,7 @@ export namespace Prisma {
     students?: StudentCreateNestedManyWithoutFellowInput
     goals?: FellowGoalCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutSchoolsInput = {
@@ -58840,6 +73415,7 @@ export namespace Prisma {
     students?: StudentUncheckedCreateNestedManyWithoutFellowInput
     goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
     reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutSchoolsInput = {
@@ -58851,6 +73427,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -58871,6 +73448,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -58921,6 +73499,7 @@ export namespace Prisma {
     students?: StudentUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutSchoolsInput = {
@@ -58941,6 +73520,7 @@ export namespace Prisma {
     students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
     goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
     reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type SchoolUpsertWithoutFellowsInput = {
@@ -58958,6 +73538,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58978,6 +73559,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59097,6 +73679,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -59117,6 +73700,7 @@ export namespace Prisma {
     id?: string
     name: string
     principalName?: string | null
+    udiseCode?: string | null
     email?: string | null
     phone?: string | null
     address?: string | null
@@ -59186,6 +73770,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59206,6 +73791,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59432,6 +74018,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     goatRearingProgram?: GoatRearingProgramCreateNestedOneWithoutBeneficiariesInput
+    events?: GoatRearingEventCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingUncheckedCreateWithoutBeneficiaryInput = {
@@ -59445,6 +74032,7 @@ export namespace Prisma {
     goatRearingProgramId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    events?: GoatRearingEventUncheckedCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingCreateOrConnectWithoutBeneficiaryInput = {
@@ -59496,6 +74084,190 @@ export namespace Prisma {
 
   export type BeneficiarySugarcaneCreateManyBeneficiaryInputEnvelope = {
     data: BeneficiarySugarcaneCreateManyBeneficiaryInput | BeneficiarySugarcaneCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ResilienceSurveyCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ResilienceSurveyCreateOrConnectWithoutBeneficiaryInput = {
+    where: ResilienceSurveyWhereUniqueInput
+    create: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type ResilienceSurveyCreateManyBeneficiaryInputEnvelope = {
+    data: ResilienceSurveyCreateManyBeneficiaryInput | ResilienceSurveyCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdaptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput = {
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+    create: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type AdaptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope = {
+    data: AdaptiveCapacitySurveyCreateManyBeneficiaryInput | AdaptiveCapacitySurveyCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyCreateOrConnectWithoutBeneficiaryInput = {
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+    create: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type AbsorptiveCapacitySurveyCreateManyBeneficiaryInputEnvelope = {
+    data: AbsorptiveCapacitySurveyCreateManyBeneficiaryInput | AbsorptiveCapacitySurveyCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransformativeCapacitySurveyCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransformativeCapacitySurveyCreateOrConnectWithoutBeneficiaryInput = {
+    where: TransformativeCapacitySurveyWhereUniqueInput
+    create: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type TransformativeCapacitySurveyCreateManyBeneficiaryInputEnvelope = {
+    data: TransformativeCapacitySurveyCreateManyBeneficiaryInput | TransformativeCapacitySurveyCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type VulnerabilitySurveyCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VulnerabilitySurveyCreateOrConnectWithoutBeneficiaryInput = {
+    where: VulnerabilitySurveyWhereUniqueInput
+    create: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type VulnerabilitySurveyCreateManyBeneficiaryInputEnvelope = {
+    data: VulnerabilitySurveyCreateManyBeneficiaryInput | VulnerabilitySurveyCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SolutionPlanCreateWithoutBeneficiaryInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanCreateOrConnectWithoutBeneficiaryInput = {
+    where: SolutionPlanWhereUniqueInput
+    create: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type SolutionPlanCreateManyBeneficiaryInputEnvelope = {
+    data: SolutionPlanCreateManyBeneficiaryInput | SolutionPlanCreateManyBeneficiaryInput[]
     skipDuplicates?: boolean
   }
 
@@ -59656,6 +74428,188 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BeneficiarySugarcane"> | Date | string
   }
 
+  export type ResilienceSurveyUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: ResilienceSurveyWhereUniqueInput
+    update: XOR<ResilienceSurveyUpdateWithoutBeneficiaryInput, ResilienceSurveyUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<ResilienceSurveyCreateWithoutBeneficiaryInput, ResilienceSurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type ResilienceSurveyUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: ResilienceSurveyWhereUniqueInput
+    data: XOR<ResilienceSurveyUpdateWithoutBeneficiaryInput, ResilienceSurveyUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type ResilienceSurveyUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: ResilienceSurveyScalarWhereInput
+    data: XOR<ResilienceSurveyUpdateManyMutationInput, ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type ResilienceSurveyScalarWhereInput = {
+    AND?: ResilienceSurveyScalarWhereInput | ResilienceSurveyScalarWhereInput[]
+    OR?: ResilienceSurveyScalarWhereInput[]
+    NOT?: ResilienceSurveyScalarWhereInput | ResilienceSurveyScalarWhereInput[]
+    id?: StringFilter<"ResilienceSurvey"> | string
+    beneficiaryId?: StringFilter<"ResilienceSurvey"> | string
+    surveyDate?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    responses?: JsonFilter<"ResilienceSurvey">
+    lifeSatisfactionScore?: FloatFilter<"ResilienceSurvey"> | number
+    planningScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterReadinessScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterBeliefsScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterMindsetScore?: FloatFilter<"ResilienceSurvey"> | number
+    financialResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    healthResilienceScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialConnectednessScore?: FloatFilter<"ResilienceSurvey"> | number
+    socialProtectionScore?: FloatFilter<"ResilienceSurvey"> | number
+    disasterWarningScore?: FloatFilter<"ResilienceSurvey"> | number
+    vulnerabilityScore?: FloatFilter<"ResilienceSurvey"> | number
+    overallScore?: FloatFilter<"ResilienceSurvey"> | number
+    createdAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"ResilienceSurvey"> | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+    update: XOR<AdaptiveCapacitySurveyUpdateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<AdaptiveCapacitySurveyCreateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type AdaptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: AdaptiveCapacitySurveyWhereUniqueInput
+    data: XOR<AdaptiveCapacitySurveyUpdateWithoutBeneficiaryInput, AdaptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type AdaptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: AdaptiveCapacitySurveyScalarWhereInput
+    data: XOR<AdaptiveCapacitySurveyUpdateManyMutationInput, AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type AdaptiveCapacitySurveyScalarWhereInput = {
+    AND?: AdaptiveCapacitySurveyScalarWhereInput | AdaptiveCapacitySurveyScalarWhereInput[]
+    OR?: AdaptiveCapacitySurveyScalarWhereInput[]
+    NOT?: AdaptiveCapacitySurveyScalarWhereInput | AdaptiveCapacitySurveyScalarWhereInput[]
+    id?: StringFilter<"AdaptiveCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"AdaptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AdaptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AdaptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AdaptiveCapacitySurvey"> | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+    update: XOR<AbsorptiveCapacitySurveyUpdateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<AbsorptiveCapacitySurveyCreateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: AbsorptiveCapacitySurveyWhereUniqueInput
+    data: XOR<AbsorptiveCapacitySurveyUpdateWithoutBeneficiaryInput, AbsorptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: AbsorptiveCapacitySurveyScalarWhereInput
+    data: XOR<AbsorptiveCapacitySurveyUpdateManyMutationInput, AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type AbsorptiveCapacitySurveyScalarWhereInput = {
+    AND?: AbsorptiveCapacitySurveyScalarWhereInput | AbsorptiveCapacitySurveyScalarWhereInput[]
+    OR?: AbsorptiveCapacitySurveyScalarWhereInput[]
+    NOT?: AbsorptiveCapacitySurveyScalarWhereInput | AbsorptiveCapacitySurveyScalarWhereInput[]
+    id?: StringFilter<"AbsorptiveCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"AbsorptiveCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"AbsorptiveCapacitySurvey">
+    overallScore?: FloatFilter<"AbsorptiveCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"AbsorptiveCapacitySurvey"> | Date | string
+  }
+
+  export type TransformativeCapacitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: TransformativeCapacitySurveyWhereUniqueInput
+    update: XOR<TransformativeCapacitySurveyUpdateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<TransformativeCapacitySurveyCreateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type TransformativeCapacitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: TransformativeCapacitySurveyWhereUniqueInput
+    data: XOR<TransformativeCapacitySurveyUpdateWithoutBeneficiaryInput, TransformativeCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type TransformativeCapacitySurveyUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: TransformativeCapacitySurveyScalarWhereInput
+    data: XOR<TransformativeCapacitySurveyUpdateManyMutationInput, TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type TransformativeCapacitySurveyScalarWhereInput = {
+    AND?: TransformativeCapacitySurveyScalarWhereInput | TransformativeCapacitySurveyScalarWhereInput[]
+    OR?: TransformativeCapacitySurveyScalarWhereInput[]
+    NOT?: TransformativeCapacitySurveyScalarWhereInput | TransformativeCapacitySurveyScalarWhereInput[]
+    id?: StringFilter<"TransformativeCapacitySurvey"> | string
+    beneficiaryId?: StringFilter<"TransformativeCapacitySurvey"> | string
+    surveyDate?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    responses?: JsonFilter<"TransformativeCapacitySurvey">
+    overallScore?: FloatFilter<"TransformativeCapacitySurvey"> | number
+    createdAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"TransformativeCapacitySurvey"> | Date | string
+  }
+
+  export type VulnerabilitySurveyUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: VulnerabilitySurveyWhereUniqueInput
+    update: XOR<VulnerabilitySurveyUpdateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<VulnerabilitySurveyCreateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type VulnerabilitySurveyUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: VulnerabilitySurveyWhereUniqueInput
+    data: XOR<VulnerabilitySurveyUpdateWithoutBeneficiaryInput, VulnerabilitySurveyUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type VulnerabilitySurveyUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: VulnerabilitySurveyScalarWhereInput
+    data: XOR<VulnerabilitySurveyUpdateManyMutationInput, VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type VulnerabilitySurveyScalarWhereInput = {
+    AND?: VulnerabilitySurveyScalarWhereInput | VulnerabilitySurveyScalarWhereInput[]
+    OR?: VulnerabilitySurveyScalarWhereInput[]
+    NOT?: VulnerabilitySurveyScalarWhereInput | VulnerabilitySurveyScalarWhereInput[]
+    id?: StringFilter<"VulnerabilitySurvey"> | string
+    beneficiaryId?: StringFilter<"VulnerabilitySurvey"> | string
+    surveyDate?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    responses?: JsonFilter<"VulnerabilitySurvey">
+    createdAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+    updatedAt?: DateTimeFilter<"VulnerabilitySurvey"> | Date | string
+  }
+
+  export type SolutionPlanUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: SolutionPlanWhereUniqueInput
+    update: XOR<SolutionPlanUpdateWithoutBeneficiaryInput, SolutionPlanUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<SolutionPlanCreateWithoutBeneficiaryInput, SolutionPlanUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type SolutionPlanUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: SolutionPlanWhereUniqueInput
+    data: XOR<SolutionPlanUpdateWithoutBeneficiaryInput, SolutionPlanUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type SolutionPlanUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: SolutionPlanScalarWhereInput
+    data: XOR<SolutionPlanUpdateManyMutationInput, SolutionPlanUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type SolutionPlanScalarWhereInput = {
+    AND?: SolutionPlanScalarWhereInput | SolutionPlanScalarWhereInput[]
+    OR?: SolutionPlanScalarWhereInput[]
+    NOT?: SolutionPlanScalarWhereInput | SolutionPlanScalarWhereInput[]
+    id?: StringFilter<"SolutionPlan"> | string
+    beneficiaryId?: StringFilter<"SolutionPlan"> | string
+    createdAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"SolutionPlan"> | Date | string
+    planData?: JsonFilter<"SolutionPlan">
+  }
+
   export type BeneficiaryCreateWithoutFamilyMembersInput = {
     id?: string
     enrolmentId: string
@@ -59678,12 +74632,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateWithoutFamilyMembersInput = {
@@ -59708,12 +74669,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryCreateOrConnectWithoutFamilyMembersInput = {
@@ -59754,12 +74722,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateWithoutFamilyMembersInput = {
@@ -59784,12 +74759,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryCreateWithoutLivestockInput = {
@@ -59814,12 +74796,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateWithoutLivestockInput = {
@@ -59844,12 +74833,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryCreateOrConnectWithoutLivestockInput = {
@@ -59918,12 +74914,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateWithoutLivestockInput = {
@@ -59948,12 +74951,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type LivestockHealthLogUpsertWithWhereUniqueWithoutLivestockInput = {
@@ -60113,12 +75123,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateWithoutSchemeEnrollmentsInput = {
@@ -60143,12 +75160,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryCreateOrConnectWithoutSchemeEnrollmentsInput = {
@@ -60210,12 +75234,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateWithoutSchemeEnrollmentsInput = {
@@ -60240,12 +75271,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type SchemeUpsertWithoutEnrollmentsInput = {
@@ -60297,12 +75335,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateWithoutGoatRearingDetailsInput = {
@@ -60327,12 +75372,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryCreateOrConnectWithoutGoatRearingDetailsInput = {
@@ -60361,6 +75413,40 @@ export namespace Prisma {
   export type GoatRearingProgramCreateOrConnectWithoutBeneficiariesInput = {
     where: GoatRearingProgramWhereUniqueInput
     create: XOR<GoatRearingProgramCreateWithoutBeneficiariesInput, GoatRearingProgramUncheckedCreateWithoutBeneficiariesInput>
+  }
+
+  export type GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput = {
+    id?: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput = {
+    id?: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GoatRearingEventCreateOrConnectWithoutBeneficiaryGoatRearingInput = {
+    where: GoatRearingEventWhereUniqueInput
+    create: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput>
+  }
+
+  export type GoatRearingEventCreateManyBeneficiaryGoatRearingInputEnvelope = {
+    data: GoatRearingEventCreateManyBeneficiaryGoatRearingInput | GoatRearingEventCreateManyBeneficiaryGoatRearingInput[]
+    skipDuplicates?: boolean
   }
 
   export type BeneficiaryUpsertWithoutGoatRearingDetailsInput = {
@@ -60396,12 +75482,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateWithoutGoatRearingDetailsInput = {
@@ -60426,12 +75519,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type GoatRearingProgramUpsertWithoutBeneficiariesInput = {
@@ -60463,6 +75563,38 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GoatRearingEventUpsertWithWhereUniqueWithoutBeneficiaryGoatRearingInput = {
+    where: GoatRearingEventWhereUniqueInput
+    update: XOR<GoatRearingEventUpdateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedUpdateWithoutBeneficiaryGoatRearingInput>
+    create: XOR<GoatRearingEventCreateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedCreateWithoutBeneficiaryGoatRearingInput>
+  }
+
+  export type GoatRearingEventUpdateWithWhereUniqueWithoutBeneficiaryGoatRearingInput = {
+    where: GoatRearingEventWhereUniqueInput
+    data: XOR<GoatRearingEventUpdateWithoutBeneficiaryGoatRearingInput, GoatRearingEventUncheckedUpdateWithoutBeneficiaryGoatRearingInput>
+  }
+
+  export type GoatRearingEventUpdateManyWithWhereWithoutBeneficiaryGoatRearingInput = {
+    where: GoatRearingEventScalarWhereInput
+    data: XOR<GoatRearingEventUpdateManyMutationInput, GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingInput>
+  }
+
+  export type GoatRearingEventScalarWhereInput = {
+    AND?: GoatRearingEventScalarWhereInput | GoatRearingEventScalarWhereInput[]
+    OR?: GoatRearingEventScalarWhereInput[]
+    NOT?: GoatRearingEventScalarWhereInput | GoatRearingEventScalarWhereInput[]
+    id?: StringFilter<"GoatRearingEvent"> | string
+    beneficiaryGoatRearingId?: StringFilter<"GoatRearingEvent"> | string
+    eventType?: StringFilter<"GoatRearingEvent"> | string
+    eventDate?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    quantity?: IntFilter<"GoatRearingEvent"> | number
+    notes?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    photoUrl?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    recordedBy?: StringNullableFilter<"GoatRearingEvent"> | string | null
+    createdAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+    updatedAt?: DateTimeFilter<"GoatRearingEvent"> | Date | string
+  }
+
   export type BeneficiaryGoatRearingCreateWithoutGoatRearingProgramInput = {
     id?: string
     goatsAssigned?: number
@@ -60474,6 +75606,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     beneficiary: BeneficiaryCreateNestedOneWithoutGoatRearingDetailsInput
+    events?: GoatRearingEventCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingUncheckedCreateWithoutGoatRearingProgramInput = {
@@ -60487,6 +75620,7 @@ export namespace Prisma {
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    events?: GoatRearingEventUncheckedCreateNestedManyWithoutBeneficiaryGoatRearingInput
   }
 
   export type BeneficiaryGoatRearingCreateOrConnectWithoutGoatRearingProgramInput = {
@@ -60515,6 +75649,78 @@ export namespace Prisma {
     data: XOR<BeneficiaryGoatRearingUpdateManyMutationInput, BeneficiaryGoatRearingUncheckedUpdateManyWithoutGoatRearingProgramInput>
   }
 
+  export type BeneficiaryGoatRearingCreateWithoutEventsInput = {
+    id?: string
+    goatsAssigned?: number
+    investment?: number | null
+    returnsAmount?: number | null
+    roiPercentage?: number | null
+    advantagesLog?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    beneficiary: BeneficiaryCreateNestedOneWithoutGoatRearingDetailsInput
+    goatRearingProgram?: GoatRearingProgramCreateNestedOneWithoutBeneficiariesInput
+  }
+
+  export type BeneficiaryGoatRearingUncheckedCreateWithoutEventsInput = {
+    id?: string
+    beneficiaryId: string
+    goatsAssigned?: number
+    investment?: number | null
+    returnsAmount?: number | null
+    roiPercentage?: number | null
+    advantagesLog?: string | null
+    notes?: string | null
+    goatRearingProgramId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryGoatRearingCreateOrConnectWithoutEventsInput = {
+    where: BeneficiaryGoatRearingWhereUniqueInput
+    create: XOR<BeneficiaryGoatRearingCreateWithoutEventsInput, BeneficiaryGoatRearingUncheckedCreateWithoutEventsInput>
+  }
+
+  export type BeneficiaryGoatRearingUpsertWithoutEventsInput = {
+    update: XOR<BeneficiaryGoatRearingUpdateWithoutEventsInput, BeneficiaryGoatRearingUncheckedUpdateWithoutEventsInput>
+    create: XOR<BeneficiaryGoatRearingCreateWithoutEventsInput, BeneficiaryGoatRearingUncheckedCreateWithoutEventsInput>
+    where?: BeneficiaryGoatRearingWhereInput
+  }
+
+  export type BeneficiaryGoatRearingUpdateToOneWithWhereWithoutEventsInput = {
+    where?: BeneficiaryGoatRearingWhereInput
+    data: XOR<BeneficiaryGoatRearingUpdateWithoutEventsInput, BeneficiaryGoatRearingUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type BeneficiaryGoatRearingUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    goatsAssigned?: IntFieldUpdateOperationsInput | number
+    investment?: NullableFloatFieldUpdateOperationsInput | number | null
+    returnsAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roiPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    advantagesLog?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    beneficiary?: BeneficiaryUpdateOneRequiredWithoutGoatRearingDetailsNestedInput
+    goatRearingProgram?: GoatRearingProgramUpdateOneWithoutBeneficiariesNestedInput
+  }
+
+  export type BeneficiaryGoatRearingUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    beneficiaryId?: StringFieldUpdateOperationsInput | string
+    goatsAssigned?: IntFieldUpdateOperationsInput | number
+    investment?: NullableFloatFieldUpdateOperationsInput | number | null
+    returnsAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    roiPercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    advantagesLog?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    goatRearingProgramId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BeneficiaryCreateWithoutSugarcaneDetailsInput = {
     id?: string
     enrolmentId: string
@@ -60537,12 +75743,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryUncheckedCreateWithoutSugarcaneDetailsInput = {
@@ -60567,12 +75780,19 @@ export namespace Prisma {
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
     livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
     schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
   }
 
   export type BeneficiaryCreateOrConnectWithoutSugarcaneDetailsInput = {
@@ -60636,12 +75856,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type BeneficiaryUncheckedUpdateWithoutSugarcaneDetailsInput = {
@@ -60666,12 +75893,19 @@ export namespace Prisma {
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
     livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
     schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
     goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
   }
 
   export type SugarcaneProgramUpsertWithoutBeneficiariesInput = {
@@ -60962,6 +76196,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -60982,6 +76217,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -61078,6 +76314,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -61098,6 +76335,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -61151,6 +76389,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -61171,6 +76410,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -61207,6 +76447,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -61227,6 +76468,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -61247,6 +76489,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -61267,6 +76510,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -61303,6 +76547,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -61323,6 +76568,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type DisasterIncidentCreateWithoutResourceNeedsInput = {
@@ -61507,6 +76753,1300 @@ export namespace Prisma {
     data: XOR<InventoryLedgerUpdateManyMutationInput, InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedInput>
   }
 
+  export type FellowCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutFellowInput
+    schools?: FellowSchoolCreateNestedManyWithoutFellowInput
+    students?: StudentCreateNestedManyWithoutFellowInput
+    goals?: FellowGoalCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowUncheckedCreateWithoutTasksInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
+    students?: StudentUncheckedCreateNestedManyWithoutFellowInput
+    goals?: FellowGoalUncheckedCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowCreateOrConnectWithoutTasksInput = {
+    where: FellowWhereUniqueInput
+    create: XOR<FellowCreateWithoutTasksInput, FellowUncheckedCreateWithoutTasksInput>
+  }
+
+  export type FellowTaskCommentCreateWithoutTaskInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutTaskCommentsInput
+  }
+
+  export type FellowTaskCommentUncheckedCreateWithoutTaskInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentCreateOrConnectWithoutTaskInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    create: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type FellowTaskCommentCreateManyTaskInputEnvelope = {
+    data: FellowTaskCommentCreateManyTaskInput | FellowTaskCommentCreateManyTaskInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FellowUpsertWithoutTasksInput = {
+    update: XOR<FellowUpdateWithoutTasksInput, FellowUncheckedUpdateWithoutTasksInput>
+    create: XOR<FellowCreateWithoutTasksInput, FellowUncheckedCreateWithoutTasksInput>
+    where?: FellowWhereInput
+  }
+
+  export type FellowUpdateToOneWithWhereWithoutTasksInput = {
+    where?: FellowWhereInput
+    data: XOR<FellowUpdateWithoutTasksInput, FellowUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type FellowUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutFellowNestedInput
+    schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
+    students?: StudentUpdateManyWithoutFellowNestedInput
+    goals?: FellowGoalUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowUncheckedUpdateWithoutTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
+    students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
+    goals?: FellowGoalUncheckedUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    update: XOR<FellowTaskCommentUpdateWithoutTaskInput, FellowTaskCommentUncheckedUpdateWithoutTaskInput>
+    create: XOR<FellowTaskCommentCreateWithoutTaskInput, FellowTaskCommentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type FellowTaskCommentUpdateWithWhereUniqueWithoutTaskInput = {
+    where: FellowTaskCommentWhereUniqueInput
+    data: XOR<FellowTaskCommentUpdateWithoutTaskInput, FellowTaskCommentUncheckedUpdateWithoutTaskInput>
+  }
+
+  export type FellowTaskCommentUpdateManyWithWhereWithoutTaskInput = {
+    where: FellowTaskCommentScalarWhereInput
+    data: XOR<FellowTaskCommentUpdateManyMutationInput, FellowTaskCommentUncheckedUpdateManyWithoutTaskInput>
+  }
+
+  export type FellowTaskCreateWithoutCommentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutTasksInput
+  }
+
+  export type FellowTaskUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    fellowId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCreateOrConnectWithoutCommentsInput = {
+    where: FellowTaskWhereUniqueInput
+    create: XOR<FellowTaskCreateWithoutCommentsInput, FellowTaskUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type UserCreateWithoutTaskCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTaskCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTaskCommentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTaskCommentsInput, UserUncheckedCreateWithoutTaskCommentsInput>
+  }
+
+  export type FellowTaskUpsertWithoutCommentsInput = {
+    update: XOR<FellowTaskUpdateWithoutCommentsInput, FellowTaskUncheckedUpdateWithoutCommentsInput>
+    create: XOR<FellowTaskCreateWithoutCommentsInput, FellowTaskUncheckedCreateWithoutCommentsInput>
+    where?: FellowTaskWhereInput
+  }
+
+  export type FellowTaskUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: FellowTaskWhereInput
+    data: XOR<FellowTaskUpdateWithoutCommentsInput, FellowTaskUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type FellowTaskUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutTasksNestedInput
+  }
+
+  export type FellowTaskUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutTaskCommentsInput = {
+    update: XOR<UserUpdateWithoutTaskCommentsInput, UserUncheckedUpdateWithoutTaskCommentsInput>
+    create: XOR<UserCreateWithoutTaskCommentsInput, UserUncheckedCreateWithoutTaskCommentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTaskCommentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTaskCommentsInput, UserUncheckedUpdateWithoutTaskCommentsInput>
+  }
+
+  export type UserUpdateWithoutTaskCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTaskCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutResilienceSurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutResilienceSurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutResilienceSurveysInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutResilienceSurveysInput, BeneficiaryUncheckedCreateWithoutResilienceSurveysInput>
+  }
+
+  export type BeneficiaryUpsertWithoutResilienceSurveysInput = {
+    update: XOR<BeneficiaryUpdateWithoutResilienceSurveysInput, BeneficiaryUncheckedUpdateWithoutResilienceSurveysInput>
+    create: XOR<BeneficiaryCreateWithoutResilienceSurveysInput, BeneficiaryUncheckedCreateWithoutResilienceSurveysInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutResilienceSurveysInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutResilienceSurveysInput, BeneficiaryUncheckedUpdateWithoutResilienceSurveysInput>
+  }
+
+  export type BeneficiaryUpdateWithoutResilienceSurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutResilienceSurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutAdaptiveCapacitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutAdaptiveCapacitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutAdaptiveCapacitySurveysInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAdaptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryUpsertWithoutAdaptiveCapacitySurveysInput = {
+    update: XOR<BeneficiaryUpdateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedUpdateWithoutAdaptiveCapacitySurveysInput>
+    create: XOR<BeneficiaryCreateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAdaptiveCapacitySurveysInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutAdaptiveCapacitySurveysInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutAdaptiveCapacitySurveysInput, BeneficiaryUncheckedUpdateWithoutAdaptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryUpdateWithoutAdaptiveCapacitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutAdaptiveCapacitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutAbsorptiveCapacitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutAbsorptiveCapacitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutAbsorptiveCapacitySurveysInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAbsorptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryUpsertWithoutAbsorptiveCapacitySurveysInput = {
+    update: XOR<BeneficiaryUpdateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedUpdateWithoutAbsorptiveCapacitySurveysInput>
+    create: XOR<BeneficiaryCreateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedCreateWithoutAbsorptiveCapacitySurveysInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutAbsorptiveCapacitySurveysInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutAbsorptiveCapacitySurveysInput, BeneficiaryUncheckedUpdateWithoutAbsorptiveCapacitySurveysInput>
+  }
+
+  export type BeneficiaryUpdateWithoutAbsorptiveCapacitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutAbsorptiveCapacitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutTransformativeSurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutTransformativeSurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutTransformativeSurveysInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutTransformativeSurveysInput, BeneficiaryUncheckedCreateWithoutTransformativeSurveysInput>
+  }
+
+  export type BeneficiaryUpsertWithoutTransformativeSurveysInput = {
+    update: XOR<BeneficiaryUpdateWithoutTransformativeSurveysInput, BeneficiaryUncheckedUpdateWithoutTransformativeSurveysInput>
+    create: XOR<BeneficiaryCreateWithoutTransformativeSurveysInput, BeneficiaryUncheckedCreateWithoutTransformativeSurveysInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutTransformativeSurveysInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutTransformativeSurveysInput, BeneficiaryUncheckedUpdateWithoutTransformativeSurveysInput>
+  }
+
+  export type BeneficiaryUpdateWithoutTransformativeSurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutTransformativeSurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutVulnerabilitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutVulnerabilitySurveysInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    solutionPlans?: SolutionPlanUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutVulnerabilitySurveysInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedCreateWithoutVulnerabilitySurveysInput>
+  }
+
+  export type BeneficiaryUpsertWithoutVulnerabilitySurveysInput = {
+    update: XOR<BeneficiaryUpdateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedUpdateWithoutVulnerabilitySurveysInput>
+    create: XOR<BeneficiaryCreateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedCreateWithoutVulnerabilitySurveysInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutVulnerabilitySurveysInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutVulnerabilitySurveysInput, BeneficiaryUncheckedUpdateWithoutVulnerabilitySurveysInput>
+  }
+
+  export type BeneficiaryUpdateWithoutVulnerabilitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutVulnerabilitySurveysInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    solutionPlans?: SolutionPlanUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateWithoutSolutionPlansInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutSolutionPlansInput = {
+    id?: string
+    enrolmentId: string
+    name: string
+    dob?: Date | string | null
+    panCard?: string | null
+    aadhar?: string | null
+    rationCard?: string | null
+    mobNumber?: string | null
+    resilienceScore?: number
+    annualIncome?: number | null
+    monthlyIncome?: number | null
+    caste?: string | null
+    religion?: string | null
+    address?: string | null
+    householdSize?: number
+    primaryIncomeType?: string | null
+    tier?: string
+    tierPercent?: number
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    isMigrated?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    familyMembers?: FamilyMemberUncheckedCreateNestedManyWithoutBeneficiaryInput
+    livestock?: LivestockUncheckedCreateNestedManyWithoutBeneficiaryInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedCreateNestedManyWithoutBeneficiaryInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedCreateNestedManyWithoutBeneficiaryInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedCreateNestedManyWithoutBeneficiaryInput
+    resilienceSurveys?: ResilienceSurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutSolutionPlansInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutSolutionPlansInput, BeneficiaryUncheckedCreateWithoutSolutionPlansInput>
+  }
+
+  export type BeneficiaryUpsertWithoutSolutionPlansInput = {
+    update: XOR<BeneficiaryUpdateWithoutSolutionPlansInput, BeneficiaryUncheckedUpdateWithoutSolutionPlansInput>
+    create: XOR<BeneficiaryCreateWithoutSolutionPlansInput, BeneficiaryUncheckedCreateWithoutSolutionPlansInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutSolutionPlansInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutSolutionPlansInput, BeneficiaryUncheckedUpdateWithoutSolutionPlansInput>
+  }
+
+  export type BeneficiaryUpdateWithoutSolutionPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutSolutionPlansInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolmentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    rationCard?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    resilienceScore?: IntFieldUpdateOperationsInput | number
+    annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
+    caste?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    householdSize?: IntFieldUpdateOperationsInput | number
+    primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
+    tier?: StringFieldUpdateOperationsInput | string
+    tierPercent?: IntFieldUpdateOperationsInput | number
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    familyMembers?: FamilyMemberUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    livestock?: LivestockUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    schemeEnrollments?: SchemeEnrollmentUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    goatRearingDetails?: BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    sugarcaneDetails?: BeneficiarySugarcaneUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    resilienceSurveys?: ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    adaptiveCapacitySurveys?: AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    absorptiveCapacitySurveys?: AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    transformativeSurveys?: TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+    vulnerabilitySurveys?: VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
   export type UserCreateManyRoleInput = {
     id?: string
     name: string
@@ -61547,6 +78087,7 @@ export namespace Prisma {
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -61567,6 +78108,7 @@ export namespace Prisma {
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -61618,6 +78160,7 @@ export namespace Prisma {
     type?: string | null
     dates?: string | null
     reason?: string | null
+    rejectionReason?: string | null
     status?: $Enums.LeaveStatus
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -61645,6 +78188,18 @@ export namespace Prisma {
     ef2?: string | null
     logininfo?: string | null
     logoutinfo?: string | null
+    checkInLat?: number | null
+    checkInLng?: number | null
+    checkOutLat?: number | null
+    checkOutLng?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentCreateManyAuthorInput = {
+    id?: string
+    taskId: string
+    text: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61678,6 +78233,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -61688,6 +78244,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -61698,6 +78255,7 @@ export namespace Prisma {
     type?: NullableStringFieldUpdateOperationsInput | string | null
     dates?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -61745,6 +78303,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61761,6 +78323,10 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61777,6 +78343,34 @@ export namespace Prisma {
     ef2?: NullableStringFieldUpdateOperationsInput | string | null
     logininfo?: NullableStringFieldUpdateOperationsInput | string | null
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
+    checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: FellowTaskUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type FellowTaskCommentUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61866,6 +78460,7 @@ export namespace Prisma {
     primaryLanguage?: string | null
     status?: string
     fellowId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -61911,6 +78506,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellow?: FellowUpdateOneWithoutStudentsNestedInput
@@ -61937,6 +78533,7 @@ export namespace Prisma {
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectMarks?: StudentSubjectMarkUncheckedUpdateManyWithoutStudentNestedInput
@@ -61962,6 +78559,7 @@ export namespace Prisma {
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     fellowId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62006,6 +78604,7 @@ export namespace Prisma {
     primaryLanguage?: string | null
     status?: string
     schoolId?: string | null
+    isMigrated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -62028,6 +78627,18 @@ export namespace Prisma {
     reviewerName: string
     date?: Date | string
     status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCreateManyFellowInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -62068,6 +78679,7 @@ export namespace Prisma {
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneWithoutStudentsNestedInput
@@ -62094,6 +78706,7 @@ export namespace Prisma {
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectMarks?: StudentSubjectMarkUncheckedUpdateManyWithoutStudentNestedInput
@@ -62119,6 +78732,7 @@ export namespace Prisma {
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     schoolId?: NullableStringFieldUpdateOperationsInput | string | null
+    isMigrated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62187,6 +78801,44 @@ export namespace Prisma {
     reviewerName?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: FellowTaskCommentUpdateManyWithoutTaskNestedInput
+  }
+
+  export type FellowTaskUncheckedUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: FellowTaskCommentUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type FellowTaskUncheckedUpdateManyWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62462,6 +79114,68 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ResilienceSurveyCreateManyBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: number
+    planningScore?: number
+    disasterReadinessScore?: number
+    disasterBeliefsScore?: number
+    disasterMindsetScore?: number
+    financialResilienceScore?: number
+    healthResilienceScore?: number
+    socialConnectednessScore?: number
+    socialProtectionScore?: number
+    disasterWarningScore?: number
+    vulnerabilityScore?: number
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AdaptiveCapacitySurveyCreateManyBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyCreateManyBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransformativeCapacitySurveyCreateManyBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    overallScore?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VulnerabilitySurveyCreateManyBeneficiaryInput = {
+    id?: string
+    surveyDate?: Date | string
+    responses: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolutionPlanCreateManyBeneficiaryInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    planData: JsonNullValueInput | InputJsonValue
+  }
+
   export type FamilyMemberUpdateWithoutBeneficiaryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -62559,6 +79273,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     goatRearingProgram?: GoatRearingProgramUpdateOneWithoutBeneficiariesNestedInput
+    events?: GoatRearingEventUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingUncheckedUpdateWithoutBeneficiaryInput = {
@@ -62572,6 +79287,7 @@ export namespace Prisma {
     goatRearingProgramId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingUncheckedUpdateManyWithoutBeneficiaryInput = {
@@ -62635,6 +79351,192 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ResilienceSurveyUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ResilienceSurveyUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ResilienceSurveyUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    lifeSatisfactionScore?: FloatFieldUpdateOperationsInput | number
+    planningScore?: FloatFieldUpdateOperationsInput | number
+    disasterReadinessScore?: FloatFieldUpdateOperationsInput | number
+    disasterBeliefsScore?: FloatFieldUpdateOperationsInput | number
+    disasterMindsetScore?: FloatFieldUpdateOperationsInput | number
+    financialResilienceScore?: FloatFieldUpdateOperationsInput | number
+    healthResilienceScore?: FloatFieldUpdateOperationsInput | number
+    socialConnectednessScore?: FloatFieldUpdateOperationsInput | number
+    socialProtectionScore?: FloatFieldUpdateOperationsInput | number
+    disasterWarningScore?: FloatFieldUpdateOperationsInput | number
+    vulnerabilityScore?: FloatFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdaptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AbsorptiveCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransformativeCapacitySurveyUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VulnerabilitySurveyUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    surveyDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    responses?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolutionPlanUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type SolutionPlanUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    planData?: JsonNullValueInput | InputJsonValue
+  }
+
   export type LivestockHealthLogCreateManyLivestockInput = {
     id?: string
     checkupDate?: Date | string
@@ -62695,6 +79597,54 @@ export namespace Prisma {
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GoatRearingEventCreateManyBeneficiaryGoatRearingInput = {
+    id?: string
+    eventType: string
+    eventDate?: Date | string
+    quantity?: number
+    notes?: string | null
+    photoUrl?: string | null
+    recordedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GoatRearingEventUpdateWithoutBeneficiaryGoatRearingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoatRearingEventUncheckedUpdateWithoutBeneficiaryGoatRearingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    eventDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BeneficiaryGoatRearingCreateManyGoatRearingProgramInput = {
     id?: string
     beneficiaryId: string
@@ -62719,6 +79669,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     beneficiary?: BeneficiaryUpdateOneRequiredWithoutGoatRearingDetailsNestedInput
+    events?: GoatRearingEventUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingUncheckedUpdateWithoutGoatRearingProgramInput = {
@@ -62732,6 +79683,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: GoatRearingEventUncheckedUpdateManyWithoutBeneficiaryGoatRearingNestedInput
   }
 
   export type BeneficiaryGoatRearingUncheckedUpdateManyWithoutGoatRearingProgramInput = {
@@ -62973,6 +79925,38 @@ export namespace Prisma {
     handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentCreateManyTaskInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowTaskCommentUpdateWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutTaskCommentsNestedInput
+  }
+
+  export type FellowTaskCommentUncheckedUpdateWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowTaskCommentUncheckedUpdateManyWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

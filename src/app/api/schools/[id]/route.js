@@ -103,6 +103,7 @@ export async function PATCH(req, context) {
       data: {
         name: body.name,
         principalName: body.principalName,
+        udiseCode: body.udiseCode,
         email: body.email,
         phone: body.phone,
         address: body.address,

@@ -28,7 +28,10 @@ export async function GET(req, { params }) {
         include: {
           beneficiaries: {
             include: {
-              beneficiary: true
+              beneficiary: true,
+              events: {
+                orderBy: { eventDate: "desc" }
+              }
             }
           }
         }

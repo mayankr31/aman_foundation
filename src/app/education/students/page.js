@@ -10,6 +10,7 @@ export default function StudentsModule() {
   const [gradeFilter, setGradeFilter] = useState("All Grades");
   const [performanceFilter, setPerformanceFilter] = useState("All Performance");
   const [schoolFilter, setSchoolFilter] = useState("All Schools");
+  const [migratedFilter, setMigratedFilter] = useState("All");
   const [showAddModal, setShowAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -95,6 +96,7 @@ export default function StudentsModule() {
     setGradeFilter("All Grades");
     setPerformanceFilter("All Performance");
     setSchoolFilter("All Schools");
+    setMigratedFilter("All");
     setSearchQuery("");
   };
 
@@ -148,7 +150,12 @@ export default function StudentsModule() {
     const matchesSchool =
       schoolFilter === "All Schools" || (s.school && s.school.id === schoolFilter);
 
-    return matchesSearch && matchesGrade && matchesPerformance && matchesSchool;
+    const matchesMigrated =
+      migratedFilter === "All" ||
+      (migratedFilter === "Migrated" && s.isMigrated === true) ||
+      (migratedFilter === "Not Migrated" && !s.isMigrated);
+
+    return matchesSearch && matchesGrade && matchesPerformance && matchesSchool && matchesMigrated;
   });
 
   const ITEMS_PER_PAGE = 10;
@@ -160,7 +167,7 @@ export default function StudentsModule() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, gradeFilter, performanceFilter, schoolFilter]);
+  }, [searchQuery, gradeFilter, performanceFilter, schoolFilter, migratedFilter]);
 
   return (
     <div className="p-6 md:p-8 lg:p-12 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -252,6 +259,15 @@ export default function StudentsModule() {
             <option>Excellent</option>
             <option>Satisfactory</option>
             <option>Needs Attention</option>
+          </select>
+          <select
+            value={migratedFilter}
+            onChange={(e) => setMigratedFilter(e.target.value)}
+            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+          >
+            <option>All</option>
+            <option>Not Migrated</option>
+            <option>Migrated</option>
           </select>
           <select
             value={schoolFilter}

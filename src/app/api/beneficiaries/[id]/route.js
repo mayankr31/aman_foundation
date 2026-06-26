@@ -66,7 +66,10 @@ export async function GET(req, { params }) {
         },
         goatRearingDetails: {
           include: {
-            goatRearingProgram: true
+            goatRearingProgram: true,
+            events: {
+              orderBy: { eventDate: "desc" }
+            }
           }
         },
         sugarcaneDetails: {
@@ -89,8 +92,8 @@ export async function PATCH(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
     }
 
     const { id } = await params;
@@ -126,7 +129,8 @@ export async function PATCH(req, { params }) {
           tierPercent: body.tierPercent !== undefined ? parseInt(body.tierPercent) : undefined,
           bankName: body.bankName,
           bankAccountNo: body.bankAccountNo,
-          bankIfsc: body.bankIfsc
+          bankIfsc: body.bankIfsc,
+          isMigrated: body.isMigrated !== undefined ? Boolean(body.isMigrated) : undefined
         }
       });
 
@@ -209,8 +213,8 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
     }
 
     const { id } = await params;

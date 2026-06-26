@@ -15,6 +15,44 @@ export default function HrAttendanceLogs() {
   // Task Modal
   const [selectedTaskLog, setSelectedTaskLog] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [checkInLocation, setCheckInLocation] = useState(null);
+  const [checkOutLocation, setCheckOutLocation] = useState(null);
+  const [isLocLoading, setIsLocLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      if (!selectedTaskLog || !showTaskModal) {
+        setCheckInLocation(null);
+        setCheckOutLocation(null);
+        return;
+      }
+      setIsLocLoading(true);
+      try {
+        if (selectedTaskLog.checkInLat && selectedTaskLog.checkInLng) {
+          const inRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedTaskLog.checkInLat}&lon=${selectedTaskLog.checkInLng}`);
+          const inData = await inRes.json();
+          setCheckInLocation(inData.display_name || "Unknown");
+        } else {
+          setCheckInLocation("Location not recorded");
+        }
+
+        if (selectedTaskLog.checkOutLat && selectedTaskLog.checkOutLng) {
+          const outRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedTaskLog.checkOutLat}&lon=${selectedTaskLog.checkOutLng}`);
+          const outData = await outRes.json();
+          setCheckOutLocation(outData.display_name || "Unknown");
+        } else {
+          setCheckOutLocation("Location not recorded");
+        }
+      } catch(e) {
+        console.error("Location fetch error", e);
+        setCheckInLocation("Failed to load");
+        setCheckOutLocation("Failed to load");
+      } finally {
+        setIsLocLoading(false);
+      }
+    };
+    fetchLocations();
+  }, [selectedTaskLog, showTaskModal]);
 
   useEffect(() => {
     if (token) {
@@ -41,14 +79,7 @@ export default function HrAttendanceLogs() {
 
   const [attendanceSearch, setAttendanceSearch] = useState("");
 
-  const getTaskCount = (ef1) => {
-    if (!ef1) return 0;
-    try {
-       const tasks = JSON.parse(ef1);
-       if (Array.isArray(tasks)) return tasks.length;
-       return tasks.checklistItems?.length || 0;
-    } catch(e) { return 0; }
-  };
+
 
   const handleTaskClick = (log) => {
     setSelectedTaskLog(log);
@@ -170,12 +201,21 @@ export default function HrAttendanceLogs() {
                         <td className="py-4 px-4 text-on-surface text-xs font-semibold">{log.intimelog || "N/A"}</td>
                         <td className="py-4 px-4">
                           <div className="flex items-center gap-1.5 text-xs font-medium">
-                            {getTaskCount(log.ef1) > 0 ? (
-                              <button onClick={() => handleTaskClick(log)} className="flex items-center gap-1 text-blue-600 hover:underline cursor-pointer">
-                                <span className="material-symbols-outlined text-[18px]">check_box</span>
-                                <span>{getTaskCount(log.ef1)} tasks</span>
-                              </button>
-                            ) : (
+                            {log.taskDetails && log.taskDetails.length > 0 ? (() => {
+                              const completed = log.taskDetails.filter(t => t.completed).length;
+                              const pending = log.taskDetails.length - completed;
+                              return (
+                                <button onClick={() => handleTaskClick(log)} className="flex flex-col items-start gap-0.5 cursor-pointer">
+                                  <span className="flex items-center gap-1 text-blue-600 hover:underline">
+                                    <span className="material-symbols-outlined text-[18px]">check_box</span>
+                                    <span>{log.taskDetails.length} {log.taskDetails.length === 1 ? 'task' : 'tasks'}</span>
+                                  </span>
+                                  <span className="text-[10px] font-semibold text-slate-500">
+                                    ({pending} pending, {completed} completed)
+                                  </span>
+                                </button>
+                              );
+                            })() : (
                               <div className="flex items-center gap-1 text-slate-400">
                                 <span className="material-symbols-outlined text-[18px]">close</span>
                                 <span>No tasks</span>
@@ -225,61 +265,52 @@ export default function HrAttendanceLogs() {
 
               <div className="space-y-3">
                 {(() => {
-                  try {
-                    const taskData = JSON.parse(selectedTaskLog.ef1);
-                    const checklistItems = taskData.checklistItems || taskData; // Handle both new and old formats
-                    const checkoutData = taskData.checkoutData;
-                    
-                    if (Array.isArray(checklistItems) && checklistItems.length > 0) {
-                      return (
-                        <>
-                          <div>
-                            <h4 className="font-medium text-gray-700 mb-2">Checklist Items:</h4>
-                            <ul className="space-y-2">
-                              {checklistItems.map((item, index) => {
-                                const isCompleted = checkoutData?.completedItems?.includes(item.id) || item.completed;
-                                return (
-                                  <li key={item.id || index} className="flex items-center">
-                                    <span className={`mr-2 material-symbols-outlined text-[20px] ${isCompleted ? 'text-green-500' : 'text-gray-400'}`}>
-                                      {isCompleted ? 'check_circle' : 'radio_button_unchecked'}
-                                    </span>
-                                    <span className={isCompleted ? 'text-gray-600 line-through' : 'text-gray-700'}>
-                                      {item.text}
-                                    </span>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                          
-                          {checkoutData && (
-                            <div className="mt-4 pt-4 border-t border-gray-200">
-                              <h4 className="font-medium text-gray-700 mb-2">Completion Details:</h4>
-                              <div className="text-sm text-gray-600">
-                                <p><span className="font-medium">Completed Items:</span> {checkoutData.completedItems?.length || 0}</p>
-                                <p><span className="font-medium">Notes:</span> {checkoutData.notes || 'No notes'}</p>
-                                <p><span className="font-medium">Submitted At:</span> {checkoutData.submittedAt || 'N/A'}</p>
-                              </div>
-                            </div>
-                          )}
-
-                          {taskData.action && (
-                            <div className="mt-4 pt-4 border-t border-gray-200">
-                              <h4 className="font-medium text-gray-700 mb-2">Check-in Details:</h4>
-                              <div className="text-sm text-gray-600">
-                                <p><span className="font-medium">Submitted At:</span> {taskData.submittedAt || 'N/A'}</p>
-                                <p><span className="font-medium">Action:</span> {taskData.action || 'N/A'}</p>
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      );
-                    }
-                    return <p className="text-gray-500">No checklist items available</p>;
-                  } catch (e) {
-                    return <p className="text-gray-500">Error parsing tasks</p>;
+                  const checklistItems = selectedTaskLog.taskDetails;
+                  
+                  if (Array.isArray(checklistItems) && checklistItems.length > 0) {
+                    return (
+                      <div>
+                        <h4 className="font-medium text-gray-700 mb-2">Checklist Items:</h4>
+                        <ul className="space-y-2">
+                          {checklistItems.map((item, index) => {
+                            const isCompleted = item.completed;
+                            return (
+                              <li key={item.id || index} className="flex items-start gap-1">
+                                <span className={`mr-2 material-symbols-outlined text-[20px] shrink-0 ${isCompleted ? 'text-green-500' : 'text-gray-400'}`}>
+                                  {isCompleted ? 'check_circle' : 'radio_button_unchecked'}
+                                </span>
+                                <div className="flex flex-col">
+                                  <span className={isCompleted ? 'text-gray-600 line-through' : 'text-gray-700'}>
+                                    {item.text}
+                                  </span>
+                                  {item.description && (
+                                    <span className="text-xs text-slate-500 mt-0.5">{item.description}</span>
+                                  )}
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    );
                   }
+                  return <p className="text-gray-500">No checklist items available</p>;
                 })()}
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check In</p>
+                      <p className="font-bold text-gray-800">{selectedTaskLog.intimelog || 'N/A'}</p>
+                      <p className="text-[10px] text-gray-500 mt-2 leading-tight">{isLocLoading ? 'Loading location...' : checkInLocation}</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
+                      <p className="font-bold text-gray-800">{selectedTaskLog.outtimelog || 'N/A'}</p>
+                      <p className="text-[10px] text-gray-500 mt-2 leading-tight">{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-6 flex justify-end">

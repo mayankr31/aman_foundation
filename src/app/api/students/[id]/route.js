@@ -75,8 +75,8 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -84,6 +84,25 @@ export async function PATCH(req, context) {
 
     if (!studentId) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "FELLOW") {
+      const studentObj = await prisma.student.findUnique({
+        where: { id: studentId },
+        select: { schoolId: true }
+      });
+      if (!studentObj || !studentObj.schoolId) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+      }
+      const isAssigned = await prisma.fellowSchool.findFirst({
+        where: {
+          schoolId: studentObj.schoolId,
+          fellow: { userId: user.id }
+        }
+      });
+      if (!isAssigned) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+      }
     }
 
     const body = await req.json();
@@ -108,7 +127,8 @@ export async function PATCH(req, context) {
         primaryLanguage: body.primaryLanguage,
         status: body.status,
         schoolId: body.schoolId,
-        fellowId: body.fellowId
+        fellowId: body.fellowId,
+        isMigrated: body.isMigrated !== undefined ? Boolean(body.isMigrated) : undefined
       }
     });
 

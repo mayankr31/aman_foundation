@@ -62,6 +62,7 @@ export async function PUT(req, { params }) {
         ...(body.type !== undefined && { type: body.type }),
         ...(body.dates !== undefined && { dates: body.dates }),
         ...(body.reason !== undefined && { reason: body.reason }),
+        ...(body.rejectionReason !== undefined && { rejectionReason: body.rejectionReason }),
         ...(body.status !== undefined && { status: body.status }),
       },
     });

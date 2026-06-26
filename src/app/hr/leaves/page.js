@@ -14,6 +14,10 @@ export default function LeaveWorkflow() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
+  const [rejectingLeaveId, setRejectingLeaveId] = useState(null);
+  const [rejectionReasonText, setRejectionReasonText] = useState("");
+  const [isSubmittingRejection, setIsSubmittingRejection] = useState(false);
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setShowToast(true);
@@ -45,7 +49,7 @@ export default function LeaveWorkflow() {
     }
   };
 
-  const handleUpdateStatus = async (leaveId, newStatus) => {
+  const handleUpdateStatus = async (leaveId, newStatus, rejectionReason = null) => {
     try {
       const res = await fetch(`/api/leaves/${leaveId}`, {
         method: "PUT",
@@ -53,7 +57,10 @@ export default function LeaveWorkflow() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ 
+          status: newStatus,
+          ...(rejectionReason && { rejectionReason })
+        })
       });
       if (res.ok) {
         triggerToast(`Leave ${newStatus.toLowerCase()} successfully`);
@@ -65,6 +72,23 @@ export default function LeaveWorkflow() {
     } catch (err) {
       triggerToast("Error updating leave");
     }
+  };
+
+  const handleRejectClick = (leaveId) => {
+    setRejectingLeaveId(leaveId);
+    setRejectionReasonText("");
+  };
+
+  const submitRejection = async () => {
+    if (!rejectionReasonText.trim()) {
+      triggerToast("Rejection reason is required.");
+      return;
+    }
+    setIsSubmittingRejection(true);
+    await handleUpdateStatus(rejectingLeaveId, "REJECTED", rejectionReasonText);
+    setIsSubmittingRejection(false);
+    setRejectingLeaveId(null);
+    setRejectionReasonText("");
   };
 
   if (currentUser && currentUser.roleName !== "ADMIN" && currentUser.roleName !== "HR") {
@@ -127,13 +151,20 @@ export default function LeaveWorkflow() {
                   <td className="py-4 px-4 font-mono text-xs">{leave.dates}</td>
                   <td className="py-4 px-4 text-xs text-on-surface-variant max-w-[200px] truncate" title={leave.reason}>{leave.reason}</td>
                   <td className="py-4 px-4">
-                    <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
-                      leave.status === "REJECTED" ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400" :
-                      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                    }`}>
-                      {leave.status}
-                    </span>
+                    <div className="flex flex-col gap-1.5 items-start">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                        leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
+                        leave.status === "REJECTED" ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400" :
+                        "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                      }`}>
+                        {leave.status}
+                      </span>
+                      {leave.status === "REJECTED" && leave.rejectionReason && (
+                        <span className="text-[10px] text-rose-600 dark:text-rose-400 font-medium bg-rose-50 dark:bg-rose-900/10 px-2 py-1 rounded-lg border border-rose-100 dark:border-rose-900/30 max-w-[150px] break-words">
+                          <span className="font-bold">Reason:</span> {leave.rejectionReason}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="py-4 px-4 flex gap-2">
                     {leave.status === "PENDING" && (
@@ -146,7 +177,7 @@ export default function LeaveWorkflow() {
                           Approve
                         </button>
                         <button
-                          onClick={() => handleUpdateStatus(leave.id, "REJECTED")}
+                          onClick={() => handleRejectClick(leave.id)}
                           className="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-900/40 rounded-lg text-xs font-bold transition-colors"
                           title="Reject"
                         >
@@ -171,6 +202,39 @@ export default function LeaveWorkflow() {
         <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
           {toastMessage}
+        </div>
+      )}
+
+      {rejectingLeaveId && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-surface-container-lowest rounded-[2rem] shadow-2xl w-full max-w-lg p-8 relative">
+            <div className="flex justify-between items-center mb-6 border-b border-outline-variant/10 pb-4">
+              <h3 className="text-xl font-headline font-bold text-on-surface">Provide Rejection Reason</h3>
+              <button onClick={() => setRejectingLeaveId(null)} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div className="space-y-4 mb-6 font-sans">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Reason</label>
+              <textarea 
+                rows="4" 
+                value={rejectionReasonText} 
+                onChange={(e) => setRejectionReasonText(e.target.value)} 
+                placeholder="Why is this leave being rejected?" 
+                className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-rose-500 bg-transparent text-sm text-on-surface resize-none"
+              ></textarea>
+            </div>
+            <div className="flex gap-4 justify-end pt-4 border-t border-outline-variant/10">
+              <button onClick={() => setRejectingLeaveId(null)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
+              <button 
+                onClick={submitRejection} 
+                disabled={isSubmittingRejection} 
+                className="px-6 py-2.5 rounded-full bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-transform flex items-center gap-2 disabled:opacity-60 cursor-pointer"
+              >
+                {isSubmittingRejection ? "Rejecting..." : "Confirm Rejection"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

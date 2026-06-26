@@ -175,6 +175,7 @@ exports.Prisma.SchoolScalarFieldEnum = {
   id: 'id',
   name: 'name',
   principalName: 'principalName',
+  udiseCode: 'udiseCode',
   email: 'email',
   phone: 'phone',
   address: 'address',
@@ -259,6 +260,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   schoolId: 'schoolId',
   fellowId: 'fellowId',
+  isMigrated: 'isMigrated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -355,6 +357,7 @@ exports.Prisma.BeneficiaryScalarFieldEnum = {
   bankName: 'bankName',
   bankAccountNo: 'bankAccountNo',
   bankIfsc: 'bankIfsc',
+  isMigrated: 'isMigrated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -427,6 +430,19 @@ exports.Prisma.GoatRearingProgramScalarFieldEnum = {
   name: 'name',
   description: 'description',
   totalGoats: 'totalGoats',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GoatRearingEventScalarFieldEnum = {
+  id: 'id',
+  beneficiaryGoatRearingId: 'beneficiaryGoatRearingId',
+  eventType: 'eventType',
+  eventDate: 'eventDate',
+  quantity: 'quantity',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  recordedBy: 'recordedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -516,6 +532,10 @@ exports.Prisma.AttendanceLogScalarFieldEnum = {
   ef2: 'ef2',
   logininfo: 'logininfo',
   logoutinfo: 'logoutinfo',
+  checkInLat: 'checkInLat',
+  checkInLng: 'checkInLng',
+  checkOutLat: 'checkOutLat',
+  checkOutLng: 'checkOutLng',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -526,6 +546,7 @@ exports.Prisma.LeaveScalarFieldEnum = {
   type: 'type',
   dates: 'dates',
   reason: 'reason',
+  rejectionReason: 'rejectionReason',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -542,9 +563,103 @@ exports.Prisma.IncidentResourceNeedScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FellowTaskScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  title: 'title',
+  description: 'description',
+  plannedDate: 'plannedDate',
+  status: 'status',
+  isPlanned: 'isPlanned',
+  completionDate: 'completionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowTaskCommentScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  authorId: 'authorId',
+  text: 'text',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ResilienceSurveyScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  lifeSatisfactionScore: 'lifeSatisfactionScore',
+  planningScore: 'planningScore',
+  disasterReadinessScore: 'disasterReadinessScore',
+  disasterBeliefsScore: 'disasterBeliefsScore',
+  disasterMindsetScore: 'disasterMindsetScore',
+  financialResilienceScore: 'financialResilienceScore',
+  healthResilienceScore: 'healthResilienceScore',
+  socialConnectednessScore: 'socialConnectednessScore',
+  socialProtectionScore: 'socialProtectionScore',
+  disasterWarningScore: 'disasterWarningScore',
+  vulnerabilityScore: 'vulnerabilityScore',
+  overallScore: 'overallScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AdaptiveCapacitySurveyScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  overallScore: 'overallScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AbsorptiveCapacitySurveyScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  overallScore: 'overallScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransformativeCapacitySurveyScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  overallScore: 'overallScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VulnerabilitySurveyScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SolutionPlanScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  planData: 'planData'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -555,6 +670,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.UserStatus = exports.$Enums.UserStatus = {
   PENDING: 'PENDING',
@@ -607,6 +728,7 @@ exports.Prisma.ModelName = {
   SchemeEnrollment: 'SchemeEnrollment',
   BeneficiaryGoatRearing: 'BeneficiaryGoatRearing',
   GoatRearingProgram: 'GoatRearingProgram',
+  GoatRearingEvent: 'GoatRearingEvent',
   BeneficiarySugarcane: 'BeneficiarySugarcane',
   SugarcaneProgram: 'SugarcaneProgram',
   DisasterIncident: 'DisasterIncident',
@@ -615,7 +737,15 @@ exports.Prisma.ModelName = {
   InventoryLedger: 'InventoryLedger',
   AttendanceLog: 'AttendanceLog',
   Leave: 'Leave',
-  IncidentResourceNeed: 'IncidentResourceNeed'
+  IncidentResourceNeed: 'IncidentResourceNeed',
+  FellowTask: 'FellowTask',
+  FellowTaskComment: 'FellowTaskComment',
+  ResilienceSurvey: 'ResilienceSurvey',
+  AdaptiveCapacitySurvey: 'AdaptiveCapacitySurvey',
+  AbsorptiveCapacitySurvey: 'AbsorptiveCapacitySurvey',
+  TransformativeCapacitySurvey: 'TransformativeCapacitySurvey',
+  VulnerabilitySurvey: 'VulnerabilitySurvey',
+  SolutionPlan: 'SolutionPlan'
 };
 
 /**

@@ -17,7 +17,7 @@ export default function AdminPage() {
   const [actionLoading, setActionLoading] = useState(null);
   
   // Tab control
-  const [activeTab, setActiveTab] = useState('users'); // 'users' | 'approvals' | 'roles'
+  const [activeTab, setActiveTab] = useState('users'); // 'users' | 'approvals' | 'roles' | 'deactivated'
   const [roles, setRoles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartments, setSelectedDepartments] = useState({});
@@ -172,10 +172,14 @@ export default function AdminPage() {
 
   // Filtered lists
   const pendingUsers = useMemo(() => users.filter(u => u.status === 'PENDING'), [users]);
-  const activeOrInactiveUsers = useMemo(() => users.filter(u => u.status !== 'PENDING'), [users]);
+  const activeUsers = useMemo(() => users.filter(u => u.status === 'ACTIVE'), [users]);
+  const deactivatedUsers = useMemo(() => users.filter(u => u.status === 'INACTIVE'), [users]);
 
   const filteredUsers = useMemo(() => {
-    const list = activeTab === 'approvals' ? pendingUsers : activeOrInactiveUsers;
+    let list = activeUsers;
+    if (activeTab === 'approvals') list = pendingUsers;
+    else if (activeTab === 'deactivated') list = deactivatedUsers;
+    
     if (!searchQuery.trim()) return list;
 
     const q = searchQuery.toLowerCase();
@@ -186,7 +190,7 @@ export default function AdminPage() {
         u.email.toLowerCase().includes(q) ||
         (u.mobile && u.mobile.includes(q))
     );
-  }, [activeTab, pendingUsers, activeOrInactiveUsers, searchQuery]);
+  }, [activeTab, pendingUsers, activeUsers, deactivatedUsers, searchQuery]);
 
   if (currentUser?.roleName !== 'ADMIN') {
     return (
@@ -224,7 +228,7 @@ export default function AdminPage() {
 
           <div className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <UsersIcon size={14} />
-            {activeOrInactiveUsers.length} Users
+            {activeUsers.length} Active
           </div>
           
           <button
@@ -259,6 +263,17 @@ export default function AdminPage() {
           Active Users
         </button>
         <button
+          onClick={() => setActiveTab('deactivated')}
+          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+            activeTab === 'deactivated'
+              ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+          }`}
+        >
+          <UserX size={14} />
+          Deactivated
+        </button>
+        <button
           onClick={() => setActiveTab('approvals')}
           className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
             activeTab === 'approvals'
@@ -290,7 +305,7 @@ export default function AdminPage() {
         <div className="space-y-6">
           
           {/* USERS / APPROVALS TAB */}
-          {(activeTab === 'users' || activeTab === 'approvals') && (
+          {(activeTab === 'users' || activeTab === 'approvals' || activeTab === 'deactivated') && (
             <>
               <div className="relative">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -439,7 +454,7 @@ export default function AdminPage() {
                                       <ShieldAlert size={12} />
                                       Edit Permissions
                                     </button>
-                                    {item.id !== currentUser?.id && (
+                                    {item.id !== currentUser?.id && activeTab === 'deactivated' && (
                                       <button
                                         onClick={() => handleDeleteUser(item.id)}
                                         disabled={actionLoading === item.id}

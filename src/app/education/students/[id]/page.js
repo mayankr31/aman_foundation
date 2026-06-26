@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import ConfirmActionModal from "@/components/ConfirmActionModal";
 
 // ─── Small helpers ─────────────────────────────────────────────────────────────
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
@@ -57,6 +58,7 @@ export default function StudentProfileDetail() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [modal, setModal] = useState(null); // 'edit' | 'academic' | 'school' | 'attendance'
+  const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
   const [schools, setSchools] = useState([]);
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -150,6 +152,20 @@ export default function StudentProfileDetail() {
       if (json.success) { await loadStudent(); setModal(null); }
       else alert(json.error || "Failed to save");
     } finally { setSaving(false); }
+  }
+
+  async function handleToggleMigrated() {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/students/${id}`, {
+        method: "PATCH",
+        headers: authHeaders(),
+        body: JSON.stringify({ isMigrated: !student.isMigrated })
+      });
+      const json = await res.json();
+      if (json.success) { await loadStudent(); }
+      else alert(json.error || "Failed to update migration status");
+    } finally { setSaving(false); setShowConfirmMigrate(false); }
   }
 
   async function handleSchoolAssign(schoolId) {
@@ -259,6 +275,11 @@ export default function StudentProfileDetail() {
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${student.status === "On Track" ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"}`}>
                 {student.status}
               </span>
+              {student.isMigrated && (
+                <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant">
+                  Migrated
+                </span>
+              )}
             </div>
             <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">school</span>
@@ -272,6 +293,16 @@ export default function StudentProfileDetail() {
           </div>
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
+          <button
+            onClick={() => setShowConfirmMigrate(true)}
+            disabled={saving}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-[18px]">
+              {student.isMigrated ? "undo" : "moving"}
+            </span>
+            {student.isMigrated ? "Unmark Migrated" : "Mark Migrated"}
+          </button>
           <button
             onClick={() => setModal("edit")}
             className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
@@ -554,6 +585,15 @@ export default function StudentProfileDetail() {
         </Modal>
       )}
 
+      <ConfirmActionModal
+        isOpen={showConfirmMigrate}
+        onClose={() => setShowConfirmMigrate(false)}
+        onConfirm={handleToggleMigrated}
+        title={student.isMigrated ? "Unmark as Migrated" : "Mark as Migrated"}
+        message={student.isMigrated ? "Are you sure you want to unmark this student as migrated?" : "Are you sure you want to mark this student as migrated?"}
+        confirmText={student.isMigrated ? "Unmark" : "Mark as Migrated"}
+        variant="primary"
+      />
 
     </div>
   );

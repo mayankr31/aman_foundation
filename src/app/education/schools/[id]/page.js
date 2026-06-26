@@ -59,6 +59,10 @@ export default function SchoolProfileDetail() {
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
   const [attendanceReviewMode, setAttendanceReviewMode] = useState(false);
   const [attendanceAction, setAttendanceAction] = useState(""); // "Present" or "Absent"
+  const [viewOnlyMode, setViewOnlyMode] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [calendarData, setCalendarData] = useState({});
 
   const [editForm, setEditForm] = useState({});
 
@@ -77,13 +81,12 @@ export default function SchoolProfileDetail() {
         setEditForm({
           name: s.name || "",
           principalName: s.principalName || "",
+          udiseCode: s.udiseCode || "",
           email: s.email || "",
           phone: s.phone || "",
           address: s.address || "",
           location: s.location || "",
           status: s.status || "Active",
-          latitude: s.latitude || "",
-          longitude: s.longitude || "",
           mapUrl: s.mapUrl || "",
           goal: s.goal || 80,
         });
@@ -122,14 +125,36 @@ export default function SchoolProfileDetail() {
         setIsEditingAttendance(true);
         const presentIds = new Set(json.data.filter(d => d.status === "Present" || d.status === "Late" || d.status === "Excused").map(d => d.studentId));
         setAttendanceSelection(presentIds);
+        setViewOnlyMode(true);
       } else {
         setIsEditingAttendance(false);
         setAttendanceSelection(new Set(school?.students?.map(s => s.id) || []));
+        setViewOnlyMode(false);
       }
     } catch (err) {
       console.error("Failed to load existing attendance");
     }
   }, [id, authHeaders, school?.students]);
+
+  const loadCalendarData = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/schools/${id}/attendance/calendar?month=${currentMonth}&year=${currentYear}`, { headers: authHeaders() });
+      const json = await res.json();
+      if (json.success) {
+        const dataMap = {};
+        json.data.forEach(d => { dataMap[d.date] = d; });
+        setCalendarData(dataMap);
+      }
+    } catch (err) {
+      console.error("Failed to load calendar data", err);
+    }
+  }, [id, currentMonth, currentYear, authHeaders]);
+
+  useEffect(() => {
+    if (school) {
+      loadCalendarData();
+    }
+  }, [school, loadCalendarData]);
 
   useEffect(() => {
     if (modal === "attendance" && attendanceDate && !attendanceReviewMode) {
@@ -206,6 +231,7 @@ export default function SchoolProfileDetail() {
         setModal(null);
         setAttendanceReviewMode(false);
         await loadSchool();
+        await loadCalendarData();
       } else {
         toast.error(json.error || "Failed to mark attendance");
       }
@@ -273,7 +299,11 @@ export default function SchoolProfileDetail() {
               {school.location} • Regional Impact Partner
             </p>
             <div className="flex flex-col gap-2 mt-2 text-xs font-medium text-slate-500 font-sans">
-              <div><span className="font-bold text-on-surface">Principal:</span> {school.principalName || "—"}</div>
+              <div className="flex flex-wrap gap-4">
+                <div><span className="font-bold text-on-surface">Principal:</span> {school.principalName || "—"}</div>
+                <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                <div><span className="font-bold text-on-surface">UDISE Code:</span> {school.udiseCode || "—"}</div>
+              </div>
               <div className="flex flex-wrap gap-4">
                 <div><span className="font-bold text-on-surface">Email:</span> {school.email || "—"}</div>
                 <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
@@ -346,6 +376,94 @@ export default function SchoolProfileDetail() {
             )}
           </div>
 
+          {/* Daily Attendance Calendar */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">calendar_month</span>
+                  Daily Attendance
+                </h3>
+                {(() => {
+                  const todayForAvg = new Date();
+                  const isCurrentMonthAvg = todayForAvg.getFullYear() === currentYear && (todayForAvg.getMonth() + 1) === currentMonth;
+                  const isFutureMonthAvg = currentYear > todayForAvg.getFullYear() || (currentYear === todayForAvg.getFullYear() && currentMonth > (todayForAvg.getMonth() + 1));
+                  
+                  if (isFutureMonthAvg) return null;
+                  
+                  const lastDayToCount = isCurrentMonthAvg ? todayForAvg.getDate() : new Date(currentYear, currentMonth, 0).getDate();
+                  let totalPresent = 0;
+                  let totalStudents = 0;
+                  
+                  for (let i = 1; i <= lastDayToCount; i++) {
+                    const dStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                    if (calendarData[dStr]) {
+                      totalPresent += calendarData[dStr].present;
+                      totalStudents += calendarData[dStr].total;
+                    }
+                  }
+                  
+                  const averageAttendance = totalStudents > 0 ? Math.round((totalPresent / totalStudents) * 100) : 0;
+                  return (
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
+                      MTD Avg: {averageAttendance}%
+                    </span>
+                  );
+                })()}
+              </div>
+              <div className="flex items-center gap-4">
+                <button onClick={() => {
+                  if (currentMonth === 1) { setCurrentMonth(12); setCurrentYear(currentYear - 1); }
+                  else { setCurrentMonth(currentMonth - 1); }
+                }} className="p-1 hover:bg-surface-container rounded-full cursor-pointer transition-colors">
+                  <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <span className="font-bold text-on-surface text-sm w-32 text-center">
+                  {new Date(currentYear, currentMonth - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}
+                </span>
+                <button onClick={() => {
+                  if (currentMonth === 12) { setCurrentMonth(1); setCurrentYear(currentYear + 1); }
+                  else { setCurrentMonth(currentMonth + 1); }
+                }} className="p-1 hover:bg-surface-container rounded-full cursor-pointer transition-colors">
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-7 gap-2">
+              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                <div key={day} className="text-center text-xs font-bold text-on-surface-variant py-2 uppercase tracking-wider">{day}</div>
+              ))}
+              {Array.from({ length: new Date(currentYear, currentMonth - 1, 1).getDay() }).map((_, i) => (
+                <div key={`empty-${i}`} className="p-2"></div>
+              ))}
+              {Array.from({ length: new Date(currentYear, currentMonth, 0).getDate() }).map((_, i) => {
+                const dateNum = i + 1;
+                const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(dateNum).padStart(2, '0')}`;
+                const dayData = calendarData[dateStr];
+                
+                const today = new Date();
+                const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                const isToday = dateStr === todayStr;
+                
+                return (
+                  <button 
+                    key={dateNum}
+                    onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceReviewMode(false); setSearchQ(""); }}
+                    className={`aspect-square p-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer relative ${dayData ? 'border-primary/30 hover:border-primary/60 bg-surface-container-lowest' : 'border-outline-variant/30 hover:border-outline-variant bg-surface-container-low/20'} ${isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest font-bold !border-primary' : ''}`}
+                  >
+                    <span className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-on-surface'}`}>{dateNum}</span>
+                    {dayData && (
+                      <span className={`text-[10px] font-bold mt-1 px-1.5 py-0.5 rounded-full ${dayData.percentage >= 80 ? 'bg-primary/20 text-primary' : dayData.percentage >= 50 ? 'bg-secondary/20 text-secondary' : 'bg-error/20 text-error'}`}>
+                        {dayData.percentage}%
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Enrolled Students */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-6">
@@ -354,10 +472,6 @@ export default function SchoolProfileDetail() {
                 Enrolled Students ({totalEnrolled})
               </h3>
               <div className="flex gap-2">
-                <button onClick={() => { setModal("attendance"); setAttendanceDate(new Date().toISOString().split("T")[0]); setAttendanceReviewMode(false); setSearchQ(""); }}
-                  className="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full text-sm font-semibold hover:bg-secondary-container/80 transition-colors flex items-center gap-1.5 cursor-pointer">
-                  <span className="material-symbols-outlined text-[16px]">how_to_reg</span> Mark Attendance
-                </button>
                 <button onClick={() => { setModal("students"); setSearchQ(""); }}
                   className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
                   <span className="material-symbols-outlined text-[16px]">manage_accounts</span> Manage Students
@@ -513,8 +627,38 @@ export default function SchoolProfileDetail() {
 
       {/* Mark Attendance Modal */}
       {modal === "attendance" && (
-        <Modal title={isEditingAttendance ? "Edit Attendance" : "Bulk Mark Attendance"} onClose={() => { setModal(null); setAttendanceReviewMode(false); }}>
-          {!attendanceReviewMode ? (
+        <Modal title={viewOnlyMode ? "Review Marked Attendance" : (isEditingAttendance ? "Edit Attendance" : "Bulk Mark Attendance")} onClose={() => { setModal(null); setAttendanceReviewMode(false); setViewOnlyMode(false); }}>
+          {viewOnlyMode ? (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center mb-4 border-b border-outline-variant/20 pb-4">
+                <h4 className="font-bold text-lg text-on-surface">Date: {attendanceDate}</h4>
+                <button type="button" onClick={() => setViewOnlyMode(false)} className="px-4 py-1.5 rounded-full bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors cursor-pointer text-sm">
+                  Edit Attendance
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-primary mb-2 border-b border-outline-variant/20 pb-2">Present ({attendanceSelection.size})</h5>
+                  <ul className="text-sm space-y-1 max-h-64 overflow-y-auto pl-4 list-disc text-on-surface-variant">
+                    {enrolledStudents.filter(s => attendanceSelection.has(s.id)).map(s => (
+                      <li key={s.id}>{s.name}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-error mb-2 border-b border-outline-variant/20 pb-2">Absent ({enrolledStudents.length - attendanceSelection.size})</h5>
+                  <ul className="text-sm space-y-1 max-h-64 overflow-y-auto pl-4 list-disc text-on-surface-variant">
+                    {enrolledStudents.filter(s => !attendanceSelection.has(s.id)).map(s => (
+                      <li key={s.id}>{s.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="flex justify-end pt-4 mt-4 border-t border-outline-variant/20">
+                <button type="button" onClick={() => { setModal(null); setViewOnlyMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm font-semibold">Close</button>
+              </div>
+            </div>
+          ) : !attendanceReviewMode ? (
             <div className="space-y-4">
               <div className="flex gap-4 items-center">
                 <InputField label="Attendance Date" name="date" type="date" value={attendanceDate} onChange={e => setAttendanceDate(e.target.value)} required />
@@ -598,14 +742,13 @@ export default function SchoolProfileDetail() {
           <form onSubmit={handleEditSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <InputField label="School Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
-              <InputField label="Principal Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} />
+              <InputField label="Principal / Headmaster Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} />
+              <InputField label="UDISE Code" name="udiseCode" value={editForm.udiseCode} onChange={e => setEditForm(f => ({ ...f, udiseCode: e.target.value }))} />
               <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
               <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
               <InputField label="Location/City" name="location" value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} />
               <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
               <InputField label="Enrolment Goal" name="goal" type="number" value={editForm.goal} onChange={e => setEditForm(f => ({ ...f, goal: e.target.value }))} />
-              <InputField label="Latitude" name="latitude" value={editForm.latitude} onChange={e => setEditForm(f => ({ ...f, latitude: e.target.value }))} />
-              <InputField label="Longitude" name="longitude" value={editForm.longitude} onChange={e => setEditForm(f => ({ ...f, longitude: e.target.value }))} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

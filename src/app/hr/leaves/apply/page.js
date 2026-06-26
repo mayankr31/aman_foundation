@@ -156,13 +156,20 @@ export default function LeaveApplication() {
                   <td className="py-4 px-4 font-mono text-xs text-on-surface-variant">{leave.dates}</td>
                   <td className="py-4 px-4 text-xs text-on-surface-variant max-w-xs truncate" title={leave.reason}>{leave.reason}</td>
                   <td className="py-4 px-4">
-                    <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
-                      leave.status === "REJECTED" ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400" :
-                      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
-                    }`}>
-                      {leave.status}
-                    </span>
+                    <div className="flex flex-col gap-1.5 items-start">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                        leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
+                        leave.status === "REJECTED" ? "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400" :
+                        "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                      }`}>
+                        {leave.status}
+                      </span>
+                      {leave.status === "REJECTED" && leave.rejectionReason && (
+                        <span className="text-[10px] text-rose-600 dark:text-rose-400 font-medium bg-rose-50 dark:bg-rose-900/10 px-2 py-1 rounded-lg border border-rose-100 dark:border-rose-900/30 max-w-[150px] break-words">
+                          <span className="font-bold">Reason:</span> {leave.rejectionReason}
+                        </span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

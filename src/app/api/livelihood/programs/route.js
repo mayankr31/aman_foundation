@@ -33,7 +33,7 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW") {
       return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 

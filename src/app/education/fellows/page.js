@@ -204,13 +204,6 @@ export default function FellowsModule() {
         </div>
 
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="bg-primary text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 shadow-lg shadow-primary/20 whitespace-nowrap cursor-pointer hover:bg-primary-container"
-        >
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          Add Fellow
-        </button>
         <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-semibold hover:shadow-[0_4px_12px_rgba(0,104,87,0.2)] transition-all flex items-center gap-2 whitespace-nowrap">
           <span className="material-symbols-outlined text-[18px]">download</span>
           Export Report

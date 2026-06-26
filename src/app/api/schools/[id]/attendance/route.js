@@ -30,15 +30,13 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Date is required" }, { status: 400 });
     }
 
-    const dateObj = new Date(dateStr);
-    if (isNaN(dateObj.getTime())) {
+    const [y, m, d] = dateStr.split('-');
+    const startOfDay = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10), 0, 0, 0, 0);
+    const endOfDay = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10), 23, 59, 59, 999);
+    
+    if (isNaN(startOfDay.getTime())) {
       return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
     }
-
-    const startOfDay = new Date(dateObj);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(dateObj);
-    endOfDay.setHours(23, 59, 59, 999);
 
     const logs = await prisma.studentAttendanceDayLog.findMany({
       where: {
@@ -100,18 +98,16 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Date and studentStatuses array are required" }, { status: 400 });
     }
 
-    const dateObj = new Date(date);
-    if (isNaN(dateObj.getTime())) {
+    const [y, m, d] = date.split('-');
+    const startOfDay = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10), 0, 0, 0, 0);
+    const endOfDay = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10), 23, 59, 59, 999);
+
+    if (isNaN(startOfDay.getTime())) {
       return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
     }
     
     // Format month as "Jan 2026"
-    const monthStr = dateObj.toLocaleString('en-US', { month: 'short', year: 'numeric' });
-
-    const startOfDay = new Date(dateObj);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(dateObj);
-    endOfDay.setHours(23, 59, 59, 999);
+    const monthStr = startOfDay.toLocaleString('en-US', { month: 'short', year: 'numeric' });
 
     await prisma.$transaction(async (tx) => {
       for (const { studentId, status } of studentStatuses) {

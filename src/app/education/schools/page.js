@@ -4,7 +4,39 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AMAN_FOUNDATION_MAP } from "@/lib/schoolsData";
 import { useAuth } from "@/lib/useAuth";
- 
+function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      {options ? (
+        <select name={name} value={value} onChange={onChange}
+          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+          {options.map(o => <option key={o} value={o}>{o}</option>)}
+        </select>
+      ) : (
+        <input type={type} name={name} value={value} onChange={onChange} required={required}
+          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+      )}
+    </div>
+  );
+}
+
+function Modal({ title, onClose, children }) {
+  return (
+    <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
+      <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
+          <h3 className="text-lg font-bold font-headline text-on-surface">{title}</h3>
+          <button onClick={onClose} className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer">
+            <span className="material-symbols-outlined text-on-surface-variant">close</span>
+          </button>
+        </div>
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function SchoolsModule() {
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,10 +45,19 @@ export default function SchoolsModule() {
  
   // Form states
   const [currentPage, setCurrentPage] = useState(1);
-  const [newSchoolName, setNewSchoolName] = useState("");
-  const [newLocation, setNewLocation] = useState("");
-  const [newPrograms, setNewPrograms] = useState("");
-  const [newGoal, setNewGoal] = useState(60);
+  const initialAddForm = {
+    name: "",
+    principalName: "",
+    udiseCode: "",
+    email: "",
+    phone: "",
+    address: "",
+    location: "",
+    status: "Active",
+    mapUrl: "",
+    goal: 80,
+  };
+  const [addForm, setAddForm] = useState(initialAddForm);
 
   useEffect(() => {
     async function loadSchools() {
@@ -37,7 +78,7 @@ export default function SchoolsModule() {
  
   const handleAddSchool = async (e) => {
     e.preventDefault();
-    if (!newSchoolName || !newLocation) return;
+    if (!addForm.name || !addForm.location) return;
  
     try {
       const res = await fetch("/api/schools", {
@@ -47,22 +88,15 @@ export default function SchoolsModule() {
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify({
-          name: newSchoolName,
-          location: newLocation,
-          goal: parseInt(newGoal),
-          status: "Active"
+          ...addForm,
+          goal: parseInt(addForm.goal)
         })
       });
       const json = await res.json();
       if (json.success) {
         setSchools([json.data, ...schools]);
-        setNewSchoolName("");
-        setNewLocation("");
-        setNewPrograms("");
-        setNewGoal(60);
+        setAddForm(initialAddForm);
         setShowAddModal(false);
-      } else {
-        alert(json.error || "Failed to add school");
       }
     } catch (err) {
       console.error("Failed to add school:", err);
@@ -264,7 +298,7 @@ export default function SchoolsModule() {
               onChange={(e) => setSelectedLocation(e.target.value)}
               className="w-full pl-11 pr-10 py-2.5 bg-surface-container rounded-full border border-outline-variant/20 focus:outline-none focus:ring-2 focus:ring-primary text-xs font-label uppercase tracking-widest text-on-surface appearance-none cursor-pointer transition-shadow"
             >
-              {["All Locations", ...Array.from(new Set(schools.map(s => s.location.split(",")[0].trim())))].map((loc) => (
+              {["All Locations", ...Array.from(new Set(schools.map(s => s.location ? s.location.split(",")[0].trim() : "Unknown Location")))].map((loc) => (
                 <option key={loc} value={loc === "All Locations" ? "All" : loc}>
                   {loc}
                 </option>
@@ -403,76 +437,37 @@ export default function SchoolsModule() {
 
       {/* Add School Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add New Partner School</h3>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined">close</span>
+        <Modal title="Add New Partner School" onClose={() => setShowAddModal(false)}>
+          <form onSubmit={handleAddSchool} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <InputField label="School Name" name="name" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} required />
+              <InputField label="Principal / Headmaster Name" name="principalName" value={addForm.principalName} onChange={e => setAddForm(f => ({ ...f, principalName: e.target.value }))} />
+              <InputField label="UDISE Code" name="udiseCode" value={addForm.udiseCode} onChange={e => setAddForm(f => ({ ...f, udiseCode: e.target.value }))} />
+              <InputField label="Email" name="email" type="email" value={addForm.email} onChange={e => setAddForm(f => ({ ...f, email: e.target.value }))} />
+              <InputField label="Phone" name="phone" value={addForm.phone} onChange={e => setAddForm(f => ({ ...f, phone: e.target.value }))} />
+              <InputField label="Location/City" name="location" value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))} required />
+              <InputField label="Status" name="status" value={addForm.status} onChange={e => setAddForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
+              <InputField label="Enrolment Goal" name="goal" type="number" value={addForm.goal} onChange={e => setAddForm(f => ({ ...f, goal: e.target.value }))} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>
+              <textarea value={addForm.address} onChange={e => setAddForm(f => ({ ...f, address: e.target.value }))} rows="2"
+                className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL</label>
+              <input value={addForm.mapUrl} onChange={e => setAddForm(f => ({ ...f, mapUrl: e.target.value }))}
+                placeholder="https://maps.google.com/embed?..."
+                className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+            </div>
+            <div className="flex justify-end gap-3 pt-4">
+              <button type="button" onClick={() => setShowAddModal(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm">
+                Add School
               </button>
             </div>
-            <form onSubmit={handleAddSchool} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  School Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Oakridge Academy"
-                  value={newSchoolName}
-                  onChange={(e) => setNewSchoolName(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  District / Location
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. North District"
-                  value={newLocation}
-                  onChange={(e) => setNewLocation(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Impact Goal Achieved (%)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  required
-                  value={newGoal}
-                  onChange={(e) => setNewGoal(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Add School
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+          </form>
+        </Modal>
       )}
     </div>
   );

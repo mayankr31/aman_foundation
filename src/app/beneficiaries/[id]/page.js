@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import ConfirmActionModal from "@/components/ConfirmActionModal";
+import { useToast } from "@/context/ToastContext";
 
 export default function BeneficiaryProfileDetail() {
   const { id } = useParams();
@@ -12,9 +14,11 @@ export default function BeneficiaryProfileDetail() {
   const [activeTab, setActiveTab] = useState("Program History");
   const [beneficiary, setBeneficiary] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   // Edit modal states
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
   const [editTab, setEditTab] = useState("Personal");
 
   // Form states matching database schema
@@ -48,6 +52,13 @@ export default function BeneficiaryProfileDetail() {
 
   // Scheme enrollments & Livelihood sub-programs
   const [enrolledSchemes, setEnrolledSchemes] = useState([]);
+  // Resilience Surveys
+  const [surveys, setSurveys] = useState([]);
+  const [adaptiveSurveys, setAdaptiveSurveys] = useState([]);
+  const [absorptiveSurveys, setAbsorptiveSurveys] = useState([]);
+  const [transformativeSurveys, setTransformativeSurveys] = useState([]);
+  const [vulnerabilitySurveys, setVulnerabilitySurveys] = useState([]);
+  const [solutionPlans, setSolutionPlans] = useState([]);
   // Removed singular scheme states as assignments are now handled in Program Details
 
   const loadBeneficiaryDetail = async () => {
@@ -103,6 +114,60 @@ export default function BeneficiaryProfileDetail() {
           ageMonths: l.ageMonths !== null ? l.ageMonths : "",
           healthStatus: l.healthStatus || "Healthy"
         })));
+
+        // Fetch Resilience Surveys
+        const resilienceRes = await fetch(`/api/beneficiaries/${id}/resilience-surveys`, { headers });
+        if (resilienceRes.ok) {
+          const resilienceData = await resilienceRes.json();
+          if (resilienceData.success) {
+            setSurveys(resilienceData.data);
+          }
+        }
+        
+        // Fetch Adaptive Capacity Surveys
+        const adaptiveRes = await fetch(`/api/beneficiaries/${id}/adaptive-surveys`, { headers });
+        if (adaptiveRes.ok) {
+          const adaptiveData = await adaptiveRes.json();
+          if (adaptiveData.success) {
+            setAdaptiveSurveys(adaptiveData.data);
+          }
+        }
+
+        // Fetch Absorptive Capacity Surveys
+        const absorptiveRes = await fetch(`/api/beneficiaries/${id}/absorptive-surveys`, { headers });
+        if (absorptiveRes.ok) {
+          const absorptiveData = await absorptiveRes.json();
+          if (absorptiveData.success) {
+            setAbsorptiveSurveys(absorptiveData.data);
+          }
+        }
+
+        // Fetch Transformative Capacity Surveys
+        const transformativeRes = await fetch(`/api/beneficiaries/${id}/transformative-surveys`, { headers });
+        if (transformativeRes.ok) {
+          const transformativeData = await transformativeRes.json();
+          if (transformativeData.success) {
+            setTransformativeSurveys(transformativeData.data);
+          }
+        }
+
+        // Fetch Vulnerability Surveys
+        const vulnerabilityRes = await fetch(`/api/beneficiaries/${id}/vulnerability-surveys`, { headers });
+        if (vulnerabilityRes.ok) {
+          const vulnerabilityData = await vulnerabilityRes.json();
+          if (vulnerabilityData.success) {
+            setVulnerabilitySurveys(vulnerabilityData.data);
+          }
+        }
+
+        // Fetch Solution Plans
+        const solutionRes = await fetch(`/api/beneficiaries/${id}/solution-plans`, { headers });
+        if (solutionRes.ok) {
+          const solutionData = await solutionRes.json();
+          if (solutionData.success) {
+            setSolutionPlans(solutionData.data);
+          }
+        }
 
         // Singular scheme details removed
       }
@@ -166,6 +231,29 @@ export default function BeneficiaryProfileDetail() {
       }
     } catch (err) {
       console.error("Update profile error:", err);
+    }
+  };
+
+  const handleToggleMigrated = async () => {
+    try {
+      const res = await fetch(`/api/beneficiaries/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ isMigrated: !beneficiary.isMigrated })
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to update migration status");
+      }
+    } catch (err) {
+      console.error("Update migration error:", err);
+    } finally {
+      setShowConfirmMigrate(false);
     }
   };
 
@@ -254,7 +342,16 @@ export default function BeneficiaryProfileDetail() {
             Beneficiary Profile File
           </h1>
         </div>
-        <div className="flex gap-3 font-sans">
+        <div className="flex gap-3 font-sans flex-wrap">
+          <button
+            onClick={() => setShowConfirmMigrate(true)}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+          >
+            <span className="material-symbols-outlined text-[18px]">
+              {beneficiary.isMigrated ? "undo" : "moving"}
+            </span>
+            {beneficiary.isMigrated ? "Unmark Migrated" : "Mark Migrated"}
+          </button>
           <button
             onClick={() => setShowEditModal(true)}
             className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
@@ -284,6 +381,11 @@ export default function BeneficiaryProfileDetail() {
                 <span className="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full whitespace-nowrap w-fit">
                   Active Participant
                 </span>
+                {beneficiary.isMigrated && (
+                  <span className="bg-surface-variant text-on-surface-variant text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full whitespace-nowrap w-fit">
+                    Migrated
+                  </span>
+                )}
               </div>
               <p className="text-on-surface-variant text-sm mb-6 max-w-md font-sans">
                 Assam rural development and livelihood beneficiary near Kalgachia circle. Enrolled in multiple micro-development programs.
@@ -385,16 +487,14 @@ export default function BeneficiaryProfileDetail() {
 
         {/* Tabs Navigation */}
         <div className="lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest flex overflow-x-auto no-scrollbar font-sans">
-          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary"].map((tab) => {
+          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Resilience KYR Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning"].map((tab) => {
             const isActive = activeTab === tab;
             return (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer border-none bg-transparent ${
-                  isActive
-                    ? "font-semibold text-primary border-b-2 border-primary"
-                    : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
+                className={`px-5 py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
+                  isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
                 }`}
               >
                 {tab}
@@ -467,6 +567,43 @@ export default function BeneficiaryProfileDetail() {
                                   <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Advantages Logged</p>
                                   <p className="text-on-surface-variant font-medium mt-1 leading-relaxed">{detail.advantagesLog || "No advantages logged yet."}</p>
                                 </div>
+                                {detail.events && detail.events.length > 0 && (
+                                  <div className="col-span-2 sm:col-span-4 lg:col-span-5 mt-3 border-t border-surface-container-high pt-3">
+                                    <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mb-2">Lifecycle Events</p>
+                                    <div className="space-y-2">
+                                      {detail.events.map((evt) => (
+                                        <div key={evt.id} className="flex items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10">
+                                          <span className={`material-symbols-outlined text-sm p-1 rounded-full ${
+                                            evt.eventType === "Death" ? "text-red-500 bg-red-50" :
+                                            evt.eventType === "Pregnancy" ? "text-amber-500 bg-amber-50" :
+                                            "text-green-500 bg-green-50"
+                                          }`}>
+                                            {evt.eventType === "Death" ? "skull" : evt.eventType === "Pregnancy" ? "pregnant_woman" : "crib"}
+                                          </span>
+                                          <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                              <span className="text-xs font-bold text-on-surface">{evt.eventType}</span>
+                                              <span className="text-[10px] text-on-surface-variant">
+                                                {new Date(evt.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                                              </span>
+                                              <span className="text-[10px] text-on-surface-variant">Qty: {evt.quantity}</span>
+                                            </div>
+                                            {evt.notes && <p className="text-[10px] text-on-surface-variant mt-0.5">{evt.notes}</p>}
+                                            {evt.recordedBy && <p className="text-[10px] text-on-surface-variant/60 mt-0.5">Recorded by: {evt.recordedBy}</p>}
+                                          </div>
+                                          {evt.photoUrl && (
+                                            <button
+                                              onClick={() => setLightboxPhoto(evt.photoUrl)}
+                                              className="shrink-0 w-10 h-10 rounded overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0"
+                                            >
+                                              <img src={evt.photoUrl} alt={`${evt.eventType} evidence`} className="w-full h-full object-cover" />
+                                            </button>
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -570,6 +707,349 @@ export default function BeneficiaryProfileDetail() {
                     ))
                   ) : (
                     <p className="col-span-2 text-sm text-on-surface-variant italic">No livestock assets allocated to this beneficiary.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Resilience KYR Tool" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">assignment</span>
+                    Resilience Measurement - HH level KYR tool
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-1">
+                    Assess the family's capacity to absorb, adapt and transform.
+                  </p>
+                </div>
+                <Link
+                  href={`/beneficiaries/${id}/kyr-survey`}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Take New Survey
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {surveys && surveys.length > 0 ? (
+                  surveys.map((survey) => (
+                    <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col gap-4 font-sans">
+                      <div className="flex flex-col sm:flex-row justify-between gap-4">
+                        <div>
+                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="text-xs text-on-surface-variant mt-1">
+                            Overall Score: <span className="font-bold text-primary">{survey.overallScore}%</span>
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                          <div>
+                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Financial</p>
+                            <p className="text-on-surface font-semibold">{survey.financialResilienceScore}%</p>
+                          </div>
+                          <div>
+                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Health</p>
+                            <p className="text-on-surface font-semibold">{survey.healthResilienceScore}%</p>
+                          </div>
+                          <div>
+                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Social</p>
+                            <p className="text-on-surface font-semibold">{survey.socialConnectednessScore}%</p>
+                          </div>
+                          <div>
+                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Mindset</p>
+                            <p className="text-on-surface font-semibold">{survey.disasterMindsetScore}%</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 border-t border-surface-container-highest">
+                        <Link href={`/beneficiaries/${id}/responses/kyr/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <span className="material-symbols-outlined text-[14px]">visibility</span>
+                          View Full Response
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No surveys have been taken for this beneficiary yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Adaptive Capacity" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">trending_up</span>
+                    Adaptive Capacity Tool
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-1">
+                    Assess the household's ability to adapt to new situations.
+                  </p>
+                </div>
+                <Link
+                  href={`/beneficiaries/${id}/adaptive-capacity`}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Take New Survey
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {adaptiveSurveys && adaptiveSurveys.length > 0 ? (
+                  adaptiveSurveys.map((survey) => (
+                    <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-on-surface-variant">
+                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 9
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                        <Link href={`/beneficiaries/${id}/responses/adaptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <span className="material-symbols-outlined text-[14px]">visibility</span>
+                          View Full Response
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No adaptive capacity surveys have been taken for this beneficiary yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Absorptive Capacity" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">shield</span>
+                    Absorptive Capacity Tool
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-1">
+                    Assess the household's ability to absorb shocks and disasters.
+                  </p>
+                </div>
+                <Link
+                  href={`/beneficiaries/${id}/absorptive-capacity`}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Take New Survey
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {absorptiveSurveys && absorptiveSurveys.length > 0 ? (
+                  absorptiveSurveys.map((survey) => (
+                    <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-on-surface-variant">
+                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 7
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                        <Link href={`/beneficiaries/${id}/responses/absorptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <span className="material-symbols-outlined text-[14px]">visibility</span>
+                          View Full Response
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No absorptive capacity surveys have been taken for this beneficiary yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Transformative Capacity" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">architecture</span>
+                    Transformative Capacity Tool
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-1">
+                    Assess systemic changes and access to markets, services, and opportunities.
+                  </p>
+                </div>
+                <Link
+                  href={`/beneficiaries/${id}/transformative-capacity`}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Take New Survey
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {transformativeSurveys && transformativeSurveys.length > 0 ? (
+                  transformativeSurveys.map((survey) => (
+                    <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-on-surface-variant">
+                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 9
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                        <Link href={`/beneficiaries/${id}/responses/transformative/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <span className="material-symbols-outlined text-[14px]">visibility</span>
+                          View Full Response
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No transformative capacity surveys have been taken for this beneficiary yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Vulnerability" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">warning</span>
+                    Vulnerability Assessment Tool
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-1">
+                    Assess the shocks, hardships, and effects faced by the household.
+                  </p>
+                </div>
+                <Link
+                  href={`/beneficiaries/${id}/vulnerability`}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Take New Survey
+                </Link>
+              </div>
+
+              <div className="space-y-4">
+                {vulnerabilitySurveys && vulnerabilitySurveys.length > 0 ? (
+                  vulnerabilitySurveys.map((survey) => (
+                    <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="text-xs text-on-surface-variant mt-1">Shocks, Hardships, and Severities Recorded</p>
+                        </div>
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                        <Link href={`/beneficiaries/${id}/responses/vulnerability/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <span className="material-symbols-outlined text-[14px]">visibility</span>
+                          View Full Response
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No vulnerability surveys have been taken for this beneficiary yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Solution Board & Planning" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 font-sans">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-4 border-b border-surface-container-highest pb-6">
+                <div>
+                  <h3 className="text-xl font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">assignment_turned_in</span>
+                    Solution Board & Planning
+                  </h3>
+                  <p className="text-sm text-on-surface-variant font-sans mt-2 max-w-2xl">
+                    View the reference documents to understand resilience gaps, then create a customized action plan prioritizing key areas for the household.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 min-w-[200px]">
+                  <Link
+                    href={`/beneficiaries/${id}/solution-board-reference`}
+                    className="w-full bg-surface-container-highest text-on-surface border border-outline-variant/30 px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-surface-container-highest/80 transition-colors flex items-center justify-center gap-2 text-center"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">menu_book</span>
+                    View Reference Board
+                  </Link>
+                  <Link
+                    href={`/beneficiaries/${id}/solution-plan`}
+                    className="w-full gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Create Solution Plan
+                  </Link>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-on-surface mb-4">Saved Solution Plans</h4>
+                <div className="space-y-4">
+                  {solutionPlans && solutionPlans.length > 0 ? (
+                    solutionPlans.map((plan) => (
+                      <div key={plan.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div>
+                            <p className="font-bold text-on-surface flex items-center gap-2">
+                              <span className="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
+                              Plan Date: {new Date(plan.createdAt).toLocaleDateString()}
+                            </p>
+                            <p className="text-sm text-on-surface-variant mt-1">
+                              Priorities targeted: <span className="font-semibold text-on-surface">{plan.planData?.numAreasPrioritized || 0}</span>
+                            </p>
+                          </div>
+                          <div>
+                            <span className="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-bold uppercase tracking-wider">
+                              Plan Active
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                          <Link href={`/beneficiaries/${id}/responses/solution-plan/${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                            <span className="material-symbols-outlined text-[14px]">visibility</span>
+                            View Full Plan
+                          </Link>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                      No solution plans have been created for this beneficiary yet. Click "Create Solution Plan" to get started.
+                    </p>
                   )}
                 </div>
               </div>
@@ -1094,6 +1574,37 @@ export default function BeneficiaryProfileDetail() {
           </div>
         </div>
       )}
+
+      {/* Photo Lightbox */}
+      {lightboxPhoto && (
+        <div
+          className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-8 cursor-pointer"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button
+            onClick={() => setLightboxPhoto(null)}
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors cursor-pointer border-none text-white"
+          >
+            <span className="material-symbols-outlined text-2xl">close</span>
+          </button>
+          <img
+            src={lightboxPhoto}
+            alt="Event evidence"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
+      <ConfirmActionModal
+        isOpen={showConfirmMigrate}
+        onClose={() => setShowConfirmMigrate(false)}
+        onConfirm={handleToggleMigrated}
+        title={beneficiary?.isMigrated ? "Unmark as Migrated" : "Mark as Migrated"}
+        message={beneficiary?.isMigrated ? "Are you sure you want to unmark this beneficiary as migrated?" : "Are you sure you want to mark this beneficiary as migrated?"}
+        confirmText={beneficiary?.isMigrated ? "Unmark" : "Mark as Migrated"}
+        variant="primary"
+      />
     </div>
   );
 }

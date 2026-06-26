@@ -161,7 +161,7 @@ export default function Sidebar({ isOpen, onClose }) {
           </div>
 
           {/* Livelihood Submenu */}
-          {user?.roleName !== "FELLOW" && (
+          {true && (
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => setLivelihoodOpen(!livelihoodOpen)}

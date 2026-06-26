@@ -68,6 +68,7 @@ model User {
   leaves             Leave[]
   verifiedTransactions InventoryLedger[]
   attendanceLogs     AttendanceLog[]
+  taskComments       FellowTaskComment[]
 }
 
 model Permission {
@@ -115,6 +116,7 @@ model School {
   id            String          @id @default(uuid())
   name          String          @unique
   principalName String?
+  udiseCode     String?
   email         String?
   phone         String?
   address       String?
@@ -154,6 +156,7 @@ model Fellow {
   students          Student[]
   goals             FellowGoal[]
   reviews           FellowReview[]
+  tasks             FellowTask[]
 }
 
 model FellowGoal {
@@ -216,6 +219,7 @@ model Student {
   status          String                 @default("On Track")
   schoolId        String?
   fellowId        String?
+  isMigrated      Boolean                @default(false)
   createdAt       DateTime               @default(now())
   updatedAt       DateTime               @updatedAt
 
@@ -341,6 +345,7 @@ model Beneficiary {
   bankName         String?
   bankAccountNo    String?
   bankIfsc         String?
+  isMigrated       Boolean                @default(false)
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
 
@@ -348,7 +353,13 @@ model Beneficiary {
   livestock         Livestock[]
   schemeEnrollments SchemeEnrollment[]
   goatRearingDetails BeneficiaryGoatRearing[]
-  sugarcaneDetails   BeneficiarySugarcane[]
+  sugarcaneDetails           BeneficiarySugarcane[]
+  resilienceSurveys          ResilienceSurvey[]
+  adaptiveCapacitySurveys    AdaptiveCapacitySurvey[]
+  absorptiveCapacitySurveys  AbsorptiveCapacitySurvey[]
+  transformativeSurveys      TransformativeCapacitySurvey[]
+  vulnerabilitySurveys       VulnerabilitySurvey[]
+  solutionPlans              SolutionPlan[]
 }
 
 model FamilyMember {
@@ -429,6 +440,7 @@ model BeneficiaryGoatRearing {
 
   beneficiary          Beneficiary         @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   goatRearingProgram   GoatRearingProgram? @relation(fields: [goatRearingProgramId], references: [id], onDelete: SetNull)
+  events               GoatRearingEvent[]
 }
 
 model GoatRearingProgram {
@@ -439,6 +451,21 @@ model GoatRearingProgram {
   createdAt     DateTime                  @default(now())
   updatedAt     DateTime                  @updatedAt
   beneficiaries BeneficiaryGoatRearing[]
+}
+
+model GoatRearingEvent {
+  id                        String                  @id @default(uuid())
+  beneficiaryGoatRearingId  String
+  eventType                 String
+  eventDate                 DateTime                @default(now())
+  quantity                  Int                     @default(1)
+  notes                     String?
+  photoUrl                  String?
+  recordedBy                String?
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
+
+  beneficiaryGoatRearing    BeneficiaryGoatRearing   @relation(fields: [beneficiaryGoatRearingId], references: [id], onDelete: Cascade)
 }
 
 model BeneficiarySugarcane {
@@ -540,6 +567,10 @@ model AttendanceLog {
   ef2           String?
   logininfo     String?
   logoutinfo    String?
+  checkInLat    Float?
+  checkInLng    Float?
+  checkOutLat   Float?
+  checkOutLng   Float?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -547,16 +578,17 @@ model AttendanceLog {
 }
 
 model Leave {
-  id        String       @id @default(uuid())
-  userId    String
-  type      String?
-  dates     String?
-  reason    String?
-  status    LeaveStatus  @default(PENDING)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id              String       @id @default(uuid())
+  userId          String
+  type            String?
+  dates           String?
+  reason          String?
+  rejectionReason String?
+  status          LeaveStatus  @default(PENDING)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model IncidentResourceNeed {
@@ -574,4 +606,128 @@ model IncidentResourceNeed {
   transactions      InventoryLedger[]
   
   @@unique([incidentId, resourceItemId])
+}
+
+model FellowTask {
+  id             String    @id @default(uuid())
+  fellowId       String
+  title          String
+  description    String?
+  plannedDate    DateTime
+  status         String    @default("Pending") // Pending, Completed
+  isPlanned      Boolean   @default(true) // true if planned task, false if unplanned task
+  completionDate DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  
+  fellow      Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  comments    FellowTaskComment[]
+}
+
+model FellowTaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  authorId  String   // User ID
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  task      FellowTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model ResilienceSurvey {
+  id                        String      @id @default(uuid())
+  beneficiaryId             String
+  surveyDate                DateTime    @default(now())
+  
+  responses                 Json        
+  
+  lifeSatisfactionScore     Float       @default(0)
+  planningScore             Float       @default(0)
+  disasterReadinessScore    Float       @default(0)
+  disasterBeliefsScore      Float       @default(0)
+  disasterMindsetScore      Float       @default(0)
+  financialResilienceScore  Float       @default(0)
+  healthResilienceScore     Float       @default(0)
+  socialConnectednessScore  Float       @default(0)
+  socialProtectionScore     Float       @default(0)
+  disasterWarningScore      Float       @default(0)
+  vulnerabilityScore        Float       @default(0)
+  
+  overallScore              Float       @default(0)
+
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @updatedAt
+
+  beneficiary               Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model AdaptiveCapacitySurvey {
+  id                String      @id @default(uuid())
+  beneficiaryId     String
+  surveyDate        DateTime    @default(now())
+  
+  responses         Json        
+  
+  overallScore      Float       @default(0)
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  beneficiary       Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model AbsorptiveCapacitySurvey {
+  id                String      @id @default(uuid())
+  beneficiaryId     String
+  surveyDate        DateTime    @default(now())
+  
+  responses         Json        
+  
+  overallScore      Float       @default(0)
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  beneficiary       Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model TransformativeCapacitySurvey {
+  id                String      @id @default(uuid())
+  beneficiaryId     String
+  surveyDate        DateTime    @default(now())
+  
+  responses         Json        
+  
+  overallScore      Float       @default(0)
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  beneficiary       Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model VulnerabilitySurvey {
+  id                String      @id @default(uuid())
+  beneficiaryId     String
+  surveyDate        DateTime    @default(now())
+  
+  responses         Json        
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  beneficiary       Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model SolutionPlan {
+  id                String      @id @default(uuid())
+  beneficiaryId     String
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  planData          Json        
+
+  beneficiary       Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
 }

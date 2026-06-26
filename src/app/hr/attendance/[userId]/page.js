@@ -25,6 +25,44 @@ export default function UserAttendanceDetails({ params }) {
   
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [checkInLocation, setCheckInLocation] = useState(null);
+  const [checkOutLocation, setCheckOutLocation] = useState(null);
+  const [isLocLoading, setIsLocLoading] = useState(false);
+  
+  useEffect(() => {
+    const fetchLocations = async () => {
+      if (!selectedDate) {
+        setCheckInLocation(null);
+        setCheckOutLocation(null);
+        return;
+      }
+      setIsLocLoading(true);
+      try {
+        if (selectedDate.checkInLat && selectedDate.checkInLng) {
+          const inRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedDate.checkInLat}&lon=${selectedDate.checkInLng}`);
+          const inData = await inRes.json();
+          setCheckInLocation(inData.display_name || "Unknown");
+        } else {
+          setCheckInLocation("Location not recorded");
+        }
+
+        if (selectedDate.checkOutLat && selectedDate.checkOutLng) {
+          const outRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedDate.checkOutLat}&lon=${selectedDate.checkOutLng}`);
+          const outData = await outRes.json();
+          setCheckOutLocation(outData.display_name || "Unknown");
+        } else {
+          setCheckOutLocation("Location not recorded");
+        }
+      } catch(e) {
+        console.error("Location fetch error", e);
+        setCheckInLocation("Failed to load");
+        setCheckOutLocation("Failed to load");
+      } finally {
+        setIsLocLoading(false);
+      }
+    };
+    fetchLocations();
+  }, [selectedDate]);
   
   useEffect(() => {
     if (token && userId) {
@@ -71,25 +109,10 @@ export default function UserAttendanceDetails({ params }) {
       else if (workStatusLower.includes("hol")) status = "holiday";
       else if (workStatusLower.includes("leav")) status = "leave";
       
-      let taskDetails = [];
-      try {
-        if (item.ef1) {
-          const parsed = JSON.parse(item.ef1);
-          if (Array.isArray(parsed)) {
-            taskDetails = parsed;
-          } else if (parsed.checklistItems && Array.isArray(parsed.checklistItems)) {
-            taskDetails = parsed.checklistItems.map(t => ({
-              ...t,
-              completed: t.completed || (parsed.checkoutData?.completedItems || []).includes(t.id)
-            }));
-          }
-        }
-      } catch (e) {}
-
       processed[dateKey] = {
         ...item,
         status,
-        taskDetails
+        taskDetails: item.taskDetails || []
       };
     });
     return processed;
@@ -149,7 +172,7 @@ export default function UserAttendanceDetails({ params }) {
         if (outMins !== null) { totalOutMins += outMins; outCount++; }
       } else {
         const dateObj = new Date(year, month, day);
-        const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+        const isWeekend = dateObj.getDay() === 0;
         if (isWeekend) {
           holidayDays++; // Count weekends as holidays
         } else if (day < calculationLimitDay) {
@@ -208,7 +231,15 @@ export default function UserAttendanceDetails({ params }) {
       const data = processedData[dateKey1] || processedData[dateKey2] || processedData[dateKey3];
       
       if (data) {
-        const tasks = Array.isArray(data.taskDetails) ? data.taskDetails.map(t => t.text).join('; ') : '';
+        const tasks = Array.isArray(data.taskDetails)
+          ? data.taskDetails.map(t => {
+              const statusStr = t.completed
+                ? `Completed${t.completionDate ? ` on ${new Date(t.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}`
+                : 'Pending';
+              const descPart = t.description ? ` - ${t.description}` : '';
+              return `${t.text}${descPart} (${statusStr})`;
+            }).join('; ')
+          : '';
         rows.push([
           dateKey1,
           data.status,
@@ -251,7 +282,7 @@ export default function UserAttendanceDetails({ params }) {
         doc.text(`Average Check-in: ${analytics.averageCheckInTime}`, 14, 54);
         doc.text(`Average Check-out: ${analytics.averageCheckOutTime}`, 14, 60);
 
-        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours'];
+        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Tasks'];
         const tableRows = [];
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         
@@ -265,15 +296,25 @@ export default function UserAttendanceDetails({ params }) {
           const data = processedData[dateKey1] || processedData[dateKey2] || processedData[dateKey3];
           
           if (data) {
+            const tasks = Array.isArray(data.taskDetails) && data.taskDetails.length > 0
+              ? data.taskDetails.map(t => {
+                  const statusStr = t.completed
+                    ? `Completed${t.completionDate ? ` on ${new Date(t.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}`
+                    : 'Pending';
+                  const descPart = t.description ? ` - ${t.description}` : '';
+                  return `• ${t.text}${descPart} (${statusStr})`;
+                }).join('\n')
+              : 'No tasks';
             tableRows.push([
               dateKey1,
               data.status,
               data.intimelog || 'N/A',
               data.outtimelog || 'N/A',
-              data.workhours || 'N/A'
+              data.workhours || 'N/A',
+              tasks
             ]);
           } else {
-            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A']);
+            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', '']);
           }
         }
 
@@ -414,7 +455,7 @@ export default function UserAttendanceDetails({ params }) {
               const isToday = `${todayYyyy}-${todayMm}-${todayDd}` === dateKey1;
               
               const dateObj = new Date(yyyy, currentDate.getMonth(), day);
-              const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+              const isWeekend = dateObj.getDay() === 0;
               const colorClass = dayData ? (statusColors[dayData.status] || statusColors.default) : (isWeekend ? statusColors.holiday : statusColors.default);
 
               return (
@@ -445,11 +486,24 @@ export default function UserAttendanceDetails({ params }) {
                       )}
                     </div>
                   )}
-                  {dayData && Array.isArray(dayData.taskDetails) && dayData.taskDetails.length > 0 && (
-                     <div className="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                       {dayData.taskDetails.length}
-                     </div>
-                  )}
+                  {dayData && Array.isArray(dayData.taskDetails) && dayData.taskDetails.length > 0 && (() => {
+                     const completed = dayData.taskDetails.filter(t => t.completed).length;
+                     const pending = dayData.taskDetails.length - completed;
+                     return (
+                       <div className="absolute top-2 left-2 flex gap-1">
+                         {pending > 0 && (
+                           <span className="bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm" title={`${pending} pending`}>
+                             {pending}P
+                           </span>
+                         )}
+                         {completed > 0 && (
+                           <span className="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm" title={`${completed} completed`}>
+                             {completed}C
+                           </span>
+                         )}
+                       </div>
+                     );
+                  })()}
                 </div>
               );
             })}
@@ -473,10 +527,12 @@ export default function UserAttendanceDetails({ params }) {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check In</p>
                 <p className="font-bold text-gray-800">{selectedDate.intimelog || 'N/A'}</p>
+                <p className="text-[10px] text-gray-500 mt-2 leading-tight" title={checkInLocation}>{isLocLoading ? 'Loading location...' : checkInLocation}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
                 <p className="font-bold text-gray-800">{selectedDate.outtimelog || 'N/A'}</p>
+                <p className="text-[10px] text-gray-500 mt-2 leading-tight" title={checkOutLocation}>{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg col-span-2 flex justify-between items-center">
                  <div>
@@ -500,7 +556,17 @@ export default function UserAttendanceDetails({ params }) {
                       <span className={`material-symbols-outlined text-[18px] ${task.completed ? 'text-emerald-500' : 'text-gray-400'}`}>
                         {task.completed ? 'check_circle' : 'radio_button_unchecked'}
                       </span>
-                      <span className={task.completed ? 'line-through text-gray-500' : 'text-gray-800'}>{task.text}</span>
+                      <div className="flex flex-col">
+                        <span className={task.completed ? 'line-through text-gray-500 font-normal' : 'text-gray-800 font-semibold'}>{task.text}</span>
+                        {task.description && (
+                          <span className="text-xs text-slate-500 mt-0.5">{task.description}</span>
+                        )}
+                        {task.completed && task.completionDate && (
+                          <span className="text-[10px] text-emerald-600 font-semibold mt-0.5">
+                            Completed on {new Date(task.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   ))
                 ) : (

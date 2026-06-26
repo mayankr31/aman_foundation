@@ -7,7 +7,7 @@ export async function POST(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

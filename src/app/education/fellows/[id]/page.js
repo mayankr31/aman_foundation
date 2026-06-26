@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import { useToast } from "@/context/ToastContext";
+import MonthlyPlanner from "@/components/MonthlyPlanner";
 
 export default function FellowProfileDetail() {
   const { id } = useParams();
@@ -362,7 +363,7 @@ export default function FellowProfileDetail() {
 
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Goals", "Performance Dashboard", "6-Month Progress Reviews"].map((tab) => {
+        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews"].map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -383,6 +384,9 @@ export default function FellowProfileDetail() {
       {/* Tab Contents */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
+          {activeTab === "Monthly Planner" && (
+            <MonthlyPlanner fellowId={fellow.id} />
+          )}
           {activeTab === "Goals" && (
             <div className="space-y-6">
               {/* Goals Tab Header */}
