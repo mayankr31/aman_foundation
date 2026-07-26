@@ -26,6 +26,7 @@ export default function ProfilePage() {
   // Fellow specific dashboard states
   const [goals, setGoals] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [coachingRecords, setCoachingRecords] = useState([]);
   const [activeTab, setActiveTab] = useState("Goals");
 
   // Goals modal/form state
@@ -87,6 +88,26 @@ export default function ProfilePage() {
       }
     }
   }, [token, isInitializing]);
+
+  useEffect(() => {
+    async function loadCoachingRecords() {
+      if (!profile?.fellow?.id || !token) return;
+      try {
+        const res = await fetch(`/api/fellows/${profile.fellow.id}/coaching`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (json.success) {
+          setCoachingRecords(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load coaching records:", err);
+      }
+    }
+    if (activeTab === "Coaching & Training") {
+      loadCoachingRecords();
+    }
+  }, [activeTab, token, profile]);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -422,15 +443,85 @@ export default function ProfilePage() {
               </button>
             </div>
           </form>
-        )}
-      </div>
+              )}
+
+              {activeTab === "Coaching & Training" && (
+                <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Training Records</h3>
+                  </div>
+                  <div className="space-y-6">
+                    {coachingRecords.length === 0 ? (
+                      <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                        No coaching or training records available yet.
+                      </div>
+                    ) : (
+                      coachingRecords.map((record) => (
+                        <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
+                          <div className="flex justify-between items-start mb-3">
+                            <div>
+                              <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
+                              <p className="text-xs text-on-surface-variant mt-1">
+                                {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                              </p>
+                            </div>
+                          </div>
+
+                          {record.feedback && (
+                            <div className="mb-4 p-4 bg-blue-50/50 rounded-lg border border-blue-100">
+                              <p className="text-xs uppercase tracking-widest text-blue-700 font-bold mb-2">Feedback</p>
+                              <p className="text-sm text-slate-700 leading-relaxed">{record.feedback}</p>
+                            </div>
+                          )}
+
+                          {record.observationNotes && (
+                            <div className="mb-4 p-4 bg-amber-50/50 rounded-lg border border-amber-100">
+                              <p className="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Observation Notes</p>
+                              <p className="text-sm text-slate-700 leading-relaxed">{record.observationNotes}</p>
+                            </div>
+                          )}
+
+                          {record.fileUrl && (
+                            <div className="mb-4">
+                              {/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(record.fileUrl) ? (
+                                <img
+                                  src={record.fileUrl}
+                                  alt={record.heading}
+                                  className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain cursor-pointer"
+                                  onClick={() => window.open(record.fileUrl, '_blank')}
+                                />
+                              ) : (
+                                <a
+                                  href={record.fileUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">attach_file</span>
+                                  {record.fileUrl.split("/").pop()}
+                                </a>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="text-xs text-slate-400 mt-3 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[14px]">person</span>
+                            Added by: <span className="font-semibold text-on-surface">{record.author?.name || "Unknown"}</span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
       {/* Render tab views for fellow role only */}
       {isFellow && (
         <>
           {/* Tabs */}
           <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-            {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews"].map((tab) => {
+            {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training"].map((tab) => {
               const isActive = activeTab === tab;
               return (
                 <button

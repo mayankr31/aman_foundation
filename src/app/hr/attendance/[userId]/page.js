@@ -574,6 +574,49 @@ export default function UserAttendanceDetails({ params }) {
                 )}
               </div>
             </div>
+
+            {(selectedDate.lessonPlanText || (Array.isArray(selectedDate.lessonPlanFiles) && selectedDate.lessonPlanFiles.length > 0)) && (
+              <div>
+                <h4 className="font-bold text-sm text-gray-800 mb-3">Daily Lesson Plan</h4>
+                <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 space-y-3">
+                  {selectedDate.lessonPlanText && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Plan Notes</p>
+                      <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{selectedDate.lessonPlanText}</p>
+                    </div>
+                  )}
+                  {Array.isArray(selectedDate.lessonPlanFiles) && selectedDate.lessonPlanFiles.length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Attached Files</p>
+                      <div className="space-y-2">
+                        {selectedDate.lessonPlanFiles.map((fileUrl, idx) => (
+                          /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileUrl) ? (
+                            <img
+                              key={idx}
+                              src={fileUrl}
+                              alt="Lesson plan attachment"
+                              className="max-w-full max-h-48 rounded-lg border border-gray-200 object-contain cursor-pointer"
+                              onClick={() => window.open(fileUrl, '_blank')}
+                            />
+                          ) : (
+                            <a
+                              key={idx}
+                              href={fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 text-sm text-blue-600 hover:underline bg-white px-3 py-1.5 rounded border border-gray-200"
+                            >
+                              <span className="material-symbols-outlined text-[16px]">description</span>
+                              {fileUrl.split("/").pop()}
+                            </a>
+                          )
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

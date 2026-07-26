@@ -260,6 +260,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   status: 'status',
   schoolId: 'schoolId',
   fellowId: 'fellowId',
+  beneficiaryId: 'beneficiaryId',
   isMigrated: 'isMigrated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -271,6 +272,9 @@ exports.Prisma.StudentSubjectMarkScalarFieldEnum = {
   subject: 'subject',
   score: 'score',
   grade: 'grade',
+  academicYear: 'academicYear',
+  academicGrade: 'academicGrade',
+  month: 'month',
   remarks: 'remarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -293,6 +297,77 @@ exports.Prisma.StudentAttendanceDayLogScalarFieldEnum = {
   date: 'date',
   status: 'status',
   note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LearningAssessmentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  schoolId: 'schoolId',
+  date: 'date',
+  canRead: 'canRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentHomeworkScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  schoolId: 'schoolId',
+  date: 'date',
+  homeworkStatus: 'homeworkStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentAssessmentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  assessmentName: 'assessmentName',
+  topic: 'topic',
+  totalMarks: 'totalMarks',
+  marksObtained: 'marksObtained',
+  academicYear: 'academicYear',
+  academicGrade: 'academicGrade',
+  month: 'month',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentTransitionScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  academicYear: 'academicYear',
+  month: 'month',
+  status: 'status',
+  description: 'description',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MigrationRecordScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  migrationType: 'migrationType',
+  destination: 'destination',
+  migrationDate: 'migrationDate',
+  expectedReturnDate: 'expectedReturnDate',
+  actualReturnDate: 'actualReturnDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.IncomeRecordScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  amount: 'amount',
+  incomeDate: 'incomeDate',
+  source: 'source',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -473,6 +548,42 @@ exports.Prisma.SugarcaneProgramScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LivelihoodProgramScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  type: 'type',
+  name: 'name',
+  description: 'description',
+  status: 'status',
+  totalTarget: 'totalTarget',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BeneficiaryLivelihoodScalarFieldEnum = {
+  id: 'id',
+  beneficiaryId: 'beneficiaryId',
+  programId: 'programId',
+  attributes: 'attributes',
+  notes: 'notes',
+  enrolledAt: 'enrolledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LivelihoodEventScalarFieldEnum = {
+  id: 'id',
+  livelihoodId: 'livelihoodId',
+  eventType: 'eventType',
+  eventDate: 'eventDate',
+  quantity: 'quantity',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  recordedBy: 'recordedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.DisasterIncidentScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -536,6 +647,8 @@ exports.Prisma.AttendanceLogScalarFieldEnum = {
   checkInLng: 'checkInLng',
   checkOutLat: 'checkOutLat',
   checkOutLng: 'checkOutLng',
+  lessonPlanText: 'lessonPlanText',
+  lessonPlanFiles: 'lessonPlanFiles',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -653,12 +766,58 @@ exports.Prisma.SolutionPlanScalarFieldEnum = {
   planData: 'planData'
 };
 
+exports.Prisma.CoachingRecordScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  heading: 'heading',
+  date: 'date',
+  feedback: 'feedback',
+  observationNotes: 'observationNotes',
+  fileUrl: 'fileUrl',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TravelRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  destination: 'destination',
+  purpose: 'purpose',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  expectedExpenses: 'expectedExpenses',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TravelExpenseScalarFieldEnum = {
+  id: 'id',
+  travelRequestId: 'travelRequestId',
+  actualExpense: 'actualExpense',
+  expenseDetails: 'expenseDetails',
+  receiptFiles: 'receiptFiles',
+  notes: 'notes',
+  submittedAt: 'submittedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
 };
 
 exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
@@ -695,10 +854,22 @@ exports.PermissionType = exports.$Enums.PermissionType = {
   DENY: 'DENY'
 };
 
+exports.LivelihoodCategory = exports.$Enums.LivelihoodCategory = {
+  FARM: 'FARM',
+  NON_FARM: 'NON_FARM'
+};
+
 exports.LeaveStatus = exports.$Enums.LeaveStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
+};
+
+exports.TravelStatus = exports.$Enums.TravelStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.Prisma.ModelName = {
@@ -716,6 +887,12 @@ exports.Prisma.ModelName = {
   StudentSubjectMark: 'StudentSubjectMark',
   StudentAttendanceLog: 'StudentAttendanceLog',
   StudentAttendanceDayLog: 'StudentAttendanceDayLog',
+  LearningAssessment: 'LearningAssessment',
+  StudentHomework: 'StudentHomework',
+  StudentAssessment: 'StudentAssessment',
+  StudentTransition: 'StudentTransition',
+  MigrationRecord: 'MigrationRecord',
+  IncomeRecord: 'IncomeRecord',
   FellowSchool: 'FellowSchool',
   Program: 'Program',
   SchoolProgram: 'SchoolProgram',
@@ -731,6 +908,9 @@ exports.Prisma.ModelName = {
   GoatRearingEvent: 'GoatRearingEvent',
   BeneficiarySugarcane: 'BeneficiarySugarcane',
   SugarcaneProgram: 'SugarcaneProgram',
+  LivelihoodProgram: 'LivelihoodProgram',
+  BeneficiaryLivelihood: 'BeneficiaryLivelihood',
+  LivelihoodEvent: 'LivelihoodEvent',
   DisasterIncident: 'DisasterIncident',
   HelpProvider: 'HelpProvider',
   ResourceItem: 'ResourceItem',
@@ -745,7 +925,10 @@ exports.Prisma.ModelName = {
   AbsorptiveCapacitySurvey: 'AbsorptiveCapacitySurvey',
   TransformativeCapacitySurvey: 'TransformativeCapacitySurvey',
   VulnerabilitySurvey: 'VulnerabilitySurvey',
-  SolutionPlan: 'SolutionPlan'
+  SolutionPlan: 'SolutionPlan',
+  CoachingRecord: 'CoachingRecord',
+  TravelRequest: 'TravelRequest',
+  TravelExpense: 'TravelExpense'
 };
 
 /**

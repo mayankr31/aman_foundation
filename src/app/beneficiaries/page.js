@@ -129,6 +129,7 @@ export default function BeneficiaryMasterDirectory() {
           schemes: programs
         })
       });
+      const json = await res.json();
         if (json.success) {
         // reload beneficiaries list
         const loadRes = await fetch("/api/beneficiaries", {
@@ -479,7 +480,7 @@ export default function BeneficiaryMasterDirectory() {
       {/* Add Beneficiary Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-surface-container pb-4">
               <div>
                 <h3 className="text-xl font-bold">Add New Beneficiary</h3>

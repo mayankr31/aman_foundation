@@ -38,6 +38,11 @@ export async function GET(req) {
             sugarcaneProgram: true
           }
         },
+        livelihoodDetails: {
+          include: {
+            program: true,
+          }
+        },
         _count: {
           select: { familyMembers: true, livestock: true }
         }

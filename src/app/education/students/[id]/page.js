@@ -62,11 +62,25 @@ export default function StudentProfileDetail() {
   const [schools, setSchools] = useState([]);
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [learningAssessments, setLearningAssessments] = useState([]);
+  const [homeworkRecords, setHomeworkRecords] = useState([]);
+  const [assessmentDateFilter, setAssessmentDateFilter] = useState("");
+  const [homeworkDateFilter, setHomeworkDateFilter] = useState("");
+  const [assessments, setAssessments] = useState([]);
+  const [transitions, setTransitions] = useState([]);
+  const [beneficiaries, setBeneficiaries] = useState([]);
+
+  const [academicYearFilter, setAcademicYearFilter] = useState("");
+  const [academicMonthFilter, setAcademicMonthFilter] = useState("");
 
   // Form states
   const [editForm, setEditForm] = useState({});
-  const [subjectForm, setSubjectForm] = useState({ subject: "", score: "", grade: "A+", remarks: "" });
+  const [transitionForm, setTransitionForm] = useState({ academicYear: "", month: "", status: "CONTINUING_EDUCATION", description: "", location: "" });
+  const [editTransitionId, setEditTransitionId] = useState(null);
+  const [subjectForm, setSubjectForm] = useState({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" });
   const [editSubjectId, setEditSubjectId] = useState(null);
+  const [assessmentForm, setAssessmentForm] = useState({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" });
+  const [editAssessmentId, setEditAssessmentId] = useState(null);
   const [attendanceYearFilter, setAttendanceYearFilter] = useState("All Years");
   const [attendanceMonthFilter, setAttendanceMonthFilter] = useState("All Months");
 
@@ -83,6 +97,11 @@ export default function StudentProfileDetail() {
         setStudent(json.data);
         setAttendanceLogs(json.data.attendanceLogs || []);
         setSubjects(json.data.subjectMarks || []);
+        setLearningAssessments(json.data.learningAssessments || []);
+        setHomeworkRecords(json.data.homeworkRecords || []);
+        setAssessments(json.data.assessments || []);
+        setTransitions(json.data.transitions || []);
+        if (json.data.beneficiary) setBeneficiaries([json.data.beneficiary]);
         setEditForm({
           name: json.data.name || "",
           studentId: json.data.studentId || "",
@@ -135,6 +154,13 @@ export default function StudentProfileDetail() {
     const res = await fetch(`/api/students/${id}/attendance`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
     const j = await res.json();
     if (j.success) setAttendanceLogs(j.data);
+  }, [id, token]);
+
+  // Fetch fresh assessments
+  const reloadAssessments = useCallback(async () => {
+    const res = await fetch(`/api/students/${id}/assessments`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    const j = await res.json();
+    if (j.success) setAssessments(j.data);
   }, [id, token]);
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
@@ -200,7 +226,7 @@ export default function StudentProfileDetail() {
         });
       }
       await reloadSubjects();
-      setSubjectForm({ subject: "", score: "", grade: "A+", remarks: "" });
+      setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" });
       setEditSubjectId(null);
     } finally { setSaving(false); }
   }
@@ -215,6 +241,107 @@ export default function StudentProfileDetail() {
     await reloadSubjects();
   }
 
+  async function handleAssessmentSave(e) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      if (editAssessmentId) {
+        await fetch(`/api/students/${id}/assessments`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ assessmentId: editAssessmentId, ...assessmentForm, totalMarks: parseFloat(assessmentForm.totalMarks), marksObtained: parseFloat(assessmentForm.marksObtained) })
+        });
+      } else {
+        await fetch(`/api/students/${id}/assessments`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ ...assessmentForm, totalMarks: parseFloat(assessmentForm.totalMarks), marksObtained: parseFloat(assessmentForm.marksObtained) })
+        });
+      }
+      await reloadAssessments();
+      setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" });
+      setEditAssessmentId(null);
+      setModal(null);
+    } finally { setSaving(false); }
+  }
+
+  async function handleDeleteAssessment(assessmentId) {
+    if (!confirm("Delete this assessment?")) return;
+    await fetch(`/api/students/${id}/assessments`, {
+      method: "DELETE",
+      headers: authHeaders(),
+      body: JSON.stringify({ assessmentId })
+    });
+    await reloadAssessments();
+  }
+
+  async function handleTransitionSave(e) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      if (editTransitionId) {
+        await fetch(`/api/students/${id}/transitions`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ transitionId: editTransitionId, ...transitionForm })
+        });
+      } else {
+        await fetch(`/api/students/${id}/transitions`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ ...transitionForm })
+        });
+      }
+      await reloadTransitions();
+      setTransitionForm({ academicYear: "", month: "", status: "CONTINUING_EDUCATION", description: "", location: "" });
+      setEditTransitionId(null);
+      setModal(null);
+    } finally { setSaving(false); }
+  }
+
+  async function handleDeleteTransition(transitionId) {
+    if (!confirm("Delete this transition record?")) return;
+    await fetch(`/api/students/${id}/transitions`, {
+      method: "DELETE",
+      headers: authHeaders(),
+      body: JSON.stringify({ transitionId })
+    });
+    await reloadTransitions();
+  }
+
+  async function handleLinkBeneficiary(beneficiaryId) {
+    await fetch(`/api/students/${id}`, {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify({ beneficiaryId })
+    });
+    await loadStudent();
+    setModal(null);
+  }
+
+  async function handleUnlinkBeneficiary() {
+    await fetch(`/api/students/${id}`, {
+      method: "PATCH",
+      headers: authHeaders(),
+      body: JSON.stringify({ beneficiaryId: null })
+    });
+    await loadStudent();
+    setBeneficiaries([]);
+  }
+
+  // Fetch fresh transitions
+  const reloadTransitions = useCallback(async () => {
+    const res = await fetch(`/api/students/${id}/transitions`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    const j = await res.json();
+    if (j.success) setTransitions(j.data);
+  }, [id, token]);
+
+  // Fetch beneficiaries for linking
+  const loadBeneficiaries = useCallback(async () => {
+    const res = await fetch("/api/beneficiaries", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    const j = await res.json();
+    if (j.success) setBeneficiaries(j.data);
+  }, [token]);
 
 
   if (isInitializing || loading) {
@@ -228,6 +355,29 @@ export default function StudentProfileDetail() {
   if (!student) {
     return <div className="p-8 text-center text-on-surface-variant font-medium">Student not found</div>;
   }
+
+  // Dropout risk calculation
+  const dropoutRisk = (() => {
+    const att = student.attendance || 0;
+    const completedHW = homeworkRecords.filter(h => h.homeworkStatus === "DONE").length;
+    const totalHW = homeworkRecords.filter(h => h.homeworkStatus !== "NO_HOMEWORK").length;
+    const hwRate = totalHW > 0 ? (completedHW / totalHW) * 100 : 100;
+    const canReadCount = learningAssessments.filter(a => a.canRead).length;
+    const totalLA = learningAssessments.length;
+
+    let risk = "Low";
+    let color = "bg-primary/10 text-primary";
+    let barColor = "bg-primary";
+    let reasons = [];
+    if (att < 35) { risk = "High"; color = "bg-error/10 text-error"; barColor = "bg-error"; reasons.push("Attendance below 35%"); }
+    else if (att < 60) { risk = "Medium"; color = "bg-yellow-500/10 text-yellow-600"; barColor = "bg-yellow-500"; reasons.push("Attendance below 60%"); }
+    const recentAtt = attendanceLogs.slice(0, 3);
+    if (recentAtt.length >= 2 && recentAtt.every(l => l.percentage < 50)) reasons.push("Declining recent attendance");
+    if (totalHW > 0 && hwRate < 50) reasons.push("Low homework completion");
+    if (totalLA > 3 && canReadCount < totalLA / 2) reasons.push("Reading difficulty");
+    if (reasons.length === 0) reasons.push("On track - keep it up");
+    return { risk, color, barColor, reasons, att, hwRate };
+  })();
 
   const name = student.name;
   // Dynamic fellows from school (if assigned)
@@ -252,6 +402,29 @@ export default function StudentProfileDetail() {
     const matchYear = attendanceYearFilter === "All Years" || y === attendanceYearFilter;
     const matchMonth = attendanceMonthFilter === "All Months" || log.month.toLowerCase().includes(attendanceMonthFilter.toLowerCase());
     return matchYear && matchMonth;
+  });
+
+  const academicMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const currentYear = new Date().getFullYear();
+  const academicYearOptions = [];
+  for (let y = currentYear; y >= currentYear - 5; y--) {
+    academicYearOptions.push(`${y - 1}-${y}`);
+  }
+
+  const filteredSubjects = subjects.filter(s => {
+    if (!academicYearFilter && !academicMonthFilter) return true;
+    let match = true;
+    if (academicYearFilter) match = match && s.academicYear === academicYearFilter;
+    if (academicMonthFilter) match = match && s.month === academicMonthFilter;
+    return match;
+  });
+
+  const filteredAssessments = assessments.filter(a => {
+    if (!academicYearFilter && !academicMonthFilter) return true;
+    let match = true;
+    if (academicYearFilter) match = match && a.academicYear === academicYearFilter;
+    if (academicMonthFilter) match = match && a.month === academicMonthFilter;
+    return match;
   });
 
   return (
@@ -356,54 +529,160 @@ export default function StudentProfileDetail() {
 
           {/* Academic Progress */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">analytics</span>
                 Academic Progress &amp; Report Card
               </h3>
-              <button
-                onClick={() => { setModal("academic"); setEditSubjectId(null); setSubjectForm({ subject: "", score: "", grade: "A+", remarks: "" }); }}
-                className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[16px]">add</span>
-                Add Subject
-              </button>
             </div>
-            <div className="space-y-4">
-              {subjects.length === 0 && (
-                <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No subject records yet.</p>
-              )}
-              {subjects.map((sub) => (
-                <div key={sub.id} className="p-4 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4 group">
-                  <div className="flex-1">
-                    <h4 className="font-bold text-on-surface text-base">{sub.subject}</h4>
-                    <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">{sub.remarks || "No remarks."}</p>
-                  </div>
-                  <div className="flex items-center gap-4 self-end md:self-auto shrink-0 font-sans">
-                    <div className="text-right">
-                      <p className="text-xs text-on-surface-variant font-medium">Score</p>
-                      <p className="font-bold text-on-surface">{sub.score} / 100</p>
-                    </div>
-                    <span className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${gradeColor(sub.grade)}`}>
-                      {sub.grade}
-                    </span>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+
+            {/* Filters */}
+            <div className="flex flex-wrap items-end gap-3 mb-6 pb-4 border-b border-outline-variant/20">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Academic Year</label>
+                <select value={academicYearFilter} onChange={(e) => setAcademicYearFilter(e.target.value)}
+                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+                  <option value="">All Years</option>
+                  {academicYearOptions.map(y => <option key={y} value={y}>{y}</option>)}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Month</label>
+                <select value={academicMonthFilter} onChange={(e) => setAcademicMonthFilter(e.target.value)}
+                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+                  <option value="">All Months</option>
+                  {academicMonths.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+              <div className="flex gap-2 ml-auto">
+                {(() => {
+                  const now = new Date();
+                  const defMonth = now.toLocaleString('en-US', { month: 'short' });
+                  const defYear = now.getFullYear();
+                  const defAcademicYear = `${defYear - 1}-${defYear}`;
+                  const defGrade = student.grade ? `Grade ${student.grade}` : "";
+                  return (
+                    <>
                       <button
-                        onClick={() => { setEditSubjectId(sub.id); setSubjectForm({ subject: sub.subject, score: sub.score, grade: sub.grade, remarks: sub.remarks || "" }); setModal("academic"); }}
-                        className="p-1.5 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
+                        onClick={() => {
+                          setModal("academic"); setEditSubjectId(null);
+                          setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: defAcademicYear, academicGrade: defGrade, month: defMonth, remarks: "" });
+                        }}
+                        className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
                       >
-                        <span className="material-symbols-outlined text-[16px]">edit</span>
+                        <span className="material-symbols-outlined text-[16px]">add</span>
+                        Add Subject
                       </button>
                       <button
-                        onClick={() => handleDeleteSubject(sub.id)}
-                        className="p-1.5 hover:bg-error-container rounded-full cursor-pointer text-error"
+                        onClick={() => {
+                          setModal("assessment"); setEditAssessmentId(null);
+                          setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: defAcademicYear, academicGrade: defGrade, month: defMonth, remarks: "" });
+                        }}
+                        className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
                       >
-                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                        <span className="material-symbols-outlined text-[16px]">add</span>
+                        Add Assessment
                       </button>
+                    </>
+                  );
+                })()}
+            </div>
+            </div>
+
+            {/* Subject Marks */}
+            <div className="mb-6">
+              <h4 className="font-headline font-bold text-sm text-on-surface mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px] text-primary">book_4</span>
+                Subject Marks {filteredSubjects.length > 0 && `(${filteredSubjects.length})`}
+              </h4>
+              {filteredSubjects.length === 0 ? (
+                <p className="text-center py-4 text-on-surface-variant font-sans text-xs">No subject records for this period.</p>
+              ) : (
+                <div className="space-y-2 max-h-[320px] overflow-y-auto">
+                  {filteredSubjects.map((sub) => (
+                    <div key={sub.id} className="p-3 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2 group">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-bold text-on-surface text-sm">{sub.subject}</h4>
+                          {sub.academicYear && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{sub.academicYear}</span>}
+                          {sub.month && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{sub.month}</span>}
+                        </div>
+                        {sub.remarks && <p className="text-xs text-on-surface-variant mt-1">{sub.remarks}</p>}
+                      </div>
+                      <div className="flex items-center gap-3 self-end md:self-auto shrink-0 font-sans">
+                        <div className="text-right">
+                          <p className="text-xs text-on-surface-variant font-medium">{sub.score} / 100</p>
+                        </div>
+                        <span className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${gradeColor(sub.grade)}`}>
+                          {sub.grade}
+                        </span>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => { setEditSubjectId(sub.id); setSubjectForm({ subject: sub.subject, score: sub.score, grade: sub.grade, academicYear: sub.academicYear || "", academicGrade: sub.academicGrade || "", month: sub.month || "", remarks: sub.remarks || "" }); setModal("academic"); }}
+                            className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSubject(sub.id)}
+                            className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              )}
+            </div>
+
+            {/* Assessments */}
+            <div>
+              <h4 className="font-headline font-bold text-sm text-on-surface mb-3 flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px] text-secondary">quiz</span>
+                Assessments {filteredAssessments.length > 0 && `(${filteredAssessments.length})`}
+              </h4>
+              {filteredAssessments.length === 0 ? (
+                <p className="text-center py-4 text-on-surface-variant font-sans text-xs">No assessments for this period.</p>
+              ) : (
+                <div className="space-y-2 max-h-[320px] overflow-y-auto">
+                  {filteredAssessments.map((asmt) => (
+                    <div key={asmt.id} className="p-3 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2 group">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-bold text-on-surface text-sm">{asmt.assessmentName}</h4>
+                          <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{asmt.topic}</span>
+                          {asmt.month && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{asmt.month}</span>}
+                        </div>
+                        {asmt.remarks && <p className="text-xs text-on-surface-variant mt-1">{asmt.remarks}</p>}
+                      </div>
+                      <div className="flex items-center gap-3 self-end md:self-auto shrink-0 font-sans">
+                        <div className="text-right">
+                          <p className="text-xs text-on-surface-variant font-medium">{asmt.marksObtained} / {asmt.totalMarks}</p>
+                          <div className="w-20 h-1.5 bg-surface-container rounded-full overflow-hidden mt-1">
+                            <div className="bg-secondary h-full rounded-full" style={{ width: `${asmt.totalMarks > 0 ? Math.min(100, (asmt.marksObtained / asmt.totalMarks) * 100) : 0}%` }}></div>
+                          </div>
+                        </div>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => { setEditAssessmentId(asmt.id); setAssessmentForm({ assessmentName: asmt.assessmentName, topic: asmt.topic, totalMarks: asmt.totalMarks, marksObtained: asmt.marksObtained, academicYear: asmt.academicYear || "", academicGrade: asmt.academicGrade || "", month: asmt.month || "", remarks: asmt.remarks || "" }); setModal("assessment"); }}
+                            className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAssessment(asmt.id)}
+                            className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -455,6 +734,29 @@ export default function StudentProfileDetail() {
             </div>
           </div>
 
+          {/* Dropout Risk */}
+          <div className={`bg-surface-container-lowest rounded-xl p-6 shadow-ambient border ${dropoutRisk.risk === "High" ? "border-error/30" : dropoutRisk.risk === "Medium" ? "border-yellow-500/30" : "border-outline-variant/10"}`}>
+            <h3 className="font-headline font-bold text-base text-on-surface mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">warning</span>
+              Dropout Risk
+            </h3>
+            <div className="space-y-3 font-sans text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-on-surface-variant">Risk Level</span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${dropoutRisk.color}`}>{dropoutRisk.risk}</span>
+              </div>
+              <div className="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full transition-all ${dropoutRisk.barColor}`} style={{ width: `${Math.max(dropoutRisk.att, 5)}%` }}></div>
+              </div>
+              <p className="text-xs text-on-surface-variant">Attendance: {dropoutRisk.att}%</p>
+              <ul className="text-xs text-on-surface-variant space-y-1 list-disc pl-4">
+                {dropoutRisk.reasons.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
           {/* Program Linkages */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-6 flex items-center gap-2">
@@ -497,7 +799,179 @@ export default function StudentProfileDetail() {
                   </span>
                 )}
               </div>
+
+              <div className="p-4 bg-surface rounded-lg">
+                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Beneficiary Family</p>
+                {student.beneficiary ? (
+                  <div className="flex items-center justify-between">
+                    <Link href={`/beneficiaries/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
+                      {student.beneficiary.name}
+                    </Link>
+                    <button onClick={() => handleUnlinkBeneficiary()}
+                      className="text-error hover:underline text-xs font-medium cursor-pointer">Unlink</button>
+                  </div>
+                ) : (
+                  <button onClick={() => { setModal("linkBeneficiary"); setSearchQ(""); loadBeneficiaries(); }}
+                    className="text-primary text-xs font-medium hover:underline cursor-pointer">
+                    + Link to Beneficiary
+                  </button>
+                )}
+              </div>
             </div>
+          </div>
+
+          {/* Learning Assessment History */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">menu_book</span>
+                Learning Assessment History
+              </h3>
+              <input
+                type="date"
+                value={assessmentDateFilter}
+                onChange={(e) => setAssessmentDateFilter(e.target.value)}
+                className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-xs focus:outline-none focus:border-primary"
+              />
+            </div>
+            {learningAssessments.length === 0 ? (
+              <p className="text-center py-4 text-on-surface-variant text-xs">No learning assessments recorded yet.</p>
+            ) : (
+              <div className="space-y-2 max-h-64 overflow-y-auto font-sans text-sm">
+                {learningAssessments
+                  .filter(a => {
+                    if (!assessmentDateFilter) return true;
+                    const d = new Date(a.date);
+                    const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                    return localStr === assessmentDateFilter;
+                  })
+                  .map(assess => (
+                  <div key={assess.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
+                    <span className="text-on-surface-variant text-xs">
+                      {new Date(assess.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </span>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${assess.canRead ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}`}>
+                      {assess.canRead ? "Can Read" : "Cannot Read"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Homework History */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">assignment</span>
+                Homework History
+              </h3>
+              <input
+                type="date"
+                value={homeworkDateFilter}
+                onChange={(e) => setHomeworkDateFilter(e.target.value)}
+                className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-xs focus:outline-none focus:border-primary"
+              />
+            </div>
+            {homeworkRecords.length === 0 ? (
+              <p className="text-center py-4 text-on-surface-variant text-xs">No homework records yet.</p>
+            ) : (
+              <div className="space-y-2 max-h-64 overflow-y-auto font-sans text-sm">
+                {homeworkRecords
+                  .filter(h => {
+                    if (!homeworkDateFilter) return true;
+                    const d = new Date(h.date);
+                    const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                    return localStr === homeworkDateFilter;
+                  })
+                  .map(hw => {
+                  const statusColors = {
+                    DONE: "bg-primary/10 text-primary",
+                    NOT_DONE: "bg-error/10 text-error",
+                    NO_HOMEWORK: "bg-surface-container text-on-surface-variant"
+                  };
+                  const statusLabels = { DONE: "Done", NOT_DONE: "Not Done", NO_HOMEWORK: "No HW" };
+                  return (
+                    <div key={hw.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
+                      <span className="text-on-surface-variant text-xs">
+                        {new Date(hw.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColors[hw.homeworkStatus] || 'bg-surface-container text-on-surface-variant'}`}>
+                        {statusLabels[hw.homeworkStatus] || hw.homeworkStatus}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* School Transition History */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">trending_up</span>
+                School Transition History
+              </h3>
+              <button
+                onClick={() => {
+                  const now = new Date();
+                  setModal("transition"); setEditTransitionId(null);
+                  setTransitionForm({ academicYear: `${now.getFullYear() - 1}-${now.getFullYear()}`, month: now.toLocaleString('en-US', { month: 'short' }), status: "CONTINUING_EDUCATION", description: "", location: "" });
+                }}
+                className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[14px]">add</span>
+                Add
+              </button>
+            </div>
+            {transitions.length === 0 ? (
+              <p className="text-center py-4 text-on-surface-variant text-xs">No transition records yet.</p>
+            ) : (
+              <div className="space-y-2 max-h-64 overflow-y-auto font-sans text-sm">
+                {transitions.map(t => {
+                  const statusColors = {
+                    CONTINUING_EDUCATION: "bg-primary/10 text-primary",
+                    ENROLLED_COLLEGE: "bg-secondary/10 text-secondary",
+                    WORKING: "bg-tertiary/10 text-tertiary",
+                    DROPOUT: "bg-error/10 text-error",
+                    OTHER: "bg-surface-container text-on-surface-variant"
+                  };
+                  const statusLabels = {
+                    CONTINUING_EDUCATION: "Continuing Education",
+                    ENROLLED_COLLEGE: "Enrolled in College",
+                    WORKING: "Working",
+                    DROPOUT: "Dropout",
+                    OTHER: "Other"
+                  };
+                  return (
+                    <div key={t.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColors[t.status] || 'bg-surface-container text-on-surface-variant'}`}>
+                            {statusLabels[t.status] || t.status}
+                          </span>
+                          <span className="text-xs text-on-surface-variant">{t.month} {t.academicYear}</span>
+                        </div>
+                        {(t.description || t.location) && (
+                          <p className="text-xs text-on-surface-variant mt-0.5 truncate">{[t.description, t.location].filter(Boolean).join(' — ')}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-1 ml-2 shrink-0">
+                        <button onClick={() => { setEditTransitionId(t.id); setTransitionForm({ academicYear: t.academicYear || "", month: t.month || "", status: t.status, description: t.description || "", location: t.location || "" }); setModal("transition"); }}
+                          className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
+                          <span className="material-symbols-outlined text-[14px]">edit</span>
+                        </button>
+                        <button onClick={() => handleDeleteTransition(t.id)}
+                          className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                          <span className="material-symbols-outlined text-[14px]">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -564,9 +1038,19 @@ export default function StudentProfileDetail() {
 
       {/* Academic Progress Modal */}
       {modal === "academic" && (
-        <Modal title={editSubjectId ? "Edit Subject Mark" : "Add Subject Mark"} onClose={() => { setModal(null); setEditSubjectId(null); setSubjectForm({ subject: "", score: "", grade: "A+", remarks: "" }); }}>
+        <Modal title={editSubjectId ? "Edit Subject Mark" : "Add Subject Mark"} onClose={() => { setModal(null); setEditSubjectId(null); setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" }); }}>
           <form onSubmit={handleSubjectSave} className="space-y-4">
             <InputField label="Subject" name="subject" value={subjectForm.subject} onChange={e => setSubjectForm(f => ({ ...f, subject: e.target.value }))} required />
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Academic Grade</label>
+                <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                  {student.grade ? `${student.grade}` : "—"}
+                </span>
+              </div>
+              <InputField label="Academic Year" name="academicYear" value={subjectForm.academicYear} onChange={e => setSubjectForm(f => ({ ...f, academicYear: e.target.value }))} options={["", ...academicYearOptions]} />
+              <InputField label="Month" name="month" value={subjectForm.month} onChange={e => setSubjectForm(f => ({ ...f, month: e.target.value }))} options={["", ...academicMonths]} />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <InputField label="Score (out of 100)" name="score" type="number" value={subjectForm.score} onChange={e => setSubjectForm(f => ({ ...f, score: e.target.value }))} required />
               <InputField label="Grade" name="grade" value={subjectForm.grade} onChange={e => setSubjectForm(f => ({ ...f, grade: e.target.value }))} options={["A+", "A", "B+", "B", "C+", "C", "D", "F"]} />
@@ -582,6 +1066,91 @@ export default function StudentProfileDetail() {
               </button>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {/* Assessment Modal */}
+      {modal === "assessment" && (
+        <Modal title={editAssessmentId ? "Edit Assessment" : "Add Assessment"} onClose={() => { setModal(null); setEditAssessmentId(null); setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" }); }}>
+          <form onSubmit={handleAssessmentSave} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <InputField label="Assessment Name" name="assessmentName" value={assessmentForm.assessmentName} onChange={e => setAssessmentForm(f => ({ ...f, assessmentName: e.target.value }))} required />
+              <InputField label="Topic" name="topic" value={assessmentForm.topic} onChange={e => setAssessmentForm(f => ({ ...f, topic: e.target.value }))} required />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Academic Grade</label>
+                <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                  {student.grade ? `${student.grade}` : "—"}
+                </span>
+              </div>
+              <InputField label="Academic Year" name="academicYear" value={assessmentForm.academicYear} onChange={e => setAssessmentForm(f => ({ ...f, academicYear: e.target.value }))} options={["", ...academicYearOptions]} />
+              <InputField label="Month" name="month" value={assessmentForm.month} onChange={e => setAssessmentForm(f => ({ ...f, month: e.target.value }))} options={["", ...academicMonths]} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <InputField label="Total Marks" name="totalMarks" type="number" value={assessmentForm.totalMarks} onChange={e => setAssessmentForm(f => ({ ...f, totalMarks: e.target.value }))} required />
+              <InputField label="Marks Obtained" name="marksObtained" type="number" value={assessmentForm.marksObtained} onChange={e => setAssessmentForm(f => ({ ...f, marksObtained: e.target.value }))} required />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Remarks</label>
+              <textarea rows="3" value={assessmentForm.remarks} onChange={e => setAssessmentForm(f => ({ ...f, remarks: e.target.value }))} className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => { setModal(null); setEditAssessmentId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                {saving ? "Saving..." : editAssessmentId ? "Update" : "Add Assessment"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Transition Modal */}
+      {modal === "transition" && (
+        <Modal title={editTransitionId ? "Edit Transition" : "Add Transition Record"} onClose={() => { setModal(null); setEditTransitionId(null); setTransitionForm({ academicYear: "", month: "", status: "CONTINUING_EDUCATION", description: "", location: "" }); }}>
+          <form onSubmit={handleTransitionSave} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <InputField label="Academic Year" name="academicYear" value={transitionForm.academicYear} onChange={e => setTransitionForm(f => ({ ...f, academicYear: e.target.value }))} options={["", ...academicYearOptions]} />
+              <InputField label="Month" name="month" value={transitionForm.month} onChange={e => setTransitionForm(f => ({ ...f, month: e.target.value }))} options={["", ...academicMonths]} />
+            </div>
+            <InputField label="Status" name="status" value={transitionForm.status} onChange={e => setTransitionForm(f => ({ ...f, status: e.target.value }))}
+              options={["CONTINUING_EDUCATION", "ENROLLED_COLLEGE", "WORKING", "DROPOUT", "OTHER"]} />
+            {transitionForm.status === "OTHER" && (
+              <InputField label="Describe (Other)" name="description" value={transitionForm.description} onChange={e => setTransitionForm(f => ({ ...f, description: e.target.value }))} />
+            )}
+            {transitionForm.status !== "OTHER" && (
+              <InputField label="Description" name="description" value={transitionForm.description} onChange={e => setTransitionForm(f => ({ ...f, description: e.target.value }))} />
+            )}
+            <InputField label="Location" name="location" value={transitionForm.location} onChange={e => setTransitionForm(f => ({ ...f, location: e.target.value }))} />
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => { setModal(null); setEditTransitionId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                {saving ? "Saving..." : editTransitionId ? "Update" : "Add Transition"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {/* Link Beneficiary Modal */}
+      {modal === "linkBeneficiary" && (
+        <Modal title="Link to Beneficiary" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Search and select a beneficiary to link this student to.</p>
+          <input type="text" placeholder="Search beneficiaries..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-72 overflow-y-auto">
+            {beneficiaries
+              .filter(b => b.name.toLowerCase().includes(searchQ.toLowerCase()) || b.enrolmentId?.includes(searchQ))
+              .map(b => (
+                <button key={b.id}
+                  onClick={() => handleLinkBeneficiary(b.id)}
+                  className="w-full text-left p-3 rounded-lg border border-outline-variant hover:bg-surface-container transition-colors cursor-pointer text-sm font-sans"
+                >
+                  <span className="font-semibold text-on-surface">{b.name}</span>
+                  <span className="text-xs text-on-surface-variant ml-2">{b.enrolmentId}</span>
+                </button>
+              ))}
+          </div>
         </Modal>
       )}
 

@@ -11,6 +11,7 @@ export default function BeneficiaryProfileDetail() {
   const { id } = useParams();
 
   const { token, isInitializing } = useAuth();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState("Program History");
   const [beneficiary, setBeneficiary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ export default function BeneficiaryProfileDetail() {
   // Edit modal states
   const [showEditModal, setShowEditModal] = useState(false);
   const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [editTab, setEditTab] = useState("Personal");
 
   // Form states matching database schema
@@ -59,6 +61,26 @@ export default function BeneficiaryProfileDetail() {
   const [transformativeSurveys, setTransformativeSurveys] = useState([]);
   const [vulnerabilitySurveys, setVulnerabilitySurveys] = useState([]);
   const [solutionPlans, setSolutionPlans] = useState([]);
+
+  // Migration History
+  const [migrationRecords, setMigrationRecords] = useState([]);
+  const [showMigrationModal, setShowMigrationModal] = useState(false);
+  const [migrationForm, setMigrationForm] = useState({ migrationType: "SEASONAL", destination: "", migrationDate: "", expectedReturnDate: "", actualReturnDate: "", notes: "" });
+  const [editMigrationId, setEditMigrationId] = useState(null);
+
+  // Income Tracking
+  const [incomeRecords, setIncomeRecords] = useState([]);
+  const [showIncomeModal, setShowIncomeModal] = useState(false);
+  const [incomeForm, setIncomeForm] = useState({ amount: "", incomeDate: "", source: "", notes: "" });
+  const [incomeOtherSource, setIncomeOtherSource] = useState("");
+  const [editIncomeId, setEditIncomeId] = useState(null);
+
+  // Link Students
+  const [showLinkStudentModal, setShowLinkStudentModal] = useState(false);
+  const [studentSearch, setStudentSearch] = useState("");
+  const [allStudents, setAllStudents] = useState([]);
+  const [studentSearchLoading, setStudentSearchLoading] = useState(false);
+
   // Removed singular scheme states as assignments are now handled in Program Details
 
   const loadBeneficiaryDetail = async () => {
@@ -115,6 +137,16 @@ export default function BeneficiaryProfileDetail() {
           healthStatus: l.healthStatus || "Healthy"
         })));
 
+        setMigrationRecords(b.migrationRecords || []);
+
+        const incomeRes = await fetch(`/api/beneficiaries/${id}/income`, { headers });
+        if (incomeRes.ok) {
+          const incomeData = await incomeRes.json();
+          if (incomeData.success) {
+            setIncomeRecords(incomeData.data);
+          }
+        }
+
         // Fetch Resilience Surveys
         const resilienceRes = await fetch(`/api/beneficiaries/${id}/resilience-surveys`, { headers });
         if (resilienceRes.ok) {
@@ -123,7 +155,7 @@ export default function BeneficiaryProfileDetail() {
             setSurveys(resilienceData.data);
           }
         }
-        
+
         // Fetch Adaptive Capacity Surveys
         const adaptiveRes = await fetch(`/api/beneficiaries/${id}/adaptive-surveys`, { headers });
         if (adaptiveRes.ok) {
@@ -257,6 +289,221 @@ export default function BeneficiaryProfileDetail() {
     }
   };
 
+  const handleDeleteBeneficiary = async () => {
+    try {
+      const res = await fetch(`/api/beneficiaries/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success("Beneficiary deleted successfully.");
+        window.location.href = "/beneficiaries";
+      } else {
+        alert(json.error || "Failed to delete beneficiary");
+      }
+    } catch (err) {
+      console.error("Delete beneficiary error:", err);
+    } finally {
+      setShowConfirmDelete(false);
+    }
+  };
+
+  const handleOpenMigrationForm = (record = null) => {
+    if (record) {
+      setEditMigrationId(record.id);
+      setMigrationForm({
+        migrationType: record.migrationType || "SEASONAL",
+        destination: record.destination || "",
+        migrationDate: record.migrationDate ? record.migrationDate.split("T")[0] : "",
+        expectedReturnDate: record.expectedReturnDate ? record.expectedReturnDate.split("T")[0] : "",
+        actualReturnDate: record.actualReturnDate ? record.actualReturnDate.split("T")[0] : "",
+        notes: record.notes || ""
+      });
+    } else {
+      setEditMigrationId(null);
+      setMigrationForm({ migrationType: "SEASONAL", destination: "", migrationDate: "", expectedReturnDate: "", actualReturnDate: "", notes: "" });
+    }
+    setShowMigrationModal(true);
+  };
+
+  const handleCloseMigrationForm = () => {
+    setShowMigrationModal(false);
+    setEditMigrationId(null);
+  };
+
+  const handleMigrationSave = async (e) => {
+    e.preventDefault();
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const url = editMigrationId
+        ? `/api/beneficiaries/${id}/migrations/${editMigrationId}`
+        : `/api/beneficiaries/${id}/migrations`;
+      const method = editMigrationId ? "PUT" : "POST";
+
+      const res = await fetch(url, { method, headers, body: JSON.stringify(migrationForm) });
+      const json = await res.json();
+      if (json.success) {
+        handleCloseMigrationForm();
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to save migration record");
+      }
+    } catch (err) {
+      console.error("Migration save error:", err);
+    }
+  };
+
+  const handleDeleteMigration = async (recordId) => {
+    if (!confirm("Are you sure you want to delete this migration record?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`/api/beneficiaries/${id}/migrations/${recordId}`, { method: "DELETE", headers });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to delete migration record");
+      }
+    } catch (err) {
+      console.error("Delete migration error:", err);
+    }
+  };
+
+  const handleOpenIncomeForm = (record = null) => {
+    if (record) {
+      setEditIncomeId(record.id);
+      const knownSources = ["Agriculture", "Livestock", "Daily Wage", "Small Business", "Remittance"];
+      const isCustomSource = record.source && !knownSources.includes(record.source);
+      setIncomeForm({
+        amount: record.amount || "",
+        incomeDate: record.incomeDate ? record.incomeDate.split("T")[0] : "",
+        source: isCustomSource ? "Other" : (record.source || ""),
+        notes: record.notes || ""
+      });
+      setIncomeOtherSource(isCustomSource ? (record.source || "") : "");
+    } else {
+      setEditIncomeId(null);
+      setIncomeForm({ amount: "", incomeDate: "", source: "", notes: "" });
+      setIncomeOtherSource("");
+    }
+    setShowIncomeModal(true);
+  };
+
+  const handleCloseIncomeForm = () => {
+    setShowIncomeModal(false);
+    setEditIncomeId(null);
+    setIncomeOtherSource("");
+  };
+
+  const handleIncomeSave = async (e) => {
+    e.preventDefault();
+    if (!incomeForm.amount || !incomeForm.incomeDate) {
+      alert("Amount and Date are required.");
+      return;
+    }
+    const resolvedSource = incomeForm.source === "Other" ? (incomeOtherSource.trim() || "Other") : incomeForm.source;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const url = `/api/beneficiaries/${id}/income`;
+      const method = "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify({ ...incomeForm, source: resolvedSource })
+      });
+      const json = await res.json();
+      if (json.success) {
+        handleCloseIncomeForm();
+        loadBeneficiaryDetail();
+        toast.success("Income record saved successfully.");
+      } else {
+        alert(json.error || "Failed to save income record");
+      }
+    } catch (err) {
+      console.error("Income save error:", err);
+    }
+  };
+
+  const handleDeleteIncome = async (recordId) => {
+    if (!confirm("Are you sure you want to delete this income record?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`/api/beneficiaries/${id}/income`, {
+        method: "DELETE",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ recordId })
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+        toast.success("Income record deleted.");
+      } else {
+        alert(json.error || "Failed to delete income record");
+      }
+    } catch (err) {
+      console.error("Delete income error:", err);
+    }
+  };
+
+  const handleStudentSearch = async (query) => {
+    setStudentSearch(query);
+    setStudentSearchLoading(true);
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const url = `/api/students${query ? `?search=${encodeURIComponent(query)}` : ""}`;
+      const res = await fetch(url, { headers });
+      const json = await res.json();
+      if (json.success) {
+        setAllStudents(json.data || []);
+      }
+    } catch (err) {
+      console.error("Student search error:", err);
+    } finally {
+      setStudentSearchLoading(false);
+    }
+  };
+
+  const handleLinkStudent = async (studentId) => {
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/students/${studentId}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ beneficiaryId: id })
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to link student");
+      }
+    } catch (err) {
+      console.error("Link student error:", err);
+    }
+  };
+
+  const handleUnlinkStudent = async (studentId) => {
+    if (!confirm("Are you sure you want to unlink this student?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/students/${studentId}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ beneficiaryId: null })
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to unlink student");
+      }
+    } catch (err) {
+      console.error("Unlink student error:", err);
+    }
+  };
+
   const addFamilyMemberRow = () => {
     setFamilyMembers([...familyMembers, { name: "", relation: "Spouse", dob: "", contactInfo: "" }]);
   };
@@ -362,6 +609,13 @@ export default function BeneficiaryProfileDetail() {
           <button className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-body-md font-medium shadow-glow hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border-none">
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Data
+          </button>
+          <button
+            onClick={() => setShowConfirmDelete(true)}
+            className="bg-error-container text-on-error-container px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
+          >
+            <span className="material-symbols-outlined text-[18px]">delete</span>
+            Delete
           </button>
         </div>
       </header>
@@ -487,8 +741,15 @@ export default function BeneficiaryProfileDetail() {
 
         {/* Tabs Navigation */}
         <div className="lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest flex overflow-x-auto no-scrollbar font-sans">
-          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Resilience KYR Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning"].map((tab) => {
+          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Income Tracking", "Resilience KYR Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning", "Migration History"].map((tab) => {
             const isActive = activeTab === tab;
+            const tabLabel = tab === "Family Directory" && beneficiary.familyMembers?.length
+              ? `Family Directory (${beneficiary.familyMembers.length})`
+              : tab === "Migration History"
+                ? `Migration History (${migrationRecords.length})`
+                : tab === "Income Tracking"
+                  ? `Income Tracking (${incomeRecords.length})`
+                  : tab;
             return (
               <button
                 key={tab}
@@ -497,7 +758,7 @@ export default function BeneficiaryProfileDetail() {
                   isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
                 }`}
               >
-                {tab}
+                {tabLabel}
               </button>
             );
           })}
@@ -515,168 +776,129 @@ export default function BeneficiaryProfileDetail() {
                 </div>
               </div>
 
-              {/* Enrolled Schemes Logs */}
+              {/* Active Scheme Enrollments */}
               <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 font-sans">
                 <h3 className="text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">history</span>
-                  Active Scheme Enrollments
+                  Active Livelihood Programs
                 </h3>
-                <div className="relative pl-6 space-y-8 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container-highest">
-                  
-                  {isGoatEnrolled && (
-                    <div className="relative">
-                      <div className="absolute -left-[30px] top-1 w-4 h-4 rounded-full bg-primary ring-4 ring-surface-container-lowest z-10 shadow-glow"></div>
-                      <div className="bg-surface p-5 rounded-lg border border-surface-container-high">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h4 className="font-bold text-on-surface text-base">Goat Rearing Development</h4>
-                            <p className="text-xs text-on-surface-variant mt-1">
-                              Enrolled on: {new Date(beneficiary.schemeEnrollments.find(se => se.scheme.name === "Goat Rearing")?.enrolledAt).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">
-                            Active
-                          </span>
-                        </div>
-                        
-                        {beneficiary.goatRearingDetails && beneficiary.goatRearingDetails.length > 0 ? (
-                          <div className="space-y-4 mt-4">
-                            {beneficiary.goatRearingDetails.map((detail, idx) => (
-                              <div key={detail.id || idx} className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 text-xs p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/10">
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Program Linkage</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.goatRearingProgram?.name || "Unassigned"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Goats Assigned</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.goatsAssigned} Animals</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Investment Value</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">₹{detail.investment?.toLocaleString() || "N/A"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Cumulative Returns</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">₹{detail.returnsAmount?.toLocaleString() || "N/A"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">ROI</p>
-                                  <p className="text-primary font-bold text-sm mt-1">{detail.roiPercentage !== null ? `${detail.roiPercentage}%` : "N/A"}</p>
-                                </div>
-                                <div className="col-span-2 sm:col-span-4 lg:col-span-5 mt-2 border-t border-surface-container-high pt-2">
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Advantages Logged</p>
-                                  <p className="text-on-surface-variant font-medium mt-1 leading-relaxed">{detail.advantagesLog || "No advantages logged yet."}</p>
-                                </div>
-                                {detail.events && detail.events.length > 0 && (
-                                  <div className="col-span-2 sm:col-span-4 lg:col-span-5 mt-3 border-t border-surface-container-high pt-3">
-                                    <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mb-2">Lifecycle Events</p>
-                                    <div className="space-y-2">
-                                      {detail.events.map((evt) => (
-                                        <div key={evt.id} className="flex items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10">
-                                          <span className={`material-symbols-outlined text-sm p-1 rounded-full ${
-                                            evt.eventType === "Death" ? "text-red-500 bg-red-50" :
-                                            evt.eventType === "Pregnancy" ? "text-amber-500 bg-amber-50" :
-                                            "text-green-500 bg-green-50"
-                                          }`}>
-                                            {evt.eventType === "Death" ? "skull" : evt.eventType === "Pregnancy" ? "pregnant_woman" : "crib"}
-                                          </span>
-                                          <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                              <span className="text-xs font-bold text-on-surface">{evt.eventType}</span>
-                                              <span className="text-[10px] text-on-surface-variant">
-                                                {new Date(evt.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
-                                              </span>
-                                              <span className="text-[10px] text-on-surface-variant">Qty: {evt.quantity}</span>
-                                            </div>
-                                            {evt.notes && <p className="text-[10px] text-on-surface-variant mt-0.5">{evt.notes}</p>}
-                                            {evt.recordedBy && <p className="text-[10px] text-on-surface-variant/60 mt-0.5">Recorded by: {evt.recordedBy}</p>}
-                                          </div>
-                                          {evt.photoUrl && (
-                                            <button
-                                              onClick={() => setLightboxPhoto(evt.photoUrl)}
-                                              className="shrink-0 w-10 h-10 rounded overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0"
-                                            >
-                                              <img src={evt.photoUrl} alt={`${evt.eventType} evidence`} className="w-full h-full object-cover" />
-                                            </button>
-                                          )}
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-xs text-on-surface-variant mt-2 italic">Waiting for program details to be populated.</p>
-                        )}
-                      </div>
-                    </div>
-                  )}
- 
-                  {isCaneEnrolled && (
-                    <div className="relative">
-                      <div className="absolute -left-[30px] top-1 w-4 h-4 rounded-full bg-secondary border-2 border-surface ring-4 ring-surface-container-lowest z-10"></div>
-                      <div className="bg-surface p-5 rounded-lg border border-surface-container-high">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h4 className="font-bold text-on-surface text-base">Sugarcane Cultivation</h4>
-                            <p className="text-xs text-on-surface-variant mt-1">
-                              Enrolled on: {new Date(beneficiary.schemeEnrollments.find(se => se.scheme.name === "Sugarcane")?.enrolledAt).toLocaleDateString()}
-                            </p>
-                          </div>
-                          <span className="text-xs font-bold text-secondary bg-secondary-container/10 px-2 py-1 rounded">
-                            Active
-                          </span>
-                        </div>
- 
-                        {beneficiary.sugarcaneDetails && beneficiary.sugarcaneDetails.length > 0 ? (
-                          <div className="space-y-4 mt-4">
-                            {beneficiary.sugarcaneDetails.map((detail, idx) => (
-                              <div key={detail.id || idx} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-xs p-4 bg-surface-container-lowest rounded-lg border border-outline-variant/10">
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Program Linkage</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.sugarcaneProgram?.name || "Unassigned"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Allotted land</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.hectaresAllotted} Hectares</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Soil / Irrigation</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.soilType || "N/A"} / {detail.waterSource || "N/A"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Crop Stage</p>
-                                  <p className="text-secondary font-bold text-sm mt-1 uppercase tracking-wider">{detail.cropStage}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Est. vs Actual Yield</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.estimatedYieldTons} vs {detail.actualYieldTons !== null ? `${detail.actualYieldTons} Tons` : "Growing"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Est. vs Actual Revenue</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">₹{detail.estimatedRevenue?.toLocaleString() || "N/A"} vs {detail.actualRevenue ? `₹${detail.actualRevenue.toLocaleString()}` : "N/A"}</p>
-                                </div>
-                                <div>
-                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Fertilizer Distribution</p>
-                                  <p className="text-on-surface font-bold text-sm mt-1">{detail.fertilizersDistributed || "None distributed"}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-xs text-on-surface-variant mt-2 italic">Waiting for program details to be populated.</p>
-                        )}
-                      </div>
-                    </div>
-                  )}
 
-                  {(!isGoatEnrolled && !isCaneEnrolled) && (
-                    <p className="text-sm text-on-surface-variant italic">No scheme enrollments found.</p>
-                  )}
-                  
-                </div>
+                {(!beneficiary.livelihoodDetails || beneficiary.livelihoodDetails.length === 0) &&
+                 (!beneficiary.goatRearingDetails || beneficiary.goatRearingDetails.length === 0) &&
+                 (!beneficiary.sugarcaneDetails || beneficiary.sugarcaneDetails.length === 0) ? (
+                  <p className="text-sm text-on-surface-variant italic">No program enrollments found. Enroll this beneficiary through a program detail page.</p>
+                ) : (
+                  <div className="space-y-6">
+                    {/* New Unified Livelihood Details */}
+                    {beneficiary.livelihoodDetails && beneficiary.livelihoodDetails.length > 0 && (
+                      <div className="space-y-4">
+                        <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider border-b border-surface-container-high pb-2">
+                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "FARM").length > 0 ? "Farm" : ""}
+                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "FARM").length > 0 && beneficiary.livelihoodDetails.filter(d => d.program?.category === "NON_FARM").length > 0 ? " & " : ""}
+                          {beneficiary.livelihoodDetails.filter(d => d.program?.category === "NON_FARM").length > 0 ? "Non-Farm" : ""} Programs
+                        </p>
+                        {beneficiary.livelihoodDetails.map((detail) => (
+                          <div key={detail.id} className="bg-surface p-5 rounded-lg border border-surface-container-high">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h4 className="font-bold text-on-surface text-base">{detail.program?.name || "Unknown Program"}</h4>
+                                <p className="text-xs text-on-surface-variant mt-1">
+                                  {detail.program?.category === "FARM" ? "Farm" : "Non-Farm"} · {detail.program?.type?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "N/A"}
+                                </p>
+                              </div>
+                              <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">
+                                Enrolled {new Date(detail.enrolledAt).toLocaleDateString("en-IN")}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/10">
+                              {detail.attributes && typeof detail.attributes === "object" && Object.entries(detail.attributes).map(([key, val]) => {
+                                if (val === null || val === undefined || val === "") return null;
+                                const label = key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase());
+                                let display = String(val);
+                                if (["investment", "returnsAmount", "estimatedRevenue", "actualRevenue"].includes(key)) {
+                                  display = `₹${Number(val).toLocaleString("en-IN")}`;
+                                } else if (key === "roiPercentage") {
+                                  display = `${Number(val).toFixed(1)}%`;
+                                } else if (typeof val === "number") {
+                                  display = Number(val).toLocaleString("en-IN");
+                                }
+                                return (
+                                  <div key={key}>
+                                    <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">{label}</p>
+                                    <p className="text-on-surface font-bold text-sm mt-0.5">{display}</p>
+                                  </div>
+                                );
+                              })}
+                              {detail.notes && (
+                                <div className="col-span-full border-t border-surface-container-high pt-2 mt-1">
+                                  <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Notes</p>
+                                  <p className="text-on-surface-variant text-sm mt-0.5">{detail.notes}</p>
+                                </div>
+                              )}
+                            </div>
+                            {detail.events && detail.events.length > 0 && (
+                              <div className="mt-3 border-t border-surface-container-high pt-3">
+                                <p className="text-slate-400 font-semibold uppercase tracking-wider text-[10px] mb-2">Events</p>
+                                <div className="space-y-2">
+                                  {detail.events.map((evt) => (
+                                    <div key={evt.id} className="flex items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10 text-xs">
+                                      <span className="px-2 py-0.5 rounded font-semibold bg-slate-100 text-slate-700 shrink-0">{evt.eventType}</span>
+                                      <span className="text-on-surface-variant">{new Date(evt.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                                      {evt.quantity != null && <span className="text-on-surface-variant">Qty: {evt.quantity}</span>}
+                                      {evt.notes && <span className="text-on-surface-variant truncate max-w-xs">{evt.notes}</span>}
+                                      {evt.photoUrl && (
+                                        <button onClick={() => setLightboxPhoto(evt.photoUrl)} className="shrink-0 w-8 h-8 rounded overflow-hidden border border-outline-variant/20 cursor-pointer bg-transparent p-0 ml-auto">
+                                          <img src={evt.photoUrl} alt="Event" className="w-full h-full object-cover" />
+                                        </button>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Legacy Goat Rearing Details */}
+                    {beneficiary.goatRearingDetails && beneficiary.goatRearingDetails.length > 0 && (
+                      <div className="space-y-4">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-surface-container-high pb-2">Legacy — Goat Rearing</p>
+                        {beneficiary.goatRearingDetails.map((detail, idx) => (
+                          <div key={detail.id || idx} className="bg-surface p-5 rounded-lg border border-surface-container-high">
+                            <h4 className="font-bold text-on-surface text-sm mb-3">{detail.goatRearingProgram?.name || "Unassigned"}</h4>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs p-3 bg-surface-container-lowest rounded-lg">
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Goats</p><p className="text-on-surface font-bold text-sm mt-0.5">{detail.goatsAssigned}</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Investment</p><p className="text-on-surface font-bold text-sm mt-0.5">₹{detail.investment?.toLocaleString() || "N/A"}</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Returns</p><p className="text-on-surface font-bold text-sm mt-0.5">₹{detail.returnsAmount?.toLocaleString() || "N/A"}</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">ROI</p><p className="text-primary font-bold text-sm mt-0.5">{detail.roiPercentage != null ? `${detail.roiPercentage}%` : "N/A"}</p></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Legacy Sugarcane Details */}
+                    {beneficiary.sugarcaneDetails && beneficiary.sugarcaneDetails.length > 0 && (
+                      <div className="space-y-4">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-surface-container-high pb-2">Legacy — Sugarcane</p>
+                        {beneficiary.sugarcaneDetails.map((detail, idx) => (
+                          <div key={detail.id || idx} className="bg-surface p-5 rounded-lg border border-surface-container-high">
+                            <h4 className="font-bold text-on-surface text-sm mb-3">{detail.sugarcaneProgram?.name || "Unassigned"}</h4>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs p-3 bg-surface-container-lowest rounded-lg">
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Land</p><p className="text-on-surface font-bold text-sm mt-0.5">{detail.hectaresAllotted} Ha</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Soil / Water</p><p className="text-on-surface font-bold text-sm mt-0.5">{detail.soilType || "N/A"} / {detail.waterSource || "N/A"}</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Stage</p><p className="text-secondary font-bold text-sm mt-0.5 uppercase">{detail.cropStage}</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Yield (Est/Actual)</p><p className="text-on-surface font-bold text-sm mt-0.5">{detail.estimatedYieldTons}/{detail.actualYieldTons || "—"} T</p></div>
+                              <div><p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Revenue (Est/Actual)</p><p className="text-on-surface font-bold text-sm mt-0.5">₹{detail.estimatedRevenue?.toLocaleString() || "N/A"} / {detail.actualRevenue ? `₹${detail.actualRevenue.toLocaleString()}` : "N/A"}</p></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Livestock Assets Card */}
@@ -1056,12 +1278,175 @@ export default function BeneficiaryProfileDetail() {
             </div>
           )}
 
+          {activeTab === "Income Tracking" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 font-sans">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">payments</span>
+                    Income Tracking
+                  </h3>
+                  <p className="text-sm text-on-surface-variant mt-1">
+                    Record monthly income entries for this household.
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleOpenIncomeForm()}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Add Income
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {incomeRecords && incomeRecords.length > 0 ? (
+                  incomeRecords.map((record) => (
+                    <div key={record.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-sans">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <p className="font-bold text-on-surface text-lg">₹{Number(record.amount).toLocaleString()}</p>
+                          {record.source && (
+                            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-tertiary-container text-on-tertiary-container">
+                              {record.source}
+                            </span>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 mt-2 text-xs">
+                          <div>
+                            <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Date</p>
+                            <p className="text-on-surface font-medium">{record.incomeDate ? new Date(record.incomeDate).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}</p>
+                          </div>
+                          <div>
+                            <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Recorded On</p>
+                            <p className="text-on-surface font-medium">{new Date(record.createdAt).toLocaleDateString("en-IN")}</p>
+                          </div>
+                        </div>
+                        {record.notes && (
+                          <p className="text-xs text-on-surface-variant mt-2 italic">"{record.notes}"</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => handleOpenIncomeForm(record)}
+                          className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteIncome(record.id)}
+                          className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No income records found for this beneficiary.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "Migration History" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 font-sans">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                    <span className="material-symbols-outlined text-primary font-bold">moving</span>
+                    Migration History
+                  </h3>
+                  <p className="text-sm text-on-surface-variant mt-1">
+                    Track seasonal and permanent migration patterns for this household.
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleOpenMigrationForm()}
+                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  Add Migration
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {migrationRecords && migrationRecords.length > 0 ? (
+                  migrationRecords.map((record) => (
+                    <div key={record.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-sans">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            record.migrationType === "PERMANENT" ? "bg-error-container text-on-error-container" : "bg-tertiary-container text-on-tertiary-container"
+                          }`}>
+                            {record.migrationType === "PERMANENT" ? "Permanent" : "Seasonal"}
+                          </span>
+                        </div>
+                        <p className="font-bold text-on-surface text-sm">{record.destination}</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2 text-xs">
+                          <div>
+                            <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Migration Date</p>
+                            <p className="text-on-surface font-medium">{record.migrationDate ? new Date(record.migrationDate).toLocaleDateString() : "N/A"}</p>
+                          </div>
+                          {record.expectedReturnDate && (
+                            <div>
+                              <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Expected Return</p>
+                              <p className="text-on-surface font-medium">{new Date(record.expectedReturnDate).toLocaleDateString()}</p>
+                            </div>
+                          )}
+                          {record.actualReturnDate && (
+                            <div>
+                              <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Actual Return</p>
+                              <p className="text-on-surface font-medium">{new Date(record.actualReturnDate).toLocaleDateString()}</p>
+                            </div>
+                          )}
+                        </div>
+                        {record.notes && (
+                          <p className="text-xs text-on-surface-variant mt-2 italic">"{record.notes}"</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => handleOpenMigrationForm(record)}
+                          className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteMigration(record.id)}
+                          className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                    No migration records found for this beneficiary.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {activeTab === "Family Directory" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
-              <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
-                <span className="material-symbols-outlined text-primary">group</span>
-                Family Members &amp; Household Registry
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                  <span className="material-symbols-outlined text-primary">group</span>
+                  Family Members &amp; Household Registry
+                </h3>
+                <button
+                  onClick={() => { setShowEditModal(true); setEditTab("Family"); }}
+                  className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-[14px]">add</span>
+                  Add Family Member
+                </button>
+              </div>
               
               <div className="space-y-4">
                 {beneficiary.familyMembers && beneficiary.familyMembers.length > 0 ? (
@@ -1090,6 +1475,62 @@ export default function BeneficiaryProfileDetail() {
                 ) : (
                   <p className="text-sm text-on-surface-variant italic">No family member records logged.</p>
                 )}
+              </div>
+
+              {/* Linked Students */}
+              <div className="border-t border-surface-container-high pt-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                  <h4 className="font-bold text-on-surface text-sm uppercase tracking-wider flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-[18px]">school</span>
+                    Linked Students
+                  </h4>
+                  <button
+                    onClick={() => { setStudentSearch(""); setShowLinkStudentModal(true); handleStudentSearch(""); }}
+                    className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">add_link</span>
+                    Link Student
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {beneficiary.students && beneficiary.students.length > 0 ? (
+                    beneficiary.students.map((student) => (
+                      <div key={student.id} className="p-3 border border-surface-container-highest rounded-lg flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 font-sans bg-surface-container-low/20">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Link
+                              href={`/students/${student.id}`}
+                              className="font-bold text-sm text-primary hover:underline capitalize"
+                            >
+                              {student.name}
+                            </Link>
+                            {student.isMigrated && (
+                              <span className="px-1.5 py-0.5 bg-surface-variant text-on-surface-variant rounded text-[8px] font-bold uppercase tracking-wider">
+                                Migrated
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-3 mt-1 text-xs text-on-surface-variant">
+                            <span className="font-mono text-[9px]">ID: {student.studentId || student.id}</span>
+                            <span>Grade: {student.grade || "N/A"}</span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleUnlinkStudent(student.id)}
+                          className="px-2.5 py-1 bg-error-container/20 text-on-error-container hover:bg-error-container/40 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer border-none flex items-center gap-1 shrink-0"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">link_off</span>
+                          Unlink
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs text-on-surface-variant italic p-3 border border-dashed border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                      No students linked to this household yet. Click "Link Student" to connect a student record.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -1575,6 +2016,314 @@ export default function BeneficiaryProfileDetail() {
         </div>
       )}
 
+      {/* Income Form Modal */}
+      {showIncomeModal && (
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] font-sans border border-outline-variant/10 text-on-surface">
+            <div className="flex justify-between items-center border-b border-surface-container-high pb-4 mb-4">
+              <h3 className="text-xl font-bold text-on-surface">
+                {editIncomeId ? "Edit Income Record" : "Add Income Record"}
+              </h3>
+              <button
+                onClick={handleCloseIncomeForm}
+                className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleIncomeSave} className="flex-grow overflow-y-auto pr-2 space-y-4 text-xs">
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Date</label>
+                <input
+                  type="date"
+                  required
+                  value={incomeForm.incomeDate}
+                  onChange={e => setIncomeForm({ ...incomeForm, incomeDate: e.target.value })}
+                  className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Amount (₹)</label>
+                <input
+                  type="number"
+                  required
+                  min="0"
+                  step="0.01"
+                  value={incomeForm.amount}
+                  onChange={e => setIncomeForm({ ...incomeForm, amount: e.target.value })}
+                  placeholder="e.g. 5000"
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Income Source</label>
+                <select
+                  value={incomeForm.source}
+                  onChange={e => setIncomeForm({ ...incomeForm, source: e.target.value })}
+                  className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                >
+                  <option value="">Select source</option>
+                  <option value="Agriculture">Agriculture</option>
+                  <option value="Livestock">Livestock</option>
+                  <option value="Daily Wage">Daily Wage</option>
+                  <option value="Small Business">Small Business</option>
+                  <option value="Remittance">Remittance</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              {incomeForm.source === "Other" && (
+                <div className="flex flex-col gap-1">
+                  <label className="font-semibold uppercase tracking-wider text-slate-400">Specify Other Source</label>
+                  <input
+                    type="text"
+                    required
+                    value={incomeOtherSource}
+                    onChange={e => setIncomeOtherSource(e.target.value)}
+                    placeholder="e.g. Pension, Rental, Fishing..."
+                    className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                  />
+                </div>
+              )}
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Notes</label>
+                <textarea
+                  rows="3"
+                  value={incomeForm.notes}
+                  onChange={e => setIncomeForm({ ...incomeForm, notes: e.target.value })}
+                  placeholder="Additional notes about this income entry..."
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface resize-none"
+                />
+              </div>
+            </form>
+
+            <div className="flex justify-end gap-3 border-t border-surface-container-high pt-4 mt-4 text-xs font-sans">
+              <button
+                type="button"
+                onClick={handleCloseIncomeForm}
+                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleIncomeSave}
+                className="px-5 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+              >
+                {editIncomeId ? "Update Record" : "Save Record"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Migration Form Modal */}
+      {showMigrationModal && (
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] font-sans border border-outline-variant/10 text-on-surface">
+            <div className="flex justify-between items-center border-b border-surface-container-high pb-4 mb-4">
+              <h3 className="text-xl font-bold text-on-surface">
+                {editMigrationId ? "Edit Migration Record" : "Add Migration Record"}
+              </h3>
+              <button
+                onClick={handleCloseMigrationForm}
+                className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleMigrationSave} className="flex-grow overflow-y-auto pr-2 space-y-4 text-xs">
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Migration Type</label>
+                <select
+                  value={migrationForm.migrationType}
+                  onChange={e => setMigrationForm({ ...migrationForm, migrationType: e.target.value })}
+                  className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                >
+                  <option value="SEASONAL">Seasonal</option>
+                  <option value="PERMANENT">Permanent</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Destination</label>
+                <input
+                  type="text"
+                  required
+                  value={migrationForm.destination}
+                  onChange={e => setMigrationForm({ ...migrationForm, destination: e.target.value })}
+                  placeholder="e.g. Mumbai, Maharashtra"
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Migration Date</label>
+                <input
+                  type="date"
+                  required
+                  value={migrationForm.migrationDate}
+                  onChange={e => setMigrationForm({ ...migrationForm, migrationDate: e.target.value })}
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                />
+              </div>
+
+              {migrationForm.migrationType === "SEASONAL" && (
+                <>
+                  <div className="flex flex-col gap-1">
+                    <label className="font-semibold uppercase tracking-wider text-slate-400">Expected Return Date</label>
+                    <input
+                      type="date"
+                      value={migrationForm.expectedReturnDate}
+                      onChange={e => setMigrationForm({ ...migrationForm, expectedReturnDate: e.target.value })}
+                      className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="font-semibold uppercase tracking-wider text-slate-400">Actual Return Date</label>
+                    <input
+                      type="date"
+                      value={migrationForm.actualReturnDate}
+                      onChange={e => setMigrationForm({ ...migrationForm, actualReturnDate: e.target.value })}
+                      className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="flex flex-col gap-1">
+                <label className="font-semibold uppercase tracking-wider text-slate-400">Notes</label>
+                <textarea
+                  rows="3"
+                  value={migrationForm.notes}
+                  onChange={e => setMigrationForm({ ...migrationForm, notes: e.target.value })}
+                  placeholder="Additional details about this migration..."
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface resize-none"
+                />
+              </div>
+            </form>
+
+            <div className="flex justify-end gap-3 border-t border-surface-container-high pt-4 mt-4 text-xs font-sans">
+              <button
+                type="button"
+                onClick={handleCloseMigrationForm}
+                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleMigrationSave}
+                className="px-5 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+              >
+                {editMigrationId ? "Update Record" : "Save Record"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Link Student Modal */}
+      {showLinkStudentModal && (
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] font-sans border border-outline-variant/10 text-on-surface">
+            <div className="flex justify-between items-center border-b border-surface-container-high pb-4 mb-4">
+              <h3 className="text-xl font-bold text-on-surface">Link Student to Household</h3>
+              <button
+                onClick={() => setShowLinkStudentModal(false)}
+                className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="flex-grow overflow-y-auto pr-2 space-y-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">Search Students</label>
+                <input
+                  type="text"
+                  value={studentSearch}
+                  onChange={e => handleStudentSearch(e.target.value)}
+                  placeholder="Search by name, student ID..."
+                  className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface text-sm"
+                />
+              </div>
+
+              <div className="space-y-2 text-xs">
+                {studentSearchLoading ? (
+                  <p className="text-center text-on-surface-variant italic py-4">Searching...</p>
+                ) : allStudents.length > 0 ? (
+                  allStudents.map((student) => {
+                    const isAlreadyLinked = beneficiary.students?.some(s => s.id === student.id);
+                    return (
+                      <div key={student.id} className="p-3 border border-surface-container-highest rounded-lg flex items-center justify-between gap-3 bg-surface-container-low/20">
+                        <div>
+                          <p className="font-bold text-on-surface text-sm capitalize">{student.name}</p>
+                          <p className="text-slate-400 text-[10px] mt-0.5">
+                            ID: {student.studentId || student.id} {student.grade ? `| Grade: ${student.grade}` : ""}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => isAlreadyLinked ? handleUnlinkStudent(student.id) : handleLinkStudent(student.id)}
+                          className={`px-3 py-1.5 rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer border-none transition-colors ${
+                            isAlreadyLinked
+                              ? "bg-error-container/20 text-on-error-container hover:bg-error-container/40"
+                              : "bg-primary/10 text-primary hover:bg-primary/20"
+                          }`}
+                        >
+                          {isAlreadyLinked ? "Unlink" : "Link"}
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="text-center text-on-surface-variant italic py-4">No students found.</p>
+                )}
+              </div>
+
+              {/* Already Linked Students in this modal for reference */}
+              {beneficiary.students && beneficiary.students.length > 0 && (
+                <div className="border-t border-surface-container-high pt-4 mt-4">
+                  <h4 className="text-xs font-bold text-on-surface uppercase tracking-wider mb-3">Currently Linked Students</h4>
+                  <div className="space-y-2">
+                    {beneficiary.students.map((student) => (
+                      <div key={student.id} className="p-2 border border-surface-container-highest rounded-lg flex items-center justify-between gap-3 bg-surface-container-low/20">
+                        <div>
+                          <p className="font-semibold text-on-surface text-xs capitalize">{student.name}</p>
+                          <p className="text-slate-400 text-[9px]">ID: {student.studentId || student.id}</p>
+                        </div>
+                        <button
+                          onClick={() => handleUnlinkStudent(student.id)}
+                          className="px-2.5 py-1 bg-error-container/20 text-on-error-container hover:bg-error-container/40 rounded text-[9px] font-bold uppercase tracking-wider cursor-pointer border-none"
+                        >
+                          Unlink
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 border-t border-surface-container-high pt-4 mt-4 text-xs font-sans">
+              <button
+                type="button"
+                onClick={() => setShowLinkStudentModal(false)}
+                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Photo Lightbox */}
       {lightboxPhoto && (
         <div
@@ -1604,6 +2353,16 @@ export default function BeneficiaryProfileDetail() {
         message={beneficiary?.isMigrated ? "Are you sure you want to unmark this beneficiary as migrated?" : "Are you sure you want to mark this beneficiary as migrated?"}
         confirmText={beneficiary?.isMigrated ? "Unmark" : "Mark as Migrated"}
         variant="primary"
+      />
+
+      <ConfirmActionModal
+        isOpen={showConfirmDelete}
+        onClose={() => setShowConfirmDelete(false)}
+        onConfirm={handleDeleteBeneficiary}
+        title="Delete Beneficiary"
+        message="Are you sure you want to permanently delete this beneficiary? All associated records (income, family, livestock, surveys) will be removed. This action cannot be undone."
+        confirmText="Delete"
+        variant="danger"
       />
     </div>
   );

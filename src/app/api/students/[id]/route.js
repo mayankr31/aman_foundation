@@ -59,6 +59,23 @@ export async function GET(req, context) {
         attendanceLogs: {
           include: { dayLogs: { orderBy: { date: "asc" } } },
           orderBy: { createdAt: "desc" }
+        },
+        learningAssessments: {
+          orderBy: { date: "desc" },
+          take: 50
+        },
+        homeworkRecords: {
+          orderBy: { date: "desc" },
+          take: 50
+        },
+        assessments: {
+          orderBy: { createdAt: "desc" }
+        },
+        transitions: {
+          orderBy: { createdAt: "desc" }
+        },
+        beneficiary: {
+          select: { id: true, name: true, enrolmentId: true }
         }
       }
     });
@@ -128,6 +145,7 @@ export async function PATCH(req, context) {
         status: body.status,
         schoolId: body.schoolId,
         fellowId: body.fellowId,
+        beneficiaryId: body.beneficiaryId !== undefined ? (body.beneficiaryId || null) : undefined,
         isMigrated: body.isMigrated !== undefined ? Boolean(body.isMigrated) : undefined
       }
     });

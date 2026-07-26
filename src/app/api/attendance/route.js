@@ -111,7 +111,7 @@ export async function POST(req) {
     if (error) return error;
 
     const body = await req.json();
-    const { logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkInLat, checkInLng } = body;
+    const { logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkInLat, checkInLng, lessonPlanText } = body;
 
     const log = await prisma.attendanceLog.create({
       data: {
@@ -127,7 +127,8 @@ export async function POST(req) {
         logininfo,
         logoutinfo,
         checkInLat,
-        checkInLng
+        checkInLng,
+        lessonPlanText
       }
     });
 
@@ -144,7 +145,7 @@ export async function PATCH(req) {
     if (error) return error;
 
     const body = await req.json();
-    const { id, logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkOutLat, checkOutLng } = body;
+    const { id, logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkOutLat, checkOutLng, lessonPlanText } = body;
 
     const log = await prisma.attendanceLog.update({
       where: { id },
@@ -159,7 +160,8 @@ export async function PATCH(req) {
         logininfo,
         logoutinfo,
         checkOutLat,
-        checkOutLng
+        checkOutLng,
+        lessonPlanText
       }
     });
 

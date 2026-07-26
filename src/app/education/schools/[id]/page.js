@@ -64,6 +64,11 @@ export default function SchoolProfileDetail() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [calendarData, setCalendarData] = useState({});
 
+  const [includeLearningAssessment, setIncludeLearningAssessment] = useState(false);
+  const [includeHomework, setIncludeHomework] = useState(false);
+  const [learningAssessmentMap, setLearningAssessmentMap] = useState({});
+  const [homeworkMap, setHomeworkMap] = useState({});
+
   const [editForm, setEditForm] = useState({});
 
   const authHeaders = useCallback(() => ({
@@ -130,6 +135,24 @@ export default function SchoolProfileDetail() {
         setIsEditingAttendance(false);
         setAttendanceSelection(new Set(school?.students?.map(s => s.id) || []));
         setViewOnlyMode(false);
+      }
+      if (json.learningAssessments && json.learningAssessments.length > 0) {
+        const laMap = {};
+        json.learningAssessments.forEach(a => { laMap[a.studentId] = a.canRead; });
+        setLearningAssessmentMap(laMap);
+        setIncludeLearningAssessment(true);
+      } else {
+        setLearningAssessmentMap({});
+        setIncludeLearningAssessment(false);
+      }
+      if (json.homework && json.homework.length > 0) {
+        const hwMap = {};
+        json.homework.forEach(h => { hwMap[h.studentId] = h.homeworkStatus; });
+        setHomeworkMap(hwMap);
+        setIncludeHomework(true);
+      } else {
+        setHomeworkMap({});
+        setIncludeHomework(false);
       }
     } catch (err) {
       console.error("Failed to load existing attendance");
@@ -220,10 +243,23 @@ export default function SchoolProfileDetail() {
         studentId: s.id,
         status: attendanceSelection.has(s.id) ? attendanceAction : (attendanceAction === "Present" ? "Absent" : "Present")
       }));
+      const body = { date: attendanceDate, studentStatuses };
+      if (includeLearningAssessment) {
+        body.learningAssessments = (school?.students || []).map(s => ({
+          studentId: s.id,
+          canRead: !!learningAssessmentMap[s.id]
+        }));
+      }
+      if (includeHomework) {
+        body.homework = (school?.students || []).map(s => ({
+          studentId: s.id,
+          status: homeworkMap[s.id] || "NO_HOMEWORK"
+        }));
+      }
       const res = await fetch(`/api/schools/${id}/attendance`, {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ date: attendanceDate, studentStatuses })
+        body: JSON.stringify(body)
       });
       const json = await res.json();
       if (json.success) {
@@ -449,7 +485,7 @@ export default function SchoolProfileDetail() {
                 return (
                   <button 
                     key={dateNum}
-                    onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceReviewMode(false); setSearchQ(""); }}
+                    onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceReviewMode(false); setSearchQ(""); setIncludeLearningAssessment(false); setIncludeHomework(false); setLearningAssessmentMap({}); setHomeworkMap({}); }}
                     className={`aspect-square p-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer relative ${dayData ? 'border-primary/30 hover:border-primary/60 bg-surface-container-lowest' : 'border-outline-variant/30 hover:border-outline-variant bg-surface-container-low/20'} ${isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest font-bold !border-primary' : ''}`}
                   >
                     <span className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-on-surface'}`}>{dateNum}</span>
@@ -489,6 +525,7 @@ export default function SchoolProfileDetail() {
                       <th className="py-3 px-3">Student ID</th>
                       <th className="py-3 px-3">Grade</th>
                       <th className="py-3 px-3">Status</th>
+                      <th className="py-3 px-3">Risk</th>
                       <th className="py-3 px-3 text-right">Action</th>
                     </tr>
                   </thead>
@@ -504,6 +541,16 @@ export default function SchoolProfileDetail() {
                           <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${s.status === "On Track" ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"}`}>
                             {s.status}
                           </span>
+                        </td>
+                        <td className="py-3 px-3">
+                          {(() => {
+                            const att = s.attendance || 0;
+                            let risk = "Low";
+                            let color = "bg-primary/10 text-primary";
+                            if (att < 35) { risk = "High"; color = "bg-error/10 text-error"; }
+                            else if (att < 60) { risk = "Med"; color = "bg-yellow-500/10 text-yellow-600"; }
+                            return <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${color}`}>{risk}</span>;
+                          })()}
                         </td>
                         <td className="py-3 px-3 text-right">
                           <button onClick={() => handleRemoveStudent(s.id)} className="text-error hover:underline text-xs font-medium cursor-pointer">Remove</button>
@@ -539,6 +586,10 @@ export default function SchoolProfileDetail() {
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Active Programs</span>
                 <span className="font-bold text-primary">{assignedPrograms.length}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-surface-container">
+                <span className="text-on-surface-variant font-medium">At Risk ({enrolledStudents.filter(s => (s.attendance || 0) < 35).length})</span>
+                <span className="font-bold text-error">{enrolledStudents.filter(s => (s.attendance || 0) < 35).length} Students</span>
               </div>
             </div>
           </div>
@@ -627,7 +678,7 @@ export default function SchoolProfileDetail() {
 
       {/* Mark Attendance Modal */}
       {modal === "attendance" && (
-        <Modal title={viewOnlyMode ? "Review Marked Attendance" : (isEditingAttendance ? "Edit Attendance" : "Bulk Mark Attendance")} onClose={() => { setModal(null); setAttendanceReviewMode(false); setViewOnlyMode(false); }}>
+        <Modal title={viewOnlyMode ? "Review Marked Attendance" : (isEditingAttendance ? "Edit Attendance" : "Bulk Mark Attendance")} onClose={() => { setModal(null); setAttendanceReviewMode(false); setViewOnlyMode(false); setIncludeLearningAssessment(false); setIncludeHomework(false); setLearningAssessmentMap({}); setHomeworkMap({}); }}>
           {viewOnlyMode ? (
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-4 border-b border-outline-variant/20 pb-4">
@@ -654,6 +705,37 @@ export default function SchoolProfileDetail() {
                   </ul>
                 </div>
               </div>
+              {includeLearningAssessment && Object.keys(learningAssessmentMap).length > 0 && (
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-secondary mb-2 border-b border-outline-variant/20 pb-2">Learning Assessment &mdash; Can Read</h5>
+                  <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                    {enrolledStudents.map(s => (
+                      <div key={s.id} className="text-sm flex items-center gap-2">
+                        <span className={learningAssessmentMap[s.id] ? "text-primary font-bold" : "text-on-surface-variant"}>{learningAssessmentMap[s.id] ? "✓" : "✗"}</span>
+                        <span className="text-on-surface-variant truncate">{s.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {includeHomework && Object.keys(homeworkMap).length > 0 && (
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-secondary mb-2 border-b border-outline-variant/20 pb-2">Homework Status</h5>
+                  <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                    {enrolledStudents.map(s => {
+                      const hw = homeworkMap[s.id];
+                      const color = hw === "DONE" ? "text-primary" : hw === "NOT_DONE" ? "text-error" : "text-on-surface-variant";
+                      const label = hw === "DONE" ? "Done" : hw === "NOT_DONE" ? "Not Done" : "No HW";
+                      return (
+                        <div key={s.id} className="text-xs flex items-center gap-1">
+                          <span className={`font-semibold ${color}`}>{label}</span>
+                          <span className="text-on-surface-variant truncate">{s.name}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="flex justify-end pt-4 mt-4 border-t border-outline-variant/20">
                 <button type="button" onClick={() => { setModal(null); setViewOnlyMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm font-semibold">Close</button>
               </div>
@@ -691,6 +773,103 @@ export default function SchoolProfileDetail() {
                 ))}
               </div>
 
+              {/* Learning Assessment Toggle */}
+              <div className="border border-outline-variant/30 rounded-lg p-4">
+                <label className="flex items-center gap-2 cursor-pointer mb-3">
+                  <input type="checkbox" checked={includeLearningAssessment} onChange={(e) => {
+                    setIncludeLearningAssessment(e.target.checked);
+                    if (!e.target.checked) setLearningAssessmentMap({});
+                  }} className="w-4 h-4 text-secondary focus:ring-secondary border-outline-variant rounded" />
+                  <span className="text-sm font-semibold text-on-surface">Mark Learning Assessment</span>
+                  <span className="text-xs text-on-surface-variant">— "Was the student able to read?"</span>
+                </label>
+                {includeLearningAssessment && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 mb-2 text-xs">
+                      <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => {
+                        const map = {};
+                        enrolledStudents.forEach(s => { map[s.id] = true; });
+                        setLearningAssessmentMap(map);
+                      }}>Mark All: Can Read</button>
+                      <span className="text-on-surface-variant">|</span>
+                      <button type="button" className="text-error font-medium hover:underline cursor-pointer" onClick={() => {
+                        const map = {};
+                        enrolledStudents.forEach(s => { map[s.id] = false; });
+                        setLearningAssessmentMap(map);
+                      }}>Mark All: Cannot Read</button>
+                      <span className="ml-auto text-on-surface-variant">
+                        {Object.values(learningAssessmentMap).filter(v => v === true).length} can read
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {enrolledStudents.map(s => (
+                        <label key={s.id} className="flex items-center gap-2 text-xs p-1.5 hover:bg-surface-container rounded cursor-pointer">
+                          <input type="checkbox" checked={!!learningAssessmentMap[s.id]} onChange={(e) => {
+                            const map = { ...learningAssessmentMap };
+                            map[s.id] = e.target.checked;
+                            setLearningAssessmentMap(map);
+                          }} className="w-3.5 h-3.5 text-secondary focus:ring-secondary border-outline-variant rounded" />
+                          <span className="truncate text-on-surface-variant">{s.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Homework Toggle */}
+              <div className="border border-outline-variant/30 rounded-lg p-4">
+                <label className="flex items-center gap-2 cursor-pointer mb-3">
+                  <input type="checkbox" checked={includeHomework} onChange={(e) => {
+                    setIncludeHomework(e.target.checked);
+                    if (!e.target.checked) setHomeworkMap({});
+                  }} className="w-4 h-4 text-secondary focus:ring-secondary border-outline-variant rounded" />
+                  <span className="text-sm font-semibold text-on-surface">Mark Homework</span>
+                </label>
+                {includeHomework && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 mb-2 text-xs">
+                      <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => {
+                        const map = { ...homeworkMap };
+                        enrolledStudents.forEach(s => { map[s.id] = "DONE"; });
+                        setHomeworkMap(map);
+                      }}>All: Done</button>
+                      <span className="text-on-surface-variant">|</span>
+                      <button type="button" className="text-error font-medium hover:underline cursor-pointer" onClick={() => {
+                        const map = { ...homeworkMap };
+                        enrolledStudents.forEach(s => { map[s.id] = "NOT_DONE"; });
+                        setHomeworkMap(map);
+                      }}>All: Not Done</button>
+                      <span className="text-on-surface-variant">|</span>
+                      <button type="button" className="text-on-surface-variant font-medium hover:underline cursor-pointer" onClick={() => {
+                        const map = { ...homeworkMap };
+                        enrolledStudents.forEach(s => { map[s.id] = "NO_HOMEWORK"; });
+                        setHomeworkMap(map);
+                      }}>All: No Homework</button>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {enrolledStudents.map(s => {
+                        const hw = homeworkMap[s.id] || "NO_HOMEWORK";
+                        return (
+                          <div key={s.id} className="flex items-center gap-2 text-xs p-1.5">
+                            <select value={hw} onChange={(e) => {
+                              const map = { ...homeworkMap };
+                              map[s.id] = e.target.value;
+                              setHomeworkMap(map);
+                            }} className="text-xs border border-outline-variant rounded px-1 py-0.5 bg-surface text-on-surface focus:outline-none focus:border-primary w-20">
+                              <option value="NO_HOMEWORK">No HW</option>
+                              <option value="DONE">Done</option>
+                              <option value="NOT_DONE">Not Done</option>
+                            </select>
+                            <span className="truncate text-on-surface-variant">{s.name}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
                 <button type="button" onClick={() => { setModal(null); setAttendanceReviewMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
                 <div className="flex gap-2">
@@ -724,6 +903,27 @@ export default function SchoolProfileDetail() {
                   </ul>
                 </div>
               </div>
+
+              {includeLearningAssessment && (
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-secondary mb-2 border-b border-outline-variant/20 pb-2">Learning Assessment</h5>
+                  <p className="text-sm text-on-surface-variant">
+                    Can Read: {Object.values(learningAssessmentMap).filter(v => v === true).length} of {enrolledStudents.length} students
+                    &middot; Cannot Read: {Object.values(learningAssessmentMap).filter(v => v === false).length} of {enrolledStudents.length}
+                  </p>
+                </div>
+              )}
+
+              {includeHomework && (
+                <div className="border border-outline-variant/30 rounded-lg p-3 bg-surface-container-low">
+                  <h5 className="font-bold text-secondary mb-2 border-b border-outline-variant/20 pb-2">Homework</h5>
+                  <p className="text-sm text-on-surface-variant flex flex-wrap gap-x-4 gap-y-1">
+                    <span>Done: {Object.values(homeworkMap).filter(v => v === "DONE").length}</span>
+                    <span>Not Done: {Object.values(homeworkMap).filter(v => v === "NOT_DONE").length}</span>
+                    <span>No Homework: {Object.values(homeworkMap).filter(v => v === "NO_HOMEWORK").length}</span>
+                  </p>
+                </div>
+              )}
 
               <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
                 <button type="button" disabled={saving} onClick={() => setAttendanceReviewMode(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50">Back</button>

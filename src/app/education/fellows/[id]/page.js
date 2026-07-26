@@ -17,6 +17,7 @@ export default function FellowProfileDetail() {
   const [loading, setLoading] = useState(true);
   const [goals, setGoals] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [coachingRecords, setCoachingRecords] = useState([]);
   const [activeTab, setActiveTab] = useState("Goals");
 
   // Form states for adding new goals
@@ -40,6 +41,14 @@ export default function FellowProfileDetail() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [deleteItemType, setDeleteItemType] = useState(""); // "goal" | "review"
+
+  // Coaching & Training modal states
+  const [showAddCoachingModal, setShowAddCoachingModal] = useState(false);
+  const [newCoachingHeading, setNewCoachingHeading] = useState("");
+  const [newCoachingDate, setNewCoachingDate] = useState("");
+  const [newCoachingFeedback, setNewCoachingFeedback] = useState("");
+  const [newCoachingObservation, setNewCoachingObservation] = useState("");
+  const [newCoachingFile, setNewCoachingFile] = useState(null);
 
   // Redirection check: Fellows can only view their profile under /profile, not here
   useEffect(() => {
@@ -70,6 +79,82 @@ export default function FellowProfileDetail() {
       loadFellowDetail();
     }
   }, [id, token, isInitializing]);
+
+  useEffect(() => {
+    async function loadCoachingRecords() {
+      try {
+        const res = await fetch(`/api/fellows/${id}/coaching`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setCoachingRecords(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load coaching records:", err);
+      }
+    }
+    if (activeTab === "Coaching & Training" && token && id) {
+      loadCoachingRecords();
+    }
+  }, [activeTab, token, id]);
+
+  const handleAddCoachingRecord = async (e) => {
+    e.preventDefault();
+    if (!newCoachingHeading || !newCoachingDate) return;
+
+    try {
+      const formData = new FormData();
+      formData.append("heading", newCoachingHeading);
+      formData.append("date", newCoachingDate);
+      formData.append("feedback", newCoachingFeedback);
+      formData.append("observationNotes", newCoachingObservation);
+      if (newCoachingFile) {
+        formData.append("file", newCoachingFile);
+      }
+
+      const res = await fetch(`/api/fellows/${id}/coaching`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+      const json = await res.json();
+      if (json.success) {
+        setCoachingRecords(prev => [json.data, ...prev]);
+        setNewCoachingHeading("");
+        setNewCoachingDate("");
+        setNewCoachingFeedback("");
+        setNewCoachingObservation("");
+        setNewCoachingFile(null);
+        setShowAddCoachingModal(false);
+        toast.success("Coaching record added!");
+      } else {
+        toast.error(json.error || "Failed to add record");
+      }
+    } catch (err) {
+      console.error("Failed to add coaching record:", err);
+      toast.error("An error occurred");
+    }
+  };
+
+  const handleDeleteCoachingRecord = async (recordId) => {
+    try {
+      const res = await fetch(`/api/fellows/${id}/coaching?recordId=${recordId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const json = await res.json();
+      if (json.success) {
+        setCoachingRecords(prev => prev.filter(r => r.id !== recordId));
+        toast.success("Record deleted");
+      } else {
+        toast.error(json.error || "Failed to delete record");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("An error occurred");
+    }
+  };
 
   const toggleMilestone = async (goalId, milestoneId, currentDone) => {
     const newDone = !currentDone;
@@ -363,7 +448,7 @@ export default function FellowProfileDetail() {
 
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews"].map((tab) => {
+        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training"].map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -635,6 +720,95 @@ export default function FellowProfileDetail() {
               </div>
             </div>
           )}
+
+          {activeTab === "Coaching & Training" && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Training Records</h3>
+                {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                  <button
+                    onClick={() => setShowAddCoachingModal(true)}
+                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">add</span>
+                    Add Record
+                  </button>
+                )}
+              </div>
+              <div className="space-y-6">
+                {coachingRecords.length === 0 ? (
+                  <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                    No coaching or training records available yet.
+                  </div>
+                ) : (
+                  coachingRecords.map((record) => (
+                    <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
+                          <p className="text-xs text-on-surface-variant mt-1">
+                            {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                          </p>
+                        </div>
+                        {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                          <button
+                            onClick={() => handleDeleteCoachingRecord(record.id)}
+                            className="text-on-surface-variant hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                            title="Delete record"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
+                      </div>
+
+                      {record.feedback && (
+                        <div className="mb-4 p-4 bg-blue-50/50 rounded-lg border border-blue-100">
+                          <p className="text-xs uppercase tracking-widest text-blue-700 font-bold mb-2">Feedback</p>
+                          <p className="text-sm text-slate-700 leading-relaxed">{record.feedback}</p>
+                        </div>
+                      )}
+
+                      {record.observationNotes && (
+                        <div className="mb-4 p-4 bg-amber-50/50 rounded-lg border border-amber-100">
+                          <p className="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Observation Notes</p>
+                          <p className="text-sm text-slate-700 leading-relaxed">{record.observationNotes}</p>
+                        </div>
+                      )}
+
+                      {record.fileUrl && (
+                        <div className="mb-4">
+                          {/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(record.fileUrl) ? (
+                            <img
+                              src={record.fileUrl}
+                              alt={record.heading}
+                              className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain cursor-pointer"
+                              onClick={() => window.open(record.fileUrl, '_blank')}
+                            />
+                          ) : (
+                            <a
+                              href={record.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
+                            >
+                              <span className="material-symbols-outlined text-[16px]">attach_file</span>
+                              {record.fileUrl.split("/").pop()}
+                            </a>
+                          )}
+                        </div>
+                      )}
+
+                      <div className="text-xs text-slate-400 mt-3 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[14px]">person</span>
+                        Added by: <span className="font-semibold text-on-surface">{record.author?.name || "Unknown"}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* Sidebar Summary Card */}
@@ -855,6 +1029,88 @@ export default function FellowProfileDetail() {
                   className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
                 >
                   Save Evaluation
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showAddCoachingModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Add Coaching & Training Record</h3>
+              <button
+                onClick={() => setShowAddCoachingModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleAddCoachingRecord} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Heading / Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Classroom Observation Q2"
+                  value={newCoachingHeading}
+                  onChange={(e) => setNewCoachingHeading(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date</label>
+                <input
+                  type="date"
+                  required
+                  value={newCoachingDate}
+                  onChange={(e) => setNewCoachingDate(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Feedback</label>
+                <textarea
+                  rows={3}
+                  placeholder="Provide feedback about the training..."
+                  value={newCoachingFeedback}
+                  onChange={(e) => setNewCoachingFeedback(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Observation Notes</label>
+                <textarea
+                  rows={3}
+                  placeholder="Record your observations..."
+                  value={newCoachingObservation}
+                  onChange={(e) => setNewCoachingObservation(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Upload Document (optional)</label>
+                <input
+                  type="file"
+                  onChange={(e) => setNewCoachingFile(e.target.files?.[0] || null)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-xs"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddCoachingModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                >
+                  Save Record
                 </button>
               </div>
             </form>

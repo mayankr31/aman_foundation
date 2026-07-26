@@ -24,6 +24,13 @@ enum LeaveStatus {
   REJECTED
 }
 
+enum TravelStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
 enum Action {
   READ
   WRITE
@@ -32,6 +39,11 @@ enum Action {
 enum PermissionType {
   GRANT
   DENY
+}
+
+enum LivelihoodCategory {
+  FARM
+  NON_FARM
 }
 
 model Role {
@@ -69,6 +81,9 @@ model User {
   verifiedTransactions InventoryLedger[]
   attendanceLogs       AttendanceLog[]
   taskComments         FellowTaskComment[]
+  travelRequests       TravelRequest[]
+  approvedTravel       TravelRequest[]     @relation("ApprovedByUser")
+  coachingRecords      CoachingRecord[]
 }
 
 model Permission {
@@ -130,9 +145,11 @@ model School {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  fellows  FellowSchool[]
-  students Student[]
-  programs SchoolProgram[]
+  fellows             FellowSchool[]
+  students            Student[]
+  programs            SchoolProgram[]
+  learningAssessments LearningAssessment[]
+  homeworkRecords     StudentHomework[]
 }
 
 model Fellow {
@@ -151,12 +168,13 @@ model Fellow {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  user     User?          @relation(fields: [userId], references: [id])
-  schools  FellowSchool[]
-  students Student[]
-  goals    FellowGoal[]
-  reviews  FellowReview[]
-  tasks    FellowTask[]
+  user            User?            @relation(fields: [userId], references: [id])
+  schools         FellowSchool[]
+  students        Student[]
+  goals           FellowGoal[]
+  reviews         FellowReview[]
+  tasks           FellowTask[]
+  coachingRecords CoachingRecord[]
 }
 
 model FellowGoal {
@@ -219,25 +237,34 @@ model Student {
   status          String    @default("On Track")
   schoolId        String?
   fellowId        String?
+  beneficiaryId   String?
   isMigrated      Boolean   @default(false)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  school         School?                @relation(fields: [schoolId], references: [id])
-  fellow         Fellow?                @relation(fields: [fellowId], references: [id])
-  subjectMarks   StudentSubjectMark[]
-  attendanceLogs StudentAttendanceLog[]
+  school              School?                @relation(fields: [schoolId], references: [id])
+  fellow              Fellow?                @relation(fields: [fellowId], references: [id])
+  beneficiary         Beneficiary?           @relation(fields: [beneficiaryId], references: [id])
+  subjectMarks        StudentSubjectMark[]
+  attendanceLogs      StudentAttendanceLog[]
+  learningAssessments LearningAssessment[]
+  homeworkRecords     StudentHomework[]
+  assessments         StudentAssessment[]
+  transitions         StudentTransition[]
 }
 
 model StudentSubjectMark {
-  id        String   @id @default(uuid())
-  studentId String
-  subject   String
-  score     Float
-  grade     String
-  remarks   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  studentId     String
+  subject       String
+  score         Float
+  grade         String
+  academicYear  String?
+  academicGrade String?
+  month         String?
+  remarks       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
@@ -268,6 +295,95 @@ model StudentAttendanceDayLog {
   log StudentAttendanceLog @relation(fields: [logId], references: [id], onDelete: Cascade)
 
   @@unique([logId, date])
+}
+
+model LearningAssessment {
+  id        String   @id @default(uuid())
+  studentId String
+  schoolId  String
+  date      DateTime
+  canRead   Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+}
+
+model StudentHomework {
+  id             String   @id @default(uuid())
+  studentId      String
+  schoolId       String
+  date           DateTime
+  homeworkStatus String   @default("NOT_DONE") // DONE, NOT_DONE, NO_HOMEWORK
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  school  School  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+}
+
+model StudentAssessment {
+  id             String   @id @default(uuid())
+  studentId      String
+  assessmentName String
+  topic          String
+  totalMarks     Float
+  marksObtained  Float
+  academicYear   String?
+  academicGrade  String?
+  month          String?
+  remarks        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model StudentTransition {
+  id           String   @id @default(uuid())
+  studentId    String
+  academicYear String
+  month        String
+  status       String   @default("CONTINUING_EDUCATION")
+  description  String?
+  location     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model MigrationRecord {
+  id                 String    @id @default(uuid())
+  beneficiaryId      String
+  migrationType      String    @default("PERMANENT") // SEASONAL, PERMANENT
+  destination        String
+  migrationDate      DateTime
+  expectedReturnDate DateTime?
+  actualReturnDate   DateTime?
+  notes              String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model IncomeRecord {
+  id            String   @id @default(uuid())
+  beneficiaryId String
+  amount        Float
+  incomeDate    DateTime
+  source        String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
 }
 
 model FellowSchool {
@@ -351,9 +467,13 @@ model Beneficiary {
 
   familyMembers             FamilyMember[]
   livestock                 Livestock[]
+  students                  Student[]
+  migrationRecords          MigrationRecord[]
+  incomeRecords             IncomeRecord[]
   schemeEnrollments         SchemeEnrollment[]
   goatRearingDetails        BeneficiaryGoatRearing[]
   sugarcaneDetails          BeneficiarySugarcane[]
+  livelihoodDetails         BeneficiaryLivelihood[]
   resilienceSurveys         ResilienceSurvey[]
   adaptiveCapacitySurveys   AdaptiveCapacitySurvey[]
   absorptiveCapacitySurveys AbsorptiveCapacitySurvey[]
@@ -498,6 +618,55 @@ model SugarcaneProgram {
   beneficiaries     BeneficiarySugarcane[]
 }
 
+model LivelihoodProgram {
+  id          String             @id @default(uuid())
+  category    LivelihoodCategory
+  type        String
+  name        String
+  description String?
+  status      String             @default("active")
+  totalTarget Float?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  assignments BeneficiaryLivelihood[]
+}
+
+model BeneficiaryLivelihood {
+  id            String   @id @default(uuid())
+  beneficiaryId String
+  programId     String
+  attributes    Json
+  notes         String?
+  enrolledAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  beneficiary Beneficiary       @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  program     LivelihoodProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  events      LivelihoodEvent[]
+
+  @@index([beneficiaryId])
+  @@index([programId])
+}
+
+model LivelihoodEvent {
+  id           String   @id @default(uuid())
+  livelihoodId String
+  eventType    String
+  eventDate    DateTime @default(now())
+  quantity     Float?
+  notes        String?
+  photoUrl     String?
+  recordedBy   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  livelihood BeneficiaryLivelihood @relation(fields: [livelihoodId], references: [id], onDelete: Cascade)
+
+  @@index([livelihoodId])
+}
+
 model DisasterIncident {
   id        String   @id @default(uuid())
   name      String
@@ -555,24 +724,26 @@ model InventoryLedger {
 }
 
 model AttendanceLog {
-  id          String   @id @default(uuid())
-  userId      String
-  email       String?
-  logdate     String?
-  intimelog   String?
-  outtimelog  String?
-  workhours   String?
-  workstatus  String?
-  ef1         String?
-  ef2         String?
-  logininfo   String?
-  logoutinfo  String?
-  checkInLat  Float?
-  checkInLng  Float?
-  checkOutLat Float?
-  checkOutLng Float?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(uuid())
+  userId          String
+  email           String?
+  logdate         String?
+  intimelog       String?
+  outtimelog      String?
+  workhours       String?
+  workstatus      String?
+  ef1             String?
+  ef2             String?
+  logininfo       String?
+  logoutinfo      String?
+  checkInLat      Float?
+  checkInLng      Float?
+  checkOutLat     Float?
+  checkOutLng     Float?
+  lessonPlanText  String?
+  lessonPlanFiles Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -730,4 +901,54 @@ model SolutionPlan {
   planData Json
 
   beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+}
+
+model CoachingRecord {
+  id               String   @id @default(uuid())
+  fellowId         String
+  heading          String
+  date             DateTime
+  feedback         String?
+  observationNotes String?
+  fileUrl          String?
+  authorId         String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  fellow Fellow @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  author User   @relation(fields: [authorId], references: [id])
+}
+
+model TravelRequest {
+  id               String       @id @default(uuid())
+  userId           String
+  destination      String
+  purpose          String
+  startDate        DateTime
+  endDate          DateTime
+  expectedExpenses Float
+  status           TravelStatus @default(PENDING)
+  rejectionReason  String?
+  approvedBy       String?
+  approvedAt       DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approver User?           @relation("ApprovedByUser", fields: [approvedBy], references: [id])
+  expenses TravelExpense[]
+}
+
+model TravelExpense {
+  id              String   @id @default(uuid())
+  travelRequestId String
+  actualExpense   Float
+  expenseDetails  Json?
+  receiptFiles    Json?
+  notes           String?
+  submittedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  travelRequest TravelRequest @relation(fields: [travelRequestId], references: [id], onDelete: Cascade)
 }

@@ -59,7 +59,23 @@ export async function GET(req, context) {
       status: l.status
     }));
 
-    return NextResponse.json({ success: true, data: studentStatuses });
+    const [learningAssessments, homework] = await Promise.all([
+      prisma.learningAssessment.findMany({
+        where: { date: { gte: startOfDay, lte: endOfDay }, schoolId },
+        select: { studentId: true, canRead: true }
+      }),
+      prisma.studentHomework.findMany({
+        where: { date: { gte: startOfDay, lte: endOfDay }, schoolId },
+        select: { studentId: true, homeworkStatus: true }
+      })
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: studentStatuses,
+      learningAssessments,
+      homework
+    });
   } catch (error) {
     console.error("Fetch attendance error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -91,8 +107,10 @@ export async function POST(req, context) {
     }
 
     const body = await req.json();
-    const { date, studentStatuses } = body;
+    const { date, studentStatuses, learningAssessments, homework } = body;
     // studentStatuses: Array<{ studentId: string, status: string }>
+    // learningAssessments (optional): Array<{ studentId: string, canRead: boolean }>
+    // homework (optional): Array<{ studentId: string, status: string }>
 
     if (!date || !studentStatuses || !Array.isArray(studentStatuses)) {
       return NextResponse.json({ error: "Date and studentStatuses array are required" }, { status: 400 });
@@ -177,6 +195,46 @@ export async function POST(req, context) {
           where: { id: studentId },
           data: { attendance: overallPercentage }
         });
+      }
+
+      if (learningAssessments && Array.isArray(learningAssessments)) {
+        for (const { studentId, canRead } of learningAssessments) {
+          const existing = await tx.learningAssessment.findFirst({
+            where: { studentId, date: { gte: startOfDay, lte: endOfDay } }
+          });
+          if (existing) {
+            if (existing.canRead !== canRead) {
+              await tx.learningAssessment.update({
+                where: { id: existing.id },
+                data: { canRead }
+              });
+            }
+          } else {
+            await tx.learningAssessment.create({
+              data: { studentId, schoolId, date: startOfDay, canRead }
+            });
+          }
+        }
+      }
+
+      if (homework && Array.isArray(homework)) {
+        for (const { studentId, status: hwStatus } of homework) {
+          const existing = await tx.studentHomework.findFirst({
+            where: { studentId, date: { gte: startOfDay, lte: endOfDay } }
+          });
+          if (existing) {
+            if (existing.homeworkStatus !== hwStatus) {
+              await tx.studentHomework.update({
+                where: { id: existing.id },
+                data: { homeworkStatus: hwStatus }
+              });
+            }
+          } else {
+            await tx.studentHomework.create({
+              data: { studentId, schoolId, date: startOfDay, homeworkStatus: hwStatus }
+            });
+          }
+        }
       }
     });
 

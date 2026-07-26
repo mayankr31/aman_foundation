@@ -29,10 +29,11 @@ export default function Sidebar({ isOpen, onClose }) {
     if (
       [
         "/livelihood",
-        "/livelihood/goat-rearing",
-        "/livelihood/sugarcane",
+        "/livelihood/farm",
+        "/livelihood/non-farm",
+        "/livelihood/programs",
         "/beneficiaries",
-      ].some(path => pathname === path)
+      ].some(path => pathname.startsWith(path))
     ) {
       setLivelihoodOpen(true);
     }
@@ -190,18 +191,18 @@ export default function Sidebar({ isOpen, onClose }) {
                     Hub Overview
                   </Link>
                   <Link
-                    className={sublinkClass(pathname === "/livelihood/goat-rearing")}
-                    href="/livelihood/goat-rearing"
+                    className={sublinkClass(pathname === "/livelihood/farm")}
+                    href="/livelihood/farm"
                     onClick={onClose}
                   >
-                    Goat Rearing
+                    Farm Programs
                   </Link>
                   <Link
-                    className={sublinkClass(pathname === "/livelihood/sugarcane")}
-                    href="/livelihood/sugarcane"
+                    className={sublinkClass(pathname === "/livelihood/non-farm")}
+                    href="/livelihood/non-farm"
                     onClick={onClose}
                   >
-                    Sugarcane Cultivation
+                    Non-Farm Programs
                   </Link>
                   <Link
                     className={sublinkClass(pathname === "/beneficiaries")}
@@ -238,6 +239,30 @@ export default function Sidebar({ isOpen, onClose }) {
             >
               <span className="material-symbols-outlined">event_note</span>
               Leaves
+            </Link>
+          )}
+
+          {/* Travel - Fellow only */}
+          {user?.roleName === "FELLOW" && (
+            <Link
+              href="/travel"
+              className={navItemClass(pathname === "/travel")}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">flight</span>
+              Travel
+            </Link>
+          )}
+
+          {/* Travel Management - Admin/Manager only */}
+          {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+            <Link
+              href="/travel/manage"
+              className={navItemClass(pathname === "/travel/manage")}
+              onClick={onClose}
+            >
+              <span className="material-symbols-outlined">flight_takeoff</span>
+              Travel Management
             </Link>
           )}
 

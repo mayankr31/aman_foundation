@@ -676,6 +676,36 @@ async function main() {
     data: { name: "Organic Composting & Fertilizer Scheme", description: "Promoting chemical-free compost block application in sandy loam soils.", totalLandHectares: 15.0 }
   });
 
+  // --- NEW: Unified Livelihood Programs ---
+  console.log("Seeding Unified Livelihood Programs...");
+
+  const unifiedGoat1 = await prisma.livelihoodProgram.create({
+    data: { category: "NON_FARM", type: "goat_rearing", name: "Black Bengal Multiplication Phase I", description: "Focuses on breeding high-yield Black Bengal goats in Bartari village.", totalTarget: 50 }
+  });
+  const unifiedGoat2 = await prisma.livelihoodProgram.create({
+    data: { category: "NON_FARM", type: "goat_rearing", name: "High-Yield Fodder Training Program", description: "Training beneficiaries on sustainable silage preparation and veterinary basics.", totalTarget: 30 }
+  });
+  const unifiedGoat3 = await prisma.livelihoodProgram.create({
+    data: { category: "NON_FARM", type: "goat_rearing", name: "Silage & Feed Development Scheme", description: "Providing machinery for local community fodder blocks.", totalTarget: 20 }
+  });
+  const unifiedCane1 = await prisma.livelihoodProgram.create({
+    data: { category: "FARM", type: "sugarcane_cultivation", name: "Kalgachia Cane Development 2026", description: "High-performance sugarcane seed distribution and drip irrigation support.", totalTarget: 25.5 }
+  });
+  const unifiedCane2 = await prisma.livelihoodProgram.create({
+    data: { category: "FARM", type: "sugarcane_cultivation", name: "Beki Basin Cane Program", description: "Soil salinity correction and organic composting support in river basin soils.", totalTarget: 18.0 }
+  });
+  const unifiedCane3 = await prisma.livelihoodProgram.create({
+    data: { category: "FARM", type: "sugarcane_cultivation", name: "Organic Composting & Fertilizer Scheme", description: "Promoting chemical-free compost block application in sandy loam soils.", totalTarget: 15.0 }
+  });
+
+  // Additional example programs
+  const maizeProg = await prisma.livelihoodProgram.create({
+    data: { category: "FARM", type: "maize_cultivation", name: "Rainfed Maize Initiative 2026", description: "Promoting high-yield maize varieties with organic farming practices.", totalTarget: 12.0 }
+  });
+  const fishProg = await prisma.livelihoodProgram.create({
+    data: { category: "NON_FARM", type: "fish_farming", name: "Community Fish Pond Development", description: "Developing community-level fish farming ponds for income diversification.", totalTarget: 500 }
+  });
+
   // Beneficiaries list (10 realistic records)
   const beneficiariesList = [
     { enrolmentId: "BEN-482-A", name: "Amina Patel", dob: new Date("1984-03-15"), panCard: "BCDPN1234X", aadhar: "1234 5678 9012", rationCard: "SFY-AS-4029", mobNumber: "+91 99887 71122", resilienceScore: 82, annualIncome: 45000, monthlyIncome: 3750, caste: "General", religion: "Islam", address: "Bartari, Kalgachia, Assam", householdSize: 5, primaryIncomeType: "Agriculture", tier: "Tier 2", tierPercent: 65, bankName: "State Bank of India", bankAccountNo: "30928409184", bankIfsc: "SBIN0007421" },
@@ -782,6 +812,51 @@ async function main() {
       { beneficiaryId: createdBeneficiaries[8].id, hectaresAllotted: 6.0, soilType: "Clay Loam", waterSource: "Canal Linkage", cropStage: "Harvesting", estimatedYieldTons: 270.0, actualYieldTons: 278.4, estimatedRevenue: 842400, actualRevenue: 868608, fertilizersDistributed: "NPK (6 bags), compost block", sugarcaneProgramId: caneProgram2.id }
     ]
   });
+
+  // --- NEW: Unified BeneficiaryLivelihood Assignments ---
+  console.log("Seeding Unified Livelihood Assignments...");
+
+  // Goat rearing assignments (unified)
+  await prisma.beneficiaryLivelihood.createMany({
+    data: [
+      { beneficiaryId: createdBeneficiaries[0].id, programId: unifiedGoat1.id, attributes: { goatsAssigned: 3, investment: 12000, returnsAmount: 29400, roiPercentage: 145.0, advantagesLog: "Increased household savings, herd multiplier active." } },
+      { beneficiaryId: createdBeneficiaries[1].id, programId: unifiedGoat2.id, attributes: { goatsAssigned: 2, investment: 8000, returnsAmount: 16000, roiPercentage: 100.0, advantagesLog: "Supplementary household income, milk for local consumption." } },
+      { beneficiaryId: createdBeneficiaries[2].id, programId: unifiedGoat1.id, attributes: { goatsAssigned: 4, investment: 16000, returnsAmount: 32000, roiPercentage: 100.0, advantagesLog: "Herd expansion in progress, organic manure production." } },
+    ]
+  });
+
+  // Sugarcane assignments (unified)
+  await prisma.beneficiaryLivelihood.createMany({
+    data: [
+      { beneficiaryId: createdBeneficiaries[0].id, programId: unifiedCane1.id, attributes: { hectaresAllotted: 4.5, soilType: "Clay Loam", waterSource: "Drip Irrigation", cropStage: "Growing", estimatedYieldTons: 202.5, actualYieldTons: 198.0, fertilizersDistributed: "NPK fertilizer packs (5 bags)", estimatedRevenue: 631800, actualRevenue: 617760 } },
+      { beneficiaryId: createdBeneficiaries[3].id, programId: unifiedCane1.id, attributes: { hectaresAllotted: 5.2, soilType: "Sandy Loam", waterSource: "Canal Linkage", cropStage: "Growing", estimatedYieldTons: 234.0, estimatedRevenue: 730080, fertilizersDistributed: "NPK (4 bags), Urea (2 bags)" } },
+      { beneficiaryId: createdBeneficiaries[5].id, programId: unifiedCane2.id, attributes: { hectaresAllotted: 3.5, soilType: "Clay Loam", waterSource: "Rainfed", cropStage: "Planting", estimatedYieldTons: 157.5, estimatedRevenue: 491400, fertilizersDistributed: "Organic compost block" } },
+    ]
+  });
+
+  // Maize assignment example
+  await prisma.beneficiaryLivelihood.create({
+    data: { beneficiaryId: createdBeneficiaries[6].id, programId: maizeProg.id, attributes: { hectaresAllotted: 2.5, seedVariety: "HQPM-1 Hybrid", soilType: "Sandy Loam", waterSource: "Rainfed", cropStage: "Growing", estimatedYieldTons: 15.0, estimatedRevenue: 45000 } }
+  });
+
+  // Fish farming assignment example with event
+  const fishAssign = await prisma.beneficiaryLivelihood.create({
+    data: { beneficiaryId: createdBeneficiaries[8].id, programId: fishProg.id, attributes: { pondSize: 200, fishCount: 500, fishSpecies: "Rohu", feedType: "Commercial floating pellets", estimatedHarvestKg: 250, estimatedRevenue: 50000 } }
+  });
+  await prisma.livelihoodEvent.create({
+    data: { livelihoodId: fishAssign.id, eventType: "Stocking", eventDate: new Date("2026-04-15"), quantity: 500, notes: "Initial fingerling stocking completed", recordedBy: "Field Officer" }
+  });
+
+  // Goat event examples (unified)
+  const goatAssign1 = await prisma.beneficiaryLivelihood.findFirst({ where: { beneficiaryId: createdBeneficiaries[0].id, programId: unifiedGoat1.id } });
+  if (goatAssign1) {
+    await prisma.livelihoodEvent.createMany({
+      data: [
+        { livelihoodId: goatAssign1.id, eventType: "Pregnancy", eventDate: new Date("2026-03-10"), quantity: 2, notes: "Two does confirmed pregnant by veterinarian." },
+        { livelihoodId: goatAssign1.id, eventType: "ChildBirth", eventDate: new Date("2026-06-05"), quantity: 3, notes: "Three healthy kids born. All nursing well." },
+      ]
+    });
+  }
 
   // --- 5. DISASTER RELIEF MODULE ---
   console.log("Seeding Disaster Relief Module...");

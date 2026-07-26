@@ -94,6 +94,11 @@ export default function AttendanceModal({ isOpen, onClose }) {
   const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
+  const [lessonPlanText, setLessonPlanText] = useState("");
+  const [lessonPlanFiles, setLessonPlanFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isUploadingLP, setIsUploadingLP] = useState(false);
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setShowToast(true);
@@ -124,6 +129,13 @@ export default function AttendanceModal({ isOpen, onClose }) {
       if (resLog.ok && dataLog.data) {
         const log = dataLog.data.find(l => l.userId === user.id && l.logdate === today);
         setCurrentLog(log || null);
+        if (log) {
+          setLessonPlanText(log.lessonPlanText || "");
+          setLessonPlanFiles(Array.isArray(log.lessonPlanFiles) ? log.lessonPlanFiles : []);
+        } else {
+          setLessonPlanText("");
+          setLessonPlanFiles([]);
+        }
       }
 
       // Fetch Tasks
@@ -330,6 +342,102 @@ export default function AttendanceModal({ isOpen, onClose }) {
     }
   };
 
+  const handleSaveLessonPlan = async () => {
+    if ((!currentLog) && (!lessonPlanText.trim() && selectedFiles.length === 0)) return;
+    setIsUploadingLP(true);
+    try {
+      let logId = currentLog?.id;
+
+      if (!logId) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US');
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const dateString = `${yyyy}-${mm}-${dd}`;
+
+        let lat = null;
+        let lng = null;
+        if (navigator.geolocation) {
+          try {
+            const pos = await new Promise((resolve, reject) => {
+              navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+            });
+            lat = pos.coords.latitude;
+            lng = pos.coords.longitude;
+          } catch (err) {}
+        }
+
+        const createRes = await fetch('/api/attendance', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            logdate: dateString,
+            intimelog: timeString,
+            workstatus: `Lesson plan logged at ${timeString}`,
+            logininfo: navigator.userAgent,
+            lessonPlanText,
+            checkInLat: lat,
+            checkInLng: lng
+          })
+        });
+        const createData = await createRes.json();
+        if (createRes.ok) {
+          setCurrentLog(createData.data);
+          logId = createData.data.id;
+        } else {
+          triggerToast("Failed to create log entry");
+          return;
+        }
+      }
+
+      const formData = new FormData();
+      formData.append("logId", logId);
+      formData.append("lessonPlanText", lessonPlanText);
+      selectedFiles.forEach((file, idx) => {
+        formData.append(`file_${idx}`, file);
+      });
+
+      const res = await fetch("/api/attendance/lesson-plan", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCurrentLog(data.data);
+        setLessonPlanText(data.data.lessonPlanText || "");
+        setLessonPlanFiles(Array.isArray(data.data.lessonPlanFiles) ? data.data.lessonPlanFiles : []);
+        setSelectedFiles([]);
+        triggerToast("Lesson plan saved!");
+      }
+    } catch (e) {
+      triggerToast("Failed to save lesson plan");
+    } finally {
+      setIsUploadingLP(false);
+    }
+  };
+
+  const handleRemoveFile = async (fileIndex) => {
+    if (!currentLog) return;
+    try {
+      const res = await fetch(`/api/attendance/lesson-plan?logId=${currentLog.id}&fileIndex=${fileIndex}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCurrentLog(data.data);
+        setLessonPlanFiles(Array.isArray(data.data.lessonPlanFiles) ? data.data.lessonPlanFiles : []);
+      }
+    } catch (e) {
+      triggerToast("Failed to remove file");
+    }
+  };
+
   if (!isOpen) return null;
 
   const isCheckedIn = !!currentLog;
@@ -342,7 +450,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-10 relative mt-10 md:mt-0 font-sans">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-10 relative mt-10 md:mt-0 font-sans max-h-[90vh] overflow-y-auto">
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors"
@@ -548,6 +656,83 @@ export default function AttendanceModal({ isOpen, onClose }) {
                 )}
               </div>
             </div>
+
+            <div className="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 mt-2">
+                <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Lesson Plan</h3>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Lesson Plan Notes</label>
+                    <textarea
+                      value={lessonPlanText}
+                      onChange={(e) => setLessonPlanText(e.target.value)}
+                      placeholder="Write your daily lesson plan here..."
+                      rows={4}
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">Upload Files</label>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <label className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold cursor-pointer transition-colors shadow-md shadow-blue-600/20">
+                        <span className="material-symbols-outlined text-[18px]">upload_file</span>
+                        Choose Files
+                        <input
+                          type="file"
+                          multiple
+                          className="hidden"
+                          onChange={(e) => setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)])}
+                        />
+                      </label>
+                    </div>
+
+                    {selectedFiles.length > 0 && (
+                      <div className="mt-3 space-y-1">
+                        {selectedFiles.map((file, idx) => (
+                          <div key={`new-${idx}`} className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg">
+                            <span className="material-symbols-outlined text-[14px]">description</span>
+                            <span className="flex-1 truncate">{file.name}</span>
+                            <button onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                              <span className="material-symbols-outlined text-[14px]">close</span>
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {lessonPlanFiles.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Uploaded Files</p>
+                        <div className="space-y-1">
+                          {lessonPlanFiles.map((fileUrl, idx) => (
+                            <div key={`existing-${idx}`} className="flex items-center gap-2 text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-lg">
+                              <span className="material-symbols-outlined text-[14px] text-slate-400">description</span>
+                              <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-blue-600 hover:underline">
+                                {fileUrl.split("/").pop()}
+                              </a>
+                              <button onClick={() => handleRemoveFile(idx)} className="text-red-500 hover:text-red-700">
+                                <span className="material-symbols-outlined text-[14px]">delete</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleSaveLessonPlan}
+                      disabled={isUploadingLP || (!lessonPlanText.trim() && selectedFiles.length === 0)}
+                      className="px-6 py-2 bg-primary hover:bg-primary-container text-white font-semibold rounded-lg transition-colors cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                      {isUploadingLP && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
+                      {isUploadingLP ? "Saving..." : "Save Lesson Plan"}
+                    </button>
+                  </div>
+                </div>
+              </div>
           </div>
         )}
 

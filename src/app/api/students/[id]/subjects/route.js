@@ -59,7 +59,7 @@ export async function POST(req, context) {
     }
 
     const body = await req.json();
-    const { subject, score, grade, remarks } = body;
+    const { subject, score, grade, academicYear, academicGrade, month, remarks } = body;
 
     if (!subject || score === undefined || !grade) {
       return NextResponse.json(
@@ -74,6 +74,9 @@ export async function POST(req, context) {
         subject,
         score: parseFloat(score),
         grade,
+        academicYear: academicYear ?? null,
+        academicGrade: academicGrade ?? null,
+        month: month ?? null,
         remarks: remarks ?? null
       }
     });
@@ -105,7 +108,7 @@ export async function PUT(req, context) {
     }
 
     const body = await req.json();
-    const { subjectMarkId, subject, score, grade, remarks } = body;
+    const { subjectMarkId, subject, score, grade, academicYear, academicGrade, month, remarks } = body;
 
     if (!subjectMarkId) {
       return NextResponse.json({ error: "subjectMarkId is required" }, { status: 400 });
@@ -126,6 +129,9 @@ export async function PUT(req, context) {
         subject: subject ?? existing.subject,
         score: score !== undefined ? parseFloat(score) : existing.score,
         grade: grade ?? existing.grade,
+        academicYear: academicYear !== undefined ? (academicYear || null) : existing.academicYear,
+        academicGrade: academicGrade !== undefined ? (academicGrade || null) : existing.academicGrade,
+        month: month !== undefined ? (month || null) : existing.month,
         remarks: remarks !== undefined ? remarks : existing.remarks
       }
     });

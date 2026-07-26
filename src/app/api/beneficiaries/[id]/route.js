@@ -76,6 +76,21 @@ export async function GET(req, { params }) {
           include: {
             sugarcaneProgram: true
           }
+        },
+        livelihoodDetails: {
+          include: {
+            program: true,
+            events: {
+              orderBy: { eventDate: "desc" }
+            }
+          },
+          orderBy: { enrolledAt: "desc" }
+        },
+        students: {
+          select: { id: true, name: true, studentId: true, grade: true, schoolId: true, isMigrated: true }
+        },
+        migrationRecords: {
+          orderBy: { migrationDate: "desc" }
         }
       }
     });
@@ -230,6 +245,10 @@ export async function DELETE(req, { params }) {
         where: { beneficiaryId }
       });
       await tx.beneficiarySugarcane.deleteMany({
+        where: { beneficiaryId }
+      });
+      // Delete unified livelihood details (cascades to events)
+      await tx.beneficiaryLivelihood.deleteMany({
         where: { beneficiaryId }
       });
 
