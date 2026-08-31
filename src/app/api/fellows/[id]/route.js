@@ -30,10 +30,8 @@ export async function GET(req, context) {
       include: {
         schools: { include: { school: { select: { id: true, name: true, location: true, status: true } } } },
         students: true,
-        goals: {
-          include: {
-            milestones: true
-          }
+        goalSheets: {
+          orderBy: { date: "desc" }
         },
         reviews: true
       }
@@ -119,8 +117,8 @@ export async function DELETE(req, context) {
         where: { fellowId }
       });
 
-      // 4. Delete goals (milestones will cascade delete)
-      await tx.fellowGoal.deleteMany({
+      // 4. Delete goal sheets
+      await tx.goalSheet.deleteMany({
         where: { fellowId }
       });
 

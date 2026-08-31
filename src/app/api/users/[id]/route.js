@@ -41,7 +41,7 @@ export async function DELETE(req, context) {
           data: { fellowId: null }
         });
         
-        // Delete the fellow (which cascades to FellowGoal, FellowGoalMilestone, FellowReview in db)
+        // Delete fellow (cascades to GoalSheet, FellowReview, etc. in db)
         await tx.fellow.delete({
           where: { id: fellowId }
         });

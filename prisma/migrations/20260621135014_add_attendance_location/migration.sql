@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE "AttendanceLog" ADD COLUMN     "checkInLat" DOUBLE PRECISION,
-ADD COLUMN     "checkInLng" DOUBLE PRECISION,
-ADD COLUMN     "checkOutLat" DOUBLE PRECISION,
-ADD COLUMN     "checkOutLng" DOUBLE PRECISION;

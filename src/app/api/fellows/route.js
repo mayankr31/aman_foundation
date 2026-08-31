@@ -12,24 +12,14 @@ export async function GET(req) {
         schools: {
           include: { school: { select: { id: true, name: true, location: true } } }
         },
-        goals: {
-          include: {
-            milestones: true
-          }
-        },
         _count: {
-          select: { students: true, goals: true }
+          select: { students: true, goalSheets: true }
         }
       },
       orderBy: { createdAt: "desc" }
     });
 
     const mappedFellows = fellows.map((f) => {
-      const milestones = f.goals.flatMap(g => g.milestones.map(m => ({
-        done: m.done,
-        text: m.text
-      }))).slice(0, 2);
-
       return {
         id: f.id,
         name: f.name,
@@ -40,7 +30,7 @@ export async function GET(req) {
         location: f.address || (f.schools?.[0]?.school?.location || "Kalgachia"),
         schools: (f.schools || []).map(fs => fs.school),
         progress: f.progress,
-        milestones: milestones.length > 0 ? milestones : [
+        milestones: [
           { done: true, text: "Placement Setup" },
           { done: false, text: "Pending Review" }
         ],

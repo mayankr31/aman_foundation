@@ -8,9 +8,7 @@ async function main() {
   console.log("Clearing existing tables...");
   await prisma.inventoryLedger.deleteMany({});
   await prisma.resourceItem.deleteMany({});
-  await prisma.helpProviderIncident.deleteMany({});
   await prisma.helpProvider.deleteMany({});
-  await prisma.affectedFamily.deleteMany({});
   await prisma.disasterIncident.deleteMany({});
 
   await prisma.beneficiarySugarcane.deleteMany({});
@@ -28,19 +26,24 @@ async function main() {
   await prisma.schoolProgram.deleteMany({});
   await prisma.program.deleteMany({});
 
-  await prisma.studentSubjectMark.deleteMany({});
+  await prisma.FLNResponse.deleteMany({});
+  await prisma.SELResponse.deleteMany({});
+  await prisma.SubjectAssessmentResponse.deleteMany({});
+  await prisma.EnrollmentResponse.deleteMany({});
+  await prisma.AssessmentForm.deleteMany({});
+  await prisma.FLNQuestion.deleteMany({});
+  await prisma.FLNCategory.deleteMany({});
+  await prisma.SELQuestion.deleteMany({});
+  await prisma.SubjectAssessmentTemplate.deleteMany({});
+
   await prisma.studentAttendanceLog.deleteMany({});
   await prisma.student.deleteMany({});
 
   await prisma.fellowReview.deleteMany({});
-  await prisma.fellowGoalMilestone.deleteMany({});
-  await prisma.fellowGoal.deleteMany({});
   await prisma.fellowSchool.deleteMany({});
   await prisma.fellow.deleteMany({});
   await prisma.school.deleteMany({});
 
-  await prisma.broadcastAlert.deleteMany({});
-  
   // Clean up user accounts for fellows to recreate them cleanly
   await prisma.user.deleteMany({
     where: {
@@ -417,90 +420,6 @@ async function main() {
     ]
   });
 
-  // 3.3 Fellow Goals & Milestones
-  await prisma.fellowGoal.create({
-    data: {
-      fellowId: fellow1.id,
-      title: "Improve Standard 3 Reading Proficiency",
-      targetDate: new Date("2026-11-30"),
-      status: "In Progress",
-      review: "Progressing well. 75% of kids now recognize standard phonics syllables.",
-      milestones: {
-        create: [
-          { text: "Administer Baseline Phonics Assessment", done: true },
-          { text: "Weekly Group Phonics Drills", done: true },
-          { text: "Conduct Mid-Term Reading Evaluation", done: false }
-        ]
-      }
-    }
-  });
-
-  await prisma.fellowGoal.create({
-    data: {
-      fellowId: fellow1.id,
-      title: "Establish PTA Attendance Benchmark at 80%",
-      targetDate: new Date("2026-12-15"),
-      status: "Completed",
-      review: "PTA attendance reached 84% in the last meeting. Excellent parent engagement.",
-      milestones: {
-        create: [
-          { text: "Send SMS notifications 3 days in advance", done: true },
-          { text: "Design parent feedback registry sheets", done: true }
-        ]
-      }
-    }
-  });
-
-  await prisma.fellowGoal.create({
-    data: {
-      fellowId: fellow2.id,
-      title: "Improve Basic Numeracy in Grade 5",
-      targetDate: new Date("2026-11-15"),
-      status: "In Progress",
-      review: "Focusing on multiplication and divisions. 60% of students now master division.",
-      milestones: {
-        create: [
-          { text: "Diagnostic assessment for basic arithmetic operations", done: true },
-          { text: "Daily 15-minute mental math drills", done: true },
-          { text: "Bi-weekly progress checks", done: false }
-        ]
-      }
-    }
-  });
-
-  await prisma.fellowGoal.create({
-    data: {
-      fellowId: fellow3.id,
-      title: "Modernize School Science Lab Infrastructure",
-      targetDate: new Date("2026-10-30"),
-      status: "Completed",
-      review: "Science lab has been stocked with basic chemistry kits and slides.",
-      milestones: {
-        create: [
-          { text: "Proposal submit for donor funding of science kits", done: true },
-          { text: "Procure kits and categorize inventory", done: true },
-          { text: "Conduct parent-teacher demo day using new apparatus", done: true }
-        ]
-      }
-    }
-  });
-
-  await prisma.fellowGoal.create({
-    data: {
-      fellowId: fellow3.id,
-      title: "Increase STEM Enrollment among Girls by 15%",
-      targetDate: new Date("2026-12-30"),
-      status: "In Progress",
-      review: "Outreach completed for Grade 9. 10 girls registered for additional tutoring.",
-      milestones: {
-        create: [
-          { text: "Parent counseling assemblies in local village", done: true },
-          { text: "After-school science coding sessions", done: false }
-        ]
-      }
-    }
-  });
-
   // 3.4 Fellow Reviews
   await prisma.fellowReview.create({
     data: {
@@ -533,32 +452,11 @@ async function main() {
     createdStudents.push(student);
   }
 
-  // 3.6 Student Subject Marks & Attendance Logs (Seeded dynamically)
-  console.log("Seeding student marks & attendance logs...");
-  const subjects = ["Mathematics", "Reading & Literacy", "General Science", "Social Studies", "English"];
+  // 3.6 Attendance Logs (Seeded dynamically)
+  console.log("Seeding attendance logs...");
   const months = ["Jan", "Feb", "Mar", "Apr", "May"];
 
   for (const student of createdStudents) {
-    // Subject marks
-    for (const sub of subjects) {
-      const score = Math.floor(62 + Math.random() * 35); // 62 - 97
-      let grade = "A";
-      if (score < 70) grade = "C";
-      else if (score < 85) grade = "B";
-      else if (score >= 95) grade = "A+";
-
-      await prisma.studentSubjectMark.create({
-        data: {
-          studentId: student.id,
-          subject: sub,
-          score,
-          grade,
-          remarks: score >= 90 ? "Excellent understanding." : score >= 75 ? "Consistent effort shown." : "Requires tutoring."
-        }
-      });
-    }
-
-    // Attendance logs
     for (const mon of months) {
       const total = 22;
       const present = Math.floor(14 + Math.random() * 9); // 14 to 22
@@ -940,11 +838,84 @@ async function main() {
   });
 
   // Broadcast Alert
-  await prisma.broadcastAlert.createMany({
+  // ─── Assessment Templates (FLN, SEL, Subjects) ───
+  console.log("Seeding assessment templates...");
+
+  await prisma.FLNCategory.create({
+    data: {
+      name: "Emergent", order: 1,
+      questions: { create: [
+        { questionText: "Alphabet sound", marks: 1, order: 1 },
+        { questionText: "CVC Words (4 words)", marks: 2, order: 2 }
+      ]}
+    }
+  });
+  await prisma.FLNCategory.create({
+    data: {
+      name: "Beginner", order: 2,
+      questions: { create: [
+        { questionText: "Consonant blends (beginning)", marks: 2, order: 1 },
+        { questionText: "Consonant blends (end)", marks: 2, order: 2 },
+        { questionText: "Consonant digraphs", marks: 2, order: 3 },
+        { questionText: "Long Vowels (magic E)", marks: 2, order: 4 },
+        { questionText: "Vowel Digraphs", marks: 2, order: 5 }
+      ]}
+    }
+  });
+  await prisma.FLNCategory.create({
+    data: {
+      name: "Intermediate", order: 3,
+      questions: { create: [
+        { questionText: "Multi syllable word (decoding)", marks: 2, order: 1 },
+        { questionText: "Reading sentences", marks: 2, order: 2 }
+      ]}
+    }
+  });
+  await prisma.FLNCategory.create({
+    data: {
+      name: "Advanced", order: 4,
+      questions: { create: [
+        { questionText: "Reading Paragraphs", marks: 3, order: 1 }
+      ]}
+    }
+  });
+
+  const selQTexts = [
+    "How difficult is it for you to ask questions in class?",
+    "How difficult is it for you to finish work, even when it is hard?",
+    "How difficult is it for you to share your feelings with others?",
+    "How difficult is it for you to ask others for feedback?",
+    "How difficult is it for you to talk about yourself and your family?",
+    "How difficult is it for you to set goals for yourself?",
+    "How difficult is it for you to ask for help?",
+    "How difficult is it for you to make new friends in your class?",
+    "How difficult is it for you to share things with your friends?",
+    "How difficult is it for you to say sorry when you make a mistake?",
+    "How difficult is it for you to work in a group?",
+    "How difficult is it for you to learn from people with different opinions?",
+    "How difficult is it for you to know how someone is feeling by looking at their face?",
+    "How difficult is it for you to understand problems in your class or school?",
+    "How difficult is it for you to speak up when you see something unfair, even if others don't?",
+    "How difficult is it for you to speak about your community?",
+    "How difficult is it for you to be a leader?",
+    "How difficult is it for you to solve problems that affect both you and your classmates?",
+    "How difficult is it for you to solve problems at home?"
+  ];
+  for (let i = 0; i < selQTexts.length; i++) {
+    await prisma.SELQuestion.create({
+      data: {
+        questionText: selQTexts[i],
+        options: ["Too Easy", "Easy", "Hard", "Too Hard", "Can with Teachers Help"],
+        order: i + 1
+      }
+    });
+  }
+
+  await prisma.SubjectAssessmentTemplate.createMany({
     data: [
-      { severity: "Urgent", message: "Beki River water levels rising. Residents in Bartari advised to move to school shelter.", sentByUserId: defaultAdmin.id },
-      { severity: "Warning", message: "Storm warning for Sawpur village. Maintain backup stocks.", sentByUserId: defaultAdmin.id },
-      { severity: "Information", message: "Free medical camp starting tomorrow at Bartari High School.", sentByUserId: defaultAdmin.id }
+      { name: "English", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"], order: 1 },
+      { name: "Assamese", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"], order: 2 },
+      { name: "Maths", options: ["Number Recognition (1-9)", "Beginner", "Number Recognition (11-99)", "Subtraction", "absent"], order: 3 }
     ]
   });
 

@@ -4,8 +4,16 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import GoalSheetForm from "@/components/GoalSheetForm";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
+import EngagementSurveyForm from "@/components/EngagementSurveyForm";
+import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
+import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
+import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
+import dynamic from "next/dynamic";
+
+const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
 export default function ProfilePage() {
   const { token, isInitializing } = useAuth();
@@ -24,16 +32,21 @@ export default function ProfilePage() {
   const [editAvatar, setEditAvatar] = useState("");
 
   // Fellow specific dashboard states
-  const [goals, setGoals] = useState([]);
+  const [goalSheets, setGoalSheets] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
+  const [engagementSurveys, setEngagementSurveys] = useState([]);
+  const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
   const [activeTab, setActiveTab] = useState("Goals");
+  const [showPDFModal, setShowPDFModal] = useState(false);
+  const [showEngagementForm, setShowEngagementForm] = useState(false);
+  const [showLookBeyondForm, setShowLookBeyondForm] = useState(false);
+  const [viewingSurvey, setViewingSurvey] = useState(null);
+  const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
 
-  // Goals modal/form state
-  const [showAddGoalModal, setShowAddGoalModal] = useState(false);
-  const [newGoalTitle, setNewGoalTitle] = useState("");
-  const [newGoalTargetDate, setNewGoalTargetDate] = useState("");
-  const [newGoalMilestones, setNewGoalMilestones] = useState([""]);
+  // Goal Sheet states
+  const [showGoalSheetForm, setShowGoalSheetForm] = useState(false);
+  const [editingGoalSheet, setEditingGoalSheet] = useState(null);
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -61,15 +74,13 @@ export default function ProfilePage() {
             setEditDob(userProfile.fellow.dob ? userProfile.fellow.dob.split("T")[0] : "");
             setEditAvatar(userProfile.fellow.avatar || "");
 
-            // Fetch goals and reviews for fellow
-            // We can resolve by userProfile.fellow.id
             const fellowId = userProfile.fellow.id;
             const detailRes = await fetch(`/api/fellows/${fellowId}`, {
               headers: { Authorization: `Bearer ${token}` }
             });
             const detailJson = await detailRes.json();
             if (detailJson.success) {
-              setGoals(detailJson.data.goals || []);
+              setGoalSheets(detailJson.data.goalSheets || []);
               setReviews(detailJson.data.reviews || []);
             }
           }
@@ -108,6 +119,94 @@ export default function ProfilePage() {
       loadCoachingRecords();
     }
   }, [activeTab, token, profile]);
+
+  useEffect(() => {
+    async function loadEngagementSurveys() {
+      if (!profile?.fellow?.id || !token) return;
+      try {
+        const res = await fetch(`/api/fellows/${profile.fellow.id}/engagement-surveys`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (json.success) {
+          setEngagementSurveys(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load engagement surveys:", err);
+      }
+    }
+    if (activeTab === "Engagement Survey") {
+      loadEngagementSurveys();
+    }
+  }, [activeTab, token, profile]);
+
+  useEffect(() => {
+    async function loadLookBeyondSurveys() {
+      if (!profile?.fellow?.id || !token) return;
+      try {
+        const res = await fetch(`/api/fellows/${profile.fellow.id}/look-beyond`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (json.success) {
+          setLookBeyondSurveys(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load look beyond surveys:", err);
+      }
+    }
+    if (activeTab === "Look Beyond Survey") {
+      loadLookBeyondSurveys();
+    }
+  }, [activeTab, token, profile]);
+
+  const handleSubmitEngagementSurvey = async (surveyDate, responses) => {
+    try {
+      const res = await fetch(`/api/fellows/${profile.fellow.id}/engagement-surveys`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ surveyDate, responses })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setEngagementSurveys((prev) => [json.data, ...prev]);
+        setShowEngagementForm(false);
+        toast.success("Engagement survey submitted successfully!");
+      } else {
+        toast.error(json.error || "Failed to submit survey");
+      }
+    } catch (err) {
+      console.error("Failed to submit engagement survey:", err);
+      toast.error("An error occurred while submitting the survey.");
+    }
+  };
+
+  const handleSubmitLookBeyond = async (surveyDate, responses) => {
+    try {
+      const res = await fetch(`/api/fellows/${profile.fellow.id}/look-beyond`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ surveyDate, responses })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setLookBeyondSurveys((prev) => [json.data, ...prev]);
+        setShowLookBeyondForm(false);
+        toast.success("Look Beyond survey submitted successfully!");
+      } else {
+        toast.error(json.error || "Failed to submit survey");
+      }
+    } catch (err) {
+      console.error("Failed to submit look beyond survey:", err);
+      toast.error("An error occurred while submitting the survey.");
+    }
+  };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -157,77 +256,20 @@ export default function ProfilePage() {
     }
   };
 
-  const toggleMilestone = async (goalId, milestoneId, currentDone) => {
-    const newDone = !currentDone;
-    const updated = goals.map((goal) => {
-      if (goal.id === goalId) {
-        const updatedMilestones = goal.milestones.map((m) => {
-          if (m.id === milestoneId) return { ...m, done: newDone };
-          return m;
-        });
-        return { ...goal, milestones: updatedMilestones };
+  const handleGoalSheetSaved = (updatedSheet) => {
+    setGoalSheets((prev) => {
+      const idx = prev.findIndex((s) => s.id === updatedSheet.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = updatedSheet;
+        return copy;
       }
-      return goal;
+      return [updatedSheet, ...prev];
     });
-    setGoals(updated);
-
-    try {
-      const fellowId = profile.fellow.id;
-      await fetch(`/api/fellows/${fellowId}/goals`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          type: "TOGGLE_MILESTONE",
-          milestoneId,
-          done: newDone
-        })
-      });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
-  const handleAddGoal = async (e) => {
-    e.preventDefault();
-    if (!newGoalTitle) return;
-
-    try {
-      const fellowId = profile.fellow.id;
-      const filteredMilestones = newGoalMilestones.filter(m => m.trim() !== "");
-      const res = await fetch(`/api/fellows/${fellowId}/goals`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          title: newGoalTitle,
-          targetDate: newGoalTargetDate || null,
-          milestones: filteredMilestones
-        })
-      });
-      const json = await res.json();
-      if (json.success) {
-        setGoals(prev => [...prev, json.data]);
-        setNewGoalTitle("");
-        setNewGoalTargetDate("");
-        setNewGoalMilestones([""]);
-        setShowAddGoalModal(false);
-        toast.success("Goal created successfully!");
-      } else {
-        toast.error(json.error || "Failed to create goal");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("An error occurred while creating the goal.");
-    }
-  };
-
-  const handleDeleteGoal = (goalId) => {
-    setDeleteItemId(goalId);
+  const handleDeleteGoalSheet = (sheetId) => {
+    setDeleteItemId(sheetId);
     setDeleteModalOpen(true);
   };
 
@@ -235,20 +277,20 @@ export default function ProfilePage() {
     if (!deleteItemId) return;
     try {
       const fellowId = profile.fellow.id;
-      const res = await fetch(`/api/fellows/${fellowId}/goals?goalId=${deleteItemId}`, {
+      const res = await fetch(`/api/fellows/${fellowId}/goal-sheets/${deleteItemId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
       const json = await res.json();
       if (json.success) {
-        setGoals(prev => prev.filter(g => g.id !== deleteItemId));
-        toast.success("Goal deleted successfully!");
+        setGoalSheets((prev) => prev.filter((s) => s.id !== deleteItemId));
+        toast.success("Goal sheet deleted successfully!");
       } else {
-        toast.error(json.error || "Failed to delete goal");
+        toast.error(json.error || "Failed to delete goal sheet");
       }
     } catch (err) {
       console.error(err);
-      toast.error("An error occurred while deleting the goal.");
+      toast.error("An error occurred while deleting the goal sheet.");
     }
     setDeleteModalOpen(false);
     setDeleteItemId(null);
@@ -347,6 +389,15 @@ export default function ProfilePage() {
               <span className="material-symbols-outlined text-[18px]">edit</span>
               Edit Profile
             </button>
+            {profile.role?.name === "FELLOW" && (
+              <button
+                onClick={() => setShowPDFModal(true)}
+                className="bg-surface-container text-on-surface px-6 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
+              >
+                <span className="material-symbols-outlined text-[18px]">book</span>
+                Learning Framework
+              </button>
+            )}
           </div>
         ) : (
           <form onSubmit={handleUpdateProfile} className="relative z-10 space-y-6 font-sans text-sm">
@@ -514,6 +565,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
               )}
+
             </div>
 
       {/* Render tab views for fellow role only */}
@@ -521,7 +573,7 @@ export default function ProfilePage() {
         <>
           {/* Tabs */}
           <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-            {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training"].map((tab) => {
+            {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training", "Engagement Survey", "Look Beyond Survey"].map((tab) => {
               const isActive = activeTab === tab;
               return (
                 <button
@@ -547,76 +599,69 @@ export default function ProfilePage() {
               {activeTab === "Goals" && (
                 <div className="space-y-6">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-headline font-bold text-xl text-on-surface">Fellow Learning Goals</h3>
+                    <h3 className="font-headline font-bold text-xl text-on-surface">Goal Sheets</h3>
                     <button
-                      onClick={() => setShowAddGoalModal(true)}
+                      onClick={() => {
+                        setEditingGoalSheet(null);
+                        setShowGoalSheetForm(true);
+                      }}
                       className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[16px]">add</span>
-                      Add New Goal
+                      Create New Goal Sheet
                     </button>
                   </div>
 
-                  {goals.length === 0 ? (
+                  {goalSheets.length === 0 ? (
                     <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                      No learning goals set yet. Click "Add New Goal" to start.
+                      No goal sheets yet. Click "Create New Goal Sheet" to start.
                     </div>
                   ) : (
-                    goals.map((g) => (
-                      <div key={g.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group">
-                        <div className="flex justify-between items-start mb-4 gap-4">
-                          <div>
+                    goalSheets.map((sheet) => (
+                      <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
+                        <div className="flex justify-between items-start gap-4">
+                          <button
+                            onClick={() => {
+                              setEditingGoalSheet(sheet);
+                              setShowGoalSheetForm(true);
+                            }}
+                            className="text-left flex-1 cursor-pointer"
+                          >
                             <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
-                              {g.title}
-                              <button
-                                onClick={() => handleDeleteGoal(g.id)}
-                                className="text-on-surface-variant hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity ml-2 animate-pulse"
-                                title="Delete goal"
-                              >
-                                <span className="material-symbols-outlined text-[18px]">delete</span>
-                              </button>
-                            </h3>
-                            <p className="text-xs text-on-surface-variant mt-1">
-                              Target Date: {g.targetDate ? new Date(g.targetDate).toLocaleDateString() : "No date set"}
-                            </p>
-                          </div>
-                          <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                            g.status === "Completed" ? "bg-primary-fixed text-on-primary-fixed" :
-                            g.status === "In Progress" ? "bg-secondary-container text-on-secondary-container" :
-                            "bg-surface-variant text-on-surface-variant"
-                          }`}>
-                            {g.status}
-                          </span>
-                        </div>
-
-                        {/* Milestones Checklist */}
-                        <div className="space-y-3 pl-2 mt-4 border-l-2 border-surface-container">
-                          <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Goal Milestones</p>
-                          {g.milestones && g.milestones.map((m) => (
-                            <div
-                              key={m.id}
-                              onClick={() => toggleMilestone(g.id, m.id, m.done)}
-                              className="flex items-center gap-3 cursor-pointer group/item"
-                            >
-                              <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${
-                                m.done ? "bg-primary border-primary text-white" : "border-outline-variant group-hover/item:border-primary"
-                              }`}>
-                                {m.done && <span className="material-symbols-outlined text-[14px]">check</span>}
-                              </div>
-                              <span className={`text-sm ${m.done ? "line-through text-on-surface-variant" : "text-on-surface"}`}>
-                                {m.text}
+                              Goal Sheet
+                              <span className="text-xs font-normal text-on-surface-variant">
+                                {new Date(sheet.date).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })}
                               </span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Review Outcome */}
-                        {g.review && (
-                          <div className="mt-6 p-4 bg-surface-container-low rounded-lg">
-                            <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Progress Review</p>
-                            <p className="text-sm text-on-surface leading-relaxed">{g.review}</p>
+                            </h3>
+                            {sheet.portfolioLink && (
+                              <p className="text-sm text-primary mt-1 truncate max-w-md">
+                                Portfolio linked
+                              </p>
+                            )}
+                          </button>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                                sheet.status === "SUBMITTED"
+                                  ? "bg-secondary-container text-on-secondary-container"
+                                  : "bg-primary-fixed text-on-primary-fixed"
+                              }`}
+                            >
+                              {sheet.status}
+                            </span>
+                            <button
+                              onClick={() => handleDeleteGoalSheet(sheet.id)}
+                              className="text-on-surface-variant hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              title="Delete goal sheet"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
                           </div>
-                        )}
+                        </div>
                       </div>
                     ))
                   )}
@@ -730,6 +775,110 @@ export default function ProfilePage() {
                   </div>
                 </div>
               )}
+
+              {activeTab === "Engagement Survey" && (
+                <div className="space-y-6">
+                  {showEngagementForm ? (
+                    <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+                      <EngagementSurveyForm
+                        onSubmit={handleSubmitEngagementSurvey}
+                        onCancel={() => setShowEngagementForm(false)}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-headline font-bold text-xl text-on-surface">Engagement Survey</h3>
+                        <button
+                          onClick={() => setShowEngagementForm(true)}
+                          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">add</span>
+                          Fill Engagement Survey
+                        </button>
+                      </div>
+
+                      {engagementSurveys.length === 0 ? (
+                        <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                          No engagement surveys submitted yet. Click &ldquo;Fill Engagement Survey&rdquo; to complete your first survey.
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {engagementSurveys.map((survey) => (
+                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
+                              <div>
+                                <p className="font-semibold text-on-surface text-sm">Engagement Survey</p>
+                                <p className="text-xs text-on-surface-variant mt-1">
+                                  {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => setViewingSurvey(survey)}
+                                className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                                title="View Responses"
+                              >
+                                <span className="material-symbols-outlined text-[22px]">visibility</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {activeTab === "Look Beyond Survey" && (
+                <div className="space-y-6">
+                  {showLookBeyondForm ? (
+                    <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+                      <LookBeyondSurveyForm
+                        onSubmit={handleSubmitLookBeyond}
+                        onCancel={() => setShowLookBeyondForm(false)}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-headline font-bold text-xl text-on-surface">Look Beyond Survey</h3>
+                        <button
+                          onClick={() => setShowLookBeyondForm(true)}
+                          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">add</span>
+                          Fill Look Beyond Survey
+                        </button>
+                      </div>
+
+                      {lookBeyondSurveys.length === 0 ? (
+                        <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                          No Look Beyond surveys submitted yet. Click &ldquo;Fill Look Beyond Survey&rdquo; to complete your first survey.
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {lookBeyondSurveys.map((survey) => (
+                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
+                              <div>
+                                <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
+                                <p className="text-xs text-on-surface-variant mt-1">
+                                  {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => setViewingLookBeyond(survey)}
+                                className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                                title="View Responses"
+                              >
+                                <span className="material-symbols-outlined text-[22px]">visibility</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Sidebar Summary Card */}
@@ -769,105 +918,23 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Add Goal Modal */}
-          {showAddGoalModal && (
-            <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-              <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-bold text-on-surface">Add New Learning Goal</h3>
-                  <button
-                    onClick={() => setShowAddGoalModal(false)}
-                    className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">close</span>
-                  </button>
-                </div>
-                <form onSubmit={handleAddGoal} className="space-y-4 text-sm">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide font-headline">
-                      Goal Title
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Conduct 5 remedial math sessions"
-                      value={newGoalTitle}
-                      onChange={(e) => setNewGoalTitle(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                      Target Date
-                    </label>
-                    <input
-                      type="date"
-                      value={newGoalTargetDate}
-                      onChange={(e) => setNewGoalTargetDate(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                        Milestones
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setNewGoalMilestones([...newGoalMilestones, ""])}
-                        className="text-xs text-primary font-semibold hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        + Add Milestone
-                      </button>
-                    </div>
-                    {newGoalMilestones.map((milestone, idx) => (
-                      <div key={idx} className="flex gap-2 items-center mb-2">
-                        <input
-                          type="text"
-                          required
-                          placeholder={`Milestone #${idx + 1}`}
-                          value={milestone}
-                          onChange={(e) => {
-                            const updated = [...newGoalMilestones];
-                            updated[idx] = e.target.value;
-                            setNewGoalMilestones(updated);
-                          }}
-                          className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                        />
-                        {newGoalMilestones.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = [...newGoalMilestones];
-                              updated.splice(idx, 1);
-                              setNewGoalMilestones(updated);
-                            }}
-                            className="text-red-500 hover:text-red-700 cursor-pointer"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setShowAddGoalModal(false)}
-                      className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                    >
-                      Create Goal
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+          {/* Goal Sheet Form Modal */}
+          {showGoalSheetForm && (
+            <GoalSheetForm
+              fellowId={profile.fellow.id}
+              sheetData={editingGoalSheet}
+              isManager={false}
+              token={token}
+              onClose={() => {
+                setShowGoalSheetForm(false);
+                setEditingGoalSheet(null);
+              }}
+              onSave={(updatedSheet) => {
+                handleGoalSheetSaved(updatedSheet);
+                setShowGoalSheetForm(false);
+                setEditingGoalSheet(null);
+              }}
+            />
           )}
         </>
       )}
@@ -879,9 +946,25 @@ export default function ProfilePage() {
           setDeleteItemId(null);
         }}
         onConfirm={handleConfirmDelete}
-        title="Delete Goal"
-        message="Are you sure you want to delete this goal? This action is permanent and cannot be undone."
+        title="Delete Goal Sheet"
+        message="Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
       />
+
+      <PDFViewerModal isOpen={showPDFModal} onClose={() => setShowPDFModal(false)} />
+
+      {viewingSurvey && (
+        <EngagementSurveyViewer
+          survey={viewingSurvey}
+          onClose={() => setViewingSurvey(null)}
+        />
+      )}
+
+      {viewingLookBeyond && (
+        <LookBeyondSurveyViewer
+          survey={viewingLookBeyond}
+          onClose={() => setViewingLookBeyond(null)}
+        />
+      )}
     </div>
   );
 }

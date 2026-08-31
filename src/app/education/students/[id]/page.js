@@ -53,22 +53,22 @@ function Modal({ title, onClose, children }) {
 // ─── Main Component ─────────────────────────────────────────────────────────────
 export default function StudentProfileDetail() {
   const { id } = useParams();
-  const { token, isInitializing } = useAuth();
+  const { user, token, isInitializing } = useAuth();
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [modal, setModal] = useState(null); // 'edit' | 'academic' | 'school' | 'attendance'
+  const [modal, setModal] = useState(null); // 'edit' | 'school' | 'attendance' | 'assessment_form'
   const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
   const [schools, setSchools] = useState([]);
   const [attendanceLogs, setAttendanceLogs] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [learningAssessments, setLearningAssessments] = useState([]);
   const [homeworkRecords, setHomeworkRecords] = useState([]);
   const [assessmentDateFilter, setAssessmentDateFilter] = useState("");
   const [homeworkDateFilter, setHomeworkDateFilter] = useState("");
-  const [assessments, setAssessments] = useState([]);
+  const [assessmentForms, setAssessmentForms] = useState([]);
   const [transitions, setTransitions] = useState([]);
   const [beneficiaries, setBeneficiaries] = useState([]);
+  const [searchQ, setSearchQ] = useState("");
 
   const [academicYearFilter, setAcademicYearFilter] = useState("");
   const [academicMonthFilter, setAcademicMonthFilter] = useState("");
@@ -77,12 +77,24 @@ export default function StudentProfileDetail() {
   const [editForm, setEditForm] = useState({});
   const [transitionForm, setTransitionForm] = useState({ academicYear: "", month: "", status: "CONTINUING_EDUCATION", description: "", location: "" });
   const [editTransitionId, setEditTransitionId] = useState(null);
-  const [subjectForm, setSubjectForm] = useState({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" });
-  const [editSubjectId, setEditSubjectId] = useState(null);
-  const [assessmentForm, setAssessmentForm] = useState({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" });
-  const [editAssessmentId, setEditAssessmentId] = useState(null);
   const [attendanceYearFilter, setAttendanceYearFilter] = useState("All Years");
   const [attendanceMonthFilter, setAttendanceMonthFilter] = useState("All Months");
+
+  // Assessment form state
+  const [activeFormTab, setActiveFormTab] = useState("basic");
+  const [editingFormId, setEditingFormId] = useState(null);
+  const [assessmentFormData, setAssessmentFormData] = useState({
+    assessmentType: "", date: "",
+    isEnrolledInSchool: null, reasonNotEnrolled: "",
+    subjectResponses: [], flnScores: {}, selAnswers: {}
+  });
+
+  // Assessment templates
+  const [templates, setTemplates] = useState({ flnCategories: [], selQuestions: [], subjectTemplates: [] });
+  const [templateModalTab, setTemplateModalTab] = useState("fln");
+  const [templateEditor, setTemplateEditor] = useState(null);
+  const [templateDelete, setTemplateDelete] = useState(null);
+  const [assessmentTypeFilter, setAssessmentTypeFilter] = useState("");
 
   const authHeaders = useCallback(() => ({
     "Content-Type": "application/json",
@@ -96,10 +108,9 @@ export default function StudentProfileDetail() {
       if (json.success) {
         setStudent(json.data);
         setAttendanceLogs(json.data.attendanceLogs || []);
-        setSubjects(json.data.subjectMarks || []);
+        setAssessmentForms(json.data.assessmentForms || []);
         setLearningAssessments(json.data.learningAssessments || []);
         setHomeworkRecords(json.data.homeworkRecords || []);
-        setAssessments(json.data.assessments || []);
         setTransitions(json.data.transitions || []);
         if (json.data.beneficiary) setBeneficiaries([json.data.beneficiary]);
         setEditForm({
@@ -142,12 +153,29 @@ export default function StudentProfileDetail() {
       .catch(console.error);
   }, [modal, token]);
 
-  // Fetch fresh subjects
-  const reloadSubjects = useCallback(async () => {
-    const res = await fetch(`/api/students/${id}/subjects`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
-    const j = await res.json();
-    if (j.success) setSubjects(j.data);
-  }, [id, token]);
+  // Fetch assessment templates
+  const loadTemplates = useCallback(async () => {
+    try {
+      const [flnRes, selRes, subjRes] = await Promise.all([
+        fetch("/api/assessment-templates/fln-categories", { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
+        fetch("/api/assessment-templates/sel-questions", { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
+        fetch("/api/assessment-templates/subjects", { headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      ]);
+      const [flnData, selData, subjData] = await Promise.all([flnRes.json(), selRes.json(), subjRes.json()]);
+      setTemplates({
+        flnCategories: flnData.success ? flnData.data : [],
+        selQuestions: selData.success ? selData.data : [],
+        subjectTemplates: subjData.success ? subjData.data : []
+      });
+    } catch (err) { console.error("Failed to load templates:", err); }
+  }, [token]);
+
+  // Load assessment templates when modal opens or on mount
+  useEffect(() => {
+    if (!isInitializing && token) {
+      loadTemplates();
+    }
+  }, [isInitializing, token, loadTemplates]);
 
   // Fetch fresh attendance
   const reloadAttendance = useCallback(async () => {
@@ -156,12 +184,241 @@ export default function StudentProfileDetail() {
     if (j.success) setAttendanceLogs(j.data);
   }, [id, token]);
 
-  // Fetch fresh assessments
-  const reloadAssessments = useCallback(async () => {
-    const res = await fetch(`/api/students/${id}/assessments`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  // Fetch fresh assessment forms
+  const reloadAssessmentForms = useCallback(async () => {
+    const res = await fetch(`/api/students/${id}/assessment-forms`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
     const j = await res.json();
-    if (j.success) setAssessments(j.data);
+    if (j.success) setAssessmentForms(j.data);
   }, [id, token]);
+
+  // ─── Assessment Form Handlers ────────────────────────────────────────────────
+
+  function openNewAssessmentForm() {
+    setEditingFormId(null);
+    setActiveFormTab("basic");
+    const subjectResponses = (templates.subjectTemplates || []).map(st => ({
+      subjectTemplateId: st.id, selectedOption: ""
+    }));
+    const flnScores = {};
+    const selAnswers = {};
+    (templates.flnCategories || []).forEach(cat => {
+      (cat.questions || []).forEach(q => { flnScores[q.id] = ""; });
+    });
+    (templates.selQuestions || []).forEach(q => { selAnswers[q.id] = ""; });
+    setAssessmentFormData({
+      assessmentType: "", date: "",
+      isEnrolledInSchool: null, reasonNotEnrolled: "",
+      subjectResponses, flnScores, selAnswers
+    });
+    setModal("assessment_form");
+  }
+
+  function openEditAssessmentForm(form) {
+    setEditingFormId(form.id);
+    setActiveFormTab("basic");
+    const subjectResponses = (templates.subjectTemplates || []).map(st => {
+      const existing = (form.subjectResponses || []).find(sr => sr.subjectTemplateId === st.id);
+      return { subjectTemplateId: st.id, selectedOption: existing ? existing.selectedOption : "" };
+    });
+    const flnScores = {};
+    (templates.flnCategories || []).forEach(cat => {
+      (cat.questions || []).forEach(q => {
+        const existing = (form.flnResponses || []).find(fr => fr.flnQuestionId === q.id);
+        flnScores[q.id] = existing ? existing.score : "";
+      });
+    });
+    const selAnswers = {};
+    (templates.selQuestions || []).forEach(q => {
+      const existing = (form.selResponses || []).find(sr => sr.selQuestionId === q.id);
+      selAnswers[q.id] = existing ? existing.answer : "";
+    });
+    setAssessmentFormData({
+      assessmentType: form.assessmentType || "",
+      date: form.date ? form.date.split("T")[0] : "",
+      isEnrolledInSchool: form.isEnrolledInSchool,
+      reasonNotEnrolled: form.reasonNotEnrolled || "",
+      subjectResponses, flnScores, selAnswers
+    });
+    setModal("assessment_form");
+  }
+
+  async function handleAssessmentFormSave(e) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const payload = {
+        assessmentType: assessmentFormData.assessmentType,
+        date: assessmentFormData.date,
+        isEnrolledInSchool: assessmentFormData.isEnrolledInSchool,
+        reasonNotEnrolled: assessmentFormData.reasonNotEnrolled || null,
+        subjectResponses: assessmentFormData.subjectResponses.filter(sr => sr.selectedOption),
+        flnScores: Object.fromEntries(
+          Object.entries(assessmentFormData.flnScores).filter(([, v]) => v !== "" && v !== null)
+        ),
+        selAnswers: Object.fromEntries(
+          Object.entries(assessmentFormData.selAnswers).filter(([, v]) => v !== "" && v !== null)
+        )
+      };
+
+      if (editingFormId) {
+        await fetch(`/api/assessment-forms/${editingFormId}/responses`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+      } else {
+        await fetch(`/api/students/${id}/assessment-forms`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+      }
+      await reloadAssessmentForms();
+      setModal(null);
+      setEditingFormId(null);
+    } catch (err) {
+      console.error("Failed to save assessment form:", err);
+    } finally { setSaving(false); }
+  }
+
+  async function handleDeleteAssessmentForm(formId) {
+    if (!confirm("Delete this assessment form?")) return;
+    await fetch(`/api/assessment-forms/${formId}`, {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+    await reloadAssessmentForms();
+  }
+
+  function normalizeTemplateOptions(options) {
+    return (options || []).map(opt => opt.trim()).filter(Boolean);
+  }
+
+  function openTemplateEditor(type, item = null, extra = {}) {
+    const defaultOptions = type === "sel-question"
+      ? ["Too Easy", "Easy", "Hard", "Too Hard", "Can with Teachers Help"]
+      : type === "subject"
+        ? ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"]
+        : [];
+
+    setTemplateEditor({
+      type,
+      id: item?.id || null,
+      name: item?.name || "",
+      questionText: item?.questionText || "",
+      marks: item?.marks ?? 1,
+      order: item?.order ?? extra.order ?? 0,
+      categoryId: item?.categoryId || extra.categoryId || "",
+      options: Array.isArray(item?.options) ? item.options : defaultOptions
+    });
+  }
+
+  function updateTemplateOption(index, value) {
+    setTemplateEditor(editor => ({
+      ...editor,
+      options: editor.options.map((option, i) => i === index ? value : option)
+    }));
+  }
+
+  function addTemplateOption() {
+    setTemplateEditor(editor => ({ ...editor, options: [...(editor.options || []), ""] }));
+  }
+
+  function removeTemplateOption(index) {
+    setTemplateEditor(editor => ({
+      ...editor,
+      options: editor.options.filter((_, i) => i !== index)
+    }));
+  }
+
+  async function handleTemplateSave(e) {
+    e.preventDefault();
+    if (!templateEditor) return;
+
+    setSaving(true);
+    try {
+      const { type, id: templateId } = templateEditor;
+      let endpoint = "";
+      let payload = {};
+
+      if (type === "fln-category") {
+        endpoint = templateId
+          ? `/api/assessment-templates/fln-categories/${templateId}`
+          : "/api/assessment-templates/fln-categories";
+        payload = {
+          name: templateEditor.name.trim(),
+          order: parseInt(templateEditor.order, 10) || 0
+        };
+      }
+
+      if (type === "fln-question") {
+        endpoint = templateId
+          ? `/api/assessment-templates/fln-questions/${templateId}`
+          : "/api/assessment-templates/fln-questions";
+        payload = {
+          categoryId: templateEditor.categoryId,
+          questionText: templateEditor.questionText.trim(),
+          marks: templateEditor.marks === "" ? 0 : Number(templateEditor.marks),
+          order: parseInt(templateEditor.order, 10) || 0
+        };
+      }
+
+      if (type === "sel-question") {
+        endpoint = templateId
+          ? `/api/assessment-templates/sel-questions/${templateId}`
+          : "/api/assessment-templates/sel-questions";
+        payload = {
+          questionText: templateEditor.questionText.trim(),
+          options: normalizeTemplateOptions(templateEditor.options),
+          order: parseInt(templateEditor.order, 10) || 0
+        };
+      }
+
+      if (type === "subject") {
+        endpoint = templateId
+          ? `/api/assessment-templates/subjects/${templateId}`
+          : "/api/assessment-templates/subjects";
+        payload = {
+          name: templateEditor.name.trim(),
+          options: normalizeTemplateOptions(templateEditor.options),
+          order: parseInt(templateEditor.order, 10) || 0
+        };
+      }
+
+      const res = await fetch(endpoint, {
+        method: templateId ? "PUT" : "POST",
+        headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (!json.success) {
+        alert(json.error || "Failed to save template");
+        return;
+      }
+      await loadTemplates();
+      setTemplateEditor(null);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleTemplateDelete() {
+    if (!templateDelete) return;
+
+    const endpointMap = {
+      "fln-category": `/api/assessment-templates/fln-categories/${templateDelete.id}`,
+      "fln-question": `/api/assessment-templates/fln-questions/${templateDelete.id}`,
+      "sel-question": `/api/assessment-templates/sel-questions/${templateDelete.id}`,
+      subject: `/api/assessment-templates/subjects/${templateDelete.id}`
+    };
+
+    await fetch(endpointMap[templateDelete.type], {
+      method: "DELETE",
+      headers: authHeaders()
+    });
+    await loadTemplates();
+    setTemplateDelete(null);
+  }
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
@@ -206,73 +463,6 @@ export default function StudentProfileDetail() {
       if (json.success) { await loadStudent(); setModal(null); }
       else alert(json.error || "Failed to update school");
     } finally { setSaving(false); }
-  }
-
-  async function handleSubjectSave(e) {
-    e.preventDefault();
-    setSaving(true);
-    try {
-      if (editSubjectId) {
-        await fetch(`/api/students/${id}/subjects`, {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify({ subjectMarkId: editSubjectId, ...subjectForm, score: parseFloat(subjectForm.score) })
-        });
-      } else {
-        await fetch(`/api/students/${id}/subjects`, {
-          method: "POST",
-          headers: authHeaders(),
-          body: JSON.stringify({ ...subjectForm, score: parseFloat(subjectForm.score) })
-        });
-      }
-      await reloadSubjects();
-      setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" });
-      setEditSubjectId(null);
-    } finally { setSaving(false); }
-  }
-
-  async function handleDeleteSubject(subjectMarkId) {
-    if (!confirm("Delete this subject mark?")) return;
-    await fetch(`/api/students/${id}/subjects`, {
-      method: "DELETE",
-      headers: authHeaders(),
-      body: JSON.stringify({ subjectMarkId })
-    });
-    await reloadSubjects();
-  }
-
-  async function handleAssessmentSave(e) {
-    e.preventDefault();
-    setSaving(true);
-    try {
-      if (editAssessmentId) {
-        await fetch(`/api/students/${id}/assessments`, {
-          method: "PUT",
-          headers: authHeaders(),
-          body: JSON.stringify({ assessmentId: editAssessmentId, ...assessmentForm, totalMarks: parseFloat(assessmentForm.totalMarks), marksObtained: parseFloat(assessmentForm.marksObtained) })
-        });
-      } else {
-        await fetch(`/api/students/${id}/assessments`, {
-          method: "POST",
-          headers: authHeaders(),
-          body: JSON.stringify({ ...assessmentForm, totalMarks: parseFloat(assessmentForm.totalMarks), marksObtained: parseFloat(assessmentForm.marksObtained) })
-        });
-      }
-      await reloadAssessments();
-      setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" });
-      setEditAssessmentId(null);
-      setModal(null);
-    } finally { setSaving(false); }
-  }
-
-  async function handleDeleteAssessment(assessmentId) {
-    if (!confirm("Delete this assessment?")) return;
-    await fetch(`/api/students/${id}/assessments`, {
-      method: "DELETE",
-      headers: authHeaders(),
-      body: JSON.stringify({ assessmentId })
-    });
-    await reloadAssessments();
   }
 
   async function handleTransitionSave(e) {
@@ -380,15 +570,6 @@ export default function StudentProfileDetail() {
   })();
 
   const name = student.name;
-  // Dynamic fellows from school (if assigned)
-  const schoolFellows = student.school?.fellows || [];
-
-  const gradeColor = (g) => {
-    if (!g) return "bg-surface-container text-on-surface-variant";
-    if (g.includes("A")) return "bg-primary/10 text-primary";
-    if (g.includes("B")) return "bg-secondary-fixed text-on-secondary-container";
-    return "bg-tertiary-container text-on-tertiary-container";
-  };
 
   const attendanceYears = ["All Years", ...Array.from(new Set(attendanceLogs.map(log => {
     const yearMatch = log.month.match(/\b(20\d{2})\b/);
@@ -411,21 +592,12 @@ export default function StudentProfileDetail() {
     academicYearOptions.push(`${y - 1}-${y}`);
   }
 
-  const filteredSubjects = subjects.filter(s => {
-    if (!academicYearFilter && !academicMonthFilter) return true;
-    let match = true;
-    if (academicYearFilter) match = match && s.academicYear === academicYearFilter;
-    if (academicMonthFilter) match = match && s.month === academicMonthFilter;
-    return match;
+  const filteredAssessmentForms = assessmentForms.filter(f => {
+    if (!assessmentTypeFilter) return true;
+    return f.assessmentType === assessmentTypeFilter;
   });
 
-  const filteredAssessments = assessments.filter(a => {
-    if (!academicYearFilter && !academicMonthFilter) return true;
-    let match = true;
-    if (academicYearFilter) match = match && a.academicYear === academicYearFilter;
-    if (academicMonthFilter) match = match && a.month === academicMonthFilter;
-    return match;
-  });
+  const isAdminOrManager = user && (user.roleName === "ADMIN" || user.roleName === "PROGRAM_MANAGER");
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -527,163 +699,117 @@ export default function StudentProfileDetail() {
             </div>
           </div>
 
-          {/* Academic Progress */}
+          {/* Academic Assessments */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">analytics</span>
-                Academic Progress &amp; Report Card
+                Academic Assessments
               </h3>
             </div>
 
             {/* Filters */}
             <div className="flex flex-wrap items-end gap-3 mb-6 pb-4 border-b border-outline-variant/20">
               <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Academic Year</label>
-                <select value={academicYearFilter} onChange={(e) => setAcademicYearFilter(e.target.value)}
+                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Assessment Type</label>
+                <select value={assessmentTypeFilter} onChange={(e) => setAssessmentTypeFilter(e.target.value)}
                   className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
-                  <option value="">All Years</option>
-                  {academicYearOptions.map(y => <option key={y} value={y}>{y}</option>)}
-                </select>
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Month</label>
-                <select value={academicMonthFilter} onChange={(e) => setAcademicMonthFilter(e.target.value)}
-                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
-                  <option value="">All Months</option>
-                  {academicMonths.map(m => <option key={m} value={m}>{m}</option>)}
+                  <option value="">All Types</option>
+                  <option value="BASELINE">Baseline</option>
+                  <option value="MIDLINE">Midline</option>
+                  <option value="ENDLINE">Endline</option>
                 </select>
               </div>
               <div className="flex gap-2 ml-auto">
-                {(() => {
-                  const now = new Date();
-                  const defMonth = now.toLocaleString('en-US', { month: 'short' });
-                  const defYear = now.getFullYear();
-                  const defAcademicYear = `${defYear - 1}-${defYear}`;
-                  const defGrade = student.grade ? `Grade ${student.grade}` : "";
-                  return (
-                    <>
-                      <button
-                        onClick={() => {
-                          setModal("academic"); setEditSubjectId(null);
-                          setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: defAcademicYear, academicGrade: defGrade, month: defMonth, remarks: "" });
-                        }}
-                        className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">add</span>
-                        Add Subject
-                      </button>
-                      <button
-                        onClick={() => {
-                          setModal("assessment"); setEditAssessmentId(null);
-                          setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: defAcademicYear, academicGrade: defGrade, month: defMonth, remarks: "" });
-                        }}
-                        className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">add</span>
-                        Add Assessment
-                      </button>
-                    </>
+                <button
+                  onClick={() => { loadTemplates().then(() => openNewAssessmentForm()); }}
+                  className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[16px]">add</span>
+                  New Assessment
+                </button>
+              </div>
+            </div>
+
+            {/* Assessment Forms List */}
+            {filteredAssessmentForms.length === 0 ? (
+              <p className="text-center py-4 text-on-surface-variant font-sans text-xs">No assessment forms recorded yet.</p>
+            ) : (
+              <div className="space-y-3 max-h-[500px] overflow-y-auto">
+                {filteredAssessmentForms.map((form) => {
+                  const typeColors = {
+                    BASELINE: "bg-blue-100 text-blue-700",
+                    MIDLINE: "bg-yellow-100 text-yellow-700",
+                    ENDLINE: "bg-green-100 text-green-700"
+                  };
+                  const totalFLNMarks = templates.flnCategories.reduce((sum, cat) =>
+                    sum + (cat.questions || []).reduce((s, q) => s + (q.marks || 0), 0), 0
                   );
-                })()}
-            </div>
-            </div>
-
-            {/* Subject Marks */}
-            <div className="mb-6">
-              <h4 className="font-headline font-bold text-sm text-on-surface mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px] text-primary">book_4</span>
-                Subject Marks {filteredSubjects.length > 0 && `(${filteredSubjects.length})`}
-              </h4>
-              {filteredSubjects.length === 0 ? (
-                <p className="text-center py-4 text-on-surface-variant font-sans text-xs">No subject records for this period.</p>
-              ) : (
-                <div className="space-y-2 max-h-[320px] overflow-y-auto">
-                  {filteredSubjects.map((sub) => (
-                    <div key={sub.id} className="p-3 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2 group">
-                      <div className="flex-1 min-w-0">
+                  const scoredFLN = (form.flnResponses || []).reduce((sum, r) => sum + (r.score || 0), 0);
+                  return (
+                    <div key={form.id} className="p-4 bg-surface-container-low rounded-lg border border-outline-variant/10 group">
+                      <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="font-bold text-on-surface text-sm">{sub.subject}</h4>
-                          {sub.academicYear && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{sub.academicYear}</span>}
-                          {sub.month && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{sub.month}</span>}
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${typeColors[form.assessmentType] || "bg-surface-variant text-on-surface-variant"}`}>
+                            {form.assessmentType}
+                          </span>
+                          <span className="text-xs text-on-surface-variant">
+                            {form.date ? new Date(form.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : "—"}
+                          </span>
+                          {form.fellow && (
+                            <span className="text-xs text-on-surface-variant">by {form.fellow.name}</span>
+                          )}
                         </div>
-                        {sub.remarks && <p className="text-xs text-on-surface-variant mt-1">{sub.remarks}</p>}
-                      </div>
-                      <div className="flex items-center gap-3 self-end md:self-auto shrink-0 font-sans">
-                        <div className="text-right">
-                          <p className="text-xs text-on-surface-variant font-medium">{sub.score} / 100</p>
-                        </div>
-                        <span className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${gradeColor(sub.grade)}`}>
-                          {sub.grade}
-                        </span>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity items-center">
                           <button
-                            onClick={() => { setEditSubjectId(sub.id); setSubjectForm({ subject: sub.subject, score: sub.score, grade: sub.grade, academicYear: sub.academicYear || "", academicGrade: sub.academicGrade || "", month: sub.month || "", remarks: sub.remarks || "" }); setModal("academic"); }}
+                            onClick={() => { loadTemplates().then(() => openEditAssessmentForm(form)); }}
                             className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
                           >
                             <span className="material-symbols-outlined text-[14px]">edit</span>
                           </button>
-                          <button
-                            onClick={() => handleDeleteSubject(sub.id)}
-                            className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
-                          >
-                            <span className="material-symbols-outlined text-[14px]">delete</span>
-                          </button>
+                          {isAdminOrManager && (
+                            <button
+                              onClick={() => handleDeleteAssessmentForm(form.id)}
+                              className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
+                            >
+                              <span className="material-symbols-outlined text-[14px]">delete</span>
+                            </button>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
 
-            {/* Assessments */}
-            <div>
-              <h4 className="font-headline font-bold text-sm text-on-surface mb-3 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px] text-secondary">quiz</span>
-                Assessments {filteredAssessments.length > 0 && `(${filteredAssessments.length})`}
-              </h4>
-              {filteredAssessments.length === 0 ? (
-                <p className="text-center py-4 text-on-surface-variant font-sans text-xs">No assessments for this period.</p>
-              ) : (
-                <div className="space-y-2 max-h-[320px] overflow-y-auto">
-                  {filteredAssessments.map((asmt) => (
-                    <div key={asmt.id} className="p-3 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-2 group">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h4 className="font-bold text-on-surface text-sm">{asmt.assessmentName}</h4>
-                          <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{asmt.topic}</span>
-                          {asmt.month && <span className="text-[10px] text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">{asmt.month}</span>}
+                      {/* Summary mini-cards */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <div className="bg-surface rounded p-2 text-center">
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">Enrolled</p>
+                          <p className="text-sm font-semibold text-on-surface">
+                            {form.isEnrolledInSchool === null ? "—" : form.isEnrolledInSchool ? "Yes" : "No"}
+                          </p>
                         </div>
-                        {asmt.remarks && <p className="text-xs text-on-surface-variant mt-1">{asmt.remarks}</p>}
-                      </div>
-                      <div className="flex items-center gap-3 self-end md:self-auto shrink-0 font-sans">
-                        <div className="text-right">
-                          <p className="text-xs text-on-surface-variant font-medium">{asmt.marksObtained} / {asmt.totalMarks}</p>
-                          <div className="w-20 h-1.5 bg-surface-container rounded-full overflow-hidden mt-1">
-                            <div className="bg-secondary h-full rounded-full" style={{ width: `${asmt.totalMarks > 0 ? Math.min(100, (asmt.marksObtained / asmt.totalMarks) * 100) : 0}%` }}></div>
-                          </div>
+                        <div className="bg-surface rounded p-2 text-center">
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">Subjects</p>
+                          <p className="text-sm font-semibold text-on-surface">
+                            {form.subjectResponses?.length || 0}/{templates.subjectTemplates.length || 0}
+                          </p>
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => { setEditAssessmentId(asmt.id); setAssessmentForm({ assessmentName: asmt.assessmentName, topic: asmt.topic, totalMarks: asmt.totalMarks, marksObtained: asmt.marksObtained, academicYear: asmt.academicYear || "", academicGrade: asmt.academicGrade || "", month: asmt.month || "", remarks: asmt.remarks || "" }); setModal("assessment"); }}
-                            className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
-                          >
-                            <span className="material-symbols-outlined text-[14px]">edit</span>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteAssessment(asmt.id)}
-                            className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
-                          >
-                            <span className="material-symbols-outlined text-[14px]">delete</span>
-                          </button>
+                        <div className="bg-surface rounded p-2 text-center">
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">FLN Score</p>
+                          <p className="text-sm font-semibold text-on-surface">
+                            {scoredFLN}/{totalFLNMarks}
+                          </p>
+                        </div>
+                        <div className="bg-surface rounded p-2 text-center">
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">SEL</p>
+                          <p className="text-sm font-semibold text-on-surface">
+                            {form.selResponses?.length || 0}/{templates.selQuestions.length || 0}
+                          </p>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
@@ -819,6 +945,29 @@ export default function StudentProfileDetail() {
               </div>
             </div>
           </div>
+
+          {isAdminOrManager && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">settings</span>
+                    Assessment Templates
+                  </h3>
+                  <p className="text-xs text-on-surface-variant mt-1">
+                    FLN, SEL, and subject template setup
+                  </p>
+                </div>
+                <button
+                  onClick={() => { loadTemplates(); setModal("assessment_templates"); }}
+                  className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+                >
+                  <span className="material-symbols-outlined text-[16px]">tune</span>
+                  Manage
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Learning Assessment History */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
@@ -1036,69 +1185,470 @@ export default function StudentProfileDetail() {
         </Modal>
       )}
 
-      {/* Academic Progress Modal */}
-      {modal === "academic" && (
-        <Modal title={editSubjectId ? "Edit Subject Mark" : "Add Subject Mark"} onClose={() => { setModal(null); setEditSubjectId(null); setSubjectForm({ subject: "", score: "", grade: "A+", academicYear: "", academicGrade: "", month: "", remarks: "" }); }}>
-          <form onSubmit={handleSubjectSave} className="space-y-4">
-            <InputField label="Subject" name="subject" value={subjectForm.subject} onChange={e => setSubjectForm(f => ({ ...f, subject: e.target.value }))} required />
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Academic Grade</label>
-                <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
-                  {student.grade ? `${student.grade}` : "—"}
-                </span>
+      {/* Assessment Form Modal */}
+      {modal === "assessment_form" && (
+        <Modal title={editingFormId ? "Edit Assessment Form" : "New Assessment Form"} onClose={() => { setModal(null); setEditingFormId(null); }}>
+          <form onSubmit={handleAssessmentFormSave} className="space-y-4">
+            {/* Tab navigation */}
+            <div className="flex gap-1 border-b border-outline-variant/20 pb-2 overflow-x-auto">
+              {["basic", "enrollment", "subjects", "fln", "sel"].map(tab => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveFormTab(tab)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                    activeFormTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                  }`}
+                >
+                  {tab === "basic" ? "Basic Info" : tab === "enrollment" ? "Enrollment" : tab === "subjects" ? "Subjects" : tab === "fln" ? "FLN" : "SEL"}
+                </button>
+              ))}
+            </div>
+
+            {/* Basic Info Tab */}
+            {activeFormTab === "basic" && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Fellow Name</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {user?.fellowName || user?.name || "—"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Student Name</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {student.name}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Gender</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {student.gender || "—"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Age</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {student.dob ? `${Math.floor((new Date() - new Date(student.dob)) / 31557600000)} Years` : "—"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Class / Grade</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {student.grade || "—"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">School Name</label>
+                    <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
+                      {student.school?.name || "Unassigned"}
+                    </span>
+                  </div>
+                </div>
+                <InputField label="Assessment Type" name="assessmentType" value={assessmentFormData.assessmentType}
+                  onChange={e => setAssessmentFormData(f => ({ ...f, assessmentType: e.target.value }))}
+                  options={["", "BASELINE", "MIDLINE", "ENDLINE"]} required />
+                <InputField label="Date" name="date" type="date" value={assessmentFormData.date}
+                  onChange={e => setAssessmentFormData(f => ({ ...f, date: e.target.value }))} required />
               </div>
-              <InputField label="Academic Year" name="academicYear" value={subjectForm.academicYear} onChange={e => setSubjectForm(f => ({ ...f, academicYear: e.target.value }))} options={["", ...academicYearOptions]} />
-              <InputField label="Month" name="month" value={subjectForm.month} onChange={e => setSubjectForm(f => ({ ...f, month: e.target.value }))} options={["", ...academicMonths]} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <InputField label="Score (out of 100)" name="score" type="number" value={subjectForm.score} onChange={e => setSubjectForm(f => ({ ...f, score: e.target.value }))} required />
-              <InputField label="Grade" name="grade" value={subjectForm.grade} onChange={e => setSubjectForm(f => ({ ...f, grade: e.target.value }))} options={["A+", "A", "B+", "B", "C+", "C", "D", "F"]} />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Remarks</label>
-              <textarea rows="3" value={subjectForm.remarks} onChange={e => setSubjectForm(f => ({ ...f, remarks: e.target.value }))} className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
-            </div>
-            <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => { setModal(null); setEditSubjectId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+            )}
+
+            {/* Enrollment Tab */}
+            {activeFormTab === "enrollment" && (
+              <div className="space-y-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-semibold text-on-surface">Is the child enrolled in School?</label>
+                  <div className="flex gap-4">
+                    {[true, false].map(val => (
+                      <label key={String(val)} className="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="isEnrolled" checked={assessmentFormData.isEnrolledInSchool === val}
+                          onChange={() => setAssessmentFormData(f => ({ ...f, isEnrolledInSchool: val, reasonNotEnrolled: val ? "" : f.reasonNotEnrolled }))}
+                          className="accent-primary" />
+                        <span className="text-sm text-on-surface">{val ? "Yes" : "No"}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                {assessmentFormData.isEnrolledInSchool === false && (
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">If no, why?</label>
+                    <textarea rows="3" value={assessmentFormData.reasonNotEnrolled}
+                      onChange={e => setAssessmentFormData(f => ({ ...f, reasonNotEnrolled: e.target.value }))}
+                      className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Subjects Tab */}
+            {activeFormTab === "subjects" && (
+              <div className="space-y-4">
+                {templates.subjectTemplates.length === 0 ? (
+                  <p className="text-center py-4 text-on-surface-variant text-xs">No subject templates configured.</p>
+                ) : (
+                  templates.subjectTemplates.map((st) => {
+                    const resp = assessmentFormData.subjectResponses.find(sr => sr.subjectTemplateId === st.id);
+                    const options = Array.isArray(st.options) ? st.options : [];
+                    return (
+                      <InputField key={st.id}
+                        label={st.name}
+                        name={`subject_${st.id}`}
+                        value={resp ? resp.selectedOption : ""}
+                        onChange={e => {
+                          setAssessmentFormData(f => ({
+                            ...f,
+                            subjectResponses: f.subjectResponses.map(sr =>
+                              sr.subjectTemplateId === st.id ? { ...sr, selectedOption: e.target.value } : sr
+                            )
+                          }));
+                        }}
+                        options={["", ...options]} />
+                    );
+                  })
+                )}
+              </div>
+            )}
+
+            {/* FLN Tab */}
+            {activeFormTab === "fln" && (
+              <div className="space-y-6">
+                {templates.flnCategories.length === 0 ? (
+                  <p className="text-center py-4 text-on-surface-variant text-xs">No FLN categories configured.</p>
+                ) : (
+                  templates.flnCategories.map(cat => {
+                    const catScore = (cat.questions || []).reduce((sum, q) =>
+                      sum + (parseFloat(assessmentFormData.flnScores[q.id]) || 0), 0);
+                    const catMax = (cat.questions || []).reduce((sum, q) => sum + (q.marks || 0), 0);
+                    return (
+                      <div key={cat.id} className="border border-outline-variant/20 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-headline font-bold text-sm text-on-surface">{cat.name}</h4>
+                          <span className="text-xs text-on-surface-variant">{catScore}/{catMax}</span>
+                        </div>
+                        {(cat.questions || []).map(q => (
+                          <div key={q.id} className="flex items-center gap-3 py-1.5">
+                            <span className="text-xs text-on-surface-variant flex-1">
+                              Q{q.order}. {q.questionText}
+                            </span>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <input type="number" min="0" max={q.marks}
+                                value={assessmentFormData.flnScores[q.id] ?? ""}
+                                onChange={e => {
+                                  const parsed = parseFloat(e.target.value);
+                                  const val = Number.isNaN(parsed) ? "" : Math.min(Math.max(0, parsed), q.marks);
+                                  setAssessmentFormData(f => ({
+                                    ...f,
+                                    flnScores: { ...f.flnScores, [q.id]: val }
+                                  }));
+                                }}
+                                className="w-16 px-2 py-1 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm text-center focus:outline-none focus:border-primary" />
+                              <span className="text-xs text-on-surface-variant">/ {q.marks}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })
+                )}
+                {templates.flnCategories.length > 0 && (
+                  <div className="text-right pt-2 border-t border-outline-variant/20">
+                    <span className="text-sm font-bold text-on-surface">
+                      Total FLN: {
+                        Object.entries(assessmentFormData.flnScores).reduce((sum, [, v]) => sum + (parseFloat(v) || 0), 0)
+                      } / {
+                        templates.flnCategories.reduce((sum, cat) =>
+                          sum + (cat.questions || []).reduce((s, q) => s + (q.marks || 0), 0), 0)
+                      }
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* SEL Tab */}
+            {activeFormTab === "sel" && (
+              <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+                {templates.selQuestions.length === 0 ? (
+                  <p className="text-center py-4 text-on-surface-variant text-xs">No SEL questions configured.</p>
+                ) : (
+                  templates.selQuestions.map(q => {
+                    const options = Array.isArray(q.options) ? q.options : [];
+                    return (
+                      <div key={q.id} className="border-b border-outline-variant/10 pb-3">
+                        <label className="text-sm font-medium text-on-surface mb-1.5 block">
+                          Q{q.order}. {q.questionText}
+                        </label>
+                        <select
+                          value={assessmentFormData.selAnswers[q.id] || ""}
+                          onChange={e => setAssessmentFormData(f => ({
+                            ...f,
+                            selAnswers: { ...f.selAnswers, [q.id]: e.target.value }
+                          }))}
+                          className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary w-full"
+                        >
+                          <option value="">Select...</option>
+                          {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+              <button type="button" onClick={() => { setModal(null); setEditingFormId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
               <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
-                {saving ? "Saving..." : editSubjectId ? "Update" : "Add Subject"}
+                {saving ? "Saving..." : editingFormId ? "Update" : "Save Assessment"}
               </button>
             </div>
           </form>
         </Modal>
       )}
 
-      {/* Assessment Modal */}
-      {modal === "assessment" && (
-        <Modal title={editAssessmentId ? "Edit Assessment" : "Add Assessment"} onClose={() => { setModal(null); setEditAssessmentId(null); setAssessmentForm({ assessmentName: "", topic: "", totalMarks: "", marksObtained: "", academicYear: "", academicGrade: "", month: "", remarks: "" }); }}>
-          <form onSubmit={handleAssessmentSave} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <InputField label="Assessment Name" name="assessmentName" value={assessmentForm.assessmentName} onChange={e => setAssessmentForm(f => ({ ...f, assessmentName: e.target.value }))} required />
-              <InputField label="Topic" name="topic" value={assessmentForm.topic} onChange={e => setAssessmentForm(f => ({ ...f, topic: e.target.value }))} required />
+      {modal === "assessment_templates" && (
+        <Modal title="Assessment Templates" onClose={() => { setModal(null); setTemplateEditor(null); }}>
+          <div className="space-y-5">
+            <div className="flex gap-1 border-b border-outline-variant/20 pb-2 overflow-x-auto">
+              {[
+                ["fln", "FLN"],
+                ["sel", "SEL"],
+                ["subjects", "Subjects"]
+              ].map(([tab, label]) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setTemplateModalTab(tab)}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                    templateModalTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Academic Grade</label>
-                <span className="px-3 py-2 border border-outline-variant rounded-lg bg-surface-container-low text-on-surface text-sm font-semibold">
-                  {student.grade ? `${student.grade}` : "—"}
-                </span>
+
+            {templateModalTab === "fln" && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-headline font-bold text-sm text-on-surface">FLN Categories</h4>
+                  <button
+                    type="button"
+                    onClick={() => openTemplateEditor("fln-category", null, { order: templates.flnCategories.length + 1 })}
+                    className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">add</span>
+                    Add Category
+                  </button>
+                </div>
+                {templates.flnCategories.length === 0 ? (
+                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No FLN categories configured.</p>
+                ) : (
+                  <div className="space-y-3">
+                    {templates.flnCategories.map(cat => (
+                      <div key={cat.id} className="border border-outline-variant/20 rounded-lg">
+                        <div className="flex items-center justify-between gap-3 p-3 bg-surface-container-low border-b border-outline-variant/10">
+                          <div>
+                            <p className="font-semibold text-sm text-on-surface">{cat.name}</p>
+                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">Order {cat.order}</p>
+                          </div>
+                          <div className="flex gap-1">
+                            <button type="button" onClick={() => openTemplateEditor("fln-category", cat)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
+                              <span className="material-symbols-outlined text-[15px]">edit</span>
+                            </button>
+                            <button type="button" onClick={() => setTemplateDelete({ type: "fln-category", id: cat.id, label: cat.name })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                              <span className="material-symbols-outlined text-[15px]">delete</span>
+                            </button>
+                          </div>
+                        </div>
+                        <div className="p-3 space-y-2">
+                          {(cat.questions || []).map(q => (
+                            <div key={q.id} className="flex items-start justify-between gap-3 text-xs">
+                              <span className="text-on-surface-variant flex-1">Q{q.order}. {q.questionText} ({q.marks} mark{q.marks === 1 ? "" : "s"})</span>
+                              <div className="flex gap-1 shrink-0">
+                                <button type="button" onClick={() => openTemplateEditor("fln-question", q, { categoryId: cat.id })} className="p-0.5 hover:text-primary cursor-pointer text-on-surface-variant">
+                                  <span className="material-symbols-outlined text-[13px]">edit</span>
+                                </button>
+                                <button type="button" onClick={() => setTemplateDelete({ type: "fln-question", id: q.id, label: q.questionText })} className="p-0.5 hover:text-error cursor-pointer text-on-surface-variant">
+                                  <span className="material-symbols-outlined text-[13px]">delete</span>
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => openTemplateEditor("fln-question", null, { categoryId: cat.id, order: (cat.questions || []).length + 1 })}
+                            className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1"
+                          >
+                            <span className="material-symbols-outlined text-[12px]">add</span>
+                            Add Question
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <InputField label="Academic Year" name="academicYear" value={assessmentForm.academicYear} onChange={e => setAssessmentForm(f => ({ ...f, academicYear: e.target.value }))} options={["", ...academicYearOptions]} />
-              <InputField label="Month" name="month" value={assessmentForm.month} onChange={e => setAssessmentForm(f => ({ ...f, month: e.target.value }))} options={["", ...academicMonths]} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <InputField label="Total Marks" name="totalMarks" type="number" value={assessmentForm.totalMarks} onChange={e => setAssessmentForm(f => ({ ...f, totalMarks: e.target.value }))} required />
-              <InputField label="Marks Obtained" name="marksObtained" type="number" value={assessmentForm.marksObtained} onChange={e => setAssessmentForm(f => ({ ...f, marksObtained: e.target.value }))} required />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Remarks</label>
-              <textarea rows="3" value={assessmentForm.remarks} onChange={e => setAssessmentForm(f => ({ ...f, remarks: e.target.value }))} className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
-            </div>
-            <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => { setModal(null); setEditAssessmentId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+            )}
+
+            {templateModalTab === "sel" && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-headline font-bold text-sm text-on-surface">SEL Questions</h4>
+                  <button type="button" onClick={() => openTemplateEditor("sel-question", null, { order: templates.selQuestions.length + 1 })} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">add</span>
+                    Add Question
+                  </button>
+                </div>
+                {templates.selQuestions.length === 0 ? (
+                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No SEL questions configured.</p>
+                ) : (
+                  <div className="divide-y divide-outline-variant/10 border border-outline-variant/20 rounded-lg max-h-[55vh] overflow-y-auto">
+                    {templates.selQuestions.map(q => (
+                      <div key={q.id} className="flex items-start justify-between gap-3 p-3">
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-on-surface">Q{q.order}. {q.questionText}</p>
+                          <p className="text-[10px] text-on-surface-variant mt-1">{(q.options || []).join(", ")}</p>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          <button type="button" onClick={() => openTemplateEditor("sel-question", q)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                          </button>
+                          <button type="button" onClick={() => setTemplateDelete({ type: "sel-question", id: q.id, label: q.questionText })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {templateModalTab === "subjects" && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-headline font-bold text-sm text-on-surface">Subject Templates</h4>
+                  <button type="button" onClick={() => openTemplateEditor("subject", null, { order: templates.subjectTemplates.length + 1 })} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">add</span>
+                    Add Subject
+                  </button>
+                </div>
+                {templates.subjectTemplates.length === 0 ? (
+                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No subject templates configured.</p>
+                ) : (
+                  <div className="divide-y divide-outline-variant/10 border border-outline-variant/20 rounded-lg">
+                    {templates.subjectTemplates.map(st => (
+                      <div key={st.id} className="flex items-start justify-between gap-3 p-3">
+                        <div className="flex-1">
+                          <p className="text-xs font-medium text-on-surface">{st.name}</p>
+                          <p className="text-[10px] text-on-surface-variant mt-1">{(st.options || []).join(", ")}</p>
+                        </div>
+                        <div className="flex gap-1 shrink-0">
+                          <button type="button" onClick={() => openTemplateEditor("subject", st)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                          </button>
+                          <button type="button" onClick={() => setTemplateDelete({ type: "subject", id: st.id, label: st.name })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
+
+      {templateEditor && (
+        <Modal
+          title={`${templateEditor.id ? "Edit" : "Add"} ${
+            templateEditor.type === "fln-category" ? "FLN Category" :
+            templateEditor.type === "fln-question" ? "FLN Question" :
+            templateEditor.type === "sel-question" ? "SEL Question" : "Subject Template"
+          }`}
+          onClose={() => setTemplateEditor(null)}
+        >
+          <form onSubmit={handleTemplateSave} className="space-y-4">
+            {templateEditor.type === "fln-category" && (
+              <InputField label="Category Name" name="name" value={templateEditor.name} onChange={e => setTemplateEditor(f => ({ ...f, name: e.target.value }))} required />
+            )}
+
+            {templateEditor.type === "fln-question" && (
+              <>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Category</label>
+                  <select
+                    value={templateEditor.categoryId}
+                    onChange={e => setTemplateEditor(f => ({ ...f, categoryId: e.target.value }))}
+                    required
+                    className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
+                  >
+                    <option value="">Select category</option>
+                    {templates.flnCategories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Question Text</label>
+                  <textarea rows="3" value={templateEditor.questionText} onChange={e => setTemplateEditor(f => ({ ...f, questionText: e.target.value }))} required className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Marks</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    value={templateEditor.marks}
+                    onChange={e => setTemplateEditor(f => ({ ...f, marks: e.target.value }))}
+                    required
+                    className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </>
+            )}
+
+            {templateEditor.type === "sel-question" && (
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Question Text</label>
+                <textarea rows="3" value={templateEditor.questionText} onChange={e => setTemplateEditor(f => ({ ...f, questionText: e.target.value }))} required className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
+              </div>
+            )}
+
+            {templateEditor.type === "subject" && (
+              <InputField label="Subject Name" name="name" value={templateEditor.name} onChange={e => setTemplateEditor(f => ({ ...f, name: e.target.value }))} required />
+            )}
+
+            <InputField label="Order" name="order" type="number" value={templateEditor.order} onChange={e => setTemplateEditor(f => ({ ...f, order: e.target.value }))} />
+
+            {(templateEditor.type === "sel-question" || templateEditor.type === "subject") && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Dropdown Options</label>
+                  <button type="button" onClick={addTemplateOption} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[12px]">add</span>
+                    Add Option
+                  </button>
+                </div>
+                {(templateEditor.options || []).map((option, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <input value={option} onChange={e => updateTemplateOption(index, e.target.value)} className="flex-1 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+                    <button type="button" onClick={() => removeTemplateOption(index)} className="p-2 hover:bg-error-container rounded-full cursor-pointer text-error">
+                      <span className="material-symbols-outlined text-[16px]">delete</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
+              <button type="button" onClick={() => setTemplateEditor(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
               <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
-                {saving ? "Saving..." : editAssessmentId ? "Update" : "Add Assessment"}
+                {saving ? "Saving..." : "Save"}
               </button>
             </div>
           </form>
@@ -1162,6 +1712,16 @@ export default function StudentProfileDetail() {
         message={student.isMigrated ? "Are you sure you want to unmark this student as migrated?" : "Are you sure you want to mark this student as migrated?"}
         confirmText={student.isMigrated ? "Unmark" : "Mark as Migrated"}
         variant="primary"
+      />
+
+      <ConfirmActionModal
+        isOpen={!!templateDelete}
+        onClose={() => setTemplateDelete(null)}
+        onConfirm={handleTemplateDelete}
+        title="Delete Template Item"
+        message={`Delete "${templateDelete?.label || "this item"}"? This cannot be undone.`}
+        confirmText="Delete"
+        variant="danger"
       />
 
     </div>

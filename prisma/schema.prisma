@@ -84,6 +84,7 @@ model User {
   travelRequests     TravelRequest[]
   approvedTravel     TravelRequest[]      @relation("ApprovedByUser")
   coachingRecords    CoachingRecord[]
+  pmReflections      PMReflection[]
 }
 
 model Permission {
@@ -150,6 +151,7 @@ model School {
   programs             SchoolProgram[]
   learningAssessments  LearningAssessment[]
   homeworkRecords      StudentHomework[]
+  assessmentForms      AssessmentForm[]
 }
 
 model Fellow {
@@ -171,35 +173,44 @@ model Fellow {
   user              User?           @relation(fields: [userId], references: [id])
   schools           FellowSchool[]
   students          Student[]
-  goals             FellowGoal[]
+  goalSheets        GoalSheet[]
   reviews           FellowReview[]
   tasks             FellowTask[]
   coachingRecords   CoachingRecord[]
+  assessmentForms   AssessmentForm[]
+  engagementSurveys EngagementSurvey[]
+  lookBeyondSurveys   LookBeyondSurvey[]
+  pmReflections     PMReflection[]
 }
 
-model FellowGoal {
-  id          String                 @id @default(uuid())
-  fellowId    String
-  title       String
-  targetDate  DateTime?
-  status      String                 @default("In Progress")
-  review      String?
-  createdAt   DateTime               @default(now())
-  updatedAt   DateTime               @updatedAt
+model GoalSheet {
+  id            String   @id @default(uuid())
+  fellowId      String
+  date          DateTime
+  status        String   @default("SUBMITTED")  // SUBMITTED, REVIEWED
+  portfolioLink String?
+  responses     Json     @default("{}")     // JSONB for all Q1-Q13 answers
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  fellow      Fellow                 @relation(fields: [fellowId], references: [id], onDelete: Cascade)
-  milestones  FellowGoalMilestone[]
+  fellow        Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
 }
 
-model FellowGoalMilestone {
-  id          String       @id @default(uuid())
-  goalId      String
-  text        String
-  done        Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+model PMReflection {
+  id        String   @id @default(uuid())
+  fellowId  String
+  date      DateTime
+  responses Json     @default("{}")  // { C1:"Novice", C2:"Beginner", ..., R5:"Advanced" }
+  matrix    Json     @default("{}")  // { HS_HW:"#...", HS_LW:"#...", LS_HW:"#...", LS_LW:"#..." }
+  notes     String?
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  goal        FellowGoal   @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  fellow    Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id])
+
+  @@index([fellowId])
 }
 
 model FellowReview {
@@ -245,28 +256,11 @@ model Student {
   school          School?                @relation(fields: [schoolId], references: [id])
   fellow          Fellow?                @relation(fields: [fellowId], references: [id])
   beneficiary     Beneficiary?           @relation(fields: [beneficiaryId], references: [id])
-  subjectMarks        StudentSubjectMark[]
   attendanceLogs      StudentAttendanceLog[]
   learningAssessments LearningAssessment[]
   homeworkRecords     StudentHomework[]
-  assessments         StudentAssessment[]
   transitions         StudentTransition[]
-}
-
-model StudentSubjectMark {
-  id            String   @id @default(uuid())
-  studentId     String
-  subject       String
-  score         Float
-  grade         String
-  academicYear  String?
-  academicGrade String?
-  month         String?
-  remarks       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assessmentForms     AssessmentForm[]
 }
 
 model StudentAttendanceLog {
@@ -325,23 +319,6 @@ model StudentHomework {
   school         School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, date])
-}
-
-model StudentAssessment {
-  id             String   @id @default(uuid())
-  studentId      String
-  assessmentName String
-  topic          String
-  totalMarks     Float
-  marksObtained  Float
-  academicYear   String?
-  academicGrade  String?
-  month          String?
-  remarks        String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  student        Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model StudentTransition {
@@ -919,6 +896,28 @@ model CoachingRecord {
   author           User     @relation(fields: [authorId], references: [id])
 }
 
+model EngagementSurvey {
+  id          String   @id @default(uuid())
+  fellowId    String
+  surveyDate  DateTime
+  responses   Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  fellow      Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+}
+
+model LookBeyondSurvey {
+  id          String   @id @default(uuid())
+  fellowId    String
+  surveyDate  DateTime
+  responses   Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  fellow      Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+}
+
 model TravelRequest {
   id               String       @id @default(uuid())
   userId           String
@@ -951,4 +950,123 @@ model TravelExpense {
   updatedAt        DateTime      @updatedAt
 
   travelRequest    TravelRequest @relation(fields: [travelRequestId], references: [id], onDelete: Cascade)
+}
+
+// ─── Assessment Templates (managed by ADMIN/PROGRAM_MANAGER) ───
+
+model FLNCategory {
+  id        String        @id @default(uuid())
+  name      String
+  order     Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  questions FLNQuestion[]
+}
+
+model FLNQuestion {
+  id           String      @id @default(uuid())
+  categoryId   String
+  questionText String
+  marks        Float
+  order        Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  category     FLNCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  responses    FLNResponse[]
+}
+
+model SELQuestion {
+  id           String       @id @default(uuid())
+  questionText String
+  options      Json
+  order        Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  responses    SELResponse[]
+}
+
+model SubjectAssessmentTemplate {
+  id        String                     @id @default(uuid())
+  name      String
+  options   Json
+  order     Int                        @default(0)
+  createdAt DateTime                   @default(now())
+  updatedAt DateTime                   @updatedAt
+
+  responses SubjectAssessmentResponse[]
+}
+
+// ─── Assessment Form & Responses ───
+
+model AssessmentForm {
+  id                 String                      @id @default(uuid())
+  studentId          String
+  fellowId           String?
+  schoolId           String?
+  assessmentType     String
+  date               DateTime
+  isEnrolledInSchool Boolean?
+  reasonNotEnrolled  String?
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
+
+  student            Student                     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fellow             Fellow?                     @relation(fields: [fellowId], references: [id])
+  school             School?                     @relation(fields: [schoolId], references: [id])
+  enrollmentResponses EnrollmentResponse[]
+  subjectResponses   SubjectAssessmentResponse[]
+  flnResponses       FLNResponse[]
+  selResponses       SELResponse[]
+}
+
+model EnrollmentResponse {
+  id               String         @id @default(uuid())
+  assessmentFormId String
+  question         String
+  answer           String
+  createdAt        DateTime       @default(now())
+
+  assessmentForm   AssessmentForm @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+}
+
+model SubjectAssessmentResponse {
+  id                String                    @id @default(uuid())
+  assessmentFormId  String
+  subjectTemplateId String
+  selectedOption    String
+  createdAt         DateTime                  @default(now())
+
+  assessmentForm    AssessmentForm            @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+  subjectTemplate   SubjectAssessmentTemplate @relation(fields: [subjectTemplateId], references: [id])
+
+  @@unique([assessmentFormId, subjectTemplateId])
+}
+
+model FLNResponse {
+  id               String         @id @default(uuid())
+  assessmentFormId String
+  flnQuestionId    String
+  score            Float
+  createdAt        DateTime       @default(now())
+
+  assessmentForm   AssessmentForm @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+  flnQuestion      FLNQuestion    @relation(fields: [flnQuestionId], references: [id])
+
+  @@unique([assessmentFormId, flnQuestionId])
+}
+
+model SELResponse {
+  id               String         @id @default(uuid())
+  assessmentFormId String
+  selQuestionId    String
+  answer           String
+  createdAt        DateTime       @default(now())
+
+  assessmentForm   AssessmentForm @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+  selQuestion      SELQuestion    @relation(fields: [selQuestionId], references: [id])
+
+  @@unique([assessmentFormId, selQuestionId])
 }

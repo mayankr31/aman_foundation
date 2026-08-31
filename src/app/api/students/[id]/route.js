@@ -55,7 +55,6 @@ export async function GET(req, context) {
           }
         },
         fellow: true,
-        subjectMarks: true,
         attendanceLogs: {
           include: { dayLogs: { orderBy: { date: "asc" } } },
           orderBy: { createdAt: "desc" }
@@ -68,11 +67,25 @@ export async function GET(req, context) {
           orderBy: { date: "desc" },
           take: 50
         },
-        assessments: {
-          orderBy: { createdAt: "desc" }
-        },
         transitions: {
           orderBy: { createdAt: "desc" }
+        },
+        assessmentForms: {
+          include: {
+            fellow: { select: { id: true, name: true } },
+            school: { select: { id: true, name: true } },
+            enrollmentResponses: true,
+            subjectResponses: {
+              include: { subjectTemplate: true }
+            },
+            flnResponses: {
+              include: { flnQuestion: { include: { category: true } } }
+            },
+            selResponses: {
+              include: { selQuestion: true }
+            }
+          },
+          orderBy: { date: "desc" }
         },
         beneficiary: {
           select: { id: true, name: true, enrolmentId: true }
@@ -174,17 +187,9 @@ export async function DELETE(req, context) {
     }
 
     await prisma.$transaction(async (tx) => {
-      // 1. Delete student subject marks
-      await tx.studentSubjectMark.deleteMany({
-        where: { studentId }
-      });
-
-      // 2. Delete student attendance logs
       await tx.studentAttendanceLog.deleteMany({
         where: { studentId }
       });
-
-      // 3. Delete student record
       await tx.student.delete({
         where: { id: studentId }
       });

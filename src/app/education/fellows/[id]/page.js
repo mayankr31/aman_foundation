@@ -5,8 +5,16 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import GoalSheetForm from "@/components/GoalSheetForm";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
+import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
+import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
+import PMReflectionForm from "@/components/PMReflectionForm";
+import PMReflectionViewer from "@/components/PMReflectionViewer";
+import dynamic from "next/dynamic";
+
+const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
 export default function FellowProfileDetail() {
   const { id } = useParams();
@@ -15,20 +23,26 @@ export default function FellowProfileDetail() {
   const toast = useToast();
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [goals, setGoals] = useState([]);
+  const [goalSheets, setGoalSheets] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
+  const [engagementSurveys, setEngagementSurveys] = useState([]);
+  const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
+  const [pmReflections, setPmReflections] = useState([]);
+  const [viewingSurvey, setViewingSurvey] = useState(null);
+  const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
+  const [viewingReflection, setViewingReflection] = useState(null);
   const [activeTab, setActiveTab] = useState("Goals");
+  const [showPDFModal, setShowPDFModal] = useState(false);
 
-  // Form states for adding new goals
-  const [showAddGoalModal, setShowAddGoalModal] = useState(false);
-  const [newGoalTitle, setNewGoalTitle] = useState("");
-  const [newGoalTargetDate, setNewGoalTargetDate] = useState("");
-  const [newGoalMilestones, setNewGoalMilestones] = useState([""]);
+  // Goal Sheet states
+  const [showGoalSheetForm, setShowGoalSheetForm] = useState(false);
+  const [editingGoalSheet, setEditingGoalSheet] = useState(null);
+  const [reviewingGoalSheet, setReviewingGoalSheet] = useState(null);
 
-  // Form states for adding new reviews
-  const [editingReviewGoalId, setEditingReviewGoalId] = useState(null);
-  const [reviewText, setReviewText] = useState("");
+  // PM Reflection states
+  const [showReflectionForm, setShowReflectionForm] = useState(false);
+  const [editingReflection, setEditingReflection] = useState(null);
 
   // Form states for 6-month evaluations reviews
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
@@ -40,7 +54,7 @@ export default function FellowProfileDetail() {
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [deleteItemType, setDeleteItemType] = useState(""); // "goal" | "review"
+  const [deleteItemType, setDeleteItemType] = useState(""); // "goalSheet" | "review"
 
   // Coaching & Training modal states
   const [showAddCoachingModal, setShowAddCoachingModal] = useState(false);
@@ -66,7 +80,7 @@ export default function FellowProfileDetail() {
         const json = await res.json();
         if (json.success) {
           setFellow(json.data);
-          setGoals(json.data.goals || []);
+          setGoalSheets(json.data.goalSheets || []);
           setReviews(json.data.reviews || []);
         }
       } catch (err) {
@@ -96,6 +110,63 @@ export default function FellowProfileDetail() {
     }
     if (activeTab === "Coaching & Training" && token && id) {
       loadCoachingRecords();
+    }
+  }, [activeTab, token, id]);
+
+  useEffect(() => {
+    async function loadEngagementSurveys() {
+      try {
+        const res = await fetch(`/api/fellows/${id}/engagement-surveys`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setEngagementSurveys(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load engagement surveys:", err);
+      }
+    }
+    if (activeTab === "Engagement Survey" && token && id) {
+      loadEngagementSurveys();
+    }
+  }, [activeTab, token, id]);
+
+  useEffect(() => {
+    async function loadLookBeyondSurveys() {
+      try {
+        const res = await fetch(`/api/fellows/${id}/look-beyond`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setLookBeyondSurveys(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load look beyond surveys:", err);
+      }
+    }
+    if (activeTab === "Look Beyond Survey" && token && id) {
+      loadLookBeyondSurveys();
+    }
+  }, [activeTab, token, id]);
+
+  useEffect(() => {
+    async function loadPmReflections() {
+      try {
+        const res = await fetch(`/api/fellows/${id}/pm-reflections`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+        if (json.success) {
+          setPmReflections(json.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to load PM reflections:", err);
+      }
+    }
+    if (activeTab === "PM Reflection" && token && id) {
+      loadPmReflections();
     }
   }, [activeTab, token, id]);
 
@@ -156,115 +227,22 @@ export default function FellowProfileDetail() {
     }
   };
 
-  const toggleMilestone = async (goalId, milestoneId, currentDone) => {
-    const newDone = !currentDone;
-    
-    // Update local state first for instant responsiveness
-    const updated = goals.map((goal) => {
-      if (goal.id === goalId) {
-        const updatedMilestones = goal.milestones.map((m) => {
-          if (m.id === milestoneId) return { ...m, done: newDone };
-          return m;
-        });
-        return { ...goal, milestones: updatedMilestones };
+  const handleGoalSheetSaved = (updatedSheet) => {
+    setGoalSheets((prev) => {
+      const idx = prev.findIndex((s) => s.id === updatedSheet.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = updatedSheet;
+        return copy;
       }
-      return goal;
+      return [updatedSheet, ...prev];
     });
-    setGoals(updated);
-
-    try {
-      await fetch(`/api/fellows/${id}/goals`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({
-          type: "TOGGLE_MILESTONE",
-          milestoneId,
-          done: newDone
-        })
-      });
-    } catch (err) {
-      console.error("Failed to persist milestone toggle:", err);
-    }
   };
 
-  const handleAddGoal = async (e) => {
-    e.preventDefault();
-    if (!newGoalTitle) return;
-
-    try {
-      const filteredMilestones = newGoalMilestones.filter(m => m.trim() !== "");
-      const res = await fetch(`/api/fellows/${id}/goals`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({
-          title: newGoalTitle,
-          targetDate: newGoalTargetDate || null,
-          milestones: filteredMilestones
-        })
-      });
-      const json = await res.json();
-      if (json.success) {
-        setGoals(prev => [...prev, json.data]);
-        setNewGoalTitle("");
-        setNewGoalTargetDate("");
-        setNewGoalMilestones([""]);
-        setShowAddGoalModal(false);
-        toast.success("Goal created successfully!");
-      } else {
-        toast.error(json.error || "Failed to create goal");
-      }
-    } catch (err) {
-      console.error("Failed to add goal:", err);
-      toast.error("An error occurred while creating the goal.");
-    }
-  };
-
-  const handleDeleteGoal = (goalId) => {
-    setDeleteItemId(goalId);
-    setDeleteItemType("goal");
+  const handleDeleteGoalSheet = (sheetId) => {
+    setDeleteItemId(sheetId);
+    setDeleteItemType("goalSheet");
     setDeleteModalOpen(true);
-  };
-
-  const handleSaveReview = async (goalId) => {
-    try {
-      const res = await fetch(`/api/fellows/${id}/goals`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          type: "UPDATE_REVIEW",
-          goalId,
-          review: reviewText
-        })
-      });
-      const json = await res.json();
-      if (json.success) {
-        // Update local state
-        const updated = goals.map((goal) => {
-          if (goal.id === goalId) {
-            return { ...goal, review: reviewText };
-          }
-          return goal;
-        });
-        setGoals(updated);
-        setEditingReviewGoalId(null);
-        setReviewText("");
-        toast.success("Progress review updated successfully!");
-      } else {
-        toast.error(json.error || "Failed to save review");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("An error occurred while saving the review.");
-    }
   };
 
   const handleAddReview = async (e) => {
@@ -306,25 +284,43 @@ export default function FellowProfileDetail() {
     setDeleteModalOpen(true);
   };
 
+  const handleReflectionSaved = (updatedReflection) => {
+    setPmReflections((prev) => {
+      const idx = prev.findIndex((r) => r.id === updatedReflection.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = updatedReflection;
+        return copy;
+      }
+      return [updatedReflection, ...prev];
+    });
+  };
+
+  const handleDeleteReflection = (reflectionId) => {
+    setDeleteItemId(reflectionId);
+    setDeleteItemType("pmReflection");
+    setDeleteModalOpen(true);
+  };
+
   const handleConfirmDelete = async () => {
     if (!deleteItemId) return;
 
-    if (deleteItemType === "goal") {
+    if (deleteItemType === "goalSheet") {
       try {
-        const res = await fetch(`/api/fellows/${id}/goals?goalId=${deleteItemId}`, {
+        const res = await fetch(`/api/fellows/${id}/goal-sheets/${deleteItemId}`, {
           method: "DELETE",
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
         const json = await res.json();
         if (json.success) {
-          setGoals(prev => prev.filter(g => g.id !== deleteItemId));
-          toast.success("Goal deleted successfully!");
+          setGoalSheets((prev) => prev.filter((s) => s.id !== deleteItemId));
+          toast.success("Goal sheet deleted successfully!");
         } else {
-          toast.error(json.error || "Failed to delete goal");
+          toast.error(json.error || "Failed to delete goal sheet");
         }
       } catch (err) {
-        console.error("Failed to delete goal:", err);
-        toast.error("An error occurred while deleting the goal.");
+        console.error("Failed to delete goal sheet:", err);
+        toast.error("An error occurred");
       }
     } else if (deleteItemType === "review") {
       try {
@@ -342,6 +338,23 @@ export default function FellowProfileDetail() {
       } catch (err) {
         console.error(err);
         toast.error("An error occurred while deleting the review.");
+      }
+    } else if (deleteItemType === "pmReflection") {
+      try {
+        const res = await fetch(`/api/fellows/${id}/pm-reflections/${deleteItemId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const json = await res.json();
+        if (json.success) {
+          setPmReflections(prev => prev.filter(r => r.id !== deleteItemId));
+          toast.success("PM reflection deleted successfully!");
+        } else {
+          toast.error(json.error || "Failed to delete PM reflection");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("An error occurred while deleting the PM reflection.");
       }
     }
     setDeleteModalOpen(false);
@@ -443,12 +456,19 @@ export default function FellowProfileDetail() {
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Presentation Report
           </button>
+          <button
+            onClick={() => setShowPDFModal(true)}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+          >
+            <span className="material-symbols-outlined text-[18px]">book</span>
+            Learning Framework
+          </button>
         </div>
       </header>
 
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training"].map((tab) => {
+        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training", "Engagement Survey", "Look Beyond Survey", "PM Reflection"].map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -474,120 +494,86 @@ export default function FellowProfileDetail() {
           )}
           {activeTab === "Goals" && (
             <div className="space-y-6">
-              {/* Goals Tab Header */}
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl text-on-surface">Fellow Learning Goals</h3>
-                <button
-                  onClick={() => setShowAddGoalModal(true)}
-                  className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
-                >
-                  <span className="material-symbols-outlined text-[16px]">add</span>
-                  Add New Goal
-                </button>
+                <h3 className="font-headline font-bold text-xl text-on-surface">Goal Sheets</h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingGoalSheet(null);
+                      setReviewingGoalSheet(null);
+                      setShowGoalSheetForm(true);
+                    }}
+                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">add</span>
+                    Create New Goal Sheet
+                  </button>
+                </div>
               </div>
 
-              {goals.length === 0 ? (
+              {goalSheets.length === 0 ? (
                 <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                  No learning goals have been set yet. Click "Add New Goal" to start.
+                  No goal sheets have been created yet. Click &quot;Create New Goal Sheet&quot; to start.
                 </div>
               ) : (
-                goals.map((g) => (
-                  <div key={g.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group">
-                    <div className="flex justify-between items-start mb-4 gap-4">
-                      <div>
+                goalSheets.map((sheet) => (
+                  <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
+                    <div className="flex justify-between items-start gap-4">
+                      <button
+                        onClick={() => {
+                          setEditingGoalSheet(sheet);
+                          setReviewingGoalSheet(sheet);
+                          setShowGoalSheetForm(true);
+                        }}
+                        className="text-left flex-1 cursor-pointer"
+                      >
                         <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
-                          {g.title}
-                          <button
-                            onClick={() => handleDeleteGoal(g.id)}
-                            className="text-on-surface-variant hover:text-red-600 transition-colors ml-2"
-                            title="Delete goal"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
-                        </h3>
-                        <p className="text-xs text-on-surface-variant mt-1">
-                          Target Date: {g.targetDate ? new Date(g.targetDate).toLocaleDateString() : "No date set"}
-                        </p>
-                      </div>
-                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                        g.status === "Completed" ? "bg-primary-fixed text-on-primary-fixed" :
-                        g.status === "In Progress" ? "bg-secondary-container text-on-secondary-container" :
-                        "bg-surface-variant text-on-surface-variant"
-                      }`}>
-                        {g.status}
-                      </span>
-                    </div>
-
-                    {/* Milestones Checklist */}
-                    <div className="space-y-3 pl-2 mt-4 border-l-2 border-surface-container">
-                      <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Goal Milestones</p>
-                      {g.milestones && g.milestones.map((m) => (
-                        <div
-                          key={m.id}
-                          onClick={() => toggleMilestone(g.id, m.id, m.done)}
-                          className="flex items-center gap-3 cursor-pointer group/item"
-                        >
-                          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${
-                            m.done ? "bg-primary border-primary text-white" : "border-outline-variant group-hover/item:border-primary"
-                          }`}>
-                            {m.done && <span className="material-symbols-outlined text-[14px]">check</span>}
-                          </div>
-                          <span className={`text-sm ${m.done ? "line-through text-on-surface-variant" : "text-on-surface"}`}>
-                            {m.text}
+                          Goal Sheet
+                          <span className="text-xs font-normal text-on-surface-variant">
+                            {new Date(sheet.date).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
                           </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Review Outcome & Editor */}
-                    <div className="mt-6 p-4 bg-surface-container-low rounded-lg relative group/review font-sans">
-                      <div className="flex justify-between items-center mb-2">
-                        <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Progress Review</p>
-                        {user?.roleName === "ADMIN" && (
+                        </h3>
+                        {sheet.portfolioLink && (
+                          <p className="text-sm text-primary mt-1 truncate max-w-md">
+                            Portfolio linked
+                          </p>
+                        )}
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                            sheet.status === "SUBMITTED"
+                              ? "bg-secondary-container text-on-secondary-container"
+                              : "bg-primary-fixed text-on-primary-fixed"
+                          }`}
+                        >
+                          {sheet.status}
+                        </span>
+                        {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
                           <button
-                            onClick={() => {
-                              setEditingReviewGoalId(g.id);
-                              setReviewText(g.review || "");
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setReviewingGoalSheet(sheet);
+                              setEditingGoalSheet(sheet);
+                              setShowGoalSheetForm(true);
                             }}
-                            className="text-xs text-primary font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                            className="text-xs text-primary font-semibold hover:underline cursor-pointer whitespace-nowrap"
                           >
-                            <span className="material-symbols-outlined text-xs">edit</span>
-                            {g.review ? "Edit Review" : "Write Review"}
+                            Write Review
                           </button>
                         )}
+                        <button
+                          onClick={() => handleDeleteGoalSheet(sheet.id)}
+                          className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
+                          title="Delete goal sheet"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
                       </div>
-                      
-                      {editingReviewGoalId === g.id ? (
-                        <div className="space-y-3 mt-2">
-                          <textarea
-                            value={reviewText}
-                            onChange={(e) => setReviewText(e.target.value)}
-                            placeholder="Write your progress review here..."
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface"
-                            rows={3}
-                          />
-                          <div className="flex justify-end gap-2">
-                            <button
-                              onClick={() => setEditingReviewGoalId(null)}
-                              className="px-3 py-1.5 rounded-full border border-outline-variant text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={() => handleSaveReview(g.id)}
-                              className="px-4 py-1.5 rounded-full bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                            >
-                              Save Review
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        g.review ? (
-                          <p className="text-sm text-on-surface leading-relaxed">{g.review}</p>
-                        ) : (
-                          <p className="text-xs text-slate-400 italic">No review submitted yet.</p>
-                        )
-                      )}
                     </div>
                   </div>
                 ))
@@ -809,6 +795,163 @@ export default function FellowProfileDetail() {
             </div>
           )}
 
+          {activeTab === "Engagement Survey" && (
+            <div className="space-y-6">
+              <h3 className="font-headline font-bold text-xl text-on-surface">Engagement Survey</h3>
+
+              {engagementSurveys.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                  No engagement surveys submitted yet.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {engagementSurveys.map((survey) => (
+                    <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold text-on-surface text-sm">Engagement Survey</p>
+                        <p className="text-xs text-on-surface-variant mt-1">
+                          {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setViewingSurvey(survey)}
+                        className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                        title="View Responses"
+                      >
+                        <span className="material-symbols-outlined text-[22px]">visibility</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "Look Beyond Survey" && (
+            <div className="space-y-6">
+              <h3 className="font-headline font-bold text-xl text-on-surface">Look Beyond Survey</h3>
+
+              {lookBeyondSurveys.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                  No Look Beyond surveys submitted yet.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {lookBeyondSurveys.map((survey) => (
+                    <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
+                      <div>
+                        <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
+                        <p className="text-xs text-on-surface-variant mt-1">
+                          {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setViewingLookBeyond(survey)}
+                        className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                        title="View Responses"
+                      >
+                        <span className="material-symbols-outlined text-[22px]">visibility</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "PM Reflection" && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="font-headline font-bold text-xl text-on-surface">POST LDJC PM Reflection</h3>
+                  <p className="text-sm text-on-surface-variant mt-1">
+                    Leadership Development Journey Conversation review by the Program Manager
+                  </p>
+                </div>
+                {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                  <button
+                    onClick={() => {
+                      setEditingReflection(null);
+                      setShowReflectionForm(true);
+                    }}
+                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">add</span>
+                    Create PM Reflection
+                  </button>
+                )}
+              </div>
+
+              {pmReflections.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                  No PM reflections have been created yet.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {pmReflections.map((reflection) => {
+                    const matrixColors = reflection.matrix || {};
+                    const isManager = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+                    return (
+                      <div
+                        key={reflection.id}
+                        className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-start gap-4"
+                      >
+                        <button
+                          onClick={() => setViewingReflection(reflection)}
+                          className="text-left flex-1 cursor-pointer"
+                        >
+                          <p className="font-semibold text-on-surface text-sm flex items-center gap-2">
+                            PM Reflection
+                            <span className="text-xs font-normal text-on-surface-variant">
+                              {new Date(reflection.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                            </span>
+                          </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            {["HS_HW", "HS_LW", "LS_HW", "LS_LW"].map((cellKey) => (
+                              <span
+                                key={cellKey}
+                                title={cellKey.replace("_", ", ")}
+                                className="w-5 h-5 rounded-full border border-black/10 shadow-sm"
+                                style={{ backgroundColor: matrixColors[cellKey] || "#d1d5db" }}
+                              ></span>
+                            ))}
+                          </div>
+                          {reflection.author?.name && (
+                            <p className="text-xs text-on-surface-variant mt-2">
+                              Reviewed by {reflection.author.name}
+                            </p>
+                          )}
+                        </button>
+                        <div className="flex items-center gap-2">
+                          {isManager && (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setEditingReflection(reflection);
+                                  setShowReflectionForm(true);
+                                }}
+                                className="text-xs text-primary font-semibold hover:underline cursor-pointer whitespace-nowrap"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteReflection(reflection.id)}
+                                className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
+                                title="Delete PM reflection"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
 
         {/* Sidebar Summary Card */}
@@ -848,106 +991,31 @@ export default function FellowProfileDetail() {
         </div>
       </div>
 
-      {/* Add Goal Modal */}
-      {showAddGoalModal && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add New Learning Goal</h3>
-              <button
-                onClick={() => setShowAddGoalModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[18px]">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleAddGoal} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Goal Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Conduct 5 remedial math sessions"
-                  value={newGoalTitle}
-                  onChange={(e) => setNewGoalTitle(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Target Date
-                </label>
-                <input
-                  type="date"
-                  value={newGoalTargetDate}
-                  onChange={(e) => setNewGoalTargetDate(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    Milestones
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setNewGoalMilestones([...newGoalMilestones, ""])}
-                    className="text-xs text-primary font-semibold hover:underline flex items-center gap-1"
-                  >
-                    + Add Milestone
-                  </button>
-                </div>
-                {newGoalMilestones.map((milestone, idx) => (
-                  <div key={idx} className="flex gap-2 items-center mb-2">
-                    <input
-                      type="text"
-                      required
-                      placeholder={`Milestone #${idx + 1}`}
-                      value={milestone}
-                      onChange={(e) => {
-                        const updated = [...newGoalMilestones];
-                        updated[idx] = e.target.value;
-                        setNewGoalMilestones(updated);
-                      }}
-                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                    {newGoalMilestones.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...newGoalMilestones];
-                          updated.splice(idx, 1);
-                          setNewGoalMilestones(updated);
-                        }}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">delete</span>
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddGoalModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Create Goal
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {/* Goal Sheet Form Modal */}
+      {showGoalSheetForm && (
+        <GoalSheetForm
+          fellowId={fellow.id}
+          sheetData={editingGoalSheet}
+          isManager={
+            reviewingGoalSheet
+              ? true
+              : false
+          }
+          token={token}
+          onClose={() => {
+            setShowGoalSheetForm(false);
+            setEditingGoalSheet(null);
+            setReviewingGoalSheet(null);
+          }}
+          onSave={(updatedSheet) => {
+            handleGoalSheetSaved(updatedSheet);
+            setShowGoalSheetForm(false);
+            setEditingGoalSheet(null);
+            setReviewingGoalSheet(null);
+          }}
+        />
       )}
+
       {/* Add Evaluation Review Modal */}
       {showAddReviewModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
@@ -1126,13 +1194,55 @@ export default function FellowProfileDetail() {
           setDeleteItemType("");
         }}
         onConfirm={handleConfirmDelete}
-        title={deleteItemType === "goal" ? "Delete Goal" : "Delete Evaluation Review"}
+        title={deleteItemType === "goalSheet" ? "Delete Goal Sheet" : deleteItemType === "pmReflection" ? "Delete PM Reflection" : "Delete Evaluation Review"}
         message={
-          deleteItemType === "goal"
-            ? "Are you sure you want to delete this goal? This action is permanent and cannot be undone."
+          deleteItemType === "goalSheet"
+            ? "Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
+            : deleteItemType === "pmReflection"
+            ? "Are you sure you want to delete this PM reflection? This action is permanent and cannot be undone."
             : "Are you sure you want to delete this evaluation review? This action is permanent and cannot be undone."
         }
       />
+
+      <PDFViewerModal isOpen={showPDFModal} onClose={() => setShowPDFModal(false)} />
+
+      {viewingSurvey && (
+        <EngagementSurveyViewer
+          survey={viewingSurvey}
+          onClose={() => setViewingSurvey(null)}
+        />
+      )}
+
+      {viewingLookBeyond && (
+        <LookBeyondSurveyViewer
+          survey={viewingLookBeyond}
+          onClose={() => setViewingLookBeyond(null)}
+        />
+      )}
+
+      {showReflectionForm && (
+        <PMReflectionForm
+          fellowId={fellow.id}
+          reflection={editingReflection}
+          token={token}
+          onClose={() => {
+            setShowReflectionForm(false);
+            setEditingReflection(null);
+          }}
+          onSave={(updatedReflection) => {
+            handleReflectionSaved(updatedReflection);
+            setShowReflectionForm(false);
+            setEditingReflection(null);
+          }}
+        />
+      )}
+
+      {viewingReflection && (
+        <PMReflectionViewer
+          reflection={viewingReflection}
+          onClose={() => setViewingReflection(null)}
+        />
+      )}
     </div>
   );
 }

@@ -207,22 +207,25 @@ exports.Prisma.FellowScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.FellowGoalScalarFieldEnum = {
+exports.Prisma.GoalSheetScalarFieldEnum = {
   id: 'id',
   fellowId: 'fellowId',
-  title: 'title',
-  targetDate: 'targetDate',
+  date: 'date',
   status: 'status',
-  review: 'review',
+  portfolioLink: 'portfolioLink',
+  responses: 'responses',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.FellowGoalMilestoneScalarFieldEnum = {
+exports.Prisma.PMReflectionScalarFieldEnum = {
   id: 'id',
-  goalId: 'goalId',
-  text: 'text',
-  done: 'done',
+  fellowId: 'fellowId',
+  date: 'date',
+  responses: 'responses',
+  matrix: 'matrix',
+  notes: 'notes',
+  authorId: 'authorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -266,20 +269,6 @@ exports.Prisma.StudentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.StudentSubjectMarkScalarFieldEnum = {
-  id: 'id',
-  studentId: 'studentId',
-  subject: 'subject',
-  score: 'score',
-  grade: 'grade',
-  academicYear: 'academicYear',
-  academicGrade: 'academicGrade',
-  month: 'month',
-  remarks: 'remarks',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.StudentAttendanceLogScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -317,21 +306,6 @@ exports.Prisma.StudentHomeworkScalarFieldEnum = {
   schoolId: 'schoolId',
   date: 'date',
   homeworkStatus: 'homeworkStatus',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.StudentAssessmentScalarFieldEnum = {
-  id: 'id',
-  studentId: 'studentId',
-  assessmentName: 'assessmentName',
-  topic: 'topic',
-  totalMarks: 'totalMarks',
-  marksObtained: 'marksObtained',
-  academicYear: 'academicYear',
-  academicGrade: 'academicGrade',
-  month: 'month',
-  remarks: 'remarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -779,6 +753,24 @@ exports.Prisma.CoachingRecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EngagementSurveyScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LookBeyondSurveyScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  surveyDate: 'surveyDate',
+  responses: 'responses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TravelRequestScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -805,6 +797,87 @@ exports.Prisma.TravelExpenseScalarFieldEnum = {
   submittedAt: 'submittedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FLNCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FLNQuestionScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  questionText: 'questionText',
+  marks: 'marks',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SELQuestionScalarFieldEnum = {
+  id: 'id',
+  questionText: 'questionText',
+  options: 'options',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubjectAssessmentTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  options: 'options',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssessmentFormScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fellowId: 'fellowId',
+  schoolId: 'schoolId',
+  assessmentType: 'assessmentType',
+  date: 'date',
+  isEnrolledInSchool: 'isEnrolledInSchool',
+  reasonNotEnrolled: 'reasonNotEnrolled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EnrollmentResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  question: 'question',
+  answer: 'answer',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SubjectAssessmentResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  subjectTemplateId: 'subjectTemplateId',
+  selectedOption: 'selectedOption',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FLNResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  flnQuestionId: 'flnQuestionId',
+  score: 'score',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SELResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  selQuestionId: 'selQuestionId',
+  answer: 'answer',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -880,16 +953,14 @@ exports.Prisma.ModelName = {
   UserPermission: 'UserPermission',
   School: 'School',
   Fellow: 'Fellow',
-  FellowGoal: 'FellowGoal',
-  FellowGoalMilestone: 'FellowGoalMilestone',
+  GoalSheet: 'GoalSheet',
+  PMReflection: 'PMReflection',
   FellowReview: 'FellowReview',
   Student: 'Student',
-  StudentSubjectMark: 'StudentSubjectMark',
   StudentAttendanceLog: 'StudentAttendanceLog',
   StudentAttendanceDayLog: 'StudentAttendanceDayLog',
   LearningAssessment: 'LearningAssessment',
   StudentHomework: 'StudentHomework',
-  StudentAssessment: 'StudentAssessment',
   StudentTransition: 'StudentTransition',
   MigrationRecord: 'MigrationRecord',
   IncomeRecord: 'IncomeRecord',
@@ -927,8 +998,19 @@ exports.Prisma.ModelName = {
   VulnerabilitySurvey: 'VulnerabilitySurvey',
   SolutionPlan: 'SolutionPlan',
   CoachingRecord: 'CoachingRecord',
+  EngagementSurvey: 'EngagementSurvey',
+  LookBeyondSurvey: 'LookBeyondSurvey',
   TravelRequest: 'TravelRequest',
-  TravelExpense: 'TravelExpense'
+  TravelExpense: 'TravelExpense',
+  FLNCategory: 'FLNCategory',
+  FLNQuestion: 'FLNQuestion',
+  SELQuestion: 'SELQuestion',
+  SubjectAssessmentTemplate: 'SubjectAssessmentTemplate',
+  AssessmentForm: 'AssessmentForm',
+  EnrollmentResponse: 'EnrollmentResponse',
+  SubjectAssessmentResponse: 'SubjectAssessmentResponse',
+  FLNResponse: 'FLNResponse',
+  SELResponse: 'SELResponse'
 };
 
 /**
