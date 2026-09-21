@@ -17,6 +17,11 @@ export async function GET(req) {
               include: {
                 school: true
               }
+            },
+            afterSchoolCentres: {
+              include: {
+                centre: true
+              }
             }
           }
         }
@@ -82,6 +87,11 @@ export async function PATCH(req) {
               schools: {
                 include: {
                   school: true
+                }
+              },
+              afterSchoolCentres: {
+                include: {
+                  centre: true
                 }
               }
             }

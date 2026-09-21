@@ -32,8 +32,7 @@ export async function GET(req, context) {
         students: true,
         goalSheets: {
           orderBy: { date: "desc" }
-        },
-        reviews: true
+        }
       }
     });
 
@@ -112,17 +111,12 @@ export async function DELETE(req, context) {
       // 2. Remove school assignments (M2M)
       await tx.fellowSchool.deleteMany({ where: { fellowId } });
 
-      // 3. Delete reviews
-      await tx.fellowReview.deleteMany({
-        where: { fellowId }
-      });
-
-      // 4. Delete goal sheets
+      // 3. Delete goal sheets
       await tx.goalSheet.deleteMany({
         where: { fellowId }
       });
 
-      // 5. Delete the fellow record
+      // 4. Delete the fellow record
       await tx.fellow.delete({
         where: { id: fellowId }
       });

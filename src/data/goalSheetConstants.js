@@ -145,10 +145,10 @@ export const QUESTIONS = [
       { key: "schoolDevelopment", type: "text" },
     ],
   },
-  // Q10: Self Reflection Progress made by midline
+  // Q10: Self Reflection Progress made by endline
   {
     id: "Q10",
-    label: "Q10. Self Reflection Progress made by midline",
+    label: "Q10. Self Reflection Progress made by endline",
     sections: [
       { key: "leadingClassroom", type: "text" },
       { key: "leadingMyself", type: "titles" },

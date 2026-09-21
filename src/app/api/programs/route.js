@@ -10,7 +10,7 @@ export async function GET(req) {
     const programs = await prisma.program.findMany({
       include: {
         _count: {
-          select: { schools: true, events: true }
+          select: { schools: true, events: true, afterSchoolCentres: true }
         }
       },
       orderBy: { createdAt: "desc" }

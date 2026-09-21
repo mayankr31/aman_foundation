@@ -306,3 +306,43 @@ export const getCapacityOptionLabel = (type, id, val) => {
   const opt = q.options.find(o => o.value === parseInt(val));
   return opt ? opt.label : val;
 };
+
+export const getCapacityQuestions = (type) => {
+  if (type === 'adaptive') return adaptiveQuestions;
+  if (type === 'absorptive') return absorptiveQuestions;
+  if (type === 'transformative') return transformativeQuestions;
+  return [];
+};
+
+// Computes the capacity percentage (0-100) from a survey's stored responses.
+// Each question's selected option contributes its score (0.2-1.0); the result is
+// (sum of scores / number of questions) * 100, rounded to 2 decimals.
+export const computeCapacityScore = (type, responses) => {
+  const breakdown = computeCapacityScoreBreakdown(type, responses);
+  return breakdown ? breakdown.percentage : null;
+};
+
+// Computes { total, max, percentage } for a capacity survey's stored responses.
+export const computeCapacityScoreBreakdown = (type, responses) => {
+  const questions = getCapacityQuestions(type);
+  if (!responses || questions.length === 0) return null;
+
+  const total = questions.reduce((sum, q) => {
+    const selectedValue = responses[q.id];
+    const option = q.options.find(o => o.value === parseInt(selectedValue));
+    return sum + (option ? option.score : 0);
+  }, 0);
+
+  const max = questions.length;
+  const percentage = Math.round((total / max) * 10000) / 100;
+  return { total, max, percentage };
+};
+
+// Computes the raw total score (sum of selected option scores) for a capacity survey.
+export const computeCapacityTotalScore = (type, responses) => {
+  const breakdown = computeCapacityScoreBreakdown(type, responses);
+  return breakdown ? breakdown.total : null;
+};
+
+// Returns the maximum achievable total score for a capacity survey type.
+export const getCapacityMaxScore = (type) => getCapacityQuestions(type).length;

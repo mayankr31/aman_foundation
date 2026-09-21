@@ -43,3 +43,43 @@ export async function POST(req, { params }) {
     );
   }
 }
+
+export async function PATCH(req, { params }) {
+  const { id: beneficiaryId } = await params;
+
+  try {
+    const body = await req.json();
+    const { planId, planData } = body;
+
+    if (!planId || !planData) {
+      return NextResponse.json(
+        { success: false, error: "planId and planData are required" },
+        { status: 400 }
+      );
+    }
+
+    const existing = await prisma.solutionPlan.findFirst({
+      where: { id: planId, beneficiaryId }
+    });
+
+    if (!existing) {
+      return NextResponse.json(
+        { success: false, error: "Solution plan not found" },
+        { status: 404 }
+      );
+    }
+
+    const plan = await prisma.solutionPlan.update({
+      where: { id: planId },
+      data: { planData }
+    });
+
+    return NextResponse.json({ success: true, data: plan });
+  } catch (error) {
+    console.error("Error updating solution plan:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update solution plan" },
+      { status: 500 }
+    );
+  }
+}

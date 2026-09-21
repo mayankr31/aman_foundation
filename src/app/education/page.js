@@ -130,6 +130,52 @@ export default function EducationHub() {
           </div>
         </Link>
 
+        {/* After School Students Module Card */}
+        <Link
+          className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
+          href="/education/after-school-students"
+        >
+          <div className="absolute right-0 top-0 w-32 h-32 bg-secondary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+          <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6 z-10 group-hover:bg-secondary/10 transition-colors">
+            <span className="material-symbols-outlined text-3xl text-secondary">groups_2</span>
+          </div>
+          <h3 className="text-xl font-semibold text-on-surface mb-3 z-10 group-hover:text-secondary transition-colors">
+            After School Students
+          </h3>
+          <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
+            Manage after school learners enrolled at our community learning centres — track attendance, learning outcomes, and centre linkages.
+          </p>
+          <div className="flex items-center gap-2 text-secondary font-medium text-sm mt-auto z-10 font-sans">
+            <span>Access Module</span>
+            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+              arrow_forward
+            </span>
+          </div>
+        </Link>
+
+        {/* After School Centres Module Card */}
+        <Link
+          className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
+          href="/education/after-school-centres"
+        >
+          <div className="absolute right-0 top-0 w-32 h-32 bg-tertiary/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+          <div className="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center mb-6 z-10 group-hover:bg-tertiary/10 transition-colors">
+            <span className="material-symbols-outlined text-3xl text-tertiary">meeting_room</span>
+          </div>
+          <h3 className="text-xl font-semibold text-on-surface mb-3 z-10 group-hover:text-tertiary transition-colors">
+            After School Centres
+          </h3>
+          <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
+            Maintain community learning centre profiles, assign fellows, and monitor attendance across each after school cohort.
+          </p>
+          <div className="flex items-center gap-2 text-tertiary font-medium text-sm mt-auto z-10 font-sans">
+            <span>Access Module</span>
+            <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+              arrow_forward
+            </span>
+          </div>
+        </Link>
+
         {/* PTA & Programs Card */}
         <Link
           className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"

@@ -43,14 +43,6 @@ export async function POST(req, { params }) {
       },
     });
 
-    // Update the beneficiary's main resilienceScore to the newest survey's overall score
-    await prisma.beneficiary.update({
-      where: { id: beneficiaryId },
-      data: {
-        resilienceScore: Math.round(scores?.overallScore || 0),
-      },
-    });
-
     return NextResponse.json({ success: true, data: newSurvey });
   } catch (error) {
     console.error("Failed to create resilience survey:", error);

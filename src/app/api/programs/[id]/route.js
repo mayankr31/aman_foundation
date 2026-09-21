@@ -17,6 +17,11 @@ export async function GET(req, context) {
           include: {
             school: true
           }
+        },
+        afterSchoolCentres: {
+          include: {
+            centre: true
+          }
         }
       }
     });
@@ -99,6 +104,11 @@ export async function DELETE(req, context) {
 
       // 2. Delete school programs links
       await tx.schoolProgram.deleteMany({
+        where: { programId: id }
+      });
+
+      // 2b. Delete after school centre program links
+      await tx.afterSchoolCentreProgram.deleteMany({
         where: { programId: id }
       });
 

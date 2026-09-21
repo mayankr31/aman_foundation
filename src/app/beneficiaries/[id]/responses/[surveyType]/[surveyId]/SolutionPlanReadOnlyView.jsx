@@ -38,16 +38,20 @@ export default function SolutionPlanReadOnlyView({ planData }) {
                         <span className="material-symbols-outlined text-primary mt-0.5">check_circle</span>
                         <p className="text-sm font-semibold text-on-surface">{act.activity}</p>
                       </div>
-                      <div className="flex items-center gap-4 text-xs font-medium text-slate-500 sm:w-80 flex-shrink-0">
-                        <div className="flex flex-col w-1/3">
+                      <div className="flex items-center gap-4 text-xs font-medium text-slate-500 sm:w-[24rem] flex-shrink-0">
+                        <div className="flex flex-col w-1/4">
                           <span className="uppercase tracking-wider text-[9px] mb-1">Timeline</span>
                           <span className="truncate" title={act.timeline}>{act.timeline || "N/A"}</span>
                         </div>
-                        <div className="flex flex-col w-1/3">
+                        <div className="flex flex-col w-1/4">
+                          <span className="uppercase tracking-wider text-[9px] mb-1">Completion Status</span>
+                          <span className="truncate" title={act.completionStatus}>{act.completionStatus || "N/A"}</span>
+                        </div>
+                        <div className="flex flex-col w-1/4">
                           <span className="uppercase tracking-wider text-[9px] mb-1">Support Needed?</span>
                           <span className="truncate" title={act.supportNeeded}>{act.supportNeeded || "N/A"}</span>
                         </div>
-                        <div className="flex flex-col w-1/3">
+                        <div className="flex flex-col w-1/4">
                           <span className="uppercase tracking-wider text-[9px] mb-1">By Whom?</span>
                           <span className="truncate" title={act.byWhom}>{act.byWhom || "N/A"}</span>
                         </div>

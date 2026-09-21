@@ -22,6 +22,8 @@ export default function Sidebar({ isOpen, onClose }) {
         "/education/students",
         "/education/schools",
         "/education/pta",
+        "/education/after-school-students",
+        "/education/after-school-centres",
       ].some(path => pathname === path)
     ) {
       setEduOpen(true);
@@ -147,6 +149,20 @@ export default function Sidebar({ isOpen, onClose }) {
                   onClick={onClose}
                 >
                   Schools
+                </Link>
+                <Link
+                  className={sublinkClass(pathname === "/education/after-school-students")}
+                  href="/education/after-school-students"
+                  onClick={onClose}
+                >
+                  After School Students
+                </Link>
+                <Link
+                  className={sublinkClass(pathname === "/education/after-school-centres")}
+                  href="/education/after-school-centres"
+                  onClick={onClose}
+                >
+                  After School Centres
                 </Link>
                 {user?.roleName !== "FELLOW" && (
                   <Link

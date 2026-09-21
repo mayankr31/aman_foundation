@@ -11,6 +11,7 @@ import EngagementSurveyForm from "@/components/EngagementSurveyForm";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
+import StudentDataView from "@/components/StudentDataView";
 import dynamic from "next/dynamic";
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
@@ -33,7 +34,6 @@ export default function ProfilePage() {
 
   // Fellow specific dashboard states
   const [goalSheets, setGoalSheets] = useState([]);
-  const [reviews, setReviews] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
@@ -81,7 +81,6 @@ export default function ProfilePage() {
             const detailJson = await detailRes.json();
             if (detailJson.success) {
               setGoalSheets(detailJson.data.goalSheets || []);
-              setReviews(detailJson.data.reviews || []);
             }
           }
         }
@@ -115,7 +114,7 @@ export default function ProfilePage() {
         console.error("Failed to load coaching records:", err);
       }
     }
-    if (activeTab === "Coaching & Training") {
+    if (activeTab === "Coaching & Classroom Observation") {
       loadCoachingRecords();
     }
   }, [activeTab, token, profile]);
@@ -322,6 +321,7 @@ export default function ProfilePage() {
     .substring(0, 2);
 
   const assignedSchool = isFellow && profile.fellow.schools && profile.fellow.schools.length > 0 ? profile.fellow.schools[0].school : null;
+  const afterSchoolCentres = isFellow && profile.fellow.afterSchoolCentres ? profile.fellow.afterSchoolCentres.map(fc => fc.centre) : [];
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -377,6 +377,22 @@ export default function ProfilePage() {
                     <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
                     <div>
                       <span className="font-bold text-on-surface">School Placement:</span> {assignedSchool ? assignedSchool.name : "Unassigned"}
+                    </div>
+                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-bold text-on-surface">After School Centres:</span>
+                      {afterSchoolCentres.length > 0 ? (
+                        afterSchoolCentres.map((c, i) => (
+                          <span key={c.id}>
+                            {i > 0 && <span className="mr-1">,</span>}
+                            <Link href={`/education/after-school-centres/${c.id}`} className="text-primary hover:underline">
+                              {c.name}
+                            </Link>
+                          </span>
+                        ))
+                      ) : (
+                        <span>None</span>
+                      )}
                     </div>
                   </div>
                 )}
@@ -496,15 +512,15 @@ export default function ProfilePage() {
           </form>
               )}
 
-              {activeTab === "Coaching & Training" && (
+              {activeTab === "Coaching & Classroom Observation" && (
                 <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Training Records</h3>
+                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
                   </div>
                   <div className="space-y-6">
                     {coachingRecords.length === 0 ? (
                       <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                        No coaching or training records available yet.
+                        No coaching or classroom observation records available yet.
                       </div>
                     ) : (
                       coachingRecords.map((record) => (
@@ -573,7 +589,7 @@ export default function ProfilePage() {
         <>
           {/* Tabs */}
           <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-            {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training", "Engagement Survey", "Look Beyond Survey"].map((tab) => {
+            {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey"].map((tab) => {
               const isActive = activeTab === tab;
               return (
                 <button
@@ -742,38 +758,8 @@ export default function ProfilePage() {
                 </div>
               )}
 
-              {activeTab === "6-Month Progress Reviews" && (
-                <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
-                  <h3 className="font-headline font-bold text-xl text-on-surface">6-Month Comprehensive Evaluations</h3>
-                  <div className="space-y-6">
-                    {(reviews.length > 0 ? reviews : [
-                      {
-                        id: "default-1",
-                        period: "Mid-Cohort Review (Period: Jan - Jun)",
-                        evaluation: profile.name + " has demonstrated exceptional lesson planning capabilities. Her implementation of the interactive phonics cards resulted in standard 3 reading scores increasing by 34% in 4 months. She maintains robust communications logs with the school headmasters and has successfully normalized PTA assemblies.",
-                        rating: 4.8,
-                        reviewerName: "Sarah Jenkins (Operations Lead)",
-                        date: "2026-06-22",
-                        status: "Completed"
-                      }
-                    ]).map((rev) => (
-                      <div key={rev.id} className="p-5 border border-surface-container rounded-lg">
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="font-bold text-on-surface">{rev.period}</h4>
-                          <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">{rev.status}</span>
-                        </div>
-                        <p className="text-sm text-on-surface-variant leading-relaxed">
-                          "{rev.evaluation}"
-                        </p>
-                        <div className="mt-4 flex gap-4 text-xs text-slate-400 font-sans">
-                          <div>Reviewed by: <span className="font-bold text-on-surface">{rev.reviewerName}</span></div>
-                          <div>Date: {new Date(rev.date).toLocaleDateString()}</div>
-                          {rev.rating && <div>Rating: <span className="font-bold text-primary">{rev.rating} / 5.0</span></div>}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {activeTab === "Student Data" && (
+                <StudentDataView fellowId={profile.fellow.id} token={token} canEditNotes />
               )}
 
               {activeTab === "Engagement Survey" && (
@@ -890,6 +876,12 @@ export default function ProfilePage() {
                     <span className="text-on-surface-variant">Active Placement</span>
                     <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
                   </div>
+                  {afterSchoolCentres.length > 0 && (
+                    <div className="flex justify-between py-2 border-b border-surface-container">
+                      <span className="text-on-surface-variant">After School Centres</span>
+                      <span className="font-semibold text-on-surface">{afterSchoolCentres.length}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between py-2 border-b border-surface-container">
                     <span className="text-on-surface-variant">Class Grades</span>
                     <span className="font-semibold text-on-surface">Grade 3, Grade 4</span>

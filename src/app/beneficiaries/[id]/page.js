@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useToast } from "@/context/ToastContext";
+import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 
 export default function BeneficiaryProfileDetail() {
   const { id } = useParams();
@@ -61,6 +62,10 @@ export default function BeneficiaryProfileDetail() {
   const [transformativeSurveys, setTransformativeSurveys] = useState([]);
   const [vulnerabilitySurveys, setVulnerabilitySurveys] = useState([]);
   const [solutionPlans, setSolutionPlans] = useState([]);
+
+  // Resilience score calculation selections (null = use latest submission)
+  const [calcSelection, setCalcSelection] = useState({ adaptive: null, absorptive: null, transformative: null });
+  const [isCalculatingResilience, setIsCalculatingResilience] = useState(false);
 
   // Migration History
   const [migrationRecords, setMigrationRecords] = useState([]);
@@ -215,6 +220,36 @@ export default function BeneficiaryProfileDetail() {
       loadBeneficiaryDetail();
     }
   }, [id, token, isInitializing]);
+
+  const handleCalculateResilience = async () => {
+    if (resilienceScoreComputed === null) {
+      toast.error("All three capacity surveys (Adaptive, Absorptive, Transformative) are required to calculate the resilience score.");
+      return;
+    }
+    setIsCalculatingResilience(true);
+    try {
+      const res = await fetch(`/api/beneficiaries/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ resilienceScore: resilienceScoreComputed }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success(`Resilience score calculated and saved as ${resilienceScoreComputed}.`);
+        loadBeneficiaryDetail();
+      } else {
+        alert(json.error || "Failed to save resilience score");
+      }
+    } catch (err) {
+      console.error("Calculate resilience error:", err);
+      toast.error("Failed to calculate resilience score.");
+    } finally {
+      setIsCalculatingResilience(false);
+    }
+  };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -544,7 +579,28 @@ export default function BeneficiaryProfileDetail() {
     return <div className="p-8 text-center text-on-surface-variant font-medium">Beneficiary not found</div>;
   }
 
-  const score = beneficiary.resilienceScore || 50;
+  const resolveSelection = (list, selectedId) => {
+    return (selectedId && list.find(s => s.id === selectedId)) || list[0] || null;
+  };
+
+  const adaptiveSelection = resolveSelection(adaptiveSurveys, calcSelection.adaptive);
+  const absorptiveSelection = resolveSelection(absorptiveSurveys, calcSelection.absorptive);
+  const transformativeSelection = resolveSelection(transformativeSurveys, calcSelection.transformative);
+
+  const adaptivePct = adaptiveSelection ? computeCapacityScore('adaptive', adaptiveSelection.responses) : null;
+  const absorptivePct = absorptiveSelection ? computeCapacityScore('absorptive', absorptiveSelection.responses) : null;
+  const transformativePct = transformativeSelection ? computeCapacityScore('transformative', transformativeSelection.responses) : null;
+
+  const resilienceScoreComputed = (adaptivePct !== null && absorptivePct !== null && transformativePct !== null)
+    ? Math.round((adaptivePct + absorptivePct + transformativePct) / 3)
+    : null;
+
+  const missingCapacityTypes = [];
+  if (!adaptiveSelection) missingCapacityTypes.push("Adaptive Capacity");
+  if (!absorptiveSelection) missingCapacityTypes.push("Absorptive Capacity");
+  if (!transformativeSelection) missingCapacityTypes.push("Transformative Capacity");
+
+  const score = resilienceScoreComputed ?? beneficiary.resilienceScore ?? 50;
   const strokeDashoffset = 251.2 - (score / 100) * 251.2;
 
   const isGoatEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Goat Rearing");
@@ -741,7 +797,7 @@ export default function BeneficiaryProfileDetail() {
 
         {/* Tabs Navigation */}
         <div className="lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest flex overflow-x-auto no-scrollbar font-sans">
-          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Income Tracking", "Resilience KYR Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning", "Migration History"].map((tab) => {
+          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Income Tracking", "Resilience Measurement Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning", "Migration History"].map((tab) => {
             const isActive = activeTab === tab;
             const tabLabel = tab === "Family Directory" && beneficiary.familyMembers?.length
               ? `Family Directory (${beneficiary.familyMembers.length})`
@@ -935,13 +991,13 @@ export default function BeneficiaryProfileDetail() {
             </div>
           )}
 
-          {activeTab === "Resilience KYR Tool" && (
+          {activeTab === "Resilience Measurement Tool" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
                     <span className="material-symbols-outlined text-primary font-bold">assignment</span>
-                    Resilience Measurement - HH level KYR tool
+                    Resilience Measurement Tool
                   </h3>
                   <p className="text-sm text-on-surface-variant font-sans mt-1">
                     Assess the family's capacity to absorb, adapt and transform.
@@ -1035,7 +1091,7 @@ export default function BeneficiaryProfileDetail() {
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
-                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 9
+                            Score: <span className="font-bold text-primary">{computeCapacityTotalScore('adaptive', survey.responses)?.toFixed(2)}</span> / {getCapacityMaxScore('adaptive')}
                           </p>
                         </div>
                       </div>
@@ -1087,7 +1143,7 @@ export default function BeneficiaryProfileDetail() {
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
-                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 7
+                            Score: <span className="font-bold text-primary">{computeCapacityTotalScore('absorptive', survey.responses)?.toFixed(2)}</span> / {getCapacityMaxScore('absorptive')}
                           </p>
                         </div>
                       </div>
@@ -1139,7 +1195,7 @@ export default function BeneficiaryProfileDetail() {
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
-                            Score: <span className="font-bold text-primary">{parseFloat(survey.overallScore).toFixed(2)}</span> / 9
+                            Score: <span className="font-bold text-primary">{computeCapacityTotalScore('transformative', survey.responses)?.toFixed(2)}</span> / {getCapacityMaxScore('transformative')}
                           </p>
                         </div>
                       </div>
@@ -1260,10 +1316,14 @@ export default function BeneficiaryProfileDetail() {
                             </span>
                           </div>
                         </div>
-                        <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                        <div className="mt-4 pt-4 border-t border-surface-container-highest flex items-center gap-4 flex-wrap">
                           <Link href={`/beneficiaries/${id}/responses/solution-plan/${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                             <span className="material-symbols-outlined text-[14px]">visibility</span>
                             View Full Plan
+                          </Link>
+                          <Link href={`/beneficiaries/${id}/solution-plan?planId=${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                            Edit Plan
                           </Link>
                         </div>
                       </div>
@@ -1692,6 +1752,73 @@ export default function BeneficiaryProfileDetail() {
                 <span className="font-bold text-on-surface text-base">{landAllottedText}</span>
               </div>
             </div>
+          </div>
+
+          {/* Resilience Score (KYOR) - always visible */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="text-xs uppercase tracking-widest text-on-surface-variant mb-4 font-sans font-bold">
+              Resilience Score (KYOR)
+            </h3>
+
+            <div className="flex items-center justify-between mb-3 font-sans">
+              <div>
+                <p className="text-sm font-semibold text-on-surface">Composite Score</p>
+                <p className="text-[10px] text-on-surface-variant">Average of 3 capacity scores</p>
+              </div>
+              <div className="text-right">
+                <span className="text-3xl font-bold text-primary tracking-tight">{resilienceScoreComputed ?? "N/A"}</span>
+                <span className="text-xs text-on-surface-variant font-medium"> / 100</span>
+              </div>
+            </div>
+            <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mb-5">
+              <div className="bg-primary h-full rounded-full" style={{ width: `${resilienceScoreComputed ?? 0}%` }}></div>
+            </div>
+
+            <div className="space-y-3 text-sm font-sans">
+              {[
+                { label: "Adaptive", key: 'adaptive', pct: adaptivePct, sel: adaptiveSelection, list: adaptiveSurveys },
+                { label: "Absorptive", key: 'absorptive', pct: absorptivePct, sel: absorptiveSelection, list: absorptiveSurveys },
+                { label: "Transformative", key: 'transformative', pct: transformativePct, sel: transformativeSelection, list: transformativeSurveys },
+              ].map((item) => (
+                <div key={item.key} className="p-3 bg-surface rounded-lg border border-outline-variant/10">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold text-on-surface">{item.label} Capacity</span>
+                    <span className={`font-bold ${item.pct !== null ? 'text-primary' : 'text-on-surface-variant'}`}>
+                      {item.pct !== null ? `${item.pct}%` : "N/A"}
+                    </span>
+                  </div>
+                  <select
+                    value={item.sel?.id || ""}
+                    onChange={(e) => setCalcSelection(prev => ({ ...prev, [item.key]: e.target.value || null }))}
+                    disabled={item.list.length === 0}
+                    className="w-full bg-surface-container border border-outline-variant/30 rounded px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {item.list.length === 0 && <option value="">No submissions</option>}
+                    {item.list.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {new Date(s.surveyDate).toLocaleDateString()} — {computeCapacityScore(item.key, s.responses)}%
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {missingCapacityTypes.length > 0 && (
+              <div className="mt-4 p-3 bg-error-container/10 border border-error/20 rounded-lg text-xs text-on-surface-variant font-sans">
+                <p className="font-bold text-error mb-1">Cannot calculate resilience score</p>
+                <p>Missing submissions: {missingCapacityTypes.join(", ")}. Take these surveys first.</p>
+              </div>
+            )}
+
+            <button
+              onClick={handleCalculateResilience}
+              disabled={resilienceScoreComputed === null || isCalculatingResilience}
+              className="mt-4 w-full gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="material-symbols-outlined text-[18px]">calculate</span>
+              {isCalculatingResilience ? "Calculating..." : "Calculate & Save Resilience Score"}
+            </button>
           </div>
         </div>
       </div>

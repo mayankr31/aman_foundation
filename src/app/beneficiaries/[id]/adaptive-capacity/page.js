@@ -141,7 +141,7 @@ export default function AdaptiveCapacitySurveyPage() {
       }, 0);
 
       const maxScore = questions.length * 1; 
-      const percentageScore = (totalScore / maxScore) * 10;
+      const percentageScore = (totalScore / maxScore) * 100;
 
       const payload = {
         responses: {

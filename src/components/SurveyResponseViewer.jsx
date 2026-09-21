@@ -71,6 +71,7 @@ export default function SurveyResponseViewer({ type, responses, planData }) {
       { id: 'q2', text: "What was the effect of this shock on you and your family?", dict: EFFECTS_DICT },
       { id: 'q3', text: "What was the immediate effect on the prices of basic necessities?", dict: PRICES_DICT },
       { id: 'q4', text: "What are the hardships your family faced immediately?", dict: HARDSHIPS_DICT },
+      { id: 'q5', text: "Which shocks is your household likely to face in the next 2 years?", dict: SHOCKS_DICT },
     ];
 
     return (

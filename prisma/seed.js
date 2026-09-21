@@ -26,6 +26,18 @@ async function main() {
   await prisma.schoolProgram.deleteMany({});
   await prisma.program.deleteMany({});
 
+  await prisma.afterSchoolFLNResponse.deleteMany({});
+  await prisma.afterSchoolSubjectAssessmentResponse.deleteMany({});
+  await prisma.afterSchoolAssessmentForm.deleteMany({});
+  await prisma.afterSchoolStudentTransition.deleteMany({});
+  await prisma.afterSchoolHomework.deleteMany({});
+  await prisma.afterSchoolLearningAssessment.deleteMany({});
+  await prisma.afterSchoolStudentAttendanceLog.deleteMany({});
+  await prisma.afterSchoolStudent.deleteMany({});
+  await prisma.afterSchoolCentreProgram.deleteMany({});
+  await prisma.fellowAfterSchoolCentre.deleteMany({});
+  await prisma.afterSchoolCentre.deleteMany({});
+
   await prisma.FLNResponse.deleteMany({});
   await prisma.SELResponse.deleteMany({});
   await prisma.SubjectAssessmentResponse.deleteMany({});
@@ -528,6 +540,92 @@ async function main() {
       { programId: prog1.id, title: "Q3 PTA General Assembly", description: "Review of student outcomes, infrastructure needs, and parent feedback.", date: new Date("2026-10-24T10:00:00"), location: "Oakridge Main Hall", status: "Completed" },
       { programId: prog1.id, title: "Fellow-Parent Welcome Committee", description: "Orientation session welcoming Cohort '24 fellows to the district.", date: new Date("2026-11-12T11:30:00"), location: "Riverside Classroom B", status: "Scheduled" },
       { programId: prog3.id, title: "Numeracy Exhibition & Award Day", description: "Certificates distribution to top bootcamp math solvers.", date: new Date("2026-05-15T09:00:00"), location: "Balikuri School Ground", status: "Completed" }
+    ]
+  });
+
+  // --- 3.8 AFTER SCHOOL MODULE ---
+  console.log("Seeding After School Module...");
+
+  const asc1 = await prisma.afterSchoolCentre.create({
+    data: {
+      name: "Balikuri Community Learning Centre",
+      coordinatorName: "Farzana Khatun",
+      phone: "+91 98765 43320",
+      email: "balikuri.clc@aman.org",
+      address: "Balikuri Ward 1, Kalgachia, Assam",
+      location: "Balikuri, Kalgachia",
+      status: "Active",
+      goal: 60,
+      mapUrl: "https://maps.google.com/maps?q=Balikuri,%20Assam&t=&z=13&ie=UTF8&iwloc=&output=embed"
+    }
+  });
+
+  const asc2 = await prisma.afterSchoolCentre.create({
+    data: {
+      name: "Gunialguri Shiksha Kendra",
+      coordinatorName: "Mofida Begum",
+      phone: "+91 98765 43321",
+      email: "gunialguri.clc@aman.org",
+      address: "Gunialguri Ward 2, Kalgachia, Assam",
+      location: "Gunialguri, Kalgachia",
+      status: "Active",
+      goal: 50
+    }
+  });
+
+  // Link fellows to after school centres (M2M) - students under these fellows
+  await prisma.fellowAfterSchoolCentre.createMany({
+    data: [
+      { fellowId: fellow4.id, centreId: asc1.id },
+      { fellowId: fellow1.id, centreId: asc1.id },
+      { fellowId: fellow5.id, centreId: asc2.id }
+    ]
+  });
+
+  // After school students (linked to centre + fellow, mirroring Student.schoolId/fellowId)
+  const ascStudentsList = [
+    { studentId: "AST-2026-001", name: "Jahida Khatun", dob: new Date("2014-03-11"), gender: "Female", phone: "+91 98765 43330", address: "Balikuri Ward 1", grade: "Grade 7", gradeGroup: "Middle (6-8)", district: "Balikuri", attendance: 88.0, guardianName: "Nurul Islam", guardianPhone: "+91 98765 43331", enrolmentDate: new Date("2026-01-05"), primaryLanguage: "Bengali", status: "On Track", centreId: asc1.id, fellowId: fellow4.id },
+    { studentId: "AST-2026-002", name: "Sahil Ahmed", dob: new Date("2013-07-22"), gender: "Male", email: "sahil@gmail.com", phone: "+91 98765 43332", address: "Balikuri Ward 3", grade: "Grade 8", gradeGroup: "Middle (6-8)", district: "Balikuri", attendance: 72.4, guardianName: "Abdul Ahmed", guardianPhone: "+91 98765 43333", enrolmentDate: new Date("2026-01-05"), primaryLanguage: "Assamese, Bengali", status: "Needs Attention", centreId: asc1.id, fellowId: fellow4.id },
+    { studentId: "AST-2026-003", name: "Mousumi Das", dob: new Date("2015-11-02"), gender: "Female", address: "Balikuri Village", grade: "Grade 6", gradeGroup: "Middle (6-8)", district: "Balikuri", attendance: 95.0, guardianName: "Hari Das", guardianPhone: "+91 98765 43334", enrolmentDate: new Date("2026-02-01"), primaryLanguage: "Assamese", status: "On Track", centreId: asc1.id, fellowId: fellow1.id },
+    { studentId: "AST-2026-004", name: "Rajib Ali", dob: new Date("2016-05-18"), gender: "Male", address: "Balikuri Ward 2", grade: "Grade 5", gradeGroup: "Primary (1-5)", district: "Balikuri", attendance: 61.2, guardianName: "Samsul Ali", guardianPhone: "+91 98765 43335", enrolmentDate: new Date("2026-01-12"), primaryLanguage: "Bengali", status: "Needs Attention", centreId: asc1.id, fellowId: fellow1.id },
+    { studentId: "AST-2026-005", name: "Rima Begum", dob: new Date("2014-09-30"), gender: "Female", address: "Gunialguri Ward 2", grade: "Grade 7", gradeGroup: "Middle (6-8)", district: "Gunialguri", attendance: 91.5, guardianName: "Jalal Begum", guardianPhone: "+91 98765 43336", enrolmentDate: new Date("2026-01-08"), primaryLanguage: "Bengali", status: "On Track", centreId: asc2.id, fellowId: fellow5.id },
+    { studentId: "AST-2026-006", name: "Dipankar Boro", dob: new Date("2012-12-14"), gender: "Male", address: "Gunialguri Village", grade: "Grade 9", gradeGroup: "High (9-10)", district: "Gunialguri", attendance: 84.0, guardianName: "Ratan Boro", guardianPhone: "+91 98765 43337", enrolmentDate: new Date("2026-01-08"), primaryLanguage: "Bodo, Assamese", status: "On Track", centreId: asc2.id, fellowId: fellow5.id },
+    { studentId: "AST-2026-007", name: "Afsana Parvin", dob: new Date("2015-02-27"), gender: "Female", address: "Gunialguri Ward 1", grade: "Grade 6", gradeGroup: "Middle (6-8)", district: "Gunialguri", attendance: 76.8, guardianName: "Kamal Parvin", guardianPhone: "+91 98765 43338", enrolmentDate: new Date("2026-02-15"), primaryLanguage: "Bengali", status: "On Track", centreId: asc2.id, fellowId: fellow5.id },
+    { studentId: "AST-2026-008", name: "Imran Sheikh", dob: new Date("2016-08-09"), gender: "Male", address: "Gunialguri Ward 3", grade: "Grade 5", gradeGroup: "Primary (1-5)", district: "Gunialguri", attendance: 58.9, guardianName: "Fazlul Sheikh", guardianPhone: "+91 98765 43339", enrolmentDate: new Date("2026-01-20"), primaryLanguage: "Assamese", status: "Needs Attention", centreId: asc2.id, fellowId: fellow5.id }
+  ];
+
+  const createdASCStudents = [];
+  for (const s of ascStudentsList) {
+    const st = await prisma.afterSchoolStudent.create({ data: s });
+    createdASCStudents.push(st);
+  }
+
+  // After school attendance logs
+  console.log("Seeding after school attendance logs...");
+  for (const student of createdASCStudents) {
+    for (const mon of ["Jan", "Feb", "Mar", "Apr", "May"]) {
+      const total = 22;
+      const present = Math.floor(12 + Math.random() * 10); // 12 to 21
+      const percentage = parseFloat(((present / total) * 100).toFixed(1));
+      await prisma.afterSchoolStudentAttendanceLog.create({
+        data: { studentId: student.id, month: mon, present, total, percentage }
+      });
+    }
+  }
+
+  // Some transitions
+  await prisma.afterSchoolStudentTransition.createMany({
+    data: [
+      { studentId: createdASCStudents[0].id, academicYear: "2025-26", month: "Apr", status: "CONTINUING_EDUCATION", description: "Continued at community centre literacy track", location: "Balikuri CLC" },
+      { studentId: createdASCStudents[1].id, academicYear: "2025-26", month: "Mar", status: "DROPOUT_RISK", description: "Irregular attendance flagged for home visit", location: "Balikuri" }
+    ]
+  });
+
+  // Connect centres to programs
+  await prisma.afterSchoolCentreProgram.createMany({
+    data: [
+      { centreId: asc1.id, programId: prog1.id },
+      { centreId: asc2.id, programId: prog2.id }
     ]
   });
 

@@ -181,6 +181,11 @@ model Fellow {
   engagementSurveys EngagementSurvey[]
   lookBeyondSurveys   LookBeyondSurvey[]
   pmReflections     PMReflection[]
+
+  afterSchoolCentres      FellowAfterSchoolCentre[]
+  afterSchoolStudents     AfterSchoolStudent[]
+  afterSchoolAssessmentForms AfterSchoolAssessmentForm[]
+  studentDataNotes        FellowStudentDataNote[]
 }
 
 model GoalSheet {
@@ -389,6 +394,7 @@ model Program {
 
   schools          SchoolProgram[]
   events           ProgramEvent[]
+  afterSchoolCentres AfterSchoolCentreProgram[]
 }
 
 model SchoolProgram {
@@ -975,6 +981,7 @@ model FLNQuestion {
 
   category     FLNCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   responses    FLNResponse[]
+  afterSchoolResponses AfterSchoolFLNResponse[]
 }
 
 model SELQuestion {
@@ -997,6 +1004,7 @@ model SubjectAssessmentTemplate {
   updatedAt DateTime                   @updatedAt
 
   responses SubjectAssessmentResponse[]
+  afterSchoolResponses AfterSchoolSubjectAssessmentResponse[]
 }
 
 // ─── Assessment Form & Responses ───
@@ -1069,4 +1077,218 @@ model SELResponse {
   selQuestion      SELQuestion    @relation(fields: [selQuestionId], references: [id])
 
   @@unique([assessmentFormId, selQuestionId])
+}
+
+// ─── After School (Community Learning Centres) ───
+
+model AfterSchoolCentre {
+  id              String              @id @default(uuid())
+  name            String              @unique
+  coordinatorName String?
+  phone           String?
+  email           String?
+  address         String?
+  location        String?
+  status          String              @default("Active")
+  goal            Int                 @default(80)
+  img             String?
+  mapUrl          String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  fellows           FellowAfterSchoolCentre[]
+  students          AfterSchoolStudent[]
+  programs          AfterSchoolCentreProgram[]
+  learningAssessments AfterSchoolLearningAssessment[]
+  homeworkRecords   AfterSchoolHomework[]
+  assessmentForms   AfterSchoolAssessmentForm[]
+}
+
+model FellowAfterSchoolCentre {
+  id        String              @id @default(uuid())
+  fellowId  String
+  centreId  String
+  createdAt DateTime            @default(now())
+
+  fellow    Fellow              @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  centre    AfterSchoolCentre   @relation(fields: [centreId], references: [id], onDelete: Cascade)
+
+  @@unique([fellowId, centreId])
+}
+
+model AfterSchoolCentreProgram {
+  id        String             @id @default(uuid())
+  centreId  String
+  programId String
+
+  centre    AfterSchoolCentre  @relation(fields: [centreId], references: [id], onDelete: Cascade)
+  program   Program            @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([centreId, programId])
+}
+
+model AfterSchoolStudent {
+  id              String               @id @default(uuid())
+  studentId       String               @unique
+  name            String
+  dob             DateTime?
+  gender          String?
+  email           String?
+  phone           String?
+  address         String?
+  grade           String?
+  gradeGroup      String?
+  district        String?
+  attendance      Float                @default(0.0)
+  guardianName    String?
+  guardianPhone   String?
+  enrolmentDate   DateTime?
+  primaryLanguage String?
+  status          String               @default("On Track")
+  centreId        String?
+  fellowId        String?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  centre            AfterSchoolCentre?  @relation(fields: [centreId], references: [id], onDelete: SetNull)
+  fellow            Fellow?             @relation(fields: [fellowId], references: [id], onDelete: SetNull)
+  attendanceLogs    AfterSchoolStudentAttendanceLog[]
+  learningAssessments AfterSchoolLearningAssessment[]
+  homeworkRecords   AfterSchoolHomework[]
+  transitions       AfterSchoolStudentTransition[]
+  assessmentForms   AfterSchoolAssessmentForm[]
+}
+
+model AfterSchoolStudentAttendanceLog {
+  id         String                        @id @default(uuid())
+  studentId  String
+  month      String
+  present    Int
+  total      Int
+  percentage Float
+  createdAt  DateTime                      @default(now())
+  updatedAt  DateTime                      @updatedAt
+
+  student    AfterSchoolStudent            @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  dayLogs    AfterSchoolStudentAttendanceDayLog[]
+}
+
+model AfterSchoolStudentAttendanceDayLog {
+  id        String                        @id @default(uuid())
+  logId     String
+  date      DateTime
+  status    String                        @default("Present") // Present, Absent, Late, Excused
+  note      String?
+  createdAt DateTime                      @default(now())
+  updatedAt DateTime                      @updatedAt
+
+  log       AfterSchoolStudentAttendanceLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+
+  @@unique([logId, date])
+}
+
+model AfterSchoolLearningAssessment {
+  id        String             @id @default(uuid())
+  studentId String
+  centreId  String
+  date      DateTime
+  canRead   Boolean
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  student   AfterSchoolStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  centre    AfterSchoolCentre  @relation(fields: [centreId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+}
+
+model AfterSchoolHomework {
+  id             String             @id @default(uuid())
+  studentId      String
+  centreId       String
+  date           DateTime
+  homeworkStatus String             @default("NOT_DONE") // DONE, NOT_DONE, NO_HOMEWORK
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  student        AfterSchoolStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  centre         AfterSchoolCentre  @relation(fields: [centreId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, date])
+}
+
+model AfterSchoolStudentTransition {
+  id            String             @id @default(uuid())
+  studentId     String
+  academicYear  String
+  month         String
+  status        String             @default("CONTINUING_EDUCATION")
+  description   String?
+  location      String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  student       AfterSchoolStudent @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model AfterSchoolAssessmentForm {
+  id                 String                          @id @default(uuid())
+  studentId          String
+  fellowId           String?
+  centreId           String?
+  assessmentType     String
+  date               DateTime
+  isEnrolledInSchool Boolean?
+  reasonNotEnrolled  String?
+  createdAt          DateTime                        @default(now())
+  updatedAt          DateTime                        @updatedAt
+
+  student            AfterSchoolStudent              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  fellow             Fellow?                         @relation(fields: [fellowId], references: [id])
+  centre             AfterSchoolCentre?              @relation(fields: [centreId], references: [id])
+  subjectResponses   AfterSchoolSubjectAssessmentResponse[]
+  flnResponses       AfterSchoolFLNResponse[]
+}
+
+model AfterSchoolSubjectAssessmentResponse {
+  id                String                        @id @default(uuid())
+  assessmentFormId  String
+  subjectTemplateId String
+  selectedOption    String
+  createdAt         DateTime                      @default(now())
+
+  assessmentForm    AfterSchoolAssessmentForm     @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+  subjectTemplate   SubjectAssessmentTemplate     @relation(fields: [subjectTemplateId], references: [id])
+
+  @@unique([assessmentFormId, subjectTemplateId])
+}
+
+model AfterSchoolFLNResponse {
+  id               String                      @id @default(uuid())
+  assessmentFormId String
+  flnQuestionId    String
+  score            Float
+  createdAt        DateTime                    @default(now())
+
+  assessmentForm   AfterSchoolAssessmentForm   @relation(fields: [assessmentFormId], references: [id], onDelete: Cascade)
+  flnQuestion      FLNQuestion                 @relation(fields: [flnQuestionId], references: [id])
+
+  @@unique([assessmentFormId, flnQuestionId])
+}
+
+// ─── Fellow Student Data Notes (per session/phase/subject-block) ───
+
+model FellowStudentDataNote {
+  id         String   @id @default(uuid())
+  fellowId   String
+  session    String
+  phase      String   // BASELINE | MIDLINE | ENDLINE
+  sectionKey String   // SubjectAssessmentTemplate.id OR "READING_FLUENCY"
+  note       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  fellow     Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+
+  @@unique([fellowId, session, phase, sectionKey])
 }

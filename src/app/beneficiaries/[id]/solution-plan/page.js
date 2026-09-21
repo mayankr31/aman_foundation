@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
@@ -12,15 +12,16 @@ export default function SolutionPlanPage() {
   const router = useRouter();
   const { token } = useAuth();
   const toast = useToast();
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingPlanId, setEditingPlanId] = useState(null);
 
   const [priorities, setPriorities] = useState([
     {
       id: Date.now().toString(),
       name: "",
       activities: [
-        { id: Date.now().toString() + "-a", activity: "", timeline: "", supportNeeded: "No", byWhom: "" }
+        { id: Date.now().toString() + "-a", activity: "", timeline: "", completionStatus: "", supportNeeded: "No", byWhom: "" }
       ]
     }
   ]);
@@ -32,7 +33,7 @@ export default function SolutionPlanPage() {
         id: Date.now().toString(),
         name: "",
         activities: [
-          { id: Date.now().toString() + "-a", activity: "", timeline: "", supportNeeded: "No", byWhom: "" }
+          { id: Date.now().toString() + "-a", activity: "", timeline: "", completionStatus: "", supportNeeded: "No", byWhom: "" }
         ]
       }
     ]);
@@ -51,7 +52,7 @@ export default function SolutionPlanPage() {
       if (p.id === priorityId) {
         return {
           ...p,
-          activities: [...p.activities, { id: Date.now().toString(), activity: "", timeline: "", supportNeeded: "No", byWhom: "" }]
+          activities: [...p.activities, { id: Date.now().toString(), activity: "", timeline: "", completionStatus: "", supportNeeded: "No", byWhom: "" }]
         };
       }
       return p;
@@ -87,6 +88,46 @@ export default function SolutionPlanPage() {
     }));
   };
 
+  // If editing an existing plan (?planId=...), load and prefill its data
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const searchParams = new URLSearchParams(window.location.search);
+    const planId = searchParams.get("planId");
+    if (!planId || !token) return;
+
+    fetch(`/api/beneficiaries/${id}/solution-plans`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (!json.success) return;
+        const plan = json.data.find(p => p.id === planId);
+        if (plan) {
+          const pd = plan.planData || {};
+          const loaded = (pd.priorities || []).map(p => ({
+            id: Date.now().toString() + "-" + Math.random(),
+            name: p.name || "",
+            activities: (p.activities || []).map(a => ({
+              id: Date.now().toString() + "-" + Math.random(),
+              activity: a.activity || "",
+              timeline: a.timeline || "",
+              completionStatus: a.completionStatus || "",
+              supportNeeded: a.supportNeeded || "No",
+              byWhom: a.byWhom || ""
+            }))
+          }));
+          setPriorities(loaded.length > 0 ? loaded : []);
+          setEditingPlanId(planId);
+        } else {
+          toast.error("Solution plan not found");
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load solution plan:", err);
+        toast.error("Failed to load solution plan");
+      });
+  }, [id, token]);
+
   const handleSubmit = async () => {
     // Basic validation
     const isEmpty = priorities.length === 0 || priorities.some(p => !p.name.trim() || p.activities.length === 0 || p.activities.some(a => !a.activity.trim()));
@@ -97,15 +138,23 @@ export default function SolutionPlanPage() {
 
     setIsSubmitting(true);
     try {
-      const payload = { 
+      const payload = {
         planData: {
           numAreasPrioritized: priorities.length,
           priorities: priorities
         }
       };
-      
-      const res = await fetch(`/api/beneficiaries/${id}/solution-plans`, {
-        method: "POST",
+
+      const url = editingPlanId
+        ? `/api/beneficiaries/${id}/solution-plans`
+        : `/api/beneficiaries/${id}/solution-plans`;
+      const method = editingPlanId ? "PATCH" : "POST";
+      if (editingPlanId) {
+        payload.planId = editingPlanId;
+      }
+
+      const res = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -115,7 +164,7 @@ export default function SolutionPlanPage() {
 
       const data = await res.json();
       if (data.success) {
-        toast.success("Solution Plan saved successfully!");
+        toast.success(editingPlanId ? "Solution Plan updated successfully!" : "Solution Plan saved successfully!");
         router.push(`/beneficiaries/${id}`);
       } else {
         toast.error("Error saving solution plan: " + data.error);
@@ -138,7 +187,7 @@ export default function SolutionPlanPage() {
       <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden mb-8">
         <div className="bg-surface-container-low p-6 border-b border-outline-variant/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold font-headline text-on-surface">Solution Planning Questions</h1>
+            <h1 className="text-2xl font-bold font-headline text-on-surface">{editingPlanId ? "Edit Solution Plan" : "Solution Planning Questions"}</h1>
             <p className="text-sm text-on-surface-variant mt-2">
               Number of areas Prioritized: <span className="font-bold text-primary">{priorities.length}</span>
             </p>
@@ -186,13 +235,14 @@ export default function SolutionPlanPage() {
 
               {/* Activities Table */}
               <div className="p-4 bg-surface-container-lowest overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[700px]">
+                <table className="w-full text-left border-collapse min-w-[900px]">
                   <thead>
                     <tr>
-                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[40%]">Key Activities planned</th>
-                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[20%]">Timeline</th>
-                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[15%] text-center">Support needed?</th>
-                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[20%]">By Whom</th>
+                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[30%]">Key Activities planned</th>
+                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[15%]">Timeline</th>
+                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[18%]">Completion Status</th>
+                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[12%] text-center">Support needed?</th>
+                      <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[15%]">By Whom</th>
                       <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[5%] text-center"></th>
                     </tr>
                   </thead>
@@ -213,6 +263,15 @@ export default function SolutionPlanPage() {
                             placeholder="e.g. 3 Months"
                             value={activity.timeline}
                             onChange={(e) => updateActivity(priority.id, activity.id, "timeline", e.target.value)}
+                            className="w-full bg-transparent border-none focus:ring-1 focus:ring-primary rounded text-sm p-2 outline-none"
+                          />
+                        </td>
+                        <td className="border border-surface-container-highest p-2 align-top">
+                          <input 
+                            type="text" 
+                            placeholder="e.g. Completed, Pending, In Progress"
+                            value={activity.completionStatus}
+                            onChange={(e) => updateActivity(priority.id, activity.id, "completionStatus", e.target.value)}
                             className="w-full bg-transparent border-none focus:ring-1 focus:ring-primary rounded text-sm p-2 outline-none"
                           />
                         </td>
@@ -270,7 +329,7 @@ export default function SolutionPlanPage() {
             disabled={isSubmitting}
             className="gradient-primary bg-primary text-on-primary px-8 py-3 rounded-full font-bold text-sm hover:opacity-90 transition-opacity shadow-glow disabled:opacity-50"
           >
-            {isSubmitting ? "Saving Plan..." : "Save Solution Plan"}
+            {isSubmitting ? "Saving Plan..." : editingPlanId ? "Update Solution Plan" : "Save Solution Plan"}
           </button>
         </div>
       </div>

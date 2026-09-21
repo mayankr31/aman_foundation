@@ -30,6 +30,8 @@ export default function PtaProgramDetail() {
   const [saving, setSaving] = useState(false);
   const [allSchools, setAllSchools] = useState([]);
   const [searchQ, setSearchQ] = useState("");
+  const [allCentres, setAllCentres] = useState([]);
+  const [centreSearchQ, setCentreSearchQ] = useState("");
 
   const [editForm, setEditForm] = useState({});
   const [eventForm, setEventForm] = useState({ title: "", description: "", date: "", time: "", location: "", status: "Scheduled" });
@@ -68,6 +70,14 @@ export default function PtaProgramDetail() {
     fetch("/api/schools", { headers: token ? { Authorization: `Bearer ${token}` } : {} })
       .then(r => r.json())
       .then(j => { if (j.success) setAllSchools(j.data); })
+      .catch(console.error);
+  }, [modal, token]);
+
+  useEffect(() => {
+    if (modal !== "addCentre") return;
+    fetch("/api/after-school-centres", { headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      .then(r => r.json())
+      .then(j => { if (j.success) setAllCentres(j.data); })
       .catch(console.error);
   }, [modal, token]);
 
@@ -133,6 +143,25 @@ export default function PtaProgramDetail() {
     await loadProgram();
   }
 
+  async function handleAssignCentre(centreId) {
+    await fetch(`/api/after-school-centres/${centreId}/programs`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ programId: id })
+    });
+    await loadProgram();
+  }
+
+  async function handleRemoveCentre(centreId) {
+    if (!confirm("Remove this after school centre from the program?")) return;
+    await fetch(`/api/after-school-centres/${centreId}/programs`, {
+      method: "DELETE",
+      headers: authHeaders(),
+      body: JSON.stringify({ programId: id })
+    });
+    await loadProgram();
+  }
+
   if (isInitializing || loading) return (
     <div className="p-8 flex justify-center items-center h-96">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -142,6 +171,8 @@ export default function PtaProgramDetail() {
 
   const assignedSchoolIds = new Set((program.schools || []).map(s => s.schoolId));
   const filteredSchools = allSchools.filter(s => s.name.toLowerCase().includes(searchQ.toLowerCase()));
+  const assignedCentreIds = new Set((program.afterSchoolCentres || []).map(c => c.centreId));
+  const filteredCentres = allCentres.filter(c => c.name.toLowerCase().includes(centreSearchQ.toLowerCase()));
 
   // Aggregate students from all schools in this program
   const totalStudents = (program.schools || []).reduce((acc, sp) => acc + (sp.school?._count?.students || 0), 0);
@@ -223,6 +254,40 @@ export default function PtaProgramDetail() {
             )}
           </div>
 
+          {/* After School Centres in this Program */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-tertiary">meeting_room</span>
+                After School Centres in this Program ({program.afterSchoolCentres?.length || 0})
+              </h3>
+              <button onClick={() => { setModal("addCentre"); setCentreSearchQ(""); }}
+                className="bg-tertiary/10 text-tertiary px-4 py-2 rounded-full text-sm font-semibold hover:bg-tertiary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
+                <span className="material-symbols-outlined text-[16px]">add</span> Add Centre
+              </button>
+            </div>
+            {(!program.afterSchoolCentres || program.afterSchoolCentres.length === 0) ? (
+              <p className="text-center py-8 text-on-surface-variant text-sm">No after school centres assigned to this program yet.</p>
+            ) : (
+              <div className="space-y-4">
+                {program.afterSchoolCentres.map(cp => (
+                  <div key={cp.centreId} className="p-4 bg-surface-container-low rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                      <h4 className="font-bold text-on-surface text-base">{cp.centre.name}</h4>
+                      <p className="text-xs text-on-surface-variant mt-1">{cp.centre.location} • {cp.centre.status}</p>
+                    </div>
+                    <div className="flex items-center gap-3 self-end md:self-auto shrink-0">
+                      <Link href={`/education/after-school-centres/${cp.centreId}`} className="text-xs text-primary hover:underline font-medium">View Centre</Link>
+                      <button onClick={() => handleRemoveCentre(cp.centreId)} className="p-1.5 hover:bg-error-container rounded-full cursor-pointer text-error">
+                        <span className="material-symbols-outlined text-[14px]">remove_circle</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Events */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-6">
@@ -272,6 +337,10 @@ export default function PtaProgramDetail() {
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Schools Enrolled</span>
                 <span className="font-semibold text-on-surface">{program.schools?.length || 0}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-surface-container">
+                <span className="text-on-surface-variant">After School Centres</span>
+                <span className="font-semibold text-on-surface">{program.afterSchoolCentres?.length || 0}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Events</span>
@@ -358,6 +427,34 @@ export default function PtaProgramDetail() {
                   <button
                     onClick={() => isAssigned ? handleRemoveSchool(s.id) : handleAssignSchool(s.id)}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                  >
+                    {isAssigned ? "Remove" : "Assign"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
+
+      {/* Add After School Centre to Program */}
+      {modal === "addCentre" && (
+        <Modal title="Assign After School Centre to Program" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Search and assign an after school centre to this program.</p>
+          <input type="text" placeholder="Search centres..." value={centreSearchQ} onChange={e => setCentreSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-80 overflow-y-auto">
+            {filteredCentres.map(c => {
+              const isAssigned = assignedCentreIds.has(c.id);
+              return (
+                <div key={c.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                  <div>
+                    <p className="font-semibold text-on-surface text-sm">{c.name}</p>
+                    <p className="text-xs text-on-surface-variant">{c.location} • {c.status}</p>
+                  </div>
+                  <button
+                    onClick={() => isAssigned ? handleRemoveCentre(c.id) : handleAssignCentre(c.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-tertiary/10 text-tertiary hover:bg-tertiary/20"}`}
                   >
                     {isAssigned ? "Remove" : "Assign"}
                   </button>

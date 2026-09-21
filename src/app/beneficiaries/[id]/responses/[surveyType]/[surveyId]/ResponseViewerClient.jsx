@@ -4,11 +4,12 @@ import KyrReadOnlyView from "./KyrReadOnlyView";
 import CapacityReadOnlyView from "./CapacityReadOnlyView";
 import VulnerabilityReadOnlyView from "./VulnerabilityReadOnlyView";
 import SolutionPlanReadOnlyView from "./SolutionPlanReadOnlyView";
+import { computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 
 export default function ResponseViewerClient({ surveyType, surveyData, beneficiaryId }) {
   const getSurveyTitle = () => {
     switch (surveyType) {
-      case 'kyr': return "Resilience KYR Tool Survey";
+      case 'kyr': return "Resilience Measurement Tool Survey";
       case 'adaptive': return "Adaptive Capacity Survey";
       case 'absorptive': return "Absorptive Capacity Survey";
       case 'transformative': return "Transformative Capacity Survey";
@@ -49,7 +50,10 @@ export default function ResponseViewerClient({ surveyType, surveyData, beneficia
         {surveyData.overallScore !== undefined && (
           <div className="bg-surface-container-high px-4 py-2 rounded-lg text-center">
             <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">Overall Score</p>
-            <p className="text-xl font-bold text-primary">{parseFloat(surveyData.overallScore).toFixed(2)}</p>
+            {['adaptive', 'absorptive', 'transformative'].includes(surveyType)
+              ? <p className="text-xl font-bold text-primary">{computeCapacityTotalScore(surveyType, surveyData.responses)?.toFixed(2)} / {getCapacityMaxScore(surveyType)}</p>
+              : <p className="text-xl font-bold text-primary">{parseFloat(surveyData.overallScore).toFixed(2)}</p>
+            }
           </div>
         )}
       </div>

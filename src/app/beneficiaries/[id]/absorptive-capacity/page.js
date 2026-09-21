@@ -119,7 +119,7 @@ export default function AbsorptiveCapacitySurveyPage() {
       }, 0);
 
       const maxScore = questions.length * 1; 
-      const percentageScore = (totalScore / maxScore) * 10;
+      const percentageScore = (totalScore / maxScore) * 100;
 
       const payload = {
         responses: {
@@ -127,7 +127,7 @@ export default function AbsorptiveCapacitySurveyPage() {
           vulnerabilityNote,
           facilitator: user?.name || user?.email || "Unknown",
         },
-        overallScore: percentageScore
+        overallScore: parseFloat(percentageScore.toFixed(2))
       };
       
       const res = await fetch(`/api/beneficiaries/${id}/absorptive-surveys`, {

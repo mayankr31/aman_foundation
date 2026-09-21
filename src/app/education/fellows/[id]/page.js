@@ -12,6 +12,7 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import PMReflectionForm from "@/components/PMReflectionForm";
 import PMReflectionViewer from "@/components/PMReflectionViewer";
+import StudentDataView from "@/components/StudentDataView";
 import dynamic from "next/dynamic";
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
@@ -24,7 +25,6 @@ export default function FellowProfileDetail() {
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
   const [goalSheets, setGoalSheets] = useState([]);
-  const [reviews, setReviews] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
@@ -44,19 +44,12 @@ export default function FellowProfileDetail() {
   const [showReflectionForm, setShowReflectionForm] = useState(false);
   const [editingReflection, setEditingReflection] = useState(null);
 
-  // Form states for 6-month evaluations reviews
-  const [showAddReviewModal, setShowAddReviewModal] = useState(false);
-  const [newReviewPeriod, setNewReviewPeriod] = useState("");
-  const [newReviewRating, setNewReviewRating] = useState("");
-  const [newReviewerName, setNewReviewerName] = useState("");
-  const [newReviewEvaluation, setNewReviewEvaluation] = useState("");
-
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [deleteItemType, setDeleteItemType] = useState(""); // "goalSheet" | "review"
+  const [deleteItemType, setDeleteItemType] = useState(""); // "goalSheet" | "pmReflection"
 
-  // Coaching & Training modal states
+  // Coaching & Classroom Observation modal states
   const [showAddCoachingModal, setShowAddCoachingModal] = useState(false);
   const [newCoachingHeading, setNewCoachingHeading] = useState("");
   const [newCoachingDate, setNewCoachingDate] = useState("");
@@ -81,7 +74,6 @@ export default function FellowProfileDetail() {
         if (json.success) {
           setFellow(json.data);
           setGoalSheets(json.data.goalSheets || []);
-          setReviews(json.data.reviews || []);
         }
       } catch (err) {
         console.error("Failed to load fellow detail:", err);
@@ -108,7 +100,7 @@ export default function FellowProfileDetail() {
         console.error("Failed to load coaching records:", err);
       }
     }
-    if (activeTab === "Coaching & Training" && token && id) {
+    if (activeTab === "Coaching & Classroom Observation" && token && id) {
       loadCoachingRecords();
     }
   }, [activeTab, token, id]);
@@ -245,45 +237,6 @@ export default function FellowProfileDetail() {
     setDeleteModalOpen(true);
   };
 
-  const handleAddReview = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`/api/fellows/${id}/reviews`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          period: newReviewPeriod,
-          rating: newReviewRating ? parseFloat(newReviewRating) : null,
-          reviewerName: newReviewerName,
-          evaluation: newReviewEvaluation
-        })
-      });
-      const json = await res.json();
-      if (json.success) {
-        setReviews(prev => [json.data, ...prev]);
-        setNewReviewPeriod("");
-        setNewReviewRating("");
-        setNewReviewerName("");
-        setNewReviewEvaluation("");
-        setShowAddReviewModal(false);
-        toast.success("Evaluation review saved successfully!");
-      } else {
-        toast.error(json.error || "Failed to save evaluation");
-      }
-    } catch (err) {
-      toast.error("An error occurred while saving the evaluation.");
-    }
-  };
-
-  const handleDeleteReview = (reviewId) => {
-    setDeleteItemId(reviewId);
-    setDeleteItemType("review");
-    setDeleteModalOpen(true);
-  };
-
   const handleReflectionSaved = (updatedReflection) => {
     setPmReflections((prev) => {
       const idx = prev.findIndex((r) => r.id === updatedReflection.id);
@@ -321,23 +274,6 @@ export default function FellowProfileDetail() {
       } catch (err) {
         console.error("Failed to delete goal sheet:", err);
         toast.error("An error occurred");
-      }
-    } else if (deleteItemType === "review") {
-      try {
-        const res = await fetch(`/api/fellows/${id}/reviews?reviewId=${deleteItemId}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const json = await res.json();
-        if (json.success) {
-          setReviews(prev => prev.filter(r => r.id !== deleteItemId));
-          toast.success("Evaluation review deleted successfully!");
-        } else {
-          toast.error(json.error || "Failed to delete review");
-        }
-      } catch (err) {
-        console.error(err);
-        toast.error("An error occurred while deleting the review.");
       }
     } else if (deleteItemType === "pmReflection") {
       try {
@@ -468,7 +404,7 @@ export default function FellowProfileDetail() {
 
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Monthly Planner", "Goals", "Performance Dashboard", "6-Month Progress Reviews", "Coaching & Training", "Engagement Survey", "Look Beyond Survey", "PM Reflection"].map((tab) => {
+        {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey", "PM Reflection"].map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -655,62 +591,18 @@ export default function FellowProfileDetail() {
             </div>
           )}
 
-          {activeTab === "6-Month Progress Reviews" && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl text-on-surface">6-Month Comprehensive Evaluations</h3>
-                {user?.roleName === "ADMIN" && (
-                  <button
-                    onClick={() => setShowAddReviewModal(true)}
-                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">add</span>
-                    Add Evaluation Review
-                  </button>
-                )}
-              </div>
-              <div className="space-y-6">
-                {reviews.length === 0 ? (
-                  <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                    No progress evaluations have been added yet. Click "Add Evaluation Review" to start.
-                  </div>
-                ) : (
-                  reviews.map((rev) => (
-                  <div key={rev.id} className="p-5 border border-surface-container rounded-lg relative group/review-card font-sans">
-                    <div className="flex justify-between items-start mb-3">
-                      <h4 className="font-bold text-on-surface flex items-center gap-2">
-                        {rev.period}
-                        {user?.roleName === "ADMIN" && rev.id !== "default-1" && (
-                          <button
-                            onClick={() => handleDeleteReview(rev.id)}
-                            className="text-on-surface-variant hover:text-red-600 transition-colors ml-2"
-                            title="Delete evaluation review"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
-                        )}
-                      </h4>
-                      <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">{rev.status}</span>
-                    </div>
-                    <p className="text-sm text-on-surface-variant leading-relaxed">
-                      "{rev.evaluation}"
-                    </p>
-                    <div className="mt-4 flex gap-4 text-xs text-slate-400 font-sans">
-                      <div>Reviewed by: <span className="font-bold text-on-surface">{rev.reviewerName}</span></div>
-                      <div>Date: {new Date(rev.date).toLocaleDateString()}</div>
-                      {rev.rating && <div>Rating: <span className="font-bold text-primary">{rev.rating} / 5.0</span></div>}
-                    </div>
-                  </div>
-                  ))
-                )}
-              </div>
-            </div>
+          {activeTab === "Student Data" && (
+            <StudentDataView
+              fellowId={fellow.id}
+              token={token}
+              canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
+            />
           )}
 
-          {activeTab === "Coaching & Training" && (
+          {activeTab === "Coaching & Classroom Observation" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Training Records</h3>
+                <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
                 {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
                   <button
                     onClick={() => setShowAddCoachingModal(true)}
@@ -724,7 +616,7 @@ export default function FellowProfileDetail() {
               <div className="space-y-6">
                 {coachingRecords.length === 0 ? (
                   <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                    No coaching or training records available yet.
+                    No coaching or classroom observation records available yet.
                   </div>
                 ) : (
                   coachingRecords.map((record) => (
@@ -1016,99 +908,12 @@ export default function FellowProfileDetail() {
         />
       )}
 
-      {/* Add Evaluation Review Modal */}
-      {showAddReviewModal && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add 6-Month Progress Evaluation</h3>
-              <button
-                onClick={() => setShowAddReviewModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[18px]">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleAddReview} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Evaluation Period
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Mid-Cohort Review (Period: Jan - Jun)"
-                  value={newReviewPeriod}
-                  onChange={(e) => setNewReviewPeriod(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Rating (optional, 1.0 to 5.0)
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="1"
-                  max="5"
-                  placeholder="e.g. 4.8"
-                  value={newReviewRating}
-                  onChange={(e) => setNewReviewRating(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Reviewer Name & Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Sarah Jenkins (Operations Lead)"
-                  value={newReviewerName}
-                  onChange={(e) => setNewReviewerName(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Evaluation Comments
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  placeholder="Provide details about the fellow's performance..."
-                  value={newReviewEvaluation}
-                  onChange={(e) => setNewReviewEvaluation(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddReviewModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Save Evaluation
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
+      {/* Add Coaching & Classroom Observation Record Modal */}
       {showAddCoachingModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add Coaching & Training Record</h3>
+              <h3 className="text-lg font-bold text-on-surface">Add Coaching & Classroom Observation Record</h3>
               <button
                 onClick={() => setShowAddCoachingModal(false)}
                 className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
@@ -1194,13 +999,11 @@ export default function FellowProfileDetail() {
           setDeleteItemType("");
         }}
         onConfirm={handleConfirmDelete}
-        title={deleteItemType === "goalSheet" ? "Delete Goal Sheet" : deleteItemType === "pmReflection" ? "Delete PM Reflection" : "Delete Evaluation Review"}
+        title={deleteItemType === "goalSheet" ? "Delete Goal Sheet" : "Delete PM Reflection"}
         message={
           deleteItemType === "goalSheet"
             ? "Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
-            : deleteItemType === "pmReflection"
-            ? "Are you sure you want to delete this PM reflection? This action is permanent and cannot be undone."
-            : "Are you sure you want to delete this evaluation review? This action is permanent and cannot be undone."
+            : "Are you sure you want to delete this PM reflection? This action is permanent and cannot be undone."
         }
       />
 

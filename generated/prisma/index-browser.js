@@ -880,6 +880,152 @@ exports.Prisma.SELResponseScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AfterSchoolCentreScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  coordinatorName: 'coordinatorName',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  location: 'location',
+  status: 'status',
+  goal: 'goal',
+  img: 'img',
+  mapUrl: 'mapUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowAfterSchoolCentreScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  centreId: 'centreId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AfterSchoolCentreProgramScalarFieldEnum = {
+  id: 'id',
+  centreId: 'centreId',
+  programId: 'programId'
+};
+
+exports.Prisma.AfterSchoolStudentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  name: 'name',
+  dob: 'dob',
+  gender: 'gender',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  grade: 'grade',
+  gradeGroup: 'gradeGroup',
+  district: 'district',
+  attendance: 'attendance',
+  guardianName: 'guardianName',
+  guardianPhone: 'guardianPhone',
+  enrolmentDate: 'enrolmentDate',
+  primaryLanguage: 'primaryLanguage',
+  status: 'status',
+  centreId: 'centreId',
+  fellowId: 'fellowId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolStudentAttendanceLogScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  month: 'month',
+  present: 'present',
+  total: 'total',
+  percentage: 'percentage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolStudentAttendanceDayLogScalarFieldEnum = {
+  id: 'id',
+  logId: 'logId',
+  date: 'date',
+  status: 'status',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolLearningAssessmentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  centreId: 'centreId',
+  date: 'date',
+  canRead: 'canRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolHomeworkScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  centreId: 'centreId',
+  date: 'date',
+  homeworkStatus: 'homeworkStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolStudentTransitionScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  academicYear: 'academicYear',
+  month: 'month',
+  status: 'status',
+  description: 'description',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolAssessmentFormScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fellowId: 'fellowId',
+  centreId: 'centreId',
+  assessmentType: 'assessmentType',
+  date: 'date',
+  isEnrolledInSchool: 'isEnrolledInSchool',
+  reasonNotEnrolled: 'reasonNotEnrolled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AfterSchoolSubjectAssessmentResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  subjectTemplateId: 'subjectTemplateId',
+  selectedOption: 'selectedOption',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AfterSchoolFLNResponseScalarFieldEnum = {
+  id: 'id',
+  assessmentFormId: 'assessmentFormId',
+  flnQuestionId: 'flnQuestionId',
+  score: 'score',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FellowStudentDataNoteScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  session: 'session',
+  phase: 'phase',
+  sectionKey: 'sectionKey',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1010,7 +1156,20 @@ exports.Prisma.ModelName = {
   EnrollmentResponse: 'EnrollmentResponse',
   SubjectAssessmentResponse: 'SubjectAssessmentResponse',
   FLNResponse: 'FLNResponse',
-  SELResponse: 'SELResponse'
+  SELResponse: 'SELResponse',
+  AfterSchoolCentre: 'AfterSchoolCentre',
+  FellowAfterSchoolCentre: 'FellowAfterSchoolCentre',
+  AfterSchoolCentreProgram: 'AfterSchoolCentreProgram',
+  AfterSchoolStudent: 'AfterSchoolStudent',
+  AfterSchoolStudentAttendanceLog: 'AfterSchoolStudentAttendanceLog',
+  AfterSchoolStudentAttendanceDayLog: 'AfterSchoolStudentAttendanceDayLog',
+  AfterSchoolLearningAssessment: 'AfterSchoolLearningAssessment',
+  AfterSchoolHomework: 'AfterSchoolHomework',
+  AfterSchoolStudentTransition: 'AfterSchoolStudentTransition',
+  AfterSchoolAssessmentForm: 'AfterSchoolAssessmentForm',
+  AfterSchoolSubjectAssessmentResponse: 'AfterSchoolSubjectAssessmentResponse',
+  AfterSchoolFLNResponse: 'AfterSchoolFLNResponse',
+  FellowStudentDataNote: 'FellowStudentDataNote'
 };
 
 /**
