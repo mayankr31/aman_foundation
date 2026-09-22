@@ -37,11 +37,28 @@ export async function GET(req, context) {
       }
     }
 
+    if (user.role.name === "PROGRAM_MANAGER") {
+      const isManaged = await prisma.programManagerAfterSchoolCentre.findFirst({
+        where: { centreId, userId: user.id }
+      });
+      if (!isManaged) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
+      }
+    }
+
     const centre = await prisma.afterSchoolCentre.findUnique({
       where: { id: centreId },
       include: {
         fellows: {
           include: { fellow: true }
+        },
+        programManagers: {
+          include: {
+            user: {
+              select: { id: true, name: true, username: true, email: true, mobile: true }
+            }
+          },
+          orderBy: { createdAt: "asc" }
         },
         students: {
           select: {

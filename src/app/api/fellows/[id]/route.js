@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isAdmin, isFellowManaged } from "@/lib/scope";
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -23,6 +24,10 @@ export async function GET(req, context) {
 
     if (!fellowId) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
     }
 
     const fellow = await prisma.fellow.findUnique({
@@ -48,8 +53,8 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (!isAdmin(user) && user.role.name !== "PROGRAM_MANAGER") {
+      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -57,6 +62,10 @@ export async function PATCH(req, context) {
 
     if (!fellowId) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
     }
 
     const body = await req.json();

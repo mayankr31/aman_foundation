@@ -41,17 +41,18 @@ function Modal({ title, onClose, children }) {
 
 export default function SchoolProfileDetail() {
   const { id } = useParams();
-  const { token, isInitializing } = useAuth();
+  const { token, isInitializing, user } = useAuth();
   const toast = useToast();
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance'
+  const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance' | 'managers'
 
   // For assignment modals
   const [allStudents, setAllStudents] = useState([]);
   const [allFellows, setAllFellows] = useState([]);
   const [allPrograms, setAllPrograms] = useState([]);
+  const [allProgramManagers, setAllProgramManagers] = useState([]);
   const [searchQ, setSearchQ] = useState("");
 
   const [attendanceDate, setAttendanceDate] = useState("");
@@ -118,6 +119,9 @@ export default function SchoolProfileDetail() {
     }
     if (modal === "programs") {
       fetch("/api/programs", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllPrograms(j.data); });
+    }
+    if (modal === "managers") {
+      fetch("/api/users?role=PROGRAM_MANAGER", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllProgramManagers(j.data); });
     }
   }, [modal, token]);
 
@@ -219,6 +223,21 @@ export default function SchoolProfileDetail() {
     await loadSchool();
   }
 
+  async function handleAssignManager(userId) {
+    const res = await fetch(`/api/schools/${id}/program-managers`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ userId }) });
+    const json = await res.json();
+    if (!json.success) toast.error(json.error || "Failed to assign Program Manager");
+    await loadSchool();
+  }
+
+  async function handleRemoveManager(userId) {
+    if (!confirm("Remove this Program Manager from the school?")) return;
+    const res = await fetch(`/api/schools/${id}/program-managers`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ userId }) });
+    const json = await res.json();
+    if (!json.success) toast.error(json.error || "Failed to remove Program Manager");
+    await loadSchool();
+  }
+
   async function handleAssignProgram(programId) {
     await fetch(`/api/schools/${id}/programs`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ programId }) });
     await loadSchool();
@@ -288,6 +307,8 @@ export default function SchoolProfileDetail() {
   const enrolledStudents = school.students || [];
   const assignedFellows = school.fellows || [];
   const assignedPrograms = school.programs || [];
+  const assignedManagers = school.programManagers || [];
+  const isAdmin = user?.roleName === "ADMIN";
   const { totalEnrolled = 0, genderRatio = {} } = school;
   const maleCount = genderRatio.male || 0;
   const femaleCount = genderRatio.female || 0;
@@ -297,10 +318,12 @@ export default function SchoolProfileDetail() {
   const schoolStudentIds = new Set(enrolledStudents.map(s => s.id));
   const schoolFellowIds = new Set(assignedFellows.map(f => f.fellowId));
   const schoolProgramIds = new Set(assignedPrograms.map(p => p.programId));
+  const schoolManagerIds = new Set(assignedManagers.map(m => m.userId));
 
   const filteredStudents = allStudents.filter(s => s.name.toLowerCase().includes(searchQ.toLowerCase()) || s.studentId?.includes(searchQ));
   const filteredFellows = allFellows.filter(f => f.name.toLowerCase().includes(searchQ.toLowerCase()));
   const filteredPrograms = allPrograms.filter(p => p.title.toLowerCase().includes(searchQ.toLowerCase()));
+  const filteredManagers = allProgramManagers.filter(m => (m.name || "").toLowerCase().includes(searchQ.toLowerCase()) || (m.email || "").toLowerCase().includes(searchQ.toLowerCase()));
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -350,10 +373,12 @@ export default function SchoolProfileDetail() {
           </div>
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
-          <button onClick={() => setModal("edit")}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
-            <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
-          </button>
+          {isAdmin && (
+            <button onClick={() => setModal("edit")}
+              className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+              <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
+            </button>
+          )}
           <button className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
             <span className="material-symbols-outlined text-[18px]">download</span> Export Report
           </button>
@@ -666,6 +691,46 @@ export default function SchoolProfileDetail() {
                     <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
                       <span className="material-symbols-outlined text-[14px]">remove_circle</span>
                     </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Program Managers */}
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">supervisor_account</span>
+                Program Managers ({assignedManagers.length})
+              </h3>
+              {isAdmin && (
+                <button onClick={() => { setModal("managers"); setSearchQ(""); }}
+                  className="bg-primary/10 text-primary p-1.5 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer">
+                  <span className="material-symbols-outlined text-[16px]">edit</span>
+                </button>
+              )}
+            </div>
+            {assignedManagers.length === 0 ? (
+              <p className="text-sm text-on-surface-variant text-center py-4">No Program Managers assigned yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {assignedManagers.map(pm => (
+                  <div key={pm.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none font-sans text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold">
+                        {pm.user?.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-on-surface text-sm">{pm.user?.name || "—"}</p>
+                        <p className="text-xs text-on-surface-variant">{pm.user?.email || ""}</p>
+                      </div>
+                    </div>
+                    {isAdmin && (
+                      <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                        <span className="material-symbols-outlined text-[14px]">remove_circle</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -1049,6 +1114,37 @@ export default function SchoolProfileDetail() {
                   </div>
                   <button
                     onClick={() => isAssigned ? handleRemoveProgram(p.id) : handleAssignProgram(p.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                  >
+                    {isAssigned ? "Remove" : "Assign"}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Modal>
+      )}
+
+      {/* Manage Program Managers */}
+      {modal === "managers" && (
+        <Modal title="Manage Program Managers" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Assign or remove Program Managers for this school. Program Managers can manage the fellows and students of this school.</p>
+          <input type="text" placeholder="Search program managers..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+            className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {filteredManagers.length === 0 && (
+              <p className="text-sm text-on-surface-variant text-center py-4">No Program Manager accounts found.</p>
+            )}
+            {filteredManagers.map(m => {
+              const isAssigned = schoolManagerIds.has(m.id);
+              return (
+                <div key={m.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                  <div>
+                    <p className="font-semibold text-on-surface text-sm">{m.name}</p>
+                    <p className="text-xs text-on-surface-variant">{m.email}</p>
+                  </div>
+                  <button
+                    onClick={() => isAssigned ? handleRemoveManager(m.id) : handleAssignManager(m.id)}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
                   >
                     {isAssigned ? "Remove" : "Assign"}

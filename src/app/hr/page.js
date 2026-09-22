@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function HrEmployeeManagement() {
   const router = useRouter();
   const { token, user: currentUser } = useAuth();
+  const isAdmin = currentUser?.roleName === "ADMIN";
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -70,6 +71,7 @@ export default function HrEmployeeManagement() {
   }, [users, directorySearch, directoryDept]);
 
   const handleRowClick = (user) => {
+    if (!isAdmin) return;
     setSelectedUser({ ...user });
     setShowProfileModal(true);
   };
@@ -173,7 +175,7 @@ export default function HrEmployeeManagement() {
                 </thead>
                 <tbody>
                   {filteredEmployees.map((emp) => (
-                    <tr key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
+                    <tr key={emp.id} onClick={() => handleRowClick(emp)} className={`border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors ${isAdmin ? "cursor-pointer" : ""}`}>
                       <td className="py-4 px-4 font-bold text-on-surface">{emp.name || emp.username}</td>
                       <td className="py-4 px-4 text-xs text-on-surface-variant">{emp.email}</td>
                       <td className="py-4 px-4 text-on-surface-variant">{emp.department || "Unassigned"}</td>

@@ -24,12 +24,15 @@ export default function LeaveWorkflow() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
+  const canReview = ["ADMIN", "HR", "PROGRAM_MANAGER"].includes(currentUser?.roleName);
+
   useEffect(() => {
-    if (currentUser && currentUser.roleName !== "ADMIN" && currentUser.roleName !== "HR") {
+    if (currentUser && !canReview) {
       router.push("/hr/leaves/apply");
     } else if (token) {
       fetchLeaves();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, currentUser, router]);
 
   const fetchLeaves = async () => {
@@ -91,7 +94,7 @@ export default function LeaveWorkflow() {
     setRejectionReasonText("");
   };
 
-  if (currentUser && currentUser.roleName !== "ADMIN" && currentUser.roleName !== "HR") {
+  if (currentUser && !canReview) {
     return null; // Don't render anything while redirecting
   }
 
@@ -167,7 +170,7 @@ export default function LeaveWorkflow() {
                     </div>
                   </td>
                   <td className="py-4 px-4 flex gap-2">
-                    {leave.status === "PENDING" && (
+                    {leave.status === "PENDING" && leave.userId !== currentUser?.id && (
                       <>
                         <button
                           onClick={() => handleUpdateStatus(leave.id, "APPROVED")}

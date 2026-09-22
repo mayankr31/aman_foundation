@@ -153,7 +153,6 @@ export default function PMReflectionForm({
                       <select
                         value={responses[key] || ""}
                         onChange={(e) => updateResponse(key, e.target.value)}
-                        required
                         className={dropdownClass}
                       >
                         <option value="">Select level...</option>

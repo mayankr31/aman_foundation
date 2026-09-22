@@ -68,6 +68,10 @@ model User {
   roleId      String
   status      UserStatus       @default(PENDING)
   department  String?
+  dob         DateTime?
+  gender      String?
+  address     String?
+  avatar      String?
   leavesTaken Int              @default(0)
   leavesRemaining Int          @default(15)
   createdAt   DateTime         @default(now())
@@ -85,6 +89,14 @@ model User {
   approvedTravel     TravelRequest[]      @relation("ApprovedByUser")
   coachingRecords    CoachingRecord[]
   pmReflections      PMReflection[]
+  individualFeedback IndividualFeedback[]
+  performanceObservations FellowPerformance[]
+
+  managedSchools           ProgramManagerSchool[]
+  managedCentres           ProgramManagerAfterSchoolCentre[]
+  managedLivelihoodPrograms ProgramManagerLivelihoodProgram[]
+  pmTasks                  ProgramManagerTask[]
+  pmTaskComments           ProgramManagerTaskComment[]
 }
 
 model Permission {
@@ -152,6 +164,7 @@ model School {
   learningAssessments  LearningAssessment[]
   homeworkRecords      StudentHomework[]
   assessmentForms      AssessmentForm[]
+  programManagers      ProgramManagerSchool[]
 }
 
 model Fellow {
@@ -181,6 +194,8 @@ model Fellow {
   engagementSurveys EngagementSurvey[]
   lookBeyondSurveys   LookBeyondSurvey[]
   pmReflections     PMReflection[]
+  individualFeedback IndividualFeedback[]
+  performanceObservations FellowPerformance[]
 
   afterSchoolCentres      FellowAfterSchoolCentre[]
   afterSchoolStudents     AfterSchoolStudent[]
@@ -216,6 +231,32 @@ model PMReflection {
   author    User     @relation(fields: [authorId], references: [id])
 
   @@index([fellowId])
+}
+
+model FellowPerformance {
+  id                  String   @id @default(uuid())
+  fellowId            String
+  date                DateTime
+  classGroup          String?
+  subject             String
+  lessonPlan          Int
+  culture             Int
+  lessonFlow          Int
+  content             Int
+  communityEngagement Int
+  overallScore        Float
+  strength            String?
+  aod                 String?
+  trend               String?
+  authorId            String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  fellow    Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id])
+
+  @@index([fellowId])
+  @@index([date])
 }
 
 model FellowReview {
@@ -395,6 +436,70 @@ model Program {
   schools          SchoolProgram[]
   events           ProgramEvent[]
   afterSchoolCentres AfterSchoolCentreProgram[]
+}
+
+model ProgramManagerSchool {
+  id        String   @id @default(uuid())
+  userId    String
+  schoolId  String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, schoolId])
+}
+
+model ProgramManagerAfterSchoolCentre {
+  id        String            @id @default(uuid())
+  userId    String
+  centreId  String
+  createdAt DateTime          @default(now())
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  centre    AfterSchoolCentre @relation(fields: [centreId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, centreId])
+}
+
+model ProgramManagerLivelihoodProgram {
+  id        String           @id @default(uuid())
+  userId    String
+  programId String
+  createdAt DateTime         @default(now())
+
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program   LivelihoodProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, programId])
+}
+
+model ProgramManagerTask {
+  id             String    @id @default(uuid())
+  userId         String
+  title          String
+  description    String?
+  plannedDate    DateTime
+  status         String    @default("Pending") // Pending, Completed
+  isPlanned      Boolean   @default(true)
+  completionDate DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments       ProgramManagerTaskComment[]
+}
+
+model ProgramManagerTaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task      ProgramManagerTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model SchoolProgram {
@@ -613,6 +718,7 @@ model LivelihoodProgram {
   updatedAt     DateTime            @updatedAt
 
   assignments   BeneficiaryLivelihood[]
+  programManagers ProgramManagerLivelihoodProgram[]
 }
 
 model BeneficiaryLivelihood {
@@ -924,6 +1030,31 @@ model LookBeyondSurvey {
   fellow      Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
 }
 
+model IndividualFeedback {
+  id                 String   @id @default(uuid())
+  fellowId           String
+  date               DateTime
+  classroomLevel     String?
+  classGroup         String?
+  subject            String
+  subjectOther       String?
+  lessonPlanLink     String?
+  lessonPlanFeedback Boolean  @default(false)
+  strengths          String?
+  areasOfDevelopment String?
+  nextStepsFellow    String?
+  nextStepPM         String?
+  authorId           String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  fellow             Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  author             User     @relation(fields: [authorId], references: [id])
+
+  @@index([fellowId])
+  @@index([date])
+}
+
 model TravelRequest {
   id               String       @id @default(uuid())
   userId           String
@@ -1102,6 +1233,7 @@ model AfterSchoolCentre {
   learningAssessments AfterSchoolLearningAssessment[]
   homeworkRecords   AfterSchoolHomework[]
   assessmentForms   AfterSchoolAssessmentForm[]
+  programManagers   ProgramManagerAfterSchoolCentre[]
 }
 
 model FellowAfterSchoolCentre {
@@ -1284,11 +1416,12 @@ model FellowStudentDataNote {
   session    String
   phase      String   // BASELINE | MIDLINE | ENDLINE
   sectionKey String   // SubjectAssessmentTemplate.id OR "READING_FLUENCY"
+  source     String   @default("school") // "school" | "afterSchool"
   note       String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   fellow     Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
 
-  @@unique([fellowId, session, phase, sectionKey])
+  @@unique([fellowId, session, phase, sectionKey, source])
 }

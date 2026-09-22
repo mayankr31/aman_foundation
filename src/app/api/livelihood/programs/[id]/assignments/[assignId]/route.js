@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isLivelihoodProgramManaged } from "@/lib/scope";
 
 export async function PATCH(req, { params }) {
   try {
@@ -24,6 +25,13 @@ export async function PATCH(req, { params }) {
     });
     if (!existing) {
       return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
+    }
+
+    if (
+      user.role.name === "PROGRAM_MANAGER" &&
+      !(await isLivelihoodProgramManaged(user.id, existing.programId))
+    ) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     const updateData = {};
@@ -61,6 +69,13 @@ export async function DELETE(req, { params }) {
     });
     if (!existing) {
       return NextResponse.json({ error: "Assignment not found" }, { status: 404 });
+    }
+
+    if (
+      user.role.name === "PROGRAM_MANAGER" &&
+      !(await isLivelihoodProgramManaged(user.id, existing.programId))
+    ) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     await prisma.beneficiaryLivelihood.delete({ where: { id: assignId } });

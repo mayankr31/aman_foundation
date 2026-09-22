@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isLivelihoodProgramManaged } from "@/lib/scope";
+
+async function isPmEventAllowed(userId, livelihoodId) {
+  const livelihood = await prisma.beneficiaryLivelihood.findUnique({
+    where: { id: livelihoodId },
+    select: { programId: true },
+  });
+  if (!livelihood) return false;
+  return isLivelihoodProgramManaged(userId, livelihood.programId);
+}
 
 export async function PATCH(req, { params }) {
   try {
@@ -22,6 +32,10 @@ export async function PATCH(req, { params }) {
     const existing = await prisma.livelihoodEvent.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isPmEventAllowed(user.id, existing.livelihoodId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     const updateData = {};
@@ -60,6 +74,10 @@ export async function DELETE(req, { params }) {
     const existing = await prisma.livelihoodEvent.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isPmEventAllowed(user.id, existing.livelihoodId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     await prisma.livelihoodEvent.delete({ where: { id } });

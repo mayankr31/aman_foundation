@@ -14,6 +14,10 @@ export async function GET(req) {
           fellow: { userId: user.id }
         }
       };
+    } else if (user.role.name === "PROGRAM_MANAGER") {
+      where.programManagers = {
+        some: { userId: user.id }
+      };
     }
 
     const schools = await prisma.school.findMany({

@@ -24,6 +24,7 @@ export default function BeneficiaryMasterDirectory() {
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [sugarcanePrograms, setSugarcanePrograms] = useState([]);
   const [goatRearingPrograms, setGoatRearingPrograms] = useState([]);
+  const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
   const [hasGoatChecked, setHasGoatChecked] = useState(false);
   const [hasSugarcaneChecked, setHasSugarcaneChecked] = useState(false);
 
@@ -41,6 +42,7 @@ export default function BeneficiaryMasterDirectory() {
         if (progJson.success) {
           setSugarcanePrograms(progJson.data.sugarcanePrograms || []);
           setGoatRearingPrograms(progJson.data.goatRearingPrograms || []);
+          setLivelihoodPrograms(progJson.data.programs || []);
         }
 
         if (json.success) {
@@ -88,6 +90,7 @@ export default function BeneficiaryMasterDirectory() {
     if (formData.get("program_goat")) programs.push("Goat Rearing");
     if (formData.get("program_sugarcane")) programs.push("Sugarcane");
     if (programs.length === 0) programs.push("Goat Rearing"); // Default fallback
+    const selectedLivelihoodProgramId = formData.get("programId") || null;
     
     let tierPercent = 50;
     if (tier === "Tier 1") tierPercent = 40;
@@ -126,7 +129,8 @@ export default function BeneficiaryMasterDirectory() {
           bankName: formData.get("bankName") || null,
           bankAccountNo: formData.get("bankAccountNo") || null,
           bankIfsc: formData.get("bankIfsc") || null,
-          schemes: programs
+          schemes: programs,
+          ...(selectedLivelihoodProgramId ? { programId: selectedLivelihoodProgramId } : {})
         })
       });
       const json = await res.json();
@@ -755,6 +759,24 @@ export default function BeneficiaryMasterDirectory() {
                     <span>Sugarcane Cultivation</span>
                   </label>
                 </div>
+                {livelihoodPrograms.length > 0 && (
+                  <div className="flex flex-col gap-1.5 mt-3">
+                    <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+                      Enroll in Livelihood Program (optional)
+                    </label>
+                    <select
+                      name="programId"
+                      className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-xs"
+                    >
+                      <option value="">— None —</option>
+                      {livelihoodPrograms.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name} ({p.category === "FARM" ? "Farm" : "Non-Farm"})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
 
               {(hasGoatChecked || hasSugarcaneChecked) && (

@@ -24,7 +24,10 @@ export async function GET(req) {
               }
             }
           }
-        }
+        },
+        managedSchools: { include: { school: true } },
+        managedCentres: { include: { centre: true } },
+        managedLivelihoodPrograms: { include: { program: true } },
       }
     });
 
@@ -32,7 +35,8 @@ export async function GET(req) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: fullUser });
+    const { password: _pw, ...safeUser } = fullUser;
+    return NextResponse.json({ success: true, data: safeUser });
   } catch (error) {
     console.error("Fetch profile error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -55,6 +59,12 @@ export async function PATCH(req) {
           name: name || undefined,
           email: email || undefined,
           mobile: mobile !== undefined ? mobile : undefined,
+          // Store personal details directly on the User record (used by
+          // Program Managers and other non-fellow roles).
+          address: address !== undefined ? address : undefined,
+          gender: gender !== undefined ? gender : undefined,
+          dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,
+          avatar: avatar !== undefined ? avatar : undefined,
         },
         include: {
           role: true,
@@ -95,12 +105,16 @@ export async function PATCH(req) {
                 }
               }
             }
-          }
+          },
+          managedSchools: { include: { school: true } },
+          managedCentres: { include: { centre: true } },
+          managedLivelihoodPrograms: { include: { program: true } },
         }
       });
     });
 
-    return NextResponse.json({ success: true, data: updatedUser });
+    const { password: _pw2, ...safeUpdatedUser } = updatedUser;
+    return NextResponse.json({ success: true, data: safeUpdatedUser });
   } catch (error) {
     console.error("Update profile error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

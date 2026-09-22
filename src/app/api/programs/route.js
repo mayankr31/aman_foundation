@@ -1,13 +1,27 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getManagedSchoolIds, getManagedCentreIds } from "@/lib/scope";
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    let where;
+    if (user.role.name === "PROGRAM_MANAGER") {
+      const [schoolIds, centreIds] = await Promise.all([
+        getManagedSchoolIds(user.id),
+        getManagedCentreIds(user.id),
+      ]);
+      const or = [];
+      if (schoolIds.length) or.push({ schools: { some: { schoolId: { in: schoolIds } } } });
+      if (centreIds.length) or.push({ afterSchoolCentres: { some: { centreId: { in: centreIds } } } });
+      where = or.length ? { OR: or } : { id: { in: [] } };
+    }
+
     const programs = await prisma.program.findMany({
+      where,
       include: {
         _count: {
           select: { schools: true, events: true, afterSchoolCentres: true }

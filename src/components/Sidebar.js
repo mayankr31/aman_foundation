@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
-export default function Sidebar({ isOpen, onClose }) {
+export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCollapse }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  
+
   // Dropdown states
   const [eduOpen, setEduOpen] = useState(false);
+  const [observationsOpen, setObservationsOpen] = useState(false);
   const [livelihoodOpen, setLivelihoodOpen] = useState(false);
 
   // Auto-expand active folder on path change
@@ -28,6 +29,9 @@ export default function Sidebar({ isOpen, onClose }) {
     ) {
       setEduOpen(true);
     }
+    if (pathname.startsWith("/fellow-observations")) {
+      setObservationsOpen(true);
+    }
     if (
       [
         "/livelihood",
@@ -42,7 +46,9 @@ export default function Sidebar({ isOpen, onClose }) {
   }, [pathname]);
 
   const navItemClass = (isActive) =>
-    `flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-300 ease-in-out ${
+    `flex items-center gap-3 py-3 px-4 rounded-full transition-all duration-300 ease-in-out ${
+      collapsed ? "md:justify-center md:px-0" : ""
+    } ${
       isActive
         ? "bg-teal-700 text-white shadow-lg shadow-teal-900/20"
         : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 font-medium"
@@ -54,6 +60,18 @@ export default function Sidebar({ isOpen, onClose }) {
         ? "text-primary bg-primary-container/10 font-semibold"
         : "text-slate-500 hover:text-primary transition-colors hover:bg-slate-200/50 font-medium"
     }`;
+
+  // On desktop the labels hide when collapsed; on mobile they always show.
+  const labelClass = collapsed ? "md:hidden" : "";
+
+  const handleFolderToggle = (isOpenState, setOpenState) => {
+    if (collapsed) {
+      onToggleCollapse?.();
+      setOpenState(true);
+    } else {
+      setOpenState(!isOpenState);
+    }
+  };
 
   return (
     <>
@@ -68,22 +86,40 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* SideNavBar */}
       <nav
         id="side-nav"
-        className={`bg-slate-50 dark:bg-slate-900 text-teal-800 dark:text-teal-400 font-sans tracking-tight text-sm font-medium h-screen w-64 fixed left-0 top-0 overflow-y-auto shadow-[8px_0_24px_rgba(0,0,0,0.04)] z-[60] flex flex-col p-6 gap-2 border-r border-slate-100 dark:border-slate-800 transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
+        className={`bg-slate-50 dark:bg-slate-900 text-teal-800 dark:text-teal-400 font-sans tracking-tight text-sm font-medium h-screen w-64 fixed left-0 top-0 overflow-y-auto shadow-[8px_0_24px_rgba(0,0,0,0.04)] z-[60] flex flex-col p-6 gap-2 border-r border-slate-100 dark:border-slate-800 transition-all duration-300 ease-in-out ${
+          collapsed ? "md:w-20 md:px-3" : "md:w-64"
+        } ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {/* Brand */}
-        <div className="flex items-center gap-3 mb-8 px-2 shrink-0">
+        <div
+          className={`flex items-center gap-3 mb-2 px-2 shrink-0 ${
+            collapsed ? "md:justify-center md:px-0" : ""
+          }`}
+        >
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shrink-0 ambient-shadow">
             <span className="material-symbols-outlined text-2xl icon-filled">local_library</span>
           </div>
-          <div>
+          <div className={labelClass}>
             <h1 className="text-lg font-bold tracking-tighter text-teal-900 dark:text-teal-100 leading-tight whitespace-nowrap">
               Aman Foundation
             </h1>
             <p className="text-xs text-on-surface-variant whitespace-nowrap">Impact Portal</p>
           </div>
         </div>
+
+        {/* Collapse toggle (desktop only) */}
+        <button
+          onClick={onToggleCollapse}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={`hidden md:flex items-center gap-2 mb-4 py-2 px-4 rounded-full text-slate-500 hover:bg-slate-200/60 dark:hover:bg-slate-800/60 hover:text-teal-700 dark:hover:text-teal-400 transition-colors cursor-pointer ${
+            collapsed ? "justify-center px-0" : ""
+          }`}
+        >
+          <span className="material-symbols-outlined text-[20px]">
+            {collapsed ? "chevron_right" : "chevron_left"}
+          </span>
+          {!collapsed && <span className="text-xs font-semibold">Collapse</span>}
+        </button>
 
         {/* Nav Links */}
         <div className="flex-1 flex flex-col gap-2 overflow-y-auto pr-1">
@@ -92,31 +128,37 @@ export default function Sidebar({ isOpen, onClose }) {
             href="/"
             className={navItemClass(pathname === "/")}
             onClick={onClose}
+            title="Dashboard"
           >
             <span className="material-symbols-outlined">dashboard</span>
-            Dashboard
+            <span className={labelClass}>Dashboard</span>
           </Link>
 
           {/* Education Submenu */}
           <div className="flex flex-col gap-1">
             <button
-              onClick={() => setEduOpen(!eduOpen)}
-              className="flex items-center justify-between gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium"
+              onClick={() => handleFolderToggle(eduOpen, setEduOpen)}
+              title="Education"
+              className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium ${
+                collapsed ? "md:justify-center md:px-0" : "justify-between"
+              }`}
             >
               <div className="flex items-center gap-3">
                 <span className="material-symbols-outlined">school</span>
-                Education
+                <span className={labelClass}>Education</span>
               </div>
-              <span
-                className={`material-symbols-outlined transition-transform duration-300 ${
-                  eduOpen ? "rotate-180" : ""
-                }`}
-              >
-                expand_more
-              </span>
+              {!collapsed && (
+                <span
+                  className={`material-symbols-outlined transition-transform duration-300 ${
+                    eduOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  expand_more
+                </span>
+              )}
             </button>
-            
-            {eduOpen && (
+
+            {eduOpen && !collapsed && (
               <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
                 {user?.roleName !== "FELLOW" && (
                   <Link
@@ -177,27 +219,78 @@ export default function Sidebar({ isOpen, onClose }) {
             )}
           </div>
 
+          {/* Fellow Observations Submenu */}
+          {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => handleFolderToggle(observationsOpen, setObservationsOpen)}
+                title="Fellow Observations"
+                className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium ${
+                  collapsed ? "md:justify-center md:px-0" : "justify-between"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined">rate_review</span>
+                  <span className={labelClass}>Fellow Observations</span>
+                </div>
+                {!collapsed && (
+                  <span
+                    className={`material-symbols-outlined transition-transform duration-300 ${
+                      observationsOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    expand_more
+                  </span>
+                )}
+              </button>
+
+              {observationsOpen && !collapsed && (
+                <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
+                  <Link
+                    className={sublinkClass(pathname === "/fellow-observations/pm-reflection")}
+                    href="/fellow-observations/pm-reflection"
+                    onClick={onClose}
+                  >
+                    PM Reflection
+                  </Link>
+                  <Link
+                    className={sublinkClass(pathname === "/fellow-observations/fellow-performance")}
+                    href="/fellow-observations/fellow-performance"
+                    onClick={onClose}
+                  >
+                    Fellow Performance
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Livelihood Submenu */}
           {true && (
             <div className="flex flex-col gap-1">
               <button
-                onClick={() => setLivelihoodOpen(!livelihoodOpen)}
-                className="flex items-center justify-between gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium"
+                onClick={() => handleFolderToggle(livelihoodOpen, setLivelihoodOpen)}
+                title="Livelihood"
+                className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium ${
+                  collapsed ? "md:justify-center md:px-0" : "justify-between"
+                }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined">agriculture</span>
-                  Livelihood
+                  <span className={labelClass}>Livelihood</span>
                 </div>
-                <span
-                  className={`material-symbols-outlined transition-transform duration-300 ${
-                    livelihoodOpen ? "rotate-180" : ""
-                  }`}
-                >
-                  expand_more
-                </span>
+                {!collapsed && (
+                  <span
+                    className={`material-symbols-outlined transition-transform duration-300 ${
+                      livelihoodOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    expand_more
+                  </span>
+                )}
               </button>
 
-              {livelihoodOpen && (
+              {livelihoodOpen && !collapsed && (
                 <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
                   <Link
                     className={sublinkClass(pathname === "/livelihood")}
@@ -240,9 +333,10 @@ export default function Sidebar({ isOpen, onClose }) {
               href="/disaster-relief"
               className={navItemClass(pathname === "/disaster-relief")}
               onClick={onClose}
+              title="Disaster Relief"
             >
               <span className="material-symbols-outlined">emergency</span>
-              Disaster Relief
+              <span className={labelClass}>Disaster Relief</span>
             </Link>
           )}
 
@@ -252,21 +346,23 @@ export default function Sidebar({ isOpen, onClose }) {
               href={user?.roleName === "HR" ? "/hr/leaves" : "/hr/leaves/apply"}
               className={navItemClass(pathname.includes("/leaves"))}
               onClick={onClose}
+              title="Leaves"
             >
               <span className="material-symbols-outlined">event_note</span>
-              Leaves
+              <span className={labelClass}>Leaves</span>
             </Link>
           )}
 
-          {/* Travel - Fellow only */}
-          {user?.roleName === "FELLOW" && (
+          {/* Travel - Fellow & Program Manager */}
+          {(user?.roleName === "FELLOW" || user?.roleName === "PROGRAM_MANAGER") && (
             <Link
               href="/travel"
               className={navItemClass(pathname === "/travel")}
               onClick={onClose}
+              title="Travel"
             >
               <span className="material-symbols-outlined">flight</span>
-              Travel
+              <span className={labelClass}>Travel</span>
             </Link>
           )}
 
@@ -276,9 +372,10 @@ export default function Sidebar({ isOpen, onClose }) {
               href="/travel/manage"
               className={navItemClass(pathname === "/travel/manage")}
               onClick={onClose}
+              title="Travel Management"
             >
               <span className="material-symbols-outlined">flight_takeoff</span>
-              Travel Management
+              <span className={labelClass}>Travel Management</span>
             </Link>
           )}
 
@@ -288,9 +385,10 @@ export default function Sidebar({ isOpen, onClose }) {
               href="/hr"
               className={navItemClass(pathname === "/hr")}
               onClick={onClose}
+              title="HR Management"
             >
               <span className="material-symbols-outlined">group</span>
-              HR Management
+              <span className={labelClass}>HR Management</span>
             </Link>
           )}
 
@@ -300,9 +398,10 @@ export default function Sidebar({ isOpen, onClose }) {
               href="/admin"
               className={navItemClass(pathname === "/admin")}
               onClick={onClose}
+              title="Admin & Access"
             >
               <span className="material-symbols-outlined">admin_panel_settings</span>
-              Admin &amp; Access
+              <span className={labelClass}>Admin &amp; Access</span>
             </Link>
           )}
         </div>
@@ -310,21 +409,27 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Bottom utility links */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-4 flex flex-col gap-2 shrink-0">
           <a
-            className="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-full transition-all font-medium"
+            className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-full transition-all font-medium ${
+              collapsed ? "md:justify-center md:px-0" : ""
+            }`}
             href="#"
+            title="Help"
           >
             <span className="material-symbols-outlined">help</span>
-            Help
+            <span className={labelClass}>Help</span>
           </a>
           <button
             onClick={() => {
               logout();
               onClose();
             }}
-            className="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-full transition-all font-medium w-full text-left bg-transparent border-none cursor-pointer outline-none"
+            title="Logout"
+            className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-700 rounded-full transition-all font-medium w-full text-left bg-transparent border-none cursor-pointer outline-none ${
+              collapsed ? "md:justify-center md:px-0" : ""
+            }`}
           >
             <span className="material-symbols-outlined">logout</span>
-            Logout
+            <span className={labelClass}>Logout</span>
           </button>
         </div>
       </nav>

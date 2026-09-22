@@ -59,6 +59,11 @@ export type GoalSheet = $Result.DefaultSelection<Prisma.$GoalSheetPayload>
  */
 export type PMReflection = $Result.DefaultSelection<Prisma.$PMReflectionPayload>
 /**
+ * Model FellowPerformance
+ * 
+ */
+export type FellowPerformance = $Result.DefaultSelection<Prisma.$FellowPerformancePayload>
+/**
  * Model FellowReview
  * 
  */
@@ -113,6 +118,31 @@ export type FellowSchool = $Result.DefaultSelection<Prisma.$FellowSchoolPayload>
  * 
  */
 export type Program = $Result.DefaultSelection<Prisma.$ProgramPayload>
+/**
+ * Model ProgramManagerSchool
+ * 
+ */
+export type ProgramManagerSchool = $Result.DefaultSelection<Prisma.$ProgramManagerSchoolPayload>
+/**
+ * Model ProgramManagerAfterSchoolCentre
+ * 
+ */
+export type ProgramManagerAfterSchoolCentre = $Result.DefaultSelection<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+/**
+ * Model ProgramManagerLivelihoodProgram
+ * 
+ */
+export type ProgramManagerLivelihoodProgram = $Result.DefaultSelection<Prisma.$ProgramManagerLivelihoodProgramPayload>
+/**
+ * Model ProgramManagerTask
+ * 
+ */
+export type ProgramManagerTask = $Result.DefaultSelection<Prisma.$ProgramManagerTaskPayload>
+/**
+ * Model ProgramManagerTaskComment
+ * 
+ */
+export type ProgramManagerTaskComment = $Result.DefaultSelection<Prisma.$ProgramManagerTaskCommentPayload>
 /**
  * Model SchoolProgram
  * 
@@ -283,6 +313,11 @@ export type EngagementSurvey = $Result.DefaultSelection<Prisma.$EngagementSurvey
  * 
  */
 export type LookBeyondSurvey = $Result.DefaultSelection<Prisma.$LookBeyondSurveyPayload>
+/**
+ * Model IndividualFeedback
+ * 
+ */
+export type IndividualFeedback = $Result.DefaultSelection<Prisma.$IndividualFeedbackPayload>
 /**
  * Model TravelRequest
  * 
@@ -699,6 +734,16 @@ export class PrismaClient<
   get pMReflection(): Prisma.PMReflectionDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.fellowPerformance`: Exposes CRUD operations for the **FellowPerformance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FellowPerformances
+    * const fellowPerformances = await prisma.fellowPerformance.findMany()
+    * ```
+    */
+  get fellowPerformance(): Prisma.FellowPerformanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.fellowReview`: Exposes CRUD operations for the **FellowReview** model.
     * Example usage:
     * ```ts
@@ -807,6 +852,56 @@ export class PrismaClient<
     * ```
     */
   get program(): Prisma.ProgramDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programManagerSchool`: Exposes CRUD operations for the **ProgramManagerSchool** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgramManagerSchools
+    * const programManagerSchools = await prisma.programManagerSchool.findMany()
+    * ```
+    */
+  get programManagerSchool(): Prisma.ProgramManagerSchoolDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programManagerAfterSchoolCentre`: Exposes CRUD operations for the **ProgramManagerAfterSchoolCentre** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgramManagerAfterSchoolCentres
+    * const programManagerAfterSchoolCentres = await prisma.programManagerAfterSchoolCentre.findMany()
+    * ```
+    */
+  get programManagerAfterSchoolCentre(): Prisma.ProgramManagerAfterSchoolCentreDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programManagerLivelihoodProgram`: Exposes CRUD operations for the **ProgramManagerLivelihoodProgram** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgramManagerLivelihoodPrograms
+    * const programManagerLivelihoodPrograms = await prisma.programManagerLivelihoodProgram.findMany()
+    * ```
+    */
+  get programManagerLivelihoodProgram(): Prisma.ProgramManagerLivelihoodProgramDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programManagerTask`: Exposes CRUD operations for the **ProgramManagerTask** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgramManagerTasks
+    * const programManagerTasks = await prisma.programManagerTask.findMany()
+    * ```
+    */
+  get programManagerTask(): Prisma.ProgramManagerTaskDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programManagerTaskComment`: Exposes CRUD operations for the **ProgramManagerTaskComment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgramManagerTaskComments
+    * const programManagerTaskComments = await prisma.programManagerTaskComment.findMany()
+    * ```
+    */
+  get programManagerTaskComment(): Prisma.ProgramManagerTaskCommentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.schoolProgram`: Exposes CRUD operations for the **SchoolProgram** model.
@@ -1147,6 +1242,16 @@ export class PrismaClient<
     * ```
     */
   get lookBeyondSurvey(): Prisma.LookBeyondSurveyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.individualFeedback`: Exposes CRUD operations for the **IndividualFeedback** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IndividualFeedbacks
+    * const individualFeedbacks = await prisma.individualFeedback.findMany()
+    * ```
+    */
+  get individualFeedback(): Prisma.IndividualFeedbackDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.travelRequest`: Exposes CRUD operations for the **TravelRequest** model.
@@ -1830,6 +1935,7 @@ export namespace Prisma {
     Fellow: 'Fellow',
     GoalSheet: 'GoalSheet',
     PMReflection: 'PMReflection',
+    FellowPerformance: 'FellowPerformance',
     FellowReview: 'FellowReview',
     Student: 'Student',
     StudentAttendanceLog: 'StudentAttendanceLog',
@@ -1841,6 +1947,11 @@ export namespace Prisma {
     IncomeRecord: 'IncomeRecord',
     FellowSchool: 'FellowSchool',
     Program: 'Program',
+    ProgramManagerSchool: 'ProgramManagerSchool',
+    ProgramManagerAfterSchoolCentre: 'ProgramManagerAfterSchoolCentre',
+    ProgramManagerLivelihoodProgram: 'ProgramManagerLivelihoodProgram',
+    ProgramManagerTask: 'ProgramManagerTask',
+    ProgramManagerTaskComment: 'ProgramManagerTaskComment',
     SchoolProgram: 'SchoolProgram',
     ProgramEvent: 'ProgramEvent',
     Beneficiary: 'Beneficiary',
@@ -1875,6 +1986,7 @@ export namespace Prisma {
     CoachingRecord: 'CoachingRecord',
     EngagementSurvey: 'EngagementSurvey',
     LookBeyondSurvey: 'LookBeyondSurvey',
+    IndividualFeedback: 'IndividualFeedback',
     TravelRequest: 'TravelRequest',
     TravelExpense: 'TravelExpense',
     FLNCategory: 'FLNCategory',
@@ -1914,7 +2026,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "beneficiaryLivelihood" | "livelihoodEvent" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
+      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "beneficiaryLivelihood" | "livelihoodEvent" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2581,6 +2693,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PMReflectionCountArgs<ExtArgs>
             result: $Utils.Optional<PMReflectionCountAggregateOutputType> | number
+          }
+        }
+      }
+      FellowPerformance: {
+        payload: Prisma.$FellowPerformancePayload<ExtArgs>
+        fields: Prisma.FellowPerformanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FellowPerformanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FellowPerformanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          findFirst: {
+            args: Prisma.FellowPerformanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FellowPerformanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          findMany: {
+            args: Prisma.FellowPerformanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>[]
+          }
+          create: {
+            args: Prisma.FellowPerformanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          createMany: {
+            args: Prisma.FellowPerformanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FellowPerformanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>[]
+          }
+          delete: {
+            args: Prisma.FellowPerformanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          update: {
+            args: Prisma.FellowPerformanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          deleteMany: {
+            args: Prisma.FellowPerformanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FellowPerformanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FellowPerformanceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>[]
+          }
+          upsert: {
+            args: Prisma.FellowPerformanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowPerformancePayload>
+          }
+          aggregate: {
+            args: Prisma.FellowPerformanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFellowPerformance>
+          }
+          groupBy: {
+            args: Prisma.FellowPerformanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FellowPerformanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FellowPerformanceCountArgs<ExtArgs>
+            result: $Utils.Optional<FellowPerformanceCountAggregateOutputType> | number
           }
         }
       }
@@ -3395,6 +3581,376 @@ export namespace Prisma {
           count: {
             args: Prisma.ProgramCountArgs<ExtArgs>
             result: $Utils.Optional<ProgramCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgramManagerSchool: {
+        payload: Prisma.$ProgramManagerSchoolPayload<ExtArgs>
+        fields: Prisma.ProgramManagerSchoolFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgramManagerSchoolFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgramManagerSchoolFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          findFirst: {
+            args: Prisma.ProgramManagerSchoolFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgramManagerSchoolFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          findMany: {
+            args: Prisma.ProgramManagerSchoolFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>[]
+          }
+          create: {
+            args: Prisma.ProgramManagerSchoolCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          createMany: {
+            args: Prisma.ProgramManagerSchoolCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgramManagerSchoolCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>[]
+          }
+          delete: {
+            args: Prisma.ProgramManagerSchoolDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          update: {
+            args: Prisma.ProgramManagerSchoolUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgramManagerSchoolDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgramManagerSchoolUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgramManagerSchoolUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgramManagerSchoolUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerSchoolPayload>
+          }
+          aggregate: {
+            args: Prisma.ProgramManagerSchoolAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgramManagerSchool>
+          }
+          groupBy: {
+            args: Prisma.ProgramManagerSchoolGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerSchoolGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgramManagerSchoolCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerSchoolCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgramManagerAfterSchoolCentre: {
+        payload: Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>
+        fields: Prisma.ProgramManagerAfterSchoolCentreFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgramManagerAfterSchoolCentreFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgramManagerAfterSchoolCentreFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          findFirst: {
+            args: Prisma.ProgramManagerAfterSchoolCentreFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgramManagerAfterSchoolCentreFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          findMany: {
+            args: Prisma.ProgramManagerAfterSchoolCentreFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>[]
+          }
+          create: {
+            args: Prisma.ProgramManagerAfterSchoolCentreCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          createMany: {
+            args: Prisma.ProgramManagerAfterSchoolCentreCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgramManagerAfterSchoolCentreCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>[]
+          }
+          delete: {
+            args: Prisma.ProgramManagerAfterSchoolCentreDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          update: {
+            args: Prisma.ProgramManagerAfterSchoolCentreUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgramManagerAfterSchoolCentreDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgramManagerAfterSchoolCentreUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgramManagerAfterSchoolCentreUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgramManagerAfterSchoolCentreUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerAfterSchoolCentrePayload>
+          }
+          aggregate: {
+            args: Prisma.ProgramManagerAfterSchoolCentreAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgramManagerAfterSchoolCentre>
+          }
+          groupBy: {
+            args: Prisma.ProgramManagerAfterSchoolCentreGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerAfterSchoolCentreGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgramManagerAfterSchoolCentreCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerAfterSchoolCentreCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgramManagerLivelihoodProgram: {
+        payload: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>
+        fields: Prisma.ProgramManagerLivelihoodProgramFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgramManagerLivelihoodProgramFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgramManagerLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          findFirst: {
+            args: Prisma.ProgramManagerLivelihoodProgramFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgramManagerLivelihoodProgramFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          findMany: {
+            args: Prisma.ProgramManagerLivelihoodProgramFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>[]
+          }
+          create: {
+            args: Prisma.ProgramManagerLivelihoodProgramCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          createMany: {
+            args: Prisma.ProgramManagerLivelihoodProgramCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgramManagerLivelihoodProgramCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>[]
+          }
+          delete: {
+            args: Prisma.ProgramManagerLivelihoodProgramDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          update: {
+            args: Prisma.ProgramManagerLivelihoodProgramUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgramManagerLivelihoodProgramDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgramManagerLivelihoodProgramUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgramManagerLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgramManagerLivelihoodProgramUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerLivelihoodProgramPayload>
+          }
+          aggregate: {
+            args: Prisma.ProgramManagerLivelihoodProgramAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgramManagerLivelihoodProgram>
+          }
+          groupBy: {
+            args: Prisma.ProgramManagerLivelihoodProgramGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerLivelihoodProgramGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgramManagerLivelihoodProgramCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerLivelihoodProgramCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgramManagerTask: {
+        payload: Prisma.$ProgramManagerTaskPayload<ExtArgs>
+        fields: Prisma.ProgramManagerTaskFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgramManagerTaskFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgramManagerTaskFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          findFirst: {
+            args: Prisma.ProgramManagerTaskFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgramManagerTaskFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          findMany: {
+            args: Prisma.ProgramManagerTaskFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>[]
+          }
+          create: {
+            args: Prisma.ProgramManagerTaskCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          createMany: {
+            args: Prisma.ProgramManagerTaskCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgramManagerTaskCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>[]
+          }
+          delete: {
+            args: Prisma.ProgramManagerTaskDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          update: {
+            args: Prisma.ProgramManagerTaskUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgramManagerTaskDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgramManagerTaskUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgramManagerTaskUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgramManagerTaskUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskPayload>
+          }
+          aggregate: {
+            args: Prisma.ProgramManagerTaskAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgramManagerTask>
+          }
+          groupBy: {
+            args: Prisma.ProgramManagerTaskGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerTaskGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgramManagerTaskCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerTaskCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgramManagerTaskComment: {
+        payload: Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>
+        fields: Prisma.ProgramManagerTaskCommentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgramManagerTaskCommentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgramManagerTaskCommentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          findFirst: {
+            args: Prisma.ProgramManagerTaskCommentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgramManagerTaskCommentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          findMany: {
+            args: Prisma.ProgramManagerTaskCommentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>[]
+          }
+          create: {
+            args: Prisma.ProgramManagerTaskCommentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          createMany: {
+            args: Prisma.ProgramManagerTaskCommentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgramManagerTaskCommentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>[]
+          }
+          delete: {
+            args: Prisma.ProgramManagerTaskCommentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          update: {
+            args: Prisma.ProgramManagerTaskCommentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgramManagerTaskCommentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgramManagerTaskCommentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgramManagerTaskCommentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgramManagerTaskCommentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgramManagerTaskCommentPayload>
+          }
+          aggregate: {
+            args: Prisma.ProgramManagerTaskCommentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgramManagerTaskComment>
+          }
+          groupBy: {
+            args: Prisma.ProgramManagerTaskCommentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerTaskCommentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgramManagerTaskCommentCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgramManagerTaskCommentCountAggregateOutputType> | number
           }
         }
       }
@@ -5914,6 +6470,80 @@ export namespace Prisma {
           }
         }
       }
+      IndividualFeedback: {
+        payload: Prisma.$IndividualFeedbackPayload<ExtArgs>
+        fields: Prisma.IndividualFeedbackFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IndividualFeedbackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IndividualFeedbackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          findFirst: {
+            args: Prisma.IndividualFeedbackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IndividualFeedbackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          findMany: {
+            args: Prisma.IndividualFeedbackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>[]
+          }
+          create: {
+            args: Prisma.IndividualFeedbackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          createMany: {
+            args: Prisma.IndividualFeedbackCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IndividualFeedbackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>[]
+          }
+          delete: {
+            args: Prisma.IndividualFeedbackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          update: {
+            args: Prisma.IndividualFeedbackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          deleteMany: {
+            args: Prisma.IndividualFeedbackDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IndividualFeedbackUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.IndividualFeedbackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>[]
+          }
+          upsert: {
+            args: Prisma.IndividualFeedbackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IndividualFeedbackPayload>
+          }
+          aggregate: {
+            args: Prisma.IndividualFeedbackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIndividualFeedback>
+          }
+          groupBy: {
+            args: Prisma.IndividualFeedbackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IndividualFeedbackGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IndividualFeedbackCountArgs<ExtArgs>
+            result: $Utils.Optional<IndividualFeedbackCountAggregateOutputType> | number
+          }
+        }
+      }
       TravelRequest: {
         payload: Prisma.$TravelRequestPayload<ExtArgs>
         fields: Prisma.TravelRequestFieldRefs
@@ -7807,6 +8437,7 @@ export namespace Prisma {
     fellow?: FellowOmit
     goalSheet?: GoalSheetOmit
     pMReflection?: PMReflectionOmit
+    fellowPerformance?: FellowPerformanceOmit
     fellowReview?: FellowReviewOmit
     student?: StudentOmit
     studentAttendanceLog?: StudentAttendanceLogOmit
@@ -7818,6 +8449,11 @@ export namespace Prisma {
     incomeRecord?: IncomeRecordOmit
     fellowSchool?: FellowSchoolOmit
     program?: ProgramOmit
+    programManagerSchool?: ProgramManagerSchoolOmit
+    programManagerAfterSchoolCentre?: ProgramManagerAfterSchoolCentreOmit
+    programManagerLivelihoodProgram?: ProgramManagerLivelihoodProgramOmit
+    programManagerTask?: ProgramManagerTaskOmit
+    programManagerTaskComment?: ProgramManagerTaskCommentOmit
     schoolProgram?: SchoolProgramOmit
     programEvent?: ProgramEventOmit
     beneficiary?: BeneficiaryOmit
@@ -7852,6 +8488,7 @@ export namespace Prisma {
     coachingRecord?: CoachingRecordOmit
     engagementSurvey?: EngagementSurveyOmit
     lookBeyondSurvey?: LookBeyondSurveyOmit
+    individualFeedback?: IndividualFeedbackOmit
     travelRequest?: TravelRequestOmit
     travelExpense?: TravelExpenseOmit
     fLNCategory?: FLNCategoryOmit
@@ -8005,6 +8642,13 @@ export namespace Prisma {
     approvedTravel: number
     coachingRecords: number
     pmReflections: number
+    individualFeedback: number
+    performanceObservations: number
+    managedSchools: number
+    managedCentres: number
+    managedLivelihoodPrograms: number
+    pmTasks: number
+    pmTaskComments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8017,6 +8661,13 @@ export namespace Prisma {
     approvedTravel?: boolean | UserCountOutputTypeCountApprovedTravelArgs
     coachingRecords?: boolean | UserCountOutputTypeCountCoachingRecordsArgs
     pmReflections?: boolean | UserCountOutputTypeCountPmReflectionsArgs
+    individualFeedback?: boolean | UserCountOutputTypeCountIndividualFeedbackArgs
+    performanceObservations?: boolean | UserCountOutputTypeCountPerformanceObservationsArgs
+    managedSchools?: boolean | UserCountOutputTypeCountManagedSchoolsArgs
+    managedCentres?: boolean | UserCountOutputTypeCountManagedCentresArgs
+    managedLivelihoodPrograms?: boolean | UserCountOutputTypeCountManagedLivelihoodProgramsArgs
+    pmTasks?: boolean | UserCountOutputTypeCountPmTasksArgs
+    pmTaskComments?: boolean | UserCountOutputTypeCountPmTaskCommentsArgs
   }
 
   // Custom InputTypes
@@ -8093,6 +8744,55 @@ export namespace Prisma {
     where?: PMReflectionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountIndividualFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualFeedbackWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPerformanceObservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowPerformanceWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountManagedSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerSchoolWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountManagedCentresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountManagedLivelihoodProgramsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerLivelihoodProgramWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPmTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerTaskWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPmTaskCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerTaskCommentWhereInput
+  }
+
 
   /**
    * Count Type PermissionCountOutputType
@@ -8145,6 +8845,7 @@ export namespace Prisma {
     learningAssessments: number
     homeworkRecords: number
     assessmentForms: number
+    programManagers: number
   }
 
   export type SchoolCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8154,6 +8855,7 @@ export namespace Prisma {
     learningAssessments?: boolean | SchoolCountOutputTypeCountLearningAssessmentsArgs
     homeworkRecords?: boolean | SchoolCountOutputTypeCountHomeworkRecordsArgs
     assessmentForms?: boolean | SchoolCountOutputTypeCountAssessmentFormsArgs
+    programManagers?: boolean | SchoolCountOutputTypeCountProgramManagersArgs
   }
 
   // Custom InputTypes
@@ -8209,6 +8911,13 @@ export namespace Prisma {
     where?: AssessmentFormWhereInput
   }
 
+  /**
+   * SchoolCountOutputType without action
+   */
+  export type SchoolCountOutputTypeCountProgramManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerSchoolWhereInput
+  }
+
 
   /**
    * Count Type FellowCountOutputType
@@ -8225,6 +8934,8 @@ export namespace Prisma {
     engagementSurveys: number
     lookBeyondSurveys: number
     pmReflections: number
+    individualFeedback: number
+    performanceObservations: number
     afterSchoolCentres: number
     afterSchoolStudents: number
     afterSchoolAssessmentForms: number
@@ -8242,6 +8953,8 @@ export namespace Prisma {
     engagementSurveys?: boolean | FellowCountOutputTypeCountEngagementSurveysArgs
     lookBeyondSurveys?: boolean | FellowCountOutputTypeCountLookBeyondSurveysArgs
     pmReflections?: boolean | FellowCountOutputTypeCountPmReflectionsArgs
+    individualFeedback?: boolean | FellowCountOutputTypeCountIndividualFeedbackArgs
+    performanceObservations?: boolean | FellowCountOutputTypeCountPerformanceObservationsArgs
     afterSchoolCentres?: boolean | FellowCountOutputTypeCountAfterSchoolCentresArgs
     afterSchoolStudents?: boolean | FellowCountOutputTypeCountAfterSchoolStudentsArgs
     afterSchoolAssessmentForms?: boolean | FellowCountOutputTypeCountAfterSchoolAssessmentFormsArgs
@@ -8327,6 +9040,20 @@ export namespace Prisma {
    */
   export type FellowCountOutputTypeCountPmReflectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PMReflectionWhereInput
+  }
+
+  /**
+   * FellowCountOutputType without action
+   */
+  export type FellowCountOutputTypeCountIndividualFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualFeedbackWhereInput
+  }
+
+  /**
+   * FellowCountOutputType without action
+   */
+  export type FellowCountOutputTypeCountPerformanceObservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowPerformanceWhereInput
   }
 
   /**
@@ -8502,6 +9229,37 @@ export namespace Prisma {
    */
   export type ProgramCountOutputTypeCountAfterSchoolCentresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AfterSchoolCentreProgramWhereInput
+  }
+
+
+  /**
+   * Count Type ProgramManagerTaskCountOutputType
+   */
+
+  export type ProgramManagerTaskCountOutputType = {
+    comments: number
+  }
+
+  export type ProgramManagerTaskCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    comments?: boolean | ProgramManagerTaskCountOutputTypeCountCommentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerTaskCountOutputType without action
+   */
+  export type ProgramManagerTaskCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskCountOutputType
+     */
+    select?: ProgramManagerTaskCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerTaskCountOutputType without action
+   */
+  export type ProgramManagerTaskCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerTaskCommentWhereInput
   }
 
 
@@ -8823,10 +9581,12 @@ export namespace Prisma {
 
   export type LivelihoodProgramCountOutputType = {
     assignments: number
+    programManagers: number
   }
 
   export type LivelihoodProgramCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgramCountOutputTypeCountAssignmentsArgs
+    programManagers?: boolean | LivelihoodProgramCountOutputTypeCountProgramManagersArgs
   }
 
   // Custom InputTypes
@@ -8845,6 +9605,13 @@ export namespace Prisma {
    */
   export type LivelihoodProgramCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BeneficiaryLivelihoodWhereInput
+  }
+
+  /**
+   * LivelihoodProgramCountOutputType without action
+   */
+  export type LivelihoodProgramCountOutputTypeCountProgramManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerLivelihoodProgramWhereInput
   }
 
 
@@ -9254,6 +10021,7 @@ export namespace Prisma {
     learningAssessments: number
     homeworkRecords: number
     assessmentForms: number
+    programManagers: number
   }
 
   export type AfterSchoolCentreCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9263,6 +10031,7 @@ export namespace Prisma {
     learningAssessments?: boolean | AfterSchoolCentreCountOutputTypeCountLearningAssessmentsArgs
     homeworkRecords?: boolean | AfterSchoolCentreCountOutputTypeCountHomeworkRecordsArgs
     assessmentForms?: boolean | AfterSchoolCentreCountOutputTypeCountAssessmentFormsArgs
+    programManagers?: boolean | AfterSchoolCentreCountOutputTypeCountProgramManagersArgs
   }
 
   // Custom InputTypes
@@ -9316,6 +10085,13 @@ export namespace Prisma {
    */
   export type AfterSchoolCentreCountOutputTypeCountAssessmentFormsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AfterSchoolAssessmentFormWhereInput
+  }
+
+  /**
+   * AfterSchoolCentreCountOutputType without action
+   */
+  export type AfterSchoolCentreCountOutputTypeCountProgramManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerAfterSchoolCentreWhereInput
   }
 
 
@@ -10609,6 +11385,10 @@ export namespace Prisma {
     roleId: string | null
     status: $Enums.UserStatus | null
     department: string | null
+    dob: Date | null
+    gender: string | null
+    address: string | null
+    avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
     createdAt: Date | null
@@ -10625,6 +11405,10 @@ export namespace Prisma {
     roleId: string | null
     status: $Enums.UserStatus | null
     department: string | null
+    dob: Date | null
+    gender: string | null
+    address: string | null
+    avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
     createdAt: Date | null
@@ -10641,6 +11425,10 @@ export namespace Prisma {
     roleId: number
     status: number
     department: number
+    dob: number
+    gender: number
+    address: number
+    avatar: number
     leavesTaken: number
     leavesRemaining: number
     createdAt: number
@@ -10669,6 +11457,10 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    dob?: true
+    gender?: true
+    address?: true
+    avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -10685,6 +11477,10 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    dob?: true
+    gender?: true
+    address?: true
+    avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -10701,6 +11497,10 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    dob?: true
+    gender?: true
+    address?: true
+    avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -10804,6 +11604,10 @@ export namespace Prisma {
     roleId: string
     status: $Enums.UserStatus
     department: string | null
+    dob: Date | null
+    gender: string | null
+    address: string | null
+    avatar: string | null
     leavesTaken: number
     leavesRemaining: number
     createdAt: Date
@@ -10839,6 +11643,10 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    dob?: boolean
+    gender?: boolean
+    address?: boolean
+    avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -10854,6 +11662,13 @@ export namespace Prisma {
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
     pmReflections?: boolean | User$pmReflectionsArgs<ExtArgs>
+    individualFeedback?: boolean | User$individualFeedbackArgs<ExtArgs>
+    performanceObservations?: boolean | User$performanceObservationsArgs<ExtArgs>
+    managedSchools?: boolean | User$managedSchoolsArgs<ExtArgs>
+    managedCentres?: boolean | User$managedCentresArgs<ExtArgs>
+    managedLivelihoodPrograms?: boolean | User$managedLivelihoodProgramsArgs<ExtArgs>
+    pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
+    pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -10867,6 +11682,10 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    dob?: boolean
+    gender?: boolean
+    address?: boolean
+    avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -10884,6 +11703,10 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    dob?: boolean
+    gender?: boolean
+    address?: boolean
+    avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -10901,13 +11724,17 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    dob?: boolean
+    gender?: boolean
+    address?: boolean
+    avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "dob" | "gender" | "address" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
@@ -10920,6 +11747,13 @@ export namespace Prisma {
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
     pmReflections?: boolean | User$pmReflectionsArgs<ExtArgs>
+    individualFeedback?: boolean | User$individualFeedbackArgs<ExtArgs>
+    performanceObservations?: boolean | User$performanceObservationsArgs<ExtArgs>
+    managedSchools?: boolean | User$managedSchoolsArgs<ExtArgs>
+    managedCentres?: boolean | User$managedCentresArgs<ExtArgs>
+    managedLivelihoodPrograms?: boolean | User$managedLivelihoodProgramsArgs<ExtArgs>
+    pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
+    pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10943,6 +11777,13 @@ export namespace Prisma {
       approvedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
       coachingRecords: Prisma.$CoachingRecordPayload<ExtArgs>[]
       pmReflections: Prisma.$PMReflectionPayload<ExtArgs>[]
+      individualFeedback: Prisma.$IndividualFeedbackPayload<ExtArgs>[]
+      performanceObservations: Prisma.$FellowPerformancePayload<ExtArgs>[]
+      managedSchools: Prisma.$ProgramManagerSchoolPayload<ExtArgs>[]
+      managedCentres: Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>[]
+      managedLivelihoodPrograms: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
+      pmTasks: Prisma.$ProgramManagerTaskPayload<ExtArgs>[]
+      pmTaskComments: Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10954,6 +11795,10 @@ export namespace Prisma {
       roleId: string
       status: $Enums.UserStatus
       department: string | null
+      dob: Date | null
+      gender: string | null
+      address: string | null
+      avatar: string | null
       leavesTaken: number
       leavesRemaining: number
       createdAt: Date
@@ -11363,6 +12208,13 @@ export namespace Prisma {
     approvedTravel<T extends User$approvedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     coachingRecords<T extends User$coachingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$coachingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoachingRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmReflections<T extends User$pmReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pmReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PMReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    individualFeedback<T extends User$individualFeedbackArgs<ExtArgs> = {}>(args?: Subset<T, User$individualFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    performanceObservations<T extends User$performanceObservationsArgs<ExtArgs> = {}>(args?: Subset<T, User$performanceObservationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    managedSchools<T extends User$managedSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, User$managedSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    managedCentres<T extends User$managedCentresArgs<ExtArgs> = {}>(args?: Subset<T, User$managedCentresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    managedLivelihoodPrograms<T extends User$managedLivelihoodProgramsArgs<ExtArgs> = {}>(args?: Subset<T, User$managedLivelihoodProgramsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pmTasks<T extends User$pmTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pmTaskComments<T extends User$pmTaskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTaskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11401,6 +12253,10 @@ export namespace Prisma {
     readonly roleId: FieldRef<"User", 'String'>
     readonly status: FieldRef<"User", 'UserStatus'>
     readonly department: FieldRef<"User", 'String'>
+    readonly dob: FieldRef<"User", 'DateTime'>
+    readonly gender: FieldRef<"User", 'String'>
+    readonly address: FieldRef<"User", 'String'>
+    readonly avatar: FieldRef<"User", 'String'>
     readonly leavesTaken: FieldRef<"User", 'Int'>
     readonly leavesRemaining: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -12038,6 +12894,174 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PMReflectionScalarFieldEnum | PMReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * User.individualFeedback
+   */
+  export type User$individualFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    where?: IndividualFeedbackWhereInput
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    cursor?: IndividualFeedbackWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IndividualFeedbackScalarFieldEnum | IndividualFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * User.performanceObservations
+   */
+  export type User$performanceObservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    where?: FellowPerformanceWhereInput
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    cursor?: FellowPerformanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowPerformanceScalarFieldEnum | FellowPerformanceScalarFieldEnum[]
+  }
+
+  /**
+   * User.managedSchools
+   */
+  export type User$managedSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    where?: ProgramManagerSchoolWhereInput
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerSchoolScalarFieldEnum | ProgramManagerSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * User.managedCentres
+   */
+  export type User$managedCentresArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerAfterSchoolCentreScalarFieldEnum | ProgramManagerAfterSchoolCentreScalarFieldEnum[]
+  }
+
+  /**
+   * User.managedLivelihoodPrograms
+   */
+  export type User$managedLivelihoodProgramsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * User.pmTasks
+   */
+  export type User$pmTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    where?: ProgramManagerTaskWhereInput
+    orderBy?: ProgramManagerTaskOrderByWithRelationInput | ProgramManagerTaskOrderByWithRelationInput[]
+    cursor?: ProgramManagerTaskWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerTaskScalarFieldEnum | ProgramManagerTaskScalarFieldEnum[]
+  }
+
+  /**
+   * User.pmTaskComments
+   */
+  export type User$pmTaskCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    where?: ProgramManagerTaskCommentWhereInput
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerTaskCommentScalarFieldEnum | ProgramManagerTaskCommentScalarFieldEnum[]
   }
 
   /**
@@ -15622,6 +16646,7 @@ export namespace Prisma {
     learningAssessments?: boolean | School$learningAssessmentsArgs<ExtArgs>
     homeworkRecords?: boolean | School$homeworkRecordsArgs<ExtArgs>
     assessmentForms?: boolean | School$assessmentFormsArgs<ExtArgs>
+    programManagers?: boolean | School$programManagersArgs<ExtArgs>
     _count?: boolean | SchoolCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["school"]>
 
@@ -15690,6 +16715,7 @@ export namespace Prisma {
     learningAssessments?: boolean | School$learningAssessmentsArgs<ExtArgs>
     homeworkRecords?: boolean | School$homeworkRecordsArgs<ExtArgs>
     assessmentForms?: boolean | School$assessmentFormsArgs<ExtArgs>
+    programManagers?: boolean | School$programManagersArgs<ExtArgs>
     _count?: boolean | SchoolCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SchoolIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -15704,6 +16730,7 @@ export namespace Prisma {
       learningAssessments: Prisma.$LearningAssessmentPayload<ExtArgs>[]
       homeworkRecords: Prisma.$StudentHomeworkPayload<ExtArgs>[]
       assessmentForms: Prisma.$AssessmentFormPayload<ExtArgs>[]
+      programManagers: Prisma.$ProgramManagerSchoolPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -16122,6 +17149,7 @@ export namespace Prisma {
     learningAssessments<T extends School$learningAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, School$learningAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LearningAssessmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     homeworkRecords<T extends School$homeworkRecordsArgs<ExtArgs> = {}>(args?: Subset<T, School$homeworkRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentHomeworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assessmentForms<T extends School$assessmentFormsArgs<ExtArgs> = {}>(args?: Subset<T, School$assessmentFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssessmentFormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programManagers<T extends School$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, School$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16704,6 +17732,30 @@ export namespace Prisma {
   }
 
   /**
+   * School.programManagers
+   */
+  export type School$programManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    where?: ProgramManagerSchoolWhereInput
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerSchoolScalarFieldEnum | ProgramManagerSchoolScalarFieldEnum[]
+  }
+
+  /**
    * School without action
    */
   export type SchoolDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17007,6 +18059,8 @@ export namespace Prisma {
     engagementSurveys?: boolean | Fellow$engagementSurveysArgs<ExtArgs>
     lookBeyondSurveys?: boolean | Fellow$lookBeyondSurveysArgs<ExtArgs>
     pmReflections?: boolean | Fellow$pmReflectionsArgs<ExtArgs>
+    individualFeedback?: boolean | Fellow$individualFeedbackArgs<ExtArgs>
+    performanceObservations?: boolean | Fellow$performanceObservationsArgs<ExtArgs>
     afterSchoolCentres?: boolean | Fellow$afterSchoolCentresArgs<ExtArgs>
     afterSchoolStudents?: boolean | Fellow$afterSchoolStudentsArgs<ExtArgs>
     afterSchoolAssessmentForms?: boolean | Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>
@@ -17080,6 +18134,8 @@ export namespace Prisma {
     engagementSurveys?: boolean | Fellow$engagementSurveysArgs<ExtArgs>
     lookBeyondSurveys?: boolean | Fellow$lookBeyondSurveysArgs<ExtArgs>
     pmReflections?: boolean | Fellow$pmReflectionsArgs<ExtArgs>
+    individualFeedback?: boolean | Fellow$individualFeedbackArgs<ExtArgs>
+    performanceObservations?: boolean | Fellow$performanceObservationsArgs<ExtArgs>
     afterSchoolCentres?: boolean | Fellow$afterSchoolCentresArgs<ExtArgs>
     afterSchoolStudents?: boolean | Fellow$afterSchoolStudentsArgs<ExtArgs>
     afterSchoolAssessmentForms?: boolean | Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>
@@ -17107,6 +18163,8 @@ export namespace Prisma {
       engagementSurveys: Prisma.$EngagementSurveyPayload<ExtArgs>[]
       lookBeyondSurveys: Prisma.$LookBeyondSurveyPayload<ExtArgs>[]
       pmReflections: Prisma.$PMReflectionPayload<ExtArgs>[]
+      individualFeedback: Prisma.$IndividualFeedbackPayload<ExtArgs>[]
+      performanceObservations: Prisma.$FellowPerformancePayload<ExtArgs>[]
       afterSchoolCentres: Prisma.$FellowAfterSchoolCentrePayload<ExtArgs>[]
       afterSchoolStudents: Prisma.$AfterSchoolStudentPayload<ExtArgs>[]
       afterSchoolAssessmentForms: Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>[]
@@ -17532,6 +18590,8 @@ export namespace Prisma {
     engagementSurveys<T extends Fellow$engagementSurveysArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$engagementSurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EngagementSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     lookBeyondSurveys<T extends Fellow$lookBeyondSurveysArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$lookBeyondSurveysArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LookBeyondSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmReflections<T extends Fellow$pmReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$pmReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PMReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    individualFeedback<T extends Fellow$individualFeedbackArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$individualFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    performanceObservations<T extends Fellow$performanceObservationsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$performanceObservationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     afterSchoolCentres<T extends Fellow$afterSchoolCentresArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$afterSchoolCentresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowAfterSchoolCentrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     afterSchoolStudents<T extends Fellow$afterSchoolStudentsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$afterSchoolStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     afterSchoolAssessmentForms<T extends Fellow$afterSchoolAssessmentFormsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18236,6 +19296,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PMReflectionScalarFieldEnum | PMReflectionScalarFieldEnum[]
+  }
+
+  /**
+   * Fellow.individualFeedback
+   */
+  export type Fellow$individualFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    where?: IndividualFeedbackWhereInput
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    cursor?: IndividualFeedbackWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: IndividualFeedbackScalarFieldEnum | IndividualFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * Fellow.performanceObservations
+   */
+  export type Fellow$performanceObservationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    where?: FellowPerformanceWhereInput
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    cursor?: FellowPerformanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowPerformanceScalarFieldEnum | FellowPerformanceScalarFieldEnum[]
   }
 
   /**
@@ -20563,6 +21671,1287 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PMReflectionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FellowPerformance
+   */
+
+  export type AggregateFellowPerformance = {
+    _count: FellowPerformanceCountAggregateOutputType | null
+    _avg: FellowPerformanceAvgAggregateOutputType | null
+    _sum: FellowPerformanceSumAggregateOutputType | null
+    _min: FellowPerformanceMinAggregateOutputType | null
+    _max: FellowPerformanceMaxAggregateOutputType | null
+  }
+
+  export type FellowPerformanceAvgAggregateOutputType = {
+    lessonPlan: number | null
+    culture: number | null
+    lessonFlow: number | null
+    content: number | null
+    communityEngagement: number | null
+    overallScore: number | null
+  }
+
+  export type FellowPerformanceSumAggregateOutputType = {
+    lessonPlan: number | null
+    culture: number | null
+    lessonFlow: number | null
+    content: number | null
+    communityEngagement: number | null
+    overallScore: number | null
+  }
+
+  export type FellowPerformanceMinAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    date: Date | null
+    classGroup: string | null
+    subject: string | null
+    lessonPlan: number | null
+    culture: number | null
+    lessonFlow: number | null
+    content: number | null
+    communityEngagement: number | null
+    overallScore: number | null
+    strength: string | null
+    aod: string | null
+    trend: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowPerformanceMaxAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    date: Date | null
+    classGroup: string | null
+    subject: string | null
+    lessonPlan: number | null
+    culture: number | null
+    lessonFlow: number | null
+    content: number | null
+    communityEngagement: number | null
+    overallScore: number | null
+    strength: string | null
+    aod: string | null
+    trend: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FellowPerformanceCountAggregateOutputType = {
+    id: number
+    fellowId: number
+    date: number
+    classGroup: number
+    subject: number
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength: number
+    aod: number
+    trend: number
+    authorId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FellowPerformanceAvgAggregateInputType = {
+    lessonPlan?: true
+    culture?: true
+    lessonFlow?: true
+    content?: true
+    communityEngagement?: true
+    overallScore?: true
+  }
+
+  export type FellowPerformanceSumAggregateInputType = {
+    lessonPlan?: true
+    culture?: true
+    lessonFlow?: true
+    content?: true
+    communityEngagement?: true
+    overallScore?: true
+  }
+
+  export type FellowPerformanceMinAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classGroup?: true
+    subject?: true
+    lessonPlan?: true
+    culture?: true
+    lessonFlow?: true
+    content?: true
+    communityEngagement?: true
+    overallScore?: true
+    strength?: true
+    aod?: true
+    trend?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowPerformanceMaxAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classGroup?: true
+    subject?: true
+    lessonPlan?: true
+    culture?: true
+    lessonFlow?: true
+    content?: true
+    communityEngagement?: true
+    overallScore?: true
+    strength?: true
+    aod?: true
+    trend?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FellowPerformanceCountAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classGroup?: true
+    subject?: true
+    lessonPlan?: true
+    culture?: true
+    lessonFlow?: true
+    content?: true
+    communityEngagement?: true
+    overallScore?: true
+    strength?: true
+    aod?: true
+    trend?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FellowPerformanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowPerformance to aggregate.
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowPerformances to fetch.
+     */
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FellowPerformanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowPerformances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowPerformances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FellowPerformances
+    **/
+    _count?: true | FellowPerformanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FellowPerformanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FellowPerformanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FellowPerformanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FellowPerformanceMaxAggregateInputType
+  }
+
+  export type GetFellowPerformanceAggregateType<T extends FellowPerformanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateFellowPerformance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFellowPerformance[P]>
+      : GetScalarType<T[P], AggregateFellowPerformance[P]>
+  }
+
+
+
+
+  export type FellowPerformanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowPerformanceWhereInput
+    orderBy?: FellowPerformanceOrderByWithAggregationInput | FellowPerformanceOrderByWithAggregationInput[]
+    by: FellowPerformanceScalarFieldEnum[] | FellowPerformanceScalarFieldEnum
+    having?: FellowPerformanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FellowPerformanceCountAggregateInputType | true
+    _avg?: FellowPerformanceAvgAggregateInputType
+    _sum?: FellowPerformanceSumAggregateInputType
+    _min?: FellowPerformanceMinAggregateInputType
+    _max?: FellowPerformanceMaxAggregateInputType
+  }
+
+  export type FellowPerformanceGroupByOutputType = {
+    id: string
+    fellowId: string
+    date: Date
+    classGroup: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength: string | null
+    aod: string | null
+    trend: string | null
+    authorId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FellowPerformanceCountAggregateOutputType | null
+    _avg: FellowPerformanceAvgAggregateOutputType | null
+    _sum: FellowPerformanceSumAggregateOutputType | null
+    _min: FellowPerformanceMinAggregateOutputType | null
+    _max: FellowPerformanceMaxAggregateOutputType | null
+  }
+
+  type GetFellowPerformanceGroupByPayload<T extends FellowPerformanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FellowPerformanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FellowPerformanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FellowPerformanceGroupByOutputType[P]>
+            : GetScalarType<T[P], FellowPerformanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FellowPerformanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    lessonPlan?: boolean
+    culture?: boolean
+    lessonFlow?: boolean
+    content?: boolean
+    communityEngagement?: boolean
+    overallScore?: boolean
+    strength?: boolean
+    aod?: boolean
+    trend?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowPerformance"]>
+
+  export type FellowPerformanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    lessonPlan?: boolean
+    culture?: boolean
+    lessonFlow?: boolean
+    content?: boolean
+    communityEngagement?: boolean
+    overallScore?: boolean
+    strength?: boolean
+    aod?: boolean
+    trend?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowPerformance"]>
+
+  export type FellowPerformanceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    lessonPlan?: boolean
+    culture?: boolean
+    lessonFlow?: boolean
+    content?: boolean
+    communityEngagement?: boolean
+    overallScore?: boolean
+    strength?: boolean
+    aod?: boolean
+    trend?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowPerformance"]>
+
+  export type FellowPerformanceSelectScalar = {
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    lessonPlan?: boolean
+    culture?: boolean
+    lessonFlow?: boolean
+    content?: boolean
+    communityEngagement?: boolean
+    overallScore?: boolean
+    strength?: boolean
+    aod?: boolean
+    trend?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FellowPerformanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "date" | "classGroup" | "subject" | "lessonPlan" | "culture" | "lessonFlow" | "content" | "communityEngagement" | "overallScore" | "strength" | "aod" | "trend" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowPerformance"]>
+  export type FellowPerformanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FellowPerformanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FellowPerformanceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FellowPerformancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FellowPerformance"
+    objects: {
+      fellow: Prisma.$FellowPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fellowId: string
+      date: Date
+      classGroup: string | null
+      subject: string
+      lessonPlan: number
+      culture: number
+      lessonFlow: number
+      content: number
+      communityEngagement: number
+      overallScore: number
+      strength: string | null
+      aod: string | null
+      trend: string | null
+      authorId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fellowPerformance"]>
+    composites: {}
+  }
+
+  type FellowPerformanceGetPayload<S extends boolean | null | undefined | FellowPerformanceDefaultArgs> = $Result.GetResult<Prisma.$FellowPerformancePayload, S>
+
+  type FellowPerformanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FellowPerformanceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FellowPerformanceCountAggregateInputType | true
+    }
+
+  export interface FellowPerformanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FellowPerformance'], meta: { name: 'FellowPerformance' } }
+    /**
+     * Find zero or one FellowPerformance that matches the filter.
+     * @param {FellowPerformanceFindUniqueArgs} args - Arguments to find a FellowPerformance
+     * @example
+     * // Get one FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FellowPerformanceFindUniqueArgs>(args: SelectSubset<T, FellowPerformanceFindUniqueArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FellowPerformance that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FellowPerformanceFindUniqueOrThrowArgs} args - Arguments to find a FellowPerformance
+     * @example
+     * // Get one FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FellowPerformanceFindUniqueOrThrowArgs>(args: SelectSubset<T, FellowPerformanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowPerformance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceFindFirstArgs} args - Arguments to find a FellowPerformance
+     * @example
+     * // Get one FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FellowPerformanceFindFirstArgs>(args?: SelectSubset<T, FellowPerformanceFindFirstArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowPerformance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceFindFirstOrThrowArgs} args - Arguments to find a FellowPerformance
+     * @example
+     * // Get one FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FellowPerformanceFindFirstOrThrowArgs>(args?: SelectSubset<T, FellowPerformanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FellowPerformances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FellowPerformances
+     * const fellowPerformances = await prisma.fellowPerformance.findMany()
+     * 
+     * // Get first 10 FellowPerformances
+     * const fellowPerformances = await prisma.fellowPerformance.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fellowPerformanceWithIdOnly = await prisma.fellowPerformance.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FellowPerformanceFindManyArgs>(args?: SelectSubset<T, FellowPerformanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FellowPerformance.
+     * @param {FellowPerformanceCreateArgs} args - Arguments to create a FellowPerformance.
+     * @example
+     * // Create one FellowPerformance
+     * const FellowPerformance = await prisma.fellowPerformance.create({
+     *   data: {
+     *     // ... data to create a FellowPerformance
+     *   }
+     * })
+     * 
+     */
+    create<T extends FellowPerformanceCreateArgs>(args: SelectSubset<T, FellowPerformanceCreateArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FellowPerformances.
+     * @param {FellowPerformanceCreateManyArgs} args - Arguments to create many FellowPerformances.
+     * @example
+     * // Create many FellowPerformances
+     * const fellowPerformance = await prisma.fellowPerformance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FellowPerformanceCreateManyArgs>(args?: SelectSubset<T, FellowPerformanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FellowPerformances and returns the data saved in the database.
+     * @param {FellowPerformanceCreateManyAndReturnArgs} args - Arguments to create many FellowPerformances.
+     * @example
+     * // Create many FellowPerformances
+     * const fellowPerformance = await prisma.fellowPerformance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FellowPerformances and only return the `id`
+     * const fellowPerformanceWithIdOnly = await prisma.fellowPerformance.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FellowPerformanceCreateManyAndReturnArgs>(args?: SelectSubset<T, FellowPerformanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FellowPerformance.
+     * @param {FellowPerformanceDeleteArgs} args - Arguments to delete one FellowPerformance.
+     * @example
+     * // Delete one FellowPerformance
+     * const FellowPerformance = await prisma.fellowPerformance.delete({
+     *   where: {
+     *     // ... filter to delete one FellowPerformance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FellowPerformanceDeleteArgs>(args: SelectSubset<T, FellowPerformanceDeleteArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FellowPerformance.
+     * @param {FellowPerformanceUpdateArgs} args - Arguments to update one FellowPerformance.
+     * @example
+     * // Update one FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FellowPerformanceUpdateArgs>(args: SelectSubset<T, FellowPerformanceUpdateArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FellowPerformances.
+     * @param {FellowPerformanceDeleteManyArgs} args - Arguments to filter FellowPerformances to delete.
+     * @example
+     * // Delete a few FellowPerformances
+     * const { count } = await prisma.fellowPerformance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FellowPerformanceDeleteManyArgs>(args?: SelectSubset<T, FellowPerformanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowPerformances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FellowPerformances
+     * const fellowPerformance = await prisma.fellowPerformance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FellowPerformanceUpdateManyArgs>(args: SelectSubset<T, FellowPerformanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowPerformances and returns the data updated in the database.
+     * @param {FellowPerformanceUpdateManyAndReturnArgs} args - Arguments to update many FellowPerformances.
+     * @example
+     * // Update many FellowPerformances
+     * const fellowPerformance = await prisma.fellowPerformance.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FellowPerformances and only return the `id`
+     * const fellowPerformanceWithIdOnly = await prisma.fellowPerformance.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FellowPerformanceUpdateManyAndReturnArgs>(args: SelectSubset<T, FellowPerformanceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FellowPerformance.
+     * @param {FellowPerformanceUpsertArgs} args - Arguments to update or create a FellowPerformance.
+     * @example
+     * // Update or create a FellowPerformance
+     * const fellowPerformance = await prisma.fellowPerformance.upsert({
+     *   create: {
+     *     // ... data to create a FellowPerformance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FellowPerformance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FellowPerformanceUpsertArgs>(args: SelectSubset<T, FellowPerformanceUpsertArgs<ExtArgs>>): Prisma__FellowPerformanceClient<$Result.GetResult<Prisma.$FellowPerformancePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FellowPerformances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceCountArgs} args - Arguments to filter FellowPerformances to count.
+     * @example
+     * // Count the number of FellowPerformances
+     * const count = await prisma.fellowPerformance.count({
+     *   where: {
+     *     // ... the filter for the FellowPerformances we want to count
+     *   }
+     * })
+    **/
+    count<T extends FellowPerformanceCountArgs>(
+      args?: Subset<T, FellowPerformanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FellowPerformanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FellowPerformance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FellowPerformanceAggregateArgs>(args: Subset<T, FellowPerformanceAggregateArgs>): Prisma.PrismaPromise<GetFellowPerformanceAggregateType<T>>
+
+    /**
+     * Group by FellowPerformance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowPerformanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FellowPerformanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FellowPerformanceGroupByArgs['orderBy'] }
+        : { orderBy?: FellowPerformanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FellowPerformanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFellowPerformanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FellowPerformance model
+   */
+  readonly fields: FellowPerformanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FellowPerformance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FellowPerformanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fellow<T extends FellowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FellowDefaultArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FellowPerformance model
+   */
+  interface FellowPerformanceFieldRefs {
+    readonly id: FieldRef<"FellowPerformance", 'String'>
+    readonly fellowId: FieldRef<"FellowPerformance", 'String'>
+    readonly date: FieldRef<"FellowPerformance", 'DateTime'>
+    readonly classGroup: FieldRef<"FellowPerformance", 'String'>
+    readonly subject: FieldRef<"FellowPerformance", 'String'>
+    readonly lessonPlan: FieldRef<"FellowPerformance", 'Int'>
+    readonly culture: FieldRef<"FellowPerformance", 'Int'>
+    readonly lessonFlow: FieldRef<"FellowPerformance", 'Int'>
+    readonly content: FieldRef<"FellowPerformance", 'Int'>
+    readonly communityEngagement: FieldRef<"FellowPerformance", 'Int'>
+    readonly overallScore: FieldRef<"FellowPerformance", 'Float'>
+    readonly strength: FieldRef<"FellowPerformance", 'String'>
+    readonly aod: FieldRef<"FellowPerformance", 'String'>
+    readonly trend: FieldRef<"FellowPerformance", 'String'>
+    readonly authorId: FieldRef<"FellowPerformance", 'String'>
+    readonly createdAt: FieldRef<"FellowPerformance", 'DateTime'>
+    readonly updatedAt: FieldRef<"FellowPerformance", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FellowPerformance findUnique
+   */
+  export type FellowPerformanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowPerformance to fetch.
+     */
+    where: FellowPerformanceWhereUniqueInput
+  }
+
+  /**
+   * FellowPerformance findUniqueOrThrow
+   */
+  export type FellowPerformanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowPerformance to fetch.
+     */
+    where: FellowPerformanceWhereUniqueInput
+  }
+
+  /**
+   * FellowPerformance findFirst
+   */
+  export type FellowPerformanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowPerformance to fetch.
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowPerformances to fetch.
+     */
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowPerformances.
+     */
+    cursor?: FellowPerformanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowPerformances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowPerformances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowPerformances.
+     */
+    distinct?: FellowPerformanceScalarFieldEnum | FellowPerformanceScalarFieldEnum[]
+  }
+
+  /**
+   * FellowPerformance findFirstOrThrow
+   */
+  export type FellowPerformanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowPerformance to fetch.
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowPerformances to fetch.
+     */
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowPerformances.
+     */
+    cursor?: FellowPerformanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowPerformances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowPerformances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowPerformances.
+     */
+    distinct?: FellowPerformanceScalarFieldEnum | FellowPerformanceScalarFieldEnum[]
+  }
+
+  /**
+   * FellowPerformance findMany
+   */
+  export type FellowPerformanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowPerformances to fetch.
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowPerformances to fetch.
+     */
+    orderBy?: FellowPerformanceOrderByWithRelationInput | FellowPerformanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FellowPerformances.
+     */
+    cursor?: FellowPerformanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowPerformances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowPerformances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowPerformances.
+     */
+    distinct?: FellowPerformanceScalarFieldEnum | FellowPerformanceScalarFieldEnum[]
+  }
+
+  /**
+   * FellowPerformance create
+   */
+  export type FellowPerformanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FellowPerformance.
+     */
+    data: XOR<FellowPerformanceCreateInput, FellowPerformanceUncheckedCreateInput>
+  }
+
+  /**
+   * FellowPerformance createMany
+   */
+  export type FellowPerformanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FellowPerformances.
+     */
+    data: FellowPerformanceCreateManyInput | FellowPerformanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FellowPerformance createManyAndReturn
+   */
+  export type FellowPerformanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * The data used to create many FellowPerformances.
+     */
+    data: FellowPerformanceCreateManyInput | FellowPerformanceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowPerformance update
+   */
+  export type FellowPerformanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FellowPerformance.
+     */
+    data: XOR<FellowPerformanceUpdateInput, FellowPerformanceUncheckedUpdateInput>
+    /**
+     * Choose, which FellowPerformance to update.
+     */
+    where: FellowPerformanceWhereUniqueInput
+  }
+
+  /**
+   * FellowPerformance updateMany
+   */
+  export type FellowPerformanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FellowPerformances.
+     */
+    data: XOR<FellowPerformanceUpdateManyMutationInput, FellowPerformanceUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowPerformances to update
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * Limit how many FellowPerformances to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowPerformance updateManyAndReturn
+   */
+  export type FellowPerformanceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * The data used to update FellowPerformances.
+     */
+    data: XOR<FellowPerformanceUpdateManyMutationInput, FellowPerformanceUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowPerformances to update
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * Limit how many FellowPerformances to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowPerformance upsert
+   */
+  export type FellowPerformanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FellowPerformance to update in case it exists.
+     */
+    where: FellowPerformanceWhereUniqueInput
+    /**
+     * In case the FellowPerformance found by the `where` argument doesn't exist, create a new FellowPerformance with this data.
+     */
+    create: XOR<FellowPerformanceCreateInput, FellowPerformanceUncheckedCreateInput>
+    /**
+     * In case the FellowPerformance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FellowPerformanceUpdateInput, FellowPerformanceUncheckedUpdateInput>
+  }
+
+  /**
+   * FellowPerformance delete
+   */
+  export type FellowPerformanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
+    /**
+     * Filter which FellowPerformance to delete.
+     */
+    where: FellowPerformanceWhereUniqueInput
+  }
+
+  /**
+   * FellowPerformance deleteMany
+   */
+  export type FellowPerformanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowPerformances to delete
+     */
+    where?: FellowPerformanceWhereInput
+    /**
+     * Limit how many FellowPerformances to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowPerformance without action
+   */
+  export type FellowPerformanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowPerformance
+     */
+    select?: FellowPerformanceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowPerformance
+     */
+    omit?: FellowPerformanceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowPerformanceInclude<ExtArgs> | null
   }
 
 
@@ -33361,6 +35750,5422 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProgramInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgramManagerSchool
+   */
+
+  export type AggregateProgramManagerSchool = {
+    _count: ProgramManagerSchoolCountAggregateOutputType | null
+    _min: ProgramManagerSchoolMinAggregateOutputType | null
+    _max: ProgramManagerSchoolMaxAggregateOutputType | null
+  }
+
+  export type ProgramManagerSchoolMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    schoolId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerSchoolMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    schoolId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerSchoolCountAggregateOutputType = {
+    id: number
+    userId: number
+    schoolId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProgramManagerSchoolMinAggregateInputType = {
+    id?: true
+    userId?: true
+    schoolId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerSchoolMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    schoolId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerSchoolCountAggregateInputType = {
+    id?: true
+    userId?: true
+    schoolId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProgramManagerSchoolAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerSchool to aggregate.
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerSchools to fetch.
+     */
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgramManagerSchools
+    **/
+    _count?: true | ProgramManagerSchoolCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgramManagerSchoolMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgramManagerSchoolMaxAggregateInputType
+  }
+
+  export type GetProgramManagerSchoolAggregateType<T extends ProgramManagerSchoolAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgramManagerSchool]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgramManagerSchool[P]>
+      : GetScalarType<T[P], AggregateProgramManagerSchool[P]>
+  }
+
+
+
+
+  export type ProgramManagerSchoolGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerSchoolWhereInput
+    orderBy?: ProgramManagerSchoolOrderByWithAggregationInput | ProgramManagerSchoolOrderByWithAggregationInput[]
+    by: ProgramManagerSchoolScalarFieldEnum[] | ProgramManagerSchoolScalarFieldEnum
+    having?: ProgramManagerSchoolScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgramManagerSchoolCountAggregateInputType | true
+    _min?: ProgramManagerSchoolMinAggregateInputType
+    _max?: ProgramManagerSchoolMaxAggregateInputType
+  }
+
+  export type ProgramManagerSchoolGroupByOutputType = {
+    id: string
+    userId: string
+    schoolId: string
+    createdAt: Date
+    _count: ProgramManagerSchoolCountAggregateOutputType | null
+    _min: ProgramManagerSchoolMinAggregateOutputType | null
+    _max: ProgramManagerSchoolMaxAggregateOutputType | null
+  }
+
+  type GetProgramManagerSchoolGroupByPayload<T extends ProgramManagerSchoolGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgramManagerSchoolGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgramManagerSchoolGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgramManagerSchoolGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgramManagerSchoolGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgramManagerSchoolSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    schoolId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerSchool"]>
+
+  export type ProgramManagerSchoolSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    schoolId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerSchool"]>
+
+  export type ProgramManagerSchoolSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    schoolId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerSchool"]>
+
+  export type ProgramManagerSchoolSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    schoolId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProgramManagerSchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "schoolId" | "createdAt", ExtArgs["result"]["programManagerSchool"]>
+  export type ProgramManagerSchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerSchoolIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerSchoolIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgramManagerSchoolPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgramManagerSchool"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      school: Prisma.$SchoolPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      schoolId: string
+      createdAt: Date
+    }, ExtArgs["result"]["programManagerSchool"]>
+    composites: {}
+  }
+
+  type ProgramManagerSchoolGetPayload<S extends boolean | null | undefined | ProgramManagerSchoolDefaultArgs> = $Result.GetResult<Prisma.$ProgramManagerSchoolPayload, S>
+
+  type ProgramManagerSchoolCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgramManagerSchoolFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgramManagerSchoolCountAggregateInputType | true
+    }
+
+  export interface ProgramManagerSchoolDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgramManagerSchool'], meta: { name: 'ProgramManagerSchool' } }
+    /**
+     * Find zero or one ProgramManagerSchool that matches the filter.
+     * @param {ProgramManagerSchoolFindUniqueArgs} args - Arguments to find a ProgramManagerSchool
+     * @example
+     * // Get one ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgramManagerSchoolFindUniqueArgs>(args: SelectSubset<T, ProgramManagerSchoolFindUniqueArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgramManagerSchool that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgramManagerSchoolFindUniqueOrThrowArgs} args - Arguments to find a ProgramManagerSchool
+     * @example
+     * // Get one ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgramManagerSchoolFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgramManagerSchoolFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerSchool that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolFindFirstArgs} args - Arguments to find a ProgramManagerSchool
+     * @example
+     * // Get one ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgramManagerSchoolFindFirstArgs>(args?: SelectSubset<T, ProgramManagerSchoolFindFirstArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerSchool that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolFindFirstOrThrowArgs} args - Arguments to find a ProgramManagerSchool
+     * @example
+     * // Get one ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgramManagerSchoolFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgramManagerSchoolFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgramManagerSchools that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgramManagerSchools
+     * const programManagerSchools = await prisma.programManagerSchool.findMany()
+     * 
+     * // Get first 10 ProgramManagerSchools
+     * const programManagerSchools = await prisma.programManagerSchool.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programManagerSchoolWithIdOnly = await prisma.programManagerSchool.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgramManagerSchoolFindManyArgs>(args?: SelectSubset<T, ProgramManagerSchoolFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgramManagerSchool.
+     * @param {ProgramManagerSchoolCreateArgs} args - Arguments to create a ProgramManagerSchool.
+     * @example
+     * // Create one ProgramManagerSchool
+     * const ProgramManagerSchool = await prisma.programManagerSchool.create({
+     *   data: {
+     *     // ... data to create a ProgramManagerSchool
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgramManagerSchoolCreateArgs>(args: SelectSubset<T, ProgramManagerSchoolCreateArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgramManagerSchools.
+     * @param {ProgramManagerSchoolCreateManyArgs} args - Arguments to create many ProgramManagerSchools.
+     * @example
+     * // Create many ProgramManagerSchools
+     * const programManagerSchool = await prisma.programManagerSchool.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgramManagerSchoolCreateManyArgs>(args?: SelectSubset<T, ProgramManagerSchoolCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgramManagerSchools and returns the data saved in the database.
+     * @param {ProgramManagerSchoolCreateManyAndReturnArgs} args - Arguments to create many ProgramManagerSchools.
+     * @example
+     * // Create many ProgramManagerSchools
+     * const programManagerSchool = await prisma.programManagerSchool.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgramManagerSchools and only return the `id`
+     * const programManagerSchoolWithIdOnly = await prisma.programManagerSchool.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgramManagerSchoolCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgramManagerSchoolCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgramManagerSchool.
+     * @param {ProgramManagerSchoolDeleteArgs} args - Arguments to delete one ProgramManagerSchool.
+     * @example
+     * // Delete one ProgramManagerSchool
+     * const ProgramManagerSchool = await prisma.programManagerSchool.delete({
+     *   where: {
+     *     // ... filter to delete one ProgramManagerSchool
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgramManagerSchoolDeleteArgs>(args: SelectSubset<T, ProgramManagerSchoolDeleteArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgramManagerSchool.
+     * @param {ProgramManagerSchoolUpdateArgs} args - Arguments to update one ProgramManagerSchool.
+     * @example
+     * // Update one ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgramManagerSchoolUpdateArgs>(args: SelectSubset<T, ProgramManagerSchoolUpdateArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgramManagerSchools.
+     * @param {ProgramManagerSchoolDeleteManyArgs} args - Arguments to filter ProgramManagerSchools to delete.
+     * @example
+     * // Delete a few ProgramManagerSchools
+     * const { count } = await prisma.programManagerSchool.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgramManagerSchoolDeleteManyArgs>(args?: SelectSubset<T, ProgramManagerSchoolDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerSchools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgramManagerSchools
+     * const programManagerSchool = await prisma.programManagerSchool.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgramManagerSchoolUpdateManyArgs>(args: SelectSubset<T, ProgramManagerSchoolUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerSchools and returns the data updated in the database.
+     * @param {ProgramManagerSchoolUpdateManyAndReturnArgs} args - Arguments to update many ProgramManagerSchools.
+     * @example
+     * // Update many ProgramManagerSchools
+     * const programManagerSchool = await prisma.programManagerSchool.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgramManagerSchools and only return the `id`
+     * const programManagerSchoolWithIdOnly = await prisma.programManagerSchool.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgramManagerSchoolUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgramManagerSchoolUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgramManagerSchool.
+     * @param {ProgramManagerSchoolUpsertArgs} args - Arguments to update or create a ProgramManagerSchool.
+     * @example
+     * // Update or create a ProgramManagerSchool
+     * const programManagerSchool = await prisma.programManagerSchool.upsert({
+     *   create: {
+     *     // ... data to create a ProgramManagerSchool
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgramManagerSchool we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgramManagerSchoolUpsertArgs>(args: SelectSubset<T, ProgramManagerSchoolUpsertArgs<ExtArgs>>): Prisma__ProgramManagerSchoolClient<$Result.GetResult<Prisma.$ProgramManagerSchoolPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgramManagerSchools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolCountArgs} args - Arguments to filter ProgramManagerSchools to count.
+     * @example
+     * // Count the number of ProgramManagerSchools
+     * const count = await prisma.programManagerSchool.count({
+     *   where: {
+     *     // ... the filter for the ProgramManagerSchools we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgramManagerSchoolCountArgs>(
+      args?: Subset<T, ProgramManagerSchoolCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgramManagerSchoolCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgramManagerSchool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgramManagerSchoolAggregateArgs>(args: Subset<T, ProgramManagerSchoolAggregateArgs>): Prisma.PrismaPromise<GetProgramManagerSchoolAggregateType<T>>
+
+    /**
+     * Group by ProgramManagerSchool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerSchoolGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgramManagerSchoolGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgramManagerSchoolGroupByArgs['orderBy'] }
+        : { orderBy?: ProgramManagerSchoolGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgramManagerSchoolGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgramManagerSchoolGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgramManagerSchool model
+   */
+  readonly fields: ProgramManagerSchoolFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgramManagerSchool.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgramManagerSchoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    school<T extends SchoolDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolDefaultArgs<ExtArgs>>): Prisma__SchoolClient<$Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgramManagerSchool model
+   */
+  interface ProgramManagerSchoolFieldRefs {
+    readonly id: FieldRef<"ProgramManagerSchool", 'String'>
+    readonly userId: FieldRef<"ProgramManagerSchool", 'String'>
+    readonly schoolId: FieldRef<"ProgramManagerSchool", 'String'>
+    readonly createdAt: FieldRef<"ProgramManagerSchool", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerSchool findUnique
+   */
+  export type ProgramManagerSchoolFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerSchool to fetch.
+     */
+    where: ProgramManagerSchoolWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerSchool findUniqueOrThrow
+   */
+  export type ProgramManagerSchoolFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerSchool to fetch.
+     */
+    where: ProgramManagerSchoolWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerSchool findFirst
+   */
+  export type ProgramManagerSchoolFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerSchool to fetch.
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerSchools to fetch.
+     */
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerSchools.
+     */
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerSchools.
+     */
+    distinct?: ProgramManagerSchoolScalarFieldEnum | ProgramManagerSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerSchool findFirstOrThrow
+   */
+  export type ProgramManagerSchoolFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerSchool to fetch.
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerSchools to fetch.
+     */
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerSchools.
+     */
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerSchools.
+     */
+    distinct?: ProgramManagerSchoolScalarFieldEnum | ProgramManagerSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerSchool findMany
+   */
+  export type ProgramManagerSchoolFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerSchools to fetch.
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerSchools to fetch.
+     */
+    orderBy?: ProgramManagerSchoolOrderByWithRelationInput | ProgramManagerSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgramManagerSchools.
+     */
+    cursor?: ProgramManagerSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerSchools.
+     */
+    distinct?: ProgramManagerSchoolScalarFieldEnum | ProgramManagerSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerSchool create
+   */
+  export type ProgramManagerSchoolCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgramManagerSchool.
+     */
+    data: XOR<ProgramManagerSchoolCreateInput, ProgramManagerSchoolUncheckedCreateInput>
+  }
+
+  /**
+   * ProgramManagerSchool createMany
+   */
+  export type ProgramManagerSchoolCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgramManagerSchools.
+     */
+    data: ProgramManagerSchoolCreateManyInput | ProgramManagerSchoolCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgramManagerSchool createManyAndReturn
+   */
+  export type ProgramManagerSchoolCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgramManagerSchools.
+     */
+    data: ProgramManagerSchoolCreateManyInput | ProgramManagerSchoolCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerSchool update
+   */
+  export type ProgramManagerSchoolUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgramManagerSchool.
+     */
+    data: XOR<ProgramManagerSchoolUpdateInput, ProgramManagerSchoolUncheckedUpdateInput>
+    /**
+     * Choose, which ProgramManagerSchool to update.
+     */
+    where: ProgramManagerSchoolWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerSchool updateMany
+   */
+  export type ProgramManagerSchoolUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgramManagerSchools.
+     */
+    data: XOR<ProgramManagerSchoolUpdateManyMutationInput, ProgramManagerSchoolUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerSchools to update
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * Limit how many ProgramManagerSchools to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerSchool updateManyAndReturn
+   */
+  export type ProgramManagerSchoolUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgramManagerSchools.
+     */
+    data: XOR<ProgramManagerSchoolUpdateManyMutationInput, ProgramManagerSchoolUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerSchools to update
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * Limit how many ProgramManagerSchools to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerSchool upsert
+   */
+  export type ProgramManagerSchoolUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgramManagerSchool to update in case it exists.
+     */
+    where: ProgramManagerSchoolWhereUniqueInput
+    /**
+     * In case the ProgramManagerSchool found by the `where` argument doesn't exist, create a new ProgramManagerSchool with this data.
+     */
+    create: XOR<ProgramManagerSchoolCreateInput, ProgramManagerSchoolUncheckedCreateInput>
+    /**
+     * In case the ProgramManagerSchool was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgramManagerSchoolUpdateInput, ProgramManagerSchoolUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgramManagerSchool delete
+   */
+  export type ProgramManagerSchoolDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+    /**
+     * Filter which ProgramManagerSchool to delete.
+     */
+    where: ProgramManagerSchoolWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerSchool deleteMany
+   */
+  export type ProgramManagerSchoolDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerSchools to delete
+     */
+    where?: ProgramManagerSchoolWhereInput
+    /**
+     * Limit how many ProgramManagerSchools to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerSchool without action
+   */
+  export type ProgramManagerSchoolDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerSchool
+     */
+    select?: ProgramManagerSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerSchool
+     */
+    omit?: ProgramManagerSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerSchoolInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgramManagerAfterSchoolCentre
+   */
+
+  export type AggregateProgramManagerAfterSchoolCentre = {
+    _count: ProgramManagerAfterSchoolCentreCountAggregateOutputType | null
+    _min: ProgramManagerAfterSchoolCentreMinAggregateOutputType | null
+    _max: ProgramManagerAfterSchoolCentreMaxAggregateOutputType | null
+  }
+
+  export type ProgramManagerAfterSchoolCentreMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    centreId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerAfterSchoolCentreMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    centreId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerAfterSchoolCentreCountAggregateOutputType = {
+    id: number
+    userId: number
+    centreId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProgramManagerAfterSchoolCentreMinAggregateInputType = {
+    id?: true
+    userId?: true
+    centreId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerAfterSchoolCentreMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    centreId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerAfterSchoolCentreCountAggregateInputType = {
+    id?: true
+    userId?: true
+    centreId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProgramManagerAfterSchoolCentreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerAfterSchoolCentre to aggregate.
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerAfterSchoolCentres to fetch.
+     */
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerAfterSchoolCentres from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerAfterSchoolCentres.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgramManagerAfterSchoolCentres
+    **/
+    _count?: true | ProgramManagerAfterSchoolCentreCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgramManagerAfterSchoolCentreMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgramManagerAfterSchoolCentreMaxAggregateInputType
+  }
+
+  export type GetProgramManagerAfterSchoolCentreAggregateType<T extends ProgramManagerAfterSchoolCentreAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgramManagerAfterSchoolCentre]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgramManagerAfterSchoolCentre[P]>
+      : GetScalarType<T[P], AggregateProgramManagerAfterSchoolCentre[P]>
+  }
+
+
+
+
+  export type ProgramManagerAfterSchoolCentreGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithAggregationInput | ProgramManagerAfterSchoolCentreOrderByWithAggregationInput[]
+    by: ProgramManagerAfterSchoolCentreScalarFieldEnum[] | ProgramManagerAfterSchoolCentreScalarFieldEnum
+    having?: ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgramManagerAfterSchoolCentreCountAggregateInputType | true
+    _min?: ProgramManagerAfterSchoolCentreMinAggregateInputType
+    _max?: ProgramManagerAfterSchoolCentreMaxAggregateInputType
+  }
+
+  export type ProgramManagerAfterSchoolCentreGroupByOutputType = {
+    id: string
+    userId: string
+    centreId: string
+    createdAt: Date
+    _count: ProgramManagerAfterSchoolCentreCountAggregateOutputType | null
+    _min: ProgramManagerAfterSchoolCentreMinAggregateOutputType | null
+    _max: ProgramManagerAfterSchoolCentreMaxAggregateOutputType | null
+  }
+
+  type GetProgramManagerAfterSchoolCentreGroupByPayload<T extends ProgramManagerAfterSchoolCentreGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgramManagerAfterSchoolCentreGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgramManagerAfterSchoolCentreGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgramManagerAfterSchoolCentreGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgramManagerAfterSchoolCentreGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgramManagerAfterSchoolCentreSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    centreId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerAfterSchoolCentre"]>
+
+  export type ProgramManagerAfterSchoolCentreSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    centreId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerAfterSchoolCentre"]>
+
+  export type ProgramManagerAfterSchoolCentreSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    centreId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerAfterSchoolCentre"]>
+
+  export type ProgramManagerAfterSchoolCentreSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    centreId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProgramManagerAfterSchoolCentreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "centreId" | "createdAt", ExtArgs["result"]["programManagerAfterSchoolCentre"]>
+  export type ProgramManagerAfterSchoolCentreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerAfterSchoolCentreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerAfterSchoolCentreIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    centre?: boolean | AfterSchoolCentreDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgramManagerAfterSchoolCentrePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgramManagerAfterSchoolCentre"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      centre: Prisma.$AfterSchoolCentrePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      centreId: string
+      createdAt: Date
+    }, ExtArgs["result"]["programManagerAfterSchoolCentre"]>
+    composites: {}
+  }
+
+  type ProgramManagerAfterSchoolCentreGetPayload<S extends boolean | null | undefined | ProgramManagerAfterSchoolCentreDefaultArgs> = $Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload, S>
+
+  type ProgramManagerAfterSchoolCentreCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgramManagerAfterSchoolCentreFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgramManagerAfterSchoolCentreCountAggregateInputType | true
+    }
+
+  export interface ProgramManagerAfterSchoolCentreDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgramManagerAfterSchoolCentre'], meta: { name: 'ProgramManagerAfterSchoolCentre' } }
+    /**
+     * Find zero or one ProgramManagerAfterSchoolCentre that matches the filter.
+     * @param {ProgramManagerAfterSchoolCentreFindUniqueArgs} args - Arguments to find a ProgramManagerAfterSchoolCentre
+     * @example
+     * // Get one ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgramManagerAfterSchoolCentreFindUniqueArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreFindUniqueArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgramManagerAfterSchoolCentre that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgramManagerAfterSchoolCentreFindUniqueOrThrowArgs} args - Arguments to find a ProgramManagerAfterSchoolCentre
+     * @example
+     * // Get one ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgramManagerAfterSchoolCentreFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerAfterSchoolCentre that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreFindFirstArgs} args - Arguments to find a ProgramManagerAfterSchoolCentre
+     * @example
+     * // Get one ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgramManagerAfterSchoolCentreFindFirstArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreFindFirstArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerAfterSchoolCentre that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreFindFirstOrThrowArgs} args - Arguments to find a ProgramManagerAfterSchoolCentre
+     * @example
+     * // Get one ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgramManagerAfterSchoolCentreFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgramManagerAfterSchoolCentres that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentres = await prisma.programManagerAfterSchoolCentre.findMany()
+     * 
+     * // Get first 10 ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentres = await prisma.programManagerAfterSchoolCentre.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programManagerAfterSchoolCentreWithIdOnly = await prisma.programManagerAfterSchoolCentre.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgramManagerAfterSchoolCentreFindManyArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgramManagerAfterSchoolCentre.
+     * @param {ProgramManagerAfterSchoolCentreCreateArgs} args - Arguments to create a ProgramManagerAfterSchoolCentre.
+     * @example
+     * // Create one ProgramManagerAfterSchoolCentre
+     * const ProgramManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.create({
+     *   data: {
+     *     // ... data to create a ProgramManagerAfterSchoolCentre
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgramManagerAfterSchoolCentreCreateArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreCreateArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgramManagerAfterSchoolCentres.
+     * @param {ProgramManagerAfterSchoolCentreCreateManyArgs} args - Arguments to create many ProgramManagerAfterSchoolCentres.
+     * @example
+     * // Create many ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgramManagerAfterSchoolCentreCreateManyArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgramManagerAfterSchoolCentres and returns the data saved in the database.
+     * @param {ProgramManagerAfterSchoolCentreCreateManyAndReturnArgs} args - Arguments to create many ProgramManagerAfterSchoolCentres.
+     * @example
+     * // Create many ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgramManagerAfterSchoolCentres and only return the `id`
+     * const programManagerAfterSchoolCentreWithIdOnly = await prisma.programManagerAfterSchoolCentre.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgramManagerAfterSchoolCentreCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgramManagerAfterSchoolCentre.
+     * @param {ProgramManagerAfterSchoolCentreDeleteArgs} args - Arguments to delete one ProgramManagerAfterSchoolCentre.
+     * @example
+     * // Delete one ProgramManagerAfterSchoolCentre
+     * const ProgramManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.delete({
+     *   where: {
+     *     // ... filter to delete one ProgramManagerAfterSchoolCentre
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgramManagerAfterSchoolCentreDeleteArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreDeleteArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgramManagerAfterSchoolCentre.
+     * @param {ProgramManagerAfterSchoolCentreUpdateArgs} args - Arguments to update one ProgramManagerAfterSchoolCentre.
+     * @example
+     * // Update one ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgramManagerAfterSchoolCentreUpdateArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreUpdateArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgramManagerAfterSchoolCentres.
+     * @param {ProgramManagerAfterSchoolCentreDeleteManyArgs} args - Arguments to filter ProgramManagerAfterSchoolCentres to delete.
+     * @example
+     * // Delete a few ProgramManagerAfterSchoolCentres
+     * const { count } = await prisma.programManagerAfterSchoolCentre.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgramManagerAfterSchoolCentreDeleteManyArgs>(args?: SelectSubset<T, ProgramManagerAfterSchoolCentreDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerAfterSchoolCentres.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgramManagerAfterSchoolCentreUpdateManyArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerAfterSchoolCentres and returns the data updated in the database.
+     * @param {ProgramManagerAfterSchoolCentreUpdateManyAndReturnArgs} args - Arguments to update many ProgramManagerAfterSchoolCentres.
+     * @example
+     * // Update many ProgramManagerAfterSchoolCentres
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgramManagerAfterSchoolCentres and only return the `id`
+     * const programManagerAfterSchoolCentreWithIdOnly = await prisma.programManagerAfterSchoolCentre.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgramManagerAfterSchoolCentreUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgramManagerAfterSchoolCentre.
+     * @param {ProgramManagerAfterSchoolCentreUpsertArgs} args - Arguments to update or create a ProgramManagerAfterSchoolCentre.
+     * @example
+     * // Update or create a ProgramManagerAfterSchoolCentre
+     * const programManagerAfterSchoolCentre = await prisma.programManagerAfterSchoolCentre.upsert({
+     *   create: {
+     *     // ... data to create a ProgramManagerAfterSchoolCentre
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgramManagerAfterSchoolCentre we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgramManagerAfterSchoolCentreUpsertArgs>(args: SelectSubset<T, ProgramManagerAfterSchoolCentreUpsertArgs<ExtArgs>>): Prisma__ProgramManagerAfterSchoolCentreClient<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgramManagerAfterSchoolCentres.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreCountArgs} args - Arguments to filter ProgramManagerAfterSchoolCentres to count.
+     * @example
+     * // Count the number of ProgramManagerAfterSchoolCentres
+     * const count = await prisma.programManagerAfterSchoolCentre.count({
+     *   where: {
+     *     // ... the filter for the ProgramManagerAfterSchoolCentres we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgramManagerAfterSchoolCentreCountArgs>(
+      args?: Subset<T, ProgramManagerAfterSchoolCentreCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgramManagerAfterSchoolCentreCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgramManagerAfterSchoolCentre.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgramManagerAfterSchoolCentreAggregateArgs>(args: Subset<T, ProgramManagerAfterSchoolCentreAggregateArgs>): Prisma.PrismaPromise<GetProgramManagerAfterSchoolCentreAggregateType<T>>
+
+    /**
+     * Group by ProgramManagerAfterSchoolCentre.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerAfterSchoolCentreGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgramManagerAfterSchoolCentreGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgramManagerAfterSchoolCentreGroupByArgs['orderBy'] }
+        : { orderBy?: ProgramManagerAfterSchoolCentreGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgramManagerAfterSchoolCentreGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgramManagerAfterSchoolCentreGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgramManagerAfterSchoolCentre model
+   */
+  readonly fields: ProgramManagerAfterSchoolCentreFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgramManagerAfterSchoolCentre.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgramManagerAfterSchoolCentreClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    centre<T extends AfterSchoolCentreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AfterSchoolCentreDefaultArgs<ExtArgs>>): Prisma__AfterSchoolCentreClient<$Result.GetResult<Prisma.$AfterSchoolCentrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgramManagerAfterSchoolCentre model
+   */
+  interface ProgramManagerAfterSchoolCentreFieldRefs {
+    readonly id: FieldRef<"ProgramManagerAfterSchoolCentre", 'String'>
+    readonly userId: FieldRef<"ProgramManagerAfterSchoolCentre", 'String'>
+    readonly centreId: FieldRef<"ProgramManagerAfterSchoolCentre", 'String'>
+    readonly createdAt: FieldRef<"ProgramManagerAfterSchoolCentre", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerAfterSchoolCentre findUnique
+   */
+  export type ProgramManagerAfterSchoolCentreFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerAfterSchoolCentre to fetch.
+     */
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre findUniqueOrThrow
+   */
+  export type ProgramManagerAfterSchoolCentreFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerAfterSchoolCentre to fetch.
+     */
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre findFirst
+   */
+  export type ProgramManagerAfterSchoolCentreFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerAfterSchoolCentre to fetch.
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerAfterSchoolCentres to fetch.
+     */
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerAfterSchoolCentres.
+     */
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerAfterSchoolCentres from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerAfterSchoolCentres.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerAfterSchoolCentres.
+     */
+    distinct?: ProgramManagerAfterSchoolCentreScalarFieldEnum | ProgramManagerAfterSchoolCentreScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre findFirstOrThrow
+   */
+  export type ProgramManagerAfterSchoolCentreFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerAfterSchoolCentre to fetch.
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerAfterSchoolCentres to fetch.
+     */
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerAfterSchoolCentres.
+     */
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerAfterSchoolCentres from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerAfterSchoolCentres.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerAfterSchoolCentres.
+     */
+    distinct?: ProgramManagerAfterSchoolCentreScalarFieldEnum | ProgramManagerAfterSchoolCentreScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre findMany
+   */
+  export type ProgramManagerAfterSchoolCentreFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerAfterSchoolCentres to fetch.
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerAfterSchoolCentres to fetch.
+     */
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgramManagerAfterSchoolCentres.
+     */
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerAfterSchoolCentres from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerAfterSchoolCentres.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerAfterSchoolCentres.
+     */
+    distinct?: ProgramManagerAfterSchoolCentreScalarFieldEnum | ProgramManagerAfterSchoolCentreScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre create
+   */
+  export type ProgramManagerAfterSchoolCentreCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgramManagerAfterSchoolCentre.
+     */
+    data: XOR<ProgramManagerAfterSchoolCentreCreateInput, ProgramManagerAfterSchoolCentreUncheckedCreateInput>
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre createMany
+   */
+  export type ProgramManagerAfterSchoolCentreCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgramManagerAfterSchoolCentres.
+     */
+    data: ProgramManagerAfterSchoolCentreCreateManyInput | ProgramManagerAfterSchoolCentreCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre createManyAndReturn
+   */
+  export type ProgramManagerAfterSchoolCentreCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgramManagerAfterSchoolCentres.
+     */
+    data: ProgramManagerAfterSchoolCentreCreateManyInput | ProgramManagerAfterSchoolCentreCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre update
+   */
+  export type ProgramManagerAfterSchoolCentreUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgramManagerAfterSchoolCentre.
+     */
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateInput, ProgramManagerAfterSchoolCentreUncheckedUpdateInput>
+    /**
+     * Choose, which ProgramManagerAfterSchoolCentre to update.
+     */
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre updateMany
+   */
+  export type ProgramManagerAfterSchoolCentreUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgramManagerAfterSchoolCentres.
+     */
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateManyMutationInput, ProgramManagerAfterSchoolCentreUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerAfterSchoolCentres to update
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * Limit how many ProgramManagerAfterSchoolCentres to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre updateManyAndReturn
+   */
+  export type ProgramManagerAfterSchoolCentreUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgramManagerAfterSchoolCentres.
+     */
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateManyMutationInput, ProgramManagerAfterSchoolCentreUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerAfterSchoolCentres to update
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * Limit how many ProgramManagerAfterSchoolCentres to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre upsert
+   */
+  export type ProgramManagerAfterSchoolCentreUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgramManagerAfterSchoolCentre to update in case it exists.
+     */
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    /**
+     * In case the ProgramManagerAfterSchoolCentre found by the `where` argument doesn't exist, create a new ProgramManagerAfterSchoolCentre with this data.
+     */
+    create: XOR<ProgramManagerAfterSchoolCentreCreateInput, ProgramManagerAfterSchoolCentreUncheckedCreateInput>
+    /**
+     * In case the ProgramManagerAfterSchoolCentre was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgramManagerAfterSchoolCentreUpdateInput, ProgramManagerAfterSchoolCentreUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre delete
+   */
+  export type ProgramManagerAfterSchoolCentreDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    /**
+     * Filter which ProgramManagerAfterSchoolCentre to delete.
+     */
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre deleteMany
+   */
+  export type ProgramManagerAfterSchoolCentreDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerAfterSchoolCentres to delete
+     */
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    /**
+     * Limit how many ProgramManagerAfterSchoolCentres to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerAfterSchoolCentre without action
+   */
+  export type ProgramManagerAfterSchoolCentreDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgramManagerLivelihoodProgram
+   */
+
+  export type AggregateProgramManagerLivelihoodProgram = {
+    _count: ProgramManagerLivelihoodProgramCountAggregateOutputType | null
+    _min: ProgramManagerLivelihoodProgramMinAggregateOutputType | null
+    _max: ProgramManagerLivelihoodProgramMaxAggregateOutputType | null
+  }
+
+  export type ProgramManagerLivelihoodProgramMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    programId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerLivelihoodProgramMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    programId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProgramManagerLivelihoodProgramCountAggregateOutputType = {
+    id: number
+    userId: number
+    programId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProgramManagerLivelihoodProgramMinAggregateInputType = {
+    id?: true
+    userId?: true
+    programId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerLivelihoodProgramMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    programId?: true
+    createdAt?: true
+  }
+
+  export type ProgramManagerLivelihoodProgramCountAggregateInputType = {
+    id?: true
+    userId?: true
+    programId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProgramManagerLivelihoodProgramAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerLivelihoodProgram to aggregate.
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerLivelihoodPrograms to fetch.
+     */
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgramManagerLivelihoodPrograms
+    **/
+    _count?: true | ProgramManagerLivelihoodProgramCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgramManagerLivelihoodProgramMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgramManagerLivelihoodProgramMaxAggregateInputType
+  }
+
+  export type GetProgramManagerLivelihoodProgramAggregateType<T extends ProgramManagerLivelihoodProgramAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgramManagerLivelihoodProgram]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgramManagerLivelihoodProgram[P]>
+      : GetScalarType<T[P], AggregateProgramManagerLivelihoodProgram[P]>
+  }
+
+
+
+
+  export type ProgramManagerLivelihoodProgramGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithAggregationInput | ProgramManagerLivelihoodProgramOrderByWithAggregationInput[]
+    by: ProgramManagerLivelihoodProgramScalarFieldEnum[] | ProgramManagerLivelihoodProgramScalarFieldEnum
+    having?: ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgramManagerLivelihoodProgramCountAggregateInputType | true
+    _min?: ProgramManagerLivelihoodProgramMinAggregateInputType
+    _max?: ProgramManagerLivelihoodProgramMaxAggregateInputType
+  }
+
+  export type ProgramManagerLivelihoodProgramGroupByOutputType = {
+    id: string
+    userId: string
+    programId: string
+    createdAt: Date
+    _count: ProgramManagerLivelihoodProgramCountAggregateOutputType | null
+    _min: ProgramManagerLivelihoodProgramMinAggregateOutputType | null
+    _max: ProgramManagerLivelihoodProgramMaxAggregateOutputType | null
+  }
+
+  type GetProgramManagerLivelihoodProgramGroupByPayload<T extends ProgramManagerLivelihoodProgramGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgramManagerLivelihoodProgramGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgramManagerLivelihoodProgramGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgramManagerLivelihoodProgramGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgramManagerLivelihoodProgramGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgramManagerLivelihoodProgramSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerLivelihoodProgram"]>
+
+  export type ProgramManagerLivelihoodProgramSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerLivelihoodProgram"]>
+
+  export type ProgramManagerLivelihoodProgramSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerLivelihoodProgram"]>
+
+  export type ProgramManagerLivelihoodProgramSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProgramManagerLivelihoodProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "programId" | "createdAt", ExtArgs["result"]["programManagerLivelihoodProgram"]>
+  export type ProgramManagerLivelihoodProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerLivelihoodProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerLivelihoodProgramIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgramManagerLivelihoodProgramPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgramManagerLivelihoodProgram"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      program: Prisma.$LivelihoodProgramPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      programId: string
+      createdAt: Date
+    }, ExtArgs["result"]["programManagerLivelihoodProgram"]>
+    composites: {}
+  }
+
+  type ProgramManagerLivelihoodProgramGetPayload<S extends boolean | null | undefined | ProgramManagerLivelihoodProgramDefaultArgs> = $Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload, S>
+
+  type ProgramManagerLivelihoodProgramCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgramManagerLivelihoodProgramFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgramManagerLivelihoodProgramCountAggregateInputType | true
+    }
+
+  export interface ProgramManagerLivelihoodProgramDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgramManagerLivelihoodProgram'], meta: { name: 'ProgramManagerLivelihoodProgram' } }
+    /**
+     * Find zero or one ProgramManagerLivelihoodProgram that matches the filter.
+     * @param {ProgramManagerLivelihoodProgramFindUniqueArgs} args - Arguments to find a ProgramManagerLivelihoodProgram
+     * @example
+     * // Get one ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgramManagerLivelihoodProgramFindUniqueArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramFindUniqueArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgramManagerLivelihoodProgram that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgramManagerLivelihoodProgramFindUniqueOrThrowArgs} args - Arguments to find a ProgramManagerLivelihoodProgram
+     * @example
+     * // Get one ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgramManagerLivelihoodProgramFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerLivelihoodProgram that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramFindFirstArgs} args - Arguments to find a ProgramManagerLivelihoodProgram
+     * @example
+     * // Get one ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgramManagerLivelihoodProgramFindFirstArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramFindFirstArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerLivelihoodProgram that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramFindFirstOrThrowArgs} args - Arguments to find a ProgramManagerLivelihoodProgram
+     * @example
+     * // Get one ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgramManagerLivelihoodProgramFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgramManagerLivelihoodPrograms that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodPrograms = await prisma.programManagerLivelihoodProgram.findMany()
+     * 
+     * // Get first 10 ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodPrograms = await prisma.programManagerLivelihoodProgram.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programManagerLivelihoodProgramWithIdOnly = await prisma.programManagerLivelihoodProgram.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgramManagerLivelihoodProgramFindManyArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgramManagerLivelihoodProgram.
+     * @param {ProgramManagerLivelihoodProgramCreateArgs} args - Arguments to create a ProgramManagerLivelihoodProgram.
+     * @example
+     * // Create one ProgramManagerLivelihoodProgram
+     * const ProgramManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.create({
+     *   data: {
+     *     // ... data to create a ProgramManagerLivelihoodProgram
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgramManagerLivelihoodProgramCreateArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramCreateArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgramManagerLivelihoodPrograms.
+     * @param {ProgramManagerLivelihoodProgramCreateManyArgs} args - Arguments to create many ProgramManagerLivelihoodPrograms.
+     * @example
+     * // Create many ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgramManagerLivelihoodProgramCreateManyArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgramManagerLivelihoodPrograms and returns the data saved in the database.
+     * @param {ProgramManagerLivelihoodProgramCreateManyAndReturnArgs} args - Arguments to create many ProgramManagerLivelihoodPrograms.
+     * @example
+     * // Create many ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgramManagerLivelihoodPrograms and only return the `id`
+     * const programManagerLivelihoodProgramWithIdOnly = await prisma.programManagerLivelihoodProgram.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgramManagerLivelihoodProgramCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgramManagerLivelihoodProgram.
+     * @param {ProgramManagerLivelihoodProgramDeleteArgs} args - Arguments to delete one ProgramManagerLivelihoodProgram.
+     * @example
+     * // Delete one ProgramManagerLivelihoodProgram
+     * const ProgramManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.delete({
+     *   where: {
+     *     // ... filter to delete one ProgramManagerLivelihoodProgram
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgramManagerLivelihoodProgramDeleteArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramDeleteArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgramManagerLivelihoodProgram.
+     * @param {ProgramManagerLivelihoodProgramUpdateArgs} args - Arguments to update one ProgramManagerLivelihoodProgram.
+     * @example
+     * // Update one ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgramManagerLivelihoodProgramUpdateArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramUpdateArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgramManagerLivelihoodPrograms.
+     * @param {ProgramManagerLivelihoodProgramDeleteManyArgs} args - Arguments to filter ProgramManagerLivelihoodPrograms to delete.
+     * @example
+     * // Delete a few ProgramManagerLivelihoodPrograms
+     * const { count } = await prisma.programManagerLivelihoodProgram.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgramManagerLivelihoodProgramDeleteManyArgs>(args?: SelectSubset<T, ProgramManagerLivelihoodProgramDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerLivelihoodPrograms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgramManagerLivelihoodProgramUpdateManyArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerLivelihoodPrograms and returns the data updated in the database.
+     * @param {ProgramManagerLivelihoodProgramUpdateManyAndReturnArgs} args - Arguments to update many ProgramManagerLivelihoodPrograms.
+     * @example
+     * // Update many ProgramManagerLivelihoodPrograms
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgramManagerLivelihoodPrograms and only return the `id`
+     * const programManagerLivelihoodProgramWithIdOnly = await prisma.programManagerLivelihoodProgram.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgramManagerLivelihoodProgramUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgramManagerLivelihoodProgram.
+     * @param {ProgramManagerLivelihoodProgramUpsertArgs} args - Arguments to update or create a ProgramManagerLivelihoodProgram.
+     * @example
+     * // Update or create a ProgramManagerLivelihoodProgram
+     * const programManagerLivelihoodProgram = await prisma.programManagerLivelihoodProgram.upsert({
+     *   create: {
+     *     // ... data to create a ProgramManagerLivelihoodProgram
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgramManagerLivelihoodProgram we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgramManagerLivelihoodProgramUpsertArgs>(args: SelectSubset<T, ProgramManagerLivelihoodProgramUpsertArgs<ExtArgs>>): Prisma__ProgramManagerLivelihoodProgramClient<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgramManagerLivelihoodPrograms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramCountArgs} args - Arguments to filter ProgramManagerLivelihoodPrograms to count.
+     * @example
+     * // Count the number of ProgramManagerLivelihoodPrograms
+     * const count = await prisma.programManagerLivelihoodProgram.count({
+     *   where: {
+     *     // ... the filter for the ProgramManagerLivelihoodPrograms we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgramManagerLivelihoodProgramCountArgs>(
+      args?: Subset<T, ProgramManagerLivelihoodProgramCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgramManagerLivelihoodProgramCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgramManagerLivelihoodProgram.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgramManagerLivelihoodProgramAggregateArgs>(args: Subset<T, ProgramManagerLivelihoodProgramAggregateArgs>): Prisma.PrismaPromise<GetProgramManagerLivelihoodProgramAggregateType<T>>
+
+    /**
+     * Group by ProgramManagerLivelihoodProgram.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerLivelihoodProgramGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgramManagerLivelihoodProgramGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgramManagerLivelihoodProgramGroupByArgs['orderBy'] }
+        : { orderBy?: ProgramManagerLivelihoodProgramGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgramManagerLivelihoodProgramGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgramManagerLivelihoodProgramGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgramManagerLivelihoodProgram model
+   */
+  readonly fields: ProgramManagerLivelihoodProgramFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgramManagerLivelihoodProgram.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgramManagerLivelihoodProgramClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    program<T extends LivelihoodProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramDefaultArgs<ExtArgs>>): Prisma__LivelihoodProgramClient<$Result.GetResult<Prisma.$LivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgramManagerLivelihoodProgram model
+   */
+  interface ProgramManagerLivelihoodProgramFieldRefs {
+    readonly id: FieldRef<"ProgramManagerLivelihoodProgram", 'String'>
+    readonly userId: FieldRef<"ProgramManagerLivelihoodProgram", 'String'>
+    readonly programId: FieldRef<"ProgramManagerLivelihoodProgram", 'String'>
+    readonly createdAt: FieldRef<"ProgramManagerLivelihoodProgram", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerLivelihoodProgram findUnique
+   */
+  export type ProgramManagerLivelihoodProgramFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerLivelihoodProgram to fetch.
+     */
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram findUniqueOrThrow
+   */
+  export type ProgramManagerLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerLivelihoodProgram to fetch.
+     */
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram findFirst
+   */
+  export type ProgramManagerLivelihoodProgramFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerLivelihoodProgram to fetch.
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerLivelihoodPrograms to fetch.
+     */
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerLivelihoodPrograms.
+     */
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerLivelihoodPrograms.
+     */
+    distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram findFirstOrThrow
+   */
+  export type ProgramManagerLivelihoodProgramFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerLivelihoodProgram to fetch.
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerLivelihoodPrograms to fetch.
+     */
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerLivelihoodPrograms.
+     */
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerLivelihoodPrograms.
+     */
+    distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram findMany
+   */
+  export type ProgramManagerLivelihoodProgramFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerLivelihoodPrograms to fetch.
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerLivelihoodPrograms to fetch.
+     */
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgramManagerLivelihoodPrograms.
+     */
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerLivelihoodPrograms.
+     */
+    distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram create
+   */
+  export type ProgramManagerLivelihoodProgramCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgramManagerLivelihoodProgram.
+     */
+    data: XOR<ProgramManagerLivelihoodProgramCreateInput, ProgramManagerLivelihoodProgramUncheckedCreateInput>
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram createMany
+   */
+  export type ProgramManagerLivelihoodProgramCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgramManagerLivelihoodPrograms.
+     */
+    data: ProgramManagerLivelihoodProgramCreateManyInput | ProgramManagerLivelihoodProgramCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram createManyAndReturn
+   */
+  export type ProgramManagerLivelihoodProgramCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgramManagerLivelihoodPrograms.
+     */
+    data: ProgramManagerLivelihoodProgramCreateManyInput | ProgramManagerLivelihoodProgramCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram update
+   */
+  export type ProgramManagerLivelihoodProgramUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgramManagerLivelihoodProgram.
+     */
+    data: XOR<ProgramManagerLivelihoodProgramUpdateInput, ProgramManagerLivelihoodProgramUncheckedUpdateInput>
+    /**
+     * Choose, which ProgramManagerLivelihoodProgram to update.
+     */
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram updateMany
+   */
+  export type ProgramManagerLivelihoodProgramUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgramManagerLivelihoodPrograms.
+     */
+    data: XOR<ProgramManagerLivelihoodProgramUpdateManyMutationInput, ProgramManagerLivelihoodProgramUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerLivelihoodPrograms to update
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * Limit how many ProgramManagerLivelihoodPrograms to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram updateManyAndReturn
+   */
+  export type ProgramManagerLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgramManagerLivelihoodPrograms.
+     */
+    data: XOR<ProgramManagerLivelihoodProgramUpdateManyMutationInput, ProgramManagerLivelihoodProgramUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerLivelihoodPrograms to update
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * Limit how many ProgramManagerLivelihoodPrograms to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram upsert
+   */
+  export type ProgramManagerLivelihoodProgramUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgramManagerLivelihoodProgram to update in case it exists.
+     */
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    /**
+     * In case the ProgramManagerLivelihoodProgram found by the `where` argument doesn't exist, create a new ProgramManagerLivelihoodProgram with this data.
+     */
+    create: XOR<ProgramManagerLivelihoodProgramCreateInput, ProgramManagerLivelihoodProgramUncheckedCreateInput>
+    /**
+     * In case the ProgramManagerLivelihoodProgram was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgramManagerLivelihoodProgramUpdateInput, ProgramManagerLivelihoodProgramUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram delete
+   */
+  export type ProgramManagerLivelihoodProgramDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter which ProgramManagerLivelihoodProgram to delete.
+     */
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram deleteMany
+   */
+  export type ProgramManagerLivelihoodProgramDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerLivelihoodPrograms to delete
+     */
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    /**
+     * Limit how many ProgramManagerLivelihoodPrograms to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerLivelihoodProgram without action
+   */
+  export type ProgramManagerLivelihoodProgramDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgramManagerTask
+   */
+
+  export type AggregateProgramManagerTask = {
+    _count: ProgramManagerTaskCountAggregateOutputType | null
+    _min: ProgramManagerTaskMinAggregateOutputType | null
+    _max: ProgramManagerTaskMaxAggregateOutputType | null
+  }
+
+  export type ProgramManagerTaskMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    plannedDate: Date | null
+    status: string | null
+    isPlanned: boolean | null
+    completionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgramManagerTaskMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    description: string | null
+    plannedDate: Date | null
+    status: string | null
+    isPlanned: boolean | null
+    completionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgramManagerTaskCountAggregateOutputType = {
+    id: number
+    userId: number
+    title: number
+    description: number
+    plannedDate: number
+    status: number
+    isPlanned: number
+    completionDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProgramManagerTaskMinAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgramManagerTaskMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgramManagerTaskCountAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    description?: true
+    plannedDate?: true
+    status?: true
+    isPlanned?: true
+    completionDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProgramManagerTaskAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerTask to aggregate.
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTasks to fetch.
+     */
+    orderBy?: ProgramManagerTaskOrderByWithRelationInput | ProgramManagerTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgramManagerTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgramManagerTasks
+    **/
+    _count?: true | ProgramManagerTaskCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgramManagerTaskMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgramManagerTaskMaxAggregateInputType
+  }
+
+  export type GetProgramManagerTaskAggregateType<T extends ProgramManagerTaskAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgramManagerTask]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgramManagerTask[P]>
+      : GetScalarType<T[P], AggregateProgramManagerTask[P]>
+  }
+
+
+
+
+  export type ProgramManagerTaskGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerTaskWhereInput
+    orderBy?: ProgramManagerTaskOrderByWithAggregationInput | ProgramManagerTaskOrderByWithAggregationInput[]
+    by: ProgramManagerTaskScalarFieldEnum[] | ProgramManagerTaskScalarFieldEnum
+    having?: ProgramManagerTaskScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgramManagerTaskCountAggregateInputType | true
+    _min?: ProgramManagerTaskMinAggregateInputType
+    _max?: ProgramManagerTaskMaxAggregateInputType
+  }
+
+  export type ProgramManagerTaskGroupByOutputType = {
+    id: string
+    userId: string
+    title: string
+    description: string | null
+    plannedDate: Date
+    status: string
+    isPlanned: boolean
+    completionDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProgramManagerTaskCountAggregateOutputType | null
+    _min: ProgramManagerTaskMinAggregateOutputType | null
+    _max: ProgramManagerTaskMaxAggregateOutputType | null
+  }
+
+  type GetProgramManagerTaskGroupByPayload<T extends ProgramManagerTaskGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgramManagerTaskGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgramManagerTaskGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgramManagerTaskGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgramManagerTaskGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgramManagerTaskSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    comments?: boolean | ProgramManagerTask$commentsArgs<ExtArgs>
+    _count?: boolean | ProgramManagerTaskCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTask"]>
+
+  export type ProgramManagerTaskSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTask"]>
+
+  export type ProgramManagerTaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTask"]>
+
+  export type ProgramManagerTaskSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    description?: boolean
+    plannedDate?: boolean
+    status?: boolean
+    isPlanned?: boolean
+    completionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProgramManagerTaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "plannedDate" | "status" | "isPlanned" | "completionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["programManagerTask"]>
+  export type ProgramManagerTaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    comments?: boolean | ProgramManagerTask$commentsArgs<ExtArgs>
+    _count?: boolean | ProgramManagerTaskCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerTaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerTaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgramManagerTaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgramManagerTask"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      comments: Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      title: string
+      description: string | null
+      plannedDate: Date
+      status: string
+      isPlanned: boolean
+      completionDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["programManagerTask"]>
+    composites: {}
+  }
+
+  type ProgramManagerTaskGetPayload<S extends boolean | null | undefined | ProgramManagerTaskDefaultArgs> = $Result.GetResult<Prisma.$ProgramManagerTaskPayload, S>
+
+  type ProgramManagerTaskCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgramManagerTaskFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgramManagerTaskCountAggregateInputType | true
+    }
+
+  export interface ProgramManagerTaskDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgramManagerTask'], meta: { name: 'ProgramManagerTask' } }
+    /**
+     * Find zero or one ProgramManagerTask that matches the filter.
+     * @param {ProgramManagerTaskFindUniqueArgs} args - Arguments to find a ProgramManagerTask
+     * @example
+     * // Get one ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgramManagerTaskFindUniqueArgs>(args: SelectSubset<T, ProgramManagerTaskFindUniqueArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgramManagerTask that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgramManagerTaskFindUniqueOrThrowArgs} args - Arguments to find a ProgramManagerTask
+     * @example
+     * // Get one ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgramManagerTaskFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgramManagerTaskFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerTask that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskFindFirstArgs} args - Arguments to find a ProgramManagerTask
+     * @example
+     * // Get one ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgramManagerTaskFindFirstArgs>(args?: SelectSubset<T, ProgramManagerTaskFindFirstArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerTask that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskFindFirstOrThrowArgs} args - Arguments to find a ProgramManagerTask
+     * @example
+     * // Get one ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgramManagerTaskFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgramManagerTaskFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgramManagerTasks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgramManagerTasks
+     * const programManagerTasks = await prisma.programManagerTask.findMany()
+     * 
+     * // Get first 10 ProgramManagerTasks
+     * const programManagerTasks = await prisma.programManagerTask.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programManagerTaskWithIdOnly = await prisma.programManagerTask.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgramManagerTaskFindManyArgs>(args?: SelectSubset<T, ProgramManagerTaskFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgramManagerTask.
+     * @param {ProgramManagerTaskCreateArgs} args - Arguments to create a ProgramManagerTask.
+     * @example
+     * // Create one ProgramManagerTask
+     * const ProgramManagerTask = await prisma.programManagerTask.create({
+     *   data: {
+     *     // ... data to create a ProgramManagerTask
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgramManagerTaskCreateArgs>(args: SelectSubset<T, ProgramManagerTaskCreateArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgramManagerTasks.
+     * @param {ProgramManagerTaskCreateManyArgs} args - Arguments to create many ProgramManagerTasks.
+     * @example
+     * // Create many ProgramManagerTasks
+     * const programManagerTask = await prisma.programManagerTask.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgramManagerTaskCreateManyArgs>(args?: SelectSubset<T, ProgramManagerTaskCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgramManagerTasks and returns the data saved in the database.
+     * @param {ProgramManagerTaskCreateManyAndReturnArgs} args - Arguments to create many ProgramManagerTasks.
+     * @example
+     * // Create many ProgramManagerTasks
+     * const programManagerTask = await prisma.programManagerTask.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgramManagerTasks and only return the `id`
+     * const programManagerTaskWithIdOnly = await prisma.programManagerTask.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgramManagerTaskCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgramManagerTaskCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgramManagerTask.
+     * @param {ProgramManagerTaskDeleteArgs} args - Arguments to delete one ProgramManagerTask.
+     * @example
+     * // Delete one ProgramManagerTask
+     * const ProgramManagerTask = await prisma.programManagerTask.delete({
+     *   where: {
+     *     // ... filter to delete one ProgramManagerTask
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgramManagerTaskDeleteArgs>(args: SelectSubset<T, ProgramManagerTaskDeleteArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgramManagerTask.
+     * @param {ProgramManagerTaskUpdateArgs} args - Arguments to update one ProgramManagerTask.
+     * @example
+     * // Update one ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgramManagerTaskUpdateArgs>(args: SelectSubset<T, ProgramManagerTaskUpdateArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgramManagerTasks.
+     * @param {ProgramManagerTaskDeleteManyArgs} args - Arguments to filter ProgramManagerTasks to delete.
+     * @example
+     * // Delete a few ProgramManagerTasks
+     * const { count } = await prisma.programManagerTask.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgramManagerTaskDeleteManyArgs>(args?: SelectSubset<T, ProgramManagerTaskDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerTasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgramManagerTasks
+     * const programManagerTask = await prisma.programManagerTask.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgramManagerTaskUpdateManyArgs>(args: SelectSubset<T, ProgramManagerTaskUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerTasks and returns the data updated in the database.
+     * @param {ProgramManagerTaskUpdateManyAndReturnArgs} args - Arguments to update many ProgramManagerTasks.
+     * @example
+     * // Update many ProgramManagerTasks
+     * const programManagerTask = await prisma.programManagerTask.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgramManagerTasks and only return the `id`
+     * const programManagerTaskWithIdOnly = await prisma.programManagerTask.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgramManagerTaskUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgramManagerTaskUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgramManagerTask.
+     * @param {ProgramManagerTaskUpsertArgs} args - Arguments to update or create a ProgramManagerTask.
+     * @example
+     * // Update or create a ProgramManagerTask
+     * const programManagerTask = await prisma.programManagerTask.upsert({
+     *   create: {
+     *     // ... data to create a ProgramManagerTask
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgramManagerTask we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgramManagerTaskUpsertArgs>(args: SelectSubset<T, ProgramManagerTaskUpsertArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgramManagerTasks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCountArgs} args - Arguments to filter ProgramManagerTasks to count.
+     * @example
+     * // Count the number of ProgramManagerTasks
+     * const count = await prisma.programManagerTask.count({
+     *   where: {
+     *     // ... the filter for the ProgramManagerTasks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgramManagerTaskCountArgs>(
+      args?: Subset<T, ProgramManagerTaskCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgramManagerTaskCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgramManagerTask.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgramManagerTaskAggregateArgs>(args: Subset<T, ProgramManagerTaskAggregateArgs>): Prisma.PrismaPromise<GetProgramManagerTaskAggregateType<T>>
+
+    /**
+     * Group by ProgramManagerTask.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgramManagerTaskGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgramManagerTaskGroupByArgs['orderBy'] }
+        : { orderBy?: ProgramManagerTaskGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgramManagerTaskGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgramManagerTaskGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgramManagerTask model
+   */
+  readonly fields: ProgramManagerTaskFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgramManagerTask.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgramManagerTaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    comments<T extends ProgramManagerTask$commentsArgs<ExtArgs> = {}>(args?: Subset<T, ProgramManagerTask$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgramManagerTask model
+   */
+  interface ProgramManagerTaskFieldRefs {
+    readonly id: FieldRef<"ProgramManagerTask", 'String'>
+    readonly userId: FieldRef<"ProgramManagerTask", 'String'>
+    readonly title: FieldRef<"ProgramManagerTask", 'String'>
+    readonly description: FieldRef<"ProgramManagerTask", 'String'>
+    readonly plannedDate: FieldRef<"ProgramManagerTask", 'DateTime'>
+    readonly status: FieldRef<"ProgramManagerTask", 'String'>
+    readonly isPlanned: FieldRef<"ProgramManagerTask", 'Boolean'>
+    readonly completionDate: FieldRef<"ProgramManagerTask", 'DateTime'>
+    readonly createdAt: FieldRef<"ProgramManagerTask", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProgramManagerTask", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerTask findUnique
+   */
+  export type ProgramManagerTaskFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTask to fetch.
+     */
+    where: ProgramManagerTaskWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTask findUniqueOrThrow
+   */
+  export type ProgramManagerTaskFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTask to fetch.
+     */
+    where: ProgramManagerTaskWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTask findFirst
+   */
+  export type ProgramManagerTaskFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTask to fetch.
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTasks to fetch.
+     */
+    orderBy?: ProgramManagerTaskOrderByWithRelationInput | ProgramManagerTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerTasks.
+     */
+    cursor?: ProgramManagerTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTasks.
+     */
+    distinct?: ProgramManagerTaskScalarFieldEnum | ProgramManagerTaskScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTask findFirstOrThrow
+   */
+  export type ProgramManagerTaskFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTask to fetch.
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTasks to fetch.
+     */
+    orderBy?: ProgramManagerTaskOrderByWithRelationInput | ProgramManagerTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerTasks.
+     */
+    cursor?: ProgramManagerTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTasks.
+     */
+    distinct?: ProgramManagerTaskScalarFieldEnum | ProgramManagerTaskScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTask findMany
+   */
+  export type ProgramManagerTaskFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTasks to fetch.
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTasks to fetch.
+     */
+    orderBy?: ProgramManagerTaskOrderByWithRelationInput | ProgramManagerTaskOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgramManagerTasks.
+     */
+    cursor?: ProgramManagerTaskWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTasks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTasks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTasks.
+     */
+    distinct?: ProgramManagerTaskScalarFieldEnum | ProgramManagerTaskScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTask create
+   */
+  export type ProgramManagerTaskCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgramManagerTask.
+     */
+    data: XOR<ProgramManagerTaskCreateInput, ProgramManagerTaskUncheckedCreateInput>
+  }
+
+  /**
+   * ProgramManagerTask createMany
+   */
+  export type ProgramManagerTaskCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgramManagerTasks.
+     */
+    data: ProgramManagerTaskCreateManyInput | ProgramManagerTaskCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgramManagerTask createManyAndReturn
+   */
+  export type ProgramManagerTaskCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgramManagerTasks.
+     */
+    data: ProgramManagerTaskCreateManyInput | ProgramManagerTaskCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerTask update
+   */
+  export type ProgramManagerTaskUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgramManagerTask.
+     */
+    data: XOR<ProgramManagerTaskUpdateInput, ProgramManagerTaskUncheckedUpdateInput>
+    /**
+     * Choose, which ProgramManagerTask to update.
+     */
+    where: ProgramManagerTaskWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTask updateMany
+   */
+  export type ProgramManagerTaskUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgramManagerTasks.
+     */
+    data: XOR<ProgramManagerTaskUpdateManyMutationInput, ProgramManagerTaskUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerTasks to update
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * Limit how many ProgramManagerTasks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerTask updateManyAndReturn
+   */
+  export type ProgramManagerTaskUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgramManagerTasks.
+     */
+    data: XOR<ProgramManagerTaskUpdateManyMutationInput, ProgramManagerTaskUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerTasks to update
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * Limit how many ProgramManagerTasks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerTask upsert
+   */
+  export type ProgramManagerTaskUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgramManagerTask to update in case it exists.
+     */
+    where: ProgramManagerTaskWhereUniqueInput
+    /**
+     * In case the ProgramManagerTask found by the `where` argument doesn't exist, create a new ProgramManagerTask with this data.
+     */
+    create: XOR<ProgramManagerTaskCreateInput, ProgramManagerTaskUncheckedCreateInput>
+    /**
+     * In case the ProgramManagerTask was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgramManagerTaskUpdateInput, ProgramManagerTaskUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgramManagerTask delete
+   */
+  export type ProgramManagerTaskDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+    /**
+     * Filter which ProgramManagerTask to delete.
+     */
+    where: ProgramManagerTaskWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTask deleteMany
+   */
+  export type ProgramManagerTaskDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerTasks to delete
+     */
+    where?: ProgramManagerTaskWhereInput
+    /**
+     * Limit how many ProgramManagerTasks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerTask.comments
+   */
+  export type ProgramManagerTask$commentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    where?: ProgramManagerTaskCommentWhereInput
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerTaskCommentScalarFieldEnum | ProgramManagerTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTask without action
+   */
+  export type ProgramManagerTaskDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTask
+     */
+    select?: ProgramManagerTaskSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTask
+     */
+    omit?: ProgramManagerTaskOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgramManagerTaskComment
+   */
+
+  export type AggregateProgramManagerTaskComment = {
+    _count: ProgramManagerTaskCommentCountAggregateOutputType | null
+    _min: ProgramManagerTaskCommentMinAggregateOutputType | null
+    _max: ProgramManagerTaskCommentMaxAggregateOutputType | null
+  }
+
+  export type ProgramManagerTaskCommentMinAggregateOutputType = {
+    id: string | null
+    taskId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgramManagerTaskCommentMaxAggregateOutputType = {
+    id: string | null
+    taskId: string | null
+    authorId: string | null
+    text: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgramManagerTaskCommentCountAggregateOutputType = {
+    id: number
+    taskId: number
+    authorId: number
+    text: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProgramManagerTaskCommentMinAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgramManagerTaskCommentMaxAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgramManagerTaskCommentCountAggregateInputType = {
+    id?: true
+    taskId?: true
+    authorId?: true
+    text?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProgramManagerTaskCommentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerTaskComment to aggregate.
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTaskComments to fetch.
+     */
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgramManagerTaskComments
+    **/
+    _count?: true | ProgramManagerTaskCommentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgramManagerTaskCommentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgramManagerTaskCommentMaxAggregateInputType
+  }
+
+  export type GetProgramManagerTaskCommentAggregateType<T extends ProgramManagerTaskCommentAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgramManagerTaskComment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgramManagerTaskComment[P]>
+      : GetScalarType<T[P], AggregateProgramManagerTaskComment[P]>
+  }
+
+
+
+
+  export type ProgramManagerTaskCommentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgramManagerTaskCommentWhereInput
+    orderBy?: ProgramManagerTaskCommentOrderByWithAggregationInput | ProgramManagerTaskCommentOrderByWithAggregationInput[]
+    by: ProgramManagerTaskCommentScalarFieldEnum[] | ProgramManagerTaskCommentScalarFieldEnum
+    having?: ProgramManagerTaskCommentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgramManagerTaskCommentCountAggregateInputType | true
+    _min?: ProgramManagerTaskCommentMinAggregateInputType
+    _max?: ProgramManagerTaskCommentMaxAggregateInputType
+  }
+
+  export type ProgramManagerTaskCommentGroupByOutputType = {
+    id: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ProgramManagerTaskCommentCountAggregateOutputType | null
+    _min: ProgramManagerTaskCommentMinAggregateOutputType | null
+    _max: ProgramManagerTaskCommentMaxAggregateOutputType | null
+  }
+
+  type GetProgramManagerTaskCommentGroupByPayload<T extends ProgramManagerTaskCommentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgramManagerTaskCommentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgramManagerTaskCommentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgramManagerTaskCommentGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgramManagerTaskCommentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgramManagerTaskCommentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTaskComment"]>
+
+  export type ProgramManagerTaskCommentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTaskComment"]>
+
+  export type ProgramManagerTaskCommentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programManagerTaskComment"]>
+
+  export type ProgramManagerTaskCommentSelectScalar = {
+    id?: boolean
+    taskId?: boolean
+    authorId?: boolean
+    text?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProgramManagerTaskCommentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "taskId" | "authorId" | "text" | "createdAt" | "updatedAt", ExtArgs["result"]["programManagerTaskComment"]>
+  export type ProgramManagerTaskCommentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerTaskCommentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProgramManagerTaskCommentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    task?: boolean | ProgramManagerTaskDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgramManagerTaskCommentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgramManagerTaskComment"
+    objects: {
+      task: Prisma.$ProgramManagerTaskPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      taskId: string
+      authorId: string
+      text: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["programManagerTaskComment"]>
+    composites: {}
+  }
+
+  type ProgramManagerTaskCommentGetPayload<S extends boolean | null | undefined | ProgramManagerTaskCommentDefaultArgs> = $Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload, S>
+
+  type ProgramManagerTaskCommentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgramManagerTaskCommentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgramManagerTaskCommentCountAggregateInputType | true
+    }
+
+  export interface ProgramManagerTaskCommentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgramManagerTaskComment'], meta: { name: 'ProgramManagerTaskComment' } }
+    /**
+     * Find zero or one ProgramManagerTaskComment that matches the filter.
+     * @param {ProgramManagerTaskCommentFindUniqueArgs} args - Arguments to find a ProgramManagerTaskComment
+     * @example
+     * // Get one ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgramManagerTaskCommentFindUniqueArgs>(args: SelectSubset<T, ProgramManagerTaskCommentFindUniqueArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgramManagerTaskComment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgramManagerTaskCommentFindUniqueOrThrowArgs} args - Arguments to find a ProgramManagerTaskComment
+     * @example
+     * // Get one ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgramManagerTaskCommentFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgramManagerTaskCommentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerTaskComment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentFindFirstArgs} args - Arguments to find a ProgramManagerTaskComment
+     * @example
+     * // Get one ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgramManagerTaskCommentFindFirstArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentFindFirstArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgramManagerTaskComment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentFindFirstOrThrowArgs} args - Arguments to find a ProgramManagerTaskComment
+     * @example
+     * // Get one ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgramManagerTaskCommentFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgramManagerTaskComments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgramManagerTaskComments
+     * const programManagerTaskComments = await prisma.programManagerTaskComment.findMany()
+     * 
+     * // Get first 10 ProgramManagerTaskComments
+     * const programManagerTaskComments = await prisma.programManagerTaskComment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programManagerTaskCommentWithIdOnly = await prisma.programManagerTaskComment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgramManagerTaskCommentFindManyArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgramManagerTaskComment.
+     * @param {ProgramManagerTaskCommentCreateArgs} args - Arguments to create a ProgramManagerTaskComment.
+     * @example
+     * // Create one ProgramManagerTaskComment
+     * const ProgramManagerTaskComment = await prisma.programManagerTaskComment.create({
+     *   data: {
+     *     // ... data to create a ProgramManagerTaskComment
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgramManagerTaskCommentCreateArgs>(args: SelectSubset<T, ProgramManagerTaskCommentCreateArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgramManagerTaskComments.
+     * @param {ProgramManagerTaskCommentCreateManyArgs} args - Arguments to create many ProgramManagerTaskComments.
+     * @example
+     * // Create many ProgramManagerTaskComments
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgramManagerTaskCommentCreateManyArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgramManagerTaskComments and returns the data saved in the database.
+     * @param {ProgramManagerTaskCommentCreateManyAndReturnArgs} args - Arguments to create many ProgramManagerTaskComments.
+     * @example
+     * // Create many ProgramManagerTaskComments
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgramManagerTaskComments and only return the `id`
+     * const programManagerTaskCommentWithIdOnly = await prisma.programManagerTaskComment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgramManagerTaskCommentCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgramManagerTaskComment.
+     * @param {ProgramManagerTaskCommentDeleteArgs} args - Arguments to delete one ProgramManagerTaskComment.
+     * @example
+     * // Delete one ProgramManagerTaskComment
+     * const ProgramManagerTaskComment = await prisma.programManagerTaskComment.delete({
+     *   where: {
+     *     // ... filter to delete one ProgramManagerTaskComment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgramManagerTaskCommentDeleteArgs>(args: SelectSubset<T, ProgramManagerTaskCommentDeleteArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgramManagerTaskComment.
+     * @param {ProgramManagerTaskCommentUpdateArgs} args - Arguments to update one ProgramManagerTaskComment.
+     * @example
+     * // Update one ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgramManagerTaskCommentUpdateArgs>(args: SelectSubset<T, ProgramManagerTaskCommentUpdateArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgramManagerTaskComments.
+     * @param {ProgramManagerTaskCommentDeleteManyArgs} args - Arguments to filter ProgramManagerTaskComments to delete.
+     * @example
+     * // Delete a few ProgramManagerTaskComments
+     * const { count } = await prisma.programManagerTaskComment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgramManagerTaskCommentDeleteManyArgs>(args?: SelectSubset<T, ProgramManagerTaskCommentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerTaskComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgramManagerTaskComments
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgramManagerTaskCommentUpdateManyArgs>(args: SelectSubset<T, ProgramManagerTaskCommentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgramManagerTaskComments and returns the data updated in the database.
+     * @param {ProgramManagerTaskCommentUpdateManyAndReturnArgs} args - Arguments to update many ProgramManagerTaskComments.
+     * @example
+     * // Update many ProgramManagerTaskComments
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgramManagerTaskComments and only return the `id`
+     * const programManagerTaskCommentWithIdOnly = await prisma.programManagerTaskComment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgramManagerTaskCommentUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgramManagerTaskCommentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgramManagerTaskComment.
+     * @param {ProgramManagerTaskCommentUpsertArgs} args - Arguments to update or create a ProgramManagerTaskComment.
+     * @example
+     * // Update or create a ProgramManagerTaskComment
+     * const programManagerTaskComment = await prisma.programManagerTaskComment.upsert({
+     *   create: {
+     *     // ... data to create a ProgramManagerTaskComment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgramManagerTaskComment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgramManagerTaskCommentUpsertArgs>(args: SelectSubset<T, ProgramManagerTaskCommentUpsertArgs<ExtArgs>>): Prisma__ProgramManagerTaskCommentClient<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgramManagerTaskComments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentCountArgs} args - Arguments to filter ProgramManagerTaskComments to count.
+     * @example
+     * // Count the number of ProgramManagerTaskComments
+     * const count = await prisma.programManagerTaskComment.count({
+     *   where: {
+     *     // ... the filter for the ProgramManagerTaskComments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgramManagerTaskCommentCountArgs>(
+      args?: Subset<T, ProgramManagerTaskCommentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgramManagerTaskCommentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgramManagerTaskComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgramManagerTaskCommentAggregateArgs>(args: Subset<T, ProgramManagerTaskCommentAggregateArgs>): Prisma.PrismaPromise<GetProgramManagerTaskCommentAggregateType<T>>
+
+    /**
+     * Group by ProgramManagerTaskComment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgramManagerTaskCommentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgramManagerTaskCommentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgramManagerTaskCommentGroupByArgs['orderBy'] }
+        : { orderBy?: ProgramManagerTaskCommentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgramManagerTaskCommentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgramManagerTaskCommentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgramManagerTaskComment model
+   */
+  readonly fields: ProgramManagerTaskCommentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgramManagerTaskComment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgramManagerTaskCommentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    task<T extends ProgramManagerTaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProgramManagerTaskDefaultArgs<ExtArgs>>): Prisma__ProgramManagerTaskClient<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgramManagerTaskComment model
+   */
+  interface ProgramManagerTaskCommentFieldRefs {
+    readonly id: FieldRef<"ProgramManagerTaskComment", 'String'>
+    readonly taskId: FieldRef<"ProgramManagerTaskComment", 'String'>
+    readonly authorId: FieldRef<"ProgramManagerTaskComment", 'String'>
+    readonly text: FieldRef<"ProgramManagerTaskComment", 'String'>
+    readonly createdAt: FieldRef<"ProgramManagerTaskComment", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProgramManagerTaskComment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgramManagerTaskComment findUnique
+   */
+  export type ProgramManagerTaskCommentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTaskComment to fetch.
+     */
+    where: ProgramManagerTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTaskComment findUniqueOrThrow
+   */
+  export type ProgramManagerTaskCommentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTaskComment to fetch.
+     */
+    where: ProgramManagerTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTaskComment findFirst
+   */
+  export type ProgramManagerTaskCommentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTaskComment to fetch.
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTaskComments to fetch.
+     */
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerTaskComments.
+     */
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTaskComments.
+     */
+    distinct?: ProgramManagerTaskCommentScalarFieldEnum | ProgramManagerTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTaskComment findFirstOrThrow
+   */
+  export type ProgramManagerTaskCommentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTaskComment to fetch.
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTaskComments to fetch.
+     */
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgramManagerTaskComments.
+     */
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTaskComments.
+     */
+    distinct?: ProgramManagerTaskCommentScalarFieldEnum | ProgramManagerTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTaskComment findMany
+   */
+  export type ProgramManagerTaskCommentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgramManagerTaskComments to fetch.
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgramManagerTaskComments to fetch.
+     */
+    orderBy?: ProgramManagerTaskCommentOrderByWithRelationInput | ProgramManagerTaskCommentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgramManagerTaskComments.
+     */
+    cursor?: ProgramManagerTaskCommentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgramManagerTaskComments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgramManagerTaskComments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgramManagerTaskComments.
+     */
+    distinct?: ProgramManagerTaskCommentScalarFieldEnum | ProgramManagerTaskCommentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgramManagerTaskComment create
+   */
+  export type ProgramManagerTaskCommentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgramManagerTaskComment.
+     */
+    data: XOR<ProgramManagerTaskCommentCreateInput, ProgramManagerTaskCommentUncheckedCreateInput>
+  }
+
+  /**
+   * ProgramManagerTaskComment createMany
+   */
+  export type ProgramManagerTaskCommentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgramManagerTaskComments.
+     */
+    data: ProgramManagerTaskCommentCreateManyInput | ProgramManagerTaskCommentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgramManagerTaskComment createManyAndReturn
+   */
+  export type ProgramManagerTaskCommentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgramManagerTaskComments.
+     */
+    data: ProgramManagerTaskCommentCreateManyInput | ProgramManagerTaskCommentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerTaskComment update
+   */
+  export type ProgramManagerTaskCommentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgramManagerTaskComment.
+     */
+    data: XOR<ProgramManagerTaskCommentUpdateInput, ProgramManagerTaskCommentUncheckedUpdateInput>
+    /**
+     * Choose, which ProgramManagerTaskComment to update.
+     */
+    where: ProgramManagerTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTaskComment updateMany
+   */
+  export type ProgramManagerTaskCommentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgramManagerTaskComments.
+     */
+    data: XOR<ProgramManagerTaskCommentUpdateManyMutationInput, ProgramManagerTaskCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerTaskComments to update
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * Limit how many ProgramManagerTaskComments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerTaskComment updateManyAndReturn
+   */
+  export type ProgramManagerTaskCommentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgramManagerTaskComments.
+     */
+    data: XOR<ProgramManagerTaskCommentUpdateManyMutationInput, ProgramManagerTaskCommentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgramManagerTaskComments to update
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * Limit how many ProgramManagerTaskComments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgramManagerTaskComment upsert
+   */
+  export type ProgramManagerTaskCommentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgramManagerTaskComment to update in case it exists.
+     */
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    /**
+     * In case the ProgramManagerTaskComment found by the `where` argument doesn't exist, create a new ProgramManagerTaskComment with this data.
+     */
+    create: XOR<ProgramManagerTaskCommentCreateInput, ProgramManagerTaskCommentUncheckedCreateInput>
+    /**
+     * In case the ProgramManagerTaskComment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgramManagerTaskCommentUpdateInput, ProgramManagerTaskCommentUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgramManagerTaskComment delete
+   */
+  export type ProgramManagerTaskCommentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
+    /**
+     * Filter which ProgramManagerTaskComment to delete.
+     */
+    where: ProgramManagerTaskCommentWhereUniqueInput
+  }
+
+  /**
+   * ProgramManagerTaskComment deleteMany
+   */
+  export type ProgramManagerTaskCommentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgramManagerTaskComments to delete
+     */
+    where?: ProgramManagerTaskCommentWhereInput
+    /**
+     * Limit how many ProgramManagerTaskComments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgramManagerTaskComment without action
+   */
+  export type ProgramManagerTaskCommentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerTaskComment
+     */
+    select?: ProgramManagerTaskCommentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerTaskComment
+     */
+    omit?: ProgramManagerTaskCommentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerTaskCommentInclude<ExtArgs> | null
   }
 
 
@@ -48961,6 +56766,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
+    programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livelihoodProgram"]>
 
@@ -49003,6 +56809,7 @@ export namespace Prisma {
   export type LivelihoodProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "category" | "type" | "name" | "description" | "status" | "totalTarget" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodProgram"]>
   export type LivelihoodProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
+    programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LivelihoodProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -49012,6 +56819,7 @@ export namespace Prisma {
     name: "LivelihoodProgram"
     objects: {
       assignments: Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>[]
+      programManagers: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -49418,6 +57226,7 @@ export namespace Prisma {
   export interface Prisma__LivelihoodProgramClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     assignments<T extends LivelihoodProgram$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programManagers<T extends LivelihoodProgram$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -49870,6 +57679,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BeneficiaryLivelihoodScalarFieldEnum | BeneficiaryLivelihoodScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgram.programManagers
+   */
+  export type LivelihoodProgram$programManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerLivelihoodProgram
+     */
+    select?: ProgramManagerLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerLivelihoodProgram
+     */
+    omit?: ProgramManagerLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerLivelihoodProgramInclude<ExtArgs> | null
+    where?: ProgramManagerLivelihoodProgramWhereInput
+    orderBy?: ProgramManagerLivelihoodProgramOrderByWithRelationInput | ProgramManagerLivelihoodProgramOrderByWithRelationInput[]
+    cursor?: ProgramManagerLivelihoodProgramWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
   }
 
   /**
@@ -72698,6 +80531,1220 @@ export namespace Prisma {
 
 
   /**
+   * Model IndividualFeedback
+   */
+
+  export type AggregateIndividualFeedback = {
+    _count: IndividualFeedbackCountAggregateOutputType | null
+    _min: IndividualFeedbackMinAggregateOutputType | null
+    _max: IndividualFeedbackMaxAggregateOutputType | null
+  }
+
+  export type IndividualFeedbackMinAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    date: Date | null
+    classroomLevel: string | null
+    classGroup: string | null
+    subject: string | null
+    subjectOther: string | null
+    lessonPlanLink: string | null
+    lessonPlanFeedback: boolean | null
+    strengths: string | null
+    areasOfDevelopment: string | null
+    nextStepsFellow: string | null
+    nextStepPM: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IndividualFeedbackMaxAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    date: Date | null
+    classroomLevel: string | null
+    classGroup: string | null
+    subject: string | null
+    subjectOther: string | null
+    lessonPlanLink: string | null
+    lessonPlanFeedback: boolean | null
+    strengths: string | null
+    areasOfDevelopment: string | null
+    nextStepsFellow: string | null
+    nextStepPM: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type IndividualFeedbackCountAggregateOutputType = {
+    id: number
+    fellowId: number
+    date: number
+    classroomLevel: number
+    classGroup: number
+    subject: number
+    subjectOther: number
+    lessonPlanLink: number
+    lessonPlanFeedback: number
+    strengths: number
+    areasOfDevelopment: number
+    nextStepsFellow: number
+    nextStepPM: number
+    authorId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type IndividualFeedbackMinAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classroomLevel?: true
+    classGroup?: true
+    subject?: true
+    subjectOther?: true
+    lessonPlanLink?: true
+    lessonPlanFeedback?: true
+    strengths?: true
+    areasOfDevelopment?: true
+    nextStepsFellow?: true
+    nextStepPM?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IndividualFeedbackMaxAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classroomLevel?: true
+    classGroup?: true
+    subject?: true
+    subjectOther?: true
+    lessonPlanLink?: true
+    lessonPlanFeedback?: true
+    strengths?: true
+    areasOfDevelopment?: true
+    nextStepsFellow?: true
+    nextStepPM?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type IndividualFeedbackCountAggregateInputType = {
+    id?: true
+    fellowId?: true
+    date?: true
+    classroomLevel?: true
+    classGroup?: true
+    subject?: true
+    subjectOther?: true
+    lessonPlanLink?: true
+    lessonPlanFeedback?: true
+    strengths?: true
+    areasOfDevelopment?: true
+    nextStepsFellow?: true
+    nextStepPM?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type IndividualFeedbackAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IndividualFeedback to aggregate.
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualFeedbacks to fetch.
+     */
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IndividualFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IndividualFeedbacks
+    **/
+    _count?: true | IndividualFeedbackCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IndividualFeedbackMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IndividualFeedbackMaxAggregateInputType
+  }
+
+  export type GetIndividualFeedbackAggregateType<T extends IndividualFeedbackAggregateArgs> = {
+        [P in keyof T & keyof AggregateIndividualFeedback]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIndividualFeedback[P]>
+      : GetScalarType<T[P], AggregateIndividualFeedback[P]>
+  }
+
+
+
+
+  export type IndividualFeedbackGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IndividualFeedbackWhereInput
+    orderBy?: IndividualFeedbackOrderByWithAggregationInput | IndividualFeedbackOrderByWithAggregationInput[]
+    by: IndividualFeedbackScalarFieldEnum[] | IndividualFeedbackScalarFieldEnum
+    having?: IndividualFeedbackScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IndividualFeedbackCountAggregateInputType | true
+    _min?: IndividualFeedbackMinAggregateInputType
+    _max?: IndividualFeedbackMaxAggregateInputType
+  }
+
+  export type IndividualFeedbackGroupByOutputType = {
+    id: string
+    fellowId: string
+    date: Date
+    classroomLevel: string | null
+    classGroup: string | null
+    subject: string
+    subjectOther: string | null
+    lessonPlanLink: string | null
+    lessonPlanFeedback: boolean
+    strengths: string | null
+    areasOfDevelopment: string | null
+    nextStepsFellow: string | null
+    nextStepPM: string | null
+    authorId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: IndividualFeedbackCountAggregateOutputType | null
+    _min: IndividualFeedbackMinAggregateOutputType | null
+    _max: IndividualFeedbackMaxAggregateOutputType | null
+  }
+
+  type GetIndividualFeedbackGroupByPayload<T extends IndividualFeedbackGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IndividualFeedbackGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IndividualFeedbackGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IndividualFeedbackGroupByOutputType[P]>
+            : GetScalarType<T[P], IndividualFeedbackGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IndividualFeedbackSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classroomLevel?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    subjectOther?: boolean
+    lessonPlanLink?: boolean
+    lessonPlanFeedback?: boolean
+    strengths?: boolean
+    areasOfDevelopment?: boolean
+    nextStepsFellow?: boolean
+    nextStepPM?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualFeedback"]>
+
+  export type IndividualFeedbackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classroomLevel?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    subjectOther?: boolean
+    lessonPlanLink?: boolean
+    lessonPlanFeedback?: boolean
+    strengths?: boolean
+    areasOfDevelopment?: boolean
+    nextStepsFellow?: boolean
+    nextStepPM?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualFeedback"]>
+
+  export type IndividualFeedbackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classroomLevel?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    subjectOther?: boolean
+    lessonPlanLink?: boolean
+    lessonPlanFeedback?: boolean
+    strengths?: boolean
+    areasOfDevelopment?: boolean
+    nextStepsFellow?: boolean
+    nextStepPM?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["individualFeedback"]>
+
+  export type IndividualFeedbackSelectScalar = {
+    id?: boolean
+    fellowId?: boolean
+    date?: boolean
+    classroomLevel?: boolean
+    classGroup?: boolean
+    subject?: boolean
+    subjectOther?: boolean
+    lessonPlanLink?: boolean
+    lessonPlanFeedback?: boolean
+    strengths?: boolean
+    areasOfDevelopment?: boolean
+    nextStepsFellow?: boolean
+    nextStepPM?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type IndividualFeedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "date" | "classroomLevel" | "classGroup" | "subject" | "subjectOther" | "lessonPlanLink" | "lessonPlanFeedback" | "strengths" | "areasOfDevelopment" | "nextStepsFellow" | "nextStepPM" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["individualFeedback"]>
+  export type IndividualFeedbackInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type IndividualFeedbackIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type IndividualFeedbackIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    author?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $IndividualFeedbackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IndividualFeedback"
+    objects: {
+      fellow: Prisma.$FellowPayload<ExtArgs>
+      author: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fellowId: string
+      date: Date
+      classroomLevel: string | null
+      classGroup: string | null
+      subject: string
+      subjectOther: string | null
+      lessonPlanLink: string | null
+      lessonPlanFeedback: boolean
+      strengths: string | null
+      areasOfDevelopment: string | null
+      nextStepsFellow: string | null
+      nextStepPM: string | null
+      authorId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["individualFeedback"]>
+    composites: {}
+  }
+
+  type IndividualFeedbackGetPayload<S extends boolean | null | undefined | IndividualFeedbackDefaultArgs> = $Result.GetResult<Prisma.$IndividualFeedbackPayload, S>
+
+  type IndividualFeedbackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<IndividualFeedbackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: IndividualFeedbackCountAggregateInputType | true
+    }
+
+  export interface IndividualFeedbackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IndividualFeedback'], meta: { name: 'IndividualFeedback' } }
+    /**
+     * Find zero or one IndividualFeedback that matches the filter.
+     * @param {IndividualFeedbackFindUniqueArgs} args - Arguments to find a IndividualFeedback
+     * @example
+     * // Get one IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IndividualFeedbackFindUniqueArgs>(args: SelectSubset<T, IndividualFeedbackFindUniqueArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one IndividualFeedback that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {IndividualFeedbackFindUniqueOrThrowArgs} args - Arguments to find a IndividualFeedback
+     * @example
+     * // Get one IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IndividualFeedbackFindUniqueOrThrowArgs>(args: SelectSubset<T, IndividualFeedbackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IndividualFeedback that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackFindFirstArgs} args - Arguments to find a IndividualFeedback
+     * @example
+     * // Get one IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IndividualFeedbackFindFirstArgs>(args?: SelectSubset<T, IndividualFeedbackFindFirstArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first IndividualFeedback that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackFindFirstOrThrowArgs} args - Arguments to find a IndividualFeedback
+     * @example
+     * // Get one IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IndividualFeedbackFindFirstOrThrowArgs>(args?: SelectSubset<T, IndividualFeedbackFindFirstOrThrowArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more IndividualFeedbacks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IndividualFeedbacks
+     * const individualFeedbacks = await prisma.individualFeedback.findMany()
+     * 
+     * // Get first 10 IndividualFeedbacks
+     * const individualFeedbacks = await prisma.individualFeedback.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const individualFeedbackWithIdOnly = await prisma.individualFeedback.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IndividualFeedbackFindManyArgs>(args?: SelectSubset<T, IndividualFeedbackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a IndividualFeedback.
+     * @param {IndividualFeedbackCreateArgs} args - Arguments to create a IndividualFeedback.
+     * @example
+     * // Create one IndividualFeedback
+     * const IndividualFeedback = await prisma.individualFeedback.create({
+     *   data: {
+     *     // ... data to create a IndividualFeedback
+     *   }
+     * })
+     * 
+     */
+    create<T extends IndividualFeedbackCreateArgs>(args: SelectSubset<T, IndividualFeedbackCreateArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many IndividualFeedbacks.
+     * @param {IndividualFeedbackCreateManyArgs} args - Arguments to create many IndividualFeedbacks.
+     * @example
+     * // Create many IndividualFeedbacks
+     * const individualFeedback = await prisma.individualFeedback.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IndividualFeedbackCreateManyArgs>(args?: SelectSubset<T, IndividualFeedbackCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IndividualFeedbacks and returns the data saved in the database.
+     * @param {IndividualFeedbackCreateManyAndReturnArgs} args - Arguments to create many IndividualFeedbacks.
+     * @example
+     * // Create many IndividualFeedbacks
+     * const individualFeedback = await prisma.individualFeedback.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IndividualFeedbacks and only return the `id`
+     * const individualFeedbackWithIdOnly = await prisma.individualFeedback.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IndividualFeedbackCreateManyAndReturnArgs>(args?: SelectSubset<T, IndividualFeedbackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a IndividualFeedback.
+     * @param {IndividualFeedbackDeleteArgs} args - Arguments to delete one IndividualFeedback.
+     * @example
+     * // Delete one IndividualFeedback
+     * const IndividualFeedback = await prisma.individualFeedback.delete({
+     *   where: {
+     *     // ... filter to delete one IndividualFeedback
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IndividualFeedbackDeleteArgs>(args: SelectSubset<T, IndividualFeedbackDeleteArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one IndividualFeedback.
+     * @param {IndividualFeedbackUpdateArgs} args - Arguments to update one IndividualFeedback.
+     * @example
+     * // Update one IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IndividualFeedbackUpdateArgs>(args: SelectSubset<T, IndividualFeedbackUpdateArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more IndividualFeedbacks.
+     * @param {IndividualFeedbackDeleteManyArgs} args - Arguments to filter IndividualFeedbacks to delete.
+     * @example
+     * // Delete a few IndividualFeedbacks
+     * const { count } = await prisma.individualFeedback.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IndividualFeedbackDeleteManyArgs>(args?: SelectSubset<T, IndividualFeedbackDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IndividualFeedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IndividualFeedbacks
+     * const individualFeedback = await prisma.individualFeedback.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IndividualFeedbackUpdateManyArgs>(args: SelectSubset<T, IndividualFeedbackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IndividualFeedbacks and returns the data updated in the database.
+     * @param {IndividualFeedbackUpdateManyAndReturnArgs} args - Arguments to update many IndividualFeedbacks.
+     * @example
+     * // Update many IndividualFeedbacks
+     * const individualFeedback = await prisma.individualFeedback.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more IndividualFeedbacks and only return the `id`
+     * const individualFeedbackWithIdOnly = await prisma.individualFeedback.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends IndividualFeedbackUpdateManyAndReturnArgs>(args: SelectSubset<T, IndividualFeedbackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one IndividualFeedback.
+     * @param {IndividualFeedbackUpsertArgs} args - Arguments to update or create a IndividualFeedback.
+     * @example
+     * // Update or create a IndividualFeedback
+     * const individualFeedback = await prisma.individualFeedback.upsert({
+     *   create: {
+     *     // ... data to create a IndividualFeedback
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IndividualFeedback we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IndividualFeedbackUpsertArgs>(args: SelectSubset<T, IndividualFeedbackUpsertArgs<ExtArgs>>): Prisma__IndividualFeedbackClient<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of IndividualFeedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackCountArgs} args - Arguments to filter IndividualFeedbacks to count.
+     * @example
+     * // Count the number of IndividualFeedbacks
+     * const count = await prisma.individualFeedback.count({
+     *   where: {
+     *     // ... the filter for the IndividualFeedbacks we want to count
+     *   }
+     * })
+    **/
+    count<T extends IndividualFeedbackCountArgs>(
+      args?: Subset<T, IndividualFeedbackCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IndividualFeedbackCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IndividualFeedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IndividualFeedbackAggregateArgs>(args: Subset<T, IndividualFeedbackAggregateArgs>): Prisma.PrismaPromise<GetIndividualFeedbackAggregateType<T>>
+
+    /**
+     * Group by IndividualFeedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IndividualFeedbackGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IndividualFeedbackGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IndividualFeedbackGroupByArgs['orderBy'] }
+        : { orderBy?: IndividualFeedbackGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IndividualFeedbackGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIndividualFeedbackGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IndividualFeedback model
+   */
+  readonly fields: IndividualFeedbackFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IndividualFeedback.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IndividualFeedbackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fellow<T extends FellowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FellowDefaultArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IndividualFeedback model
+   */
+  interface IndividualFeedbackFieldRefs {
+    readonly id: FieldRef<"IndividualFeedback", 'String'>
+    readonly fellowId: FieldRef<"IndividualFeedback", 'String'>
+    readonly date: FieldRef<"IndividualFeedback", 'DateTime'>
+    readonly classroomLevel: FieldRef<"IndividualFeedback", 'String'>
+    readonly classGroup: FieldRef<"IndividualFeedback", 'String'>
+    readonly subject: FieldRef<"IndividualFeedback", 'String'>
+    readonly subjectOther: FieldRef<"IndividualFeedback", 'String'>
+    readonly lessonPlanLink: FieldRef<"IndividualFeedback", 'String'>
+    readonly lessonPlanFeedback: FieldRef<"IndividualFeedback", 'Boolean'>
+    readonly strengths: FieldRef<"IndividualFeedback", 'String'>
+    readonly areasOfDevelopment: FieldRef<"IndividualFeedback", 'String'>
+    readonly nextStepsFellow: FieldRef<"IndividualFeedback", 'String'>
+    readonly nextStepPM: FieldRef<"IndividualFeedback", 'String'>
+    readonly authorId: FieldRef<"IndividualFeedback", 'String'>
+    readonly createdAt: FieldRef<"IndividualFeedback", 'DateTime'>
+    readonly updatedAt: FieldRef<"IndividualFeedback", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IndividualFeedback findUnique
+   */
+  export type IndividualFeedbackFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualFeedback to fetch.
+     */
+    where: IndividualFeedbackWhereUniqueInput
+  }
+
+  /**
+   * IndividualFeedback findUniqueOrThrow
+   */
+  export type IndividualFeedbackFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualFeedback to fetch.
+     */
+    where: IndividualFeedbackWhereUniqueInput
+  }
+
+  /**
+   * IndividualFeedback findFirst
+   */
+  export type IndividualFeedbackFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualFeedback to fetch.
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualFeedbacks to fetch.
+     */
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IndividualFeedbacks.
+     */
+    cursor?: IndividualFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IndividualFeedbacks.
+     */
+    distinct?: IndividualFeedbackScalarFieldEnum | IndividualFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualFeedback findFirstOrThrow
+   */
+  export type IndividualFeedbackFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualFeedback to fetch.
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualFeedbacks to fetch.
+     */
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IndividualFeedbacks.
+     */
+    cursor?: IndividualFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IndividualFeedbacks.
+     */
+    distinct?: IndividualFeedbackScalarFieldEnum | IndividualFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualFeedback findMany
+   */
+  export type IndividualFeedbackFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which IndividualFeedbacks to fetch.
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IndividualFeedbacks to fetch.
+     */
+    orderBy?: IndividualFeedbackOrderByWithRelationInput | IndividualFeedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IndividualFeedbacks.
+     */
+    cursor?: IndividualFeedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IndividualFeedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IndividualFeedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IndividualFeedbacks.
+     */
+    distinct?: IndividualFeedbackScalarFieldEnum | IndividualFeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * IndividualFeedback create
+   */
+  export type IndividualFeedbackCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to create a IndividualFeedback.
+     */
+    data: XOR<IndividualFeedbackCreateInput, IndividualFeedbackUncheckedCreateInput>
+  }
+
+  /**
+   * IndividualFeedback createMany
+   */
+  export type IndividualFeedbackCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IndividualFeedbacks.
+     */
+    data: IndividualFeedbackCreateManyInput | IndividualFeedbackCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IndividualFeedback createManyAndReturn
+   */
+  export type IndividualFeedbackCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * The data used to create many IndividualFeedbacks.
+     */
+    data: IndividualFeedbackCreateManyInput | IndividualFeedbackCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IndividualFeedback update
+   */
+  export type IndividualFeedbackUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to update a IndividualFeedback.
+     */
+    data: XOR<IndividualFeedbackUpdateInput, IndividualFeedbackUncheckedUpdateInput>
+    /**
+     * Choose, which IndividualFeedback to update.
+     */
+    where: IndividualFeedbackWhereUniqueInput
+  }
+
+  /**
+   * IndividualFeedback updateMany
+   */
+  export type IndividualFeedbackUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IndividualFeedbacks.
+     */
+    data: XOR<IndividualFeedbackUpdateManyMutationInput, IndividualFeedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which IndividualFeedbacks to update
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * Limit how many IndividualFeedbacks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * IndividualFeedback updateManyAndReturn
+   */
+  export type IndividualFeedbackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * The data used to update IndividualFeedbacks.
+     */
+    data: XOR<IndividualFeedbackUpdateManyMutationInput, IndividualFeedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which IndividualFeedbacks to update
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * Limit how many IndividualFeedbacks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * IndividualFeedback upsert
+   */
+  export type IndividualFeedbackUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * The filter to search for the IndividualFeedback to update in case it exists.
+     */
+    where: IndividualFeedbackWhereUniqueInput
+    /**
+     * In case the IndividualFeedback found by the `where` argument doesn't exist, create a new IndividualFeedback with this data.
+     */
+    create: XOR<IndividualFeedbackCreateInput, IndividualFeedbackUncheckedCreateInput>
+    /**
+     * In case the IndividualFeedback was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IndividualFeedbackUpdateInput, IndividualFeedbackUncheckedUpdateInput>
+  }
+
+  /**
+   * IndividualFeedback delete
+   */
+  export type IndividualFeedbackDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+    /**
+     * Filter which IndividualFeedback to delete.
+     */
+    where: IndividualFeedbackWhereUniqueInput
+  }
+
+  /**
+   * IndividualFeedback deleteMany
+   */
+  export type IndividualFeedbackDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IndividualFeedbacks to delete
+     */
+    where?: IndividualFeedbackWhereInput
+    /**
+     * Limit how many IndividualFeedbacks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * IndividualFeedback without action
+   */
+  export type IndividualFeedbackDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IndividualFeedback
+     */
+    select?: IndividualFeedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IndividualFeedback
+     */
+    omit?: IndividualFeedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IndividualFeedbackInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model TravelRequest
    */
 
@@ -85528,6 +94575,7 @@ export namespace Prisma {
     learningAssessments?: boolean | AfterSchoolCentre$learningAssessmentsArgs<ExtArgs>
     homeworkRecords?: boolean | AfterSchoolCentre$homeworkRecordsArgs<ExtArgs>
     assessmentForms?: boolean | AfterSchoolCentre$assessmentFormsArgs<ExtArgs>
+    programManagers?: boolean | AfterSchoolCentre$programManagersArgs<ExtArgs>
     _count?: boolean | AfterSchoolCentreCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["afterSchoolCentre"]>
 
@@ -85587,6 +94635,7 @@ export namespace Prisma {
     learningAssessments?: boolean | AfterSchoolCentre$learningAssessmentsArgs<ExtArgs>
     homeworkRecords?: boolean | AfterSchoolCentre$homeworkRecordsArgs<ExtArgs>
     assessmentForms?: boolean | AfterSchoolCentre$assessmentFormsArgs<ExtArgs>
+    programManagers?: boolean | AfterSchoolCentre$programManagersArgs<ExtArgs>
     _count?: boolean | AfterSchoolCentreCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AfterSchoolCentreIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -85601,6 +94650,7 @@ export namespace Prisma {
       learningAssessments: Prisma.$AfterSchoolLearningAssessmentPayload<ExtArgs>[]
       homeworkRecords: Prisma.$AfterSchoolHomeworkPayload<ExtArgs>[]
       assessmentForms: Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>[]
+      programManagers: Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -86016,6 +95066,7 @@ export namespace Prisma {
     learningAssessments<T extends AfterSchoolCentre$learningAssessmentsArgs<ExtArgs> = {}>(args?: Subset<T, AfterSchoolCentre$learningAssessmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolLearningAssessmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     homeworkRecords<T extends AfterSchoolCentre$homeworkRecordsArgs<ExtArgs> = {}>(args?: Subset<T, AfterSchoolCentre$homeworkRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolHomeworkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assessmentForms<T extends AfterSchoolCentre$assessmentFormsArgs<ExtArgs> = {}>(args?: Subset<T, AfterSchoolCentre$assessmentFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programManagers<T extends AfterSchoolCentre$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, AfterSchoolCentre$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerAfterSchoolCentrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -86592,6 +95643,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AfterSchoolAssessmentFormScalarFieldEnum | AfterSchoolAssessmentFormScalarFieldEnum[]
+  }
+
+  /**
+   * AfterSchoolCentre.programManagers
+   */
+  export type AfterSchoolCentre$programManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgramManagerAfterSchoolCentre
+     */
+    select?: ProgramManagerAfterSchoolCentreSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgramManagerAfterSchoolCentre
+     */
+    omit?: ProgramManagerAfterSchoolCentreOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgramManagerAfterSchoolCentreInclude<ExtArgs> | null
+    where?: ProgramManagerAfterSchoolCentreWhereInput
+    orderBy?: ProgramManagerAfterSchoolCentreOrderByWithRelationInput | ProgramManagerAfterSchoolCentreOrderByWithRelationInput[]
+    cursor?: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgramManagerAfterSchoolCentreScalarFieldEnum | ProgramManagerAfterSchoolCentreScalarFieldEnum[]
   }
 
   /**
@@ -99213,6 +108288,7 @@ export namespace Prisma {
     session: string | null
     phase: string | null
     sectionKey: string | null
+    source: string | null
     note: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -99224,6 +108300,7 @@ export namespace Prisma {
     session: string | null
     phase: string | null
     sectionKey: string | null
+    source: string | null
     note: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -99235,6 +108312,7 @@ export namespace Prisma {
     session: number
     phase: number
     sectionKey: number
+    source: number
     note: number
     createdAt: number
     updatedAt: number
@@ -99248,6 +108326,7 @@ export namespace Prisma {
     session?: true
     phase?: true
     sectionKey?: true
+    source?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -99259,6 +108338,7 @@ export namespace Prisma {
     session?: true
     phase?: true
     sectionKey?: true
+    source?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -99270,6 +108350,7 @@ export namespace Prisma {
     session?: true
     phase?: true
     sectionKey?: true
+    source?: true
     note?: true
     createdAt?: true
     updatedAt?: true
@@ -99354,6 +108435,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source: string
     note: string
     createdAt: Date
     updatedAt: Date
@@ -99382,6 +108464,7 @@ export namespace Prisma {
     session?: boolean
     phase?: boolean
     sectionKey?: boolean
+    source?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99394,6 +108477,7 @@ export namespace Prisma {
     session?: boolean
     phase?: boolean
     sectionKey?: boolean
+    source?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99406,6 +108490,7 @@ export namespace Prisma {
     session?: boolean
     phase?: boolean
     sectionKey?: boolean
+    source?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -99418,12 +108503,13 @@ export namespace Prisma {
     session?: boolean
     phase?: boolean
     sectionKey?: boolean
+    source?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FellowStudentDataNoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "session" | "phase" | "sectionKey" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowStudentDataNote"]>
+  export type FellowStudentDataNoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "session" | "phase" | "sectionKey" | "source" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowStudentDataNote"]>
   export type FellowStudentDataNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fellow?: boolean | FellowDefaultArgs<ExtArgs>
   }
@@ -99445,6 +108531,7 @@ export namespace Prisma {
       session: string
       phase: string
       sectionKey: string
+      source: string
       note: string
       createdAt: Date
       updatedAt: Date
@@ -99877,6 +108964,7 @@ export namespace Prisma {
     readonly session: FieldRef<"FellowStudentDataNote", 'String'>
     readonly phase: FieldRef<"FellowStudentDataNote", 'String'>
     readonly sectionKey: FieldRef<"FellowStudentDataNote", 'String'>
+    readonly source: FieldRef<"FellowStudentDataNote", 'String'>
     readonly note: FieldRef<"FellowStudentDataNote", 'String'>
     readonly createdAt: FieldRef<"FellowStudentDataNote", 'DateTime'>
     readonly updatedAt: FieldRef<"FellowStudentDataNote", 'DateTime'>
@@ -100335,6 +109423,10 @@ export namespace Prisma {
     roleId: 'roleId',
     status: 'status',
     department: 'department',
+    dob: 'dob',
+    gender: 'gender',
+    address: 'address',
+    avatar: 'avatar',
     leavesTaken: 'leavesTaken',
     leavesRemaining: 'leavesRemaining',
     createdAt: 'createdAt',
@@ -100448,6 +109540,29 @@ export namespace Prisma {
   };
 
   export type PMReflectionScalarFieldEnum = (typeof PMReflectionScalarFieldEnum)[keyof typeof PMReflectionScalarFieldEnum]
+
+
+  export const FellowPerformanceScalarFieldEnum: {
+    id: 'id',
+    fellowId: 'fellowId',
+    date: 'date',
+    classGroup: 'classGroup',
+    subject: 'subject',
+    lessonPlan: 'lessonPlan',
+    culture: 'culture',
+    lessonFlow: 'lessonFlow',
+    content: 'content',
+    communityEngagement: 'communityEngagement',
+    overallScore: 'overallScore',
+    strength: 'strength',
+    aod: 'aod',
+    trend: 'trend',
+    authorId: 'authorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FellowPerformanceScalarFieldEnum = (typeof FellowPerformanceScalarFieldEnum)[keyof typeof FellowPerformanceScalarFieldEnum]
 
 
   export const FellowReviewScalarFieldEnum: {
@@ -100617,6 +109732,64 @@ export namespace Prisma {
   };
 
   export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
+
+
+  export const ProgramManagerSchoolScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    schoolId: 'schoolId',
+    createdAt: 'createdAt'
+  };
+
+  export type ProgramManagerSchoolScalarFieldEnum = (typeof ProgramManagerSchoolScalarFieldEnum)[keyof typeof ProgramManagerSchoolScalarFieldEnum]
+
+
+  export const ProgramManagerAfterSchoolCentreScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    centreId: 'centreId',
+    createdAt: 'createdAt'
+  };
+
+  export type ProgramManagerAfterSchoolCentreScalarFieldEnum = (typeof ProgramManagerAfterSchoolCentreScalarFieldEnum)[keyof typeof ProgramManagerAfterSchoolCentreScalarFieldEnum]
+
+
+  export const ProgramManagerLivelihoodProgramScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    programId: 'programId',
+    createdAt: 'createdAt'
+  };
+
+  export type ProgramManagerLivelihoodProgramScalarFieldEnum = (typeof ProgramManagerLivelihoodProgramScalarFieldEnum)[keyof typeof ProgramManagerLivelihoodProgramScalarFieldEnum]
+
+
+  export const ProgramManagerTaskScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    title: 'title',
+    description: 'description',
+    plannedDate: 'plannedDate',
+    status: 'status',
+    isPlanned: 'isPlanned',
+    completionDate: 'completionDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProgramManagerTaskScalarFieldEnum = (typeof ProgramManagerTaskScalarFieldEnum)[keyof typeof ProgramManagerTaskScalarFieldEnum]
+
+
+  export const ProgramManagerTaskCommentScalarFieldEnum: {
+    id: 'id',
+    taskId: 'taskId',
+    authorId: 'authorId',
+    text: 'text',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProgramManagerTaskCommentScalarFieldEnum = (typeof ProgramManagerTaskCommentScalarFieldEnum)[keyof typeof ProgramManagerTaskCommentScalarFieldEnum]
 
 
   export const SchoolProgramScalarFieldEnum: {
@@ -101126,6 +110299,28 @@ export namespace Prisma {
   export type LookBeyondSurveyScalarFieldEnum = (typeof LookBeyondSurveyScalarFieldEnum)[keyof typeof LookBeyondSurveyScalarFieldEnum]
 
 
+  export const IndividualFeedbackScalarFieldEnum: {
+    id: 'id',
+    fellowId: 'fellowId',
+    date: 'date',
+    classroomLevel: 'classroomLevel',
+    classGroup: 'classGroup',
+    subject: 'subject',
+    subjectOther: 'subjectOther',
+    lessonPlanLink: 'lessonPlanLink',
+    lessonPlanFeedback: 'lessonPlanFeedback',
+    strengths: 'strengths',
+    areasOfDevelopment: 'areasOfDevelopment',
+    nextStepsFellow: 'nextStepsFellow',
+    nextStepPM: 'nextStepPM',
+    authorId: 'authorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type IndividualFeedbackScalarFieldEnum = (typeof IndividualFeedbackScalarFieldEnum)[keyof typeof IndividualFeedbackScalarFieldEnum]
+
+
   export const TravelRequestScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -101445,6 +110640,7 @@ export namespace Prisma {
     session: 'session',
     phase: 'phase',
     sectionKey: 'sectionKey',
+    source: 'source',
     note: 'note',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -101746,6 +110942,10 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     department?: StringNullableFilter<"User"> | string | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    gender?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -101761,6 +110961,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
+    individualFeedback?: IndividualFeedbackListRelationFilter
+    performanceObservations?: FellowPerformanceListRelationFilter
+    managedSchools?: ProgramManagerSchoolListRelationFilter
+    managedCentres?: ProgramManagerAfterSchoolCentreListRelationFilter
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramListRelationFilter
+    pmTasks?: ProgramManagerTaskListRelationFilter
+    pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -101773,6 +110980,10 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -101788,6 +110999,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestOrderByRelationAggregateInput
     coachingRecords?: CoachingRecordOrderByRelationAggregateInput
     pmReflections?: PMReflectionOrderByRelationAggregateInput
+    individualFeedback?: IndividualFeedbackOrderByRelationAggregateInput
+    performanceObservations?: FellowPerformanceOrderByRelationAggregateInput
+    managedSchools?: ProgramManagerSchoolOrderByRelationAggregateInput
+    managedCentres?: ProgramManagerAfterSchoolCentreOrderByRelationAggregateInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
+    pmTasks?: ProgramManagerTaskOrderByRelationAggregateInput
+    pmTaskComments?: ProgramManagerTaskCommentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -101803,6 +111021,10 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     department?: StringNullableFilter<"User"> | string | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    gender?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -101818,6 +111040,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
+    individualFeedback?: IndividualFeedbackListRelationFilter
+    performanceObservations?: FellowPerformanceListRelationFilter
+    managedSchools?: ProgramManagerSchoolListRelationFilter
+    managedCentres?: ProgramManagerAfterSchoolCentreListRelationFilter
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramListRelationFilter
+    pmTasks?: ProgramManagerTaskListRelationFilter
+    pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -101830,6 +111059,10 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -101854,6 +111087,10 @@ export namespace Prisma {
     roleId?: StringWithAggregatesFilter<"User"> | string
     status?: EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
     department?: StringNullableWithAggregatesFilter<"User"> | string | null
+    dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
+    address?: StringNullableWithAggregatesFilter<"User"> | string | null
+    avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     leavesTaken?: IntWithAggregatesFilter<"User"> | number
     leavesRemaining?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -102073,6 +111310,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentListRelationFilter
     homeworkRecords?: StudentHomeworkListRelationFilter
     assessmentForms?: AssessmentFormListRelationFilter
+    programManagers?: ProgramManagerSchoolListRelationFilter
   }
 
   export type SchoolOrderByWithRelationInput = {
@@ -102098,6 +111336,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentOrderByRelationAggregateInput
     homeworkRecords?: StudentHomeworkOrderByRelationAggregateInput
     assessmentForms?: AssessmentFormOrderByRelationAggregateInput
+    programManagers?: ProgramManagerSchoolOrderByRelationAggregateInput
   }
 
   export type SchoolWhereUniqueInput = Prisma.AtLeast<{
@@ -102126,6 +111365,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentListRelationFilter
     homeworkRecords?: StudentHomeworkListRelationFilter
     assessmentForms?: AssessmentFormListRelationFilter
+    programManagers?: ProgramManagerSchoolListRelationFilter
   }, "id" | "name">
 
   export type SchoolOrderByWithAggregationInput = {
@@ -102203,6 +111443,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyListRelationFilter
     lookBeyondSurveys?: LookBeyondSurveyListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
+    individualFeedback?: IndividualFeedbackListRelationFilter
+    performanceObservations?: FellowPerformanceListRelationFilter
     afterSchoolCentres?: FellowAfterSchoolCentreListRelationFilter
     afterSchoolStudents?: AfterSchoolStudentListRelationFilter
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormListRelationFilter
@@ -102235,6 +111477,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyOrderByRelationAggregateInput
     lookBeyondSurveys?: LookBeyondSurveyOrderByRelationAggregateInput
     pmReflections?: PMReflectionOrderByRelationAggregateInput
+    individualFeedback?: IndividualFeedbackOrderByRelationAggregateInput
+    performanceObservations?: FellowPerformanceOrderByRelationAggregateInput
     afterSchoolCentres?: FellowAfterSchoolCentreOrderByRelationAggregateInput
     afterSchoolStudents?: AfterSchoolStudentOrderByRelationAggregateInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormOrderByRelationAggregateInput
@@ -102270,6 +111514,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyListRelationFilter
     lookBeyondSurveys?: LookBeyondSurveyListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
+    individualFeedback?: IndividualFeedbackListRelationFilter
+    performanceObservations?: FellowPerformanceListRelationFilter
     afterSchoolCentres?: FellowAfterSchoolCentreListRelationFilter
     afterSchoolStudents?: AfterSchoolStudentListRelationFilter
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormListRelationFilter
@@ -102464,6 +111710,126 @@ export namespace Prisma {
     authorId?: StringWithAggregatesFilter<"PMReflection"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PMReflection"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PMReflection"> | Date | string
+  }
+
+  export type FellowPerformanceWhereInput = {
+    AND?: FellowPerformanceWhereInput | FellowPerformanceWhereInput[]
+    OR?: FellowPerformanceWhereInput[]
+    NOT?: FellowPerformanceWhereInput | FellowPerformanceWhereInput[]
+    id?: StringFilter<"FellowPerformance"> | string
+    fellowId?: StringFilter<"FellowPerformance"> | string
+    date?: DateTimeFilter<"FellowPerformance"> | Date | string
+    classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
+    subject?: StringFilter<"FellowPerformance"> | string
+    lessonPlan?: IntFilter<"FellowPerformance"> | number
+    culture?: IntFilter<"FellowPerformance"> | number
+    lessonFlow?: IntFilter<"FellowPerformance"> | number
+    content?: IntFilter<"FellowPerformance"> | number
+    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    overallScore?: FloatFilter<"FellowPerformance"> | number
+    strength?: StringNullableFilter<"FellowPerformance"> | string | null
+    aod?: StringNullableFilter<"FellowPerformance"> | string | null
+    trend?: StringNullableFilter<"FellowPerformance"> | string | null
+    authorId?: StringFilter<"FellowPerformance"> | string
+    createdAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FellowPerformanceOrderByWithRelationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classGroup?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+    strength?: SortOrderInput | SortOrder
+    aod?: SortOrderInput | SortOrder
+    trend?: SortOrderInput | SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    fellow?: FellowOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type FellowPerformanceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FellowPerformanceWhereInput | FellowPerformanceWhereInput[]
+    OR?: FellowPerformanceWhereInput[]
+    NOT?: FellowPerformanceWhereInput | FellowPerformanceWhereInput[]
+    fellowId?: StringFilter<"FellowPerformance"> | string
+    date?: DateTimeFilter<"FellowPerformance"> | Date | string
+    classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
+    subject?: StringFilter<"FellowPerformance"> | string
+    lessonPlan?: IntFilter<"FellowPerformance"> | number
+    culture?: IntFilter<"FellowPerformance"> | number
+    lessonFlow?: IntFilter<"FellowPerformance"> | number
+    content?: IntFilter<"FellowPerformance"> | number
+    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    overallScore?: FloatFilter<"FellowPerformance"> | number
+    strength?: StringNullableFilter<"FellowPerformance"> | string | null
+    aod?: StringNullableFilter<"FellowPerformance"> | string | null
+    trend?: StringNullableFilter<"FellowPerformance"> | string | null
+    authorId?: StringFilter<"FellowPerformance"> | string
+    createdAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type FellowPerformanceOrderByWithAggregationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classGroup?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+    strength?: SortOrderInput | SortOrder
+    aod?: SortOrderInput | SortOrder
+    trend?: SortOrderInput | SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FellowPerformanceCountOrderByAggregateInput
+    _avg?: FellowPerformanceAvgOrderByAggregateInput
+    _max?: FellowPerformanceMaxOrderByAggregateInput
+    _min?: FellowPerformanceMinOrderByAggregateInput
+    _sum?: FellowPerformanceSumOrderByAggregateInput
+  }
+
+  export type FellowPerformanceScalarWhereWithAggregatesInput = {
+    AND?: FellowPerformanceScalarWhereWithAggregatesInput | FellowPerformanceScalarWhereWithAggregatesInput[]
+    OR?: FellowPerformanceScalarWhereWithAggregatesInput[]
+    NOT?: FellowPerformanceScalarWhereWithAggregatesInput | FellowPerformanceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FellowPerformance"> | string
+    fellowId?: StringWithAggregatesFilter<"FellowPerformance"> | string
+    date?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
+    classGroup?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
+    subject?: StringWithAggregatesFilter<"FellowPerformance"> | string
+    lessonPlan?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    culture?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    lessonFlow?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    content?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    communityEngagement?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    overallScore?: FloatWithAggregatesFilter<"FellowPerformance"> | number
+    strength?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
+    aod?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
+    trend?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
+    authorId?: StringWithAggregatesFilter<"FellowPerformance"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
   }
 
   export type FellowReviewWhereInput = {
@@ -103360,6 +112726,314 @@ export namespace Prisma {
     iconBg?: StringNullableWithAggregatesFilter<"Program"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Program"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Program"> | Date | string
+  }
+
+  export type ProgramManagerSchoolWhereInput = {
+    AND?: ProgramManagerSchoolWhereInput | ProgramManagerSchoolWhereInput[]
+    OR?: ProgramManagerSchoolWhereInput[]
+    NOT?: ProgramManagerSchoolWhereInput | ProgramManagerSchoolWhereInput[]
+    id?: StringFilter<"ProgramManagerSchool"> | string
+    userId?: StringFilter<"ProgramManagerSchool"> | string
+    schoolId?: StringFilter<"ProgramManagerSchool"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerSchool"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
+  }
+
+  export type ProgramManagerSchoolOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    schoolId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    school?: SchoolOrderByWithRelationInput
+  }
+
+  export type ProgramManagerSchoolWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_schoolId?: ProgramManagerSchoolUserIdSchoolIdCompoundUniqueInput
+    AND?: ProgramManagerSchoolWhereInput | ProgramManagerSchoolWhereInput[]
+    OR?: ProgramManagerSchoolWhereInput[]
+    NOT?: ProgramManagerSchoolWhereInput | ProgramManagerSchoolWhereInput[]
+    userId?: StringFilter<"ProgramManagerSchool"> | string
+    schoolId?: StringFilter<"ProgramManagerSchool"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerSchool"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
+  }, "id" | "userId_schoolId">
+
+  export type ProgramManagerSchoolOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    schoolId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProgramManagerSchoolCountOrderByAggregateInput
+    _max?: ProgramManagerSchoolMaxOrderByAggregateInput
+    _min?: ProgramManagerSchoolMinOrderByAggregateInput
+  }
+
+  export type ProgramManagerSchoolScalarWhereWithAggregatesInput = {
+    AND?: ProgramManagerSchoolScalarWhereWithAggregatesInput | ProgramManagerSchoolScalarWhereWithAggregatesInput[]
+    OR?: ProgramManagerSchoolScalarWhereWithAggregatesInput[]
+    NOT?: ProgramManagerSchoolScalarWhereWithAggregatesInput | ProgramManagerSchoolScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgramManagerSchool"> | string
+    userId?: StringWithAggregatesFilter<"ProgramManagerSchool"> | string
+    schoolId?: StringWithAggregatesFilter<"ProgramManagerSchool"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProgramManagerSchool"> | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreWhereInput = {
+    AND?: ProgramManagerAfterSchoolCentreWhereInput | ProgramManagerAfterSchoolCentreWhereInput[]
+    OR?: ProgramManagerAfterSchoolCentreWhereInput[]
+    NOT?: ProgramManagerAfterSchoolCentreWhereInput | ProgramManagerAfterSchoolCentreWhereInput[]
+    id?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    userId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    centreId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerAfterSchoolCentre"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    centre?: XOR<AfterSchoolCentreScalarRelationFilter, AfterSchoolCentreWhereInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    centreId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    centre?: AfterSchoolCentreOrderByWithRelationInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_centreId?: ProgramManagerAfterSchoolCentreUserIdCentreIdCompoundUniqueInput
+    AND?: ProgramManagerAfterSchoolCentreWhereInput | ProgramManagerAfterSchoolCentreWhereInput[]
+    OR?: ProgramManagerAfterSchoolCentreWhereInput[]
+    NOT?: ProgramManagerAfterSchoolCentreWhereInput | ProgramManagerAfterSchoolCentreWhereInput[]
+    userId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    centreId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerAfterSchoolCentre"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    centre?: XOR<AfterSchoolCentreScalarRelationFilter, AfterSchoolCentreWhereInput>
+  }, "id" | "userId_centreId">
+
+  export type ProgramManagerAfterSchoolCentreOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    centreId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProgramManagerAfterSchoolCentreCountOrderByAggregateInput
+    _max?: ProgramManagerAfterSchoolCentreMaxOrderByAggregateInput
+    _min?: ProgramManagerAfterSchoolCentreMinOrderByAggregateInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput = {
+    AND?: ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput | ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput[]
+    OR?: ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput[]
+    NOT?: ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput | ProgramManagerAfterSchoolCentreScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgramManagerAfterSchoolCentre"> | string
+    userId?: StringWithAggregatesFilter<"ProgramManagerAfterSchoolCentre"> | string
+    centreId?: StringWithAggregatesFilter<"ProgramManagerAfterSchoolCentre"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProgramManagerAfterSchoolCentre"> | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramWhereInput = {
+    AND?: ProgramManagerLivelihoodProgramWhereInput | ProgramManagerLivelihoodProgramWhereInput[]
+    OR?: ProgramManagerLivelihoodProgramWhereInput[]
+    NOT?: ProgramManagerLivelihoodProgramWhereInput | ProgramManagerLivelihoodProgramWhereInput[]
+    id?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    userId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    programId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerLivelihoodProgram"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    program?: LivelihoodProgramOrderByWithRelationInput
+  }
+
+  export type ProgramManagerLivelihoodProgramWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_programId?: ProgramManagerLivelihoodProgramUserIdProgramIdCompoundUniqueInput
+    AND?: ProgramManagerLivelihoodProgramWhereInput | ProgramManagerLivelihoodProgramWhereInput[]
+    OR?: ProgramManagerLivelihoodProgramWhereInput[]
+    NOT?: ProgramManagerLivelihoodProgramWhereInput | ProgramManagerLivelihoodProgramWhereInput[]
+    userId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    programId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerLivelihoodProgram"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }, "id" | "userId_programId">
+
+  export type ProgramManagerLivelihoodProgramOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+    _count?: ProgramManagerLivelihoodProgramCountOrderByAggregateInput
+    _max?: ProgramManagerLivelihoodProgramMaxOrderByAggregateInput
+    _min?: ProgramManagerLivelihoodProgramMinOrderByAggregateInput
+  }
+
+  export type ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput = {
+    AND?: ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput | ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput[]
+    OR?: ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput[]
+    NOT?: ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput | ProgramManagerLivelihoodProgramScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgramManagerLivelihoodProgram"> | string
+    userId?: StringWithAggregatesFilter<"ProgramManagerLivelihoodProgram"> | string
+    programId?: StringWithAggregatesFilter<"ProgramManagerLivelihoodProgram"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProgramManagerLivelihoodProgram"> | Date | string
+  }
+
+  export type ProgramManagerTaskWhereInput = {
+    AND?: ProgramManagerTaskWhereInput | ProgramManagerTaskWhereInput[]
+    OR?: ProgramManagerTaskWhereInput[]
+    NOT?: ProgramManagerTaskWhereInput | ProgramManagerTaskWhereInput[]
+    id?: StringFilter<"ProgramManagerTask"> | string
+    userId?: StringFilter<"ProgramManagerTask"> | string
+    title?: StringFilter<"ProgramManagerTask"> | string
+    description?: StringNullableFilter<"ProgramManagerTask"> | string | null
+    plannedDate?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    status?: StringFilter<"ProgramManagerTask"> | string
+    isPlanned?: BoolFilter<"ProgramManagerTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"ProgramManagerTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    comments?: ProgramManagerTaskCommentListRelationFilter
+  }
+
+  export type ProgramManagerTaskOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    comments?: ProgramManagerTaskCommentOrderByRelationAggregateInput
+  }
+
+  export type ProgramManagerTaskWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProgramManagerTaskWhereInput | ProgramManagerTaskWhereInput[]
+    OR?: ProgramManagerTaskWhereInput[]
+    NOT?: ProgramManagerTaskWhereInput | ProgramManagerTaskWhereInput[]
+    userId?: StringFilter<"ProgramManagerTask"> | string
+    title?: StringFilter<"ProgramManagerTask"> | string
+    description?: StringNullableFilter<"ProgramManagerTask"> | string | null
+    plannedDate?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    status?: StringFilter<"ProgramManagerTask"> | string
+    isPlanned?: BoolFilter<"ProgramManagerTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"ProgramManagerTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    comments?: ProgramManagerTaskCommentListRelationFilter
+  }, "id">
+
+  export type ProgramManagerTaskOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProgramManagerTaskCountOrderByAggregateInput
+    _max?: ProgramManagerTaskMaxOrderByAggregateInput
+    _min?: ProgramManagerTaskMinOrderByAggregateInput
+  }
+
+  export type ProgramManagerTaskScalarWhereWithAggregatesInput = {
+    AND?: ProgramManagerTaskScalarWhereWithAggregatesInput | ProgramManagerTaskScalarWhereWithAggregatesInput[]
+    OR?: ProgramManagerTaskScalarWhereWithAggregatesInput[]
+    NOT?: ProgramManagerTaskScalarWhereWithAggregatesInput | ProgramManagerTaskScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgramManagerTask"> | string
+    userId?: StringWithAggregatesFilter<"ProgramManagerTask"> | string
+    title?: StringWithAggregatesFilter<"ProgramManagerTask"> | string
+    description?: StringNullableWithAggregatesFilter<"ProgramManagerTask"> | string | null
+    plannedDate?: DateTimeWithAggregatesFilter<"ProgramManagerTask"> | Date | string
+    status?: StringWithAggregatesFilter<"ProgramManagerTask"> | string
+    isPlanned?: BoolWithAggregatesFilter<"ProgramManagerTask"> | boolean
+    completionDate?: DateTimeNullableWithAggregatesFilter<"ProgramManagerTask"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ProgramManagerTask"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProgramManagerTask"> | Date | string
+  }
+
+  export type ProgramManagerTaskCommentWhereInput = {
+    AND?: ProgramManagerTaskCommentWhereInput | ProgramManagerTaskCommentWhereInput[]
+    OR?: ProgramManagerTaskCommentWhereInput[]
+    NOT?: ProgramManagerTaskCommentWhereInput | ProgramManagerTaskCommentWhereInput[]
+    id?: StringFilter<"ProgramManagerTaskComment"> | string
+    taskId?: StringFilter<"ProgramManagerTaskComment"> | string
+    authorId?: StringFilter<"ProgramManagerTaskComment"> | string
+    text?: StringFilter<"ProgramManagerTaskComment"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+    task?: XOR<ProgramManagerTaskScalarRelationFilter, ProgramManagerTaskWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ProgramManagerTaskCommentOrderByWithRelationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    task?: ProgramManagerTaskOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type ProgramManagerTaskCommentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProgramManagerTaskCommentWhereInput | ProgramManagerTaskCommentWhereInput[]
+    OR?: ProgramManagerTaskCommentWhereInput[]
+    NOT?: ProgramManagerTaskCommentWhereInput | ProgramManagerTaskCommentWhereInput[]
+    taskId?: StringFilter<"ProgramManagerTaskComment"> | string
+    authorId?: StringFilter<"ProgramManagerTaskComment"> | string
+    text?: StringFilter<"ProgramManagerTaskComment"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+    task?: XOR<ProgramManagerTaskScalarRelationFilter, ProgramManagerTaskWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ProgramManagerTaskCommentOrderByWithAggregationInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProgramManagerTaskCommentCountOrderByAggregateInput
+    _max?: ProgramManagerTaskCommentMaxOrderByAggregateInput
+    _min?: ProgramManagerTaskCommentMinOrderByAggregateInput
+  }
+
+  export type ProgramManagerTaskCommentScalarWhereWithAggregatesInput = {
+    AND?: ProgramManagerTaskCommentScalarWhereWithAggregatesInput | ProgramManagerTaskCommentScalarWhereWithAggregatesInput[]
+    OR?: ProgramManagerTaskCommentScalarWhereWithAggregatesInput[]
+    NOT?: ProgramManagerTaskCommentScalarWhereWithAggregatesInput | ProgramManagerTaskCommentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgramManagerTaskComment"> | string
+    taskId?: StringWithAggregatesFilter<"ProgramManagerTaskComment"> | string
+    authorId?: StringWithAggregatesFilter<"ProgramManagerTaskComment"> | string
+    text?: StringWithAggregatesFilter<"ProgramManagerTaskComment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProgramManagerTaskComment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProgramManagerTaskComment"> | Date | string
   }
 
   export type SchoolProgramWhereInput = {
@@ -104427,6 +114101,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
+    programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
   }
 
   export type LivelihoodProgramOrderByWithRelationInput = {
@@ -104440,6 +114115,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     assignments?: BeneficiaryLivelihoodOrderByRelationAggregateInput
+    programManagers?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
   }
 
   export type LivelihoodProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -104456,6 +114132,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
+    programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
   }, "id">
 
   export type LivelihoodProgramOrderByWithAggregationInput = {
@@ -106023,6 +115700,119 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"LookBeyondSurvey"> | Date | string
   }
 
+  export type IndividualFeedbackWhereInput = {
+    AND?: IndividualFeedbackWhereInput | IndividualFeedbackWhereInput[]
+    OR?: IndividualFeedbackWhereInput[]
+    NOT?: IndividualFeedbackWhereInput | IndividualFeedbackWhereInput[]
+    id?: StringFilter<"IndividualFeedback"> | string
+    fellowId?: StringFilter<"IndividualFeedback"> | string
+    date?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    classroomLevel?: StringNullableFilter<"IndividualFeedback"> | string | null
+    classGroup?: StringNullableFilter<"IndividualFeedback"> | string | null
+    subject?: StringFilter<"IndividualFeedback"> | string
+    subjectOther?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanLink?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanFeedback?: BoolFilter<"IndividualFeedback"> | boolean
+    strengths?: StringNullableFilter<"IndividualFeedback"> | string | null
+    areasOfDevelopment?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepsFellow?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepPM?: StringNullableFilter<"IndividualFeedback"> | string | null
+    authorId?: StringFilter<"IndividualFeedback"> | string
+    createdAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type IndividualFeedbackOrderByWithRelationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classroomLevel?: SortOrderInput | SortOrder
+    classGroup?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    subjectOther?: SortOrderInput | SortOrder
+    lessonPlanLink?: SortOrderInput | SortOrder
+    lessonPlanFeedback?: SortOrder
+    strengths?: SortOrderInput | SortOrder
+    areasOfDevelopment?: SortOrderInput | SortOrder
+    nextStepsFellow?: SortOrderInput | SortOrder
+    nextStepPM?: SortOrderInput | SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    fellow?: FellowOrderByWithRelationInput
+    author?: UserOrderByWithRelationInput
+  }
+
+  export type IndividualFeedbackWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: IndividualFeedbackWhereInput | IndividualFeedbackWhereInput[]
+    OR?: IndividualFeedbackWhereInput[]
+    NOT?: IndividualFeedbackWhereInput | IndividualFeedbackWhereInput[]
+    fellowId?: StringFilter<"IndividualFeedback"> | string
+    date?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    classroomLevel?: StringNullableFilter<"IndividualFeedback"> | string | null
+    classGroup?: StringNullableFilter<"IndividualFeedback"> | string | null
+    subject?: StringFilter<"IndividualFeedback"> | string
+    subjectOther?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanLink?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanFeedback?: BoolFilter<"IndividualFeedback"> | boolean
+    strengths?: StringNullableFilter<"IndividualFeedback"> | string | null
+    areasOfDevelopment?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepsFellow?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepPM?: StringNullableFilter<"IndividualFeedback"> | string | null
+    authorId?: StringFilter<"IndividualFeedback"> | string
+    createdAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    author?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type IndividualFeedbackOrderByWithAggregationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classroomLevel?: SortOrderInput | SortOrder
+    classGroup?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    subjectOther?: SortOrderInput | SortOrder
+    lessonPlanLink?: SortOrderInput | SortOrder
+    lessonPlanFeedback?: SortOrder
+    strengths?: SortOrderInput | SortOrder
+    areasOfDevelopment?: SortOrderInput | SortOrder
+    nextStepsFellow?: SortOrderInput | SortOrder
+    nextStepPM?: SortOrderInput | SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: IndividualFeedbackCountOrderByAggregateInput
+    _max?: IndividualFeedbackMaxOrderByAggregateInput
+    _min?: IndividualFeedbackMinOrderByAggregateInput
+  }
+
+  export type IndividualFeedbackScalarWhereWithAggregatesInput = {
+    AND?: IndividualFeedbackScalarWhereWithAggregatesInput | IndividualFeedbackScalarWhereWithAggregatesInput[]
+    OR?: IndividualFeedbackScalarWhereWithAggregatesInput[]
+    NOT?: IndividualFeedbackScalarWhereWithAggregatesInput | IndividualFeedbackScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"IndividualFeedback"> | string
+    fellowId?: StringWithAggregatesFilter<"IndividualFeedback"> | string
+    date?: DateTimeWithAggregatesFilter<"IndividualFeedback"> | Date | string
+    classroomLevel?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    classGroup?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    subject?: StringWithAggregatesFilter<"IndividualFeedback"> | string
+    subjectOther?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    lessonPlanLink?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    lessonPlanFeedback?: BoolWithAggregatesFilter<"IndividualFeedback"> | boolean
+    strengths?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    areasOfDevelopment?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    nextStepsFellow?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    nextStepPM?: StringNullableWithAggregatesFilter<"IndividualFeedback"> | string | null
+    authorId?: StringWithAggregatesFilter<"IndividualFeedback"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"IndividualFeedback"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"IndividualFeedback"> | Date | string
+  }
+
   export type TravelRequestWhereInput = {
     AND?: TravelRequestWhereInput | TravelRequestWhereInput[]
     OR?: TravelRequestWhereInput[]
@@ -106815,6 +116605,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentListRelationFilter
     homeworkRecords?: AfterSchoolHomeworkListRelationFilter
     assessmentForms?: AfterSchoolAssessmentFormListRelationFilter
+    programManagers?: ProgramManagerAfterSchoolCentreListRelationFilter
   }
 
   export type AfterSchoolCentreOrderByWithRelationInput = {
@@ -106837,6 +116628,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentOrderByRelationAggregateInput
     homeworkRecords?: AfterSchoolHomeworkOrderByRelationAggregateInput
     assessmentForms?: AfterSchoolAssessmentFormOrderByRelationAggregateInput
+    programManagers?: ProgramManagerAfterSchoolCentreOrderByRelationAggregateInput
   }
 
   export type AfterSchoolCentreWhereUniqueInput = Prisma.AtLeast<{
@@ -106862,6 +116654,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentListRelationFilter
     homeworkRecords?: AfterSchoolHomeworkListRelationFilter
     assessmentForms?: AfterSchoolAssessmentFormListRelationFilter
+    programManagers?: ProgramManagerAfterSchoolCentreListRelationFilter
   }, "id" | "name">
 
   export type AfterSchoolCentreOrderByWithAggregationInput = {
@@ -107737,6 +117530,7 @@ export namespace Prisma {
     session?: StringFilter<"FellowStudentDataNote"> | string
     phase?: StringFilter<"FellowStudentDataNote"> | string
     sectionKey?: StringFilter<"FellowStudentDataNote"> | string
+    source?: StringFilter<"FellowStudentDataNote"> | string
     note?: StringFilter<"FellowStudentDataNote"> | string
     createdAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
     updatedAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
@@ -107749,6 +117543,7 @@ export namespace Prisma {
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
+    source?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -107757,7 +117552,7 @@ export namespace Prisma {
 
   export type FellowStudentDataNoteWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    fellowId_session_phase_sectionKey?: FellowStudentDataNoteFellowIdSessionPhaseSectionKeyCompoundUniqueInput
+    fellowId_session_phase_sectionKey_source?: FellowStudentDataNoteFellowIdSessionPhaseSectionKeySourceCompoundUniqueInput
     AND?: FellowStudentDataNoteWhereInput | FellowStudentDataNoteWhereInput[]
     OR?: FellowStudentDataNoteWhereInput[]
     NOT?: FellowStudentDataNoteWhereInput | FellowStudentDataNoteWhereInput[]
@@ -107765,11 +117560,12 @@ export namespace Prisma {
     session?: StringFilter<"FellowStudentDataNote"> | string
     phase?: StringFilter<"FellowStudentDataNote"> | string
     sectionKey?: StringFilter<"FellowStudentDataNote"> | string
+    source?: StringFilter<"FellowStudentDataNote"> | string
     note?: StringFilter<"FellowStudentDataNote"> | string
     createdAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
     updatedAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
     fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
-  }, "id" | "fellowId_session_phase_sectionKey">
+  }, "id" | "fellowId_session_phase_sectionKey_source">
 
   export type FellowStudentDataNoteOrderByWithAggregationInput = {
     id?: SortOrder
@@ -107777,6 +117573,7 @@ export namespace Prisma {
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
+    source?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -107794,6 +117591,7 @@ export namespace Prisma {
     session?: StringWithAggregatesFilter<"FellowStudentDataNote"> | string
     phase?: StringWithAggregatesFilter<"FellowStudentDataNote"> | string
     sectionKey?: StringWithAggregatesFilter<"FellowStudentDataNote"> | string
+    source?: StringWithAggregatesFilter<"FellowStudentDataNote"> | string
     note?: StringWithAggregatesFilter<"FellowStudentDataNote"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FellowStudentDataNote"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FellowStudentDataNote"> | Date | string
@@ -107879,6 +117677,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -107894,6 +117696,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -107906,6 +117715,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -107920,6 +117733,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUpdateInput = {
@@ -107931,6 +117751,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107946,6 +117770,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -107958,6 +117789,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -107972,6 +117807,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -107984,6 +117826,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -107999,6 +117845,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108015,6 +117865,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -108230,6 +118084,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateInput = {
@@ -108255,6 +118110,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUpdateInput = {
@@ -108280,6 +118136,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateInput = {
@@ -108305,6 +118162,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolCreateManyInput = {
@@ -108389,6 +118247,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -108420,6 +118280,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -108451,6 +118313,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -108482,6 +118346,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -108691,6 +118557,144 @@ export namespace Prisma {
     responses?: JsonNullValueInput | InputJsonValue
     matrix?: JsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceCreateInput = {
+    id?: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutPerformanceObservationsInput
+    author: UserCreateNestedOneWithoutPerformanceObservationsInput
+  }
+
+  export type FellowPerformanceUncheckedCreateInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutPerformanceObservationsNestedInput
+    author?: UserUpdateOneRequiredWithoutPerformanceObservationsNestedInput
+  }
+
+  export type FellowPerformanceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceCreateManyInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -109665,6 +119669,302 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
     iconBg?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedSchoolsInput
+    school: SchoolCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerSchoolUncheckedCreateInput = {
+    id?: string
+    userId: string
+    schoolId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedSchoolsNestedInput
+    school?: SchoolUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    schoolId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolCreateManyInput = {
+    id?: string
+    userId: string
+    schoolId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    schoolId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedCentresInput
+    centre: AfterSchoolCentreCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedCreateInput = {
+    id?: string
+    userId: string
+    centreId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedCentresNestedInput
+    centre?: AfterSchoolCentreUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    centreId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateManyInput = {
+    id?: string
+    userId: string
+    centreId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    centreId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedLivelihoodProgramsInput
+    program: LivelihoodProgramCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedCreateInput = {
+    id?: string
+    userId: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedLivelihoodProgramsNestedInput
+    program?: LivelihoodProgramUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateManyInput = {
+    id?: string
+    userId: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPmTasksInput
+    comments?: ProgramManagerTaskCommentCreateNestedManyWithoutTaskInput
+  }
+
+  export type ProgramManagerTaskUncheckedCreateInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type ProgramManagerTaskUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPmTasksNestedInput
+    comments?: ProgramManagerTaskCommentUpdateManyWithoutTaskNestedInput
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type ProgramManagerTaskCreateManyInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentCreateInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    task: ProgramManagerTaskCreateNestedOneWithoutCommentsInput
+    author: UserCreateNestedOneWithoutPmTaskCommentsInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedCreateInput = {
+    id?: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: ProgramManagerTaskUpdateOneRequiredWithoutCommentsNestedInput
+    author?: UserUpdateOneRequiredWithoutPmTaskCommentsNestedInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentCreateManyInput = {
+    id?: string
+    taskId: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -110839,6 +121139,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateInput = {
@@ -110852,6 +121153,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUpdateInput = {
@@ -110865,6 +121167,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateInput = {
@@ -110878,6 +121181,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramCreateManyInput = {
@@ -112576,6 +122880,137 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type IndividualFeedbackCreateInput = {
+    id?: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutIndividualFeedbackInput
+    author: UserCreateNestedOneWithoutIndividualFeedbackInput
+  }
+
+  export type IndividualFeedbackUncheckedCreateInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IndividualFeedbackUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutIndividualFeedbackNestedInput
+    author?: UserUpdateOneRequiredWithoutIndividualFeedbackNestedInput
+  }
+
+  export type IndividualFeedbackUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IndividualFeedbackCreateManyInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IndividualFeedbackUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IndividualFeedbackUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TravelRequestCreateInput = {
     id?: string
     destination: string
@@ -113389,6 +123824,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateInput = {
@@ -113411,6 +123847,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUpdateInput = {
@@ -113433,6 +123870,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateInput = {
@@ -113455,6 +123893,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreCreateManyInput = {
@@ -114355,6 +124794,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -114367,6 +124807,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -114377,6 +124818,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114389,6 +124831,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114400,6 +124843,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -114410,6 +124854,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114421,6 +124866,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -114589,6 +125035,17 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -114658,6 +125115,48 @@ export namespace Prisma {
     none?: PMReflectionWhereInput
   }
 
+  export type IndividualFeedbackListRelationFilter = {
+    every?: IndividualFeedbackWhereInput
+    some?: IndividualFeedbackWhereInput
+    none?: IndividualFeedbackWhereInput
+  }
+
+  export type FellowPerformanceListRelationFilter = {
+    every?: FellowPerformanceWhereInput
+    some?: FellowPerformanceWhereInput
+    none?: FellowPerformanceWhereInput
+  }
+
+  export type ProgramManagerSchoolListRelationFilter = {
+    every?: ProgramManagerSchoolWhereInput
+    some?: ProgramManagerSchoolWhereInput
+    none?: ProgramManagerSchoolWhereInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreListRelationFilter = {
+    every?: ProgramManagerAfterSchoolCentreWhereInput
+    some?: ProgramManagerAfterSchoolCentreWhereInput
+    none?: ProgramManagerAfterSchoolCentreWhereInput
+  }
+
+  export type ProgramManagerLivelihoodProgramListRelationFilter = {
+    every?: ProgramManagerLivelihoodProgramWhereInput
+    some?: ProgramManagerLivelihoodProgramWhereInput
+    none?: ProgramManagerLivelihoodProgramWhereInput
+  }
+
+  export type ProgramManagerTaskListRelationFilter = {
+    every?: ProgramManagerTaskWhereInput
+    some?: ProgramManagerTaskWhereInput
+    none?: ProgramManagerTaskWhereInput
+  }
+
+  export type ProgramManagerTaskCommentListRelationFilter = {
+    every?: ProgramManagerTaskCommentWhereInput
+    some?: ProgramManagerTaskCommentWhereInput
+    none?: ProgramManagerTaskCommentWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -114690,6 +125189,34 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type IndividualFeedbackOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FellowPerformanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramManagerSchoolOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramManagerAfterSchoolCentreOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramManagerLivelihoodProgramOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramManagerTaskOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgramManagerTaskCommentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -114700,6 +125227,10 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    dob?: SortOrder
+    gender?: SortOrder
+    address?: SortOrder
+    avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -114721,6 +125252,10 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    dob?: SortOrder
+    gender?: SortOrder
+    address?: SortOrder
+    avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -114737,6 +125272,10 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    dob?: SortOrder
+    gender?: SortOrder
+    address?: SortOrder
+    avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -114756,6 +125295,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -115037,17 +125590,6 @@ export namespace Prisma {
     goal?: SortOrder
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type FloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -115215,20 +125757,6 @@ export namespace Prisma {
     evaluationRating?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -115362,6 +125890,111 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type FellowPerformanceCountOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+    strength?: SortOrder
+    aod?: SortOrder
+    trend?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowPerformanceAvgOrderByAggregateInput = {
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+  }
+
+  export type FellowPerformanceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+    strength?: SortOrder
+    aod?: SortOrder
+    trend?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowPerformanceMinOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+    strength?: SortOrder
+    aod?: SortOrder
+    trend?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FellowPerformanceSumOrderByAggregateInput = {
+    lessonPlan?: SortOrder
+    culture?: SortOrder
+    lessonFlow?: SortOrder
+    content?: SortOrder
+    communityEngagement?: SortOrder
+    overallScore?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type FellowReviewCountOrderByAggregateInput = {
     id?: SortOrder
     fellowId?: SortOrder
@@ -115407,17 +126040,6 @@ export namespace Prisma {
 
   export type FellowReviewSumOrderByAggregateInput = {
     rating?: SortOrder
-  }
-
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type SchoolNullableScalarRelationFilter = {
@@ -115534,22 +126156,6 @@ export namespace Prisma {
 
   export type StudentSumOrderByAggregateInput = {
     attendance?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type StudentScalarRelationFilter = {
@@ -115929,6 +126535,165 @@ export namespace Prisma {
     status?: SortOrder
     icon?: SortOrder
     iconBg?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerSchoolUserIdSchoolIdCompoundUniqueInput = {
+    userId: string
+    schoolId: string
+  }
+
+  export type ProgramManagerSchoolCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    schoolId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerSchoolMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    schoolId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerSchoolMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    schoolId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AfterSchoolCentreScalarRelationFilter = {
+    is?: AfterSchoolCentreWhereInput
+    isNot?: AfterSchoolCentreWhereInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUserIdCentreIdCompoundUniqueInput = {
+    userId: string
+    centreId: string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    centreId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerAfterSchoolCentreMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    centreId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerAfterSchoolCentreMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    centreId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LivelihoodProgramScalarRelationFilter = {
+    is?: LivelihoodProgramWhereInput
+    isNot?: LivelihoodProgramWhereInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUserIdProgramIdCompoundUniqueInput = {
+    userId: string
+    programId: string
+  }
+
+  export type ProgramManagerLivelihoodProgramCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerLivelihoodProgramMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerLivelihoodProgramMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    plannedDate?: SortOrder
+    status?: SortOrder
+    isPlanned?: SortOrder
+    completionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskScalarRelationFilter = {
+    is?: ProgramManagerTaskWhereInput
+    isNot?: ProgramManagerTaskWhereInput
+  }
+
+  export type ProgramManagerTaskCommentCountOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskCommentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgramManagerTaskCommentMinOrderByAggregateInput = {
+    id?: SortOrder
+    taskId?: SortOrder
+    authorId?: SortOrder
+    text?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -116770,11 +127535,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
     _max?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
-  }
-
-  export type LivelihoodProgramScalarRelationFilter = {
-    is?: LivelihoodProgramWhereInput
-    isNot?: LivelihoodProgramWhereInput
   }
 
   export type LivelihoodEventListRelationFilter = {
@@ -117704,6 +128464,63 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IndividualFeedbackCountOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classroomLevel?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    subjectOther?: SortOrder
+    lessonPlanLink?: SortOrder
+    lessonPlanFeedback?: SortOrder
+    strengths?: SortOrder
+    areasOfDevelopment?: SortOrder
+    nextStepsFellow?: SortOrder
+    nextStepPM?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IndividualFeedbackMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classroomLevel?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    subjectOther?: SortOrder
+    lessonPlanLink?: SortOrder
+    lessonPlanFeedback?: SortOrder
+    strengths?: SortOrder
+    areasOfDevelopment?: SortOrder
+    nextStepsFellow?: SortOrder
+    nextStepPM?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type IndividualFeedbackMinOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    date?: SortOrder
+    classroomLevel?: SortOrder
+    classGroup?: SortOrder
+    subject?: SortOrder
+    subjectOther?: SortOrder
+    lessonPlanLink?: SortOrder
+    lessonPlanFeedback?: SortOrder
+    strengths?: SortOrder
+    areasOfDevelopment?: SortOrder
+    nextStepsFellow?: SortOrder
+    nextStepPM?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type EnumTravelStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TravelStatus | EnumTravelStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TravelStatus[] | ListEnumTravelStatusFieldRefInput<$PrismaModel>
@@ -118312,11 +129129,6 @@ export namespace Prisma {
     goal?: SortOrder
   }
 
-  export type AfterSchoolCentreScalarRelationFilter = {
-    is?: AfterSchoolCentreWhereInput
-    isNot?: AfterSchoolCentreWhereInput
-  }
-
   export type FellowAfterSchoolCentreFellowIdCentreIdCompoundUniqueInput = {
     fellowId: string
     centreId: string
@@ -118787,11 +129599,12 @@ export namespace Prisma {
     score?: SortOrder
   }
 
-  export type FellowStudentDataNoteFellowIdSessionPhaseSectionKeyCompoundUniqueInput = {
+  export type FellowStudentDataNoteFellowIdSessionPhaseSectionKeySourceCompoundUniqueInput = {
     fellowId: string
     session: string
     phase: string
     sectionKey: string
+    source: string
   }
 
   export type FellowStudentDataNoteCountOrderByAggregateInput = {
@@ -118800,6 +129613,7 @@ export namespace Prisma {
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
+    source?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -118811,6 +129625,7 @@ export namespace Prisma {
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
+    source?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -118822,6 +129637,7 @@ export namespace Prisma {
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
+    source?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -119002,6 +129818,55 @@ export namespace Prisma {
     connect?: PMReflectionWhereUniqueInput | PMReflectionWhereUniqueInput[]
   }
 
+  export type IndividualFeedbackCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput> | IndividualFeedbackCreateWithoutAuthorInput[] | IndividualFeedbackUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutAuthorInput | IndividualFeedbackCreateOrConnectWithoutAuthorInput[]
+    createMany?: IndividualFeedbackCreateManyAuthorInputEnvelope
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+  }
+
+  export type FellowPerformanceCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput> | FellowPerformanceCreateWithoutAuthorInput[] | FellowPerformanceUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutAuthorInput | FellowPerformanceCreateOrConnectWithoutAuthorInput[]
+    createMany?: FellowPerformanceCreateManyAuthorInputEnvelope
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+  }
+
+  export type ProgramManagerSchoolCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput> | ProgramManagerSchoolCreateWithoutUserInput[] | ProgramManagerSchoolUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutUserInput | ProgramManagerSchoolCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerSchoolCreateManyUserInputEnvelope
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput> | ProgramManagerAfterSchoolCentreCreateWithoutUserInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyUserInputEnvelope
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput> | ProgramManagerLivelihoodProgramCreateWithoutUserInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyUserInputEnvelope
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+  }
+
+  export type ProgramManagerTaskCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput> | ProgramManagerTaskCreateWithoutUserInput[] | ProgramManagerTaskUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutUserInput | ProgramManagerTaskCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerTaskCreateManyUserInputEnvelope
+    connect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+  }
+
+  export type ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput> | ProgramManagerTaskCommentCreateWithoutAuthorInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput | ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyAuthorInputEnvelope
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+  }
+
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -119071,8 +129936,61 @@ export namespace Prisma {
     connect?: PMReflectionWhereUniqueInput | PMReflectionWhereUniqueInput[]
   }
 
+  export type IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput> | IndividualFeedbackCreateWithoutAuthorInput[] | IndividualFeedbackUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutAuthorInput | IndividualFeedbackCreateOrConnectWithoutAuthorInput[]
+    createMany?: IndividualFeedbackCreateManyAuthorInputEnvelope
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+  }
+
+  export type FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput> | FellowPerformanceCreateWithoutAuthorInput[] | FellowPerformanceUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutAuthorInput | FellowPerformanceCreateOrConnectWithoutAuthorInput[]
+    createMany?: FellowPerformanceCreateManyAuthorInputEnvelope
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+  }
+
+  export type ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput> | ProgramManagerSchoolCreateWithoutUserInput[] | ProgramManagerSchoolUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutUserInput | ProgramManagerSchoolCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerSchoolCreateManyUserInputEnvelope
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput> | ProgramManagerAfterSchoolCentreCreateWithoutUserInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyUserInputEnvelope
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput> | ProgramManagerLivelihoodProgramCreateWithoutUserInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyUserInputEnvelope
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+  }
+
+  export type ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput> | ProgramManagerTaskCreateWithoutUserInput[] | ProgramManagerTaskUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutUserInput | ProgramManagerTaskCreateOrConnectWithoutUserInput[]
+    createMany?: ProgramManagerTaskCreateManyUserInputEnvelope
+    connect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+  }
+
+  export type ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput> | ProgramManagerTaskCommentCreateWithoutAuthorInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput | ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyAuthorInputEnvelope
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+  }
+
   export type EnumUserStatusFieldUpdateOperationsInput = {
     set?: $Enums.UserStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -119227,6 +130145,104 @@ export namespace Prisma {
     deleteMany?: PMReflectionScalarWhereInput | PMReflectionScalarWhereInput[]
   }
 
+  export type IndividualFeedbackUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput> | IndividualFeedbackCreateWithoutAuthorInput[] | IndividualFeedbackUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutAuthorInput | IndividualFeedbackCreateOrConnectWithoutAuthorInput[]
+    upsert?: IndividualFeedbackUpsertWithWhereUniqueWithoutAuthorInput | IndividualFeedbackUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: IndividualFeedbackCreateManyAuthorInputEnvelope
+    set?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    disconnect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    delete?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    update?: IndividualFeedbackUpdateWithWhereUniqueWithoutAuthorInput | IndividualFeedbackUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: IndividualFeedbackUpdateManyWithWhereWithoutAuthorInput | IndividualFeedbackUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+  }
+
+  export type FellowPerformanceUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput> | FellowPerformanceCreateWithoutAuthorInput[] | FellowPerformanceUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutAuthorInput | FellowPerformanceCreateOrConnectWithoutAuthorInput[]
+    upsert?: FellowPerformanceUpsertWithWhereUniqueWithoutAuthorInput | FellowPerformanceUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: FellowPerformanceCreateManyAuthorInputEnvelope
+    set?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    disconnect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    delete?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    update?: FellowPerformanceUpdateWithWhereUniqueWithoutAuthorInput | FellowPerformanceUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: FellowPerformanceUpdateManyWithWhereWithoutAuthorInput | FellowPerformanceUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
+  }
+
+  export type ProgramManagerSchoolUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput> | ProgramManagerSchoolCreateWithoutUserInput[] | ProgramManagerSchoolUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutUserInput | ProgramManagerSchoolCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerSchoolUpsertWithWhereUniqueWithoutUserInput | ProgramManagerSchoolUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerSchoolCreateManyUserInputEnvelope
+    set?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    disconnect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    delete?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    update?: ProgramManagerSchoolUpdateWithWhereUniqueWithoutUserInput | ProgramManagerSchoolUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerSchoolUpdateManyWithWhereWithoutUserInput | ProgramManagerSchoolUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput> | ProgramManagerAfterSchoolCentreCreateWithoutUserInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutUserInput | ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyUserInputEnvelope
+    set?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    disconnect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    delete?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    update?: ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutUserInput | ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutUserInput | ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput> | ProgramManagerLivelihoodProgramCreateWithoutUserInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutUserInput | ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyUserInputEnvelope
+    set?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    disconnect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    delete?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    update?: ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutUserInput | ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutUserInput | ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput> | ProgramManagerTaskCreateWithoutUserInput[] | ProgramManagerTaskUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutUserInput | ProgramManagerTaskCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerTaskUpsertWithWhereUniqueWithoutUserInput | ProgramManagerTaskUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerTaskCreateManyUserInputEnvelope
+    set?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    delete?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    connect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    update?: ProgramManagerTaskUpdateWithWhereUniqueWithoutUserInput | ProgramManagerTaskUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerTaskUpdateManyWithWhereWithoutUserInput | ProgramManagerTaskUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerTaskScalarWhereInput | ProgramManagerTaskScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput> | ProgramManagerTaskCommentCreateWithoutAuthorInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput | ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutAuthorInput | ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyAuthorInputEnvelope
+    set?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    delete?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    update?: ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput | ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput | ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+  }
+
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -119361,6 +130377,104 @@ export namespace Prisma {
     update?: PMReflectionUpdateWithWhereUniqueWithoutAuthorInput | PMReflectionUpdateWithWhereUniqueWithoutAuthorInput[]
     updateMany?: PMReflectionUpdateManyWithWhereWithoutAuthorInput | PMReflectionUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: PMReflectionScalarWhereInput | PMReflectionScalarWhereInput[]
+  }
+
+  export type IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput> | IndividualFeedbackCreateWithoutAuthorInput[] | IndividualFeedbackUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutAuthorInput | IndividualFeedbackCreateOrConnectWithoutAuthorInput[]
+    upsert?: IndividualFeedbackUpsertWithWhereUniqueWithoutAuthorInput | IndividualFeedbackUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: IndividualFeedbackCreateManyAuthorInputEnvelope
+    set?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    disconnect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    delete?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    update?: IndividualFeedbackUpdateWithWhereUniqueWithoutAuthorInput | IndividualFeedbackUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: IndividualFeedbackUpdateManyWithWhereWithoutAuthorInput | IndividualFeedbackUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+  }
+
+  export type FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput> | FellowPerformanceCreateWithoutAuthorInput[] | FellowPerformanceUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutAuthorInput | FellowPerformanceCreateOrConnectWithoutAuthorInput[]
+    upsert?: FellowPerformanceUpsertWithWhereUniqueWithoutAuthorInput | FellowPerformanceUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: FellowPerformanceCreateManyAuthorInputEnvelope
+    set?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    disconnect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    delete?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    update?: FellowPerformanceUpdateWithWhereUniqueWithoutAuthorInput | FellowPerformanceUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: FellowPerformanceUpdateManyWithWhereWithoutAuthorInput | FellowPerformanceUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput> | ProgramManagerSchoolCreateWithoutUserInput[] | ProgramManagerSchoolUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutUserInput | ProgramManagerSchoolCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerSchoolUpsertWithWhereUniqueWithoutUserInput | ProgramManagerSchoolUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerSchoolCreateManyUserInputEnvelope
+    set?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    disconnect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    delete?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    update?: ProgramManagerSchoolUpdateWithWhereUniqueWithoutUserInput | ProgramManagerSchoolUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerSchoolUpdateManyWithWhereWithoutUserInput | ProgramManagerSchoolUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput> | ProgramManagerAfterSchoolCentreCreateWithoutUserInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutUserInput | ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyUserInputEnvelope
+    set?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    disconnect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    delete?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    update?: ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutUserInput | ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutUserInput | ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput> | ProgramManagerLivelihoodProgramCreateWithoutUserInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutUserInput | ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyUserInputEnvelope
+    set?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    disconnect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    delete?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    update?: ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutUserInput | ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutUserInput | ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput> | ProgramManagerTaskCreateWithoutUserInput[] | ProgramManagerTaskUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutUserInput | ProgramManagerTaskCreateOrConnectWithoutUserInput[]
+    upsert?: ProgramManagerTaskUpsertWithWhereUniqueWithoutUserInput | ProgramManagerTaskUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProgramManagerTaskCreateManyUserInputEnvelope
+    set?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    delete?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    connect?: ProgramManagerTaskWhereUniqueInput | ProgramManagerTaskWhereUniqueInput[]
+    update?: ProgramManagerTaskUpdateWithWhereUniqueWithoutUserInput | ProgramManagerTaskUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProgramManagerTaskUpdateManyWithWhereWithoutUserInput | ProgramManagerTaskUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProgramManagerTaskScalarWhereInput | ProgramManagerTaskScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput> | ProgramManagerTaskCommentCreateWithoutAuthorInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput | ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput[]
+    upsert?: ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutAuthorInput | ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyAuthorInputEnvelope
+    set?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    delete?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    update?: ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput | ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput | ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
   }
 
   export type RolePermissionCreateNestedManyWithoutPermissionInput = {
@@ -119553,6 +130667,13 @@ export namespace Prisma {
     connect?: AssessmentFormWhereUniqueInput | AssessmentFormWhereUniqueInput[]
   }
 
+  export type ProgramManagerSchoolCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput> | ProgramManagerSchoolCreateWithoutSchoolInput[] | ProgramManagerSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutSchoolInput | ProgramManagerSchoolCreateOrConnectWithoutSchoolInput[]
+    createMany?: ProgramManagerSchoolCreateManySchoolInputEnvelope
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+  }
+
   export type FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput = {
     create?: XOR<FellowSchoolCreateWithoutSchoolInput, FellowSchoolUncheckedCreateWithoutSchoolInput> | FellowSchoolCreateWithoutSchoolInput[] | FellowSchoolUncheckedCreateWithoutSchoolInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutSchoolInput | FellowSchoolCreateOrConnectWithoutSchoolInput[]
@@ -119593,6 +130714,13 @@ export namespace Prisma {
     connectOrCreate?: AssessmentFormCreateOrConnectWithoutSchoolInput | AssessmentFormCreateOrConnectWithoutSchoolInput[]
     createMany?: AssessmentFormCreateManySchoolInputEnvelope
     connect?: AssessmentFormWhereUniqueInput | AssessmentFormWhereUniqueInput[]
+  }
+
+  export type ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput> | ProgramManagerSchoolCreateWithoutSchoolInput[] | ProgramManagerSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutSchoolInput | ProgramManagerSchoolCreateOrConnectWithoutSchoolInput[]
+    createMany?: ProgramManagerSchoolCreateManySchoolInputEnvelope
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
   }
 
   export type FellowSchoolUpdateManyWithoutSchoolNestedInput = {
@@ -119679,6 +130807,20 @@ export namespace Prisma {
     deleteMany?: AssessmentFormScalarWhereInput | AssessmentFormScalarWhereInput[]
   }
 
+  export type ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput> | ProgramManagerSchoolCreateWithoutSchoolInput[] | ProgramManagerSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutSchoolInput | ProgramManagerSchoolCreateOrConnectWithoutSchoolInput[]
+    upsert?: ProgramManagerSchoolUpsertWithWhereUniqueWithoutSchoolInput | ProgramManagerSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ProgramManagerSchoolCreateManySchoolInputEnvelope
+    set?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    disconnect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    delete?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    update?: ProgramManagerSchoolUpdateWithWhereUniqueWithoutSchoolInput | ProgramManagerSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ProgramManagerSchoolUpdateManyWithWhereWithoutSchoolInput | ProgramManagerSchoolUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+  }
+
   export type FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput = {
     create?: XOR<FellowSchoolCreateWithoutSchoolInput, FellowSchoolUncheckedCreateWithoutSchoolInput> | FellowSchoolCreateWithoutSchoolInput[] | FellowSchoolUncheckedCreateWithoutSchoolInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutSchoolInput | FellowSchoolCreateOrConnectWithoutSchoolInput[]
@@ -119763,6 +130905,20 @@ export namespace Prisma {
     deleteMany?: AssessmentFormScalarWhereInput | AssessmentFormScalarWhereInput[]
   }
 
+  export type ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput> | ProgramManagerSchoolCreateWithoutSchoolInput[] | ProgramManagerSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ProgramManagerSchoolCreateOrConnectWithoutSchoolInput | ProgramManagerSchoolCreateOrConnectWithoutSchoolInput[]
+    upsert?: ProgramManagerSchoolUpsertWithWhereUniqueWithoutSchoolInput | ProgramManagerSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ProgramManagerSchoolCreateManySchoolInputEnvelope
+    set?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    disconnect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    delete?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    connect?: ProgramManagerSchoolWhereUniqueInput | ProgramManagerSchoolWhereUniqueInput[]
+    update?: ProgramManagerSchoolUpdateWithWhereUniqueWithoutSchoolInput | ProgramManagerSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ProgramManagerSchoolUpdateManyWithWhereWithoutSchoolInput | ProgramManagerSchoolUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutFellowInput = {
     create?: XOR<UserCreateWithoutFellowInput, UserUncheckedCreateWithoutFellowInput>
     connectOrCreate?: UserCreateOrConnectWithoutFellowInput
@@ -119837,6 +130993,20 @@ export namespace Prisma {
     connectOrCreate?: PMReflectionCreateOrConnectWithoutFellowInput | PMReflectionCreateOrConnectWithoutFellowInput[]
     createMany?: PMReflectionCreateManyFellowInputEnvelope
     connect?: PMReflectionWhereUniqueInput | PMReflectionWhereUniqueInput[]
+  }
+
+  export type IndividualFeedbackCreateNestedManyWithoutFellowInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput> | IndividualFeedbackCreateWithoutFellowInput[] | IndividualFeedbackUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutFellowInput | IndividualFeedbackCreateOrConnectWithoutFellowInput[]
+    createMany?: IndividualFeedbackCreateManyFellowInputEnvelope
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+  }
+
+  export type FellowPerformanceCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput> | FellowPerformanceCreateWithoutFellowInput[] | FellowPerformanceUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutFellowInput | FellowPerformanceCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowPerformanceCreateManyFellowInputEnvelope
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
   }
 
   export type FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput = {
@@ -119937,6 +131107,20 @@ export namespace Prisma {
     connect?: PMReflectionWhereUniqueInput | PMReflectionWhereUniqueInput[]
   }
 
+  export type IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput> | IndividualFeedbackCreateWithoutFellowInput[] | IndividualFeedbackUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutFellowInput | IndividualFeedbackCreateOrConnectWithoutFellowInput[]
+    createMany?: IndividualFeedbackCreateManyFellowInputEnvelope
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+  }
+
+  export type FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput> | FellowPerformanceCreateWithoutFellowInput[] | FellowPerformanceUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutFellowInput | FellowPerformanceCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowPerformanceCreateManyFellowInputEnvelope
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+  }
+
   export type FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput = {
     create?: XOR<FellowAfterSchoolCentreCreateWithoutFellowInput, FellowAfterSchoolCentreUncheckedCreateWithoutFellowInput> | FellowAfterSchoolCentreCreateWithoutFellowInput[] | FellowAfterSchoolCentreUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowAfterSchoolCentreCreateOrConnectWithoutFellowInput | FellowAfterSchoolCentreCreateOrConnectWithoutFellowInput[]
@@ -119963,10 +131147,6 @@ export namespace Prisma {
     connectOrCreate?: FellowStudentDataNoteCreateOrConnectWithoutFellowInput | FellowStudentDataNoteCreateOrConnectWithoutFellowInput[]
     createMany?: FellowStudentDataNoteCreateManyFellowInputEnvelope
     connect?: FellowStudentDataNoteWhereUniqueInput | FellowStudentDataNoteWhereUniqueInput[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -120125,6 +131305,34 @@ export namespace Prisma {
     update?: PMReflectionUpdateWithWhereUniqueWithoutFellowInput | PMReflectionUpdateWithWhereUniqueWithoutFellowInput[]
     updateMany?: PMReflectionUpdateManyWithWhereWithoutFellowInput | PMReflectionUpdateManyWithWhereWithoutFellowInput[]
     deleteMany?: PMReflectionScalarWhereInput | PMReflectionScalarWhereInput[]
+  }
+
+  export type IndividualFeedbackUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput> | IndividualFeedbackCreateWithoutFellowInput[] | IndividualFeedbackUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutFellowInput | IndividualFeedbackCreateOrConnectWithoutFellowInput[]
+    upsert?: IndividualFeedbackUpsertWithWhereUniqueWithoutFellowInput | IndividualFeedbackUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: IndividualFeedbackCreateManyFellowInputEnvelope
+    set?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    disconnect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    delete?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    update?: IndividualFeedbackUpdateWithWhereUniqueWithoutFellowInput | IndividualFeedbackUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: IndividualFeedbackUpdateManyWithWhereWithoutFellowInput | IndividualFeedbackUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+  }
+
+  export type FellowPerformanceUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput> | FellowPerformanceCreateWithoutFellowInput[] | FellowPerformanceUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutFellowInput | FellowPerformanceCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowPerformanceUpsertWithWhereUniqueWithoutFellowInput | FellowPerformanceUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowPerformanceCreateManyFellowInputEnvelope
+    set?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    disconnect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    delete?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    update?: FellowPerformanceUpdateWithWhereUniqueWithoutFellowInput | FellowPerformanceUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowPerformanceUpdateManyWithWhereWithoutFellowInput | FellowPerformanceUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
   }
 
   export type FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput = {
@@ -120323,6 +131531,34 @@ export namespace Prisma {
     deleteMany?: PMReflectionScalarWhereInput | PMReflectionScalarWhereInput[]
   }
 
+  export type IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput> | IndividualFeedbackCreateWithoutFellowInput[] | IndividualFeedbackUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: IndividualFeedbackCreateOrConnectWithoutFellowInput | IndividualFeedbackCreateOrConnectWithoutFellowInput[]
+    upsert?: IndividualFeedbackUpsertWithWhereUniqueWithoutFellowInput | IndividualFeedbackUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: IndividualFeedbackCreateManyFellowInputEnvelope
+    set?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    disconnect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    delete?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    connect?: IndividualFeedbackWhereUniqueInput | IndividualFeedbackWhereUniqueInput[]
+    update?: IndividualFeedbackUpdateWithWhereUniqueWithoutFellowInput | IndividualFeedbackUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: IndividualFeedbackUpdateManyWithWhereWithoutFellowInput | IndividualFeedbackUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+  }
+
+  export type FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput> | FellowPerformanceCreateWithoutFellowInput[] | FellowPerformanceUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowPerformanceCreateOrConnectWithoutFellowInput | FellowPerformanceCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowPerformanceUpsertWithWhereUniqueWithoutFellowInput | FellowPerformanceUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowPerformanceCreateManyFellowInputEnvelope
+    set?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    disconnect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    delete?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    connect?: FellowPerformanceWhereUniqueInput | FellowPerformanceWhereUniqueInput[]
+    update?: FellowPerformanceUpdateWithWhereUniqueWithoutFellowInput | FellowPerformanceUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowPerformanceUpdateManyWithWhereWithoutFellowInput | FellowPerformanceUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
+  }
+
   export type FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput = {
     create?: XOR<FellowAfterSchoolCentreCreateWithoutFellowInput, FellowAfterSchoolCentreUncheckedCreateWithoutFellowInput> | FellowAfterSchoolCentreCreateWithoutFellowInput[] | FellowAfterSchoolCentreUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowAfterSchoolCentreCreateOrConnectWithoutFellowInput | FellowAfterSchoolCentreCreateOrConnectWithoutFellowInput[]
@@ -120419,6 +131655,42 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPmReflectionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPmReflectionsInput, UserUpdateWithoutPmReflectionsInput>, UserUncheckedUpdateWithoutPmReflectionsInput>
+  }
+
+  export type FellowCreateNestedOneWithoutPerformanceObservationsInput = {
+    create?: XOR<FellowCreateWithoutPerformanceObservationsInput, FellowUncheckedCreateWithoutPerformanceObservationsInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutPerformanceObservationsInput
+    connect?: FellowWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPerformanceObservationsInput = {
+    create?: XOR<UserCreateWithoutPerformanceObservationsInput, UserUncheckedCreateWithoutPerformanceObservationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPerformanceObservationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type FellowUpdateOneRequiredWithoutPerformanceObservationsNestedInput = {
+    create?: XOR<FellowCreateWithoutPerformanceObservationsInput, FellowUncheckedCreateWithoutPerformanceObservationsInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutPerformanceObservationsInput
+    upsert?: FellowUpsertWithoutPerformanceObservationsInput
+    connect?: FellowWhereUniqueInput
+    update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutPerformanceObservationsInput, FellowUpdateWithoutPerformanceObservationsInput>, FellowUncheckedUpdateWithoutPerformanceObservationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutPerformanceObservationsNestedInput = {
+    create?: XOR<UserCreateWithoutPerformanceObservationsInput, UserUncheckedCreateWithoutPerformanceObservationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPerformanceObservationsInput
+    upsert?: UserUpsertWithoutPerformanceObservationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPerformanceObservationsInput, UserUpdateWithoutPerformanceObservationsInput>, UserUncheckedUpdateWithoutPerformanceObservationsInput>
   }
 
   export type FellowCreateNestedOneWithoutReviewsInput = {
@@ -120521,14 +131793,6 @@ export namespace Prisma {
     connectOrCreate?: AssessmentFormCreateOrConnectWithoutStudentInput | AssessmentFormCreateOrConnectWithoutStudentInput[]
     createMany?: AssessmentFormCreateManyStudentInputEnvelope
     connect?: AssessmentFormWhereUniqueInput | AssessmentFormWhereUniqueInput[]
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type SchoolUpdateOneWithoutStudentsNestedInput = {
@@ -121021,6 +132285,174 @@ export namespace Prisma {
     update?: AfterSchoolCentreProgramUpdateWithWhereUniqueWithoutProgramInput | AfterSchoolCentreProgramUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: AfterSchoolCentreProgramUpdateManyWithWhereWithoutProgramInput | AfterSchoolCentreProgramUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: AfterSchoolCentreProgramScalarWhereInput | AfterSchoolCentreProgramScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutManagedSchoolsInput = {
+    create?: XOR<UserCreateWithoutManagedSchoolsInput, UserUncheckedCreateWithoutManagedSchoolsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedSchoolsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SchoolCreateNestedOneWithoutProgramManagersInput = {
+    create?: XOR<SchoolCreateWithoutProgramManagersInput, SchoolUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutProgramManagersInput
+    connect?: SchoolWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutManagedSchoolsNestedInput = {
+    create?: XOR<UserCreateWithoutManagedSchoolsInput, UserUncheckedCreateWithoutManagedSchoolsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedSchoolsInput
+    upsert?: UserUpsertWithoutManagedSchoolsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutManagedSchoolsInput, UserUpdateWithoutManagedSchoolsInput>, UserUncheckedUpdateWithoutManagedSchoolsInput>
+  }
+
+  export type SchoolUpdateOneRequiredWithoutProgramManagersNestedInput = {
+    create?: XOR<SchoolCreateWithoutProgramManagersInput, SchoolUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutProgramManagersInput
+    upsert?: SchoolUpsertWithoutProgramManagersInput
+    connect?: SchoolWhereUniqueInput
+    update?: XOR<XOR<SchoolUpdateToOneWithWhereWithoutProgramManagersInput, SchoolUpdateWithoutProgramManagersInput>, SchoolUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type UserCreateNestedOneWithoutManagedCentresInput = {
+    create?: XOR<UserCreateWithoutManagedCentresInput, UserUncheckedCreateWithoutManagedCentresInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedCentresInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AfterSchoolCentreCreateNestedOneWithoutProgramManagersInput = {
+    create?: XOR<AfterSchoolCentreCreateWithoutProgramManagersInput, AfterSchoolCentreUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: AfterSchoolCentreCreateOrConnectWithoutProgramManagersInput
+    connect?: AfterSchoolCentreWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutManagedCentresNestedInput = {
+    create?: XOR<UserCreateWithoutManagedCentresInput, UserUncheckedCreateWithoutManagedCentresInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedCentresInput
+    upsert?: UserUpsertWithoutManagedCentresInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutManagedCentresInput, UserUpdateWithoutManagedCentresInput>, UserUncheckedUpdateWithoutManagedCentresInput>
+  }
+
+  export type AfterSchoolCentreUpdateOneRequiredWithoutProgramManagersNestedInput = {
+    create?: XOR<AfterSchoolCentreCreateWithoutProgramManagersInput, AfterSchoolCentreUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: AfterSchoolCentreCreateOrConnectWithoutProgramManagersInput
+    upsert?: AfterSchoolCentreUpsertWithoutProgramManagersInput
+    connect?: AfterSchoolCentreWhereUniqueInput
+    update?: XOR<XOR<AfterSchoolCentreUpdateToOneWithWhereWithoutProgramManagersInput, AfterSchoolCentreUpdateWithoutProgramManagersInput>, AfterSchoolCentreUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type UserCreateNestedOneWithoutManagedLivelihoodProgramsInput = {
+    create?: XOR<UserCreateWithoutManagedLivelihoodProgramsInput, UserUncheckedCreateWithoutManagedLivelihoodProgramsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedLivelihoodProgramsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LivelihoodProgramCreateNestedOneWithoutProgramManagersInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutProgramManagersInput, LivelihoodProgramUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutProgramManagersInput
+    connect?: LivelihoodProgramWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutManagedLivelihoodProgramsNestedInput = {
+    create?: XOR<UserCreateWithoutManagedLivelihoodProgramsInput, UserUncheckedCreateWithoutManagedLivelihoodProgramsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutManagedLivelihoodProgramsInput
+    upsert?: UserUpsertWithoutManagedLivelihoodProgramsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutManagedLivelihoodProgramsInput, UserUpdateWithoutManagedLivelihoodProgramsInput>, UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput>
+  }
+
+  export type LivelihoodProgramUpdateOneRequiredWithoutProgramManagersNestedInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutProgramManagersInput, LivelihoodProgramUncheckedCreateWithoutProgramManagersInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutProgramManagersInput
+    upsert?: LivelihoodProgramUpsertWithoutProgramManagersInput
+    connect?: LivelihoodProgramWhereUniqueInput
+    update?: XOR<XOR<LivelihoodProgramUpdateToOneWithWhereWithoutProgramManagersInput, LivelihoodProgramUpdateWithoutProgramManagersInput>, LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type UserCreateNestedOneWithoutPmTasksInput = {
+    create?: XOR<UserCreateWithoutPmTasksInput, UserUncheckedCreateWithoutPmTasksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPmTasksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProgramManagerTaskCommentCreateNestedManyWithoutTaskInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput> | ProgramManagerTaskCommentCreateWithoutTaskInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput | ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyTaskInputEnvelope
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+  }
+
+  export type ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutTaskInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput> | ProgramManagerTaskCommentCreateWithoutTaskInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput | ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyTaskInputEnvelope
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutPmTasksNestedInput = {
+    create?: XOR<UserCreateWithoutPmTasksInput, UserUncheckedCreateWithoutPmTasksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPmTasksInput
+    upsert?: UserUpsertWithoutPmTasksInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPmTasksInput, UserUpdateWithoutPmTasksInput>, UserUncheckedUpdateWithoutPmTasksInput>
+  }
+
+  export type ProgramManagerTaskCommentUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput> | ProgramManagerTaskCommentCreateWithoutTaskInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput | ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput[]
+    upsert?: ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput | ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyTaskInputEnvelope
+    set?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    delete?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    update?: ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutTaskInput | ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: ProgramManagerTaskCommentUpdateManyWithWhereWithoutTaskInput | ProgramManagerTaskCommentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateManyWithoutTaskNestedInput = {
+    create?: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput> | ProgramManagerTaskCommentCreateWithoutTaskInput[] | ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput | ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput[]
+    upsert?: ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput | ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput[]
+    createMany?: ProgramManagerTaskCommentCreateManyTaskInputEnvelope
+    set?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    disconnect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    delete?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
+    update?: ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutTaskInput | ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutTaskInput[]
+    updateMany?: ProgramManagerTaskCommentUpdateManyWithWhereWithoutTaskInput | ProgramManagerTaskCommentUpdateManyWithWhereWithoutTaskInput[]
+    deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+  }
+
+  export type ProgramManagerTaskCreateNestedOneWithoutCommentsInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutCommentsInput, ProgramManagerTaskUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutCommentsInput
+    connect?: ProgramManagerTaskWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutPmTaskCommentsInput = {
+    create?: XOR<UserCreateWithoutPmTaskCommentsInput, UserUncheckedCreateWithoutPmTaskCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPmTaskCommentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProgramManagerTaskUpdateOneRequiredWithoutCommentsNestedInput = {
+    create?: XOR<ProgramManagerTaskCreateWithoutCommentsInput, ProgramManagerTaskUncheckedCreateWithoutCommentsInput>
+    connectOrCreate?: ProgramManagerTaskCreateOrConnectWithoutCommentsInput
+    upsert?: ProgramManagerTaskUpsertWithoutCommentsInput
+    connect?: ProgramManagerTaskWhereUniqueInput
+    update?: XOR<XOR<ProgramManagerTaskUpdateToOneWithWhereWithoutCommentsInput, ProgramManagerTaskUpdateWithoutCommentsInput>, ProgramManagerTaskUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutPmTaskCommentsNestedInput = {
+    create?: XOR<UserCreateWithoutPmTaskCommentsInput, UserUncheckedCreateWithoutPmTaskCommentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPmTaskCommentsInput
+    upsert?: UserUpsertWithoutPmTaskCommentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPmTaskCommentsInput, UserUpdateWithoutPmTaskCommentsInput>, UserUncheckedUpdateWithoutPmTaskCommentsInput>
   }
 
   export type SchoolCreateNestedOneWithoutProgramsInput = {
@@ -122066,11 +133498,25 @@ export namespace Prisma {
     connect?: BeneficiaryLivelihoodWhereUniqueInput | BeneficiaryLivelihoodWhereUniqueInput[]
   }
 
+  export type ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
     createMany?: BeneficiaryLivelihoodCreateManyProgramInputEnvelope
     connect?: BeneficiaryLivelihoodWhereUniqueInput | BeneficiaryLivelihoodWhereUniqueInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
   }
 
   export type EnumLivelihoodCategoryFieldUpdateOperationsInput = {
@@ -122091,6 +133537,20 @@ export namespace Prisma {
     deleteMany?: BeneficiaryLivelihoodScalarWhereInput | BeneficiaryLivelihoodScalarWhereInput[]
   }
 
+  export type ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    upsert?: ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput | ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope
+    set?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    disconnect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    delete?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    update?: ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
@@ -122103,6 +133563,20 @@ export namespace Prisma {
     update?: BeneficiaryLivelihoodUpdateWithWhereUniqueWithoutProgramInput | BeneficiaryLivelihoodUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: BeneficiaryLivelihoodUpdateManyWithWhereWithoutProgramInput | BeneficiaryLivelihoodUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: BeneficiaryLivelihoodScalarWhereInput | BeneficiaryLivelihoodScalarWhereInput[]
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput> | ProgramManagerLivelihoodProgramCreateWithoutProgramInput[] | ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    upsert?: ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput | ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope
+    set?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    disconnect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    delete?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+    update?: ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
   }
 
   export type BeneficiaryCreateNestedOneWithoutLivelihoodDetailsInput = {
@@ -122685,6 +134159,34 @@ export namespace Prisma {
     upsert?: FellowUpsertWithoutLookBeyondSurveysInput
     connect?: FellowWhereUniqueInput
     update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutLookBeyondSurveysInput, FellowUpdateWithoutLookBeyondSurveysInput>, FellowUncheckedUpdateWithoutLookBeyondSurveysInput>
+  }
+
+  export type FellowCreateNestedOneWithoutIndividualFeedbackInput = {
+    create?: XOR<FellowCreateWithoutIndividualFeedbackInput, FellowUncheckedCreateWithoutIndividualFeedbackInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutIndividualFeedbackInput
+    connect?: FellowWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutIndividualFeedbackInput = {
+    create?: XOR<UserCreateWithoutIndividualFeedbackInput, UserUncheckedCreateWithoutIndividualFeedbackInput>
+    connectOrCreate?: UserCreateOrConnectWithoutIndividualFeedbackInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FellowUpdateOneRequiredWithoutIndividualFeedbackNestedInput = {
+    create?: XOR<FellowCreateWithoutIndividualFeedbackInput, FellowUncheckedCreateWithoutIndividualFeedbackInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutIndividualFeedbackInput
+    upsert?: FellowUpsertWithoutIndividualFeedbackInput
+    connect?: FellowWhereUniqueInput
+    update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutIndividualFeedbackInput, FellowUpdateWithoutIndividualFeedbackInput>, FellowUncheckedUpdateWithoutIndividualFeedbackInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutIndividualFeedbackNestedInput = {
+    create?: XOR<UserCreateWithoutIndividualFeedbackInput, UserUncheckedCreateWithoutIndividualFeedbackInput>
+    connectOrCreate?: UserCreateOrConnectWithoutIndividualFeedbackInput
+    upsert?: UserUpsertWithoutIndividualFeedbackInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutIndividualFeedbackInput, UserUpdateWithoutIndividualFeedbackInput>, UserUncheckedUpdateWithoutIndividualFeedbackInput>
   }
 
   export type UserCreateNestedOneWithoutTravelRequestsInput = {
@@ -123401,6 +134903,13 @@ export namespace Prisma {
     connect?: AfterSchoolAssessmentFormWhereUniqueInput | AfterSchoolAssessmentFormWhereUniqueInput[]
   }
 
+  export type ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput> | ProgramManagerAfterSchoolCentreCreateWithoutCentreInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyCentreInputEnvelope
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+  }
+
   export type FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput = {
     create?: XOR<FellowAfterSchoolCentreCreateWithoutCentreInput, FellowAfterSchoolCentreUncheckedCreateWithoutCentreInput> | FellowAfterSchoolCentreCreateWithoutCentreInput[] | FellowAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
     connectOrCreate?: FellowAfterSchoolCentreCreateOrConnectWithoutCentreInput | FellowAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
@@ -123441,6 +134950,13 @@ export namespace Prisma {
     connectOrCreate?: AfterSchoolAssessmentFormCreateOrConnectWithoutCentreInput | AfterSchoolAssessmentFormCreateOrConnectWithoutCentreInput[]
     createMany?: AfterSchoolAssessmentFormCreateManyCentreInputEnvelope
     connect?: AfterSchoolAssessmentFormWhereUniqueInput | AfterSchoolAssessmentFormWhereUniqueInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput> | ProgramManagerAfterSchoolCentreCreateWithoutCentreInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyCentreInputEnvelope
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
   }
 
   export type FellowAfterSchoolCentreUpdateManyWithoutCentreNestedInput = {
@@ -123527,6 +135043,20 @@ export namespace Prisma {
     deleteMany?: AfterSchoolAssessmentFormScalarWhereInput | AfterSchoolAssessmentFormScalarWhereInput[]
   }
 
+  export type ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput> | ProgramManagerAfterSchoolCentreCreateWithoutCentreInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
+    upsert?: ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput | ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyCentreInputEnvelope
+    set?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    disconnect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    delete?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    update?: ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutCentreInput | ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutCentreInput[]
+    updateMany?: ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutCentreInput | ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutCentreInput[]
+    deleteMany?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
+  }
+
   export type FellowAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput = {
     create?: XOR<FellowAfterSchoolCentreCreateWithoutCentreInput, FellowAfterSchoolCentreUncheckedCreateWithoutCentreInput> | FellowAfterSchoolCentreCreateWithoutCentreInput[] | FellowAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
     connectOrCreate?: FellowAfterSchoolCentreCreateOrConnectWithoutCentreInput | FellowAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
@@ -123609,6 +135139,20 @@ export namespace Prisma {
     update?: AfterSchoolAssessmentFormUpdateWithWhereUniqueWithoutCentreInput | AfterSchoolAssessmentFormUpdateWithWhereUniqueWithoutCentreInput[]
     updateMany?: AfterSchoolAssessmentFormUpdateManyWithWhereWithoutCentreInput | AfterSchoolAssessmentFormUpdateManyWithWhereWithoutCentreInput[]
     deleteMany?: AfterSchoolAssessmentFormScalarWhereInput | AfterSchoolAssessmentFormScalarWhereInput[]
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput = {
+    create?: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput> | ProgramManagerAfterSchoolCentreCreateWithoutCentreInput[] | ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput[]
+    connectOrCreate?: ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput | ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput[]
+    upsert?: ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput | ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput[]
+    createMany?: ProgramManagerAfterSchoolCentreCreateManyCentreInputEnvelope
+    set?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    disconnect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    delete?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    connect?: ProgramManagerAfterSchoolCentreWhereUniqueInput | ProgramManagerAfterSchoolCentreWhereUniqueInput[]
+    update?: ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutCentreInput | ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutCentreInput[]
+    updateMany?: ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutCentreInput | ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutCentreInput[]
+    deleteMany?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
   }
 
   export type FellowCreateNestedOneWithoutAfterSchoolCentresInput = {
@@ -124378,6 +135922,17 @@ export namespace Prisma {
     not?: NestedEnumUserStatusFilter<$PrismaModel> | $Enums.UserStatus
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedEnumUserStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.UserStatus | EnumUserStatusFieldRefInput<$PrismaModel>
     in?: $Enums.UserStatus[] | ListEnumUserStatusFieldRefInput<$PrismaModel>
@@ -124386,6 +135941,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserStatusFilter<$PrismaModel>
     _max?: NestedEnumUserStatusFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -124449,17 +136018,6 @@ export namespace Prisma {
     _max?: NestedEnumPermissionTypeFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
     in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
@@ -124469,20 +136027,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -124652,6 +136196,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -124666,6 +136214,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -124677,6 +136232,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -124691,6 +136250,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -124756,6 +136322,10 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     department?: StringNullableFilter<"User"> | string | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    gender?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -124864,6 +136434,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -124894,6 +136466,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -125197,6 +136771,228 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type IndividualFeedbackCreateWithoutAuthorInput = {
+    id?: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutIndividualFeedbackInput
+  }
+
+  export type IndividualFeedbackUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IndividualFeedbackCreateOrConnectWithoutAuthorInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    create: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type IndividualFeedbackCreateManyAuthorInputEnvelope = {
+    data: IndividualFeedbackCreateManyAuthorInput | IndividualFeedbackCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FellowPerformanceCreateWithoutAuthorInput = {
+    id?: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutPerformanceObservationsInput
+  }
+
+  export type FellowPerformanceUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceCreateOrConnectWithoutAuthorInput = {
+    where: FellowPerformanceWhereUniqueInput
+    create: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type FellowPerformanceCreateManyAuthorInputEnvelope = {
+    data: FellowPerformanceCreateManyAuthorInput | FellowPerformanceCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramManagerSchoolCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    school: SchoolCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerSchoolUncheckedCreateWithoutUserInput = {
+    id?: string
+    schoolId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolCreateOrConnectWithoutUserInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    create: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerSchoolCreateManyUserInputEnvelope = {
+    data: ProgramManagerSchoolCreateManyUserInput | ProgramManagerSchoolCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    centre: AfterSchoolCentreCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput = {
+    id?: string
+    centreId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateOrConnectWithoutUserInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    create: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateManyUserInputEnvelope = {
+    data: ProgramManagerAfterSchoolCentreCreateManyUserInput | ProgramManagerAfterSchoolCentreCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutProgramManagersInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput = {
+    id?: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateOrConnectWithoutUserInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    create: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateManyUserInputEnvelope = {
+    data: ProgramManagerLivelihoodProgramCreateManyUserInput | ProgramManagerLivelihoodProgramCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramManagerTaskCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: ProgramManagerTaskCommentCreateNestedManyWithoutTaskInput
+  }
+
+  export type ProgramManagerTaskUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutTaskInput
+  }
+
+  export type ProgramManagerTaskCreateOrConnectWithoutUserInput = {
+    where: ProgramManagerTaskWhereUniqueInput
+    create: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerTaskCreateManyUserInputEnvelope = {
+    data: ProgramManagerTaskCreateManyUserInput | ProgramManagerTaskCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgramManagerTaskCommentCreateWithoutAuthorInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    task: ProgramManagerTaskCreateNestedOneWithoutCommentsInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput = {
+    id?: string
+    taskId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentCreateOrConnectWithoutAuthorInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    create: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type ProgramManagerTaskCommentCreateManyAuthorInputEnvelope = {
+    data: ProgramManagerTaskCommentCreateManyAuthorInput | ProgramManagerTaskCommentCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -125291,6 +137087,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -125321,6 +137119,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -125572,6 +137372,221 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PMReflection"> | Date | string
   }
 
+  export type IndividualFeedbackUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    update: XOR<IndividualFeedbackUpdateWithoutAuthorInput, IndividualFeedbackUncheckedUpdateWithoutAuthorInput>
+    create: XOR<IndividualFeedbackCreateWithoutAuthorInput, IndividualFeedbackUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type IndividualFeedbackUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    data: XOR<IndividualFeedbackUpdateWithoutAuthorInput, IndividualFeedbackUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type IndividualFeedbackUpdateManyWithWhereWithoutAuthorInput = {
+    where: IndividualFeedbackScalarWhereInput
+    data: XOR<IndividualFeedbackUpdateManyMutationInput, IndividualFeedbackUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type IndividualFeedbackScalarWhereInput = {
+    AND?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+    OR?: IndividualFeedbackScalarWhereInput[]
+    NOT?: IndividualFeedbackScalarWhereInput | IndividualFeedbackScalarWhereInput[]
+    id?: StringFilter<"IndividualFeedback"> | string
+    fellowId?: StringFilter<"IndividualFeedback"> | string
+    date?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    classroomLevel?: StringNullableFilter<"IndividualFeedback"> | string | null
+    classGroup?: StringNullableFilter<"IndividualFeedback"> | string | null
+    subject?: StringFilter<"IndividualFeedback"> | string
+    subjectOther?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanLink?: StringNullableFilter<"IndividualFeedback"> | string | null
+    lessonPlanFeedback?: BoolFilter<"IndividualFeedback"> | boolean
+    strengths?: StringNullableFilter<"IndividualFeedback"> | string | null
+    areasOfDevelopment?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepsFellow?: StringNullableFilter<"IndividualFeedback"> | string | null
+    nextStepPM?: StringNullableFilter<"IndividualFeedback"> | string | null
+    authorId?: StringFilter<"IndividualFeedback"> | string
+    createdAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+    updatedAt?: DateTimeFilter<"IndividualFeedback"> | Date | string
+  }
+
+  export type FellowPerformanceUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: FellowPerformanceWhereUniqueInput
+    update: XOR<FellowPerformanceUpdateWithoutAuthorInput, FellowPerformanceUncheckedUpdateWithoutAuthorInput>
+    create: XOR<FellowPerformanceCreateWithoutAuthorInput, FellowPerformanceUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type FellowPerformanceUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: FellowPerformanceWhereUniqueInput
+    data: XOR<FellowPerformanceUpdateWithoutAuthorInput, FellowPerformanceUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type FellowPerformanceUpdateManyWithWhereWithoutAuthorInput = {
+    where: FellowPerformanceScalarWhereInput
+    data: XOR<FellowPerformanceUpdateManyMutationInput, FellowPerformanceUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type FellowPerformanceScalarWhereInput = {
+    AND?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
+    OR?: FellowPerformanceScalarWhereInput[]
+    NOT?: FellowPerformanceScalarWhereInput | FellowPerformanceScalarWhereInput[]
+    id?: StringFilter<"FellowPerformance"> | string
+    fellowId?: StringFilter<"FellowPerformance"> | string
+    date?: DateTimeFilter<"FellowPerformance"> | Date | string
+    classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
+    subject?: StringFilter<"FellowPerformance"> | string
+    lessonPlan?: IntFilter<"FellowPerformance"> | number
+    culture?: IntFilter<"FellowPerformance"> | number
+    lessonFlow?: IntFilter<"FellowPerformance"> | number
+    content?: IntFilter<"FellowPerformance"> | number
+    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    overallScore?: FloatFilter<"FellowPerformance"> | number
+    strength?: StringNullableFilter<"FellowPerformance"> | string | null
+    aod?: StringNullableFilter<"FellowPerformance"> | string | null
+    trend?: StringNullableFilter<"FellowPerformance"> | string | null
+    authorId?: StringFilter<"FellowPerformance"> | string
+    createdAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+    updatedAt?: DateTimeFilter<"FellowPerformance"> | Date | string
+  }
+
+  export type ProgramManagerSchoolUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    update: XOR<ProgramManagerSchoolUpdateWithoutUserInput, ProgramManagerSchoolUncheckedUpdateWithoutUserInput>
+    create: XOR<ProgramManagerSchoolCreateWithoutUserInput, ProgramManagerSchoolUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerSchoolUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    data: XOR<ProgramManagerSchoolUpdateWithoutUserInput, ProgramManagerSchoolUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProgramManagerSchoolUpdateManyWithWhereWithoutUserInput = {
+    where: ProgramManagerSchoolScalarWhereInput
+    data: XOR<ProgramManagerSchoolUpdateManyMutationInput, ProgramManagerSchoolUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProgramManagerSchoolScalarWhereInput = {
+    AND?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+    OR?: ProgramManagerSchoolScalarWhereInput[]
+    NOT?: ProgramManagerSchoolScalarWhereInput | ProgramManagerSchoolScalarWhereInput[]
+    id?: StringFilter<"ProgramManagerSchool"> | string
+    userId?: StringFilter<"ProgramManagerSchool"> | string
+    schoolId?: StringFilter<"ProgramManagerSchool"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerSchool"> | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    update: XOR<ProgramManagerAfterSchoolCentreUpdateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutUserInput>
+    create: XOR<ProgramManagerAfterSchoolCentreCreateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateWithoutUserInput, ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutUserInput = {
+    where: ProgramManagerAfterSchoolCentreScalarWhereInput
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateManyMutationInput, ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreScalarWhereInput = {
+    AND?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
+    OR?: ProgramManagerAfterSchoolCentreScalarWhereInput[]
+    NOT?: ProgramManagerAfterSchoolCentreScalarWhereInput | ProgramManagerAfterSchoolCentreScalarWhereInput[]
+    id?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    userId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    centreId?: StringFilter<"ProgramManagerAfterSchoolCentre"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerAfterSchoolCentre"> | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    update: XOR<ProgramManagerLivelihoodProgramUpdateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedUpdateWithoutUserInput>
+    create: XOR<ProgramManagerLivelihoodProgramCreateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    data: XOR<ProgramManagerLivelihoodProgramUpdateWithoutUserInput, ProgramManagerLivelihoodProgramUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutUserInput = {
+    where: ProgramManagerLivelihoodProgramScalarWhereInput
+    data: XOR<ProgramManagerLivelihoodProgramUpdateManyMutationInput, ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramScalarWhereInput = {
+    AND?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+    OR?: ProgramManagerLivelihoodProgramScalarWhereInput[]
+    NOT?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+    id?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    userId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    programId?: StringFilter<"ProgramManagerLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerLivelihoodProgram"> | Date | string
+  }
+
+  export type ProgramManagerTaskUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerTaskWhereUniqueInput
+    update: XOR<ProgramManagerTaskUpdateWithoutUserInput, ProgramManagerTaskUncheckedUpdateWithoutUserInput>
+    create: XOR<ProgramManagerTaskCreateWithoutUserInput, ProgramManagerTaskUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProgramManagerTaskUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProgramManagerTaskWhereUniqueInput
+    data: XOR<ProgramManagerTaskUpdateWithoutUserInput, ProgramManagerTaskUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProgramManagerTaskUpdateManyWithWhereWithoutUserInput = {
+    where: ProgramManagerTaskScalarWhereInput
+    data: XOR<ProgramManagerTaskUpdateManyMutationInput, ProgramManagerTaskUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProgramManagerTaskScalarWhereInput = {
+    AND?: ProgramManagerTaskScalarWhereInput | ProgramManagerTaskScalarWhereInput[]
+    OR?: ProgramManagerTaskScalarWhereInput[]
+    NOT?: ProgramManagerTaskScalarWhereInput | ProgramManagerTaskScalarWhereInput[]
+    id?: StringFilter<"ProgramManagerTask"> | string
+    userId?: StringFilter<"ProgramManagerTask"> | string
+    title?: StringFilter<"ProgramManagerTask"> | string
+    description?: StringNullableFilter<"ProgramManagerTask"> | string | null
+    plannedDate?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    status?: StringFilter<"ProgramManagerTask"> | string
+    isPlanned?: BoolFilter<"ProgramManagerTask"> | boolean
+    completionDate?: DateTimeNullableFilter<"ProgramManagerTask"> | Date | string | null
+    createdAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTask"> | Date | string
+  }
+
+  export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    update: XOR<ProgramManagerTaskCommentUpdateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedUpdateWithoutAuthorInput>
+    create: XOR<ProgramManagerTaskCommentCreateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    data: XOR<ProgramManagerTaskCommentUpdateWithoutAuthorInput, ProgramManagerTaskCommentUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput = {
+    where: ProgramManagerTaskCommentScalarWhereInput
+    data: XOR<ProgramManagerTaskCommentUpdateManyMutationInput, ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type ProgramManagerTaskCommentScalarWhereInput = {
+    AND?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+    OR?: ProgramManagerTaskCommentScalarWhereInput[]
+    NOT?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+    id?: StringFilter<"ProgramManagerTaskComment"> | string
+    taskId?: StringFilter<"ProgramManagerTaskComment"> | string
+    authorId?: StringFilter<"ProgramManagerTaskComment"> | string
+    text?: StringFilter<"ProgramManagerTaskComment"> | string
+    createdAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
+  }
+
   export type RolePermissionCreateWithoutPermissionInput = {
     id?: string
     createdAt?: Date | string
@@ -125775,6 +137790,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -125789,6 +137808,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -125801,6 +137827,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -125814,6 +137844,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -125866,6 +137903,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125880,6 +137921,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -125892,6 +137940,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -125905,6 +137957,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -126148,6 +138207,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProgramManagerSchoolCreateWithoutSchoolInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedSchoolsInput
+  }
+
+  export type ProgramManagerSchoolUncheckedCreateWithoutSchoolInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolCreateOrConnectWithoutSchoolInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    create: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput>
+  }
+
+  export type ProgramManagerSchoolCreateManySchoolInputEnvelope = {
+    data: ProgramManagerSchoolCreateManySchoolInput | ProgramManagerSchoolCreateManySchoolInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FellowSchoolUpsertWithWhereUniqueWithoutSchoolInput = {
     where: FellowSchoolWhereUniqueInput
     update: XOR<FellowSchoolUpdateWithoutSchoolInput, FellowSchoolUncheckedUpdateWithoutSchoolInput>
@@ -126334,6 +138415,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"AssessmentForm"> | Date | string
   }
 
+  export type ProgramManagerSchoolUpsertWithWhereUniqueWithoutSchoolInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    update: XOR<ProgramManagerSchoolUpdateWithoutSchoolInput, ProgramManagerSchoolUncheckedUpdateWithoutSchoolInput>
+    create: XOR<ProgramManagerSchoolCreateWithoutSchoolInput, ProgramManagerSchoolUncheckedCreateWithoutSchoolInput>
+  }
+
+  export type ProgramManagerSchoolUpdateWithWhereUniqueWithoutSchoolInput = {
+    where: ProgramManagerSchoolWhereUniqueInput
+    data: XOR<ProgramManagerSchoolUpdateWithoutSchoolInput, ProgramManagerSchoolUncheckedUpdateWithoutSchoolInput>
+  }
+
+  export type ProgramManagerSchoolUpdateManyWithWhereWithoutSchoolInput = {
+    where: ProgramManagerSchoolScalarWhereInput
+    data: XOR<ProgramManagerSchoolUpdateManyMutationInput, ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolInput>
+  }
+
   export type UserCreateWithoutFellowInput = {
     id?: string
     name: string
@@ -126343,6 +138440,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -126357,6 +138458,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -126369,6 +138477,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -126382,6 +138494,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -126741,6 +138860,100 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type IndividualFeedbackCreateWithoutFellowInput = {
+    id?: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutIndividualFeedbackInput
+  }
+
+  export type IndividualFeedbackUncheckedCreateWithoutFellowInput = {
+    id?: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IndividualFeedbackCreateOrConnectWithoutFellowInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    create: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput>
+  }
+
+  export type IndividualFeedbackCreateManyFellowInputEnvelope = {
+    data: IndividualFeedbackCreateManyFellowInput | IndividualFeedbackCreateManyFellowInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FellowPerformanceCreateWithoutFellowInput = {
+    id?: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPerformanceObservationsInput
+  }
+
+  export type FellowPerformanceUncheckedCreateWithoutFellowInput = {
+    id?: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceCreateOrConnectWithoutFellowInput = {
+    where: FellowPerformanceWhereUniqueInput
+    create: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowPerformanceCreateManyFellowInputEnvelope = {
+    data: FellowPerformanceCreateManyFellowInput | FellowPerformanceCreateManyFellowInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FellowAfterSchoolCentreCreateWithoutFellowInput = {
     id?: string
     createdAt?: Date | string
@@ -126872,6 +139085,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -126882,6 +139096,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -126917,6 +139132,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126931,6 +139150,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -126943,6 +139169,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126956,6 +139186,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -127188,6 +139425,38 @@ export namespace Prisma {
     data: XOR<PMReflectionUpdateManyMutationInput, PMReflectionUncheckedUpdateManyWithoutFellowInput>
   }
 
+  export type IndividualFeedbackUpsertWithWhereUniqueWithoutFellowInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    update: XOR<IndividualFeedbackUpdateWithoutFellowInput, IndividualFeedbackUncheckedUpdateWithoutFellowInput>
+    create: XOR<IndividualFeedbackCreateWithoutFellowInput, IndividualFeedbackUncheckedCreateWithoutFellowInput>
+  }
+
+  export type IndividualFeedbackUpdateWithWhereUniqueWithoutFellowInput = {
+    where: IndividualFeedbackWhereUniqueInput
+    data: XOR<IndividualFeedbackUpdateWithoutFellowInput, IndividualFeedbackUncheckedUpdateWithoutFellowInput>
+  }
+
+  export type IndividualFeedbackUpdateManyWithWhereWithoutFellowInput = {
+    where: IndividualFeedbackScalarWhereInput
+    data: XOR<IndividualFeedbackUpdateManyMutationInput, IndividualFeedbackUncheckedUpdateManyWithoutFellowInput>
+  }
+
+  export type FellowPerformanceUpsertWithWhereUniqueWithoutFellowInput = {
+    where: FellowPerformanceWhereUniqueInput
+    update: XOR<FellowPerformanceUpdateWithoutFellowInput, FellowPerformanceUncheckedUpdateWithoutFellowInput>
+    create: XOR<FellowPerformanceCreateWithoutFellowInput, FellowPerformanceUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowPerformanceUpdateWithWhereUniqueWithoutFellowInput = {
+    where: FellowPerformanceWhereUniqueInput
+    data: XOR<FellowPerformanceUpdateWithoutFellowInput, FellowPerformanceUncheckedUpdateWithoutFellowInput>
+  }
+
+  export type FellowPerformanceUpdateManyWithWhereWithoutFellowInput = {
+    where: FellowPerformanceScalarWhereInput
+    data: XOR<FellowPerformanceUpdateManyMutationInput, FellowPerformanceUncheckedUpdateManyWithoutFellowInput>
+  }
+
   export type FellowAfterSchoolCentreUpsertWithWhereUniqueWithoutFellowInput = {
     where: FellowAfterSchoolCentreWhereUniqueInput
     update: XOR<FellowAfterSchoolCentreUpdateWithoutFellowInput, FellowAfterSchoolCentreUncheckedUpdateWithoutFellowInput>
@@ -127314,6 +139583,7 @@ export namespace Prisma {
     session?: StringFilter<"FellowStudentDataNote"> | string
     phase?: StringFilter<"FellowStudentDataNote"> | string
     sectionKey?: StringFilter<"FellowStudentDataNote"> | string
+    source?: StringFilter<"FellowStudentDataNote"> | string
     note?: StringFilter<"FellowStudentDataNote"> | string
     createdAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
     updatedAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
@@ -127343,6 +139613,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -127373,6 +139645,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -127419,6 +139693,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -127449,6 +139725,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -127479,6 +139757,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -127509,6 +139789,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -127529,6 +139811,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -127543,6 +139829,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -127555,6 +139848,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -127568,6 +139865,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -127610,6 +139914,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -127640,6 +139946,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -127666,6 +139974,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127680,6 +139992,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -127692,6 +140011,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -127705,6 +140028,317 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type FellowCreateWithoutPerformanceObservationsInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutFellowInput
+    schools?: FellowSchoolCreateNestedManyWithoutFellowInput
+    students?: StudentCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowUncheckedCreateWithoutPerformanceObservationsInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
+    students?: StudentUncheckedCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetUncheckedCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowCreateOrConnectWithoutPerformanceObservationsInput = {
+    where: FellowWhereUniqueInput
+    create: XOR<FellowCreateWithoutPerformanceObservationsInput, FellowUncheckedCreateWithoutPerformanceObservationsInput>
+  }
+
+  export type UserCreateWithoutPerformanceObservationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPerformanceObservationsInput, UserUncheckedCreateWithoutPerformanceObservationsInput>
+  }
+
+  export type FellowUpsertWithoutPerformanceObservationsInput = {
+    update: XOR<FellowUpdateWithoutPerformanceObservationsInput, FellowUncheckedUpdateWithoutPerformanceObservationsInput>
+    create: XOR<FellowCreateWithoutPerformanceObservationsInput, FellowUncheckedCreateWithoutPerformanceObservationsInput>
+    where?: FellowWhereInput
+  }
+
+  export type FellowUpdateToOneWithWhereWithoutPerformanceObservationsInput = {
+    where?: FellowWhereInput
+    data: XOR<FellowUpdateWithoutPerformanceObservationsInput, FellowUncheckedUpdateWithoutPerformanceObservationsInput>
+  }
+
+  export type FellowUpdateWithoutPerformanceObservationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutFellowNestedInput
+    schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
+    students?: StudentUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowUncheckedUpdateWithoutPerformanceObservationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
+    students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUncheckedUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+  }
+
+  export type UserUpsertWithoutPerformanceObservationsInput = {
+    update: XOR<UserUpdateWithoutPerformanceObservationsInput, UserUncheckedUpdateWithoutPerformanceObservationsInput>
+    create: XOR<UserCreateWithoutPerformanceObservationsInput, UserUncheckedCreateWithoutPerformanceObservationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPerformanceObservationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPerformanceObservationsInput, UserUncheckedUpdateWithoutPerformanceObservationsInput>
+  }
+
+  export type UserUpdateWithoutPerformanceObservationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -127731,6 +140365,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -127761,6 +140397,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -127807,6 +140445,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -127837,6 +140477,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -127865,6 +140507,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutStudentsInput = {
@@ -127889,6 +140532,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutStudentsInput = {
@@ -127920,6 +140564,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -127950,6 +140596,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -128243,6 +140891,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutStudentsInput = {
@@ -128267,6 +140916,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type FellowUpsertWithoutStudentsInput = {
@@ -128304,6 +140954,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -128334,6 +140986,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -128882,6 +141536,7 @@ export namespace Prisma {
     programs?: SchoolProgramCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutLearningAssessmentsInput = {
@@ -128906,6 +141561,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutLearningAssessmentsInput = {
@@ -129017,6 +141673,7 @@ export namespace Prisma {
     programs?: SchoolProgramUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutLearningAssessmentsInput = {
@@ -129041,6 +141698,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type StudentCreateWithoutHomeworkRecordsInput = {
@@ -129130,6 +141788,7 @@ export namespace Prisma {
     programs?: SchoolProgramCreateNestedManyWithoutSchoolInput
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutHomeworkRecordsInput = {
@@ -129154,6 +141813,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedCreateNestedManyWithoutSchoolInput
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutHomeworkRecordsInput = {
@@ -129265,6 +141925,7 @@ export namespace Prisma {
     programs?: SchoolProgramUpdateManyWithoutSchoolNestedInput
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutHomeworkRecordsInput = {
@@ -129289,6 +141950,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedUpdateManyWithoutSchoolNestedInput
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type StudentCreateWithoutTransitionsInput = {
@@ -129811,6 +142473,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -129841,6 +142505,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -129874,6 +142540,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutFellowsInput = {
@@ -129898,6 +142565,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutFellowsInput = {
@@ -129940,6 +142608,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -129970,6 +142640,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -130009,6 +142681,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutFellowsInput = {
@@ -130033,6 +142706,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolProgramCreateWithoutProgramInput = {
@@ -130179,6 +142853,1204 @@ export namespace Prisma {
     programId?: StringFilter<"AfterSchoolCentreProgram"> | string
   }
 
+  export type UserCreateWithoutManagedSchoolsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutManagedSchoolsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutManagedSchoolsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutManagedSchoolsInput, UserUncheckedCreateWithoutManagedSchoolsInput>
+  }
+
+  export type SchoolCreateWithoutProgramManagersInput = {
+    id?: string
+    name: string
+    principalName?: string | null
+    udiseCode?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    location?: string | null
+    status?: string
+    latitude?: string | null
+    longitude?: string | null
+    mapUrl?: string | null
+    img?: string | null
+    goal?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
+    students?: StudentCreateNestedManyWithoutSchoolInput
+    programs?: SchoolProgramCreateNestedManyWithoutSchoolInput
+    learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
+    homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
+    assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+  }
+
+  export type SchoolUncheckedCreateWithoutProgramManagersInput = {
+    id?: string
+    name: string
+    principalName?: string | null
+    udiseCode?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    location?: string | null
+    status?: string
+    latitude?: string | null
+    longitude?: string | null
+    mapUrl?: string | null
+    img?: string | null
+    goal?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
+    students?: StudentUncheckedCreateNestedManyWithoutSchoolInput
+    programs?: SchoolProgramUncheckedCreateNestedManyWithoutSchoolInput
+    learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
+    homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
+    assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+  }
+
+  export type SchoolCreateOrConnectWithoutProgramManagersInput = {
+    where: SchoolWhereUniqueInput
+    create: XOR<SchoolCreateWithoutProgramManagersInput, SchoolUncheckedCreateWithoutProgramManagersInput>
+  }
+
+  export type UserUpsertWithoutManagedSchoolsInput = {
+    update: XOR<UserUpdateWithoutManagedSchoolsInput, UserUncheckedUpdateWithoutManagedSchoolsInput>
+    create: XOR<UserCreateWithoutManagedSchoolsInput, UserUncheckedCreateWithoutManagedSchoolsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutManagedSchoolsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutManagedSchoolsInput, UserUncheckedUpdateWithoutManagedSchoolsInput>
+  }
+
+  export type UserUpdateWithoutManagedSchoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type SchoolUpsertWithoutProgramManagersInput = {
+    update: XOR<SchoolUpdateWithoutProgramManagersInput, SchoolUncheckedUpdateWithoutProgramManagersInput>
+    create: XOR<SchoolCreateWithoutProgramManagersInput, SchoolUncheckedCreateWithoutProgramManagersInput>
+    where?: SchoolWhereInput
+  }
+
+  export type SchoolUpdateToOneWithWhereWithoutProgramManagersInput = {
+    where?: SchoolWhereInput
+    data: XOR<SchoolUpdateWithoutProgramManagersInput, SchoolUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type SchoolUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableStringFieldUpdateOperationsInput | string | null
+    longitude?: NullableStringFieldUpdateOperationsInput | string | null
+    mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
+    students?: StudentUpdateManyWithoutSchoolNestedInput
+    programs?: SchoolProgramUpdateManyWithoutSchoolNestedInput
+    learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
+    homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
+    assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+  }
+
+  export type SchoolUncheckedUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    principalName?: NullableStringFieldUpdateOperationsInput | string | null
+    udiseCode?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    latitude?: NullableStringFieldUpdateOperationsInput | string | null
+    longitude?: NullableStringFieldUpdateOperationsInput | string | null
+    mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    goal?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
+    students?: StudentUncheckedUpdateManyWithoutSchoolNestedInput
+    programs?: SchoolProgramUncheckedUpdateManyWithoutSchoolNestedInput
+    learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
+    homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
+    assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+  }
+
+  export type UserCreateWithoutManagedCentresInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutManagedCentresInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutManagedCentresInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutManagedCentresInput, UserUncheckedCreateWithoutManagedCentresInput>
+  }
+
+  export type AfterSchoolCentreCreateWithoutProgramManagersInput = {
+    id?: string
+    name: string
+    coordinatorName?: string | null
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    location?: string | null
+    status?: string
+    goal?: number
+    img?: string | null
+    mapUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellows?: FellowAfterSchoolCentreCreateNestedManyWithoutCentreInput
+    students?: AfterSchoolStudentCreateNestedManyWithoutCentreInput
+    programs?: AfterSchoolCentreProgramCreateNestedManyWithoutCentreInput
+    learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
+    homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
+    assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+  }
+
+  export type AfterSchoolCentreUncheckedCreateWithoutProgramManagersInput = {
+    id?: string
+    name: string
+    coordinatorName?: string | null
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    location?: string | null
+    status?: string
+    goal?: number
+    img?: string | null
+    mapUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fellows?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
+    students?: AfterSchoolStudentUncheckedCreateNestedManyWithoutCentreInput
+    programs?: AfterSchoolCentreProgramUncheckedCreateNestedManyWithoutCentreInput
+    learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
+    homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
+    assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+  }
+
+  export type AfterSchoolCentreCreateOrConnectWithoutProgramManagersInput = {
+    where: AfterSchoolCentreWhereUniqueInput
+    create: XOR<AfterSchoolCentreCreateWithoutProgramManagersInput, AfterSchoolCentreUncheckedCreateWithoutProgramManagersInput>
+  }
+
+  export type UserUpsertWithoutManagedCentresInput = {
+    update: XOR<UserUpdateWithoutManagedCentresInput, UserUncheckedUpdateWithoutManagedCentresInput>
+    create: XOR<UserCreateWithoutManagedCentresInput, UserUncheckedCreateWithoutManagedCentresInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutManagedCentresInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutManagedCentresInput, UserUncheckedUpdateWithoutManagedCentresInput>
+  }
+
+  export type UserUpdateWithoutManagedCentresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutManagedCentresInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
+    update: XOR<AfterSchoolCentreUpdateWithoutProgramManagersInput, AfterSchoolCentreUncheckedUpdateWithoutProgramManagersInput>
+    create: XOR<AfterSchoolCentreCreateWithoutProgramManagersInput, AfterSchoolCentreUncheckedCreateWithoutProgramManagersInput>
+    where?: AfterSchoolCentreWhereInput
+  }
+
+  export type AfterSchoolCentreUpdateToOneWithWhereWithoutProgramManagersInput = {
+    where?: AfterSchoolCentreWhereInput
+    data: XOR<AfterSchoolCentreUpdateWithoutProgramManagersInput, AfterSchoolCentreUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type AfterSchoolCentreUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    coordinatorName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    goal?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellows?: FellowAfterSchoolCentreUpdateManyWithoutCentreNestedInput
+    students?: AfterSchoolStudentUpdateManyWithoutCentreNestedInput
+    programs?: AfterSchoolCentreProgramUpdateManyWithoutCentreNestedInput
+    learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
+    homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
+    assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+  }
+
+  export type AfterSchoolCentreUncheckedUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    coordinatorName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    goal?: IntFieldUpdateOperationsInput | number
+    img?: NullableStringFieldUpdateOperationsInput | string | null
+    mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellows?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
+    students?: AfterSchoolStudentUncheckedUpdateManyWithoutCentreNestedInput
+    programs?: AfterSchoolCentreProgramUncheckedUpdateManyWithoutCentreNestedInput
+    learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
+    homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
+    assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+  }
+
+  export type UserCreateWithoutManagedLivelihoodProgramsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutManagedLivelihoodProgramsInput, UserUncheckedCreateWithoutManagedLivelihoodProgramsInput>
+  }
+
+  export type LivelihoodProgramCreateWithoutProgramManagersInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramUncheckedCreateWithoutProgramManagersInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramCreateOrConnectWithoutProgramManagersInput = {
+    where: LivelihoodProgramWhereUniqueInput
+    create: XOR<LivelihoodProgramCreateWithoutProgramManagersInput, LivelihoodProgramUncheckedCreateWithoutProgramManagersInput>
+  }
+
+  export type UserUpsertWithoutManagedLivelihoodProgramsInput = {
+    update: XOR<UserUpdateWithoutManagedLivelihoodProgramsInput, UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput>
+    create: XOR<UserCreateWithoutManagedLivelihoodProgramsInput, UserUncheckedCreateWithoutManagedLivelihoodProgramsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutManagedLivelihoodProgramsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutManagedLivelihoodProgramsInput, UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput>
+  }
+
+  export type UserUpdateWithoutManagedLivelihoodProgramsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
+    update: XOR<LivelihoodProgramUpdateWithoutProgramManagersInput, LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput>
+    create: XOR<LivelihoodProgramCreateWithoutProgramManagersInput, LivelihoodProgramUncheckedCreateWithoutProgramManagersInput>
+    where?: LivelihoodProgramWhereInput
+  }
+
+  export type LivelihoodProgramUpdateToOneWithWhereWithoutProgramManagersInput = {
+    where?: LivelihoodProgramWhereInput
+    data: XOR<LivelihoodProgramUpdateWithoutProgramManagersInput, LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput>
+  }
+
+  export type LivelihoodProgramUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+  }
+
+  export type LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+  }
+
+  export type UserCreateWithoutPmTasksInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutPmTasksInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutPmTasksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPmTasksInput, UserUncheckedCreateWithoutPmTasksInput>
+  }
+
+  export type ProgramManagerTaskCommentCreateWithoutTaskInput = {
+    id?: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPmTaskCommentsInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentCreateOrConnectWithoutTaskInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    create: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type ProgramManagerTaskCommentCreateManyTaskInputEnvelope = {
+    data: ProgramManagerTaskCommentCreateManyTaskInput | ProgramManagerTaskCommentCreateManyTaskInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutPmTasksInput = {
+    update: XOR<UserUpdateWithoutPmTasksInput, UserUncheckedUpdateWithoutPmTasksInput>
+    create: XOR<UserCreateWithoutPmTasksInput, UserUncheckedCreateWithoutPmTasksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPmTasksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPmTasksInput, UserUncheckedUpdateWithoutPmTasksInput>
+  }
+
+  export type UserUpdateWithoutPmTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPmTasksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    update: XOR<ProgramManagerTaskCommentUpdateWithoutTaskInput, ProgramManagerTaskCommentUncheckedUpdateWithoutTaskInput>
+    create: XOR<ProgramManagerTaskCommentCreateWithoutTaskInput, ProgramManagerTaskCommentUncheckedCreateWithoutTaskInput>
+  }
+
+  export type ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutTaskInput = {
+    where: ProgramManagerTaskCommentWhereUniqueInput
+    data: XOR<ProgramManagerTaskCommentUpdateWithoutTaskInput, ProgramManagerTaskCommentUncheckedUpdateWithoutTaskInput>
+  }
+
+  export type ProgramManagerTaskCommentUpdateManyWithWhereWithoutTaskInput = {
+    where: ProgramManagerTaskCommentScalarWhereInput
+    data: XOR<ProgramManagerTaskCommentUpdateManyMutationInput, ProgramManagerTaskCommentUncheckedUpdateManyWithoutTaskInput>
+  }
+
+  export type ProgramManagerTaskCreateWithoutCommentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutPmTasksInput
+  }
+
+  export type ProgramManagerTaskUncheckedCreateWithoutCommentsInput = {
+    id?: string
+    userId: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCreateOrConnectWithoutCommentsInput = {
+    where: ProgramManagerTaskWhereUniqueInput
+    create: XOR<ProgramManagerTaskCreateWithoutCommentsInput, ProgramManagerTaskUncheckedCreateWithoutCommentsInput>
+  }
+
+  export type UserCreateWithoutPmTaskCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPmTaskCommentsInput, UserUncheckedCreateWithoutPmTaskCommentsInput>
+  }
+
+  export type ProgramManagerTaskUpsertWithoutCommentsInput = {
+    update: XOR<ProgramManagerTaskUpdateWithoutCommentsInput, ProgramManagerTaskUncheckedUpdateWithoutCommentsInput>
+    create: XOR<ProgramManagerTaskCreateWithoutCommentsInput, ProgramManagerTaskUncheckedCreateWithoutCommentsInput>
+    where?: ProgramManagerTaskWhereInput
+  }
+
+  export type ProgramManagerTaskUpdateToOneWithWhereWithoutCommentsInput = {
+    where?: ProgramManagerTaskWhereInput
+    data: XOR<ProgramManagerTaskUpdateWithoutCommentsInput, ProgramManagerTaskUncheckedUpdateWithoutCommentsInput>
+  }
+
+  export type ProgramManagerTaskUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPmTasksNestedInput
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateWithoutCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutPmTaskCommentsInput = {
+    update: XOR<UserUpdateWithoutPmTaskCommentsInput, UserUncheckedUpdateWithoutPmTaskCommentsInput>
+    create: XOR<UserCreateWithoutPmTaskCommentsInput, UserUncheckedCreateWithoutPmTaskCommentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPmTaskCommentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPmTaskCommentsInput, UserUncheckedUpdateWithoutPmTaskCommentsInput>
+  }
+
+  export type UserUpdateWithoutPmTaskCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type SchoolCreateWithoutProgramsInput = {
     id?: string
     name: string
@@ -130201,6 +144073,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutProgramsInput = {
@@ -130225,6 +144098,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutProgramsInput = {
@@ -130300,6 +144174,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutProgramsInput = {
@@ -130324,6 +144199,7 @@ export namespace Prisma {
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type ProgramUpsertWithoutSchoolsInput = {
@@ -132905,6 +146781,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProgramManagerLivelihoodProgramCreateWithoutProgramInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedLivelihoodProgramsInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    create: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope = {
+    data: ProgramManagerLivelihoodProgramCreateManyProgramInput | ProgramManagerLivelihoodProgramCreateManyProgramInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BeneficiaryLivelihoodUpsertWithWhereUniqueWithoutProgramInput = {
     where: BeneficiaryLivelihoodWhereUniqueInput
     update: XOR<BeneficiaryLivelihoodUpdateWithoutProgramInput, BeneficiaryLivelihoodUncheckedUpdateWithoutProgramInput>
@@ -132919,6 +146817,22 @@ export namespace Prisma {
   export type BeneficiaryLivelihoodUpdateManyWithWhereWithoutProgramInput = {
     where: BeneficiaryLivelihoodScalarWhereInput
     data: XOR<BeneficiaryLivelihoodUpdateManyMutationInput, BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    update: XOR<ProgramManagerLivelihoodProgramUpdateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedUpdateWithoutProgramInput>
+    create: XOR<ProgramManagerLivelihoodProgramCreateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedCreateWithoutProgramInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput = {
+    where: ProgramManagerLivelihoodProgramWhereUniqueInput
+    data: XOR<ProgramManagerLivelihoodProgramUpdateWithoutProgramInput, ProgramManagerLivelihoodProgramUncheckedUpdateWithoutProgramInput>
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput = {
+    where: ProgramManagerLivelihoodProgramScalarWhereInput
+    data: XOR<ProgramManagerLivelihoodProgramUpdateManyMutationInput, ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramInput>
   }
 
   export type BeneficiaryCreateWithoutLivelihoodDetailsInput = {
@@ -133018,6 +146932,7 @@ export namespace Prisma {
     totalTarget?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutAssignmentsInput = {
@@ -133030,6 +146945,7 @@ export namespace Prisma {
     totalTarget?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutAssignmentsInput = {
@@ -133185,6 +147101,7 @@ export namespace Prisma {
     totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutAssignmentsInput = {
@@ -133197,6 +147114,7 @@ export namespace Prisma {
     totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodEventUpsertWithWhereUniqueWithoutLivelihoodInput = {
@@ -133483,6 +147401,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133497,6 +147419,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -133509,6 +147438,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133522,6 +147455,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -133609,6 +147549,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133623,6 +147567,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -133635,6 +147586,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133648,6 +147603,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -133692,6 +147654,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133706,6 +147672,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -133718,6 +147691,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133731,6 +147708,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -133758,6 +147742,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133772,6 +147760,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -133784,6 +147779,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133797,6 +147796,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -133808,6 +147814,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133822,6 +147832,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -133834,6 +147851,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -133847,6 +147868,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -133874,6 +147902,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133888,6 +147920,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -133900,6 +147939,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133913,6 +147956,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type DisasterIncidentCreateWithoutResourceNeedsInput = {
@@ -134121,6 +148171,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -134151,6 +148203,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -134223,6 +148277,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -134253,6 +148309,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -134315,6 +148373,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -134329,6 +148391,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -134341,6 +148410,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -134354,6 +148427,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -134418,6 +148498,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134432,6 +148516,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -134444,6 +148535,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134457,6 +148552,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -135563,6 +149665,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -135593,6 +149697,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -135613,6 +149719,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -135627,6 +149737,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -135639,6 +149756,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -135652,6 +149773,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -135694,6 +149822,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -135724,6 +149854,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -135750,6 +149882,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135764,6 +149900,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -135776,6 +149919,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135789,6 +149936,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -135815,6 +149969,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -135845,6 +150001,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -135891,6 +150049,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -135921,6 +150081,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -135951,6 +150113,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -135981,6 +150145,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -136027,6 +150193,8 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -136057,10 +150225,316 @@ export namespace Prisma {
     assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowCreateWithoutIndividualFeedbackInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutFellowInput
+    schools?: FellowSchoolCreateNestedManyWithoutFellowInput
+    students?: StudentCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowUncheckedCreateWithoutIndividualFeedbackInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    cohort: string
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
+    students?: StudentUncheckedCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetUncheckedCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowCreateOrConnectWithoutIndividualFeedbackInput = {
+    where: FellowWhereUniqueInput
+    create: XOR<FellowCreateWithoutIndividualFeedbackInput, FellowUncheckedCreateWithoutIndividualFeedbackInput>
+  }
+
+  export type UserCreateWithoutIndividualFeedbackInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutIndividualFeedbackInput, UserUncheckedCreateWithoutIndividualFeedbackInput>
+  }
+
+  export type FellowUpsertWithoutIndividualFeedbackInput = {
+    update: XOR<FellowUpdateWithoutIndividualFeedbackInput, FellowUncheckedUpdateWithoutIndividualFeedbackInput>
+    create: XOR<FellowCreateWithoutIndividualFeedbackInput, FellowUncheckedCreateWithoutIndividualFeedbackInput>
+    where?: FellowWhereInput
+  }
+
+  export type FellowUpdateToOneWithWhereWithoutIndividualFeedbackInput = {
+    where?: FellowWhereInput
+    data: XOR<FellowUpdateWithoutIndividualFeedbackInput, FellowUncheckedUpdateWithoutIndividualFeedbackInput>
+  }
+
+  export type FellowUpdateWithoutIndividualFeedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutFellowNestedInput
+    schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
+    students?: StudentUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowUncheckedUpdateWithoutIndividualFeedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    cohort?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
+    students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUncheckedUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+  }
+
+  export type UserUpsertWithoutIndividualFeedbackInput = {
+    update: XOR<UserUpdateWithoutIndividualFeedbackInput, UserUncheckedUpdateWithoutIndividualFeedbackInput>
+    create: XOR<UserCreateWithoutIndividualFeedbackInput, UserUncheckedCreateWithoutIndividualFeedbackInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutIndividualFeedbackInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutIndividualFeedbackInput, UserUncheckedUpdateWithoutIndividualFeedbackInput>
+  }
+
+  export type UserUpdateWithoutIndividualFeedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -136072,6 +150546,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -136086,6 +150564,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -136098,6 +150583,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -136111,6 +150600,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -136127,6 +150623,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -136141,6 +150641,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -136153,6 +150660,10 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -136166,6 +150677,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
@@ -136225,6 +150743,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136239,6 +150761,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -136251,6 +150780,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136264,6 +150797,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -136286,6 +150826,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136300,6 +150844,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -136312,6 +150863,10 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -136325,6 +150880,13 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -136891,6 +151453,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -136921,6 +151485,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -136954,6 +151520,7 @@ export namespace Prisma {
     programs?: SchoolProgramCreateNestedManyWithoutSchoolInput
     learningAssessments?: LearningAssessmentCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutAssessmentFormsInput = {
@@ -136978,6 +151545,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedCreateNestedManyWithoutSchoolInput
     learningAssessments?: LearningAssessmentUncheckedCreateNestedManyWithoutSchoolInput
     homeworkRecords?: StudentHomeworkUncheckedCreateNestedManyWithoutSchoolInput
+    programManagers?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutAssessmentFormsInput = {
@@ -137187,6 +151755,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -137217,6 +151787,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -137256,6 +151828,7 @@ export namespace Prisma {
     programs?: SchoolProgramUpdateManyWithoutSchoolNestedInput
     learningAssessments?: LearningAssessmentUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutAssessmentFormsInput = {
@@ -137280,6 +151853,7 @@ export namespace Prisma {
     programs?: SchoolProgramUncheckedUpdateManyWithoutSchoolNestedInput
     learningAssessments?: LearningAssessmentUncheckedUpdateManyWithoutSchoolNestedInput
     homeworkRecords?: StudentHomeworkUncheckedUpdateManyWithoutSchoolNestedInput
+    programManagers?: ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type EnrollmentResponseUpsertWithWhereUniqueWithoutAssessmentFormInput = {
@@ -138047,6 +152621,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProgramManagerAfterSchoolCentreCreateWithoutCentreInput = {
+    id?: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutManagedCentresInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateOrConnectWithoutCentreInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    create: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateManyCentreInputEnvelope = {
+    data: ProgramManagerAfterSchoolCentreCreateManyCentreInput | ProgramManagerAfterSchoolCentreCreateManyCentreInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FellowAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput = {
     where: FellowAfterSchoolCentreWhereUniqueInput
     update: XOR<FellowAfterSchoolCentreUpdateWithoutCentreInput, FellowAfterSchoolCentreUncheckedUpdateWithoutCentreInput>
@@ -138169,6 +152765,22 @@ export namespace Prisma {
     data: XOR<AfterSchoolAssessmentFormUpdateManyMutationInput, AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreInput>
   }
 
+  export type ProgramManagerAfterSchoolCentreUpsertWithWhereUniqueWithoutCentreInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    update: XOR<ProgramManagerAfterSchoolCentreUpdateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutCentreInput>
+    create: XOR<ProgramManagerAfterSchoolCentreCreateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedCreateWithoutCentreInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateWithWhereUniqueWithoutCentreInput = {
+    where: ProgramManagerAfterSchoolCentreWhereUniqueInput
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateWithoutCentreInput, ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutCentreInput>
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateManyWithWhereWithoutCentreInput = {
+    where: ProgramManagerAfterSchoolCentreScalarWhereInput
+    data: XOR<ProgramManagerAfterSchoolCentreUpdateManyMutationInput, ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreInput>
+  }
+
   export type FellowCreateWithoutAfterSchoolCentresInput = {
     id?: string
     name: string
@@ -138194,6 +152806,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
@@ -138224,6 +152838,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
@@ -138253,6 +152869,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutFellowsInput = {
@@ -138274,6 +152891,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutFellowsInput = {
@@ -138317,6 +152935,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
@@ -138347,6 +152967,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
@@ -138382,6 +153004,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutFellowsInput = {
@@ -138403,6 +153026,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreCreateWithoutProgramsInput = {
@@ -138424,6 +153048,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutProgramsInput = {
@@ -138445,6 +153070,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutProgramsInput = {
@@ -138517,6 +153143,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutProgramsInput = {
@@ -138538,6 +153165,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type ProgramUpsertWithoutAfterSchoolCentresInput = {
@@ -138600,6 +153228,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutStudentsInput = {
@@ -138621,6 +153250,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutStudentsInput = {
@@ -138653,6 +153283,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
@@ -138683,6 +153315,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
@@ -138881,6 +153515,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutStudentsInput = {
@@ -138902,6 +153537,7 @@ export namespace Prisma {
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type FellowUpsertWithoutAfterSchoolStudentsInput = {
@@ -138940,6 +153576,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
@@ -138970,6 +153608,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
@@ -139409,6 +154049,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutLearningAssessmentsInput = {
@@ -139430,6 +154071,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutLearningAssessmentsInput = {
@@ -139534,6 +154176,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutLearningAssessmentsInput = {
@@ -139555,6 +154198,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolStudentCreateWithoutHomeworkRecordsInput = {
@@ -139637,6 +154281,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramCreateNestedManyWithoutCentreInput
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutHomeworkRecordsInput = {
@@ -139658,6 +154303,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedCreateNestedManyWithoutCentreInput
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutHomeworkRecordsInput = {
@@ -139762,6 +154408,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUpdateManyWithoutCentreNestedInput
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutHomeworkRecordsInput = {
@@ -139783,6 +154430,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedUpdateManyWithoutCentreNestedInput
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     assessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolStudentCreateWithoutTransitionsInput = {
@@ -139999,6 +154647,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
@@ -140029,6 +154679,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
@@ -140058,6 +154710,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramCreateNestedManyWithoutCentreInput
     learningAssessments?: AfterSchoolLearningAssessmentCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreUncheckedCreateWithoutAssessmentFormsInput = {
@@ -140079,6 +154732,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedCreateNestedManyWithoutCentreInput
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedCreateNestedManyWithoutCentreInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedCreateNestedManyWithoutCentreInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutCentreInput
   }
 
   export type AfterSchoolCentreCreateOrConnectWithoutAssessmentFormsInput = {
@@ -140237,6 +154891,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
@@ -140267,6 +154923,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
@@ -140302,6 +154960,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUpdateManyWithoutCentreNestedInput
     learningAssessments?: AfterSchoolLearningAssessmentUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolCentreUncheckedUpdateWithoutAssessmentFormsInput = {
@@ -140323,6 +154982,7 @@ export namespace Prisma {
     programs?: AfterSchoolCentreProgramUncheckedUpdateManyWithoutCentreNestedInput
     learningAssessments?: AfterSchoolLearningAssessmentUncheckedUpdateManyWithoutCentreNestedInput
     homeworkRecords?: AfterSchoolHomeworkUncheckedUpdateManyWithoutCentreNestedInput
+    programManagers?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreNestedInput
   }
 
   export type AfterSchoolSubjectAssessmentResponseUpsertWithWhereUniqueWithoutAssessmentFormInput = {
@@ -140642,6 +155302,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
@@ -140672,6 +155334,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
@@ -140718,6 +155382,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
@@ -140748,6 +155414,8 @@ export namespace Prisma {
     engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
     lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
@@ -140762,6 +155430,10 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    address?: string | null
+    avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -140784,6 +155456,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140798,6 +155474,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -140809,6 +155492,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140823,6 +155510,13 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -140834,6 +155528,10 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -140969,6 +155667,81 @@ export namespace Prisma {
     responses?: JsonNullValueInput | InputJsonValue
     matrix?: JsonNullValueInput | InputJsonValue
     notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type IndividualFeedbackCreateManyAuthorInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceCreateManyAuthorInput = {
+    id?: string
+    fellowId: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolCreateManyUserInput = {
+    id?: string
+    schoolId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreCreateManyUserInput = {
+    id?: string
+    centreId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramCreateManyUserInput = {
+    id?: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCreateManyUserInput = {
+    id?: string
+    title: string
+    description?: string | null
+    plannedDate: Date | string
+    status?: string
+    isPlanned?: boolean
+    completionDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentCreateManyAuthorInput = {
+    id?: string
+    taskId: string
+    text: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -141313,6 +156086,233 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type IndividualFeedbackUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutIndividualFeedbackNestedInput
+  }
+
+  export type IndividualFeedbackUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IndividualFeedbackUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutPerformanceObservationsNestedInput
+  }
+
+  export type FellowPerformanceUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    school?: SchoolUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    schoolId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    schoolId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    centre?: AfterSchoolCentreUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centreId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    centreId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutProgramManagersNestedInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: ProgramManagerTaskCommentUpdateManyWithoutTaskNestedInput
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutTaskNestedInput
+  }
+
+  export type ProgramManagerTaskUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    plannedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    isPlanned?: BoolFieldUpdateOperationsInput | boolean
+    completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: ProgramManagerTaskUpdateOneRequiredWithoutCommentsNestedInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    taskId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RolePermissionCreateManyPermissionInput = {
     id?: string
     roleId: string
@@ -141437,6 +156437,12 @@ export namespace Prisma {
     reasonNotEnrolled?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ProgramManagerSchoolCreateManySchoolInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
   }
 
   export type FellowSchoolUpdateWithoutSchoolInput = {
@@ -141655,6 +156661,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProgramManagerSchoolUpdateWithoutSchoolInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedSchoolsNestedInput
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateWithoutSchoolInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerSchoolUncheckedUpdateManyWithoutSchoolInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FellowSchoolCreateManyFellowInput = {
     id?: string
     schoolId: string
@@ -141771,6 +156795,43 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type IndividualFeedbackCreateManyFellowInput = {
+    id?: string
+    date: Date | string
+    classroomLevel?: string | null
+    classGroup?: string | null
+    subject: string
+    subjectOther?: string | null
+    lessonPlanLink?: string | null
+    lessonPlanFeedback?: boolean
+    strengths?: string | null
+    areasOfDevelopment?: string | null
+    nextStepsFellow?: string | null
+    nextStepPM?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FellowPerformanceCreateManyFellowInput = {
+    id?: string
+    date: Date | string
+    classGroup?: string | null
+    subject: string
+    lessonPlan: number
+    culture: number
+    lessonFlow: number
+    content: number
+    communityEngagement: number
+    overallScore: number
+    strength?: string | null
+    aod?: string | null
+    trend?: string | null
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type FellowAfterSchoolCentreCreateManyFellowInput = {
     id?: string
     centreId: string
@@ -141817,6 +156878,7 @@ export namespace Prisma {
     session: string
     phase: string
     sectionKey: string
+    source?: string
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -142190,6 +157252,117 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type IndividualFeedbackUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutIndividualFeedbackNestedInput
+  }
+
+  export type IndividualFeedbackUncheckedUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IndividualFeedbackUncheckedUpdateManyWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classroomLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    subjectOther?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanLink?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonPlanFeedback?: BoolFieldUpdateOperationsInput | boolean
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    areasOfDevelopment?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepsFellow?: NullableStringFieldUpdateOperationsInput | string | null
+    nextStepPM?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPerformanceObservationsNestedInput
+  }
+
+  export type FellowPerformanceUncheckedUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowPerformanceUncheckedUpdateManyWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    classGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    lessonPlan?: IntFieldUpdateOperationsInput | number
+    culture?: IntFieldUpdateOperationsInput | number
+    lessonFlow?: IntFieldUpdateOperationsInput | number
+    content?: IntFieldUpdateOperationsInput | number
+    communityEngagement?: IntFieldUpdateOperationsInput | number
+    overallScore?: FloatFieldUpdateOperationsInput | number
+    strength?: NullableStringFieldUpdateOperationsInput | string | null
+    aod?: NullableStringFieldUpdateOperationsInput | string | null
+    trend?: NullableStringFieldUpdateOperationsInput | string | null
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FellowAfterSchoolCentreUpdateWithoutFellowInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142332,6 +157505,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142342,6 +157516,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142352,6 +157527,7 @@ export namespace Prisma {
     session?: StringFieldUpdateOperationsInput | string
     phase?: StringFieldUpdateOperationsInput | string
     sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142689,6 +157865,38 @@ export namespace Prisma {
   export type AfterSchoolCentreProgramUncheckedUpdateManyWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     centreId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ProgramManagerTaskCommentCreateManyTaskInput = {
+    id?: string
+    authorId: string
+    text: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgramManagerTaskCommentUpdateWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPmTaskCommentsNestedInput
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerTaskCommentUncheckedUpdateManyWithoutTaskInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    text?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FamilyMemberCreateManyBeneficiaryInput = {
@@ -143647,6 +158855,12 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ProgramManagerLivelihoodProgramCreateManyProgramInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
   export type BeneficiaryLivelihoodUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     attributes?: JsonNullValueInput | InputJsonValue
@@ -143677,6 +158891,24 @@ export namespace Prisma {
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedLivelihoodProgramsNestedInput
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LivelihoodEventCreateManyLivelihoodInput = {
@@ -144323,6 +159555,12 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ProgramManagerAfterSchoolCentreCreateManyCentreInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+  }
+
   export type FellowAfterSchoolCentreUpdateWithoutCentreInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -144527,6 +159765,24 @@ export namespace Prisma {
     reasonNotEnrolled?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUpdateWithoutCentreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutManagedCentresNestedInput
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateWithoutCentreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutCentreInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AfterSchoolStudentAttendanceLogCreateManyStudentInput = {

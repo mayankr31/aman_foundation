@@ -12,6 +12,7 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import StudentDataView from "@/components/StudentDataView";
+import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import dynamic from "next/dynamic";
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
@@ -67,13 +68,16 @@ export default function ProfilePage() {
           setEditName(userProfile.name || "");
           setEditEmail(userProfile.email || "");
           setEditMobile(userProfile.mobile || "");
-          
-          if (userProfile.fellow) {
-            setEditAddress(userProfile.fellow.address || "");
-            setEditGender(userProfile.fellow.gender || "");
-            setEditDob(userProfile.fellow.dob ? userProfile.fellow.dob.split("T")[0] : "");
-            setEditAvatar(userProfile.fellow.avatar || "");
+          setEditAddress(userProfile.fellow ? (userProfile.fellow.address || "") : (userProfile.address || ""));
+          setEditGender(userProfile.fellow ? (userProfile.fellow.gender || "") : (userProfile.gender || ""));
+          setEditDob(
+            userProfile.fellow
+              ? (userProfile.fellow.dob ? userProfile.fellow.dob.split("T")[0] : "")
+              : (userProfile.dob ? userProfile.dob.split("T")[0] : "")
+          );
+          setEditAvatar(userProfile.fellow ? (userProfile.fellow.avatar || "") : (userProfile.avatar || ""));
 
+          if (userProfile.fellow) {
             const fellowId = userProfile.fellow.id;
             const detailRes = await fetch(`/api/fellows/${fellowId}`, {
               headers: { Authorization: `Bearer ${token}` }
@@ -220,10 +224,10 @@ export default function ProfilePage() {
           name: editName,
           email: editEmail,
           mobile: editMobile,
-          address: profile.fellow ? editAddress : undefined,
-          gender: profile.fellow ? editGender : undefined,
-          dob: profile.fellow ? editDob : undefined,
-          avatar: profile.fellow ? editAvatar : undefined
+          address: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editAddress : undefined,
+          gender: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editGender : undefined,
+          dob: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editDob : undefined,
+          avatar: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editAvatar : undefined
         })
       });
       const json = await res.json();
@@ -312,7 +316,8 @@ export default function ProfilePage() {
   }
 
   const isFellow = !!profile.fellow;
-  const avatarUrl = isFellow ? profile.fellow.avatar : "";
+  const isPm = profile.role?.name === "PROGRAM_MANAGER";
+  const avatarUrl = profile.fellow?.avatar || profile.avatar || "";
   const initials = profile.name
     .split(" ")
     .map((n) => n[0])
@@ -322,6 +327,14 @@ export default function ProfilePage() {
 
   const assignedSchool = isFellow && profile.fellow.schools && profile.fellow.schools.length > 0 ? profile.fellow.schools[0].school : null;
   const afterSchoolCentres = isFellow && profile.fellow.afterSchoolCentres ? profile.fellow.afterSchoolCentres.map(fc => fc.centre) : [];
+
+  const managedSchools = (profile.managedSchools || []).map((m) => m.school);
+  const managedCentres = (profile.managedCentres || []).map((m) => m.centre);
+  const managedPrograms = (profile.managedLivelihoodPrograms || []).map((m) => m.program);
+  const personalDob = profile.fellow?.dob || profile.dob;
+  const personalGender = profile.fellow?.gender || profile.gender;
+  const personalAddress = profile.fellow?.address || profile.address;
+  const memberSince = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long" }) : "—";
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -396,6 +409,32 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 )}
+                {isPm && (
+                  <div className="text-xs font-medium text-slate-500 font-sans flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2">
+                    <div>
+                      <span className="font-bold text-on-surface">Department:</span> {profile.department || "Unassigned"}
+                    </div>
+                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    <div>
+                      <span className="font-bold text-on-surface">Date of Birth:</span>{" "}
+                      {personalDob
+                        ? new Date(personalDob).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+                        : "—"}
+                    </div>
+                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    <div>
+                      <span className="font-bold text-on-surface">Gender:</span> {personalGender || "—"}
+                    </div>
+                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    <div>
+                      <span className="font-bold text-on-surface">Address:</span> {personalAddress || "—"}
+                    </div>
+                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    <div>
+                      <span className="font-bold text-on-surface">Member Since:</span> {memberSince}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <button
@@ -448,7 +487,7 @@ export default function ProfilePage() {
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
-              {isFellow && (
+              {(isFellow || isPm) && (
                 <>
                   <div className="flex flex-col gap-1">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">District / Address</label>
@@ -512,84 +551,143 @@ export default function ProfilePage() {
           </form>
               )}
 
-              {activeTab === "Coaching & Classroom Observation" && (
-                <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
-                  </div>
-                  <div className="space-y-6">
-                    {coachingRecords.length === 0 ? (
-                      <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                        No coaching or classroom observation records available yet.
-                      </div>
-                    ) : (
-                      coachingRecords.map((record) => (
-                        <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
-                          <div className="flex justify-between items-start mb-3">
-                            <div>
-                              <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
-                              <p className="text-xs text-on-surface-variant mt-1">
-                                {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
-                              </p>
-                            </div>
-                          </div>
-
-                          {record.feedback && (
-                            <div className="mb-4 p-4 bg-blue-50/50 rounded-lg border border-blue-100">
-                              <p className="text-xs uppercase tracking-widest text-blue-700 font-bold mb-2">Feedback</p>
-                              <p className="text-sm text-slate-700 leading-relaxed">{record.feedback}</p>
-                            </div>
-                          )}
-
-                          {record.observationNotes && (
-                            <div className="mb-4 p-4 bg-amber-50/50 rounded-lg border border-amber-100">
-                              <p className="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Observation Notes</p>
-                              <p className="text-sm text-slate-700 leading-relaxed">{record.observationNotes}</p>
-                            </div>
-                          )}
-
-                          {record.fileUrl && (
-                            <div className="mb-4">
-                              {/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(record.fileUrl) ? (
-                                <img
-                                  src={record.fileUrl}
-                                  alt={record.heading}
-                                  className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain cursor-pointer"
-                                  onClick={() => window.open(record.fileUrl, '_blank')}
-                                />
-                              ) : (
-                                <a
-                                  href={record.fileUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
-                                >
-                                  <span className="material-symbols-outlined text-[16px]">attach_file</span>
-                                  {record.fileUrl.split("/").pop()}
-                                </a>
-                              )}
-                            </div>
-                          )}
-
-                          <div className="text-xs text-slate-400 mt-3 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[14px]">person</span>
-                            Added by: <span className="font-semibold text-on-surface">{record.author?.name || "Unknown"}</span>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-
             </div>
+
+      {/* Program Manager assignments */}
+      {isPm && (
+        <div className="mb-8">
+          <h3 className="font-headline font-bold text-xl text-on-surface mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">assignment_ind</span>
+            My Assignments
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Schools */}
+            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">school</span>
+                  Schools
+                </h4>
+                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">{managedSchools.length}</span>
+              </div>
+              {managedSchools.length === 0 ? (
+                <p className="text-sm text-on-surface-variant italic">No schools assigned.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {managedSchools.map((s) => (
+                    <li key={s.id}>
+                      <Link
+                        href={`/education/schools/${s.id}`}
+                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
+                      >
+                        <span className="truncate">{s.name}</span>
+                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* After School Centres */}
+            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">cottage</span>
+                  After School Centres
+                </h4>
+                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">{managedCentres.length}</span>
+              </div>
+              {managedCentres.length === 0 ? (
+                <p className="text-sm text-on-surface-variant italic">No centres assigned.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {managedCentres.map((c) => (
+                    <li key={c.id}>
+                      <Link
+                        href={`/education/after-school-centres/${c.id}`}
+                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
+                      >
+                        <span className="truncate">{c.name}</span>
+                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Livelihood Programs */}
+            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">agriculture</span>
+                  Livelihood Programs
+                </h4>
+                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 rounded-full py-1">{managedPrograms.length}</span>
+              </div>
+              {managedPrograms.length === 0 ? (
+                <p className="text-sm text-on-surface-variant italic">No programs assigned.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {managedPrograms.map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        href={`/livelihood/programs/${p.id}`}
+                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
+                      >
+                        <span className="truncate">
+                          {p.name}
+                          <span className="ml-1 text-[10px] uppercase tracking-wider text-slate-400">
+                            {p.category === "FARM" ? "Farm" : "Non-Farm"}
+                          </span>
+                        </span>
+                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Render tab views for fellow role only */}
       {isFellow && (
         <>
+          {/* Placement Summary */}
+          <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 mb-8">
+            <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 font-sans text-sm">
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-on-surface-variant uppercase tracking-wide">Active Placement</span>
+                <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
+              </div>
+              {afterSchoolCentres.length > 0 && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs text-on-surface-variant uppercase tracking-wide">After School Centres</span>
+                  <span className="font-semibold text-on-surface">{afterSchoolCentres.length}</span>
+                </div>
+              )}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-on-surface-variant uppercase tracking-wide">Class Grades</span>
+                <span className="font-semibold text-on-surface">Grade 3, Grade 4</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-on-surface-variant uppercase tracking-wide">Assigned Students</span>
+                <span className="font-semibold text-on-surface">{profile.fellow.students ? profile.fellow.students.length : 0} Students</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-on-surface-variant uppercase tracking-wide">Evaluation Rating</span>
+                <span className="font-semibold text-primary">{profile.fellow.evaluationRating || "4.8"} / 5.0</span>
+              </div>
+            </div>
+          </div>
+
           {/* Tabs */}
           <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-            {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey"].map((tab) => {
+            {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "After School Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey", "Individual Feedback Tracking"].map((tab) => {
               const isActive = activeTab === tab;
               return (
                 <button
@@ -607,8 +705,7 @@ export default function ProfilePage() {
             })}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
+          <div>
               {activeTab === "Monthly Planner" && (
                 <MonthlyPlanner fellowId={profile.fellow.id} />
               )}
@@ -759,7 +856,81 @@ export default function ProfilePage() {
               )}
 
               {activeTab === "Student Data" && (
-                <StudentDataView fellowId={profile.fellow.id} token={token} canEditNotes />
+                <StudentDataView fellowId={profile.fellow.id} token={token} canEditNotes source="school" />
+              )}
+
+              {activeTab === "After School Student Data" && (
+                <StudentDataView fellowId={profile.fellow.id} token={token} canEditNotes source="afterSchool" />
+              )}
+
+              {activeTab === "Coaching & Classroom Observation" && (
+                <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
+                  </div>
+                  <div className="space-y-6">
+                    {coachingRecords.length === 0 ? (
+                      <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
+                        No coaching or classroom observation records available yet.
+                      </div>
+                    ) : (
+                      coachingRecords.map((record) => (
+                        <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
+                          <div className="flex justify-between items-start mb-3">
+                            <div>
+                              <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
+                              <p className="text-xs text-on-surface-variant mt-1">
+                                {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                              </p>
+                            </div>
+                          </div>
+
+                          {record.feedback && (
+                            <div className="mb-4 p-4 bg-blue-50/50 rounded-lg border border-blue-100">
+                              <p className="text-xs uppercase tracking-widest text-blue-700 font-bold mb-2">Feedback</p>
+                              <p className="text-sm text-slate-700 leading-relaxed">{record.feedback}</p>
+                            </div>
+                          )}
+
+                          {record.observationNotes && (
+                            <div className="mb-4 p-4 bg-amber-50/50 rounded-lg border border-amber-100">
+                              <p className="text-xs uppercase tracking-widest text-amber-700 font-bold mb-2">Observation Notes</p>
+                              <p className="text-sm text-slate-700 leading-relaxed">{record.observationNotes}</p>
+                            </div>
+                          )}
+
+                          {record.fileUrl && (
+                            <div className="mb-4">
+                              {/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(record.fileUrl) ? (
+                                <img
+                                  src={record.fileUrl}
+                                  alt={record.heading}
+                                  className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain cursor-pointer"
+                                  onClick={() => window.open(record.fileUrl, '_blank')}
+                                />
+                              ) : (
+                                <a
+                                  href={record.fileUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
+                                >
+                                  <span className="material-symbols-outlined text-[16px]">attach_file</span>
+                                  {record.fileUrl.split("/").pop()}
+                                </a>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="text-xs text-slate-400 mt-3 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[14px]">person</span>
+                            Added by: <span className="font-semibold text-on-surface">{record.author?.name || "Unknown"}</span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               )}
 
               {activeTab === "Engagement Survey" && (
@@ -865,49 +1036,15 @@ export default function ProfilePage() {
                   )}
                 </div>
               )}
-            </div>
 
-            {/* Sidebar Summary Card */}
-            <div className="space-y-6">
-              <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-                <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
-                <div className="space-y-4 font-sans text-sm">
-                  <div className="flex justify-between py-2 border-b border-surface-container">
-                    <span className="text-on-surface-variant">Active Placement</span>
-                    <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
-                  </div>
-                  {afterSchoolCentres.length > 0 && (
-                    <div className="flex justify-between py-2 border-b border-surface-container">
-                      <span className="text-on-surface-variant">After School Centres</span>
-                      <span className="font-semibold text-on-surface">{afterSchoolCentres.length}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between py-2 border-b border-surface-container">
-                    <span className="text-on-surface-variant">Class Grades</span>
-                    <span className="font-semibold text-on-surface">Grade 3, Grade 4</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-surface-container">
-                    <span className="text-on-surface-variant">Assigned Students</span>
-                    <span className="font-semibold text-on-surface">{profile.fellow.students ? profile.fellow.students.length : 0} Students</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-surface-container">
-                    <span className="text-on-surface-variant">Evaluation Rating</span>
-                    <span className="font-semibold text-primary">{profile.fellow.evaluationRating || "4.8"} / 5.0</span>
-                  </div>
-                </div>
-              </div>
+              {activeTab === "Individual Feedback Tracking" && (
+                <IndividualFeedbackView
+                  fellowId={profile.fellow.id}
+                  token={token}
+                  canManage={false}
+                />
+              )}
 
-              <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-2 h-full bg-secondary"></div>
-                <h3 className="font-headline font-bold text-base text-on-surface mb-2">Donor Report Status</h3>
-                <p className="text-sm text-on-surface-variant leading-relaxed mb-4">
-                  A donor-ready document incorporating the 6-month objectives, performance scores, and assessment indexes is ready.
-                </p>
-                <button className="text-sm font-semibold text-secondary hover:text-on-secondary-fixed-variant flex items-center gap-1 transition-colors cursor-pointer">
-                  Download presentation package <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Goal Sheet Form Modal */}

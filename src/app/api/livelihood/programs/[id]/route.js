@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
 
 export async function GET(req, { params }) {
   try {
@@ -9,9 +10,24 @@ export async function GET(req, { params }) {
 
     const { id } = await params;
 
+    if (!isAdmin(user) && !(await isLivelihoodProgramManaged(user.id, id))) {
+      return NextResponse.json(
+        { error: "Forbidden: You are not assigned to this program" },
+        { status: 403 }
+      );
+    }
+
     const program = await prisma.livelihoodProgram.findUnique({
       where: { id },
       include: {
+        programManagers: {
+          include: {
+            user: {
+              select: { id: true, name: true, username: true, email: true, mobile: true },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
         assignments: {
           include: {
             beneficiary: {
@@ -58,6 +74,14 @@ export async function PATCH(req, { params }) {
     }
 
     const { id } = await params;
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isLivelihoodProgramManaged(user.id, id))) {
+      return NextResponse.json(
+        { error: "Forbidden: You are not assigned to this program" },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { name, description, category, type, status, totalTarget } = body;
 
@@ -103,6 +127,13 @@ export async function DELETE(req, { params }) {
     }
 
     const { id } = await params;
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isLivelihoodProgramManaged(user.id, id))) {
+      return NextResponse.json(
+        { error: "Forbidden: You are not assigned to this program" },
+        { status: 403 }
+      );
+    }
 
     const existing = await prisma.livelihoodProgram.findUnique({ where: { id } });
     if (!existing) {

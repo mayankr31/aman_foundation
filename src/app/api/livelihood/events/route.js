@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isLivelihoodProgramManaged } from "@/lib/scope";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
@@ -37,6 +38,9 @@ export async function GET(req) {
     const where = {};
     if (livelihoodId) where.livelihoodId = livelihoodId;
     if (eventType) where.eventType = eventType;
+    if (user.role.name === "PROGRAM_MANAGER") {
+      where.livelihood = { program: { programManagers: { some: { userId: user.id } } } };
+    }
 
     const events = await prisma.livelihoodEvent.findMany({
       where,
@@ -96,6 +100,13 @@ export async function POST(req) {
         { error: "Livelihood assignment not found" },
         { status: 404 }
       );
+    }
+
+    if (
+      user.role.name === "PROGRAM_MANAGER" &&
+      !(await isLivelihoodProgramManaged(user.id, assignment.programId))
+    ) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     const photoUrl = await savePhoto(photo);

@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 
+async function canPmAccessBeneficiary(userId, beneficiaryId) {
+  const row = await prisma.beneficiaryLivelihood.findFirst({
+    where: { beneficiaryId, program: { programManagers: { some: { userId } } } },
+    select: { id: true },
+  });
+  return !!row;
+}
+
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
 
@@ -57,9 +65,9 @@ export async function POST(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    const allowedRoles = ["ADMIN", "FELLOW"];
+    const allowedRoles = ["ADMIN", "FELLOW", "PROGRAM_MANAGER"];
     if (!allowedRoles.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Fellow access required" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access required" }, { status: 403 });
     }
 
     const { id } = await params;
@@ -67,6 +75,13 @@ export async function POST(req, { params }) {
 
     if (!beneficiaryId) {
       return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+    }
+
+    if (
+      user.role.name === "PROGRAM_MANAGER" &&
+      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
+    ) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -98,9 +113,9 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    const allowedRoles = ["ADMIN", "FELLOW"];
+    const allowedRoles = ["ADMIN", "FELLOW", "PROGRAM_MANAGER"];
     if (!allowedRoles.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Fellow access required" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access required" }, { status: 403 });
     }
 
     const { id } = await params;
@@ -108,6 +123,13 @@ export async function DELETE(req, { params }) {
 
     if (!beneficiaryId) {
       return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+    }
+
+    if (
+      user.role.name === "PROGRAM_MANAGER" &&
+      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
+    ) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
     }
 
     const body = await req.json();

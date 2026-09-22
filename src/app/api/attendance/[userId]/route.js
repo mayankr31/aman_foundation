@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getManagedTeamUserIds } from "@/lib/scope";
 
 export const dynamic = 'force-dynamic';
 
@@ -9,12 +10,21 @@ export async function GET(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    // Must be ADMIN to view other users' logs
-    if (user.role.name !== "ADMIN") {
+    const { userId } = await context.params;
+
+    // ADMIN and HR can view any user's logs. PROGRAM_MANAGER can view their team (and self).
+    if (user.role.name === "PROGRAM_MANAGER" && userId !== user.id) {
+      const team = await getManagedTeamUserIds(user.id);
+      if (!team.includes(userId)) {
+        return NextResponse.json({ error: "Forbidden: This user is not in your team" }, { status: 403 });
+      }
+    } else if (
+      user.role.name !== "ADMIN" &&
+      user.role.name !== "HR" &&
+      userId !== user.id
+    ) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
     }
-
-    const { userId } = await context.params;
 
     const targetUser = await prisma.user.findUnique({
       where: { id: userId },
@@ -38,6 +48,10 @@ export async function GET(req, context) {
     if (fellow) {
       tasks = await prisma.fellowTask.findMany({
         where: { fellowId: fellow.id }
+      });
+    } else {
+      tasks = await prisma.programManagerTask.findMany({
+        where: { userId }
       });
     }
 

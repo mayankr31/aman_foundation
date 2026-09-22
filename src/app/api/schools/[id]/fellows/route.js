@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isAdmin, isSchoolManaged } from "@/lib/scope";
 
 async function resolveSchoolId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -60,8 +61,8 @@ export async function POST(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (!isAdmin(user) && user.role.name !== "PROGRAM_MANAGER") {
+      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -69,6 +70,10 @@ export async function POST(req, context) {
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isSchoolManaged(user.id, schoolId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -115,8 +120,8 @@ export async function DELETE(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    if (!isAdmin(user) && user.role.name !== "PROGRAM_MANAGER") {
+      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -124,6 +129,10 @@ export async function DELETE(req, context) {
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isSchoolManaged(user.id, schoolId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
     }
 
     const body = await req.json();

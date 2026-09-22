@@ -5,7 +5,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
 export default function PtaPrograms() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const isAdmin = user?.roleName === "ADMIN";
+  const canManageEvents = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalType, setModalType] = useState("Program"); // "Program" or "Event"
 
@@ -279,26 +281,30 @@ export default function PtaPrograms() {
             </h1>
           </div>
           <div className="flex flex-wrap gap-3 font-sans shrink-0">
-            <button
-              onClick={() => {
-                setModalType("Event");
-                setShowAddModal(true);
-              }}
-              className="flex-1 md:flex-none bg-surface-container-lowest text-on-surface border border-outline-variant/30 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-low transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">calendar_month</span>
-              <span className="whitespace-nowrap">Schedule Meeting</span>
-            </button>
-            <button
-              onClick={() => {
-                setModalType("Program");
-                setShowAddModal(true);
-              }}
-              className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">add</span>
-              <span className="whitespace-nowrap">Launch Program</span>
-            </button>
+            {canManageEvents && (
+              <button
+                onClick={() => {
+                  setModalType("Event");
+                  setShowAddModal(true);
+                }}
+                className="flex-1 md:flex-none bg-surface-container-lowest text-on-surface border border-outline-variant/30 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-low transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">calendar_month</span>
+                <span className="whitespace-nowrap">Schedule Meeting</span>
+              </button>
+            )}
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  setModalType("Program");
+                  setShowAddModal(true);
+                }}
+                className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">add</span>
+                <span className="whitespace-nowrap">Launch Program</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

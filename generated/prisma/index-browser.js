@@ -139,6 +139,10 @@ exports.Prisma.UserScalarFieldEnum = {
   roleId: 'roleId',
   status: 'status',
   department: 'department',
+  dob: 'dob',
+  gender: 'gender',
+  address: 'address',
+  avatar: 'avatar',
   leavesTaken: 'leavesTaken',
   leavesRemaining: 'leavesRemaining',
   createdAt: 'createdAt',
@@ -225,6 +229,26 @@ exports.Prisma.PMReflectionScalarFieldEnum = {
   responses: 'responses',
   matrix: 'matrix',
   notes: 'notes',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowPerformanceScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  date: 'date',
+  classGroup: 'classGroup',
+  subject: 'subject',
+  lessonPlan: 'lessonPlan',
+  culture: 'culture',
+  lessonFlow: 'lessonFlow',
+  content: 'content',
+  communityEngagement: 'communityEngagement',
+  overallScore: 'overallScore',
+  strength: 'strength',
+  aod: 'aod',
+  trend: 'trend',
   authorId: 'authorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -362,6 +386,49 @@ exports.Prisma.ProgramScalarFieldEnum = {
   status: 'status',
   icon: 'icon',
   iconBg: 'iconBg',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProgramManagerSchoolScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  schoolId: 'schoolId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProgramManagerAfterSchoolCentreScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  centreId: 'centreId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProgramManagerLivelihoodProgramScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  programId: 'programId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProgramManagerTaskScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  plannedDate: 'plannedDate',
+  status: 'status',
+  isPlanned: 'isPlanned',
+  completionDate: 'completionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProgramManagerTaskCommentScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  authorId: 'authorId',
+  text: 'text',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -771,6 +838,25 @@ exports.Prisma.LookBeyondSurveyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.IndividualFeedbackScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  date: 'date',
+  classroomLevel: 'classroomLevel',
+  classGroup: 'classGroup',
+  subject: 'subject',
+  subjectOther: 'subjectOther',
+  lessonPlanLink: 'lessonPlanLink',
+  lessonPlanFeedback: 'lessonPlanFeedback',
+  strengths: 'strengths',
+  areasOfDevelopment: 'areasOfDevelopment',
+  nextStepsFellow: 'nextStepsFellow',
+  nextStepPM: 'nextStepPM',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.TravelRequestScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1021,6 +1107,7 @@ exports.Prisma.FellowStudentDataNoteScalarFieldEnum = {
   session: 'session',
   phase: 'phase',
   sectionKey: 'sectionKey',
+  source: 'source',
   note: 'note',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1101,6 +1188,7 @@ exports.Prisma.ModelName = {
   Fellow: 'Fellow',
   GoalSheet: 'GoalSheet',
   PMReflection: 'PMReflection',
+  FellowPerformance: 'FellowPerformance',
   FellowReview: 'FellowReview',
   Student: 'Student',
   StudentAttendanceLog: 'StudentAttendanceLog',
@@ -1112,6 +1200,11 @@ exports.Prisma.ModelName = {
   IncomeRecord: 'IncomeRecord',
   FellowSchool: 'FellowSchool',
   Program: 'Program',
+  ProgramManagerSchool: 'ProgramManagerSchool',
+  ProgramManagerAfterSchoolCentre: 'ProgramManagerAfterSchoolCentre',
+  ProgramManagerLivelihoodProgram: 'ProgramManagerLivelihoodProgram',
+  ProgramManagerTask: 'ProgramManagerTask',
+  ProgramManagerTaskComment: 'ProgramManagerTaskComment',
   SchoolProgram: 'SchoolProgram',
   ProgramEvent: 'ProgramEvent',
   Beneficiary: 'Beneficiary',
@@ -1146,6 +1239,7 @@ exports.Prisma.ModelName = {
   CoachingRecord: 'CoachingRecord',
   EngagementSurvey: 'EngagementSurvey',
   LookBeyondSurvey: 'LookBeyondSurvey',
+  IndividualFeedback: 'IndividualFeedback',
   TravelRequest: 'TravelRequest',
   TravelExpense: 'TravelExpense',
   FLNCategory: 'FLNCategory',

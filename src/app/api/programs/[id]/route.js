@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isEducationProgramManaged } from "@/lib/scope";
 
 export async function GET(req, context) {
   try {
@@ -8,6 +9,10 @@ export async function GET(req, context) {
     if (error) return error;
 
     const { id } = await context.params;
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isEducationProgramManaged(user.id, id))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
+    }
 
     const program = await prisma.program.findUnique({
       where: { id },

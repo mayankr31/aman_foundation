@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { currentSession, getFellowStudentData } from "@/lib/fellowStudentData";
+import { currentSession, getFellowStudentData, SOURCES } from "@/lib/fellowStudentData";
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -35,8 +35,10 @@ export async function GET(req, context) {
 
     const url = new URL(req.url);
     const session = url.searchParams.get("session") || currentSession();
+    const sourceParam = url.searchParams.get("source") || "school";
+    const source = SOURCES.includes(sourceParam) ? sourceParam : "school";
 
-    const data = await getFellowStudentData(fellowId, session);
+    const data = await getFellowStudentData(fellowId, session, source);
     if (!data) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }

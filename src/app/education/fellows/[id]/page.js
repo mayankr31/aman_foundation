@@ -10,9 +10,8 @@ import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
-import PMReflectionForm from "@/components/PMReflectionForm";
-import PMReflectionViewer from "@/components/PMReflectionViewer";
 import StudentDataView from "@/components/StudentDataView";
+import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import dynamic from "next/dynamic";
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
@@ -28,10 +27,8 @@ export default function FellowProfileDetail() {
   const [coachingRecords, setCoachingRecords] = useState([]);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
-  const [pmReflections, setPmReflections] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
   const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
-  const [viewingReflection, setViewingReflection] = useState(null);
   const [activeTab, setActiveTab] = useState("Goals");
   const [showPDFModal, setShowPDFModal] = useState(false);
 
@@ -39,10 +36,6 @@ export default function FellowProfileDetail() {
   const [showGoalSheetForm, setShowGoalSheetForm] = useState(false);
   const [editingGoalSheet, setEditingGoalSheet] = useState(null);
   const [reviewingGoalSheet, setReviewingGoalSheet] = useState(null);
-
-  // PM Reflection states
-  const [showReflectionForm, setShowReflectionForm] = useState(false);
-  const [editingReflection, setEditingReflection] = useState(null);
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -143,25 +136,6 @@ export default function FellowProfileDetail() {
     }
   }, [activeTab, token, id]);
 
-  useEffect(() => {
-    async function loadPmReflections() {
-      try {
-        const res = await fetch(`/api/fellows/${id}/pm-reflections`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {}
-        });
-        const json = await res.json();
-        if (json.success) {
-          setPmReflections(json.data || []);
-        }
-      } catch (err) {
-        console.error("Failed to load PM reflections:", err);
-      }
-    }
-    if (activeTab === "PM Reflection" && token && id) {
-      loadPmReflections();
-    }
-  }, [activeTab, token, id]);
-
   const handleAddCoachingRecord = async (e) => {
     e.preventDefault();
     if (!newCoachingHeading || !newCoachingDate) return;
@@ -237,24 +211,6 @@ export default function FellowProfileDetail() {
     setDeleteModalOpen(true);
   };
 
-  const handleReflectionSaved = (updatedReflection) => {
-    setPmReflections((prev) => {
-      const idx = prev.findIndex((r) => r.id === updatedReflection.id);
-      if (idx >= 0) {
-        const copy = [...prev];
-        copy[idx] = updatedReflection;
-        return copy;
-      }
-      return [updatedReflection, ...prev];
-    });
-  };
-
-  const handleDeleteReflection = (reflectionId) => {
-    setDeleteItemId(reflectionId);
-    setDeleteItemType("pmReflection");
-    setDeleteModalOpen(true);
-  };
-
   const handleConfirmDelete = async () => {
     if (!deleteItemId) return;
 
@@ -274,23 +230,6 @@ export default function FellowProfileDetail() {
       } catch (err) {
         console.error("Failed to delete goal sheet:", err);
         toast.error("An error occurred");
-      }
-    } else if (deleteItemType === "pmReflection") {
-      try {
-        const res = await fetch(`/api/fellows/${id}/pm-reflections/${deleteItemId}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const json = await res.json();
-        if (json.success) {
-          setPmReflections(prev => prev.filter(r => r.id !== deleteItemId));
-          toast.success("PM reflection deleted successfully!");
-        } else {
-          toast.error(json.error || "Failed to delete PM reflection");
-        }
-      } catch (err) {
-        console.error(err);
-        toast.error("An error occurred while deleting the PM reflection.");
       }
     }
     setDeleteModalOpen(false);
@@ -388,10 +327,6 @@ export default function FellowProfileDetail() {
             <span className="material-symbols-outlined text-[18px]">mail</span>
             Contact Fellow
           </button>
-          <button className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
-            <span className="material-symbols-outlined text-[18px]">download</span>
-            Export Presentation Report
-          </button>
           <button
             onClick={() => setShowPDFModal(true)}
             className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
@@ -402,9 +337,32 @@ export default function FellowProfileDetail() {
         </div>
       </header>
 
+      {/* Placement Summary */}
+      <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 mb-8">
+        <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 font-sans text-sm">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-on-surface-variant uppercase tracking-wide">Active Placement</span>
+            <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-on-surface-variant uppercase tracking-wide">Class Grades</span>
+            <span className="font-semibold text-on-surface">Grade 3, Grade 4</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-on-surface-variant uppercase tracking-wide">Assigned Students</span>
+            <span className="font-semibold text-on-surface">{fellow.students ? fellow.students.length : 0} Students</span>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-on-surface-variant uppercase tracking-wide">Evaluation Rating</span>
+            <span className="font-semibold text-primary">{fellow.evaluationRating || "4.8"} / 5.0</span>
+          </div>
+        </div>
+      </div>
+
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey", "PM Reflection"].map((tab) => {
+        {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "After School Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey", "Individual Feedback Tracking"].map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -423,8 +381,7 @@ export default function FellowProfileDetail() {
       </div>
 
       {/* Tab Contents */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+      <div>
           {activeTab === "Monthly Planner" && (
             <MonthlyPlanner fellowId={fellow.id} />
           )}
@@ -595,6 +552,16 @@ export default function FellowProfileDetail() {
             <StudentDataView
               fellowId={fellow.id}
               token={token}
+              source="school"
+              canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
+            />
+          )}
+
+          {activeTab === "After School Student Data" && (
+            <StudentDataView
+              fellowId={fellow.id}
+              token={token}
+              source="afterSchool"
               canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
             />
           )}
@@ -751,136 +718,14 @@ export default function FellowProfileDetail() {
             </div>
           )}
 
-          {activeTab === "PM Reflection" && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h3 className="font-headline font-bold text-xl text-on-surface">POST LDJC PM Reflection</h3>
-                  <p className="text-sm text-on-surface-variant mt-1">
-                    Leadership Development Journey Conversation review by the Program Manager
-                  </p>
-                </div>
-                {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
-                  <button
-                    onClick={() => {
-                      setEditingReflection(null);
-                      setShowReflectionForm(true);
-                    }}
-                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">add</span>
-                    Create PM Reflection
-                  </button>
-                )}
-              </div>
-
-              {pmReflections.length === 0 ? (
-                <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                  No PM reflections have been created yet.
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {pmReflections.map((reflection) => {
-                    const matrixColors = reflection.matrix || {};
-                    const isManager = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
-                    return (
-                      <div
-                        key={reflection.id}
-                        className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-start gap-4"
-                      >
-                        <button
-                          onClick={() => setViewingReflection(reflection)}
-                          className="text-left flex-1 cursor-pointer"
-                        >
-                          <p className="font-semibold text-on-surface text-sm flex items-center gap-2">
-                            PM Reflection
-                            <span className="text-xs font-normal text-on-surface-variant">
-                              {new Date(reflection.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
-                            </span>
-                          </p>
-                          <div className="flex items-center gap-2 mt-2">
-                            {["HS_HW", "HS_LW", "LS_HW", "LS_LW"].map((cellKey) => (
-                              <span
-                                key={cellKey}
-                                title={cellKey.replace("_", ", ")}
-                                className="w-5 h-5 rounded-full border border-black/10 shadow-sm"
-                                style={{ backgroundColor: matrixColors[cellKey] || "#d1d5db" }}
-                              ></span>
-                            ))}
-                          </div>
-                          {reflection.author?.name && (
-                            <p className="text-xs text-on-surface-variant mt-2">
-                              Reviewed by {reflection.author.name}
-                            </p>
-                          )}
-                        </button>
-                        <div className="flex items-center gap-2">
-                          {isManager && (
-                            <>
-                              <button
-                                onClick={() => {
-                                  setEditingReflection(reflection);
-                                  setShowReflectionForm(true);
-                                }}
-                                className="text-xs text-primary font-semibold hover:underline cursor-pointer whitespace-nowrap"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteReflection(reflection.id)}
-                                className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
-                                title="Delete PM reflection"
-                              >
-                                <span className="material-symbols-outlined text-[18px]">delete</span>
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+          {activeTab === "Individual Feedback Tracking" && (
+            <IndividualFeedbackView
+              fellowId={fellow.id}
+              token={token}
+              canManage={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER"}
+            />
           )}
 
-        </div>
-
-        {/* Sidebar Summary Card */}
-        <div className="space-y-6">
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
-            <div className="space-y-4 font-sans text-sm">
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant">Active Placement</span>
-                <span className="font-semibold text-on-surface">{assignedSchool ? assignedSchool.name : "Unassigned"}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant">Class Grades</span>
-                <span className="font-semibold text-on-surface">Grade 3, Grade 4</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant">Assigned Students</span>
-                <span className="font-semibold text-on-surface">{fellow.students ? fellow.students.length : 0} Students</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant">Evaluation Rating</span>
-                <span className="font-semibold text-primary">{fellow.evaluationRating || "4.8"} / 5.0</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-2 h-full bg-secondary"></div>
-            <h3 className="font-headline font-bold text-base text-on-surface mb-2">Donor Report Status</h3>
-            <p className="text-sm text-on-surface-variant leading-relaxed mb-4">
-              A donor-ready document incorporating the 6-month objectives, performance scores, and assessment indexes is ready.
-            </p>
-            <button className="text-sm font-semibold text-secondary hover:text-on-secondary-fixed-variant flex items-center gap-1 transition-colors cursor-pointer">
-              Download presentation package <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Goal Sheet Form Modal */}
@@ -999,12 +844,8 @@ export default function FellowProfileDetail() {
           setDeleteItemType("");
         }}
         onConfirm={handleConfirmDelete}
-        title={deleteItemType === "goalSheet" ? "Delete Goal Sheet" : "Delete PM Reflection"}
-        message={
-          deleteItemType === "goalSheet"
-            ? "Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
-            : "Are you sure you want to delete this PM reflection? This action is permanent and cannot be undone."
-        }
+        title="Delete Goal Sheet"
+        message="Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
       />
 
       <PDFViewerModal isOpen={showPDFModal} onClose={() => setShowPDFModal(false)} />
@@ -1020,30 +861,6 @@ export default function FellowProfileDetail() {
         <LookBeyondSurveyViewer
           survey={viewingLookBeyond}
           onClose={() => setViewingLookBeyond(null)}
-        />
-      )}
-
-      {showReflectionForm && (
-        <PMReflectionForm
-          fellowId={fellow.id}
-          reflection={editingReflection}
-          token={token}
-          onClose={() => {
-            setShowReflectionForm(false);
-            setEditingReflection(null);
-          }}
-          onSave={(updatedReflection) => {
-            handleReflectionSaved(updatedReflection);
-            setShowReflectionForm(false);
-            setEditingReflection(null);
-          }}
-        />
-      )}
-
-      {viewingReflection && (
-        <PMReflectionViewer
-          reflection={viewingReflection}
-          onClose={() => setViewingReflection(null)}
         />
       )}
     </div>

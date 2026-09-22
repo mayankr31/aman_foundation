@@ -30,14 +30,17 @@ export default function TravelPage() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
+  const isAllowed = user?.roleName === "FELLOW" || user?.roleName === "PROGRAM_MANAGER";
+
   useEffect(() => {
-    if (!isInitializing && (!user || user.roleName !== "FELLOW")) {
+    if (!isInitializing && !isAllowed) {
       router.replace("/");
       return;
     }
-    if (token && user?.roleName === "FELLOW") {
+    if (token && isAllowed) {
       fetchRequests();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, user, isInitializing]);
 
   const fetchRequests = async () => {
@@ -48,7 +51,10 @@ export default function TravelPage() {
       });
       const json = await res.json();
       if (json.success) {
-        setRequests(json.data);
+        const mine = user?.roleName === "PROGRAM_MANAGER"
+          ? json.data.filter((r) => r.userId === user.id)
+          : json.data;
+        setRequests(mine);
       }
     } catch (e) {
       console.error(e);

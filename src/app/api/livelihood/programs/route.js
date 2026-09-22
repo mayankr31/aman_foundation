@@ -16,6 +16,9 @@ export async function GET(req) {
     if (category && category !== "all") where.category = category;
     if (type) where.type = type;
     if (status) where.status = status;
+    if (user.role.name === "PROGRAM_MANAGER") {
+      where.programManagers = { some: { userId: user.id } };
+    }
 
     const programs = await prisma.livelihoodProgram.findMany({
       where,
@@ -26,12 +29,14 @@ export async function GET(req) {
     });
 
     // Also return old-style programs for backward compatibility
-    const goatRearingPrograms = await prisma.goatRearingProgram.findMany({
-      orderBy: { name: "asc" },
-    });
-    const sugarcanePrograms = await prisma.sugarcaneProgram.findMany({
-      orderBy: { name: "asc" },
-    });
+    const goatRearingPrograms =
+      user.role.name === "PROGRAM_MANAGER"
+        ? []
+        : await prisma.goatRearingProgram.findMany({ orderBy: { name: "asc" } });
+    const sugarcanePrograms =
+      user.role.name === "PROGRAM_MANAGER"
+        ? []
+        : await prisma.sugarcaneProgram.findMany({ orderBy: { name: "asc" } });
 
     return NextResponse.json({
       success: true,

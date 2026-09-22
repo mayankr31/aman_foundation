@@ -35,10 +35,11 @@ function authHeaders(token) {
   };
 }
 
-export default function StudentDataView({ fellowId, token, canEditNotes }) {
+export default function StudentDataView({ fellowId, token, canEditNotes, source = "school" }) {
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
   const [session, setSession] = useState("");
+  const [view, setView] = useState("levels"); // "levels" | "growth"
   const [savingKey, setSavingKey] = useState(null);
   const [editingNote, setEditingNote] = useState(null); // { phase, key, value }
 
@@ -47,8 +48,9 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
     let cancelled = false;
     (async () => {
       try {
-        const q = session ? `?session=${encodeURIComponent(session)}` : "";
-        const res = await fetch(`/api/fellows/${fellowId}/student-data${q}`, {
+        const params = new URLSearchParams({ source });
+        if (session) params.set("session", session);
+        const res = await fetch(`/api/fellows/${fellowId}/student-data?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const json = await res.json();
@@ -66,7 +68,7 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
     return () => {
       cancelled = true;
     };
-  }, [fellowId, token, session]);
+  }, [fellowId, token, session, source]);
 
   async function saveNote(phase, key) {
     if (!report || editingNote?.value === undefined) return;
@@ -77,7 +79,7 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
       const res = await fetch(`/api/fellows/${fellowId}/student-data-notes`, {
         method: "PUT",
         headers: authHeaders(token),
-        body: JSON.stringify({ session: report.session, phase, sectionKey: key, note: value }),
+        body: JSON.stringify({ session: report.session, phase, sectionKey: key, source, note: value }),
       });
       const json = await res.json();
       if (!json.success) throw new Error(json.error || "Failed to save note");
@@ -130,6 +132,32 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
   }
 
   const sessions = report.sessions?.length ? report.sessions : report.session ? [report.session] : [];
+  const isAfterSchool = source === "afterSchool";
+  const heading = isAfterSchool ? "After-School Student Data" : "Student Data";
+  const populationLabel = isAfterSchool ? "after-school students" : "students";
+
+  function levelLabel(section, key) {
+    if (key === "__UNQUALIFIED") return "Below Emergent";
+    if (section.kind === "READING_FLUENCY") {
+      const cat = (report.flnCategories || []).find((c) => c.id === key);
+      return cat ? cat.name : key;
+    }
+    return displayLevel(key);
+  }
+
+  const growthSummary = PHASE_ORDER.map((phase) => {
+    const totals = { phase, improved: 0, declined: 0, same: 0, compared: 0, referenceLabel: null };
+    for (const section of report.sections) {
+      const c = section.comparison?.[phase];
+      if (!c) continue;
+      totals.improved += c.improved;
+      totals.declined += c.declined;
+      totals.same += c.same;
+      totals.compared += c.compared;
+      if (c.referenceLabel) totals.referenceLabel = c.referenceLabel;
+    }
+    return totals;
+  });
 
   return (
     <div className="space-y-6">
@@ -139,9 +167,9 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
       {/* Header / controls */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h3 className="font-headline font-bold text-xl text-on-surface">Student Data</h3>
+          <h3 className="font-headline font-bold text-xl text-on-surface">{heading}</h3>
           <p className="text-xs text-on-surface-variant mt-1">
-            Aggregate academic assessment levels of the students under this fellow (school + after-school). Reading fluency level is assigned
+            Aggregate academic assessment levels of the {populationLabel} under this fellow. Reading fluency level is assigned
             to the highest category the student qualifies in (≥70% marks).
           </p>
         </div>
@@ -151,6 +179,28 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
               {report.totalStudents} students
             </span>
           )}
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">View</label>
+            <div className="flex rounded-lg border border-outline-variant overflow-hidden">
+              {[
+                { key: "levels", label: "Levels" },
+                { key: "growth", label: "Growth" },
+              ].map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setView(opt.key)}
+                  className={`px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                    view === opt.key
+                      ? "bg-primary text-white"
+                      : "bg-surface text-on-surface-variant hover:bg-surface-container"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="flex flex-col gap-1">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Academic Session</label>
             <select
@@ -171,11 +221,105 @@ export default function StudentDataView({ fellowId, token, canEditNotes }) {
 
       {report.totalStudents === 0 ? (
         <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant text-sm">
-          No students are currently assigned to this fellow.
+          No {isAfterSchool ? "after-school " : ""}students are currently assigned to this fellow.
         </div>
       ) : report.sections.every((s) => PHASE_ORDER.every((p) => !(s.phases?.[p]?.assessed))) ? (
         <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant text-sm">
-          No academic assessments recorded yet for session <strong>{report.session}</strong>.
+          No academic assessments recorded yet for {isAfterSchool ? "after-school students in " : ""}session <strong>{report.session}</strong>.
+        </div>
+      ) : view === "growth" ? (
+        <div className="space-y-6">
+          {/* Aggregated summary */}
+          <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10">
+            <h4 className="font-headline font-bold text-base text-on-surface mb-1">Phase-over-Phase Growth</h4>
+            <p className="text-xs text-on-surface-variant mb-4">
+              Each phase is compared with its predecessor: Baseline vs the previous session&apos;s Endline, Midline vs Baseline, Endline vs Midline.
+              Summary counts are summed across all subjects.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {growthSummary.map((g) => {
+                const meta = PHASE_META[g.phase];
+                return (
+                  <div key={g.phase} className={`rounded-lg border p-3 ${meta.border} bg-surface-container-low/40`}>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${meta.color}`}>{meta.label}</span>
+                    <p className="text-[10px] text-on-surface-variant mt-2">
+                      {g.referenceLabel ? `vs ${g.referenceLabel}` : "No previous session data"}
+                    </p>
+                    <p className="text-sm font-bold text-on-surface mt-2">
+                      <span className="text-green-600">{g.improved}</span> improved
+                    </p>
+                    <p className="text-[11px] text-on-surface-variant">
+                      <span className="text-red-500 font-semibold">{g.declined}</span> declined · {g.same} same · {g.compared} compared
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Per-section growth */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            {report.sections.map((section) => {
+              const icon = section.kind === "READING_FLUENCY" ? "menu_book" : "book";
+              return (
+                <div
+                  key={section.key}
+                  className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10"
+                >
+                  <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2 mb-4">
+                    <span className="material-symbols-outlined text-[18px] text-primary">{icon}</span>
+                    {section.title}
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {PHASE_ORDER.map((phase) => {
+                      const meta = PHASE_META[phase];
+                      const c = section.comparison?.[phase] || { compared: 0, improved: 0, declined: 0, same: 0, transitions: [], referenceLabel: null };
+                      return (
+                        <div key={phase} className={`rounded-lg border p-3 ${meta.border} bg-surface-container-low/40 flex flex-col`}>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full self-start ${meta.color} mb-2`}>
+                            {meta.label}
+                          </span>
+                          <p className="text-[10px] text-on-surface-variant mb-2">
+                            {c.referenceLabel ? `vs ${c.referenceLabel}` : "No previous session data"}
+                          </p>
+                          {c.compared === 0 ? (
+                            <p className="text-xs text-on-surface-variant flex-1">Not enough comparable data.</p>
+                          ) : (
+                            <>
+                              <div className="flex items-baseline gap-1">
+                                <span className="font-bold text-green-600">{c.improved}</span>
+                                <span className="text-[11px] text-on-surface-variant">improved</span>
+                              </div>
+                              <p className="text-[11px] text-on-surface-variant">
+                                <span className="text-red-500 font-semibold">{c.declined}</span> declined · {c.same} same · {c.compared} compared
+                              </p>
+                              {c.transitions?.length > 0 && (
+                                <div className="mt-2 pt-2 border-t border-outline-variant/10 space-y-1">
+                                  {c.transitions.map((t, i) => (
+                                    <div key={i} className="flex items-center justify-between gap-2 text-[11px]">
+                                      <span
+                                        className={`truncate ${t.direction === "up" ? "text-green-700" : "text-red-500"}`}
+                                        title={`${levelLabel(section, t.from)} → ${levelLabel(section, t.to)}`}
+                                      >
+                                        {levelLabel(section, t.from)} → {levelLabel(section, t.to)}
+                                      </span>
+                                      <span className={`font-bold ${t.direction === "up" ? "text-green-700" : "text-red-500"}`}>
+                                        {t.count}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

@@ -9,6 +9,7 @@ import { Loader2 } from "lucide-react";
 
 export default function LayoutWrapper({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { token, isInitializing } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -49,8 +50,17 @@ export default function LayoutWrapper({ children }) {
 
   return (
     <div className="flex w-full min-h-screen">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-grow flex flex-col min-h-screen md:pl-64">
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
+      />
+      <div
+        className={`flex-grow flex flex-col min-h-screen min-w-0 transition-[padding] duration-300 ${
+          sidebarCollapsed ? "md:pl-20" : "md:pl-64"
+        }`}
+      >
         <Header onMenuToggle={() => setSidebarOpen(true)} />
         <main className="flex-grow flex flex-col bg-surface justify-between">
           <div className="flex-grow">{children}</div>

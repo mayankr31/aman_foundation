@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isLivelihoodProgramManaged } from "@/lib/scope";
 
 export async function POST(req, { params }) {
   try {
@@ -28,6 +29,10 @@ export async function POST(req, { params }) {
     });
     if (!program) {
       return NextResponse.json({ error: "Program not found" }, { status: 404 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER" && !(await isLivelihoodProgramManaged(user.id, programId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
     const beneficiary = await prisma.beneficiary.findUnique({

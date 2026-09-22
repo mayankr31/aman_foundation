@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { authenticateUser } from "../../../../lib/auth";
+import { getManagedTeamUserIds } from "../../../../lib/scope";
+
+async function isPmTeamMember(pmUserId, targetUserId) {
+  if (pmUserId === targetUserId) return true;
+  const team = await getManagedTeamUserIds(pmUserId);
+  return team.includes(targetUserId);
+}
 
 export async function GET(req, { params }) {
   try {
@@ -20,7 +27,11 @@ export async function GET(req, { params }) {
     }
 
     const isFellowOrOther = user.role?.name !== "ADMIN" && user.role?.name !== "HR";
-    if (isFellowOrOther && leave.userId !== user.id) {
+    if (user.role?.name === "PROGRAM_MANAGER") {
+      if (!(await isPmTeamMember(user.id, leave.userId))) {
+        return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
+      }
+    } else if (isFellowOrOther && leave.userId !== user.id) {
       return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
     }
 
@@ -51,9 +62,16 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: "Leave not found" }, { status: 404 });
     }
 
-    const isFellowOrOther = user.role?.name !== "ADMIN" && user.role?.name !== "HR";
-    if (isFellowOrOther) {
-      return NextResponse.json({ error: "Forbidden: You cannot approve or reject leaves" }, { status: 403 });
+    const isApprover = user.role?.name === "ADMIN" || user.role?.name === "HR";
+    if (!isApprover) {
+      if (user.role?.name === "PROGRAM_MANAGER") {
+        const team = await getManagedTeamUserIds(user.id);
+        if (existing.userId === user.id || !team.includes(existing.userId)) {
+          return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
+        }
+      } else {
+        return NextResponse.json({ error: "Forbidden: You cannot approve or reject leaves" }, { status: 403 });
+      }
     }
 
     const leave = await prisma.leave.update({
@@ -106,6 +124,17 @@ export async function DELETE(req, { params }) {
     const existing = await prisma.leave.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: "Leave not found" }, { status: 404 });
+    }
+
+    const isOwner = existing.userId === user.id;
+    const isAdmin = user.role?.name === "ADMIN";
+    let isPmTeam = false;
+    if (user.role?.name === "PROGRAM_MANAGER") {
+      const team = await getManagedTeamUserIds(user.id);
+      isPmTeam = team.includes(existing.userId);
+    }
+    if (!isOwner && !isAdmin && !isPmTeam) {
+      return NextResponse.json({ error: "Forbidden: You cannot delete this leave request" }, { status: 403 });
     }
 
     if (existing.status === "APPROVED" && existing.userId) {

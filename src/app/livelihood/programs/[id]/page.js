@@ -9,7 +9,8 @@ import { getTypeConfig } from "@/lib/livelihoodTypes";
 export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const isAdmin = user?.roleName === "ADMIN";
 
   const [program, setProgram] = useState(null);
   const [allBeneficiaries, setAllBeneficiaries] = useState([]);
@@ -57,6 +58,11 @@ export default function ProgramDetail() {
 
   // Expanded rows for events
   const [expandedAssignId, setExpandedAssignId] = useState(null);
+
+  // Program managers
+  const [showManagerModal, setShowManagerModal] = useState(false);
+  const [allProgramManagers, setAllProgramManagers] = useState([]);
+  const [searchManagerQ, setSearchManagerQ] = useState("");
 
   const config = program ? getTypeConfig(program.type) : null;
 
@@ -159,6 +165,44 @@ export default function ProgramDetail() {
       }
     } catch (err) {
       console.error("Delete program error:", err);
+    }
+  };
+
+  const openManagerModal = async () => {
+    setShowManagerModal(true);
+    setSearchManagerQ("");
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch("/api/users?role=PROGRAM_MANAGER", { headers });
+      const json = await res.json();
+      if (json.success) setAllProgramManagers(json.data);
+    } catch (err) {
+      console.error("Load program managers error:", err);
+    }
+  };
+
+  const handleAssignManager = async (userId) => {
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "POST", headers, body: JSON.stringify({ userId }) });
+      const json = await res.json();
+      if (!json.success) alert(json.error || "Failed to assign Program Manager");
+      setRefreshTrigger((p) => p + 1);
+    } catch (err) {
+      console.error("Assign program manager error:", err);
+    }
+  };
+
+  const handleRemoveManager = async (userId) => {
+    if (!confirm("Remove this Program Manager from the program?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "DELETE", headers, body: JSON.stringify({ userId }) });
+      const json = await res.json();
+      if (!json.success) alert(json.error || "Failed to remove Program Manager");
+      setRefreshTrigger((p) => p + 1);
+    } catch (err) {
+      console.error("Remove program manager error:", err);
     }
   };
 
@@ -310,6 +354,13 @@ export default function ProgramDetail() {
 
   const backLink = program.category === "FARM" ? "/livelihood/farm" : "/livelihood/non-farm";
   const accentColor = program.category === "FARM" ? "emerald" : "amber";
+  const assignedManagers = program.programManagers || [];
+  const programManagerIds = new Set(assignedManagers.map((m) => m.userId));
+  const filteredManagers = allProgramManagers.filter(
+    (m) =>
+      (m.name || "").toLowerCase().includes(searchManagerQ.toLowerCase()) ||
+      (m.email || "").toLowerCase().includes(searchManagerQ.toLowerCase())
+  );
 
   return (
     <div className="p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full pb-24">
@@ -377,6 +428,46 @@ export default function ProgramDetail() {
       <div className="flex gap-6 text-xs font-semibold text-on-surface-variant">
         <span><strong className="text-on-surface">{assignments.length}</strong> Enrolled Families</span>
         {program.totalTarget && <span>Target: <strong className="text-on-surface">{program.totalTarget} {config?.programTargetUnit || "units"}</strong></span>}
+      </div>
+
+      {/* Program Managers */}
+      <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">supervisor_account</span>
+            Program Managers ({assignedManagers.length})
+          </h3>
+          {isAdmin && (
+            <button
+              onClick={openManagerModal}
+              className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border-none bg-transparent"
+            >
+              <span className="material-symbols-outlined text-sm">edit</span> Manage
+            </button>
+          )}
+        </div>
+        {assignedManagers.length === 0 ? (
+          <p className="text-sm text-slate-400 italic">No Program Managers assigned to this program yet.</p>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {assignedManagers.map((pm) => (
+              <div key={pm.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20">
+                <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold">
+                  {pm.user?.name?.[0]?.toUpperCase() || "?"}
+                </div>
+                <div className="leading-tight">
+                  <p className="text-sm font-semibold text-on-surface">{pm.user?.name || "—"}</p>
+                  <p className="text-[11px] text-slate-400">{pm.user?.email || ""}</p>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
+                    <span className="material-symbols-outlined text-[14px]">close</span>
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Beneficiaries Table */}
@@ -706,6 +797,47 @@ export default function ProgramDetail() {
                 <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Save Changes</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Manage Program Managers */}
+      {showManagerModal && (
+        <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
+              <h3 className="text-lg font-bold text-on-surface">Manage Program Managers</h3>
+              <button onClick={() => setShowManagerModal(false)} className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer border-none bg-transparent">
+                <span className="material-symbols-outlined text-on-surface-variant">close</span>
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="text-sm text-on-surface-variant mb-4">Assign or remove Program Managers for this program. Program Managers can manage the beneficiaries enrolled in it.</p>
+              <input type="text" placeholder="Search program managers..." value={searchManagerQ} onChange={(e) => setSearchManagerQ(e.target.value)}
+                className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {filteredManagers.length === 0 && (
+                  <p className="text-sm text-on-surface-variant text-center py-4">No Program Manager accounts found.</p>
+                )}
+                {filteredManagers.map((m) => {
+                  const isAssigned = programManagerIds.has(m.id);
+                  return (
+                    <div key={m.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                      <div>
+                        <p className="font-semibold text-on-surface text-sm">{m.name}</p>
+                        <p className="text-xs text-on-surface-variant">{m.email}</p>
+                      </div>
+                      <button
+                        onClick={() => (isAssigned ? handleRemoveManager(m.id) : handleAssignManager(m.id))}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors border-none ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                      >
+                        {isAssigned ? "Remove" : "Assign"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}

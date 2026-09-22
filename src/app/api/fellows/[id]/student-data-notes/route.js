@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { PHASES, READING_FLUENCY_KEY } from "@/lib/fellowStudentData";
+import { PHASES, READING_FLUENCY_KEY, SOURCES } from "@/lib/fellowStudentData";
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -33,7 +33,9 @@ export async function PUT(req, context) {
       return NextResponse.json({ error: "Forbidden: You cannot edit these notes" }, { status: 403 });
     }
 
-    const { session, phase, sectionKey, note } = await req.json();
+    const body = await req.json();
+    const { session, phase, sectionKey, note } = body || {};
+    const source = SOURCES.includes(body?.source) ? body.source : "school";
 
     if (!session || !phase || !sectionKey) {
       return NextResponse.json({ error: "session, phase, and sectionKey are required" }, { status: 400 });
@@ -52,9 +54,9 @@ export async function PUT(req, context) {
     }
 
     const saved = await prisma.FellowStudentDataNote.upsert({
-      where: { fellowId_session_phase_sectionKey: { fellowId, session, phase, sectionKey } },
+      where: { fellowId_session_phase_sectionKey_source: { fellowId, session, phase, sectionKey, source } },
       update: { note: note ?? "" },
-      create: { fellowId, session, phase, sectionKey, note: note ?? "" }
+      create: { fellowId, session, phase, sectionKey, source, note: note ?? "" }
     });
 
     return NextResponse.json({ success: true, data: saved });

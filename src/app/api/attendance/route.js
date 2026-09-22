@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getManagedTeamUserIds } from "@/lib/scope";
 
 export const dynamic = 'force-dynamic';
 
@@ -9,8 +10,17 @@ export async function GET(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    let where;
+    if (user.role.name === "PROGRAM_MANAGER") {
+      const team = await getManagedTeamUserIds(user.id);
+      where = { userId: { in: [...team, user.id] } };
+    } else if (user.role.name !== "ADMIN" && user.role.name !== "HR") {
+      where = { userId: user.id };
+    }
+
     // Fetch attendance logs, including user details
     const logs = await prisma.attendanceLog.findMany({
+      where,
       include: {
         user: {
           select: {
@@ -63,14 +73,47 @@ export async function GET(req) {
       userToFellowMap[f.userId] = f;
     });
 
+    const pmTasks = await prisma.programManagerTask.findMany({
+      where: { userId: { in: userIds } },
+      select: {
+        id: true,
+        userId: true,
+        title: true,
+        description: true,
+        plannedDate: true,
+        status: true,
+        completionDate: true,
+      },
+    });
+
+    const pmTasksByUserAndDate = {};
+    pmTasks.forEach(task => {
+      const d = new Date(task.plannedDate);
+      const yyyy = d.getUTCFullYear();
+      const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(d.getUTCDate()).padStart(2, '0');
+      const key = `${task.userId}_${yyyy}-${mm}-${dd}`;
+      if (!pmTasksByUserAndDate[key]) pmTasksByUserAndDate[key] = [];
+      pmTasksByUserAndDate[key].push(task);
+    });
+
     const logsWithTasks = logs.map(log => {
       const fellow = userToFellowMap[log.userId];
       const dateKey = log.logdate;
       const tasks = fellow && dateKey ? (tasksByFellowAndDate[`${fellow.id}_${dateKey}`] || []) : [];
-      
+      const pmTasksForDay = dateKey ? (pmTasksByUserAndDate[`${log.userId}_${dateKey}`] || []) : [];
+
       let taskDetails = [];
       if (tasks.length > 0) {
         taskDetails = tasks.map(t => ({
+          id: t.id,
+          text: t.title,
+          description: t.description,
+          completed: t.status === "Completed",
+          completionDate: t.completionDate
+        }));
+      } else if (pmTasksForDay.length > 0) {
+        taskDetails = pmTasksForDay.map(t => ({
           id: t.id,
           text: t.title,
           description: t.description,
@@ -146,6 +189,19 @@ export async function PATCH(req) {
 
     const body = await req.json();
     const { id, logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkOutLat, checkOutLng, lessonPlanText } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "Attendance log id is required" }, { status: 400 });
+    }
+
+    const existingLog = await prisma.attendanceLog.findUnique({ where: { id } });
+    if (!existingLog) {
+      return NextResponse.json({ error: "Attendance log not found" }, { status: 404 });
+    }
+
+    if (existingLog.userId !== user.id && user.role.name !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden: You can only update your own attendance" }, { status: 403 });
+    }
 
     const log = await prisma.attendanceLog.update({
       where: { id },

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getManagedSchoolIds } from "@/lib/scope";
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -40,6 +41,17 @@ export async function GET(req, context) {
         }
       });
       if (!isAssigned) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+      }
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER") {
+      const studentObj = await prisma.student.findUnique({
+        where: { id: studentId },
+        select: { schoolId: true }
+      });
+      const managed = await getManagedSchoolIds(user.id);
+      if (!studentObj || !studentObj.schoolId || !managed.includes(studentObj.schoolId)) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
       }
     }
@@ -105,8 +117,12 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
-      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
+    if (
+      user.role.name !== "ADMIN" &&
+      user.role.name !== "FELLOW" &&
+      user.role.name !== "PROGRAM_MANAGER"
+    ) {
+      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -116,7 +132,7 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 
-    if (user.role.name === "FELLOW") {
+    if (user.role.name === "FELLOW" || user.role.name === "PROGRAM_MANAGER") {
       const studentObj = await prisma.student.findUnique({
         where: { id: studentId },
         select: { schoolId: true }
@@ -124,18 +140,32 @@ export async function PATCH(req, context) {
       if (!studentObj || !studentObj.schoolId) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
       }
-      const isAssigned = await prisma.fellowSchool.findFirst({
-        where: {
-          schoolId: studentObj.schoolId,
-          fellow: { userId: user.id }
+      if (user.role.name === "FELLOW") {
+        const isAssigned = await prisma.fellowSchool.findFirst({
+          where: {
+            schoolId: studentObj.schoolId,
+            fellow: { userId: user.id }
+          }
+        });
+        if (!isAssigned) {
+          return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
         }
-      });
-      if (!isAssigned) {
-        return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+      } else {
+        const managed = await getManagedSchoolIds(user.id);
+        if (!managed.includes(studentObj.schoolId)) {
+          return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+        }
       }
     }
 
     const body = await req.json();
+
+    if (user.role.name === "PROGRAM_MANAGER" && body.schoolId) {
+      const managed = await getManagedSchoolIds(user.id);
+      if (!managed.includes(body.schoolId)) {
+        return NextResponse.json({ error: "Forbidden: You can only move students within your assigned schools" }, { status: 403 });
+      }
+    }
 
     const updatedStudent = await prisma.student.update({
       where: { id: studentId },

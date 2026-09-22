@@ -38,7 +38,7 @@ export default function PMReflectionViewer({ reflection, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-[100] flex items-start justify-center p-4 pt-12 overflow-y-auto"
+      className="fixed inset-0 bg-black/50 z-[150] flex items-start justify-center p-4 pt-12 overflow-y-auto"
       onClick={onClose}
     >
       <div
@@ -123,7 +123,7 @@ export default function PMReflectionViewer({ reflection, onClose }) {
                             level ? levelColor(level) : "bg-surface-container text-on-surface-variant"
                           }`}
                         >
-                          {level || "Not rated"}
+                          {level || "—"}
                         </span>
                       </div>
                     );

@@ -37,8 +37,8 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "FELLOW") {
-      return NextResponse.json({ error: "Only fellows can create travel requests" }, { status: 403 });
+    if (user.role.name !== "FELLOW" && user.role.name !== "PROGRAM_MANAGER") {
+      return NextResponse.json({ error: "Only fellows and program managers can create travel requests" }, { status: 403 });
     }
 
     const body = await req.json();

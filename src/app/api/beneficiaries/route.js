@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { isLivelihoodProgramManaged } from "@/lib/scope";
 
 export async function GET(req) {
   try {
@@ -17,6 +18,11 @@ export async function GET(req) {
       where.address = {
         contains: location,
         mode: "insensitive"
+      };
+    }
+    if (user.role.name === "PROGRAM_MANAGER") {
+      where.livelihoodDetails = {
+        some: { program: { programManagers: { some: { userId: user.id } } } },
       };
     }
 
@@ -62,8 +68,12 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
-      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
+    if (
+      user.role.name !== "ADMIN" &&
+      user.role.name !== "FELLOW" &&
+      user.role.name !== "PROGRAM_MANAGER"
+    ) {
+      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -88,11 +98,19 @@ export async function POST(req) {
       bankName,
       bankAccountNo,
       bankIfsc,
-      schemes
+      schemes,
+      programId,
+      attributes
     } = body;
 
     if (!name || !enrolmentId) {
       return NextResponse.json({ error: "Name and Enrolment ID are required" }, { status: 400 });
+    }
+
+    if (user.role.name === "PROGRAM_MANAGER") {
+      if (programId && !(await isLivelihoodProgramManaged(user.id, programId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
+      }
     }
 
     const beneficiary = await prisma.beneficiary.create({
@@ -133,6 +151,9 @@ export async function POST(req) {
               return { scheme: { create: { name: nameOrId } } };
             }
           }))
+        } : undefined,
+        livelihoodDetails: programId ? {
+          create: { programId, attributes: attributes || {} }
         } : undefined
       }
     });

@@ -5,6 +5,7 @@ export const ACADEMIC_YEAR_START_MONTH = 3; // April (0-indexed). Months >= Apri
 export const FLN_PASS_RATIO = 0.7; // 70% category marks needed to qualify at that level
 export const READING_FLUENCY_KEY = "READING_FLUENCY";
 export const READING_FLUENCY_TITLE = "Reading Fluency";
+export const SOURCES = ["school", "afterSchool"];
 const UNQUALIFIED_KEY = "__UNQUALIFIED";
 
 export function deriveSession(dateOrString) {
@@ -65,7 +66,83 @@ function resolveFlnLevel(flnResponses, categoryConfig) {
   return level;
 }
 
-export async function getFellowStudentData(fellowId, session) {
+// Resolve the level key a single form represents for a given section.
+function formLevelKey(form, sectionKey, flnCategories) {
+  if (sectionKey === READING_FLUENCY_KEY) {
+    const flnResponses = form.flnResponses || [];
+    if (!flnResponses.length) return null; // not assessed for reading fluency
+    return resolveFlnLevel(flnResponses, flnCategories) || UNQUALIFIED_KEY;
+  }
+  const resp = (form.subjectResponses || []).find((r) => r.subjectTemplateId === sectionKey);
+  return resp?.selectedOption || null;
+}
+
+// Map studentId -> level key for a set of forms (one per student per phase).
+function buildLevelMap(forms, sectionKey, flnCategories) {
+  const map = new Map();
+  for (const form of forms) {
+    const levelKey = formLevelKey(form, sectionKey, flnCategories);
+    if (!levelKey) continue;
+    map.set(form.studentId, levelKey);
+  }
+  return map;
+}
+
+// Rank function for a section: higher rank = further along the progression.
+// Subjects follow SubjectAssessmentTemplate.options order (absent/unknown unranked).
+// Reading fluency follows FLNCategory.order; __UNQUALIFIED sits below all categories.
+function makeRankFn(sectionKey, subjectTemplates, flnCategories) {
+  if (sectionKey === READING_FLUENCY_KEY) {
+    const rank = {};
+    [...flnCategories].sort((a, b) => a.order - b.order).forEach((c, i) => { rank[c.id] = i; });
+    rank[UNQUALIFIED_KEY] = -1;
+    return (key) => (key in rank ? rank[key] : null);
+  }
+  const template = subjectTemplates.find((t) => t.id === sectionKey);
+  const rank = {};
+  let r = 0;
+  for (const opt of (template?.options || [])) {
+    const key = String(opt || "").trim();
+    if (!key || key.toLowerCase() === "absent") continue;
+    rank[key] = r++;
+  }
+  return (key) => (key in rank ? rank[key] : null);
+}
+
+// Compare target vs reference levels for students present in both maps.
+function buildComparison(targetMap, referenceMap, rankFn, referenceLabel) {
+  const result = { referenceLabel, compared: 0, improved: 0, declined: 0, same: 0, transitions: [] };
+  const transitions = new Map();
+  for (const [studentId, targetKey] of targetMap) {
+    if (!referenceMap.has(studentId)) continue;
+    const fromKey = referenceMap.get(studentId);
+    const targetRank = rankFn(targetKey);
+    const refRank = rankFn(fromKey);
+    if (targetRank === null || refRank === null) continue;
+    result.compared += 1;
+    if (targetRank === refRank) {
+      result.same += 1;
+      continue;
+    }
+    const direction = targetRank > refRank ? "up" : "down";
+    if (direction === "up") result.improved += 1;
+    else result.declined += 1;
+    const tKey = `${fromKey}|${targetKey}`;
+    const existing = transitions.get(tKey);
+    if (existing) existing.count += 1;
+    else transitions.set(tKey, { from: fromKey, to: targetKey, count: 1, direction });
+  }
+  result.transitions = Array.from(transitions.values()).sort((a, b) => b.count - a.count);
+  return result;
+}
+
+function emptyComparison(referenceLabel = null) {
+  return { referenceLabel, compared: 0, improved: 0, declined: 0, same: 0, transitions: [] };
+}
+
+export async function getFellowStudentData(fellowId, session, source = "school") {
+  if (!SOURCES.includes(source)) source = "school";
+
   const fellow = await prisma.Fellow.findUnique({
     where: { id: fellowId },
     select: {
@@ -76,8 +153,10 @@ export async function getFellowStudentData(fellowId, session) {
 
   if (!fellow) return null;
 
-  const schoolIds = (fellow.students || []).map((s) => s.id);
-  const afterSchoolIds = (fellow.afterSchoolStudents || []).map((s) => s.id);
+  const isAfterSchool = source === "afterSchool";
+  const studentIds = isAfterSchool
+    ? (fellow.afterSchoolStudents || []).map((s) => s.id)
+    : (fellow.students || []).map((s) => s.id);
 
   const [subjectTemplates, flnCategories] = await Promise.all([
     prisma.SubjectAssessmentTemplate.findMany({ orderBy: { order: "asc" } }),
@@ -87,10 +166,10 @@ export async function getFellowStudentData(fellowId, session) {
     }),
   ]);
 
-  const [schoolForms, afterSchoolForms] = await Promise.all([
-    schoolIds.length
-      ? prisma.AssessmentForm.findMany({
-          where: { studentId: { in: schoolIds } },
+  const forms = studentIds.length
+    ? isAfterSchool
+      ? await prisma.AfterSchoolAssessmentForm.findMany({
+          where: { studentId: { in: studentIds } },
           orderBy: { date: "asc" },
           include: {
             subjectResponses: { select: { subjectTemplateId: true, selectedOption: true } },
@@ -102,10 +181,8 @@ export async function getFellowStudentData(fellowId, session) {
             },
           },
         })
-      : Promise.resolve([]),
-    afterSchoolIds.length
-      ? prisma.AfterSchoolAssessmentForm.findMany({
-          where: { studentId: { in: afterSchoolIds } },
+      : await prisma.AssessmentForm.findMany({
+          where: { studentId: { in: studentIds } },
           orderBy: { date: "asc" },
           include: {
             subjectResponses: { select: { subjectTemplateId: true, selectedOption: true } },
@@ -117,24 +194,51 @@ export async function getFellowStudentData(fellowId, session) {
             },
           },
         })
-      : Promise.resolve([]),
-  ]);
+    : [];
 
-  const mapped = [
-    ...schoolForms.map((f) => ({ ...f, source: "school" })),
-    ...afterSchoolForms.map((f) => ({ ...f, source: "afterSchool" })),
-  ];
+  const mapped = forms.map((f) => ({ ...f, source }));
 
   const sessions = Array.from(new Set(mapped.map((f) => deriveSession(f.date)))).sort().reverse();
 
   if (!session) session = currentSession();
 
   const notes = await prisma.FellowStudentDataNote.findMany({
-    where: { fellowId, session },
+    where: { fellowId, session, source },
     select: { phase: true, sectionKey: true, note: true },
   });
 
   const relevant = dedupeForms(mapped.filter((f) => deriveSession(f.date) === session));
+
+  // Previous session (nearest with data) is used only as the Baseline reference.
+  const previousSession = sessions.find((s) => s < session) || null;
+  const previousForms = previousSession
+    ? dedupeForms(mapped.filter((f) => deriveSession(f.date) === previousSession))
+    : [];
+
+  const currentByPhase = {
+    BASELINE: relevant.filter((f) => f.assessmentType === "BASELINE"),
+    MIDLINE: relevant.filter((f) => f.assessmentType === "MIDLINE"),
+    ENDLINE: relevant.filter((f) => f.assessmentType === "ENDLINE"),
+  };
+  const previousEndline = previousForms.filter((f) => f.assessmentType === "ENDLINE");
+
+  // Growth: each phase compared against its predecessor.
+  // Baseline <- previous session Endline; Midline <- Baseline; Endline <- Midline.
+  const comparisonFor = (sectionKey) => {
+    const rankFn = makeRankFn(sectionKey, subjectTemplates, flnCategories);
+    const levels = {
+      BASELINE: buildLevelMap(currentByPhase.BASELINE, sectionKey, flnCategories),
+      MIDLINE: buildLevelMap(currentByPhase.MIDLINE, sectionKey, flnCategories),
+      ENDLINE: buildLevelMap(currentByPhase.ENDLINE, sectionKey, flnCategories),
+    };
+    return {
+      BASELINE: previousSession
+        ? buildComparison(levels.BASELINE, buildLevelMap(previousEndline, sectionKey, flnCategories), rankFn, `Endline ${previousSession}`)
+        : emptyComparison(),
+      MIDLINE: buildComparison(levels.MIDLINE, levels.BASELINE, rankFn, `Baseline ${session}`),
+      ENDLINE: buildComparison(levels.ENDLINE, levels.MIDLINE, rankFn, `Midline ${session}`),
+    };
+  };
 
   // ── Subject sections ──
   const sections = subjectTemplates.map((template) => {
@@ -153,6 +257,7 @@ export async function getFellowStudentData(fellowId, session) {
       title: template.name,
       order: template.order,
       phases,
+      comparison: comparisonFor(template.id),
     };
   });
 
@@ -177,6 +282,7 @@ export async function getFellowStudentData(fellowId, session) {
     title: READING_FLUENCY_TITLE,
     order: subjectTemplates.length + 1,
     phases: fluencyPhases,
+    comparison: comparisonFor(READING_FLUENCY_KEY),
   });
 
   const noteMap = {};
@@ -186,8 +292,10 @@ export async function getFellowStudentData(fellowId, session) {
 
   return {
     session,
+    source,
     sessions,
-    totalStudents: schoolIds.length + afterSchoolIds.length,
+    previousSession,
+    totalStudents: studentIds.length,
     phases: PHASES,
     subjectTemplates: subjectTemplates.map((t) => ({ id: t.id, name: t.name, options: t.options || [], order: t.order })),
     flnCategories: flnCategories.map((c) => ({ id: c.id, name: c.name, order: c.order })),

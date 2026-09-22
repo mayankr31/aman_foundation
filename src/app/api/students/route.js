@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getManagedSchoolIds } from "@/lib/scope";
 
 export async function GET(req) {
   try {
@@ -25,6 +26,13 @@ export async function GET(req) {
           }
         }
       };
+    } else if (user.role.name === "PROGRAM_MANAGER") {
+      const managed = await getManagedSchoolIds(user.id);
+      if (schoolId && schoolId !== "All Schools") {
+        if (!managed.includes(schoolId)) where.schoolId = { in: [] };
+      } else {
+        where.schoolId = { in: managed };
+      }
     }
 
     const students = await prisma.student.findMany({
@@ -52,8 +60,10 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    const isAdmin = user.role.name === "ADMIN";
+    const isPm = user.role.name === "PROGRAM_MANAGER";
+    if (!isAdmin && !isPm) {
+      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -80,6 +90,16 @@ export async function POST(req) {
 
     if (!name || !studentId || !grade || !gradeGroup) {
       return NextResponse.json({ error: "Name, Student ID, Grade, and Grade Group are required" }, { status: 400 });
+    }
+
+    if (isPm) {
+      const managed = await getManagedSchoolIds(user.id);
+      if (!schoolId || !managed.includes(schoolId)) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only add students to your assigned schools" },
+          { status: 403 }
+        );
+      }
     }
 
     const student = await prisma.student.create({

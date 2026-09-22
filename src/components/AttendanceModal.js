@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
-function TaskCommentsModal({ task, onClose, token }) {
+function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
   const [comments, setComments] = useState(task.comments || []);
   const [newComment, setNewComment] = useState("");
 
@@ -11,7 +11,7 @@ function TaskCommentsModal({ task, onClose, token }) {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      const res = await fetch(`/api/tasks/${task.id}/comments`, {
+      const res = await fetch(`${commentsBase}/${task.id}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,15 @@ function TaskCommentsModal({ task, onClose, token }) {
 
 export default function AttendanceModal({ isOpen, onClose }) {
   const { token, user } = useAuth();
-  
+
+  const isPm = user?.roleName === "PROGRAM_MANAGER";
+  const tasksBase = isPm
+    ? `/api/program-managers/${user?.id}/tasks`
+    : user?.fellowId
+    ? `/api/fellows/${user.fellowId}/tasks`
+    : null;
+  const taskItemBase = isPm ? "/api/program-manager-tasks" : "/api/tasks";
+
   const [currentLog, setCurrentLog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
@@ -139,8 +147,8 @@ export default function AttendanceModal({ isOpen, onClose }) {
       }
 
       // Fetch Tasks
-      if (user.fellowId) {
-        const resTasks = await fetch(`/api/fellows/${user.fellowId}/tasks?date=${today}`, {
+      if (tasksBase) {
+        const resTasks = await fetch(`${tasksBase}?date=${today}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const dataTasks = await resTasks.json();
@@ -288,8 +296,8 @@ export default function AttendanceModal({ isOpen, onClose }) {
 
   const addTask = async () => {
     if (newTask.trim() === "") return;
-    if (!user.fellowId) return;
-    
+    if (!tasksBase) return;
+
     try {
       const now = new Date();
       const yyyy = now.getFullYear();
@@ -297,7 +305,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
       const dd = String(now.getDate()).padStart(2, '0');
       const today = `${yyyy}-${mm}-${dd}`;
 
-      const res = await fetch(`/api/fellows/${user.fellowId}/tasks`, {
+      const res = await fetch(tasksBase, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -327,7 +335,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
     setTasks(tasks.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
 
     try {
-      await fetch(`/api/tasks/${taskId}`, {
+      await fetch(`${taskItemBase}/${taskId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -751,6 +759,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
               fetchTodayLogAndTasks(); // Refresh tasks to update comment count
             }} 
             token={token} 
+            commentsBase={taskItemBase}
           />
         )}
       </div>
