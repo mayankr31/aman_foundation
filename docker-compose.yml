@@ -1,16 +1,68 @@
-services:
-  postgres:
-    image: postgres:17
-    container_name: aman-foundation-postgres
-    restart: always
-    environment:
-      POSTGRES_USER: amanfoundationuser
-      POSTGRES_PASSWORD: amanfoundation1234
-      POSTGRES_DB: aman_foundation_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+# ═══════════════════════════════════════════════════════════════════════════════
+# Aman Foundation — Production Docker Compose
+# Stack: Traefik v3 → Next.js 16 + Prisma
+# Domain: aman.cloudtales.in
+# ═══════════════════════════════════════════════════════════════════════════════
 
-volumes:
-  postgres-data:
+services:
+
+  # ─── Migration Service (runs before app starts) ───────────────────────────
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+    image: aman_foundation_migrator:latest
+    container_name: aman_foundation_migrate
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - internal
+    restart: on-failure
+
+  # ─── App — Next.js 16 + Prisma ────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://aman.cloudtales.in}
+    image: aman_foundation_app:latest
+    container_name: aman_foundation_app
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://aman.cloudtales.in}
+    labels:
+      - "traefik.enable=true"
+      # ── Main app router (aman.cloudtales.in) ─────────────────────────────
+      - "traefik.http.routers.aman-foundation.rule=Host(`aman.cloudtales.in`)"
+      - "traefik.http.routers.aman-foundation.entrypoints=websecure"
+      - "traefik.http.routers.aman-foundation.tls.certresolver=letsencrypt"
+      - "traefik.http.services.aman-foundation.loadbalancer.server.port=3000"
+      # ── Security headers middleware ────────────────────────────────────────
+      - "traefik.http.middlewares.aman-secure-headers.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.aman-secure-headers.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.aman-secure-headers.headers.stsPreload=true"
+      - "traefik.http.middlewares.aman-secure-headers.headers.forceSTSHeader=true"
+      - "traefik.http.routers.aman-foundation.middlewares=aman-secure-headers@docker"
+    networks:
+      - web
+      - internal
+
+# ─── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  # Public-facing: shared Traefik instance ↔ App
+  web:
+    external: true
+    name: kvskhelsathi_default
+
+  # Private: App ↔ external DB (no internet exposure)
+  internal:
+    driver: bridge
+    internal: true
