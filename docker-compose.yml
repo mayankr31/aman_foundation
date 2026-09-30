@@ -62,7 +62,7 @@ networks:
     external: true
     name: kvskhelsathi_default
 
-  # Private: App ↔ external DB (no internet exposure)
+  # Private: isolated bridge for inter-service traffic
+  # NOTE: internal: true is NOT set — app needs outbound access to the external DB
   internal:
     driver: bridge
-    internal: true
