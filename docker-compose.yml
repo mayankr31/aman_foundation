@@ -24,6 +24,8 @@ services:
       NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://aman.cloudtales.in}
     labels:
       - "traefik.enable=true"
+      # ── Pin Traefik to the correct network ───────────────────────────────
+      - "traefik.docker.network=kvskhelsathi_default"
       # ── Main app router (aman.cloudtales.in) ─────────────────────────────
       - "traefik.http.routers.aman-foundation.rule=Host(`aman.cloudtales.in`)"
       - "traefik.http.routers.aman-foundation.entrypoints=websecure"

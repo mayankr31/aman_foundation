@@ -25,12 +25,14 @@ RUN apk add --no-cache libc6-compat openssl
 
 WORKDIR /app
 
-# Copy deps + generated prisma client from previous stage
+# Copy node_modules from deps
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/prisma ./prisma
 
 # Copy all source files
 COPY . .
+
+# Re-generate Prisma Client in builder context (generated/ is in .gitignore)
+RUN npx prisma generate
 
 # Build args for baking public env into bundle
 ARG NEXT_PUBLIC_SERVER_URL
