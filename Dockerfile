@@ -42,18 +42,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Build the Next.js application
 RUN npm run build
 
-# ─── Stage 3: Migrator (run migrations only, no full app build overhead) ──────
-FROM node:22-alpine AS migrator
-RUN apk add --no-cache libc6-compat openssl
-
-WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/prisma ./prisma
-COPY package.json prisma.config.ts ./
-
-# Default command: run Prisma migrations
-CMD ["npx", "prisma", "migrate", "deploy"]
 
 # ─── Stage 4: Runner (production image) ──────────────────────────────────────
 FROM node:22-alpine AS runner

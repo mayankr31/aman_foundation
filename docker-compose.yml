@@ -6,19 +6,6 @@
 
 services:
 
-  # ─── Migration Service (runs before app starts) ───────────────────────────
-  migrate:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: migrator
-    image: aman_foundation_migrator:latest
-    container_name: aman_foundation_migrate
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-    networks:
-      - internal
-    restart: on-failure
 
   # ─── App — Next.js 16 + Prisma ────────────────────────────────────────────
   app:
@@ -30,9 +17,6 @@ services:
     image: aman_foundation_app:latest
     container_name: aman_foundation_app
     restart: unless-stopped
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
     environment:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
