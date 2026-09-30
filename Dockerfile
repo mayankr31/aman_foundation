@@ -50,7 +50,7 @@ WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
-COPY package.json ./
+COPY package.json prisma.config.ts ./
 
 # Default command: run Prisma migrations
 CMD ["npx", "prisma", "migrate", "deploy"]
