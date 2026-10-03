@@ -17,48 +17,32 @@ export default function FellowsModule() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedCohort, setSelectedCohort] = useState("All");
   const [selectedDistrict, setSelectedDistrict] = useState("All");
   const [fellows, setFellows] = useState([]);
-  const [schools, setSchools] = useState([]);
-  const [centres, setCentres] = useState([]);
   const [editingFellowId, setEditingFellowId] = useState(null);
 
   // Form states
   const [newFellowName, setNewFellowName] = useState("");
-  const [newCohort, setNewCohort] = useState("Cohort '24");
   const [newLocation, setNewLocation] = useState("");
   const [newProgress, setNewProgress] = useState(50);
   const [newEmail, setNewEmail] = useState("");
   const [newPhone, setNewPhone] = useState("");
-  const [newSchoolId, setNewSchoolId] = useState("");
-  const [newCentreId, setNewCentreId] = useState("");
 
   const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
 
   const fetchFellowsData = useCallback(async () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    const [fellowRes, schoolRes, centreRes] = await Promise.all([
-      fetch("/api/fellows", { headers }),
-      fetch("/api/schools", { headers }),
-      fetch("/api/after-school-centres", { headers }),
-    ]);
+    const fellowRes = await fetch("/api/fellows", { headers });
     const fellowJson = await fellowRes.json();
-    const schoolJson = await schoolRes.json();
-    const centreJson = await centreRes.json();
     return {
       fellows: fellowJson.success ? fellowJson.data : null,
-      schools: schoolJson.success ? schoolJson.data : null,
-      centres: centreJson.success ? centreJson.data : null,
     };
   }, [token]);
 
   const loadFellows = async () => {
     try {
-      const { fellows: f, schools: s, centres: c } = await fetchFellowsData();
+      const { fellows: f } = await fetchFellowsData();
       if (f) setFellows(f);
-      if (s) setSchools(s);
-      if (c) setCentres(c);
     } catch (err) {
       console.error("Failed to load fellows:", err);
     }
@@ -67,11 +51,9 @@ export default function FellowsModule() {
   useEffect(() => {
     let active = true;
     fetchFellowsData()
-      .then(({ fellows: f, schools: s, centres: c }) => {
+      .then(({ fellows: f }) => {
         if (!active) return;
         if (f) setFellows(f);
-        if (s) setSchools(s);
-        if (c) setCentres(c);
       })
       .catch((err) => console.error("Failed to load fellows:", err));
     return () => {
@@ -86,79 +68,82 @@ export default function FellowsModule() {
     setNewProgress(50);
     setNewEmail("");
     setNewPhone("");
-    setNewSchoolId("");
-    setNewCentreId("");
-    setNewCohort("Cohort '24");
-  };
-
-  const openAddModal = () => {
-    resetForm();
-    setShowAddModal(true);
   };
 
   const openEditModal = (f) => {
     setEditingFellowId(f.id);
     setNewFellowName(f.name || "");
-    setNewCohort(f.cohort || "Cohort '24");
     setNewLocation(f.location || "");
     setNewProgress(f.progress ?? 0);
     setNewEmail(f.email || "");
     setNewPhone(f.phone || "");
-    setNewSchoolId(f.schools?.[0]?.id || "");
-    setNewCentreId("");
     setShowAddModal(true);
   };
 
-  const handleAddFellow = async (e) => {
+  const handleSaveFellow = async (e) => {
     e.preventDefault();
-    if (!newFellowName || !newLocation) return;
+    if (!newFellowName || !newLocation || !editingFellowId) return;
 
     const payload = {
       name: newFellowName,
-      cohort: newCohort,
       address: newLocation,
       progress: parseInt(newProgress),
       email: newEmail || undefined,
       phone: newPhone || undefined,
     };
-    if (newSchoolId) payload.schoolId = newSchoolId;
-    if (newCentreId) payload.centreId = newCentreId;
 
     try {
-      const res = await fetch(
-        editingFellowId ? `/api/fellows/${editingFellowId}` : "/api/fellows",
-        {
-          method: editingFellowId ? "PATCH" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const res = await fetch(`/api/fellows/${editingFellowId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify(payload)
+      });
       const json = await res.json();
       if (json.success) {
         await loadFellows();
         resetForm();
         setShowAddModal(false);
       } else {
-        alert(json.error || (editingFellowId ? "Failed to update fellow" : "Failed to add fellow"));
+        alert(json.error || "Failed to update fellow");
       }
     } catch (err) {
       console.error("Failed to save fellow:", err);
     }
   };
 
-  const cohorts = ["All", ...new Set(fellows.map((f) => f.cohort))];
   const districts = ["All", ...new Set(fellows.map((f) => f.location || f.address))];
 
   const filteredFellows = fellows.filter(
     (f) =>
       (f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (f.location && f.location.toLowerCase().includes(searchQuery.toLowerCase()))) &&
-      (selectedCohort === "All" || f.cohort === selectedCohort) &&
       (selectedDistrict === "All" || f.location === selectedDistrict)
   );
+
+  const handleExport = async () => {
+    const rows = filteredFellows.map((f) => ({
+      "Name": f.name,
+      "Email": f.email || "",
+      "Phone": f.phone || "",
+      "District / Location": f.location || "",
+      "Assigned Schools": (f.schools || []).map((s) => s.name).join(", "),
+      "Assigned Students": f.studentCount ?? 0,
+      "Goal Sheets": f.goalSheetCount ?? 0,
+      "Progress (%)": f.progress ?? 0,
+      "Evaluation Rating": f.evaluationRating ?? "",
+      "Joined Date": f.createdAt ? new Date(f.createdAt).toLocaleDateString() : "",
+    }));
+
+    const imported = await import("xlsx");
+    const XLSX = imported.default || imported;
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Fellows");
+    XLSX.writeFile(workbook, `fellows_export_${new Date().toISOString().split("T")[0]}.xlsx`);
+  };
 
   const ITEMS_PER_PAGE = 10;
   const totalPages = Math.ceil(filteredFellows.length / ITEMS_PER_PAGE);
@@ -166,11 +151,6 @@ export default function FellowsModule() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-  // Reset page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCohort, selectedDistrict]);
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -193,7 +173,7 @@ export default function FellowsModule() {
           Fellows Progress Tracking
         </h2>
         <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
-          Monitor cohort advancement, individual literacy goals, and milestone achievements across all active educational districts near Kalgachia, Assam.
+          Monitor individual literacy goals and progress across all active educational districts near Kalgachia, Assam.
         </p>
       </div>
 
@@ -207,34 +187,16 @@ export default function FellowsModule() {
             className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
             placeholder="Search fellows..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             type="text"
           />
-        </div>
-
-        {/* Cohort Filter */}
-        <div className="relative w-full sm:w-auto">
-          <select
-            value={selectedCohort}
-            onChange={(e) => setSelectedCohort(e.target.value)}
-            className="w-full sm:w-auto pl-4 pr-10 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm transition-shadow appearance-none cursor-pointer text-on-surface font-sans font-medium"
-          >
-            {cohorts.map((c) => (
-              <option key={c} value={c} className="bg-surface-container text-on-surface">
-                {c === "All" ? "All Cohorts" : c}
-              </option>
-            ))}
-          </select>
-          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">
-            expand_more
-          </span>
         </div>
 
         {/* District Filter */}
         <div className="relative w-full sm:w-auto">
           <select
             value={selectedDistrict}
-            onChange={(e) => setSelectedDistrict(e.target.value)}
+            onChange={(e) => { setSelectedDistrict(e.target.value); setCurrentPage(1); }}
             className="w-full sm:w-auto pl-4 pr-10 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm transition-shadow appearance-none cursor-pointer text-on-surface font-sans font-medium"
           >
             {districts.map((d) => (
@@ -249,19 +211,12 @@ export default function FellowsModule() {
         </div>
 
 
-        {canManage && (
-          <button
-            onClick={openAddModal}
-            className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-semibold hover:shadow-[0_4px_12px_rgba(0,104,87,0.2)] transition-all flex items-center gap-2 whitespace-nowrap"
-          >
-            <span className="material-symbols-outlined text-[18px]">person_add</span>
-            Add Fellow
-          </button>
-        )}
-
-        <button className="bg-surface-container text-on-surface px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2 whitespace-nowrap">
+        <button
+          onClick={handleExport}
+          className="bg-surface-container text-on-surface px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2 whitespace-nowrap"
+        >
           <span className="material-symbols-outlined text-[18px]">download</span>
-          Export Report
+          Export
         </button>
       </div>
 
@@ -270,39 +225,12 @@ export default function FellowsModule() {
         <div className="bg-surface-container-lowest rounded-xl p-6 ambient-shadow relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-fixed/20 rounded-full blur-2xl group-hover:bg-primary-fixed/30 transition-colors"></div>
           <p className="text-[0.75rem] uppercase tracking-[0.05em] text-on-surface-variant font-semibold mb-2">
-            Total Active Fellows
+            Total Fellows
           </p>
           <div className="flex items-baseline gap-3">
             <h3 className="text-4xl font-headline font-black text-on-surface tracking-tight">
-              {fellows.length + 245}
+              {fellows.length}
             </h3>
-            <span className="text-sm font-medium text-primary flex items-center bg-primary-fixed/30 px-2 py-0.5 rounded-full">
-              <span className="material-symbols-outlined text-[14px]">arrow_upward</span> 12%
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-surface-container-lowest rounded-xl p-6 ambient-shadow relative overflow-hidden group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-secondary-container/10 rounded-full blur-2xl group-hover:bg-secondary-container/20 transition-colors"></div>
-          <p className="text-[0.75rem] uppercase tracking-[0.05em] text-on-surface-variant font-semibold mb-2">
-            Avg. Cohort Progress
-          </p>
-          <div className="flex items-baseline gap-3">
-            <h3 className="text-4xl font-headline font-black text-on-surface tracking-tight">68%</h3>
-            <span className="text-sm font-medium text-on-surface-variant font-sans">Overall Literacy</span>
-          </div>
-        </div>
-
-        <div className="bg-surface-container-lowest rounded-xl p-6 ambient-shadow relative overflow-hidden group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-primary-container/10 rounded-full blur-2xl group-hover:bg-primary-container/20 transition-colors"></div>
-          <p className="text-[0.75rem] uppercase tracking-[0.05em] text-on-surface-variant font-semibold mb-2">
-            Milestones Achieved
-          </p>
-          <div className="flex items-baseline gap-3">
-            <h3 className="text-4xl font-headline font-black text-on-surface tracking-tight">1,402</h3>
-            <span className="text-sm font-medium text-primary flex items-center bg-primary-fixed/30 px-2 py-0.5 rounded-full">
-              <span className="material-symbols-outlined text-[14px]">arrow_upward</span> This Qtr
-            </span>
           </div>
         </div>
       </div>
@@ -313,7 +241,6 @@ export default function FellowsModule() {
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant text-[0.75rem] uppercase tracking-[0.05em] font-semibold">
                 <th className="px-8 py-4">Name</th>
-                <th className="px-6 py-4">Cohort</th>
                 <th className="px-6 py-4">District</th>
                 <th className="px-6 py-4">Literacy Goal</th>
                 <th className="px-6 py-4">Last Updated</th>
@@ -327,7 +254,6 @@ export default function FellowsModule() {
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors"
                 >
                   <td className="px-8 py-4 font-semibold text-on-surface">{f.name}</td>
-                  <td className="px-6 py-4 text-sm text-on-surface-variant">{f.cohort}</td>
                   <td className="px-6 py-4 text-sm text-on-surface-variant">{f.location}</td>
                   <td className="px-6 py-4 text-sm">
                     <span
@@ -421,13 +347,13 @@ export default function FellowsModule() {
         <p className="text-center py-12 text-xs text-slate-400 font-sans">No fellows match your search.</p>
       )}
 
-      {/* Add Fellow Modal */}
+      {/* Edit Fellow Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">
-                {editingFellowId ? "Edit Educational Fellow" : "Register New Educational Fellow"}
+                Edit Educational Fellow
               </h3>
               <button
                 onClick={() => setShowAddModal(false)}
@@ -436,7 +362,7 @@ export default function FellowsModule() {
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <form onSubmit={handleAddFellow} className="space-y-4 text-sm">
+            <form onSubmit={handleSaveFellow} className="space-y-4 text-sm">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                   Fellow Full Name
@@ -449,19 +375,6 @@ export default function FellowsModule() {
                   onChange={(e) => setNewFellowName(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
                 />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Cohort
-                </label>
-                <select
-                  value={newCohort}
-                  onChange={(e) => setNewCohort(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900"
-                >
-                  <option value="Cohort '23">Cohort '23</option>
-                  <option value="Cohort '24">Cohort '24</option>
-                </select>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
@@ -512,40 +425,6 @@ export default function FellowsModule() {
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
                 />
               </div>
-              {!editingFellowId && (
-                <>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                      Assign to School (optional)
-                    </label>
-                    <select
-                      value={newSchoolId}
-                      onChange={(e) => { setNewSchoolId(e.target.value); if (e.target.value) setNewCentreId(""); }}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900"
-                    >
-                      <option value="">— None —</option>
-                      {schools.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                      Assign to After School Centre (optional)
-                    </label>
-                    <select
-                      value={newCentreId}
-                      onChange={(e) => { setNewCentreId(e.target.value); if (e.target.value) setNewSchoolId(""); }}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900"
-                    >
-                      <option value="">— None —</option>
-                      {centres.map((c) => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
@@ -558,7 +437,7 @@ export default function FellowsModule() {
                   type="submit"
                   className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
                 >
-                  {editingFellowId ? "Save Changes" : "Register Fellow"}
+                  Save Changes
                 </button>
               </div>
             </form>

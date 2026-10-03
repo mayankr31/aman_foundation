@@ -49,7 +49,7 @@ export default function HrEmployeeManagement() {
     }
   };
 
-  // Team Directory Filter States
+  // Employees Filter States
   const [directorySearch, setDirectorySearch] = useState("");
   const [directoryDept, setDirectoryDept] = useState("All");
 
@@ -103,7 +103,7 @@ export default function HrEmployeeManagement() {
     }
   };
 
-  // Team Directory Logic only
+  // Employees Logic only
 
   return (
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full">
@@ -121,7 +121,7 @@ export default function HrEmployeeManagement() {
 
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
         <div className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-semibold text-primary border-b-2 border-primary cursor-default">
-          Team Directory
+          Employees
         </div>
         <Link href="/hr/attendance" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
           Attendance Logs

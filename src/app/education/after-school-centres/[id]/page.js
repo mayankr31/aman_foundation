@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { extractMapEmbedUrl } from "@/lib/mapUrl";
 
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
@@ -392,7 +393,7 @@ export default function AfterSchoolCentreProfileDetail() {
           {centre.mapUrl && (
             <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
               <div className="relative w-full h-[280px] rounded-lg overflow-hidden bg-surface-container-low">
-                <iframe src={centre.mapUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full"></iframe>
+                <iframe src={extractMapEmbedUrl(centre.mapUrl)} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full"></iframe>
               </div>
             </div>
           )}
@@ -682,7 +683,7 @@ export default function AfterSchoolCentreProfileDetail() {
                         <Link href={`/education/fellows/${fs.fellowId}`} className="font-semibold text-primary hover:underline text-sm">
                           {fs.fellow?.name || "—"}
                         </Link>
-                        <p className="text-xs text-on-surface-variant">{fs.fellow?.cohort || ""}</p>
+                        <p className="text-xs text-on-surface-variant">{fs.fellow?.email || ""}</p>
                       </div>
                     </div>
                     <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
@@ -1017,10 +1018,11 @@ export default function AfterSchoolCentreProfileDetail() {
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL</label>
-              <input value={editForm.mapUrl} onChange={e => setEditForm(f => ({ ...f, mapUrl: e.target.value }))}
-                placeholder="https://maps.google.com/embed?..."
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL or iframe code</label>
+              <input value={editForm.mapUrl} onChange={e => setEditForm(f => ({ ...f, mapUrl: extractMapEmbedUrl(e.target.value) }))}
+                placeholder='Paste the embed URL, or the full <iframe src="..."> code'
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+              <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
@@ -1077,7 +1079,7 @@ export default function AfterSchoolCentreProfileDetail() {
                     </div>
                     <div>
                       <p className="font-semibold text-on-surface text-sm">{f.name}</p>
-                      <p className="text-xs text-on-surface-variant">Cohort: {f.cohort} • {f.email || "—"}</p>
+                      <p className="text-xs text-on-surface-variant">{f.email || "—"}</p>
                     </div>
                   </div>
                   <button

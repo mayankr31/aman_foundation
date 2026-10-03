@@ -6,14 +6,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import FellowPerformanceForm from "@/components/FellowPerformanceForm";
-
-const RATING_COLUMNS = [
-  { key: "lessonPlan", label: "Lesson Plan" },
-  { key: "culture", label: "Culture" },
-  { key: "lessonFlow", label: "Lesson Flow" },
-  { key: "content", label: "Content" },
-  { key: "communityEngagement", label: "Community Engagement" },
-];
+import RatingCategoriesModal from "@/components/RatingCategoriesModal";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -31,6 +24,7 @@ export default function FellowPerformancePage() {
 
   const [records, setRecords] = useState([]);
   const [fellows, setFellows] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,8 +32,10 @@ export default function FellowPerformancePage() {
   const [dateTo, setDateTo] = useState("");
 
   const [showForm, setShowForm] = useState(false);
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
 
@@ -61,6 +57,9 @@ export default function FellowPerformancePage() {
       .then(([perfJson, fellowJson]) => {
         if (perfJson.success) {
           setRecords(perfJson.data || []);
+          if (Array.isArray(perfJson.categories)) {
+            setCategories(perfJson.categories);
+          }
         } else {
           toastError(perfJson.error || "Failed to load fellow performance records");
         }
@@ -145,6 +144,53 @@ export default function FellowPerformancePage() {
 
   const hasFilters = searchQuery || dateFrom || dateTo;
 
+  const handleExport = async () => {
+    if (!filteredRecords.length) {
+      alert("No records to export.");
+      return;
+    }
+    setExporting(true);
+    try {
+      const headers = ["Date", "Fellow Name", "Class Group", "Subject"];
+      categories.forEach((category) => headers.push(category.label));
+      headers.push("Overall Score", "Strength", "AOD", "Trend");
+
+      const data = filteredRecords.map((record) => {
+        const values = [
+          formatDate(record.date),
+          record.fellow?.name || "",
+          record.classGroup || "",
+          record.subject || "",
+        ];
+        categories.forEach((category) => {
+          values.push(record.ratings?.[category.key] ?? record[category.key] ?? "");
+        });
+        values.push(
+          record.overallScore ?? "",
+          record.strength || "",
+          record.aod || "",
+          record.trend || ""
+        );
+        return values;
+      });
+
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      worksheet["!cols"] = headers.map((h) => ({
+        wch: h === "Fellow Name" || h === "Strength" || h === "AOD" || h === "Trend" ? 24 : 14,
+      }));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Fellow Performance");
+      XLSX.writeFile(workbook, `fellow_performance_export_${new Date().toISOString().split("T")[0]}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export fellow performance records:", err);
+      alert("Failed to export fellow performance records. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (isInitializing || loading) {
     return (
       <div className="p-8 flex justify-center items-center h-96">
@@ -164,13 +210,30 @@ export default function FellowPerformancePage() {
             Classroom observation scores and development notes for each fellow, listed by date.
           </p>
         </div>
-        <button
-          onClick={openAddForm}
-          className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-        >
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          Add Fellow Performance
-        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={handleExport}
+            disabled={exporting}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            {exporting ? "Exporting..." : "Export"}
+          </button>
+          <button
+            onClick={() => setShowCategoriesModal(true)}
+            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20"
+          >
+            <span className="material-symbols-outlined text-[18px]">tune</span>
+            Manage Ratings
+          </button>
+          <button
+            onClick={openAddForm}
+            className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            Add Fellow Performance
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-end gap-3 mb-6 font-sans">
@@ -234,7 +297,7 @@ export default function FellowPerformancePage() {
                 </th>
                 <th className="px-4 py-3 border-r border-surface-container-highest">Class Group</th>
                 <th className="px-4 py-3 border-r border-surface-container-highest">Subject</th>
-                {RATING_COLUMNS.map((col) => (
+                {categories.map((col) => (
                   <th
                     key={col.key}
                     className="px-3 py-3 text-center border-r border-surface-container-highest"
@@ -271,9 +334,9 @@ export default function FellowPerformancePage() {
                   </td>
                   <td className="px-4 py-3 text-on-surface-variant">{record.classGroup || "—"}</td>
                   <td className="px-4 py-3 text-on-surface-variant">{record.subject || "—"}</td>
-                  {RATING_COLUMNS.map((col) => (
+                  {categories.map((col) => (
                     <td key={col.key} className="px-3 py-3 text-center text-on-surface">
-                      {record[col.key] ?? "—"}
+                      {record.ratings?.[col.key] ?? record[col.key] ?? "—"}
                     </td>
                   ))}
                   <td className="px-3 py-3 text-center">
@@ -326,9 +389,19 @@ export default function FellowPerformancePage() {
         <FellowPerformanceForm
           performance={editingRecord}
           fellows={fellows}
+          categories={categories}
           token={token}
           onClose={closeForm}
           onSave={handleSaved}
+        />
+      )}
+
+      {showCategoriesModal && (
+        <RatingCategoriesModal
+          categories={categories}
+          token={token}
+          onClose={() => setShowCategoriesModal(false)}
+          onChanged={loadData}
         />
       )}
 

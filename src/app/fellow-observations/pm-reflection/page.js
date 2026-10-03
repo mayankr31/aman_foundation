@@ -12,6 +12,7 @@ import {
   COMPETENCY_CATEGORIES,
   CATEGORY_COUNT,
   MATRIX_CELLS,
+  MATRIX_COLORS,
 } from "@/data/pmReflectionConstants";
 
 const LEVEL_STYLES = {
@@ -52,8 +53,90 @@ export default function FellowPmReflectionPage() {
   const [viewingReflection, setViewingReflection] = useState(null);
 
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [exporting, setExporting] = useState(false);
 
   const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+
+  const colorName = (hex) => {
+    if (!hex) return "Gray";
+    const match = MATRIX_COLORS.find((c) => c.hex.toLowerCase() === String(hex).toLowerCase());
+    return match ? match.label : "Gray";
+  };
+
+  const handleExport = async () => {
+    if (!rows.length) {
+      alert("No records to export.");
+      return;
+    }
+    setExporting(true);
+    try {
+      const competencyCols = COMPETENCY_CATEGORIES.length * CATEGORY_COUNT;
+      const matrixCols = MATRIX_HEADERS.length;
+      const totalCols = 1 + competencyCols + matrixCols + 1; // Fellow + ratings + matrix + Notes
+
+      const parentRow = new Array(totalCols).fill("");
+      const childRow = new Array(totalCols).fill("");
+
+      parentRow[0] = "Fellow";
+      COMPETENCY_CATEGORIES.forEach((category, ci) => {
+        parentRow[1 + ci * CATEGORY_COUNT] = category.label;
+      });
+      const matrixStart = 1 + competencyCols;
+      parentRow[matrixStart] = "Skill / Will Competency";
+      const notesCol = totalCols - 1;
+      parentRow[notesCol] = "Notes";
+
+      COMPETENCY_CATEGORIES.forEach((category, ci) => {
+        for (let i = 1; i <= CATEGORY_COUNT; i++) {
+          childRow[1 + ci * CATEGORY_COUNT + (i - 1)] = `${category.prefix}${i}`;
+        }
+      });
+      MATRIX_HEADERS.forEach((header, i) => {
+        childRow[matrixStart + i] = header.label;
+      });
+
+      const data = rows.map((row) => {
+        const reflection = row.latestReflection;
+        const values = [row.name];
+        COMPETENCY_CATEGORIES.forEach((category) => {
+          for (let i = 1; i <= CATEGORY_COUNT; i++) {
+            values.push(reflection?.responses?.[`${category.prefix}${i}`] || "");
+          }
+        });
+        MATRIX_HEADERS.forEach((header) => {
+          values.push(colorName(reflection?.matrix?.[header.key]));
+        });
+        values.push(reflection?.notes || "");
+        return values;
+      });
+
+      const merges = [
+        { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+        ...COMPETENCY_CATEGORIES.map((category, ci) => ({
+          s: { r: 0, c: 1 + ci * CATEGORY_COUNT },
+          e: { r: 0, c: 1 + ci * CATEGORY_COUNT + CATEGORY_COUNT - 1 },
+        })),
+        { s: { r: 0, c: matrixStart }, e: { r: 0, c: matrixStart + matrixCols - 1 } },
+        { s: { r: 0, c: notesCol }, e: { r: 1, c: notesCol } },
+      ];
+
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.aoa_to_sheet([parentRow, childRow, ...data]);
+      worksheet["!merges"] = merges;
+      worksheet["!cols"] = new Array(totalCols)
+        .fill(null)
+        .map((_, i) => ({ wch: i === 0 || i === notesCol ? 24 : 10 }));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "PM Reflection");
+      XLSX.writeFile(workbook, `pm_reflection_${new Date().toISOString().split("T")[0]}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export PM reflections:", err);
+      alert("Failed to export PM reflections. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     if (user && !canManage) {
@@ -216,15 +299,25 @@ export default function FellowPmReflectionPage() {
         </span>
       </Link>
 
-      <div className="mb-6">
-        <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
-          PM Reflection
-        </h2>
-        <p className="text-sm font-medium text-on-surface-variant max-w-3xl leading-relaxed">
-          Latest Leadership Development Journey Conversation reflection for each fellow. Use the
-          actions to edit the latest reflection, add a new dated reflection, or review the full
-          history.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+            PM Reflection
+          </h2>
+          <p className="text-sm font-medium text-on-surface-variant max-w-3xl leading-relaxed">
+            Latest Leadership Development Journey Conversation reflection for each fellow. Use the
+            actions to edit the latest reflection, add a new dated reflection, or review the full
+            history.
+          </p>
+        </div>
+        <button
+          onClick={handleExport}
+          disabled={exporting}
+          className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span className="material-symbols-outlined text-[18px]">download</span>
+          {exporting ? "Exporting..." : "Export"}
+        </button>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mb-6 font-sans text-xs text-on-surface-variant">
@@ -312,11 +405,6 @@ export default function FellowPmReflectionPage() {
                   >
                     <td className="px-5 py-3 sticky left-0 z-10 bg-surface-container-lowest font-semibold text-on-surface border-r border-surface-container-highest">
                       <div className="leading-tight">{row.name}</div>
-                      {row.cohort && (
-                        <div className="text-[11px] font-normal text-on-surface-variant">
-                          {row.cohort}
-                        </div>
-                      )}
                     </td>
                     {COMPETENCY_CATEGORIES.map((category) =>
                       Array.from({ length: CATEGORY_COUNT }, (_, i) => {

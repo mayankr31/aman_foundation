@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { sortSubjectOptions } from "@/data/assessmentOptions";
 
 // ─── Small helpers ─────────────────────────────────────────────────────────────
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
@@ -1043,7 +1044,7 @@ export default function AfterSchoolStudentProfileDetail() {
                             )
                           }));
                         }}
-                        options={["", ...options]} />
+                        options={["", ...sortSubjectOptions(options)]} />
                     );
                   })
                 )}

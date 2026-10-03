@@ -20,7 +20,7 @@ export async function GET(req) {
 
     const fellows = await prisma.fellow.findMany({
       where: fellowWhere,
-      select: { id: true, name: true, cohort: true },
+      select: { id: true, name: true },
       orderBy: { name: "asc" },
     });
 

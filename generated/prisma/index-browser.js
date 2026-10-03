@@ -202,7 +202,6 @@ exports.Prisma.FellowScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   address: 'address',
-  cohort: 'cohort',
   avatar: 'avatar',
   progress: 'progress',
   evaluationRating: 'evaluationRating',
@@ -245,11 +244,22 @@ exports.Prisma.FellowPerformanceScalarFieldEnum = {
   lessonFlow: 'lessonFlow',
   content: 'content',
   communityEngagement: 'communityEngagement',
+  ratings: 'ratings',
   overallScore: 'overallScore',
   strength: 'strength',
   aod: 'aod',
   trend: 'trend',
   authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PerformanceRatingCategoryScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  label: 'label',
+  order: 'order',
+  active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -623,6 +633,13 @@ exports.Prisma.LivelihoodEventScalarFieldEnum = {
   recordedBy: 'recordedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FellowLivelihoodProgramScalarFieldEnum = {
+  id: 'id',
+  fellowId: 'fellowId',
+  programId: 'programId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.DisasterIncidentScalarFieldEnum = {
@@ -1189,6 +1206,7 @@ exports.Prisma.ModelName = {
   GoalSheet: 'GoalSheet',
   PMReflection: 'PMReflection',
   FellowPerformance: 'FellowPerformance',
+  PerformanceRatingCategory: 'PerformanceRatingCategory',
   FellowReview: 'FellowReview',
   Student: 'Student',
   StudentAttendanceLog: 'StudentAttendanceLog',
@@ -1221,6 +1239,7 @@ exports.Prisma.ModelName = {
   LivelihoodProgram: 'LivelihoodProgram',
   BeneficiaryLivelihood: 'BeneficiaryLivelihood',
   LivelihoodEvent: 'LivelihoodEvent',
+  FellowLivelihoodProgram: 'FellowLivelihoodProgram',
   DisasterIncident: 'DisasterIncident',
   HelpProvider: 'HelpProvider',
   ResourceItem: 'ResourceItem',

@@ -24,6 +24,10 @@ export async function GET(req) {
       where.livelihoodDetails = {
         some: { program: { programManagers: { some: { userId: user.id } } } },
       };
+    } else if (user.role.name === "FELLOW") {
+      where.livelihoodDetails = {
+        some: { program: { fellows: { some: { fellow: { userId: user.id } } } } },
+      };
     }
 
     const beneficiaries = await prisma.beneficiary.findMany({

@@ -106,6 +106,33 @@ export async function isLivelihoodProgramManaged(userId, programId) {
   return !!row;
 }
 
+export async function getFellowIdByUserId(userId) {
+  if (!userId) return null;
+  const fellow = await prisma.fellow.findUnique({
+    where: { userId },
+    select: { id: true },
+  });
+  return fellow?.id || null;
+}
+
+export async function getFellowAssignedLivelihoodProgramIds(fellowId) {
+  if (!fellowId) return [];
+  const rows = await prisma.fellowLivelihoodProgram.findMany({
+    where: { fellowId },
+    select: { programId: true },
+  });
+  return rows.map((r) => r.programId);
+}
+
+export async function isLivelihoodProgramAssignedToFellow(fellowId, programId) {
+  if (!fellowId || !programId) return false;
+  const row = await prisma.fellowLivelihoodProgram.findFirst({
+    where: { fellowId, programId },
+    select: { id: true },
+  });
+  return !!row;
+}
+
 export async function getManagedEducationProgramIds(userId) {
   const [schoolIds, centreIds] = await Promise.all([
     getManagedSchoolIds(userId),

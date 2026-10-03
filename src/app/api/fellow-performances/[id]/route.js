@@ -3,8 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isFellowManaged } from "@/lib/scope";
 import { computeOverallScore } from "@/data/fellowPerformanceConstants";
+import { getActiveRatingCategories, isValidRating } from "@/lib/performanceCategories";
 
-const RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
+const LEGACY_RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
 
 async function findPerformance(id) {
   return prisma.fellowPerformance.findUnique({ where: { id } });
@@ -19,7 +20,7 @@ export async function GET(req, context) {
     const performance = await prisma.fellowPerformance.findUnique({
       where: { id },
       include: {
-        fellow: { select: { id: true, name: true, cohort: true } },
+        fellow: { select: { id: true, name: true } },
         author: { select: { id: true, name: true } },
       },
     });
@@ -77,33 +78,44 @@ export async function PATCH(req, context) {
     if (body.aod !== undefined) updateData.aod = body.aod || null;
     if (body.trend !== undefined) updateData.trend = body.trend || null;
 
-    const ratings = {};
+    const categories = await getActiveRatingCategories();
+    const inputRatings = body.ratings && typeof body.ratings === "object" ? body.ratings : body;
+
+    const existingStored =
+      existing.ratings && typeof existing.ratings === "object" && Object.keys(existing.ratings).length
+        ? existing.ratings
+        : Object.fromEntries(
+            LEGACY_RATING_KEYS.filter((key) => existing[key] !== null && existing[key] !== undefined).map(
+              (key) => [key, existing[key]]
+            )
+          );
+
+    const merged = { ...existingStored };
     let hasRatings = false;
-    for (const key of RATING_KEYS) {
-      if (body[key] !== undefined) {
-        const value = Number(body[key]);
-        if (Number.isNaN(value) || value < 1 || value > 4) {
-          return NextResponse.json({ error: `Invalid rating for ${key}` }, { status: 400 });
+    for (const category of categories) {
+      if (inputRatings[category.key] !== undefined && inputRatings[category.key] !== "") {
+        const value = Number(inputRatings[category.key]);
+        if (!isValidRating(value)) {
+          return NextResponse.json({ error: `Invalid rating for ${category.label}` }, { status: 400 });
         }
-        ratings[key] = value;
+        merged[category.key] = value;
         hasRatings = true;
       }
     }
 
     if (hasRatings) {
-      const merged = {};
-      for (const key of RATING_KEYS) {
-        merged[key] = ratings[key] !== undefined ? ratings[key] : existing[key];
+      updateData.ratings = merged;
+      updateData.overallScore = computeOverallScore(merged, categories);
+      for (const key of LEGACY_RATING_KEYS) {
+        if (merged[key] !== undefined) updateData[key] = merged[key];
       }
-      updateData.overallScore = computeOverallScore(merged);
-      Object.assign(updateData, ratings);
     }
 
     const updated = await prisma.fellowPerformance.update({
       where: { id },
       data: updateData,
       include: {
-        fellow: { select: { id: true, name: true, cohort: true } },
+        fellow: { select: { id: true, name: true } },
         author: { select: { id: true, name: true } },
       },
     });

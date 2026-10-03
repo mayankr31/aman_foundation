@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getManagedCentreIds } from "@/lib/scope";
+import { getManagedCentreIds, getFellowIdByUserId } from "@/lib/scope";
 
 export async function GET(req) {
   try {
@@ -62,8 +62,9 @@ export async function POST(req) {
 
     const isAdmin = user.role.name === "ADMIN";
     const isPm = user.role.name === "PROGRAM_MANAGER";
-    if (!isAdmin && !isPm) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
+    const isFellow = user.role.name === "FELLOW";
+    if (!isAdmin && !isPm && !isFellow) {
+      return NextResponse.json({ error: "Forbidden: Admin, Program Manager or Fellow access only" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -92,6 +93,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "Name and Student ID are required" }, { status: 400 });
     }
 
+    let resolvedFellowId = fellowId;
+
     if (isPm) {
       const managed = await getManagedCentreIds(user.id);
       if (!centreId || !managed.includes(centreId)) {
@@ -100,6 +103,27 @@ export async function POST(req) {
           { status: 403 }
         );
       }
+    }
+
+    if (isFellow) {
+      const fellowProfileId = await getFellowIdByUserId(user.id);
+      if (!fellowProfileId) {
+        return NextResponse.json({ error: "Forbidden: Fellow profile not found" }, { status: 403 });
+      }
+      if (!centreId) {
+        return NextResponse.json({ error: "Please select one of your assigned centres" }, { status: 400 });
+      }
+      const isAssigned = await prisma.fellowAfterSchoolCentre.findFirst({
+        where: { fellowId: fellowProfileId, centreId },
+        select: { id: true }
+      });
+      if (!isAssigned) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only add students to your assigned centres" },
+          { status: 403 }
+        );
+      }
+      resolvedFellowId = fellowProfileId;
     }
 
     const student = await prisma.afterSchoolStudent.create({
@@ -121,7 +145,7 @@ export async function POST(req) {
         primaryLanguage,
         status: status || "On Track",
         centreId,
-        fellowId
+        fellowId: resolvedFellowId
       }
     });
 

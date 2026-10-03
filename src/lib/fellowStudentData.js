@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sortSubjectOptions } from "@/data/assessmentOptions";
 
 export const PHASES = ["BASELINE", "MIDLINE", "ENDLINE"];
 export const ACADEMIC_YEAR_START_MONTH = 3; // April (0-indexed). Months >= April => new session, Jan-Mar => previous session.
@@ -101,7 +102,7 @@ function makeRankFn(sectionKey, subjectTemplates, flnCategories) {
   const template = subjectTemplates.find((t) => t.id === sectionKey);
   const rank = {};
   let r = 0;
-  for (const opt of (template?.options || [])) {
+  for (const opt of sortSubjectOptions(template?.options || [])) {
     const key = String(opt || "").trim();
     if (!key || key.toLowerCase() === "absent") continue;
     rank[key] = r++;

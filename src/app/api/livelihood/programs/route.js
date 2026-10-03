@@ -18,6 +18,8 @@ export async function GET(req) {
     if (status) where.status = status;
     if (user.role.name === "PROGRAM_MANAGER") {
       where.programManagers = { some: { userId: user.id } };
+    } else if (user.role.name === "FELLOW") {
+      where.fellows = { some: { fellow: { userId: user.id } } };
     }
 
     const programs = await prisma.livelihoodProgram.findMany({
@@ -29,14 +31,13 @@ export async function GET(req) {
     });
 
     // Also return old-style programs for backward compatibility
-    const goatRearingPrograms =
-      user.role.name === "PROGRAM_MANAGER"
-        ? []
-        : await prisma.goatRearingProgram.findMany({ orderBy: { name: "asc" } });
-    const sugarcanePrograms =
-      user.role.name === "PROGRAM_MANAGER"
-        ? []
-        : await prisma.sugarcaneProgram.findMany({ orderBy: { name: "asc" } });
+    const showLegacy = user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW";
+    const goatRearingPrograms = showLegacy
+      ? await prisma.goatRearingProgram.findMany({ orderBy: { name: "asc" } })
+      : [];
+    const sugarcanePrograms = showLegacy
+      ? await prisma.sugarcaneProgram.findMany({ orderBy: { name: "asc" } })
+      : [];
 
     return NextResponse.json({
       success: true,

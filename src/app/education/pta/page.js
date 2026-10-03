@@ -314,7 +314,7 @@ export default function PtaPrograms() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
           
           {/* Active Statistics Card */}
-          <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6 font-sans mb-4">
+          <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6 font-sans mb-4">
             <div className="bg-surface-container-lowest rounded-xl p-6 pt-8 pl-8 ambient-shadow relative overflow-hidden shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
               <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2">
                 Running Programs
@@ -325,18 +325,10 @@ export default function PtaPrograms() {
 
             <div className="bg-surface-container-lowest rounded-xl p-6 pt-8 pl-8 ambient-shadow relative overflow-hidden shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
               <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2">
-                Meetings Held (YTD)
+                Meetings Held
               </p>
-              <div className="text-4xl font-headline font-bold text-on-surface">{events.filter(e => e.status === "Completed").length + 24}</div>
+              <div className="text-4xl font-headline font-bold text-on-surface">{events.filter(e => e.status === "Completed").length}</div>
               <p className="text-xs text-on-surface-variant mt-2">Parent-Teacher linkages complete</p>
-            </div>
-
-            <div className="bg-surface-container-lowest rounded-xl p-6 pt-8 pl-8 ambient-shadow relative overflow-hidden shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
-              <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2">
-                Communication Follow-ups
-              </p>
-              <div className="text-4xl font-headline font-bold text-primary">4 Pending</div>
-              <p className="text-xs text-on-surface-variant mt-2">Requires organizer action</p>
             </div>
           </div>
 

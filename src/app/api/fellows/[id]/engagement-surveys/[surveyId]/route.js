@@ -1,13 +1,30 @@
 import { NextResponse } from "next/server";
 import { authenticateUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { isFellowManaged } from "@/lib/scope";
+
+async function resolveFellowId(id) {
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  if (isUuid) return id;
+
+  const name = decodeURIComponent(id).replace(/-/g, " ");
+  const fellow = await prisma.fellow.findFirst({
+    where: { name: { equals: name, mode: "insensitive" } }
+  });
+  return fellow ? fellow.id : null;
+}
 
 export async function GET(req, { params }) {
-  const { id: fellowId, surveyId } = await params;
+  const { id, surveyId } = await params;
   const { user, error } = await authenticateUser(req);
   if (error) return error;
 
   try {
+    const fellowId = await resolveFellowId(id);
+    if (!fellowId) {
+      return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
+    }
+
     const fellow = await prisma.fellow.findUnique({
       where: { id: fellowId },
     });
@@ -16,7 +33,11 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (user.role.name !== "ADMIN" && user.id !== fellow.userId) {
+    const isAdmin = user.role.name === "ADMIN";
+    const isOwner = user.id === fellow.userId;
+    const isPm = user.role.name === "PROGRAM_MANAGER";
+    const allowed = isAdmin || isOwner || (isPm && (await isFellowManaged(user.id, fellowId)));
+    if (!allowed) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

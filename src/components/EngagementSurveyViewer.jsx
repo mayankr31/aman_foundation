@@ -50,8 +50,8 @@ const Q22_ITEMS = {
 const SECTIONS = [
   { title: "Demographics", keys: ["q1", "q2"] },
   { title: "Section 1 - Belief Questions", keys: ["q3", "q4"] },
-  { title: "Section 2 - Culture", keys: ["q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12"] },
-  { title: "Section 2 - Expectations, Well-being and Progress", keys: ["q13", "q14", "q14Reason", "q15", "q16", "q17", "q18", "q19"] },
+  { title: "Section 2.1 - Culture", keys: ["q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12"] },
+  { title: "Section 2.2 - Expectations, Well-being and Progress", keys: ["q13", "q14", "q14Reason", "q15", "q16", "q17", "q18", "q19"] },
   { title: "Section 3 - Support", keys: ["q20", "q21"] },
   { title: "Section 4 - Quality of L&D Spaces", keys: ["q22_selected", "q23"] },
   { title: "Section 5 - Overall Feedback", keys: ["q24", "q24Reason", "q25", "q26"] },

@@ -38,13 +38,16 @@ export async function GET(req) {
       return {
         id: f.id,
         name: f.name,
-        cohort: f.cohort,
         avatar: f.avatar,
         email: f.email,
         phone: f.phone,
         location: f.address || (f.schools?.[0]?.school?.location || "Kalgachia"),
         schools: (f.schools || []).map(fs => fs.school),
         progress: f.progress,
+        evaluationRating: f.evaluationRating,
+        createdAt: f.createdAt,
+        studentCount: f._count?.students ?? 0,
+        goalSheetCount: f._count?.goalSheets ?? 0,
         milestones: [
           { done: true, text: "Placement Setup" },
           { done: false, text: "Pending Review" }
@@ -79,7 +82,6 @@ export async function POST(req) {
       email,
       phone,
       address,
-      cohort,
       avatar,
       progress,
       evaluationRating,
@@ -90,8 +92,8 @@ export async function POST(req) {
       userId
     } = body;
 
-    if (!name || !cohort) {
-      return NextResponse.json({ error: "Name and Cohort are required" }, { status: 400 });
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
 
     const targetSchoolIds = [...(Array.isArray(schoolIds) ? schoolIds : []), ...(schoolId ? [schoolId] : [])];
@@ -120,7 +122,6 @@ export async function POST(req) {
         email: email || null,
         phone,
         address,
-        cohort,
         avatar,
         progress: progress ? parseInt(progress) : 0,
         evaluationRating: evaluationRating ? parseFloat(evaluationRating) : null,

@@ -64,6 +64,11 @@ export default function ProgramDetail() {
   const [allProgramManagers, setAllProgramManagers] = useState([]);
   const [searchManagerQ, setSearchManagerQ] = useState("");
 
+  // Fellows
+  const [showFellowModal, setShowFellowModal] = useState(false);
+  const [allFellows, setAllFellows] = useState([]);
+  const [searchFellowQ, setSearchFellowQ] = useState("");
+
   const config = program ? getTypeConfig(program.type) : null;
 
   useEffect(() => {
@@ -203,6 +208,44 @@ export default function ProgramDetail() {
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Remove program manager error:", err);
+    }
+  };
+
+  const openFellowModal = async () => {
+    setShowFellowModal(true);
+    setSearchFellowQ("");
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch("/api/fellows", { headers });
+      const json = await res.json();
+      if (json.success) setAllFellows(json.data);
+    } catch (err) {
+      console.error("Load fellows error:", err);
+    }
+  };
+
+  const handleAssignFellow = async (fellowId) => {
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/livelihood/programs/${id}/fellows`, { method: "POST", headers, body: JSON.stringify({ fellowId }) });
+      const json = await res.json();
+      if (!json.success) alert(json.error || "Failed to assign Fellow");
+      setRefreshTrigger((p) => p + 1);
+    } catch (err) {
+      console.error("Assign fellow error:", err);
+    }
+  };
+
+  const handleRemoveFellow = async (fellowId) => {
+    if (!confirm("Remove this Fellow from the program?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+      const res = await fetch(`/api/livelihood/programs/${id}/fellows`, { method: "DELETE", headers, body: JSON.stringify({ fellowId }) });
+      const json = await res.json();
+      if (!json.success) alert(json.error || "Failed to remove Fellow");
+      setRefreshTrigger((p) => p + 1);
+    } catch (err) {
+      console.error("Remove fellow error:", err);
     }
   };
 
@@ -362,6 +405,14 @@ export default function ProgramDetail() {
       (m.email || "").toLowerCase().includes(searchManagerQ.toLowerCase())
   );
 
+  const assignedFellows = program.fellows || [];
+  const assignedFellowIds = new Set(assignedFellows.map((f) => f.fellowId));
+  const filteredFellows = allFellows.filter(
+    (f) =>
+      (f.name || "").toLowerCase().includes(searchFellowQ.toLowerCase()) ||
+      (f.email || "").toLowerCase().includes(searchFellowQ.toLowerCase())
+  );
+
   return (
     <div className="p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full pb-24">
       {/* Back */}
@@ -461,6 +512,46 @@ export default function ProgramDetail() {
                 </div>
                 {isAdmin && (
                   <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
+                    <span className="material-symbols-outlined text-[14px]">close</span>
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Fellows */}
+      <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">school</span>
+            Fellows ({assignedFellows.length})
+          </h3>
+          {isAdmin && (
+            <button
+              onClick={openFellowModal}
+              className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border-none bg-transparent"
+            >
+              <span className="material-symbols-outlined text-sm">edit</span> Manage
+            </button>
+          )}
+        </div>
+        {assignedFellows.length === 0 ? (
+          <p className="text-sm text-slate-400 italic">No Fellows assigned to this program yet.</p>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {assignedFellows.map((f) => (
+              <div key={f.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+                  {f.fellow?.name?.[0]?.toUpperCase() || "?"}
+                </div>
+                <div className="leading-tight">
+                  <p className="text-sm font-semibold text-on-surface">{f.fellow?.name || "—"}</p>
+                  <p className="text-[11px] text-slate-400">{f.fellow?.email || ""}</p>
+                </div>
+                {isAdmin && (
+                  <button onClick={() => handleRemoveFellow(f.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
                     <span className="material-symbols-outlined text-[14px]">close</span>
                   </button>
                 )}
@@ -829,6 +920,47 @@ export default function ProgramDetail() {
                       </div>
                       <button
                         onClick={() => (isAssigned ? handleRemoveManager(m.id) : handleAssignManager(m.id))}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors border-none ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+                      >
+                        {isAssigned ? "Remove" : "Assign"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manage Fellows */}
+      {showFellowModal && (
+        <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
+              <h3 className="text-lg font-bold text-on-surface">Manage Fellows</h3>
+              <button onClick={() => setShowFellowModal(false)} className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer border-none bg-transparent">
+                <span className="material-symbols-outlined text-on-surface-variant">close</span>
+              </button>
+            </div>
+            <div className="p-6">
+              <p className="text-sm text-on-surface-variant mb-4">Assign or remove Fellows for this program. Fellows can view the program and its beneficiaries.</p>
+              <input type="text" placeholder="Search fellows..." value={searchFellowQ} onChange={(e) => setSearchFellowQ(e.target.value)}
+                className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {filteredFellows.length === 0 && (
+                  <p className="text-sm text-on-surface-variant text-center py-4">No Fellows found.</p>
+                )}
+                {filteredFellows.map((f) => {
+                  const isAssigned = assignedFellowIds.has(f.id);
+                  return (
+                    <div key={f.id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${isAssigned ? "border-primary/30 bg-primary/5" : "border-outline-variant hover:bg-surface-container"}`}>
+                      <div>
+                        <p className="font-semibold text-on-surface text-sm">{f.name}</p>
+                        <p className="text-xs text-on-surface-variant">{f.email || ""}</p>
+                      </div>
+                      <button
+                        onClick={() => (isAssigned ? handleRemoveFellow(f.id) : handleAssignFellow(f.id))}
                         className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors border-none ${isAssigned ? "bg-error-container text-on-error-container hover:bg-error/20" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
                       >
                         {isAssigned ? "Remove" : "Assign"}

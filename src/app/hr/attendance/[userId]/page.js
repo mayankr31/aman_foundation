@@ -350,6 +350,8 @@ export default function UserAttendanceDetails({ params }) {
   if (isLoading) return <div className="p-10 text-center text-slate-500">Loading details...</div>;
   if (!userData) return <div className="p-10 text-center text-slate-500">User not found.</div>;
 
+  const isPm = userData?.role?.name === "PROGRAM_MANAGER";
+
   return (
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full font-sans bg-gray-50/50">
       <Link href="/hr" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
@@ -575,7 +577,7 @@ export default function UserAttendanceDetails({ params }) {
               </div>
             </div>
 
-            {(selectedDate.lessonPlanText || (Array.isArray(selectedDate.lessonPlanFiles) && selectedDate.lessonPlanFiles.length > 0)) && (
+            {!isPm && (selectedDate.lessonPlanText || (Array.isArray(selectedDate.lessonPlanFiles) && selectedDate.lessonPlanFiles.length > 0)) && (
               <div>
                 <h4 className="font-bold text-sm text-gray-800 mb-3">Daily Lesson Plan</h4>
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 space-y-3">

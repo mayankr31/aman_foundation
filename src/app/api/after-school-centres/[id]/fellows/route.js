@@ -35,7 +35,6 @@ export async function GET(req, context) {
           select: {
             id: true,
             name: true,
-            cohort: true,
             email: true,
             phone: true
           }
@@ -92,7 +91,7 @@ export async function POST(req, context) {
       data: { fellowId, centreId },
       include: {
         fellow: {
-          select: { id: true, name: true, cohort: true, email: true, phone: true }
+          select: { id: true, name: true, email: true, phone: true }
         }
       }
     });

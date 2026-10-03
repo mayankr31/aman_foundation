@@ -467,7 +467,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
         </button>
 
         <div className="mb-8">
-          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 font-sans">Fellow Workspace</p>
+          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 font-sans">{isPm ? "PM Workspace" : "Fellow Workspace"}</p>
           <h2 className="text-3xl font-headline font-semibold tracking-tight text-on-surface">Daily Attendance & Tasks</h2>
         </div>
 
@@ -665,6 +665,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
               </div>
             </div>
 
+            {!isPm && (
             <div className="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 mt-2">
                 <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Lesson Plan</h3>
                 
@@ -741,6 +742,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
                   </div>
                 </div>
               </div>
+            )}
           </div>
         )}
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getManagedCentreIds } from "@/lib/scope";
+import { getManagedCentreIds, getFellowIdByUserId } from "@/lib/scope";
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -69,7 +69,7 @@ export async function GET(req, context) {
         centre: {
           include: {
             fellows: {
-              include: { fellow: { select: { id: true, name: true, cohort: true, email: true } } }
+              include: { fellow: { select: { id: true, name: true, email: true } } }
             }
           }
         },
@@ -153,6 +153,19 @@ export async function PATCH(req, context) {
     if (user.role.name === "PROGRAM_MANAGER" && body.centreId) {
       const managed = await getManagedCentreIds(user.id);
       if (!managed.includes(body.centreId)) {
+        return NextResponse.json({ error: "Forbidden: You can only move students within your assigned centres" }, { status: 403 });
+      }
+    }
+
+    if (user.role.name === "FELLOW" && body.centreId) {
+      const fellowProfileId = await getFellowIdByUserId(user.id);
+      const isAssigned = fellowProfileId
+        ? await prisma.fellowAfterSchoolCentre.findFirst({
+            where: { fellowId: fellowProfileId, centreId: body.centreId },
+            select: { id: true }
+          })
+        : null;
+      if (!isAssigned) {
         return NextResponse.json({ error: "Forbidden: You can only move students within your assigned centres" }, { status: 403 });
       }
     }

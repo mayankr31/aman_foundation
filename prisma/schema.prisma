@@ -175,7 +175,6 @@ model Fellow {
   email             String?         @unique
   phone             String?
   address           String?
-  cohort            String
   avatar            String?
   progress          Int             @default(0)
   evaluationRating  Float?
@@ -201,6 +200,7 @@ model Fellow {
   afterSchoolStudents     AfterSchoolStudent[]
   afterSchoolAssessmentForms AfterSchoolAssessmentForm[]
   studentDataNotes        FellowStudentDataNote[]
+  livelihoodPrograms      FellowLivelihoodProgram[]
 }
 
 model GoalSheet {
@@ -239,11 +239,12 @@ model FellowPerformance {
   date                DateTime
   classGroup          String?
   subject             String
-  lessonPlan          Int
-  culture             Int
-  lessonFlow          Int
-  content             Int
-  communityEngagement Int
+  lessonPlan          Int?
+  culture             Int?
+  lessonFlow          Int?
+  content             Int?
+  communityEngagement Int?
+  ratings             Json     @default("{}")
   overallScore        Float
   strength            String?
   aod                 String?
@@ -257,6 +258,16 @@ model FellowPerformance {
 
   @@index([fellowId])
   @@index([date])
+}
+
+model PerformanceRatingCategory {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  label     String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model FellowReview {
@@ -719,6 +730,7 @@ model LivelihoodProgram {
 
   assignments   BeneficiaryLivelihood[]
   programManagers ProgramManagerLivelihoodProgram[]
+  fellows       FellowLivelihoodProgram[]
 }
 
 model BeneficiaryLivelihood {
@@ -754,6 +766,19 @@ model LivelihoodEvent {
   livelihood      BeneficiaryLivelihood @relation(fields: [livelihoodId], references: [id], onDelete: Cascade)
 
   @@index([livelihoodId])
+}
+
+model FellowLivelihoodProgram {
+  id        String            @id @default(uuid())
+  fellowId  String
+  programId String
+  createdAt DateTime          @default(now())
+
+  fellow    Fellow            @relation(fields: [fellowId], references: [id], onDelete: Cascade)
+  program   LivelihoodProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  @@unique([fellowId, programId])
+  @@index([programId])
 }
 
 model DisasterIncident {

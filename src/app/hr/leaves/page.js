@@ -114,13 +114,13 @@ export default function LeaveWorkflow() {
 
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
         <Link href="/hr" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Team Directory
+          Employees
         </Link>
         <Link href="/hr/attendance" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
           Attendance Logs
         </Link>
         <div className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-semibold text-primary border-b-2 border-primary cursor-default">
-          Leave Workflow
+          Leave Requests
         </div>
       </div>
 

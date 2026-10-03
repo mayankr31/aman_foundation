@@ -3,8 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedFellowIds, isFellowManaged } from "@/lib/scope";
 import { computeOverallScore } from "@/data/fellowPerformanceConstants";
+import { getActiveRatingCategories, isValidRating } from "@/lib/performanceCategories";
 
-const RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
+const LEGACY_RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
 
 export async function GET(req) {
   try {
@@ -28,12 +29,14 @@ export async function GET(req) {
       where,
       orderBy: { date: "desc" },
       include: {
-        fellow: { select: { id: true, name: true, cohort: true } },
+        fellow: { select: { id: true, name: true } },
         author: { select: { id: true, name: true } },
       },
     });
 
-    return NextResponse.json({ success: true, data: performances });
+    const categories = await getActiveRatingCategories();
+
+    return NextResponse.json({ success: true, data: performances, categories });
   } catch (err) {
     console.error("Fetch fellow performances error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -70,13 +73,21 @@ export async function POST(req) {
       );
     }
 
+    const categories = await getActiveRatingCategories();
+    const inputRatings = body.ratings && typeof body.ratings === "object" ? body.ratings : body;
+
     const ratings = {};
-    for (const key of RATING_KEYS) {
-      const value = Number(body[key]);
-      if (Number.isNaN(value) || value < 1 || value > 4) {
-        return NextResponse.json({ error: `Invalid rating for ${key}` }, { status: 400 });
+    for (const category of categories) {
+      const value = Number(inputRatings[category.key]);
+      if (!isValidRating(value)) {
+        return NextResponse.json({ error: `Invalid rating for ${category.label}` }, { status: 400 });
       }
-      ratings[key] = value;
+      ratings[category.key] = value;
+    }
+
+    const legacyRatings = {};
+    for (const key of LEGACY_RATING_KEYS) {
+      legacyRatings[key] = ratings[key] ?? null;
     }
 
     if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
@@ -89,15 +100,16 @@ export async function POST(req) {
         date: new Date(date),
         classGroup: classGroup || null,
         subject,
-        ...ratings,
-        overallScore: computeOverallScore(ratings),
+        ...legacyRatings,
+        ratings,
+        overallScore: computeOverallScore(ratings, categories),
         strength: strength || null,
         aod: aod || null,
         trend: trend || null,
         authorId: user.id,
       },
       include: {
-        fellow: { select: { id: true, name: true, cohort: true } },
+        fellow: { select: { id: true, name: true } },
         author: { select: { id: true, name: true } },
       },
     });

@@ -64,6 +64,11 @@ export type PMReflection = $Result.DefaultSelection<Prisma.$PMReflectionPayload>
  */
 export type FellowPerformance = $Result.DefaultSelection<Prisma.$FellowPerformancePayload>
 /**
+ * Model PerformanceRatingCategory
+ * 
+ */
+export type PerformanceRatingCategory = $Result.DefaultSelection<Prisma.$PerformanceRatingCategoryPayload>
+/**
  * Model FellowReview
  * 
  */
@@ -223,6 +228,11 @@ export type BeneficiaryLivelihood = $Result.DefaultSelection<Prisma.$Beneficiary
  * 
  */
 export type LivelihoodEvent = $Result.DefaultSelection<Prisma.$LivelihoodEventPayload>
+/**
+ * Model FellowLivelihoodProgram
+ * 
+ */
+export type FellowLivelihoodProgram = $Result.DefaultSelection<Prisma.$FellowLivelihoodProgramPayload>
 /**
  * Model DisasterIncident
  * 
@@ -744,6 +754,16 @@ export class PrismaClient<
   get fellowPerformance(): Prisma.FellowPerformanceDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.performanceRatingCategory`: Exposes CRUD operations for the **PerformanceRatingCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PerformanceRatingCategories
+    * const performanceRatingCategories = await prisma.performanceRatingCategory.findMany()
+    * ```
+    */
+  get performanceRatingCategory(): Prisma.PerformanceRatingCategoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.fellowReview`: Exposes CRUD operations for the **FellowReview** model.
     * Example usage:
     * ```ts
@@ -1062,6 +1082,16 @@ export class PrismaClient<
     * ```
     */
   get livelihoodEvent(): Prisma.LivelihoodEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fellowLivelihoodProgram`: Exposes CRUD operations for the **FellowLivelihoodProgram** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FellowLivelihoodPrograms
+    * const fellowLivelihoodPrograms = await prisma.fellowLivelihoodProgram.findMany()
+    * ```
+    */
+  get fellowLivelihoodProgram(): Prisma.FellowLivelihoodProgramDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.disasterIncident`: Exposes CRUD operations for the **DisasterIncident** model.
@@ -1936,6 +1966,7 @@ export namespace Prisma {
     GoalSheet: 'GoalSheet',
     PMReflection: 'PMReflection',
     FellowPerformance: 'FellowPerformance',
+    PerformanceRatingCategory: 'PerformanceRatingCategory',
     FellowReview: 'FellowReview',
     Student: 'Student',
     StudentAttendanceLog: 'StudentAttendanceLog',
@@ -1968,6 +1999,7 @@ export namespace Prisma {
     LivelihoodProgram: 'LivelihoodProgram',
     BeneficiaryLivelihood: 'BeneficiaryLivelihood',
     LivelihoodEvent: 'LivelihoodEvent',
+    FellowLivelihoodProgram: 'FellowLivelihoodProgram',
     DisasterIncident: 'DisasterIncident',
     HelpProvider: 'HelpProvider',
     ResourceItem: 'ResourceItem',
@@ -2026,7 +2058,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "beneficiaryLivelihood" | "livelihoodEvent" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
+      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2767,6 +2799,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FellowPerformanceCountArgs<ExtArgs>
             result: $Utils.Optional<FellowPerformanceCountAggregateOutputType> | number
+          }
+        }
+      }
+      PerformanceRatingCategory: {
+        payload: Prisma.$PerformanceRatingCategoryPayload<ExtArgs>
+        fields: Prisma.PerformanceRatingCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PerformanceRatingCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PerformanceRatingCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.PerformanceRatingCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PerformanceRatingCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.PerformanceRatingCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.PerformanceRatingCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.PerformanceRatingCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PerformanceRatingCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.PerformanceRatingCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          update: {
+            args: Prisma.PerformanceRatingCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.PerformanceRatingCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PerformanceRatingCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PerformanceRatingCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.PerformanceRatingCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PerformanceRatingCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.PerformanceRatingCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePerformanceRatingCategory>
+          }
+          groupBy: {
+            args: Prisma.PerformanceRatingCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PerformanceRatingCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PerformanceRatingCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<PerformanceRatingCategoryCountAggregateOutputType> | number
           }
         }
       }
@@ -5135,6 +5241,80 @@ export namespace Prisma {
           count: {
             args: Prisma.LivelihoodEventCountArgs<ExtArgs>
             result: $Utils.Optional<LivelihoodEventCountAggregateOutputType> | number
+          }
+        }
+      }
+      FellowLivelihoodProgram: {
+        payload: Prisma.$FellowLivelihoodProgramPayload<ExtArgs>
+        fields: Prisma.FellowLivelihoodProgramFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FellowLivelihoodProgramFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FellowLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          findFirst: {
+            args: Prisma.FellowLivelihoodProgramFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FellowLivelihoodProgramFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          findMany: {
+            args: Prisma.FellowLivelihoodProgramFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>[]
+          }
+          create: {
+            args: Prisma.FellowLivelihoodProgramCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          createMany: {
+            args: Prisma.FellowLivelihoodProgramCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FellowLivelihoodProgramCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>[]
+          }
+          delete: {
+            args: Prisma.FellowLivelihoodProgramDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          update: {
+            args: Prisma.FellowLivelihoodProgramUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          deleteMany: {
+            args: Prisma.FellowLivelihoodProgramDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FellowLivelihoodProgramUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FellowLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>[]
+          }
+          upsert: {
+            args: Prisma.FellowLivelihoodProgramUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FellowLivelihoodProgramPayload>
+          }
+          aggregate: {
+            args: Prisma.FellowLivelihoodProgramAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFellowLivelihoodProgram>
+          }
+          groupBy: {
+            args: Prisma.FellowLivelihoodProgramGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FellowLivelihoodProgramGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FellowLivelihoodProgramCountArgs<ExtArgs>
+            result: $Utils.Optional<FellowLivelihoodProgramCountAggregateOutputType> | number
           }
         }
       }
@@ -8438,6 +8618,7 @@ export namespace Prisma {
     goalSheet?: GoalSheetOmit
     pMReflection?: PMReflectionOmit
     fellowPerformance?: FellowPerformanceOmit
+    performanceRatingCategory?: PerformanceRatingCategoryOmit
     fellowReview?: FellowReviewOmit
     student?: StudentOmit
     studentAttendanceLog?: StudentAttendanceLogOmit
@@ -8470,6 +8651,7 @@ export namespace Prisma {
     livelihoodProgram?: LivelihoodProgramOmit
     beneficiaryLivelihood?: BeneficiaryLivelihoodOmit
     livelihoodEvent?: LivelihoodEventOmit
+    fellowLivelihoodProgram?: FellowLivelihoodProgramOmit
     disasterIncident?: DisasterIncidentOmit
     helpProvider?: HelpProviderOmit
     resourceItem?: ResourceItemOmit
@@ -8940,6 +9122,7 @@ export namespace Prisma {
     afterSchoolStudents: number
     afterSchoolAssessmentForms: number
     studentDataNotes: number
+    livelihoodPrograms: number
   }
 
   export type FellowCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8959,6 +9142,7 @@ export namespace Prisma {
     afterSchoolStudents?: boolean | FellowCountOutputTypeCountAfterSchoolStudentsArgs
     afterSchoolAssessmentForms?: boolean | FellowCountOutputTypeCountAfterSchoolAssessmentFormsArgs
     studentDataNotes?: boolean | FellowCountOutputTypeCountStudentDataNotesArgs
+    livelihoodPrograms?: boolean | FellowCountOutputTypeCountLivelihoodProgramsArgs
   }
 
   // Custom InputTypes
@@ -9082,6 +9266,13 @@ export namespace Prisma {
    */
   export type FellowCountOutputTypeCountStudentDataNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FellowStudentDataNoteWhereInput
+  }
+
+  /**
+   * FellowCountOutputType without action
+   */
+  export type FellowCountOutputTypeCountLivelihoodProgramsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowLivelihoodProgramWhereInput
   }
 
 
@@ -9582,11 +9773,13 @@ export namespace Prisma {
   export type LivelihoodProgramCountOutputType = {
     assignments: number
     programManagers: number
+    fellows: number
   }
 
   export type LivelihoodProgramCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgramCountOutputTypeCountAssignmentsArgs
     programManagers?: boolean | LivelihoodProgramCountOutputTypeCountProgramManagersArgs
+    fellows?: boolean | LivelihoodProgramCountOutputTypeCountFellowsArgs
   }
 
   // Custom InputTypes
@@ -9612,6 +9805,13 @@ export namespace Prisma {
    */
   export type LivelihoodProgramCountOutputTypeCountProgramManagersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProgramManagerLivelihoodProgramWhereInput
+  }
+
+  /**
+   * LivelihoodProgramCountOutputType without action
+   */
+  export type LivelihoodProgramCountOutputTypeCountFellowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowLivelihoodProgramWhereInput
   }
 
 
@@ -17804,7 +18004,6 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
-    cohort: string | null
     avatar: string | null
     progress: number | null
     evaluationRating: number | null
@@ -17821,7 +18020,6 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
-    cohort: string | null
     avatar: string | null
     progress: number | null
     evaluationRating: number | null
@@ -17838,7 +18036,6 @@ export namespace Prisma {
     email: number
     phone: number
     address: number
-    cohort: number
     avatar: number
     progress: number
     evaluationRating: number
@@ -17867,7 +18064,6 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    cohort?: true
     avatar?: true
     progress?: true
     evaluationRating?: true
@@ -17884,7 +18080,6 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    cohort?: true
     avatar?: true
     progress?: true
     evaluationRating?: true
@@ -17901,7 +18096,6 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
-    cohort?: true
     avatar?: true
     progress?: true
     evaluationRating?: true
@@ -18005,7 +18199,6 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
-    cohort: string
     avatar: string | null
     progress: number
     evaluationRating: number | null
@@ -18041,7 +18234,6 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    cohort?: boolean
     avatar?: boolean
     progress?: boolean
     evaluationRating?: boolean
@@ -18065,6 +18257,7 @@ export namespace Prisma {
     afterSchoolStudents?: boolean | Fellow$afterSchoolStudentsArgs<ExtArgs>
     afterSchoolAssessmentForms?: boolean | Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>
     studentDataNotes?: boolean | Fellow$studentDataNotesArgs<ExtArgs>
+    livelihoodPrograms?: boolean | Fellow$livelihoodProgramsArgs<ExtArgs>
     _count?: boolean | FellowCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fellow"]>
 
@@ -18076,7 +18269,6 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    cohort?: boolean
     avatar?: boolean
     progress?: boolean
     evaluationRating?: boolean
@@ -18094,7 +18286,6 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    cohort?: boolean
     avatar?: boolean
     progress?: boolean
     evaluationRating?: boolean
@@ -18112,7 +18303,6 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
-    cohort?: boolean
     avatar?: boolean
     progress?: boolean
     evaluationRating?: boolean
@@ -18121,7 +18311,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FellowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "cohort" | "avatar" | "progress" | "evaluationRating" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["fellow"]>
+  export type FellowOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "avatar" | "progress" | "evaluationRating" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["fellow"]>
   export type FellowInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Fellow$userArgs<ExtArgs>
     schools?: boolean | Fellow$schoolsArgs<ExtArgs>
@@ -18140,6 +18330,7 @@ export namespace Prisma {
     afterSchoolStudents?: boolean | Fellow$afterSchoolStudentsArgs<ExtArgs>
     afterSchoolAssessmentForms?: boolean | Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>
     studentDataNotes?: boolean | Fellow$studentDataNotesArgs<ExtArgs>
+    livelihoodPrograms?: boolean | Fellow$livelihoodProgramsArgs<ExtArgs>
     _count?: boolean | FellowCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FellowIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18169,6 +18360,7 @@ export namespace Prisma {
       afterSchoolStudents: Prisma.$AfterSchoolStudentPayload<ExtArgs>[]
       afterSchoolAssessmentForms: Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>[]
       studentDataNotes: Prisma.$FellowStudentDataNotePayload<ExtArgs>[]
+      livelihoodPrograms: Prisma.$FellowLivelihoodProgramPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -18178,7 +18370,6 @@ export namespace Prisma {
       email: string | null
       phone: string | null
       address: string | null
-      cohort: string
       avatar: string | null
       progress: number
       evaluationRating: number | null
@@ -18596,6 +18787,7 @@ export namespace Prisma {
     afterSchoolStudents<T extends Fellow$afterSchoolStudentsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$afterSchoolStudentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolStudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     afterSchoolAssessmentForms<T extends Fellow$afterSchoolAssessmentFormsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$afterSchoolAssessmentFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AfterSchoolAssessmentFormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     studentDataNotes<T extends Fellow$studentDataNotesArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$studentDataNotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowStudentDataNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    livelihoodPrograms<T extends Fellow$livelihoodProgramsArgs<ExtArgs> = {}>(args?: Subset<T, Fellow$livelihoodProgramsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -18632,7 +18824,6 @@ export namespace Prisma {
     readonly email: FieldRef<"Fellow", 'String'>
     readonly phone: FieldRef<"Fellow", 'String'>
     readonly address: FieldRef<"Fellow", 'String'>
-    readonly cohort: FieldRef<"Fellow", 'String'>
     readonly avatar: FieldRef<"Fellow", 'String'>
     readonly progress: FieldRef<"Fellow", 'Int'>
     readonly evaluationRating: FieldRef<"Fellow", 'Float'>
@@ -19440,6 +19631,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FellowStudentDataNoteScalarFieldEnum | FellowStudentDataNoteScalarFieldEnum[]
+  }
+
+  /**
+   * Fellow.livelihoodPrograms
+   */
+  export type Fellow$livelihoodProgramsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    where?: FellowLivelihoodProgramWhereInput
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
   }
 
   /**
@@ -21755,6 +21970,7 @@ export namespace Prisma {
     lessonFlow: number
     content: number
     communityEngagement: number
+    ratings: number
     overallScore: number
     strength: number
     aod: number
@@ -21835,6 +22051,7 @@ export namespace Prisma {
     lessonFlow?: true
     content?: true
     communityEngagement?: true
+    ratings?: true
     overallScore?: true
     strength?: true
     aod?: true
@@ -21937,11 +22154,12 @@ export namespace Prisma {
     date: Date
     classGroup: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan: number | null
+    culture: number | null
+    lessonFlow: number | null
+    content: number | null
+    communityEngagement: number | null
+    ratings: JsonValue
     overallScore: number
     strength: string | null
     aod: string | null
@@ -21981,6 +22199,7 @@ export namespace Prisma {
     lessonFlow?: boolean
     content?: boolean
     communityEngagement?: boolean
+    ratings?: boolean
     overallScore?: boolean
     strength?: boolean
     aod?: boolean
@@ -22003,6 +22222,7 @@ export namespace Prisma {
     lessonFlow?: boolean
     content?: boolean
     communityEngagement?: boolean
+    ratings?: boolean
     overallScore?: boolean
     strength?: boolean
     aod?: boolean
@@ -22025,6 +22245,7 @@ export namespace Prisma {
     lessonFlow?: boolean
     content?: boolean
     communityEngagement?: boolean
+    ratings?: boolean
     overallScore?: boolean
     strength?: boolean
     aod?: boolean
@@ -22047,6 +22268,7 @@ export namespace Prisma {
     lessonFlow?: boolean
     content?: boolean
     communityEngagement?: boolean
+    ratings?: boolean
     overallScore?: boolean
     strength?: boolean
     aod?: boolean
@@ -22056,7 +22278,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FellowPerformanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "date" | "classGroup" | "subject" | "lessonPlan" | "culture" | "lessonFlow" | "content" | "communityEngagement" | "overallScore" | "strength" | "aod" | "trend" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowPerformance"]>
+  export type FellowPerformanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "date" | "classGroup" | "subject" | "lessonPlan" | "culture" | "lessonFlow" | "content" | "communityEngagement" | "ratings" | "overallScore" | "strength" | "aod" | "trend" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["fellowPerformance"]>
   export type FellowPerformanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fellow?: boolean | FellowDefaultArgs<ExtArgs>
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -22082,11 +22304,12 @@ export namespace Prisma {
       date: Date
       classGroup: string | null
       subject: string
-      lessonPlan: number
-      culture: number
-      lessonFlow: number
-      content: number
-      communityEngagement: number
+      lessonPlan: number | null
+      culture: number | null
+      lessonFlow: number | null
+      content: number | null
+      communityEngagement: number | null
+      ratings: Prisma.JsonValue
       overallScore: number
       strength: string | null
       aod: string | null
@@ -22529,6 +22752,7 @@ export namespace Prisma {
     readonly lessonFlow: FieldRef<"FellowPerformance", 'Int'>
     readonly content: FieldRef<"FellowPerformance", 'Int'>
     readonly communityEngagement: FieldRef<"FellowPerformance", 'Int'>
+    readonly ratings: FieldRef<"FellowPerformance", 'Json'>
     readonly overallScore: FieldRef<"FellowPerformance", 'Float'>
     readonly strength: FieldRef<"FellowPerformance", 'String'>
     readonly aod: FieldRef<"FellowPerformance", 'String'>
@@ -22952,6 +23176,1066 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FellowPerformanceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PerformanceRatingCategory
+   */
+
+  export type AggregatePerformanceRatingCategory = {
+    _count: PerformanceRatingCategoryCountAggregateOutputType | null
+    _avg: PerformanceRatingCategoryAvgAggregateOutputType | null
+    _sum: PerformanceRatingCategorySumAggregateOutputType | null
+    _min: PerformanceRatingCategoryMinAggregateOutputType | null
+    _max: PerformanceRatingCategoryMaxAggregateOutputType | null
+  }
+
+  export type PerformanceRatingCategoryAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type PerformanceRatingCategorySumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type PerformanceRatingCategoryMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    label: string | null
+    order: number | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PerformanceRatingCategoryMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    label: string | null
+    order: number | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PerformanceRatingCategoryCountAggregateOutputType = {
+    id: number
+    key: number
+    label: number
+    order: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PerformanceRatingCategoryAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type PerformanceRatingCategorySumAggregateInputType = {
+    order?: true
+  }
+
+  export type PerformanceRatingCategoryMinAggregateInputType = {
+    id?: true
+    key?: true
+    label?: true
+    order?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PerformanceRatingCategoryMaxAggregateInputType = {
+    id?: true
+    key?: true
+    label?: true
+    order?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PerformanceRatingCategoryCountAggregateInputType = {
+    id?: true
+    key?: true
+    label?: true
+    order?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PerformanceRatingCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PerformanceRatingCategory to aggregate.
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerformanceRatingCategories to fetch.
+     */
+    orderBy?: PerformanceRatingCategoryOrderByWithRelationInput | PerformanceRatingCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PerformanceRatingCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerformanceRatingCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerformanceRatingCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PerformanceRatingCategories
+    **/
+    _count?: true | PerformanceRatingCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PerformanceRatingCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PerformanceRatingCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PerformanceRatingCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PerformanceRatingCategoryMaxAggregateInputType
+  }
+
+  export type GetPerformanceRatingCategoryAggregateType<T extends PerformanceRatingCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregatePerformanceRatingCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePerformanceRatingCategory[P]>
+      : GetScalarType<T[P], AggregatePerformanceRatingCategory[P]>
+  }
+
+
+
+
+  export type PerformanceRatingCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PerformanceRatingCategoryWhereInput
+    orderBy?: PerformanceRatingCategoryOrderByWithAggregationInput | PerformanceRatingCategoryOrderByWithAggregationInput[]
+    by: PerformanceRatingCategoryScalarFieldEnum[] | PerformanceRatingCategoryScalarFieldEnum
+    having?: PerformanceRatingCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PerformanceRatingCategoryCountAggregateInputType | true
+    _avg?: PerformanceRatingCategoryAvgAggregateInputType
+    _sum?: PerformanceRatingCategorySumAggregateInputType
+    _min?: PerformanceRatingCategoryMinAggregateInputType
+    _max?: PerformanceRatingCategoryMaxAggregateInputType
+  }
+
+  export type PerformanceRatingCategoryGroupByOutputType = {
+    id: string
+    key: string
+    label: string
+    order: number
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: PerformanceRatingCategoryCountAggregateOutputType | null
+    _avg: PerformanceRatingCategoryAvgAggregateOutputType | null
+    _sum: PerformanceRatingCategorySumAggregateOutputType | null
+    _min: PerformanceRatingCategoryMinAggregateOutputType | null
+    _max: PerformanceRatingCategoryMaxAggregateOutputType | null
+  }
+
+  type GetPerformanceRatingCategoryGroupByPayload<T extends PerformanceRatingCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PerformanceRatingCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PerformanceRatingCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PerformanceRatingCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], PerformanceRatingCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PerformanceRatingCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    label?: boolean
+    order?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["performanceRatingCategory"]>
+
+  export type PerformanceRatingCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    label?: boolean
+    order?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["performanceRatingCategory"]>
+
+  export type PerformanceRatingCategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    label?: boolean
+    order?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["performanceRatingCategory"]>
+
+  export type PerformanceRatingCategorySelectScalar = {
+    id?: boolean
+    key?: boolean
+    label?: boolean
+    order?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PerformanceRatingCategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "label" | "order" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["performanceRatingCategory"]>
+
+  export type $PerformanceRatingCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PerformanceRatingCategory"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      label: string
+      order: number
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["performanceRatingCategory"]>
+    composites: {}
+  }
+
+  type PerformanceRatingCategoryGetPayload<S extends boolean | null | undefined | PerformanceRatingCategoryDefaultArgs> = $Result.GetResult<Prisma.$PerformanceRatingCategoryPayload, S>
+
+  type PerformanceRatingCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PerformanceRatingCategoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PerformanceRatingCategoryCountAggregateInputType | true
+    }
+
+  export interface PerformanceRatingCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PerformanceRatingCategory'], meta: { name: 'PerformanceRatingCategory' } }
+    /**
+     * Find zero or one PerformanceRatingCategory that matches the filter.
+     * @param {PerformanceRatingCategoryFindUniqueArgs} args - Arguments to find a PerformanceRatingCategory
+     * @example
+     * // Get one PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PerformanceRatingCategoryFindUniqueArgs>(args: SelectSubset<T, PerformanceRatingCategoryFindUniqueArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PerformanceRatingCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PerformanceRatingCategoryFindUniqueOrThrowArgs} args - Arguments to find a PerformanceRatingCategory
+     * @example
+     * // Get one PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PerformanceRatingCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, PerformanceRatingCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PerformanceRatingCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryFindFirstArgs} args - Arguments to find a PerformanceRatingCategory
+     * @example
+     * // Get one PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PerformanceRatingCategoryFindFirstArgs>(args?: SelectSubset<T, PerformanceRatingCategoryFindFirstArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PerformanceRatingCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryFindFirstOrThrowArgs} args - Arguments to find a PerformanceRatingCategory
+     * @example
+     * // Get one PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PerformanceRatingCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, PerformanceRatingCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PerformanceRatingCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PerformanceRatingCategories
+     * const performanceRatingCategories = await prisma.performanceRatingCategory.findMany()
+     * 
+     * // Get first 10 PerformanceRatingCategories
+     * const performanceRatingCategories = await prisma.performanceRatingCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const performanceRatingCategoryWithIdOnly = await prisma.performanceRatingCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PerformanceRatingCategoryFindManyArgs>(args?: SelectSubset<T, PerformanceRatingCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PerformanceRatingCategory.
+     * @param {PerformanceRatingCategoryCreateArgs} args - Arguments to create a PerformanceRatingCategory.
+     * @example
+     * // Create one PerformanceRatingCategory
+     * const PerformanceRatingCategory = await prisma.performanceRatingCategory.create({
+     *   data: {
+     *     // ... data to create a PerformanceRatingCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends PerformanceRatingCategoryCreateArgs>(args: SelectSubset<T, PerformanceRatingCategoryCreateArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PerformanceRatingCategories.
+     * @param {PerformanceRatingCategoryCreateManyArgs} args - Arguments to create many PerformanceRatingCategories.
+     * @example
+     * // Create many PerformanceRatingCategories
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PerformanceRatingCategoryCreateManyArgs>(args?: SelectSubset<T, PerformanceRatingCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PerformanceRatingCategories and returns the data saved in the database.
+     * @param {PerformanceRatingCategoryCreateManyAndReturnArgs} args - Arguments to create many PerformanceRatingCategories.
+     * @example
+     * // Create many PerformanceRatingCategories
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PerformanceRatingCategories and only return the `id`
+     * const performanceRatingCategoryWithIdOnly = await prisma.performanceRatingCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PerformanceRatingCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, PerformanceRatingCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PerformanceRatingCategory.
+     * @param {PerformanceRatingCategoryDeleteArgs} args - Arguments to delete one PerformanceRatingCategory.
+     * @example
+     * // Delete one PerformanceRatingCategory
+     * const PerformanceRatingCategory = await prisma.performanceRatingCategory.delete({
+     *   where: {
+     *     // ... filter to delete one PerformanceRatingCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PerformanceRatingCategoryDeleteArgs>(args: SelectSubset<T, PerformanceRatingCategoryDeleteArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PerformanceRatingCategory.
+     * @param {PerformanceRatingCategoryUpdateArgs} args - Arguments to update one PerformanceRatingCategory.
+     * @example
+     * // Update one PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PerformanceRatingCategoryUpdateArgs>(args: SelectSubset<T, PerformanceRatingCategoryUpdateArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PerformanceRatingCategories.
+     * @param {PerformanceRatingCategoryDeleteManyArgs} args - Arguments to filter PerformanceRatingCategories to delete.
+     * @example
+     * // Delete a few PerformanceRatingCategories
+     * const { count } = await prisma.performanceRatingCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PerformanceRatingCategoryDeleteManyArgs>(args?: SelectSubset<T, PerformanceRatingCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PerformanceRatingCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PerformanceRatingCategories
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PerformanceRatingCategoryUpdateManyArgs>(args: SelectSubset<T, PerformanceRatingCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PerformanceRatingCategories and returns the data updated in the database.
+     * @param {PerformanceRatingCategoryUpdateManyAndReturnArgs} args - Arguments to update many PerformanceRatingCategories.
+     * @example
+     * // Update many PerformanceRatingCategories
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PerformanceRatingCategories and only return the `id`
+     * const performanceRatingCategoryWithIdOnly = await prisma.performanceRatingCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PerformanceRatingCategoryUpdateManyAndReturnArgs>(args: SelectSubset<T, PerformanceRatingCategoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PerformanceRatingCategory.
+     * @param {PerformanceRatingCategoryUpsertArgs} args - Arguments to update or create a PerformanceRatingCategory.
+     * @example
+     * // Update or create a PerformanceRatingCategory
+     * const performanceRatingCategory = await prisma.performanceRatingCategory.upsert({
+     *   create: {
+     *     // ... data to create a PerformanceRatingCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PerformanceRatingCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PerformanceRatingCategoryUpsertArgs>(args: SelectSubset<T, PerformanceRatingCategoryUpsertArgs<ExtArgs>>): Prisma__PerformanceRatingCategoryClient<$Result.GetResult<Prisma.$PerformanceRatingCategoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PerformanceRatingCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryCountArgs} args - Arguments to filter PerformanceRatingCategories to count.
+     * @example
+     * // Count the number of PerformanceRatingCategories
+     * const count = await prisma.performanceRatingCategory.count({
+     *   where: {
+     *     // ... the filter for the PerformanceRatingCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends PerformanceRatingCategoryCountArgs>(
+      args?: Subset<T, PerformanceRatingCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PerformanceRatingCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PerformanceRatingCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PerformanceRatingCategoryAggregateArgs>(args: Subset<T, PerformanceRatingCategoryAggregateArgs>): Prisma.PrismaPromise<GetPerformanceRatingCategoryAggregateType<T>>
+
+    /**
+     * Group by PerformanceRatingCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PerformanceRatingCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PerformanceRatingCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PerformanceRatingCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: PerformanceRatingCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PerformanceRatingCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPerformanceRatingCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PerformanceRatingCategory model
+   */
+  readonly fields: PerformanceRatingCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PerformanceRatingCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PerformanceRatingCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PerformanceRatingCategory model
+   */
+  interface PerformanceRatingCategoryFieldRefs {
+    readonly id: FieldRef<"PerformanceRatingCategory", 'String'>
+    readonly key: FieldRef<"PerformanceRatingCategory", 'String'>
+    readonly label: FieldRef<"PerformanceRatingCategory", 'String'>
+    readonly order: FieldRef<"PerformanceRatingCategory", 'Int'>
+    readonly active: FieldRef<"PerformanceRatingCategory", 'Boolean'>
+    readonly createdAt: FieldRef<"PerformanceRatingCategory", 'DateTime'>
+    readonly updatedAt: FieldRef<"PerformanceRatingCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PerformanceRatingCategory findUnique
+   */
+  export type PerformanceRatingCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter, which PerformanceRatingCategory to fetch.
+     */
+    where: PerformanceRatingCategoryWhereUniqueInput
+  }
+
+  /**
+   * PerformanceRatingCategory findUniqueOrThrow
+   */
+  export type PerformanceRatingCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter, which PerformanceRatingCategory to fetch.
+     */
+    where: PerformanceRatingCategoryWhereUniqueInput
+  }
+
+  /**
+   * PerformanceRatingCategory findFirst
+   */
+  export type PerformanceRatingCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter, which PerformanceRatingCategory to fetch.
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerformanceRatingCategories to fetch.
+     */
+    orderBy?: PerformanceRatingCategoryOrderByWithRelationInput | PerformanceRatingCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PerformanceRatingCategories.
+     */
+    cursor?: PerformanceRatingCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerformanceRatingCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerformanceRatingCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PerformanceRatingCategories.
+     */
+    distinct?: PerformanceRatingCategoryScalarFieldEnum | PerformanceRatingCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * PerformanceRatingCategory findFirstOrThrow
+   */
+  export type PerformanceRatingCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter, which PerformanceRatingCategory to fetch.
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerformanceRatingCategories to fetch.
+     */
+    orderBy?: PerformanceRatingCategoryOrderByWithRelationInput | PerformanceRatingCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PerformanceRatingCategories.
+     */
+    cursor?: PerformanceRatingCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerformanceRatingCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerformanceRatingCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PerformanceRatingCategories.
+     */
+    distinct?: PerformanceRatingCategoryScalarFieldEnum | PerformanceRatingCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * PerformanceRatingCategory findMany
+   */
+  export type PerformanceRatingCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter, which PerformanceRatingCategories to fetch.
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PerformanceRatingCategories to fetch.
+     */
+    orderBy?: PerformanceRatingCategoryOrderByWithRelationInput | PerformanceRatingCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PerformanceRatingCategories.
+     */
+    cursor?: PerformanceRatingCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PerformanceRatingCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PerformanceRatingCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PerformanceRatingCategories.
+     */
+    distinct?: PerformanceRatingCategoryScalarFieldEnum | PerformanceRatingCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * PerformanceRatingCategory create
+   */
+  export type PerformanceRatingCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PerformanceRatingCategory.
+     */
+    data: XOR<PerformanceRatingCategoryCreateInput, PerformanceRatingCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * PerformanceRatingCategory createMany
+   */
+  export type PerformanceRatingCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PerformanceRatingCategories.
+     */
+    data: PerformanceRatingCategoryCreateManyInput | PerformanceRatingCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PerformanceRatingCategory createManyAndReturn
+   */
+  export type PerformanceRatingCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many PerformanceRatingCategories.
+     */
+    data: PerformanceRatingCategoryCreateManyInput | PerformanceRatingCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PerformanceRatingCategory update
+   */
+  export type PerformanceRatingCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PerformanceRatingCategory.
+     */
+    data: XOR<PerformanceRatingCategoryUpdateInput, PerformanceRatingCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which PerformanceRatingCategory to update.
+     */
+    where: PerformanceRatingCategoryWhereUniqueInput
+  }
+
+  /**
+   * PerformanceRatingCategory updateMany
+   */
+  export type PerformanceRatingCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PerformanceRatingCategories.
+     */
+    data: XOR<PerformanceRatingCategoryUpdateManyMutationInput, PerformanceRatingCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which PerformanceRatingCategories to update
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * Limit how many PerformanceRatingCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PerformanceRatingCategory updateManyAndReturn
+   */
+  export type PerformanceRatingCategoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update PerformanceRatingCategories.
+     */
+    data: XOR<PerformanceRatingCategoryUpdateManyMutationInput, PerformanceRatingCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which PerformanceRatingCategories to update
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * Limit how many PerformanceRatingCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PerformanceRatingCategory upsert
+   */
+  export type PerformanceRatingCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PerformanceRatingCategory to update in case it exists.
+     */
+    where: PerformanceRatingCategoryWhereUniqueInput
+    /**
+     * In case the PerformanceRatingCategory found by the `where` argument doesn't exist, create a new PerformanceRatingCategory with this data.
+     */
+    create: XOR<PerformanceRatingCategoryCreateInput, PerformanceRatingCategoryUncheckedCreateInput>
+    /**
+     * In case the PerformanceRatingCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PerformanceRatingCategoryUpdateInput, PerformanceRatingCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * PerformanceRatingCategory delete
+   */
+  export type PerformanceRatingCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
+    /**
+     * Filter which PerformanceRatingCategory to delete.
+     */
+    where: PerformanceRatingCategoryWhereUniqueInput
+  }
+
+  /**
+   * PerformanceRatingCategory deleteMany
+   */
+  export type PerformanceRatingCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PerformanceRatingCategories to delete
+     */
+    where?: PerformanceRatingCategoryWhereInput
+    /**
+     * Limit how many PerformanceRatingCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PerformanceRatingCategory without action
+   */
+  export type PerformanceRatingCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PerformanceRatingCategory
+     */
+    select?: PerformanceRatingCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PerformanceRatingCategory
+     */
+    omit?: PerformanceRatingCategoryOmit<ExtArgs> | null
   }
 
 
@@ -56767,6 +58051,7 @@ export namespace Prisma {
     updatedAt?: boolean
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
+    fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livelihoodProgram"]>
 
@@ -56810,6 +58095,7 @@ export namespace Prisma {
   export type LivelihoodProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignments?: boolean | LivelihoodProgram$assignmentsArgs<ExtArgs>
     programManagers?: boolean | LivelihoodProgram$programManagersArgs<ExtArgs>
+    fellows?: boolean | LivelihoodProgram$fellowsArgs<ExtArgs>
     _count?: boolean | LivelihoodProgramCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LivelihoodProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -56820,6 +58106,7 @@ export namespace Prisma {
     objects: {
       assignments: Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>[]
       programManagers: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
+      fellows: Prisma.$FellowLivelihoodProgramPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -57227,6 +58514,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     assignments<T extends LivelihoodProgram$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     programManagers<T extends LivelihoodProgram$programManagersArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$programManagersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fellows<T extends LivelihoodProgram$fellowsArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgram$fellowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -57703,6 +58991,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProgramManagerLivelihoodProgramScalarFieldEnum | ProgramManagerLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodProgram.fellows
+   */
+  export type LivelihoodProgram$fellowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    where?: FellowLivelihoodProgramWhereInput
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
   }
 
   /**
@@ -60019,6 +61331,1064 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LivelihoodEventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FellowLivelihoodProgram
+   */
+
+  export type AggregateFellowLivelihoodProgram = {
+    _count: FellowLivelihoodProgramCountAggregateOutputType | null
+    _min: FellowLivelihoodProgramMinAggregateOutputType | null
+    _max: FellowLivelihoodProgramMaxAggregateOutputType | null
+  }
+
+  export type FellowLivelihoodProgramMinAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    programId: string | null
+    createdAt: Date | null
+  }
+
+  export type FellowLivelihoodProgramMaxAggregateOutputType = {
+    id: string | null
+    fellowId: string | null
+    programId: string | null
+    createdAt: Date | null
+  }
+
+  export type FellowLivelihoodProgramCountAggregateOutputType = {
+    id: number
+    fellowId: number
+    programId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FellowLivelihoodProgramMinAggregateInputType = {
+    id?: true
+    fellowId?: true
+    programId?: true
+    createdAt?: true
+  }
+
+  export type FellowLivelihoodProgramMaxAggregateInputType = {
+    id?: true
+    fellowId?: true
+    programId?: true
+    createdAt?: true
+  }
+
+  export type FellowLivelihoodProgramCountAggregateInputType = {
+    id?: true
+    fellowId?: true
+    programId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FellowLivelihoodProgramAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowLivelihoodProgram to aggregate.
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowLivelihoodPrograms to fetch.
+     */
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FellowLivelihoodPrograms
+    **/
+    _count?: true | FellowLivelihoodProgramCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FellowLivelihoodProgramMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FellowLivelihoodProgramMaxAggregateInputType
+  }
+
+  export type GetFellowLivelihoodProgramAggregateType<T extends FellowLivelihoodProgramAggregateArgs> = {
+        [P in keyof T & keyof AggregateFellowLivelihoodProgram]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFellowLivelihoodProgram[P]>
+      : GetScalarType<T[P], AggregateFellowLivelihoodProgram[P]>
+  }
+
+
+
+
+  export type FellowLivelihoodProgramGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FellowLivelihoodProgramWhereInput
+    orderBy?: FellowLivelihoodProgramOrderByWithAggregationInput | FellowLivelihoodProgramOrderByWithAggregationInput[]
+    by: FellowLivelihoodProgramScalarFieldEnum[] | FellowLivelihoodProgramScalarFieldEnum
+    having?: FellowLivelihoodProgramScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FellowLivelihoodProgramCountAggregateInputType | true
+    _min?: FellowLivelihoodProgramMinAggregateInputType
+    _max?: FellowLivelihoodProgramMaxAggregateInputType
+  }
+
+  export type FellowLivelihoodProgramGroupByOutputType = {
+    id: string
+    fellowId: string
+    programId: string
+    createdAt: Date
+    _count: FellowLivelihoodProgramCountAggregateOutputType | null
+    _min: FellowLivelihoodProgramMinAggregateOutputType | null
+    _max: FellowLivelihoodProgramMaxAggregateOutputType | null
+  }
+
+  type GetFellowLivelihoodProgramGroupByPayload<T extends FellowLivelihoodProgramGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FellowLivelihoodProgramGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FellowLivelihoodProgramGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FellowLivelihoodProgramGroupByOutputType[P]>
+            : GetScalarType<T[P], FellowLivelihoodProgramGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FellowLivelihoodProgramSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowLivelihoodProgram"]>
+
+  export type FellowLivelihoodProgramSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowLivelihoodProgram"]>
+
+  export type FellowLivelihoodProgramSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fellowId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fellowLivelihoodProgram"]>
+
+  export type FellowLivelihoodProgramSelectScalar = {
+    id?: boolean
+    fellowId?: boolean
+    programId?: boolean
+    createdAt?: boolean
+  }
+
+  export type FellowLivelihoodProgramOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fellowId" | "programId" | "createdAt", ExtArgs["result"]["fellowLivelihoodProgram"]>
+  export type FellowLivelihoodProgramInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type FellowLivelihoodProgramIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+  export type FellowLivelihoodProgramIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fellow?: boolean | FellowDefaultArgs<ExtArgs>
+    program?: boolean | LivelihoodProgramDefaultArgs<ExtArgs>
+  }
+
+  export type $FellowLivelihoodProgramPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FellowLivelihoodProgram"
+    objects: {
+      fellow: Prisma.$FellowPayload<ExtArgs>
+      program: Prisma.$LivelihoodProgramPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fellowId: string
+      programId: string
+      createdAt: Date
+    }, ExtArgs["result"]["fellowLivelihoodProgram"]>
+    composites: {}
+  }
+
+  type FellowLivelihoodProgramGetPayload<S extends boolean | null | undefined | FellowLivelihoodProgramDefaultArgs> = $Result.GetResult<Prisma.$FellowLivelihoodProgramPayload, S>
+
+  type FellowLivelihoodProgramCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FellowLivelihoodProgramFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FellowLivelihoodProgramCountAggregateInputType | true
+    }
+
+  export interface FellowLivelihoodProgramDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FellowLivelihoodProgram'], meta: { name: 'FellowLivelihoodProgram' } }
+    /**
+     * Find zero or one FellowLivelihoodProgram that matches the filter.
+     * @param {FellowLivelihoodProgramFindUniqueArgs} args - Arguments to find a FellowLivelihoodProgram
+     * @example
+     * // Get one FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FellowLivelihoodProgramFindUniqueArgs>(args: SelectSubset<T, FellowLivelihoodProgramFindUniqueArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FellowLivelihoodProgram that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FellowLivelihoodProgramFindUniqueOrThrowArgs} args - Arguments to find a FellowLivelihoodProgram
+     * @example
+     * // Get one FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FellowLivelihoodProgramFindUniqueOrThrowArgs>(args: SelectSubset<T, FellowLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowLivelihoodProgram that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramFindFirstArgs} args - Arguments to find a FellowLivelihoodProgram
+     * @example
+     * // Get one FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FellowLivelihoodProgramFindFirstArgs>(args?: SelectSubset<T, FellowLivelihoodProgramFindFirstArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FellowLivelihoodProgram that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramFindFirstOrThrowArgs} args - Arguments to find a FellowLivelihoodProgram
+     * @example
+     * // Get one FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FellowLivelihoodProgramFindFirstOrThrowArgs>(args?: SelectSubset<T, FellowLivelihoodProgramFindFirstOrThrowArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FellowLivelihoodPrograms that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FellowLivelihoodPrograms
+     * const fellowLivelihoodPrograms = await prisma.fellowLivelihoodProgram.findMany()
+     * 
+     * // Get first 10 FellowLivelihoodPrograms
+     * const fellowLivelihoodPrograms = await prisma.fellowLivelihoodProgram.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fellowLivelihoodProgramWithIdOnly = await prisma.fellowLivelihoodProgram.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FellowLivelihoodProgramFindManyArgs>(args?: SelectSubset<T, FellowLivelihoodProgramFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FellowLivelihoodProgram.
+     * @param {FellowLivelihoodProgramCreateArgs} args - Arguments to create a FellowLivelihoodProgram.
+     * @example
+     * // Create one FellowLivelihoodProgram
+     * const FellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.create({
+     *   data: {
+     *     // ... data to create a FellowLivelihoodProgram
+     *   }
+     * })
+     * 
+     */
+    create<T extends FellowLivelihoodProgramCreateArgs>(args: SelectSubset<T, FellowLivelihoodProgramCreateArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FellowLivelihoodPrograms.
+     * @param {FellowLivelihoodProgramCreateManyArgs} args - Arguments to create many FellowLivelihoodPrograms.
+     * @example
+     * // Create many FellowLivelihoodPrograms
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FellowLivelihoodProgramCreateManyArgs>(args?: SelectSubset<T, FellowLivelihoodProgramCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FellowLivelihoodPrograms and returns the data saved in the database.
+     * @param {FellowLivelihoodProgramCreateManyAndReturnArgs} args - Arguments to create many FellowLivelihoodPrograms.
+     * @example
+     * // Create many FellowLivelihoodPrograms
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FellowLivelihoodPrograms and only return the `id`
+     * const fellowLivelihoodProgramWithIdOnly = await prisma.fellowLivelihoodProgram.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FellowLivelihoodProgramCreateManyAndReturnArgs>(args?: SelectSubset<T, FellowLivelihoodProgramCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FellowLivelihoodProgram.
+     * @param {FellowLivelihoodProgramDeleteArgs} args - Arguments to delete one FellowLivelihoodProgram.
+     * @example
+     * // Delete one FellowLivelihoodProgram
+     * const FellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.delete({
+     *   where: {
+     *     // ... filter to delete one FellowLivelihoodProgram
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FellowLivelihoodProgramDeleteArgs>(args: SelectSubset<T, FellowLivelihoodProgramDeleteArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FellowLivelihoodProgram.
+     * @param {FellowLivelihoodProgramUpdateArgs} args - Arguments to update one FellowLivelihoodProgram.
+     * @example
+     * // Update one FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FellowLivelihoodProgramUpdateArgs>(args: SelectSubset<T, FellowLivelihoodProgramUpdateArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FellowLivelihoodPrograms.
+     * @param {FellowLivelihoodProgramDeleteManyArgs} args - Arguments to filter FellowLivelihoodPrograms to delete.
+     * @example
+     * // Delete a few FellowLivelihoodPrograms
+     * const { count } = await prisma.fellowLivelihoodProgram.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FellowLivelihoodProgramDeleteManyArgs>(args?: SelectSubset<T, FellowLivelihoodProgramDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowLivelihoodPrograms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FellowLivelihoodPrograms
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FellowLivelihoodProgramUpdateManyArgs>(args: SelectSubset<T, FellowLivelihoodProgramUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FellowLivelihoodPrograms and returns the data updated in the database.
+     * @param {FellowLivelihoodProgramUpdateManyAndReturnArgs} args - Arguments to update many FellowLivelihoodPrograms.
+     * @example
+     * // Update many FellowLivelihoodPrograms
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FellowLivelihoodPrograms and only return the `id`
+     * const fellowLivelihoodProgramWithIdOnly = await prisma.fellowLivelihoodProgram.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FellowLivelihoodProgramUpdateManyAndReturnArgs>(args: SelectSubset<T, FellowLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FellowLivelihoodProgram.
+     * @param {FellowLivelihoodProgramUpsertArgs} args - Arguments to update or create a FellowLivelihoodProgram.
+     * @example
+     * // Update or create a FellowLivelihoodProgram
+     * const fellowLivelihoodProgram = await prisma.fellowLivelihoodProgram.upsert({
+     *   create: {
+     *     // ... data to create a FellowLivelihoodProgram
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FellowLivelihoodProgram we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FellowLivelihoodProgramUpsertArgs>(args: SelectSubset<T, FellowLivelihoodProgramUpsertArgs<ExtArgs>>): Prisma__FellowLivelihoodProgramClient<$Result.GetResult<Prisma.$FellowLivelihoodProgramPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FellowLivelihoodPrograms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramCountArgs} args - Arguments to filter FellowLivelihoodPrograms to count.
+     * @example
+     * // Count the number of FellowLivelihoodPrograms
+     * const count = await prisma.fellowLivelihoodProgram.count({
+     *   where: {
+     *     // ... the filter for the FellowLivelihoodPrograms we want to count
+     *   }
+     * })
+    **/
+    count<T extends FellowLivelihoodProgramCountArgs>(
+      args?: Subset<T, FellowLivelihoodProgramCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FellowLivelihoodProgramCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FellowLivelihoodProgram.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FellowLivelihoodProgramAggregateArgs>(args: Subset<T, FellowLivelihoodProgramAggregateArgs>): Prisma.PrismaPromise<GetFellowLivelihoodProgramAggregateType<T>>
+
+    /**
+     * Group by FellowLivelihoodProgram.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FellowLivelihoodProgramGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FellowLivelihoodProgramGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FellowLivelihoodProgramGroupByArgs['orderBy'] }
+        : { orderBy?: FellowLivelihoodProgramGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FellowLivelihoodProgramGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFellowLivelihoodProgramGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FellowLivelihoodProgram model
+   */
+  readonly fields: FellowLivelihoodProgramFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FellowLivelihoodProgram.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FellowLivelihoodProgramClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fellow<T extends FellowDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FellowDefaultArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    program<T extends LivelihoodProgramDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivelihoodProgramDefaultArgs<ExtArgs>>): Prisma__LivelihoodProgramClient<$Result.GetResult<Prisma.$LivelihoodProgramPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FellowLivelihoodProgram model
+   */
+  interface FellowLivelihoodProgramFieldRefs {
+    readonly id: FieldRef<"FellowLivelihoodProgram", 'String'>
+    readonly fellowId: FieldRef<"FellowLivelihoodProgram", 'String'>
+    readonly programId: FieldRef<"FellowLivelihoodProgram", 'String'>
+    readonly createdAt: FieldRef<"FellowLivelihoodProgram", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FellowLivelihoodProgram findUnique
+   */
+  export type FellowLivelihoodProgramFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowLivelihoodProgram to fetch.
+     */
+    where: FellowLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * FellowLivelihoodProgram findUniqueOrThrow
+   */
+  export type FellowLivelihoodProgramFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowLivelihoodProgram to fetch.
+     */
+    where: FellowLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * FellowLivelihoodProgram findFirst
+   */
+  export type FellowLivelihoodProgramFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowLivelihoodProgram to fetch.
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowLivelihoodPrograms to fetch.
+     */
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowLivelihoodPrograms.
+     */
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowLivelihoodPrograms.
+     */
+    distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * FellowLivelihoodProgram findFirstOrThrow
+   */
+  export type FellowLivelihoodProgramFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowLivelihoodProgram to fetch.
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowLivelihoodPrograms to fetch.
+     */
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FellowLivelihoodPrograms.
+     */
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowLivelihoodPrograms.
+     */
+    distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * FellowLivelihoodProgram findMany
+   */
+  export type FellowLivelihoodProgramFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter, which FellowLivelihoodPrograms to fetch.
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FellowLivelihoodPrograms to fetch.
+     */
+    orderBy?: FellowLivelihoodProgramOrderByWithRelationInput | FellowLivelihoodProgramOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FellowLivelihoodPrograms.
+     */
+    cursor?: FellowLivelihoodProgramWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FellowLivelihoodPrograms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FellowLivelihoodPrograms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FellowLivelihoodPrograms.
+     */
+    distinct?: FellowLivelihoodProgramScalarFieldEnum | FellowLivelihoodProgramScalarFieldEnum[]
+  }
+
+  /**
+   * FellowLivelihoodProgram create
+   */
+  export type FellowLivelihoodProgramCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FellowLivelihoodProgram.
+     */
+    data: XOR<FellowLivelihoodProgramCreateInput, FellowLivelihoodProgramUncheckedCreateInput>
+  }
+
+  /**
+   * FellowLivelihoodProgram createMany
+   */
+  export type FellowLivelihoodProgramCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FellowLivelihoodPrograms.
+     */
+    data: FellowLivelihoodProgramCreateManyInput | FellowLivelihoodProgramCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FellowLivelihoodProgram createManyAndReturn
+   */
+  export type FellowLivelihoodProgramCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * The data used to create many FellowLivelihoodPrograms.
+     */
+    data: FellowLivelihoodProgramCreateManyInput | FellowLivelihoodProgramCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowLivelihoodProgram update
+   */
+  export type FellowLivelihoodProgramUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FellowLivelihoodProgram.
+     */
+    data: XOR<FellowLivelihoodProgramUpdateInput, FellowLivelihoodProgramUncheckedUpdateInput>
+    /**
+     * Choose, which FellowLivelihoodProgram to update.
+     */
+    where: FellowLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * FellowLivelihoodProgram updateMany
+   */
+  export type FellowLivelihoodProgramUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FellowLivelihoodPrograms.
+     */
+    data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowLivelihoodPrograms to update
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * Limit how many FellowLivelihoodPrograms to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowLivelihoodProgram updateManyAndReturn
+   */
+  export type FellowLivelihoodProgramUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * The data used to update FellowLivelihoodPrograms.
+     */
+    data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyInput>
+    /**
+     * Filter which FellowLivelihoodPrograms to update
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * Limit how many FellowLivelihoodPrograms to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FellowLivelihoodProgram upsert
+   */
+  export type FellowLivelihoodProgramUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FellowLivelihoodProgram to update in case it exists.
+     */
+    where: FellowLivelihoodProgramWhereUniqueInput
+    /**
+     * In case the FellowLivelihoodProgram found by the `where` argument doesn't exist, create a new FellowLivelihoodProgram with this data.
+     */
+    create: XOR<FellowLivelihoodProgramCreateInput, FellowLivelihoodProgramUncheckedCreateInput>
+    /**
+     * In case the FellowLivelihoodProgram was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FellowLivelihoodProgramUpdateInput, FellowLivelihoodProgramUncheckedUpdateInput>
+  }
+
+  /**
+   * FellowLivelihoodProgram delete
+   */
+  export type FellowLivelihoodProgramDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
+    /**
+     * Filter which FellowLivelihoodProgram to delete.
+     */
+    where: FellowLivelihoodProgramWhereUniqueInput
+  }
+
+  /**
+   * FellowLivelihoodProgram deleteMany
+   */
+  export type FellowLivelihoodProgramDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FellowLivelihoodPrograms to delete
+     */
+    where?: FellowLivelihoodProgramWhereInput
+    /**
+     * Limit how many FellowLivelihoodPrograms to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FellowLivelihoodProgram without action
+   */
+  export type FellowLivelihoodProgramDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FellowLivelihoodProgram
+     */
+    select?: FellowLivelihoodProgramSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FellowLivelihoodProgram
+     */
+    omit?: FellowLivelihoodProgramOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FellowLivelihoodProgramInclude<ExtArgs> | null
   }
 
 
@@ -109501,7 +111871,6 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
-    cohort: 'cohort',
     avatar: 'avatar',
     progress: 'progress',
     evaluationRating: 'evaluationRating',
@@ -109553,6 +111922,7 @@ export namespace Prisma {
     lessonFlow: 'lessonFlow',
     content: 'content',
     communityEngagement: 'communityEngagement',
+    ratings: 'ratings',
     overallScore: 'overallScore',
     strength: 'strength',
     aod: 'aod',
@@ -109563,6 +111933,19 @@ export namespace Prisma {
   };
 
   export type FellowPerformanceScalarFieldEnum = (typeof FellowPerformanceScalarFieldEnum)[keyof typeof FellowPerformanceScalarFieldEnum]
+
+
+  export const PerformanceRatingCategoryScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    label: 'label',
+    order: 'order',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PerformanceRatingCategoryScalarFieldEnum = (typeof PerformanceRatingCategoryScalarFieldEnum)[keyof typeof PerformanceRatingCategoryScalarFieldEnum]
 
 
   export const FellowReviewScalarFieldEnum: {
@@ -110030,6 +112413,16 @@ export namespace Prisma {
   };
 
   export type LivelihoodEventScalarFieldEnum = (typeof LivelihoodEventScalarFieldEnum)[keyof typeof LivelihoodEventScalarFieldEnum]
+
+
+  export const FellowLivelihoodProgramScalarFieldEnum: {
+    id: 'id',
+    fellowId: 'fellowId',
+    programId: 'programId',
+    createdAt: 'createdAt'
+  };
+
+  export type FellowLivelihoodProgramScalarFieldEnum = (typeof FellowLivelihoodProgramScalarFieldEnum)[keyof typeof FellowLivelihoodProgramScalarFieldEnum]
 
 
   export const DisasterIncidentScalarFieldEnum: {
@@ -111425,7 +113818,6 @@ export namespace Prisma {
     email?: StringNullableFilter<"Fellow"> | string | null
     phone?: StringNullableFilter<"Fellow"> | string | null
     address?: StringNullableFilter<"Fellow"> | string | null
-    cohort?: StringFilter<"Fellow"> | string
     avatar?: StringNullableFilter<"Fellow"> | string | null
     progress?: IntFilter<"Fellow"> | number
     evaluationRating?: FloatNullableFilter<"Fellow"> | number | null
@@ -111449,6 +113841,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentListRelationFilter
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormListRelationFilter
     studentDataNotes?: FellowStudentDataNoteListRelationFilter
+    livelihoodPrograms?: FellowLivelihoodProgramListRelationFilter
   }
 
   export type FellowOrderByWithRelationInput = {
@@ -111459,7 +113852,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
-    cohort?: SortOrder
     avatar?: SortOrderInput | SortOrder
     progress?: SortOrder
     evaluationRating?: SortOrderInput | SortOrder
@@ -111483,6 +113875,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentOrderByRelationAggregateInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormOrderByRelationAggregateInput
     studentDataNotes?: FellowStudentDataNoteOrderByRelationAggregateInput
+    livelihoodPrograms?: FellowLivelihoodProgramOrderByRelationAggregateInput
   }
 
   export type FellowWhereUniqueInput = Prisma.AtLeast<{
@@ -111497,7 +113890,6 @@ export namespace Prisma {
     gender?: StringNullableFilter<"Fellow"> | string | null
     phone?: StringNullableFilter<"Fellow"> | string | null
     address?: StringNullableFilter<"Fellow"> | string | null
-    cohort?: StringFilter<"Fellow"> | string
     avatar?: StringNullableFilter<"Fellow"> | string | null
     progress?: IntFilter<"Fellow"> | number
     evaluationRating?: FloatNullableFilter<"Fellow"> | number | null
@@ -111520,6 +113912,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentListRelationFilter
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormListRelationFilter
     studentDataNotes?: FellowStudentDataNoteListRelationFilter
+    livelihoodPrograms?: FellowLivelihoodProgramListRelationFilter
   }, "id" | "email" | "userId">
 
   export type FellowOrderByWithAggregationInput = {
@@ -111530,7 +113923,6 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
-    cohort?: SortOrder
     avatar?: SortOrderInput | SortOrder
     progress?: SortOrder
     evaluationRating?: SortOrderInput | SortOrder
@@ -111555,7 +113947,6 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Fellow"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Fellow"> | string | null
     address?: StringNullableWithAggregatesFilter<"Fellow"> | string | null
-    cohort?: StringWithAggregatesFilter<"Fellow"> | string
     avatar?: StringNullableWithAggregatesFilter<"Fellow"> | string | null
     progress?: IntWithAggregatesFilter<"Fellow"> | number
     evaluationRating?: FloatNullableWithAggregatesFilter<"Fellow"> | number | null
@@ -111721,11 +114112,12 @@ export namespace Prisma {
     date?: DateTimeFilter<"FellowPerformance"> | Date | string
     classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
     subject?: StringFilter<"FellowPerformance"> | string
-    lessonPlan?: IntFilter<"FellowPerformance"> | number
-    culture?: IntFilter<"FellowPerformance"> | number
-    lessonFlow?: IntFilter<"FellowPerformance"> | number
-    content?: IntFilter<"FellowPerformance"> | number
-    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    lessonPlan?: IntNullableFilter<"FellowPerformance"> | number | null
+    culture?: IntNullableFilter<"FellowPerformance"> | number | null
+    lessonFlow?: IntNullableFilter<"FellowPerformance"> | number | null
+    content?: IntNullableFilter<"FellowPerformance"> | number | null
+    communityEngagement?: IntNullableFilter<"FellowPerformance"> | number | null
+    ratings?: JsonFilter<"FellowPerformance">
     overallScore?: FloatFilter<"FellowPerformance"> | number
     strength?: StringNullableFilter<"FellowPerformance"> | string | null
     aod?: StringNullableFilter<"FellowPerformance"> | string | null
@@ -111743,11 +114135,12 @@ export namespace Prisma {
     date?: SortOrder
     classGroup?: SortOrderInput | SortOrder
     subject?: SortOrder
-    lessonPlan?: SortOrder
-    culture?: SortOrder
-    lessonFlow?: SortOrder
-    content?: SortOrder
-    communityEngagement?: SortOrder
+    lessonPlan?: SortOrderInput | SortOrder
+    culture?: SortOrderInput | SortOrder
+    lessonFlow?: SortOrderInput | SortOrder
+    content?: SortOrderInput | SortOrder
+    communityEngagement?: SortOrderInput | SortOrder
+    ratings?: SortOrder
     overallScore?: SortOrder
     strength?: SortOrderInput | SortOrder
     aod?: SortOrderInput | SortOrder
@@ -111768,11 +114161,12 @@ export namespace Prisma {
     date?: DateTimeFilter<"FellowPerformance"> | Date | string
     classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
     subject?: StringFilter<"FellowPerformance"> | string
-    lessonPlan?: IntFilter<"FellowPerformance"> | number
-    culture?: IntFilter<"FellowPerformance"> | number
-    lessonFlow?: IntFilter<"FellowPerformance"> | number
-    content?: IntFilter<"FellowPerformance"> | number
-    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    lessonPlan?: IntNullableFilter<"FellowPerformance"> | number | null
+    culture?: IntNullableFilter<"FellowPerformance"> | number | null
+    lessonFlow?: IntNullableFilter<"FellowPerformance"> | number | null
+    content?: IntNullableFilter<"FellowPerformance"> | number | null
+    communityEngagement?: IntNullableFilter<"FellowPerformance"> | number | null
+    ratings?: JsonFilter<"FellowPerformance">
     overallScore?: FloatFilter<"FellowPerformance"> | number
     strength?: StringNullableFilter<"FellowPerformance"> | string | null
     aod?: StringNullableFilter<"FellowPerformance"> | string | null
@@ -111790,11 +114184,12 @@ export namespace Prisma {
     date?: SortOrder
     classGroup?: SortOrderInput | SortOrder
     subject?: SortOrder
-    lessonPlan?: SortOrder
-    culture?: SortOrder
-    lessonFlow?: SortOrder
-    content?: SortOrder
-    communityEngagement?: SortOrder
+    lessonPlan?: SortOrderInput | SortOrder
+    culture?: SortOrderInput | SortOrder
+    lessonFlow?: SortOrderInput | SortOrder
+    content?: SortOrderInput | SortOrder
+    communityEngagement?: SortOrderInput | SortOrder
+    ratings?: SortOrder
     overallScore?: SortOrder
     strength?: SortOrderInput | SortOrder
     aod?: SortOrderInput | SortOrder
@@ -111818,11 +114213,12 @@ export namespace Prisma {
     date?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
     classGroup?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
     subject?: StringWithAggregatesFilter<"FellowPerformance"> | string
-    lessonPlan?: IntWithAggregatesFilter<"FellowPerformance"> | number
-    culture?: IntWithAggregatesFilter<"FellowPerformance"> | number
-    lessonFlow?: IntWithAggregatesFilter<"FellowPerformance"> | number
-    content?: IntWithAggregatesFilter<"FellowPerformance"> | number
-    communityEngagement?: IntWithAggregatesFilter<"FellowPerformance"> | number
+    lessonPlan?: IntNullableWithAggregatesFilter<"FellowPerformance"> | number | null
+    culture?: IntNullableWithAggregatesFilter<"FellowPerformance"> | number | null
+    lessonFlow?: IntNullableWithAggregatesFilter<"FellowPerformance"> | number | null
+    content?: IntNullableWithAggregatesFilter<"FellowPerformance"> | number | null
+    communityEngagement?: IntNullableWithAggregatesFilter<"FellowPerformance"> | number | null
+    ratings?: JsonWithAggregatesFilter<"FellowPerformance">
     overallScore?: FloatWithAggregatesFilter<"FellowPerformance"> | number
     strength?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
     aod?: StringNullableWithAggregatesFilter<"FellowPerformance"> | string | null
@@ -111830,6 +114226,70 @@ export namespace Prisma {
     authorId?: StringWithAggregatesFilter<"FellowPerformance"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FellowPerformance"> | Date | string
+  }
+
+  export type PerformanceRatingCategoryWhereInput = {
+    AND?: PerformanceRatingCategoryWhereInput | PerformanceRatingCategoryWhereInput[]
+    OR?: PerformanceRatingCategoryWhereInput[]
+    NOT?: PerformanceRatingCategoryWhereInput | PerformanceRatingCategoryWhereInput[]
+    id?: StringFilter<"PerformanceRatingCategory"> | string
+    key?: StringFilter<"PerformanceRatingCategory"> | string
+    label?: StringFilter<"PerformanceRatingCategory"> | string
+    order?: IntFilter<"PerformanceRatingCategory"> | number
+    active?: BoolFilter<"PerformanceRatingCategory"> | boolean
+    createdAt?: DateTimeFilter<"PerformanceRatingCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"PerformanceRatingCategory"> | Date | string
+  }
+
+  export type PerformanceRatingCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PerformanceRatingCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: PerformanceRatingCategoryWhereInput | PerformanceRatingCategoryWhereInput[]
+    OR?: PerformanceRatingCategoryWhereInput[]
+    NOT?: PerformanceRatingCategoryWhereInput | PerformanceRatingCategoryWhereInput[]
+    label?: StringFilter<"PerformanceRatingCategory"> | string
+    order?: IntFilter<"PerformanceRatingCategory"> | number
+    active?: BoolFilter<"PerformanceRatingCategory"> | boolean
+    createdAt?: DateTimeFilter<"PerformanceRatingCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"PerformanceRatingCategory"> | Date | string
+  }, "id" | "key">
+
+  export type PerformanceRatingCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PerformanceRatingCategoryCountOrderByAggregateInput
+    _avg?: PerformanceRatingCategoryAvgOrderByAggregateInput
+    _max?: PerformanceRatingCategoryMaxOrderByAggregateInput
+    _min?: PerformanceRatingCategoryMinOrderByAggregateInput
+    _sum?: PerformanceRatingCategorySumOrderByAggregateInput
+  }
+
+  export type PerformanceRatingCategoryScalarWhereWithAggregatesInput = {
+    AND?: PerformanceRatingCategoryScalarWhereWithAggregatesInput | PerformanceRatingCategoryScalarWhereWithAggregatesInput[]
+    OR?: PerformanceRatingCategoryScalarWhereWithAggregatesInput[]
+    NOT?: PerformanceRatingCategoryScalarWhereWithAggregatesInput | PerformanceRatingCategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PerformanceRatingCategory"> | string
+    key?: StringWithAggregatesFilter<"PerformanceRatingCategory"> | string
+    label?: StringWithAggregatesFilter<"PerformanceRatingCategory"> | string
+    order?: IntWithAggregatesFilter<"PerformanceRatingCategory"> | number
+    active?: BoolWithAggregatesFilter<"PerformanceRatingCategory"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"PerformanceRatingCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PerformanceRatingCategory"> | Date | string
   }
 
   export type FellowReviewWhereInput = {
@@ -114102,6 +116562,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
+    fellows?: FellowLivelihoodProgramListRelationFilter
   }
 
   export type LivelihoodProgramOrderByWithRelationInput = {
@@ -114116,6 +116577,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     assignments?: BeneficiaryLivelihoodOrderByRelationAggregateInput
     programManagers?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
+    fellows?: FellowLivelihoodProgramOrderByRelationAggregateInput
   }
 
   export type LivelihoodProgramWhereUniqueInput = Prisma.AtLeast<{
@@ -114133,6 +116595,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"LivelihoodProgram"> | Date | string
     assignments?: BeneficiaryLivelihoodListRelationFilter
     programManagers?: ProgramManagerLivelihoodProgramListRelationFilter
+    fellows?: FellowLivelihoodProgramListRelationFilter
   }, "id">
 
   export type LivelihoodProgramOrderByWithAggregationInput = {
@@ -114323,6 +116786,60 @@ export namespace Prisma {
     recordedBy?: StringNullableWithAggregatesFilter<"LivelihoodEvent"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LivelihoodEvent"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodEvent"> | Date | string
+  }
+
+  export type FellowLivelihoodProgramWhereInput = {
+    AND?: FellowLivelihoodProgramWhereInput | FellowLivelihoodProgramWhereInput[]
+    OR?: FellowLivelihoodProgramWhereInput[]
+    NOT?: FellowLivelihoodProgramWhereInput | FellowLivelihoodProgramWhereInput[]
+    id?: StringFilter<"FellowLivelihoodProgram"> | string
+    fellowId?: StringFilter<"FellowLivelihoodProgram"> | string
+    programId?: StringFilter<"FellowLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"FellowLivelihoodProgram"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }
+
+  export type FellowLivelihoodProgramOrderByWithRelationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+    fellow?: FellowOrderByWithRelationInput
+    program?: LivelihoodProgramOrderByWithRelationInput
+  }
+
+  export type FellowLivelihoodProgramWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    fellowId_programId?: FellowLivelihoodProgramFellowIdProgramIdCompoundUniqueInput
+    AND?: FellowLivelihoodProgramWhereInput | FellowLivelihoodProgramWhereInput[]
+    OR?: FellowLivelihoodProgramWhereInput[]
+    NOT?: FellowLivelihoodProgramWhereInput | FellowLivelihoodProgramWhereInput[]
+    fellowId?: StringFilter<"FellowLivelihoodProgram"> | string
+    programId?: StringFilter<"FellowLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"FellowLivelihoodProgram"> | Date | string
+    fellow?: XOR<FellowScalarRelationFilter, FellowWhereInput>
+    program?: XOR<LivelihoodProgramScalarRelationFilter, LivelihoodProgramWhereInput>
+  }, "id" | "fellowId_programId">
+
+  export type FellowLivelihoodProgramOrderByWithAggregationInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+    _count?: FellowLivelihoodProgramCountOrderByAggregateInput
+    _max?: FellowLivelihoodProgramMaxOrderByAggregateInput
+    _min?: FellowLivelihoodProgramMinOrderByAggregateInput
+  }
+
+  export type FellowLivelihoodProgramScalarWhereWithAggregatesInput = {
+    AND?: FellowLivelihoodProgramScalarWhereWithAggregatesInput | FellowLivelihoodProgramScalarWhereWithAggregatesInput[]
+    OR?: FellowLivelihoodProgramScalarWhereWithAggregatesInput[]
+    NOT?: FellowLivelihoodProgramScalarWhereWithAggregatesInput | FellowLivelihoodProgramScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FellowLivelihoodProgram"> | string
+    fellowId?: StringWithAggregatesFilter<"FellowLivelihoodProgram"> | string
+    programId?: StringWithAggregatesFilter<"FellowLivelihoodProgram"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FellowLivelihoodProgram"> | Date | string
   }
 
   export type DisasterIncidentWhereInput = {
@@ -118230,7 +120747,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -118253,6 +120769,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateInput = {
@@ -118263,7 +120780,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -118286,6 +120802,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUpdateInput = {
@@ -118296,7 +120813,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -118319,6 +120835,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateInput = {
@@ -118329,7 +120846,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -118352,6 +120868,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowCreateManyInput = {
@@ -118362,7 +120879,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -118379,7 +120895,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -118395,7 +120910,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -118567,11 +121081,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -118588,11 +121103,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -118607,11 +121123,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118628,11 +121145,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118648,11 +121166,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -118667,11 +121186,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118686,16 +121206,87 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
     trend?: NullableStringFieldUpdateOperationsInput | string | null
     authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PerformanceRatingCategoryCreateInput = {
+    id?: string
+    key: string
+    label: string
+    order?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PerformanceRatingCategoryUncheckedCreateInput = {
+    id?: string
+    key: string
+    label: string
+    order?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PerformanceRatingCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PerformanceRatingCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PerformanceRatingCategoryCreateManyInput = {
+    id?: string
+    key: string
+    label: string
+    order?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PerformanceRatingCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PerformanceRatingCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -121140,6 +123731,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateInput = {
@@ -121154,6 +123746,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUpdateInput = {
@@ -121168,6 +123761,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateInput = {
@@ -121182,6 +123776,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramCreateManyInput = {
@@ -121387,6 +123982,53 @@ export namespace Prisma {
     recordedBy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutLivelihoodProgramsInput
+    program: LivelihoodProgramCreateNestedOneWithoutFellowsInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedCreateInput = {
+    id?: string
+    fellowId: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type FellowLivelihoodProgramUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutLivelihoodProgramsNestedInput
+    program?: LivelihoodProgramUpdateOneRequiredWithoutFellowsNestedInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramCreateManyInput = {
+    id?: string
+    fellowId: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type FellowLivelihoodProgramUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DisasterIncidentCreateInput = {
@@ -125660,6 +128302,12 @@ export namespace Prisma {
     none?: FellowStudentDataNoteWhereInput
   }
 
+  export type FellowLivelihoodProgramListRelationFilter = {
+    every?: FellowLivelihoodProgramWhereInput
+    some?: FellowLivelihoodProgramWhereInput
+    none?: FellowLivelihoodProgramWhereInput
+  }
+
   export type GoalSheetOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -125696,6 +128344,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type FellowLivelihoodProgramOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type FellowCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -125704,7 +128356,6 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    cohort?: SortOrder
     avatar?: SortOrder
     progress?: SortOrder
     evaluationRating?: SortOrder
@@ -125726,7 +128377,6 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    cohort?: SortOrder
     avatar?: SortOrder
     progress?: SortOrder
     evaluationRating?: SortOrder
@@ -125743,7 +128393,6 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
-    cohort?: SortOrder
     avatar?: SortOrder
     progress?: SortOrder
     evaluationRating?: SortOrder
@@ -125890,6 +128539,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -125912,6 +128572,7 @@ export namespace Prisma {
     lessonFlow?: SortOrder
     content?: SortOrder
     communityEngagement?: SortOrder
+    ratings?: SortOrder
     overallScore?: SortOrder
     strength?: SortOrder
     aod?: SortOrder
@@ -125979,6 +128640,22 @@ export namespace Prisma {
     overallScore?: SortOrder
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -125993,6 +128670,44 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type PerformanceRatingCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PerformanceRatingCategoryAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type PerformanceRatingCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PerformanceRatingCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    label?: SortOrder
+    order?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PerformanceRatingCategorySumOrderByAggregateInput = {
+    order?: SortOrder
   }
 
   export type FellowReviewCountOrderByAggregateInput = {
@@ -127037,17 +129752,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type LivestockHealthLogListRelationFilter = {
     every?: LivestockHealthLogWhereInput
     some?: LivestockHealthLogWhereInput
@@ -127103,22 +129807,6 @@ export namespace Prisma {
 
   export type LivestockSumOrderByAggregateInput = {
     ageMonths?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type LivestockScalarRelationFilter = {
@@ -127628,6 +130316,32 @@ export namespace Prisma {
 
   export type LivelihoodEventSumOrderByAggregateInput = {
     quantity?: SortOrder
+  }
+
+  export type FellowLivelihoodProgramFellowIdProgramIdCompoundUniqueInput = {
+    fellowId: string
+    programId: string
+  }
+
+  export type FellowLivelihoodProgramCountOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FellowLivelihoodProgramMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FellowLivelihoodProgramMinOrderByAggregateInput = {
+    id?: SortOrder
+    fellowId?: SortOrder
+    programId?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type IncidentResourceNeedListRelationFilter = {
@@ -131037,6 +133751,13 @@ export namespace Prisma {
     connect?: FellowStudentDataNoteWhereUniqueInput | FellowStudentDataNoteWhereUniqueInput[]
   }
 
+  export type FellowLivelihoodProgramCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput> | FellowLivelihoodProgramCreateWithoutFellowInput[] | FellowLivelihoodProgramUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutFellowInput | FellowLivelihoodProgramCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowLivelihoodProgramCreateManyFellowInputEnvelope
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+  }
+
   export type FellowSchoolUncheckedCreateNestedManyWithoutFellowInput = {
     create?: XOR<FellowSchoolCreateWithoutFellowInput, FellowSchoolUncheckedCreateWithoutFellowInput> | FellowSchoolCreateWithoutFellowInput[] | FellowSchoolUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutFellowInput | FellowSchoolCreateOrConnectWithoutFellowInput[]
@@ -131147,6 +133868,13 @@ export namespace Prisma {
     connectOrCreate?: FellowStudentDataNoteCreateOrConnectWithoutFellowInput | FellowStudentDataNoteCreateOrConnectWithoutFellowInput[]
     createMany?: FellowStudentDataNoteCreateManyFellowInputEnvelope
     connect?: FellowStudentDataNoteWhereUniqueInput | FellowStudentDataNoteWhereUniqueInput[]
+  }
+
+  export type FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput> | FellowLivelihoodProgramCreateWithoutFellowInput[] | FellowLivelihoodProgramUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutFellowInput | FellowLivelihoodProgramCreateOrConnectWithoutFellowInput[]
+    createMany?: FellowLivelihoodProgramCreateManyFellowInputEnvelope
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -131391,6 +134119,20 @@ export namespace Prisma {
     deleteMany?: FellowStudentDataNoteScalarWhereInput | FellowStudentDataNoteScalarWhereInput[]
   }
 
+  export type FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput> | FellowLivelihoodProgramCreateWithoutFellowInput[] | FellowLivelihoodProgramUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutFellowInput | FellowLivelihoodProgramCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowLivelihoodProgramUpsertWithWhereUniqueWithoutFellowInput | FellowLivelihoodProgramUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowLivelihoodProgramCreateManyFellowInputEnvelope
+    set?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    disconnect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    delete?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutFellowInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutFellowInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+  }
+
   export type FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput = {
     create?: XOR<FellowSchoolCreateWithoutFellowInput, FellowSchoolUncheckedCreateWithoutFellowInput> | FellowSchoolCreateWithoutFellowInput[] | FellowSchoolUncheckedCreateWithoutFellowInput[]
     connectOrCreate?: FellowSchoolCreateOrConnectWithoutFellowInput | FellowSchoolCreateOrConnectWithoutFellowInput[]
@@ -131615,6 +134357,20 @@ export namespace Prisma {
     deleteMany?: FellowStudentDataNoteScalarWhereInput | FellowStudentDataNoteScalarWhereInput[]
   }
 
+  export type FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput> | FellowLivelihoodProgramCreateWithoutFellowInput[] | FellowLivelihoodProgramUncheckedCreateWithoutFellowInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutFellowInput | FellowLivelihoodProgramCreateOrConnectWithoutFellowInput[]
+    upsert?: FellowLivelihoodProgramUpsertWithWhereUniqueWithoutFellowInput | FellowLivelihoodProgramUpsertWithWhereUniqueWithoutFellowInput[]
+    createMany?: FellowLivelihoodProgramCreateManyFellowInputEnvelope
+    set?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    disconnect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    delete?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutFellowInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutFellowInput[]
+    updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutFellowInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutFellowInput[]
+    deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+  }
+
   export type FellowCreateNestedOneWithoutGoalSheetsInput = {
     create?: XOR<FellowCreateWithoutGoalSheetsInput, FellowUncheckedCreateWithoutGoalSheetsInput>
     connectOrCreate?: FellowCreateOrConnectWithoutGoalSheetsInput
@@ -131667,6 +134423,14 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutPerformanceObservationsInput, UserUncheckedCreateWithoutPerformanceObservationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPerformanceObservationsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -133163,14 +135927,6 @@ export namespace Prisma {
     connect?: LivestockHealthLogWhereUniqueInput | LivestockHealthLogWhereUniqueInput[]
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type BeneficiaryUpdateOneRequiredWithoutLivestockNestedInput = {
     create?: XOR<BeneficiaryCreateWithoutLivestockInput, BeneficiaryUncheckedCreateWithoutLivestockInput>
     connectOrCreate?: BeneficiaryCreateOrConnectWithoutLivestockInput
@@ -133505,6 +136261,13 @@ export namespace Prisma {
     connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
   }
 
+  export type FellowLivelihoodProgramCreateNestedManyWithoutProgramInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput> | FellowLivelihoodProgramCreateWithoutProgramInput[] | FellowLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutProgramInput | FellowLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    createMany?: FellowLivelihoodProgramCreateManyProgramInputEnvelope
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
@@ -133517,6 +136280,13 @@ export namespace Prisma {
     connectOrCreate?: ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput | ProgramManagerLivelihoodProgramCreateOrConnectWithoutProgramInput[]
     createMany?: ProgramManagerLivelihoodProgramCreateManyProgramInputEnvelope
     connect?: ProgramManagerLivelihoodProgramWhereUniqueInput | ProgramManagerLivelihoodProgramWhereUniqueInput[]
+  }
+
+  export type FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput> | FellowLivelihoodProgramCreateWithoutProgramInput[] | FellowLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutProgramInput | FellowLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    createMany?: FellowLivelihoodProgramCreateManyProgramInputEnvelope
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
   }
 
   export type EnumLivelihoodCategoryFieldUpdateOperationsInput = {
@@ -133551,6 +136321,20 @@ export namespace Prisma {
     deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
   }
 
+  export type FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput> | FellowLivelihoodProgramCreateWithoutProgramInput[] | FellowLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutProgramInput | FellowLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    upsert?: FellowLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: FellowLivelihoodProgramCreateManyProgramInputEnvelope
+    set?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    disconnect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    delete?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+  }
+
   export type BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput = {
     create?: XOR<BeneficiaryLivelihoodCreateWithoutProgramInput, BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput> | BeneficiaryLivelihoodCreateWithoutProgramInput[] | BeneficiaryLivelihoodUncheckedCreateWithoutProgramInput[]
     connectOrCreate?: BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput | BeneficiaryLivelihoodCreateOrConnectWithoutProgramInput[]
@@ -133577,6 +136361,20 @@ export namespace Prisma {
     update?: ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
     updateMany?: ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
     deleteMany?: ProgramManagerLivelihoodProgramScalarWhereInput | ProgramManagerLivelihoodProgramScalarWhereInput[]
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput = {
+    create?: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput> | FellowLivelihoodProgramCreateWithoutProgramInput[] | FellowLivelihoodProgramUncheckedCreateWithoutProgramInput[]
+    connectOrCreate?: FellowLivelihoodProgramCreateOrConnectWithoutProgramInput | FellowLivelihoodProgramCreateOrConnectWithoutProgramInput[]
+    upsert?: FellowLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput[]
+    createMany?: FellowLivelihoodProgramCreateManyProgramInputEnvelope
+    set?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    disconnect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    delete?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    connect?: FellowLivelihoodProgramWhereUniqueInput | FellowLivelihoodProgramWhereUniqueInput[]
+    update?: FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput | FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput[]
+    updateMany?: FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput | FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput[]
+    deleteMany?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
   }
 
   export type BeneficiaryCreateNestedOneWithoutLivelihoodDetailsInput = {
@@ -133661,6 +136459,34 @@ export namespace Prisma {
     upsert?: BeneficiaryLivelihoodUpsertWithoutEventsInput
     connect?: BeneficiaryLivelihoodWhereUniqueInput
     update?: XOR<XOR<BeneficiaryLivelihoodUpdateToOneWithWhereWithoutEventsInput, BeneficiaryLivelihoodUpdateWithoutEventsInput>, BeneficiaryLivelihoodUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type FellowCreateNestedOneWithoutLivelihoodProgramsInput = {
+    create?: XOR<FellowCreateWithoutLivelihoodProgramsInput, FellowUncheckedCreateWithoutLivelihoodProgramsInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutLivelihoodProgramsInput
+    connect?: FellowWhereUniqueInput
+  }
+
+  export type LivelihoodProgramCreateNestedOneWithoutFellowsInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutFellowsInput, LivelihoodProgramUncheckedCreateWithoutFellowsInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutFellowsInput
+    connect?: LivelihoodProgramWhereUniqueInput
+  }
+
+  export type FellowUpdateOneRequiredWithoutLivelihoodProgramsNestedInput = {
+    create?: XOR<FellowCreateWithoutLivelihoodProgramsInput, FellowUncheckedCreateWithoutLivelihoodProgramsInput>
+    connectOrCreate?: FellowCreateOrConnectWithoutLivelihoodProgramsInput
+    upsert?: FellowUpsertWithoutLivelihoodProgramsInput
+    connect?: FellowWhereUniqueInput
+    update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutLivelihoodProgramsInput, FellowUpdateWithoutLivelihoodProgramsInput>, FellowUncheckedUpdateWithoutLivelihoodProgramsInput>
+  }
+
+  export type LivelihoodProgramUpdateOneRequiredWithoutFellowsNestedInput = {
+    create?: XOR<LivelihoodProgramCreateWithoutFellowsInput, LivelihoodProgramUncheckedCreateWithoutFellowsInput>
+    connectOrCreate?: LivelihoodProgramCreateOrConnectWithoutFellowsInput
+    upsert?: LivelihoodProgramUpsertWithoutFellowsInput
+    connect?: LivelihoodProgramWhereUniqueInput
+    update?: XOR<XOR<LivelihoodProgramUpdateToOneWithWhereWithoutFellowsInput, LivelihoodProgramUpdateWithoutFellowsInput>, LivelihoodProgramUncheckedUpdateWithoutFellowsInput>
   }
 
   export type IncidentResourceNeedCreateNestedManyWithoutIncidentInput = {
@@ -136068,22 +138894,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -136098,6 +138908,22 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedEnumLivelihoodCategoryFilter<$PrismaModel = never> = {
@@ -136418,7 +139244,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -136440,6 +139265,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutUserInput = {
@@ -136450,7 +139276,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -136472,6 +139297,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutUserInput = {
@@ -136822,11 +139648,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -136842,11 +139669,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -137071,7 +139899,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -137093,6 +139920,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutUserInput = {
@@ -137103,7 +139931,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -137125,6 +139952,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type LeaveUpsertWithWhereUniqueWithoutUserInput = {
@@ -137435,11 +140263,12 @@ export namespace Prisma {
     date?: DateTimeFilter<"FellowPerformance"> | Date | string
     classGroup?: StringNullableFilter<"FellowPerformance"> | string | null
     subject?: StringFilter<"FellowPerformance"> | string
-    lessonPlan?: IntFilter<"FellowPerformance"> | number
-    culture?: IntFilter<"FellowPerformance"> | number
-    lessonFlow?: IntFilter<"FellowPerformance"> | number
-    content?: IntFilter<"FellowPerformance"> | number
-    communityEngagement?: IntFilter<"FellowPerformance"> | number
+    lessonPlan?: IntNullableFilter<"FellowPerformance"> | number | null
+    culture?: IntNullableFilter<"FellowPerformance"> | number | null
+    lessonFlow?: IntNullableFilter<"FellowPerformance"> | number | null
+    content?: IntNullableFilter<"FellowPerformance"> | number | null
+    communityEngagement?: IntNullableFilter<"FellowPerformance"> | number | null
+    ratings?: JsonFilter<"FellowPerformance">
     overallScore?: FloatFilter<"FellowPerformance"> | number
     strength?: StringNullableFilter<"FellowPerformance"> | string | null
     aod?: StringNullableFilter<"FellowPerformance"> | string | null
@@ -138911,11 +141740,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -138930,11 +141760,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -139109,6 +141940,28 @@ export namespace Prisma {
 
   export type FellowStudentDataNoteCreateManyFellowInputEnvelope = {
     data: FellowStudentDataNoteCreateManyFellowInput | FellowStudentDataNoteCreateManyFellowInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FellowLivelihoodProgramCreateWithoutFellowInput = {
+    id?: string
+    createdAt?: Date | string
+    program: LivelihoodProgramCreateNestedOneWithoutFellowsInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedCreateWithoutFellowInput = {
+    id?: string
+    programId: string
+    createdAt?: Date | string
+  }
+
+  export type FellowLivelihoodProgramCreateOrConnectWithoutFellowInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    create: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowLivelihoodProgramCreateManyFellowInputEnvelope = {
+    data: FellowLivelihoodProgramCreateManyFellowInput | FellowLivelihoodProgramCreateManyFellowInput[]
     skipDuplicates?: boolean
   }
 
@@ -139589,6 +142442,32 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FellowStudentDataNote"> | Date | string
   }
 
+  export type FellowLivelihoodProgramUpsertWithWhereUniqueWithoutFellowInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    update: XOR<FellowLivelihoodProgramUpdateWithoutFellowInput, FellowLivelihoodProgramUncheckedUpdateWithoutFellowInput>
+    create: XOR<FellowLivelihoodProgramCreateWithoutFellowInput, FellowLivelihoodProgramUncheckedCreateWithoutFellowInput>
+  }
+
+  export type FellowLivelihoodProgramUpdateWithWhereUniqueWithoutFellowInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    data: XOR<FellowLivelihoodProgramUpdateWithoutFellowInput, FellowLivelihoodProgramUncheckedUpdateWithoutFellowInput>
+  }
+
+  export type FellowLivelihoodProgramUpdateManyWithWhereWithoutFellowInput = {
+    where: FellowLivelihoodProgramScalarWhereInput
+    data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowInput>
+  }
+
+  export type FellowLivelihoodProgramScalarWhereInput = {
+    AND?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+    OR?: FellowLivelihoodProgramScalarWhereInput[]
+    NOT?: FellowLivelihoodProgramScalarWhereInput | FellowLivelihoodProgramScalarWhereInput[]
+    id?: StringFilter<"FellowLivelihoodProgram"> | string
+    fellowId?: StringFilter<"FellowLivelihoodProgram"> | string
+    programId?: StringFilter<"FellowLivelihoodProgram"> | string
+    createdAt?: DateTimeFilter<"FellowLivelihoodProgram"> | Date | string
+  }
+
   export type FellowCreateWithoutGoalSheetsInput = {
     id?: string
     name: string
@@ -139597,7 +142476,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -139619,6 +142497,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutGoalSheetsInput = {
@@ -139629,7 +142508,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -139651,6 +142529,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutGoalSheetsInput = {
@@ -139677,7 +142556,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -139699,6 +142577,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutGoalSheetsInput = {
@@ -139709,7 +142588,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -139731,6 +142609,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowCreateWithoutPmReflectionsInput = {
@@ -139741,7 +142620,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -139763,6 +142641,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutPmReflectionsInput = {
@@ -139773,7 +142652,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -139795,6 +142673,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutPmReflectionsInput = {
@@ -139898,7 +142777,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -139920,6 +142798,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutPmReflectionsInput = {
@@ -139930,7 +142809,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -139952,6 +142830,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type UserUpsertWithoutPmReflectionsInput = {
@@ -140045,7 +142924,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140067,6 +142945,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -140077,7 +142956,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140099,6 +142977,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -140202,7 +143081,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140224,6 +143102,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -140234,7 +143113,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140256,6 +143134,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type UserUpsertWithoutPerformanceObservationsInput = {
@@ -140349,7 +143228,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140371,6 +143249,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutReviewsInput = {
@@ -140381,7 +143260,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140403,6 +143281,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutReviewsInput = {
@@ -140429,7 +143308,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140451,6 +143329,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutReviewsInput = {
@@ -140461,7 +143340,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140483,6 +143361,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type SchoolCreateWithoutStudentsInput = {
@@ -140548,7 +143427,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140570,6 +143448,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutStudentsInput = {
@@ -140580,7 +143459,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -140602,6 +143480,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutStudentsInput = {
@@ -140938,7 +143817,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140960,6 +143838,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutStudentsInput = {
@@ -140970,7 +143849,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -140992,6 +143870,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type BeneficiaryUpsertWithoutStudentsInput = {
@@ -142457,7 +145336,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -142479,6 +145357,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutSchoolsInput = {
@@ -142489,7 +145368,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -142511,6 +145389,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutSchoolsInput = {
@@ -142592,7 +145471,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -142614,6 +145492,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutSchoolsInput = {
@@ -142624,7 +145503,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -142646,6 +145524,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type SchoolUpsertWithoutFellowsInput = {
@@ -143481,6 +146360,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutProgramManagersInput = {
@@ -143494,6 +146374,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutProgramManagersInput = {
@@ -143606,6 +146487,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutProgramManagersInput = {
@@ -143619,6 +146501,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type UserCreateWithoutPmTasksInput = {
@@ -146803,6 +149686,28 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FellowLivelihoodProgramCreateWithoutProgramInput = {
+    id?: string
+    createdAt?: Date | string
+    fellow: FellowCreateNestedOneWithoutLivelihoodProgramsInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedCreateWithoutProgramInput = {
+    id?: string
+    fellowId: string
+    createdAt?: Date | string
+  }
+
+  export type FellowLivelihoodProgramCreateOrConnectWithoutProgramInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    create: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput>
+  }
+
+  export type FellowLivelihoodProgramCreateManyProgramInputEnvelope = {
+    data: FellowLivelihoodProgramCreateManyProgramInput | FellowLivelihoodProgramCreateManyProgramInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BeneficiaryLivelihoodUpsertWithWhereUniqueWithoutProgramInput = {
     where: BeneficiaryLivelihoodWhereUniqueInput
     update: XOR<BeneficiaryLivelihoodUpdateWithoutProgramInput, BeneficiaryLivelihoodUncheckedUpdateWithoutProgramInput>
@@ -146833,6 +149738,22 @@ export namespace Prisma {
   export type ProgramManagerLivelihoodProgramUpdateManyWithWhereWithoutProgramInput = {
     where: ProgramManagerLivelihoodProgramScalarWhereInput
     data: XOR<ProgramManagerLivelihoodProgramUpdateManyMutationInput, ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramInput>
+  }
+
+  export type FellowLivelihoodProgramUpsertWithWhereUniqueWithoutProgramInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    update: XOR<FellowLivelihoodProgramUpdateWithoutProgramInput, FellowLivelihoodProgramUncheckedUpdateWithoutProgramInput>
+    create: XOR<FellowLivelihoodProgramCreateWithoutProgramInput, FellowLivelihoodProgramUncheckedCreateWithoutProgramInput>
+  }
+
+  export type FellowLivelihoodProgramUpdateWithWhereUniqueWithoutProgramInput = {
+    where: FellowLivelihoodProgramWhereUniqueInput
+    data: XOR<FellowLivelihoodProgramUpdateWithoutProgramInput, FellowLivelihoodProgramUncheckedUpdateWithoutProgramInput>
+  }
+
+  export type FellowLivelihoodProgramUpdateManyWithWhereWithoutProgramInput = {
+    where: FellowLivelihoodProgramScalarWhereInput
+    data: XOR<FellowLivelihoodProgramUpdateManyMutationInput, FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramInput>
   }
 
   export type BeneficiaryCreateWithoutLivelihoodDetailsInput = {
@@ -146933,6 +149854,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramUncheckedCreateWithoutAssignmentsInput = {
@@ -146946,6 +149868,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+    fellows?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
   }
 
   export type LivelihoodProgramCreateOrConnectWithoutAssignmentsInput = {
@@ -147102,6 +150025,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodProgramUncheckedUpdateWithoutAssignmentsInput = {
@@ -147115,6 +150039,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
+    fellows?: FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type LivelihoodEventUpsertWithWhereUniqueWithoutLivelihoodInput = {
@@ -147207,6 +150132,222 @@ export namespace Prisma {
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowCreateWithoutLivelihoodProgramsInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutFellowInput
+    schools?: FellowSchoolCreateNestedManyWithoutFellowInput
+    students?: StudentCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowUncheckedCreateWithoutLivelihoodProgramsInput = {
+    id?: string
+    name: string
+    dob?: Date | string | null
+    gender?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    avatar?: string | null
+    progress?: number
+    evaluationRating?: number | null
+    userId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schools?: FellowSchoolUncheckedCreateNestedManyWithoutFellowInput
+    students?: StudentUncheckedCreateNestedManyWithoutFellowInput
+    goalSheets?: GoalSheetUncheckedCreateNestedManyWithoutFellowInput
+    reviews?: FellowReviewUncheckedCreateNestedManyWithoutFellowInput
+    tasks?: FellowTaskUncheckedCreateNestedManyWithoutFellowInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutFellowInput
+    assessmentForms?: AssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    engagementSurveys?: EngagementSurveyUncheckedCreateNestedManyWithoutFellowInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedCreateNestedManyWithoutFellowInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutFellowInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutFellowInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+  }
+
+  export type FellowCreateOrConnectWithoutLivelihoodProgramsInput = {
+    where: FellowWhereUniqueInput
+    create: XOR<FellowCreateWithoutLivelihoodProgramsInput, FellowUncheckedCreateWithoutLivelihoodProgramsInput>
+  }
+
+  export type LivelihoodProgramCreateWithoutFellowsInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramUncheckedCreateWithoutFellowsInput = {
+    id?: string
+    category: $Enums.LivelihoodCategory
+    type: string
+    name: string
+    description?: string | null
+    status?: string
+    totalTarget?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedCreateNestedManyWithoutProgramInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutProgramInput
+  }
+
+  export type LivelihoodProgramCreateOrConnectWithoutFellowsInput = {
+    where: LivelihoodProgramWhereUniqueInput
+    create: XOR<LivelihoodProgramCreateWithoutFellowsInput, LivelihoodProgramUncheckedCreateWithoutFellowsInput>
+  }
+
+  export type FellowUpsertWithoutLivelihoodProgramsInput = {
+    update: XOR<FellowUpdateWithoutLivelihoodProgramsInput, FellowUncheckedUpdateWithoutLivelihoodProgramsInput>
+    create: XOR<FellowCreateWithoutLivelihoodProgramsInput, FellowUncheckedCreateWithoutLivelihoodProgramsInput>
+    where?: FellowWhereInput
+  }
+
+  export type FellowUpdateToOneWithWhereWithoutLivelihoodProgramsInput = {
+    where?: FellowWhereInput
+    data: XOR<FellowUpdateWithoutLivelihoodProgramsInput, FellowUncheckedUpdateWithoutLivelihoodProgramsInput>
+  }
+
+  export type FellowUpdateWithoutLivelihoodProgramsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutFellowNestedInput
+    schools?: FellowSchoolUpdateManyWithoutFellowNestedInput
+    students?: StudentUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+  }
+
+  export type FellowUncheckedUpdateWithoutLivelihoodProgramsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schools?: FellowSchoolUncheckedUpdateManyWithoutFellowNestedInput
+    students?: StudentUncheckedUpdateManyWithoutFellowNestedInput
+    goalSheets?: GoalSheetUncheckedUpdateManyWithoutFellowNestedInput
+    reviews?: FellowReviewUncheckedUpdateManyWithoutFellowNestedInput
+    tasks?: FellowTaskUncheckedUpdateManyWithoutFellowNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutFellowNestedInput
+    assessmentForms?: AssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    engagementSurveys?: EngagementSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    lookBeyondSurveys?: LookBeyondSurveyUncheckedUpdateManyWithoutFellowNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutFellowNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutFellowNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
+    afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+  }
+
+  export type LivelihoodProgramUpsertWithoutFellowsInput = {
+    update: XOR<LivelihoodProgramUpdateWithoutFellowsInput, LivelihoodProgramUncheckedUpdateWithoutFellowsInput>
+    create: XOR<LivelihoodProgramCreateWithoutFellowsInput, LivelihoodProgramUncheckedCreateWithoutFellowsInput>
+    where?: LivelihoodProgramWhereInput
+  }
+
+  export type LivelihoodProgramUpdateToOneWithWhereWithoutFellowsInput = {
+    where?: LivelihoodProgramWhereInput
+    data: XOR<LivelihoodProgramUpdateWithoutFellowsInput, LivelihoodProgramUncheckedUpdateWithoutFellowsInput>
+  }
+
+  export type LivelihoodProgramUpdateWithoutFellowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUpdateManyWithoutProgramNestedInput
+  }
+
+  export type LivelihoodProgramUncheckedUpdateWithoutFellowsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    type?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    totalTarget?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: BeneficiaryLivelihoodUncheckedUpdateManyWithoutProgramNestedInput
+    programManagers?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramNestedInput
   }
 
   export type IncidentResourceNeedCreateWithoutIncidentInput = {
@@ -148155,7 +151296,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -148177,6 +151317,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutTasksInput = {
@@ -148187,7 +151328,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -148209,6 +151349,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutTasksInput = {
@@ -148261,7 +151402,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -148283,6 +151423,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutTasksInput = {
@@ -148293,7 +151434,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -148315,6 +151455,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -149649,7 +152790,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -149671,6 +152811,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutCoachingRecordsInput = {
@@ -149681,7 +152822,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -149703,6 +152843,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutCoachingRecordsInput = {
@@ -149806,7 +152947,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -149828,6 +152968,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -149838,7 +152979,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -149860,6 +153000,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type UserUpsertWithoutCoachingRecordsInput = {
@@ -149953,7 +153094,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -149975,6 +153115,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutEngagementSurveysInput = {
@@ -149985,7 +153126,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -150007,6 +153147,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutEngagementSurveysInput = {
@@ -150033,7 +153174,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150055,6 +153195,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutEngagementSurveysInput = {
@@ -150065,7 +153206,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150087,6 +153227,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowCreateWithoutLookBeyondSurveysInput = {
@@ -150097,7 +153238,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -150119,6 +153259,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutLookBeyondSurveysInput = {
@@ -150129,7 +153270,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -150151,6 +153291,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutLookBeyondSurveysInput = {
@@ -150177,7 +153318,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150199,6 +153339,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutLookBeyondSurveysInput = {
@@ -150209,7 +153350,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150231,6 +153371,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowCreateWithoutIndividualFeedbackInput = {
@@ -150241,7 +153382,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -150263,6 +153403,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -150273,7 +153414,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -150295,6 +153435,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -150398,7 +153539,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150420,6 +153560,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -150430,7 +153571,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -150452,6 +153592,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type UserUpsertWithoutIndividualFeedbackInput = {
@@ -151437,7 +154578,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -151459,6 +154599,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutAssessmentFormsInput = {
@@ -151469,7 +154610,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -151491,6 +154631,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutAssessmentFormsInput = {
@@ -151739,7 +154880,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -151761,6 +154901,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutAssessmentFormsInput = {
@@ -151771,7 +154912,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -151793,6 +154933,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type SchoolUpsertWithoutAssessmentFormsInput = {
@@ -152789,7 +155930,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -152811,6 +155951,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutAfterSchoolCentresInput = {
@@ -152821,7 +155962,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -152843,6 +155983,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutAfterSchoolCentresInput = {
@@ -152918,7 +156059,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -152940,6 +156080,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutAfterSchoolCentresInput = {
@@ -152950,7 +156091,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -152972,6 +156112,7 @@ export namespace Prisma {
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutFellowsInput = {
@@ -153266,7 +156407,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -153288,6 +156428,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutAfterSchoolStudentsInput = {
@@ -153298,7 +156439,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -153320,6 +156460,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutAfterSchoolStudentsInput = {
@@ -153559,7 +156700,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -153581,6 +156721,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutAfterSchoolStudentsInput = {
@@ -153591,7 +156732,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -153613,6 +156753,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type AfterSchoolStudentAttendanceLogUpsertWithWhereUniqueWithoutStudentInput = {
@@ -154630,7 +157771,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -154652,6 +157792,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutAfterSchoolAssessmentFormsInput = {
@@ -154662,7 +157803,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -154684,6 +157824,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     studentDataNotes?: FellowStudentDataNoteUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutAfterSchoolAssessmentFormsInput = {
@@ -154874,7 +158015,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -154896,6 +158036,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutAfterSchoolAssessmentFormsInput = {
@@ -154906,7 +158047,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -154928,6 +158068,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     studentDataNotes?: FellowStudentDataNoteUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutAssessmentFormsInput = {
@@ -155285,7 +158426,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -155307,6 +158447,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramCreateNestedManyWithoutFellowInput
   }
 
   export type FellowUncheckedCreateWithoutStudentDataNotesInput = {
@@ -155317,7 +158458,6 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
-    cohort: string
     avatar?: string | null
     progress?: number
     evaluationRating?: number | null
@@ -155339,6 +158479,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedCreateNestedManyWithoutFellowInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedCreateNestedManyWithoutFellowInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedCreateNestedManyWithoutFellowInput
   }
 
   export type FellowCreateOrConnectWithoutStudentDataNotesInput = {
@@ -155365,7 +158506,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -155387,6 +158527,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUpdateManyWithoutFellowNestedInput
   }
 
   export type FellowUncheckedUpdateWithoutStudentDataNotesInput = {
@@ -155397,7 +158538,6 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
-    cohort?: StringFieldUpdateOperationsInput | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     progress?: IntFieldUpdateOperationsInput | number
     evaluationRating?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -155419,6 +158559,7 @@ export namespace Prisma {
     afterSchoolCentres?: FellowAfterSchoolCentreUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolStudents?: AfterSchoolStudentUncheckedUpdateManyWithoutFellowNestedInput
     afterSchoolAssessmentForms?: AfterSchoolAssessmentFormUncheckedUpdateManyWithoutFellowNestedInput
+    livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
   export type UserCreateManyRoleInput = {
@@ -155695,11 +158836,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -156145,11 +159287,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -156165,11 +159308,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -156184,11 +159328,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -156818,11 +159963,12 @@ export namespace Prisma {
     date: Date | string
     classGroup?: string | null
     subject: string
-    lessonPlan: number
-    culture: number
-    lessonFlow: number
-    content: number
-    communityEngagement: number
+    lessonPlan?: number | null
+    culture?: number | null
+    lessonFlow?: number | null
+    content?: number | null
+    communityEngagement?: number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore: number
     strength?: string | null
     aod?: string | null
@@ -156882,6 +160028,12 @@ export namespace Prisma {
     note: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type FellowLivelihoodProgramCreateManyFellowInput = {
+    id?: string
+    programId: string
+    createdAt?: Date | string
   }
 
   export type FellowSchoolUpdateWithoutFellowInput = {
@@ -157311,11 +160463,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157330,11 +160483,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157349,11 +160503,12 @@ export namespace Prisma {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     classGroup?: NullableStringFieldUpdateOperationsInput | string | null
     subject?: StringFieldUpdateOperationsInput | string
-    lessonPlan?: IntFieldUpdateOperationsInput | number
-    culture?: IntFieldUpdateOperationsInput | number
-    lessonFlow?: IntFieldUpdateOperationsInput | number
-    content?: IntFieldUpdateOperationsInput | number
-    communityEngagement?: IntFieldUpdateOperationsInput | number
+    lessonPlan?: NullableIntFieldUpdateOperationsInput | number | null
+    culture?: NullableIntFieldUpdateOperationsInput | number | null
+    lessonFlow?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: NullableIntFieldUpdateOperationsInput | number | null
+    communityEngagement?: NullableIntFieldUpdateOperationsInput | number | null
+    ratings?: JsonNullValueInput | InputJsonValue
     overallScore?: FloatFieldUpdateOperationsInput | number
     strength?: NullableStringFieldUpdateOperationsInput | string | null
     aod?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157531,6 +160686,24 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    program?: LivelihoodProgramUpdateOneRequiredWithoutFellowsNestedInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StudentAttendanceLogCreateManyStudentInput = {
@@ -158861,6 +162034,12 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type FellowLivelihoodProgramCreateManyProgramInput = {
+    id?: string
+    fellowId: string
+    createdAt?: Date | string
+  }
+
   export type BeneficiaryLivelihoodUpdateWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     attributes?: JsonNullValueInput | InputJsonValue
@@ -158908,6 +162087,24 @@ export namespace Prisma {
   export type ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutProgramInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fellow?: FellowUpdateOneRequiredWithoutLivelihoodProgramsNestedInput
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FellowLivelihoodProgramUncheckedUpdateManyWithoutProgramInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fellowId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

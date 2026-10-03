@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { sortSubjectOptions } from "@/data/assessmentOptions";
 
 const LEVEL_FIXUPS = {
   words: "Word",
@@ -35,13 +36,14 @@ function authHeaders(token) {
   };
 }
 
-export default function StudentDataView({ fellowId, token, canEditNotes, source = "school" }) {
+export default function StudentDataView({ fellowId, fellowName, token, canEditNotes, source = "school" }) {
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
   const [session, setSession] = useState("");
   const [view, setView] = useState("levels"); // "levels" | "growth"
   const [savingKey, setSavingKey] = useState(null);
   const [editingNote, setEditingNote] = useState(null); // { phase, key, value }
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     if (!fellowId || !token) return;
@@ -107,7 +109,10 @@ export default function StudentDataView({ fellowId, token, canEditNotes, source 
       return rows;
     }
     const template = (report?.subjectTemplates || []).find((t) => t.id === section.key);
-    const rows = (template?.options || []).map((opt) => ({ key: opt, label: displayLevel(opt) }));
+    const rows = sortSubjectOptions(template?.options || []).map((opt) => ({
+      key: opt,
+      label: displayLevel(opt),
+    }));
     const configured = new Set(rows.map((r) => r.key));
     const extras = new Set();
     PHASE_ORDER.forEach((p) => {
@@ -117,6 +122,84 @@ export default function StudentDataView({ fellowId, token, canEditNotes, source 
     });
     extras.forEach((k) => rows.push({ key: k, label: displayLevel(k) }));
     return rows;
+  }
+
+  async function handleExport() {
+    if (!report) return;
+    setExporting(true);
+    try {
+      // Each section (subject / reading fluency) owns its own set of levels.
+      const groups = report.sections
+        .map((section) => ({ section, title: section.title, levels: buildRows(section) }))
+        .filter((group) => group.levels.length > 0);
+
+      if (!groups.length) {
+        alert("Nothing to export for this session.");
+        return;
+      }
+
+      const totalCols = groups.reduce(
+        (sum, group) => sum + group.levels.length * PHASE_ORDER.length,
+        0
+      );
+
+      const titleRow = new Array(totalCols).fill("");
+      const subjectRow = new Array(totalCols).fill("");
+      const phaseRow = new Array(totalCols).fill("");
+      const levelRow = new Array(totalCols).fill("");
+      const dataRow = new Array(totalCols).fill("");
+
+      const headingParts = ["Student Data"];
+      if (fellowName) headingParts.push(fellowName);
+      if (report.session) headingParts.push(report.session);
+      titleRow[0] = `${headingParts.join(" - ")}${
+        source === "afterSchool" ? " (After School)" : ""
+      }`;
+
+      const merges = [{ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } }];
+
+      let col = 0;
+      groups.forEach((group) => {
+        const width = group.levels.length * PHASE_ORDER.length;
+        subjectRow[col] = group.title;
+        merges.push({ s: { r: 1, c: col }, e: { r: 1, c: col + width - 1 } });
+
+        PHASE_ORDER.forEach((phase, p) => {
+          const phaseStart = col + p * group.levels.length;
+          phaseRow[phaseStart] = PHASE_META[phase].label;
+          merges.push({
+            s: { r: 2, c: phaseStart },
+            e: { r: 2, c: phaseStart + group.levels.length - 1 },
+          });
+          const counts = group.section.phases?.[phase]?.counts || {};
+          group.levels.forEach((level, l) => {
+            const c = phaseStart + l;
+            levelRow[c] = level.label;
+            dataRow[c] = counts[level.key] ?? 0;
+          });
+        });
+
+        col += width;
+      });
+
+      const aoa = [titleRow, subjectRow, phaseRow, levelRow, dataRow];
+
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+      worksheet["!merges"] = merges;
+      worksheet["!cols"] = new Array(totalCols).fill({ wch: 12 });
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Student Data");
+      const suffix = source === "afterSchool" ? "after_school_" : "";
+      const date = new Date().toISOString().split("T")[0];
+      XLSX.writeFile(workbook, `${suffix}student_data_${report.session || date}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export student data:", err);
+      alert("Failed to export student data. Please try again.");
+    } finally {
+      setExporting(false);
+    }
   }
 
   if (!report && !error) {
@@ -215,6 +298,19 @@ export default function StudentDataView({ fellowId, token, canEditNotes, source 
                 </option>
               ))}
             </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Export</label>
+            <button
+              type="button"
+              onClick={handleExport}
+              disabled={exporting || report.totalStudents === 0}
+              className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Export the selected session to Excel"
+            >
+              <span className="material-symbols-outlined text-[16px]">download</span>
+              {exporting ? "Exporting..." : "Export"}
+            </button>
           </div>
         </div>
       </div>

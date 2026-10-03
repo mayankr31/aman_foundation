@@ -4,12 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { FELLOW_TABS } from "@/lib/fellowTabs";
 
 export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCollapse }) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
   // Dropdown states
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [eduOpen, setEduOpen] = useState(false);
   const [observationsOpen, setObservationsOpen] = useState(false);
   const [livelihoodOpen, setLivelihoodOpen] = useState(false);
@@ -20,6 +22,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
       [
         "/education",
         "/education/fellows",
+        "/education/program-managers",
         "/education/students",
         "/education/schools",
         "/education/pta",
@@ -28,6 +31,9 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
       ].some(path => pathname === path)
     ) {
       setEduOpen(true);
+    }
+    if (pathname.startsWith("/profile")) {
+      setWorkspaceOpen(true);
     }
     if (pathname.startsWith("/fellow-observations")) {
       setObservationsOpen(true);
@@ -134,6 +140,48 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             <span className={labelClass}>Dashboard</span>
           </Link>
 
+          {/* My Profile Submenu (Fellow) */}
+          {user?.roleName === "FELLOW" && (
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => handleFolderToggle(workspaceOpen, setWorkspaceOpen)}
+                title="My Profile"
+                className={`flex items-center gap-3 py-3 px-4 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-full transition-all w-full text-left font-medium ${
+                  collapsed ? "md:justify-center md:px-0" : "justify-between"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="material-symbols-outlined">person</span>
+                  <span className={labelClass}>My Profile</span>
+                </div>
+                {!collapsed && (
+                  <span
+                    className={`material-symbols-outlined transition-transform duration-300 ${
+                      workspaceOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    expand_more
+                  </span>
+                )}
+              </button>
+
+              {workspaceOpen && !collapsed && (
+                <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
+                  {FELLOW_TABS.map((tab) => (
+                    <Link
+                      key={tab.slug}
+                      className={sublinkClass(false)}
+                      href={`/profile?tab=${tab.slug}`}
+                      onClick={onClose}
+                    >
+                      {tab.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Education Submenu */}
           <div className="flex flex-col gap-1">
             <button
@@ -176,6 +224,15 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                     onClick={onClose}
                   >
                     Fellows
+                  </Link>
+                )}
+                {user?.roleName === "ADMIN" && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/program-managers")}
+                    href="/education/program-managers"
+                    onClick={onClose}
+                  >
+                    Program Managers
                   </Link>
                 )}
                 <Link
@@ -385,10 +442,10 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
               href="/hr"
               className={navItemClass(pathname === "/hr")}
               onClick={onClose}
-              title="HR Management"
+              title="Employees"
             >
               <span className="material-symbols-outlined">group</span>
-              <span className={labelClass}>HR Management</span>
+              <span className={labelClass}>Employees</span>
             </Link>
           )}
 

@@ -79,7 +79,6 @@ export async function PATCH(req, context) {
         email: body.email,
         phone: body.phone,
         address: body.address,
-        cohort: body.cohort,
         avatar: body.avatar,
         progress: body.progress !== undefined ? parseInt(body.progress) : undefined,
         evaluationRating: body.evaluationRating !== undefined ? parseFloat(body.evaluationRating) : undefined,

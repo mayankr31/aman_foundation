@@ -2,8 +2,8 @@
  
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { AMAN_FOUNDATION_MAP } from "@/lib/schoolsData";
 import { useAuth } from "@/lib/useAuth";
+import { extractMapEmbedUrl } from "@/lib/mapUrl";
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
     <div className="flex flex-col gap-1">
@@ -102,6 +102,40 @@ export default function AfterSchoolCentresModule() {
     }
   };
 
+  const handleExport = async () => {
+    if (centres.length === 0) {
+      alert("No centre records to export.");
+      return;
+    }
+
+    const rows = centres.map((c) => ({
+      "Centre Name": c.name,
+      "Coordinator Name": c.coordinatorName || "",
+      "Email": c.email || "",
+      "Phone": c.phone || "",
+      "Location": c.location || "",
+      "Address": c.address || "",
+      "Status": c.status || "",
+      "Enrollment Goal": c.goal ?? "",
+      "Enrolled": c.enrolled ?? 0,
+      "Programs": c.programs ?? 0,
+      "Map URL": c.mapUrl || "",
+    }));
+
+    try {
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Centres");
+      const date = new Date().toISOString().split("T")[0];
+      XLSX.writeFile(workbook, `after_school_centres_export_${date}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export centres:", err);
+      alert("Failed to export centres. Please try again.");
+    }
+  };
+
   const [selectedLocation, setSelectedLocation] = useState("All");
 
   const filteredCentres = centres.filter((c) => {
@@ -149,104 +183,41 @@ export default function AfterSchoolCentresModule() {
           </p>
         </div>
       </div>
-      {/* Bento Grid Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        {/* Map View (Hero Card) */}
-        <div className="xl:col-span-8 bg-surface-container-low rounded-[1rem] relative overflow-hidden h-[500px] flex group border border-outline-variant/10 shadow-inner">
-          <iframe
-            src={AMAN_FOUNDATION_MAP.embedUrl}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="w-full h-full"
-          ></iframe>
-          {/* Glassmorphism Stats Overlay */}
-          <div className="absolute bottom-6 left-6 right-6 md:right-auto md:w-[340px] bg-surface-container-lowest/85 backdrop-blur-[12px] p-6 rounded-[1rem] shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] pointer-events-none">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline text-lg text-on-surface tracking-tight">Regional Impact</h3>
-              <span className="material-symbols-outlined text-primary">public</span>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
-                  Total Centres
-                </p>
-                <p className="font-headline text-2xl text-on-surface">{centres.length}</p>
-              </div>
-              <div>
-                <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
-                  Active Students
-                </p>
-                <p className="font-headline text-2xl text-primary">
-                  {centres.reduce((acc, c) => acc + (c.enrolled ?? 0), 0).toLocaleString()}
-                </p>
-              </div>
-            </div>
+      {/* Summary Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="material-symbols-outlined text-primary text-[20px]">school</span>
+            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Total Centres</p>
           </div>
+          <p className="font-headline text-3xl text-on-surface">{centres.length}</p>
         </div>
-        {/* Aggregated Metrics Side Panel */}
-        <div className="xl:col-span-4 flex flex-col gap-6">
-          {/* Primary Metric Card */}
-          <div className="bg-primary-container p-8 rounded-[1rem] flex flex-col justify-between h-full relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="material-symbols-outlined text-on-primary-container">trending_up</span>
-                <h3 className="font-label text-xs uppercase tracking-[0.05em] text-on-primary-container/80">
-                  Overall Impact Score
-                </h3>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <p className="font-headline text-5xl tracking-[-0.02em] text-on-primary-container">87</p>
-                <p className="font-body text-sm text-on-primary-container/80">/ 100</p>
-              </div>
-            </div>
-            <div className="mt-8 space-y-4 relative z-10">
-              <div>
-                <div className="flex justify-between text-sm mb-1 text-on-primary-container">
-                  <span>Program Attendance</span>
-                  <span className="font-medium">92%</span>
-                </div>
-                <div className="h-1.5 w-full bg-on-primary-container/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-on-primary-container w-[92%] rounded-full shadow-[0_0_8px_rgba(255,255,255,0.5)]"></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1 text-on-primary-container">
-                  <span>Resource Allocation</span>
-                  <span className="font-medium">78%</span>
-                </div>
-                <div className="h-1.5 w-full bg-on-primary-container/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-on-primary-container w-[78%] rounded-full"></div>
-                </div>
-              </div>
-            </div>
+        <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="material-symbols-outlined text-primary text-[20px]">groups</span>
+            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Active Students</p>
           </div>
-          {/* Alert/Action Card */}
-          <div className="bg-surface-container-low p-6 rounded-[1rem]">
-            <h3 className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4">
-              Needs Attention
-            </h3>
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-secondary text-[20px]">warning</span>
-              </div>
-              <div>
-                <p className="font-body text-sm text-on-surface font-medium">
-                  3 Centres require immediate resource restocking.
-                </p>
-                <a
-                  className="font-label text-xs uppercase tracking-widest text-primary mt-2 inline-block hover:underline"
-                  href="#"
-                >
-                  Review Inventory
-                </a>
-              </div>
-            </div>
+          <p className="font-headline text-3xl text-primary">
+            {centres.reduce((acc, c) => acc + (c.enrolled ?? 0), 0).toLocaleString()}
+          </p>
+        </div>
+        <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="material-symbols-outlined text-primary text-[20px]">campaign</span>
+            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Total Programs</p>
           </div>
+          <p className="font-headline text-3xl text-on-surface">
+            {centres.reduce((acc, c) => acc + (c.programs ?? 0), 0)}
+          </p>
+        </div>
+        <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Active Centres</p>
+          </div>
+          <p className="font-headline text-3xl text-on-surface">
+            {centres.filter((c) => c.status === "Active").length}
+          </p>
         </div>
       </div>
 
@@ -265,7 +236,10 @@ export default function AfterSchoolCentresModule() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <button className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/10">
+          <button
+            onClick={handleExport}
+            className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/10"
+          >
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export Data</span>
           </button>
@@ -355,22 +329,25 @@ export default function AfterSchoolCentresModule() {
                 </div>
               </div>
               <div className="mt-auto">
-                <div className="flex justify-between font-label text-xs uppercase tracking-widest text-on-surface-variant mb-2">
-                  <span>Impact Goal</span>
-                  <span className={c.goal > 50 ? "text-primary" : "text-secondary"}>
-                    {c.goal}%
-                  </span>
-                </div>
-                <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${
-                      c.goal > 50
-                        ? "bg-primary shadow-[0_0_4px_rgba(0,104,87,0.4)]"
-                        : "bg-secondary"
-                    }`}
-                    style={{ width: `${c.goal}%` }}
-                  ></div>
-                </div>
+                {(() => {
+                  const enrolled = c.enrolled ?? 0;
+                  const goal = c.goal || 0;
+                  const progress = goal > 0 ? Math.min(100, Math.round((enrolled / goal) * 100)) : 0;
+                  const color = progress >= 80 ? "bg-primary shadow-[0_0_4px_rgba(0,104,87,0.4)]" : progress >= 40 ? "bg-secondary" : "bg-error";
+                  return (
+                    <>
+                      <div className="flex justify-between font-label text-xs uppercase tracking-widest text-on-surface-variant mb-2">
+                        <span>Enrollment Goal</span>
+                        <span className={progress >= 80 ? "text-primary" : progress >= 40 ? "text-secondary" : "text-error"}>
+                          {enrolled} / {goal}
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }}></div>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             </Link>
           ))}
@@ -453,10 +430,11 @@ export default function AfterSchoolCentresModule() {
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL</label>
-              <input value={addForm.mapUrl} onChange={e => setAddForm(f => ({ ...f, mapUrl: e.target.value }))}
-                placeholder="https://maps.google.com/embed?..."
+              <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Google Maps Embed URL or iframe code</label>
+              <input value={addForm.mapUrl} onChange={e => setAddForm(f => ({ ...f, mapUrl: extractMapEmbedUrl(e.target.value) }))}
+                placeholder='Paste the embed URL, or the full <iframe src="..."> code'
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+              <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <button type="button" onClick={() => setShowAddModal(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>

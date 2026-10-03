@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
 import { useToast } from "@/context/ToastContext";
@@ -12,14 +13,30 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import StudentDataView from "@/components/StudentDataView";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
+import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
 export default function FellowProfileDetail() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 flex justify-center items-center h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      }
+    >
+      <FellowProfileDetailContent />
+    </Suspense>
+  );
+}
+
+function FellowProfileDetailContent() {
   const { id } = useParams();
   const { token, user, isInitializing } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const toast = useToast();
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,7 +46,7 @@ export default function FellowProfileDetail() {
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
   const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
-  const [activeTab, setActiveTab] = useState("Goals");
+  const activeTab = labelFromSlug(searchParams.get("tab")) || "Monthly Planner";
   const [showPDFModal, setShowPDFModal] = useState(false);
 
   // Goal Sheet states
@@ -303,9 +320,6 @@ export default function FellowProfileDetail() {
               <h2 className="text-3xl font-headline font-black text-on-surface capitalize">
                 {fellow.name}
               </h2>
-              <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                {fellow.cohort}
-              </span>
             </div>
             <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-primary">location_on</span>
@@ -362,19 +376,21 @@ export default function FellowProfileDetail() {
 
       {/* Tabs */}
       <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {["Monthly Planner", "Goals", "Performance Dashboard", "Student Data", "After School Student Data", "Coaching & Classroom Observation", "Engagement Survey", "Look Beyond Survey", "Individual Feedback Tracking"].map((tab) => {
-          const isActive = activeTab === tab;
+        {FELLOW_TABS.map((tab) => {
+          const isActive = activeTab === tab.label;
           return (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.slug}
+              onClick={() =>
+                router.replace(`/education/fellows/${id}?tab=${tab.slug}`, { scroll: false })
+              }
               className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                 isActive
                   ? "font-semibold text-primary border-b-2 border-primary"
                   : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
               }`}
             >
-              {tab}
+              {tab.label}
             </button>
           );
         })}
@@ -474,83 +490,10 @@ export default function FellowProfileDetail() {
             </div>
           )}
 
-          {activeTab === "Performance Dashboard" && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-8">
-              <h3 className="font-headline font-bold text-xl text-on-surface mb-6">Classroom Performance Analytics</h3>
-              
-              {/* Math & English Improvement Indexes */}
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between text-sm font-semibold mb-2">
-                    <span>Student Literacy Level Improvement</span>
-                    <span className="text-primary">+{fellow.progress || 34}% Progress</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-3 rounded-full overflow-hidden relative">
-                    <div className="bg-primary h-full rounded-full" style={{ width: `${fellow.progress || 34}%` }}></div>
-                  </div>
-                  <p className="text-xs text-on-surface-variant mt-2">Target: +40% improvement in writing by Q4</p>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-sm font-semibold mb-2">
-                    <span>PTA Parent Engagement Rating</span>
-                    <span className="text-primary">82% Positive</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-3 rounded-full overflow-hidden relative">
-                    <div className="bg-primary h-full rounded-full w-[82%]"></div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-sm font-semibold mb-2">
-                    <span>Average Class Attendance Rate</span>
-                    <span className="text-primary">91% Attendance</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-3 rounded-full overflow-hidden relative">
-                    <div className="bg-primary h-full rounded-full w-[91%]"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* simulated performance dashboard bar graph */}
-              <div className="mt-10 border-t border-surface-container pt-8">
-                <h4 className="font-headline font-semibold text-base mb-6 text-on-surface">Monthly Assessment Benchmarks (Average Score %)</h4>
-                <div className="h-64 flex items-end justify-between gap-4 border-b border-surface-container-highest pb-2 relative font-sans">
-                  <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-[10px] text-on-surface-variant pointer-events-none">
-                    <span>100%</span>
-                    <span>80%</span>
-                    <span>60%</span>
-                    <span>40%</span>
-                    <span>20%</span>
-                    <span>0%</span>
-                  </div>
-                  <div className="w-8"></div>
-                  {[
-                    { month: "Jan", val: 55 },
-                    { month: "Feb", val: 62 },
-                    { month: "Mar", val: 70 },
-                    { month: "Apr", val: 76 },
-                    { month: "May", val: 84 },
-                  ].map((d, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center group max-w-[50px] relative">
-                      <div className="absolute bottom-full mb-2 bg-on-surface text-surface text-[10px] px-2.5 py-0.5 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                        {d.val}%
-                      </div>
-                      <div
-                        className="w-full bg-primary rounded-t-sm transition-all duration-500 shadow-sm"
-                        style={{ height: `${d.val}%` }}
-                      ></div>
-                      <span className="text-[10px] text-on-surface-variant mt-2 font-medium">{d.month}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
           {activeTab === "Student Data" && (
             <StudentDataView
               fellowId={fellow.id}
+              fellowName={fellow.name}
               token={token}
               source="school"
               canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
@@ -560,6 +503,7 @@ export default function FellowProfileDetail() {
           {activeTab === "After School Student Data" && (
             <StudentDataView
               fellowId={fellow.id}
+              fellowName={fellow.name}
               token={token}
               source="afterSchool"
               canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
@@ -672,13 +616,22 @@ export default function FellowProfileDetail() {
                           {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
                         </p>
                       </div>
-                      <button
-                        onClick={() => setViewingSurvey(survey)}
-                        className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
-                        title="View Responses"
-                      >
-                        <span className="material-symbols-outlined text-[22px]">visibility</span>
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => exportEngagementSurveyPdf(survey, fellow.name)}
+                          className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                          title="Export as PDF"
+                        >
+                          <span className="material-symbols-outlined text-[22px]">download</span>
+                        </button>
+                        <button
+                          onClick={() => setViewingSurvey(survey)}
+                          className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                          title="View Responses"
+                        >
+                          <span className="material-symbols-outlined text-[22px]">visibility</span>
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -704,13 +657,22 @@ export default function FellowProfileDetail() {
                           {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
                         </p>
                       </div>
-                      <button
-                        onClick={() => setViewingLookBeyond(survey)}
-                        className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
-                        title="View Responses"
-                      >
-                        <span className="material-symbols-outlined text-[22px]">visibility</span>
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => exportLookBeyondSurveyPdf(survey, fellow.name)}
+                          className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                          title="Export as PDF"
+                        >
+                          <span className="material-symbols-outlined text-[22px]">download</span>
+                        </button>
+                        <button
+                          onClick={() => setViewingLookBeyond(survey)}
+                          className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
+                          title="View Responses"
+                        >
+                          <span className="material-symbols-outlined text-[22px]">visibility</span>
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>

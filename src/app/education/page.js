@@ -51,7 +51,7 @@ export default function EducationHub() {
               My Profile
             </h3>
             <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
-              View your school assignment, cohort metrics, classroom performance evaluations, and manage your teaching goals.
+              View your school assignment, classroom performance evaluations, and manage your teaching goals.
             </p>
             <div className="flex items-center gap-2 text-primary font-medium text-sm mt-auto z-10 font-sans">
               <span>View Profile</span>
@@ -73,7 +73,7 @@ export default function EducationHub() {
               Fellows Module
             </h3>
             <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
-              Manage cohort data, track professional development, and monitor the placement and performance of our educational fellows across all operating regions.
+              Track professional development and monitor the placement and performance of our educational fellows across all operating regions.
             </p>
             <div className="flex items-center gap-2 text-primary font-medium text-sm mt-auto z-10 font-sans">
               <span>Access Module</span>
@@ -166,7 +166,7 @@ export default function EducationHub() {
             After School Centres
           </h3>
           <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
-            Maintain community learning centre profiles, assign fellows, and monitor attendance across each after school cohort.
+            Maintain community learning centre profiles, assign fellows, and monitor attendance across each after school centre.
           </p>
           <div className="flex items-center gap-2 text-tertiary font-medium text-sm mt-auto z-10 font-sans">
             <span>Access Module</span>

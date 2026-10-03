@@ -4,6 +4,59 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
+const EMPTY_STUDENT_FORM = {
+  name: "",
+  studentId: "",
+  dob: "",
+  gender: "",
+  grade: "Grade 8",
+  gradeGroup: "Middle",
+  district: "",
+  primaryLanguage: "",
+  email: "",
+  phone: "",
+  guardianName: "",
+  guardianPhone: "",
+  address: "",
+  enrolmentDate: "",
+  status: "On Track",
+  schoolId: "",
+};
+
+function normalizeGradeGroup(value) {
+  const base = (value || "").split(" (")[0].trim();
+  return base === "High" ? "Secondary" : base;
+}
+
+function FormField({ label, name, value, onChange, type = "text", required = false, placeholder, options }) {
+  const inputClasses =
+    "px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface";
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      {options ? (
+        <select name={name} value={value} onChange={(e) => onChange(name, e.target.value)} required={required} className={inputClasses}>
+          {options.map((o, index) => {
+            const optValue = typeof o === "string" ? o : o.value;
+            const optLabel = typeof o === "string" ? o : o.label;
+            return <option key={`${optValue}-${index}`} value={optValue}>{optLabel}</option>;
+          })}
+        </select>
+      ) : (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={(e) => onChange(name, e.target.value)}
+          required={required}
+          placeholder={placeholder}
+          className={inputClasses}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function StudentsModule() {
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,13 +71,11 @@ export default function StudentsModule() {
   const [schools, setSchools] = useState([]);
 
   // Form states for adding a student
-  const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentId, setNewStudentId] = useState("");
-  const [newStudentSchool, setNewStudentSchool] = useState("");
-  const [newStudentGrade, setNewStudentGrade] = useState("Grade 8");
-  const [newStudentGradeGroup, setNewStudentGradeGroup] = useState("Middle (6-8)");
-  const [newStudentAttendance, setNewStudentAttendance] = useState("");
-  const [newStudentStatus, setNewStudentStatus] = useState("On Track");
+  const [newStudentForm, setNewStudentForm] = useState(EMPTY_STUDENT_FORM);
+
+  const handleNewStudentChange = (name, value) => {
+    setNewStudentForm((f) => ({ ...f, [name]: value }));
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -47,7 +98,7 @@ export default function StudentsModule() {
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!newStudentName || !newStudentSchool || !newStudentAttendance) return;
+    if (!newStudentForm.name || !newStudentForm.schoolId) return;
 
     try {
       const res = await fetch("/api/students", {
@@ -57,14 +108,11 @@ export default function StudentsModule() {
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify({
-          studentId: newStudentId || `STU-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-          name: newStudentName,
-          schoolId: newStudentSchool,
-          grade: newStudentGrade,
-          gradeGroup: newStudentGradeGroup,
-          attendance: parseFloat(newStudentAttendance),
-          status: newStudentStatus,
-          district: "Kalgachia"
+          ...newStudentForm,
+          studentId: newStudentForm.studentId || `STU-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+          attendance: 0,
+          dob: newStudentForm.dob || null,
+          enrolmentDate: newStudentForm.enrolmentDate || null,
         })
       });
       const json = await res.json();
@@ -76,13 +124,7 @@ export default function StudentsModule() {
         if (loadJson.success) {
           setStudents(loadJson.data);
         }
-        setNewStudentName("");
-        setNewStudentId("");
-        setNewStudentSchool("");
-        setNewStudentGrade("Grade 8");
-        setNewStudentGradeGroup("Middle (6-8)");
-        setNewStudentAttendance("");
-        setNewStudentStatus("On Track");
+        setNewStudentForm(EMPTY_STUDENT_FORM);
         setShowAddModal(false);
       } else {
         alert(json.error || "Failed to add student");
@@ -92,12 +134,54 @@ export default function StudentsModule() {
     }
   };
 
+  const handleExport = async () => {
+    if (filteredStudents.length === 0) {
+      alert("No student records to export.");
+      return;
+    }
+
+    const rows = filteredStudents.map((s) => ({
+      "Student ID": s.studentId,
+      "Name": s.name,
+      "School": s.school ? s.school.name : "Unassigned",
+      "Grade": s.grade,
+      "Grade Group": s.gradeGroup,
+      "Gender": s.gender || "",
+      "Date of Birth": s.dob ? new Date(s.dob).toLocaleDateString() : "",
+      "District": s.district || "",
+      "Primary Language": s.primaryLanguage || "",
+      "Guardian Name": s.guardianName || "",
+      "Guardian Phone": s.guardianPhone || "",
+      "Email": s.email || "",
+      "Phone": s.phone || "",
+      "Address": s.address || "",
+      "Enrolment Date": s.enrolmentDate ? new Date(s.enrolmentDate).toLocaleDateString() : "",
+      "Attendance (%)": s.attendance ?? 0,
+      "Status": s.status,
+      "Migrated": s.isMigrated ? "Yes" : "No",
+    }));
+
+    try {
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+      const date = new Date().toISOString().split("T")[0];
+      XLSX.writeFile(workbook, `students_export_${date}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export students:", err);
+      alert("Failed to export students. Please try again.");
+    }
+  };
+
   const clearFilters = () => {
     setGradeFilter("All Grades");
     setPerformanceFilter("All Performance");
     setSchoolFilter("All Schools");
     setMigratedFilter("All");
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   const getInitials = (name) => {
@@ -138,7 +222,8 @@ export default function StudentsModule() {
       s.studentId.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesGrade =
-      gradeFilter === "All Grades" || s.gradeGroup === gradeFilter;
+      gradeFilter === "All Grades" ||
+      normalizeGradeGroup(s.gradeGroup) === gradeFilter;
 
     const matchesPerformance =
       performanceFilter === "All Performance" ||
@@ -164,10 +249,6 @@ export default function StudentsModule() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, gradeFilter, performanceFilter, schoolFilter, migratedFilter]);
 
   return (
     <div className="p-6 md:p-8 lg:p-12 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -202,11 +283,14 @@ export default function StudentsModule() {
               className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 transition-shadow"
               placeholder="Search students..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
               type="text"
             />
           </div>
-          <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer">
+          <button
+            onClick={handleExport}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer"
+          >
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export</span>
           </button>
@@ -228,10 +312,10 @@ export default function StudentsModule() {
             <span className="text-xs uppercase tracking-widest text-on-surface-variant font-label">
               Total Enrolled
             </span>
-            <span className="text-3xl font-black text-on-surface tracking-tighter">4,285</span>
+            <span className="text-3xl font-black text-on-surface tracking-tighter">{students.length.toLocaleString()}</span>
             <div className="flex items-center gap-1 text-primary text-xs font-medium mt-1">
-              <span className="material-symbols-outlined text-xs">trending_up</span>
-              <span>+12% this term</span>
+              <span className="material-symbols-outlined text-xs">school</span>
+              <span>Across {schools.length} partner {schools.length === 1 ? "school" : "schools"}</span>
             </div>
           </div>
         </div>
@@ -242,17 +326,18 @@ export default function StudentsModule() {
           </span>
           <select
             value={gradeFilter}
-            onChange={(e) => setGradeFilter(e.target.value)}
+            onChange={(e) => { setGradeFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
             <option>All Grades</option>
-            <option>Primary (1-5)</option>
-            <option>Middle (6-8)</option>
-            <option>High (9-10)</option>
+            <option>Primary</option>
+            <option>Middle</option>
+            <option>Secondary</option>
+            <option>Senior Secondary</option>
           </select>
           <select
             value={performanceFilter}
-            onChange={(e) => setPerformanceFilter(e.target.value)}
+            onChange={(e) => { setPerformanceFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
             <option>All Performance</option>
@@ -262,7 +347,7 @@ export default function StudentsModule() {
           </select>
           <select
             value={migratedFilter}
-            onChange={(e) => setMigratedFilter(e.target.value)}
+            onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
             <option>All</option>
@@ -271,7 +356,7 @@ export default function StudentsModule() {
           </select>
           <select
             value={schoolFilter}
-            onChange={(e) => setSchoolFilter(e.target.value)}
+            onChange={(e) => { setSchoolFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
             <option value="All Schools">All Schools</option>
@@ -443,136 +528,62 @@ export default function StudentsModule() {
       {/* Add Student Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add New Student Record</h3>
+          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl font-sans">
+            <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
+              <h3 className="text-lg font-bold font-headline text-on-surface">Add New Student Record</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+                className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer"
               >
-                <span className="material-symbols-outlined">close</span>
+                <span className="material-symbols-outlined text-on-surface-variant">close</span>
               </button>
             </div>
-            <form onSubmit={handleAddStudent} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Student Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Aarav Kumar"
-                  value={newStudentName}
-                  onChange={(e) => setNewStudentName(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Student ID (Optional)
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. STU-2026-101 (Leave blank to auto-generate)"
-                  value={newStudentId}
-                  onChange={(e) => setNewStudentId(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Partner School Linkage
-                </label>
-                <select
-                  required
-                  value={newStudentSchool}
-                  onChange={(e) => setNewStudentSchool(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                >
-                  <option value="" disabled>Select partner school...</option>
-                  {schools.map(sch => (
-                    <option key={sch.id} value={sch.id}>{sch.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    Grade Group
-                  </label>
-                  <select
-                    value={newStudentGradeGroup}
-                    onChange={(e) => setNewStudentGradeGroup(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                  >
-                    <option>Primary (1-5)</option>
-                    <option>Middle (6-8)</option>
-                    <option>High (9-10)</option>
-                  </select>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    Specific Grade
-                  </label>
-                  <select
-                    value={newStudentGrade}
-                    onChange={(e) => setNewStudentGrade(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                  >
-                    {Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`).map(g => (
-                      <option key={g}>{g}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    Attendance (%)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
+            <div className="p-6">
+              <form onSubmit={handleAddStudent} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <FormField label="Full Name" name="name" value={newStudentForm.name} onChange={handleNewStudentChange} required placeholder="e.g. Aarav Kumar" />
+                <FormField label="Student ID (Optional)" name="studentId" value={newStudentForm.studentId} onChange={handleNewStudentChange} placeholder="Leave blank to auto-generate" />
+                <div className="md:col-span-2">
+                  <FormField
+                    label="Partner School Linkage"
+                    name="schoolId"
+                    value={newStudentForm.schoolId}
+                    onChange={handleNewStudentChange}
                     required
-                    placeholder="e.g. 95"
-                    value={newStudentAttendance}
-                    onChange={(e) => setNewStudentAttendance(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    options={[{ value: "", label: "Select partner school..." }, ...schools.map((sch) => ({ value: sch.id, label: sch.name }))]}
                   />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                    Academic Status
-                  </label>
-                  <select
-                    value={newStudentStatus}
-                    onChange={(e) => setNewStudentStatus(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                  >
-                    <option>On Track</option>
-                    <option>Satisfactory</option>
-                    <option>Needs Attention</option>
-                    <option>Excelling</option>
-                  </select>
+                <FormField label="Date of Birth" name="dob" type="date" value={newStudentForm.dob} onChange={handleNewStudentChange} />
+                <FormField label="Gender" name="gender" value={newStudentForm.gender} onChange={handleNewStudentChange} options={["", "Male", "Female", "Other"]} />
+                <FormField label="Grade" name="grade" value={newStudentForm.grade} onChange={handleNewStudentChange} options={Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`)} />
+                <FormField label="Grade Group" name="gradeGroup" value={newStudentForm.gradeGroup} onChange={handleNewStudentChange} options={["Primary", "Middle", "Secondary", "Senior Secondary"]} />
+                <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} placeholder="e.g. Kalgachia" />
+                <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} placeholder="e.g. Hindi" />
+                <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} />
+                <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} />
+                <FormField label="Email" name="email" type="email" value={newStudentForm.email} onChange={handleNewStudentChange} />
+                <FormField label="Phone" name="phone" value={newStudentForm.phone} onChange={handleNewStudentChange} />
+                <div className="md:col-span-2">
+                  <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} placeholder="Village / Town, Post Office" />
                 </div>
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Add Student
-                </button>
-              </div>
-            </form>
+                <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} />
+                <FormField label="Status" name="status" value={newStudentForm.status} onChange={handleNewStudentChange} options={["On Track", "Needs Attention", "At Risk", "Graduated", "Inactive"]} />
+                <div className="md:col-span-2 flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+                  >
+                    Add Student
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

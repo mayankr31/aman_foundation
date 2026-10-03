@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
+import { isAdmin, isLivelihoodProgramManaged, getFellowIdByUserId, isLivelihoodProgramAssignedToFellow } from "@/lib/scope";
 
 export async function GET(req, { params }) {
   try {
@@ -10,7 +10,15 @@ export async function GET(req, { params }) {
 
     const { id } = await params;
 
-    if (!isAdmin(user) && !(await isLivelihoodProgramManaged(user.id, id))) {
+    let allowed = isAdmin(user);
+    if (!allowed && user.role.name === "PROGRAM_MANAGER") {
+      allowed = await isLivelihoodProgramManaged(user.id, id);
+    }
+    if (!allowed && user.role.name === "FELLOW") {
+      const fellowId = await getFellowIdByUserId(user.id);
+      allowed = await isLivelihoodProgramAssignedToFellow(fellowId, id);
+    }
+    if (!allowed) {
       return NextResponse.json(
         { error: "Forbidden: You are not assigned to this program" },
         { status: 403 }
@@ -24,6 +32,14 @@ export async function GET(req, { params }) {
           include: {
             user: {
               select: { id: true, name: true, username: true, email: true, mobile: true },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
+        fellows: {
+          include: {
+            fellow: {
+              select: { id: true, name: true, email: true, phone: true, avatar: true },
             },
           },
           orderBy: { createdAt: "asc" },

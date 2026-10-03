@@ -5,7 +5,7 @@ import { useToast } from "@/context/ToastContext";
 import {
   SUBJECT_OPTIONS,
   RATING_OPTIONS,
-  RATING_FIELDS,
+  DEFAULT_RATING_FIELDS,
   computeOverallScore,
 } from "@/data/fellowPerformanceConstants";
 
@@ -24,6 +24,7 @@ const inputClass =
 export default function FellowPerformanceForm({
   performance,
   fellows = [],
+  categories = [],
   token,
   onClose,
   onSave,
@@ -50,11 +51,16 @@ export default function FellowPerformanceForm({
   );
   const [subjectOther, setSubjectOther] = useState(initialSubjectIsOther ? performance.subject : "");
   const [ratings, setRatings] = useState(() => {
-    const obj = {};
-    for (const field of RATING_FIELDS) {
-      obj[field.key] = performance?.[field.key] ?? "";
+    if (performance?.ratings && Object.keys(performance.ratings).length) {
+      return { ...performance.ratings };
     }
-    return obj;
+    const legacy = {};
+    for (const field of DEFAULT_RATING_FIELDS) {
+      if (performance && performance[field.key] !== null && performance[field.key] !== undefined) {
+        legacy[field.key] = performance[field.key];
+      }
+    }
+    return legacy;
   });
   const [strength, setStrength] = useState(performance?.strength || "");
   const [aod, setAod] = useState(performance?.aod || "");
@@ -65,7 +71,7 @@ export default function FellowPerformanceForm({
     setRatings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const overallScore = computeOverallScore(ratings);
+  const overallScore = computeOverallScore(ratings, categories);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -82,7 +88,11 @@ export default function FellowPerformanceForm({
       toast.error("Please enter the subject");
       return;
     }
-    const missing = RATING_FIELDS.find((field) => !ratings[field.key]);
+    if (!categories.length) {
+      toast.error("Please add at least one rating category");
+      return;
+    }
+    const missing = categories.find((category) => !ratings[category.key]);
     if (missing) {
       toast.error(`Please rate ${missing.label}`);
       return;
@@ -105,7 +115,7 @@ export default function FellowPerformanceForm({
           date,
           classGroup,
           subject,
-          ...ratings,
+          ratings,
           strength,
           aod,
           trend,
@@ -181,7 +191,7 @@ export default function FellowPerformanceForm({
                 {fellows.map((fellow) => (
                   <option key={fellow.id} value={fellow.id}>
                     {fellow.name}
-                    {fellow.cohort ? ` (${fellow.cohort})` : ""}
+                    {fellow.email ? ` (${fellow.email})` : ""}
                   </option>
                 ))}
               </select>
@@ -229,7 +239,7 @@ export default function FellowPerformanceForm({
           </div>
 
           <div className="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
               <h3 className="font-headline font-bold text-base text-on-surface">
                 Ratings (1 - 4)
               </h3>
@@ -242,16 +252,17 @@ export default function FellowPerformanceForm({
                 </span>
               </div>
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {RATING_FIELDS.map((field) => (
-                <div key={field.key}>
+              {categories.map((category) => (
+                <div key={category.id}>
                   <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
-                    {field.label}
+                    {category.label}
                   </label>
                   <select
                     required
-                    value={ratings[field.key]}
-                    onChange={(e) => updateRating(field.key, e.target.value)}
+                    value={ratings[category.key] ?? ""}
+                    onChange={(e) => updateRating(category.key, e.target.value)}
                     className={inputClass}
                   >
                     <option value="">Select...</option>
@@ -263,6 +274,11 @@ export default function FellowPerformanceForm({
                   </select>
                 </div>
               ))}
+              {categories.length === 0 && (
+                <p className="text-sm text-on-surface-variant col-span-full">
+                  No rating categories configured. Use &ldquo;Manage Ratings&rdquo; to add categories.
+                </p>
+              )}
             </div>
           </div>
 

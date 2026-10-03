@@ -26,15 +26,55 @@ export async function PATCH(req, context) {
       dataToUpdate.department = department;
     }
 
-    const updatedUser = await prisma.user.update({
+    const targetUser = await prisma.user.findUnique({
       where: { id },
-      data: dataToUpdate,
-      select: {
-        id: true,
-        username: true,
-        status: true,
-        role: { select: { name: true } }
+      select: { id: true, name: true, email: true, fellow: { select: { id: true } }, role: { select: { name: true } } },
+    });
+
+    if (!targetUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const updated = await tx.user.update({
+        where: { id },
+        data: dataToUpdate,
+        select: {
+          id: true,
+          username: true,
+          status: true,
+          role: { select: { name: true } }
+        }
+      });
+
+      // When a fellow account is approved, ensure a linked Fellow profile exists
+      // so the fellow can access their dashboard data.
+      if (
+        status === "ACTIVE" &&
+        targetUser.role?.name === "FELLOW" &&
+        !targetUser.fellow
+      ) {
+        const existing = targetUser.email
+          ? await tx.fellow.findUnique({ where: { email: targetUser.email } })
+          : null;
+
+        if (existing && !existing.userId) {
+          await tx.fellow.update({
+            where: { id: existing.id },
+            data: { userId: id },
+          });
+        } else if (!existing) {
+          await tx.fellow.create({
+            data: {
+              name: targetUser.name,
+              email: targetUser.email,
+              userId: id,
+            },
+          });
+        }
       }
+
+      return updated;
     });
 
     return NextResponse.json({ success: true, data: updatedUser });
