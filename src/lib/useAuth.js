@@ -51,8 +51,10 @@ export function useAuth() {
                 roleId: json.data.roleId,
                 roleName: json.data.role.name,
                 name: json.data.name,
+                avatar: json.data.avatar || json.data.fellow?.avatar || null,
                 fellowId: json.data.fellow?.id || null,
                 fellowName: json.data.fellow?.name || null,
+                permissions: json.data.permissions || {},
               };
               localStorage.setItem("user", encodeData(freshUser));
               setUser(freshUser);
@@ -89,11 +91,22 @@ export function useAuth() {
     window.location.href = "/login";
   };
 
+  const can = (page, action = "READ") => {
+    if (!page) return true;
+    const perms = user?.permissions;
+    // Permissions not loaded yet (e.g. legacy session) → don't hard-block.
+    if (!perms || typeof perms !== "object") return true;
+    const pagePerms = perms[page];
+    if (!pagePerms) return false;
+    return action === "WRITE" ? !!pagePerms.write : !!pagePerms.read;
+  };
+
   return {
     user,
     token,
     isInitializing,
     login,
     logout,
+    can,
   };
 }

@@ -146,7 +146,7 @@ export default function HrAttendanceLogs() {
           Attendance Logs
         </div>
         <Link href="/hr/leaves" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Leave Workflow
+          Leave Requests
         </Link>
       </div>
 

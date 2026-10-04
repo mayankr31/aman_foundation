@@ -5,7 +5,9 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
-import { sortSubjectOptions } from "@/data/assessmentOptions";
+import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 // ─── Small helpers ─────────────────────────────────────────────────────────────
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
@@ -58,6 +60,8 @@ export default function StudentProfileDetail() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [editPhoto, setEditPhoto] = useState(null);
   const [modal, setModal] = useState(null); // 'edit' | 'school' | 'attendance' | 'assessment_form'
   const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
   const [schools, setSchools] = useState([]);
@@ -96,6 +100,7 @@ export default function StudentProfileDetail() {
   const [templateEditor, setTemplateEditor] = useState(null);
   const [templateDelete, setTemplateDelete] = useState(null);
   const [assessmentTypeFilter, setAssessmentTypeFilter] = useState("");
+  const [assessmentSessionFilter, setAssessmentSessionFilter] = useState("");
 
   const authHeaders = useCallback(() => ({
     "Content-Type": "application/json",
@@ -433,9 +438,46 @@ export default function StudentProfileDetail() {
         body: JSON.stringify(editForm)
       });
       const json = await res.json();
-      if (json.success) { await loadStudent(); setModal(null); }
+      if (json.success) {
+        if (editPhoto) {
+          const fd = new FormData();
+          fd.append("photo", editPhoto);
+          await fetch(`/api/students/${id}/photo`, {
+            method: "POST",
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            body: fd
+          });
+        }
+        setEditPhoto(null);
+        await loadStudent();
+        setModal(null);
+      }
       else alert(json.error || "Failed to save");
     } finally { setSaving(false); }
+  }
+
+  async function handlePhotoUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      const fd = new FormData();
+      fd.append("photo", file);
+      const res = await fetch(`/api/students/${id}/photo`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd
+      });
+      const json = await res.json();
+      if (json.success) await loadStudent();
+      else alert(json.error || "Failed to upload photo");
+    } catch (err) {
+      console.error("Failed to upload photo:", err);
+      alert("Error uploading photo");
+    } finally {
+      setUploadingPhoto(false);
+      e.target.value = "";
+    }
   }
 
   async function handleToggleMigrated() {
@@ -593,12 +635,17 @@ export default function StudentProfileDetail() {
     academicYearOptions.push(`${y - 1}-${y}`);
   }
 
+  const assessmentSessions = Array.from(
+    new Set(assessmentForms.filter(f => f.date).map(f => deriveSession(f.date)))
+  ).sort().reverse();
+
   const filteredAssessmentForms = assessmentForms.filter(f => {
-    if (!assessmentTypeFilter) return true;
-    return f.assessmentType === assessmentTypeFilter;
+    if (assessmentTypeFilter && f.assessmentType !== assessmentTypeFilter) return false;
+    if (assessmentSessionFilter && (!f.date || deriveSession(f.date) !== assessmentSessionFilter)) return false;
+    return true;
   });
 
-  const isAdminOrManager = user && (user.roleName === "ADMIN" || user.roleName === "PROGRAM_MANAGER");
+  const isAdminOrManager = user && (user.roleName === "ADMIN" || PROGRAM_ROLES.includes(user.roleName));
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -612,8 +659,18 @@ export default function StudentProfileDetail() {
       <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-4xl shrink-0 border-4 border-surface shadow-md">
-            {name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)}
+          <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
+            <div className="w-full h-full rounded-full overflow-hidden bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-4xl border-4 border-surface shadow-md">
+              {student.photoUrl ? (
+                <img alt="student" className="w-full h-full object-cover" src={student.photoUrl} />
+              ) : (
+                name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)
+              )}
+            </div>
+            <label className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container transition-colors" title="Upload photo">
+              <span className="material-symbols-outlined text-[18px]">{uploadingPhoto ? "hourglass_top" : "photo_camera"}</span>
+              <input type="file" accept="image/*" className="hidden" disabled={uploadingPhoto} onChange={handlePhotoUpload} />
+            </label>
           </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
@@ -662,10 +719,6 @@ export default function StudentProfileDetail() {
           >
             <span className="material-symbols-outlined text-[18px]">school</span>
             Manage School
-          </button>
-          <button className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
-            <span className="material-symbols-outlined text-[18px]">download</span>
-            Export Report
           </button>
         </div>
       </header>
@@ -719,6 +772,16 @@ export default function StudentProfileDetail() {
                   <option value="BASELINE">Baseline</option>
                   <option value="MIDLINE">Midline</option>
                   <option value="ENDLINE">Endline</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Academic Session</label>
+                <select value={assessmentSessionFilter} onChange={(e) => setAssessmentSessionFilter(e.target.value)}
+                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+                  <option value="">All Sessions</option>
+                  {assessmentSessions.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
                 </select>
               </div>
               <div className="flex gap-2 ml-auto">
@@ -1133,6 +1196,31 @@ export default function StudentProfileDetail() {
         <Modal title="Edit Student Info" onClose={() => setModal(null)}>
           <form onSubmit={handleEditSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2 flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center shrink-0">
+                  {editPhoto ? (
+                    <img alt="preview" className="w-full h-full object-cover" src={URL.createObjectURL(editPhoto)} />
+                  ) : student.photoUrl ? (
+                    <img alt="student" className="w-full h-full object-cover" src={student.photoUrl} />
+                  ) : (
+                    <span className="material-symbols-outlined text-on-surface-variant">person</span>
+                  )}
+                </div>
+                <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-surface-container transition-colors cursor-pointer">
+                  {editPhoto ? "Change Photo" : "Upload Photo"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => setEditPhoto(e.target.files?.[0] || null)}
+                  />
+                </label>
+                {editPhoto && (
+                  <button type="button" onClick={() => setEditPhoto(null)} className="text-sm text-error font-semibold hover:underline cursor-pointer">
+                    Remove
+                  </button>
+                )}
+              </div>
               <InputField label="Full Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
               <InputField label="Student ID" name="studentId" value={editForm.studentId} onChange={e => setEditForm(f => ({ ...f, studentId: e.target.value }))} />
               <InputField label="Date of Birth" name="dob" type="date" value={editForm.dob} onChange={e => setEditForm(f => ({ ...f, dob: e.target.value }))} />

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isCentreManaged } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveCentreId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -20,6 +23,10 @@ export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     const { id } = await context.params;
     const centreId = await resolveCentreId(id);
@@ -52,7 +59,11 @@ export async function POST(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!isAdmin(user) && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
+    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
@@ -63,7 +74,7 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
     }
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isCentreManaged(user.id, centreId))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isCentreManaged(user.id, centreId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
     }
 
@@ -105,7 +116,11 @@ export async function DELETE(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!isAdmin(user) && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
+    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }
 
@@ -116,7 +131,7 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
     }
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isCentreManaged(user.id, centreId))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isCentreManaged(user.id, centreId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
     }
 

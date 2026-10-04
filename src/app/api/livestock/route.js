@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const { searchParams } = new URL(req.url);
     const healthStatus = searchParams.get("healthStatus");
@@ -34,6 +39,10 @@ export async function POST(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN" && user.role.name !== "FELLOW") {
       return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });

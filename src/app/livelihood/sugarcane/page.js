@@ -134,7 +134,6 @@ export default function SugarcaneCultivation() {
             householdSize: 4,
             primaryIncomeType: "Agriculture",
             tier: "Tier 2",
-            tierPercent: 50,
             resilienceScore: 50,
             schemes: ["Sugarcane"]
           })
@@ -271,7 +270,6 @@ export default function SugarcaneCultivation() {
         monthlyIncome: existingBen.monthlyIncome,
         resilienceScore: existingBen.resilienceScore,
         tier: existingBen.tier,
-        tierPercent: existingBen.tierPercent,
         aadhar: existingBen.aadhar,
         panCard: existingBen.panCard,
         rationCard: existingBen.rationCard,

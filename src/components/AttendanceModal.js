@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
   const [comments, setComments] = useState(task.comments || []);
   const [newComment, setNewComment] = useState("");
@@ -81,13 +83,26 @@ function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }
 export default function AttendanceModal({ isOpen, onClose }) {
   const { token, user } = useAuth();
 
-  const isPm = user?.roleName === "PROGRAM_MANAGER";
-  const tasksBase = isPm
+  const isProgramStaff = PROGRAM_ROLES.includes(user?.roleName);
+  const tasksBase = isProgramStaff
     ? `/api/program-managers/${user?.id}/tasks`
     : user?.fellowId
     ? `/api/fellows/${user.fellowId}/tasks`
     : null;
-  const taskItemBase = isPm ? "/api/program-manager-tasks" : "/api/tasks";
+  const taskItemBase = isProgramStaff ? "/api/program-manager-tasks" : "/api/tasks";
+
+  const workspaceLabel = (() => {
+    const roleName = user?.roleName;
+    if (!roleName) return "Workspace";
+    if (roleName === "FELLOW") return "Fellow Workspace";
+    if (roleName === "PROGRAM_MANAGER") return "PM Workspace";
+    const pretty = roleName
+      .toLowerCase()
+      .split("_")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+    return `${pretty} Workspace`;
+  })();
 
   const [currentLog, setCurrentLog] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -467,7 +482,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
         </button>
 
         <div className="mb-8">
-          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 font-sans">{isPm ? "PM Workspace" : "Fellow Workspace"}</p>
+          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 font-sans">{workspaceLabel}</p>
           <h2 className="text-3xl font-headline font-semibold tracking-tight text-on-surface">Daily Attendance & Tasks</h2>
         </div>
 
@@ -665,7 +680,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            {!isPm && (
+            {!isProgramStaff && (
             <div className="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 mt-2">
                 <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Lesson Plan</h3>
                 

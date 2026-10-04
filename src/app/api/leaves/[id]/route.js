@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { authenticateUser } from "../../../../lib/auth";
 import { getManagedTeamUserIds } from "../../../../lib/scope";
+import { checkPermission } from "@/lib/permissions";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function isPmTeamMember(pmUserId, targetUserId) {
   if (pmUserId === targetUserId) return true;
@@ -13,6 +17,10 @@ export async function GET(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "leaves", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for leaves" }, { status: 403 });
+    }
 
     const { id } = await params;
     const leave = await prisma.leave.findUnique({
@@ -27,7 +35,7 @@ export async function GET(req, { params }) {
     }
 
     const isFellowOrOther = user.role?.name !== "ADMIN" && user.role?.name !== "HR";
-    if (user.role?.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role?.name)) {
       if (!(await isPmTeamMember(user.id, leave.userId))) {
         return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
       }
@@ -47,6 +55,10 @@ export async function PUT(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "leaves", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for leaves" }, { status: 403 });
+    }
+
     const { id } = await params;
     const body = await req.json();
 
@@ -64,7 +76,7 @@ export async function PUT(req, { params }) {
 
     const isApprover = user.role?.name === "ADMIN" || user.role?.name === "HR";
     if (!isApprover) {
-      if (user.role?.name === "PROGRAM_MANAGER") {
+      if (PROGRAM_ROLES.includes(user.role?.name)) {
         const team = await getManagedTeamUserIds(user.id);
         if (existing.userId === user.id || !team.includes(existing.userId)) {
           return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
@@ -107,6 +119,24 @@ export async function PUT(req, { params }) {
       }
     }
 
+    // Notify the request creator when their leave is approved or rejected.
+    if (
+      existing.userId &&
+      (body.status === "APPROVED" || body.status === "REJECTED") &&
+      body.status !== existing.status
+    ) {
+      const isRejected = body.status === "REJECTED";
+      await notifyUsers([existing.userId], {
+        type: isRejected ? NOTIFICATION_TYPES.LEAVE_REJECTED : NOTIFICATION_TYPES.LEAVE_APPROVED,
+        title: isRejected ? "Leave Request Rejected" : "Leave Request Approved",
+        message: isRejected
+          ? `Your leave request${leave.dates ? ` (${leave.dates})` : ""} was rejected.${leave.rejectionReason ? ` Reason: ${leave.rejectionReason}` : ""}`
+          : `Your leave request${leave.dates ? ` (${leave.dates})` : ""} was approved.`,
+        link: `/hr/leaves`,
+        actorId: user.id,
+      });
+    }
+
     return NextResponse.json({ success: true, data: leave });
   } catch (error) {
     console.error("PUT leave error:", error);
@@ -119,6 +149,10 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "leaves", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for leaves" }, { status: 403 });
+    }
+
     const { id } = await params;
 
     const existing = await prisma.leave.findUnique({ where: { id } });
@@ -129,7 +163,7 @@ export async function DELETE(req, { params }) {
     const isOwner = existing.userId === user.id;
     const isAdmin = user.role?.name === "ADMIN";
     let isPmTeam = false;
-    if (user.role?.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role?.name)) {
       const team = await getManagedTeamUserIds(user.id);
       isPmTeam = team.includes(existing.userId);
     }

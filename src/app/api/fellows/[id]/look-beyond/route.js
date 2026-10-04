@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import { authenticateUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isFellowManaged } from "@/lib/scope";
+import {
+  notifyUsers,
+  getReviewerUserIdsForFellow,
+  NOTIFICATION_TYPES,
+} from "@/lib/notifications";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -19,6 +27,10 @@ export async function GET(req, { params }) {
   const { user, error } = await authenticateUser(req);
   if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
   try {
     const fellowId = await resolveFellowId(id);
     if (!fellowId) {
@@ -35,7 +47,7 @@ export async function GET(req, { params }) {
 
     const isAdmin = user.role.name === "ADMIN";
     const isOwner = user.id === fellow.userId;
-    const isPm = user.role.name === "PROGRAM_MANAGER";
+    const isPm = PROGRAM_ROLES.includes(user.role.name);
     const allowed = isAdmin || isOwner || (isPm && (await isFellowManaged(user.id, fellowId)));
     if (!allowed) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -56,6 +68,10 @@ export async function POST(req, { params }) {
   const { id } = await params;
   const { user, error } = await authenticateUser(req);
   if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
   try {
     const fellowId = await resolveFellowId(id);
@@ -89,6 +105,18 @@ export async function POST(req, { params }) {
         responses,
       },
     });
+
+    // Notify reviewers only when the fellow submits their own survey.
+    if (user.id === fellow.userId) {
+      const reviewers = await getReviewerUserIdsForFellow(fellowId);
+      await notifyUsers(reviewers, {
+        type: NOTIFICATION_TYPES.LOOK_BEYOND_SUBMITTED,
+        title: "Look Beyond Survey Submitted",
+        message: `${fellow.name || "A fellow"} has submitted their Look Beyond survey.`,
+        link: `/education/fellows/${fellowId}?tab=look-beyond-survey`,
+        actorId: user.id,
+      });
+    }
 
     return NextResponse.json({ success: true, data: newSurvey });
   } catch (err) {

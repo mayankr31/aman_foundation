@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdminOrPm } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -18,6 +19,10 @@ export async function PATCH(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
 
     if (!isAdminOrPm(user)) {
       return NextResponse.json({ error: "Forbidden: Only managers can edit feedback" }, { status: 403 });
@@ -74,6 +79,10 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
 
     if (!isAdminOrPm(user)) {
       return NextResponse.json({ error: "Forbidden: Only managers can delete feedback" }, { status: 403 });

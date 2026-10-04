@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function LeaveWorkflow() {
   const router = useRouter();
   const { token, user: currentUser } = useAuth();
@@ -24,7 +26,7 @@ export default function LeaveWorkflow() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const canReview = ["ADMIN", "HR", "PROGRAM_MANAGER"].includes(currentUser?.roleName);
+  const canReview = ["ADMIN", "HR", ...PROGRAM_ROLES].includes(currentUser?.roleName);
 
   useEffect(() => {
     if (currentUser && !canReview) {

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useState, useEffect, useMemo, use } from "react";
 import { useAuth } from "@/lib/useAuth";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 // Status colors
 const statusColors = {
   logged: 'bg-emerald-100',
@@ -350,7 +352,7 @@ export default function UserAttendanceDetails({ params }) {
   if (isLoading) return <div className="p-10 text-center text-slate-500">Loading details...</div>;
   if (!userData) return <div className="p-10 text-center text-slate-500">User not found.</div>;
 
-  const isPm = userData?.role?.name === "PROGRAM_MANAGER";
+  const isPm = PROGRAM_ROLES.includes(userData?.role?.name);
 
   return (
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full font-sans bg-gray-50/50">

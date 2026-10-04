@@ -5,6 +5,9 @@ import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
 import crypto from "crypto";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "goat-events");
 
@@ -39,6 +42,10 @@ export async function GET(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     const { id } = await params;
 
     const event = await prisma.goatRearingEvent.findUnique({
@@ -70,7 +77,11 @@ export async function PATCH(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW") {
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -128,7 +139,11 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW") {
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

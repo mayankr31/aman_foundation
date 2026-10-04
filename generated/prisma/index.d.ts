@@ -24,6 +24,11 @@ export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
  * Model Permission
  * 
  */
@@ -219,6 +224,11 @@ export type SugarcaneProgram = $Result.DefaultSelection<Prisma.$SugarcaneProgram
  */
 export type LivelihoodProgram = $Result.DefaultSelection<Prisma.$LivelihoodProgramPayload>
 /**
+ * Model LivelihoodType
+ * 
+ */
+export type LivelihoodType = $Result.DefaultSelection<Prisma.$LivelihoodTypePayload>
+/**
  * Model BeneficiaryLivelihood
  * 
  */
@@ -268,6 +278,16 @@ export type Leave = $Result.DefaultSelection<Prisma.$LeavePayload>
  * 
  */
 export type IncidentResourceNeed = $Result.DefaultSelection<Prisma.$IncidentResourceNeedPayload>
+/**
+ * Model ReliefDistribution
+ * 
+ */
+export type ReliefDistribution = $Result.DefaultSelection<Prisma.$ReliefDistributionPayload>
+/**
+ * Model ReliefDistributionItem
+ * 
+ */
+export type ReliefDistributionItem = $Result.DefaultSelection<Prisma.$ReliefDistributionItemPayload>
 /**
  * Model FellowTask
  * 
@@ -674,6 +694,16 @@ export class PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.permission`: Exposes CRUD operations for the **Permission** model.
     * Example usage:
     * ```ts
@@ -1064,6 +1094,16 @@ export class PrismaClient<
   get livelihoodProgram(): Prisma.LivelihoodProgramDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.livelihoodType`: Exposes CRUD operations for the **LivelihoodType** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LivelihoodTypes
+    * const livelihoodTypes = await prisma.livelihoodType.findMany()
+    * ```
+    */
+  get livelihoodType(): Prisma.LivelihoodTypeDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.beneficiaryLivelihood`: Exposes CRUD operations for the **BeneficiaryLivelihood** model.
     * Example usage:
     * ```ts
@@ -1162,6 +1202,26 @@ export class PrismaClient<
     * ```
     */
   get incidentResourceNeed(): Prisma.IncidentResourceNeedDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reliefDistribution`: Exposes CRUD operations for the **ReliefDistribution** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReliefDistributions
+    * const reliefDistributions = await prisma.reliefDistribution.findMany()
+    * ```
+    */
+  get reliefDistribution(): Prisma.ReliefDistributionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reliefDistributionItem`: Exposes CRUD operations for the **ReliefDistributionItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReliefDistributionItems
+    * const reliefDistributionItems = await prisma.reliefDistributionItem.findMany()
+    * ```
+    */
+  get reliefDistributionItem(): Prisma.ReliefDistributionItemDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.fellowTask`: Exposes CRUD operations for the **FellowTask** model.
@@ -1958,6 +2018,7 @@ export namespace Prisma {
   export const ModelName: {
     Role: 'Role',
     User: 'User',
+    Notification: 'Notification',
     Permission: 'Permission',
     RolePermission: 'RolePermission',
     UserPermission: 'UserPermission',
@@ -1997,6 +2058,7 @@ export namespace Prisma {
     BeneficiarySugarcane: 'BeneficiarySugarcane',
     SugarcaneProgram: 'SugarcaneProgram',
     LivelihoodProgram: 'LivelihoodProgram',
+    LivelihoodType: 'LivelihoodType',
     BeneficiaryLivelihood: 'BeneficiaryLivelihood',
     LivelihoodEvent: 'LivelihoodEvent',
     FellowLivelihoodProgram: 'FellowLivelihoodProgram',
@@ -2007,6 +2069,8 @@ export namespace Prisma {
     AttendanceLog: 'AttendanceLog',
     Leave: 'Leave',
     IncidentResourceNeed: 'IncidentResourceNeed',
+    ReliefDistribution: 'ReliefDistribution',
+    ReliefDistributionItem: 'ReliefDistributionItem',
     FellowTask: 'FellowTask',
     FellowTaskComment: 'FellowTaskComment',
     ResilienceSurvey: 'ResilienceSurvey',
@@ -2058,7 +2122,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
+      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2207,6 +2271,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
           }
         }
       }
@@ -5096,6 +5234,80 @@ export namespace Prisma {
           }
         }
       }
+      LivelihoodType: {
+        payload: Prisma.$LivelihoodTypePayload<ExtArgs>
+        fields: Prisma.LivelihoodTypeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LivelihoodTypeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LivelihoodTypeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          findFirst: {
+            args: Prisma.LivelihoodTypeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LivelihoodTypeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          findMany: {
+            args: Prisma.LivelihoodTypeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>[]
+          }
+          create: {
+            args: Prisma.LivelihoodTypeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          createMany: {
+            args: Prisma.LivelihoodTypeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LivelihoodTypeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>[]
+          }
+          delete: {
+            args: Prisma.LivelihoodTypeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          update: {
+            args: Prisma.LivelihoodTypeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          deleteMany: {
+            args: Prisma.LivelihoodTypeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LivelihoodTypeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LivelihoodTypeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>[]
+          }
+          upsert: {
+            args: Prisma.LivelihoodTypeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LivelihoodTypePayload>
+          }
+          aggregate: {
+            args: Prisma.LivelihoodTypeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLivelihoodType>
+          }
+          groupBy: {
+            args: Prisma.LivelihoodTypeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodTypeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LivelihoodTypeCountArgs<ExtArgs>
+            result: $Utils.Optional<LivelihoodTypeCountAggregateOutputType> | number
+          }
+        }
+      }
       BeneficiaryLivelihood: {
         payload: Prisma.$BeneficiaryLivelihoodPayload<ExtArgs>
         fields: Prisma.BeneficiaryLivelihoodFieldRefs
@@ -5833,6 +6045,154 @@ export namespace Prisma {
           count: {
             args: Prisma.IncidentResourceNeedCountArgs<ExtArgs>
             result: $Utils.Optional<IncidentResourceNeedCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReliefDistribution: {
+        payload: Prisma.$ReliefDistributionPayload<ExtArgs>
+        fields: Prisma.ReliefDistributionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReliefDistributionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReliefDistributionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          findFirst: {
+            args: Prisma.ReliefDistributionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReliefDistributionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          findMany: {
+            args: Prisma.ReliefDistributionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>[]
+          }
+          create: {
+            args: Prisma.ReliefDistributionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          createMany: {
+            args: Prisma.ReliefDistributionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReliefDistributionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>[]
+          }
+          delete: {
+            args: Prisma.ReliefDistributionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          update: {
+            args: Prisma.ReliefDistributionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReliefDistributionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReliefDistributionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReliefDistributionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReliefDistributionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionPayload>
+          }
+          aggregate: {
+            args: Prisma.ReliefDistributionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReliefDistribution>
+          }
+          groupBy: {
+            args: Prisma.ReliefDistributionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReliefDistributionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReliefDistributionCountArgs<ExtArgs>
+            result: $Utils.Optional<ReliefDistributionCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReliefDistributionItem: {
+        payload: Prisma.$ReliefDistributionItemPayload<ExtArgs>
+        fields: Prisma.ReliefDistributionItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReliefDistributionItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReliefDistributionItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          findFirst: {
+            args: Prisma.ReliefDistributionItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReliefDistributionItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          findMany: {
+            args: Prisma.ReliefDistributionItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>[]
+          }
+          create: {
+            args: Prisma.ReliefDistributionItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          createMany: {
+            args: Prisma.ReliefDistributionItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReliefDistributionItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>[]
+          }
+          delete: {
+            args: Prisma.ReliefDistributionItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          update: {
+            args: Prisma.ReliefDistributionItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReliefDistributionItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReliefDistributionItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReliefDistributionItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReliefDistributionItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReliefDistributionItemPayload>
+          }
+          aggregate: {
+            args: Prisma.ReliefDistributionItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReliefDistributionItem>
+          }
+          groupBy: {
+            args: Prisma.ReliefDistributionItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReliefDistributionItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReliefDistributionItemCountArgs<ExtArgs>
+            result: $Utils.Optional<ReliefDistributionItemCountAggregateOutputType> | number
           }
         }
       }
@@ -8610,6 +8970,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     role?: RoleOmit
     user?: UserOmit
+    notification?: NotificationOmit
     permission?: PermissionOmit
     rolePermission?: RolePermissionOmit
     userPermission?: UserPermissionOmit
@@ -8649,6 +9010,7 @@ export namespace Prisma {
     beneficiarySugarcane?: BeneficiarySugarcaneOmit
     sugarcaneProgram?: SugarcaneProgramOmit
     livelihoodProgram?: LivelihoodProgramOmit
+    livelihoodType?: LivelihoodTypeOmit
     beneficiaryLivelihood?: BeneficiaryLivelihoodOmit
     livelihoodEvent?: LivelihoodEventOmit
     fellowLivelihoodProgram?: FellowLivelihoodProgramOmit
@@ -8659,6 +9021,8 @@ export namespace Prisma {
     attendanceLog?: AttendanceLogOmit
     leave?: LeaveOmit
     incidentResourceNeed?: IncidentResourceNeedOmit
+    reliefDistribution?: ReliefDistributionOmit
+    reliefDistributionItem?: ReliefDistributionItemOmit
     fellowTask?: FellowTaskOmit
     fellowTaskComment?: FellowTaskCommentOmit
     resilienceSurvey?: ResilienceSurveyOmit
@@ -8818,6 +9182,7 @@ export namespace Prisma {
     permissions: number
     leaves: number
     verifiedTransactions: number
+    reliefDistributions: number
     attendanceLogs: number
     taskComments: number
     travelRequests: number
@@ -8831,12 +9196,14 @@ export namespace Prisma {
     managedLivelihoodPrograms: number
     pmTasks: number
     pmTaskComments: number
+    notifications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     permissions?: boolean | UserCountOutputTypeCountPermissionsArgs
     leaves?: boolean | UserCountOutputTypeCountLeavesArgs
     verifiedTransactions?: boolean | UserCountOutputTypeCountVerifiedTransactionsArgs
+    reliefDistributions?: boolean | UserCountOutputTypeCountReliefDistributionsArgs
     attendanceLogs?: boolean | UserCountOutputTypeCountAttendanceLogsArgs
     taskComments?: boolean | UserCountOutputTypeCountTaskCommentsArgs
     travelRequests?: boolean | UserCountOutputTypeCountTravelRequestsArgs
@@ -8850,6 +9217,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: boolean | UserCountOutputTypeCountManagedLivelihoodProgramsArgs
     pmTasks?: boolean | UserCountOutputTypeCountPmTasksArgs
     pmTaskComments?: boolean | UserCountOutputTypeCountPmTaskCommentsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -8882,6 +9250,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountVerifiedTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryLedgerWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReliefDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionWhereInput
   }
 
   /**
@@ -8973,6 +9348,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPmTaskCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProgramManagerTaskCommentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -9852,10 +10234,12 @@ export namespace Prisma {
 
   export type DisasterIncidentCountOutputType = {
     resourceNeeds: number
+    reliefDistributions: number
   }
 
   export type DisasterIncidentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     resourceNeeds?: boolean | DisasterIncidentCountOutputTypeCountResourceNeedsArgs
+    reliefDistributions?: boolean | DisasterIncidentCountOutputTypeCountReliefDistributionsArgs
   }
 
   // Custom InputTypes
@@ -9876,6 +10260,13 @@ export namespace Prisma {
     where?: IncidentResourceNeedWhereInput
   }
 
+  /**
+   * DisasterIncidentCountOutputType without action
+   */
+  export type DisasterIncidentCountOutputTypeCountReliefDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionWhereInput
+  }
+
 
   /**
    * Count Type ResourceItemCountOutputType
@@ -9884,11 +10275,13 @@ export namespace Prisma {
   export type ResourceItemCountOutputType = {
     ledgerTransactions: number
     incidentNeeds: number
+    reliefItems: number
   }
 
   export type ResourceItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ledgerTransactions?: boolean | ResourceItemCountOutputTypeCountLedgerTransactionsArgs
     incidentNeeds?: boolean | ResourceItemCountOutputTypeCountIncidentNeedsArgs
+    reliefItems?: boolean | ResourceItemCountOutputTypeCountReliefItemsArgs
   }
 
   // Custom InputTypes
@@ -9916,6 +10309,13 @@ export namespace Prisma {
     where?: IncidentResourceNeedWhereInput
   }
 
+  /**
+   * ResourceItemCountOutputType without action
+   */
+  export type ResourceItemCountOutputTypeCountReliefItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionItemWhereInput
+  }
+
 
   /**
    * Count Type IncidentResourceNeedCountOutputType
@@ -9923,10 +10323,12 @@ export namespace Prisma {
 
   export type IncidentResourceNeedCountOutputType = {
     transactions: number
+    reliefItems: number
   }
 
   export type IncidentResourceNeedCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactions?: boolean | IncidentResourceNeedCountOutputTypeCountTransactionsArgs
+    reliefItems?: boolean | IncidentResourceNeedCountOutputTypeCountReliefItemsArgs
   }
 
   // Custom InputTypes
@@ -9945,6 +10347,44 @@ export namespace Prisma {
    */
   export type IncidentResourceNeedCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InventoryLedgerWhereInput
+  }
+
+  /**
+   * IncidentResourceNeedCountOutputType without action
+   */
+  export type IncidentResourceNeedCountOutputTypeCountReliefItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionItemWhereInput
+  }
+
+
+  /**
+   * Count Type ReliefDistributionCountOutputType
+   */
+
+  export type ReliefDistributionCountOutputType = {
+    items: number
+  }
+
+  export type ReliefDistributionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | ReliefDistributionCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReliefDistributionCountOutputType without action
+   */
+  export type ReliefDistributionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionCountOutputType
+     */
+    select?: ReliefDistributionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReliefDistributionCountOutputType without action
+   */
+  export type ReliefDistributionCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionItemWhereInput
   }
 
 
@@ -11585,9 +12025,20 @@ export namespace Prisma {
     roleId: string | null
     status: $Enums.UserStatus | null
     department: string | null
+    employeeId: string | null
     dob: Date | null
     gender: string | null
+    maritalStatus: string | null
+    bloodGroup: string | null
     address: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    aadharNumber: string | null
+    panCard: string | null
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    dateOfJoining: Date | null
     avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
@@ -11605,9 +12056,20 @@ export namespace Prisma {
     roleId: string | null
     status: $Enums.UserStatus | null
     department: string | null
+    employeeId: string | null
     dob: Date | null
     gender: string | null
+    maritalStatus: string | null
+    bloodGroup: string | null
     address: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    aadharNumber: string | null
+    panCard: string | null
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    dateOfJoining: Date | null
     avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
@@ -11625,9 +12087,20 @@ export namespace Prisma {
     roleId: number
     status: number
     department: number
+    employeeId: number
     dob: number
     gender: number
+    maritalStatus: number
+    bloodGroup: number
     address: number
+    emergencyContactName: number
+    emergencyContactPhone: number
+    aadharNumber: number
+    panCard: number
+    bankName: number
+    bankAccountNo: number
+    bankIfsc: number
+    dateOfJoining: number
     avatar: number
     leavesTaken: number
     leavesRemaining: number
@@ -11657,9 +12130,20 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    employeeId?: true
     dob?: true
     gender?: true
+    maritalStatus?: true
+    bloodGroup?: true
     address?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    aadharNumber?: true
+    panCard?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    dateOfJoining?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -11677,9 +12161,20 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    employeeId?: true
     dob?: true
     gender?: true
+    maritalStatus?: true
+    bloodGroup?: true
     address?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    aadharNumber?: true
+    panCard?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    dateOfJoining?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -11697,9 +12192,20 @@ export namespace Prisma {
     roleId?: true
     status?: true
     department?: true
+    employeeId?: true
     dob?: true
     gender?: true
+    maritalStatus?: true
+    bloodGroup?: true
     address?: true
+    emergencyContactName?: true
+    emergencyContactPhone?: true
+    aadharNumber?: true
+    panCard?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    dateOfJoining?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -11804,9 +12310,20 @@ export namespace Prisma {
     roleId: string
     status: $Enums.UserStatus
     department: string | null
+    employeeId: string | null
     dob: Date | null
     gender: string | null
+    maritalStatus: string | null
+    bloodGroup: string | null
     address: string | null
+    emergencyContactName: string | null
+    emergencyContactPhone: string | null
+    aadharNumber: string | null
+    panCard: string | null
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    dateOfJoining: Date | null
     avatar: string | null
     leavesTaken: number
     leavesRemaining: number
@@ -11843,9 +12360,20 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    employeeId?: boolean
     dob?: boolean
     gender?: boolean
+    maritalStatus?: boolean
+    bloodGroup?: boolean
     address?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    aadharNumber?: boolean
+    panCard?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    dateOfJoining?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -11856,6 +12384,7 @@ export namespace Prisma {
     fellow?: boolean | User$fellowArgs<ExtArgs>
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
+    reliefDistributions?: boolean | User$reliefDistributionsArgs<ExtArgs>
     attendanceLogs?: boolean | User$attendanceLogsArgs<ExtArgs>
     taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
@@ -11869,6 +12398,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: boolean | User$managedLivelihoodProgramsArgs<ExtArgs>
     pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
     pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -11882,9 +12412,20 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    employeeId?: boolean
     dob?: boolean
     gender?: boolean
+    maritalStatus?: boolean
+    bloodGroup?: boolean
     address?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    aadharNumber?: boolean
+    panCard?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    dateOfJoining?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -11903,9 +12444,20 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    employeeId?: boolean
     dob?: boolean
     gender?: boolean
+    maritalStatus?: boolean
+    bloodGroup?: boolean
     address?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    aadharNumber?: boolean
+    panCard?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    dateOfJoining?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -11924,9 +12476,20 @@ export namespace Prisma {
     roleId?: boolean
     status?: boolean
     department?: boolean
+    employeeId?: boolean
     dob?: boolean
     gender?: boolean
+    maritalStatus?: boolean
+    bloodGroup?: boolean
     address?: boolean
+    emergencyContactName?: boolean
+    emergencyContactPhone?: boolean
+    aadharNumber?: boolean
+    panCard?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    dateOfJoining?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -11934,13 +12497,14 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "dob" | "gender" | "address" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
     fellow?: boolean | User$fellowArgs<ExtArgs>
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
+    reliefDistributions?: boolean | User$reliefDistributionsArgs<ExtArgs>
     attendanceLogs?: boolean | User$attendanceLogsArgs<ExtArgs>
     taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
@@ -11954,6 +12518,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: boolean | User$managedLivelihoodProgramsArgs<ExtArgs>
     pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
     pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11971,6 +12536,7 @@ export namespace Prisma {
       fellow: Prisma.$FellowPayload<ExtArgs> | null
       leaves: Prisma.$LeavePayload<ExtArgs>[]
       verifiedTransactions: Prisma.$InventoryLedgerPayload<ExtArgs>[]
+      reliefDistributions: Prisma.$ReliefDistributionPayload<ExtArgs>[]
       attendanceLogs: Prisma.$AttendanceLogPayload<ExtArgs>[]
       taskComments: Prisma.$FellowTaskCommentPayload<ExtArgs>[]
       travelRequests: Prisma.$TravelRequestPayload<ExtArgs>[]
@@ -11984,6 +12550,7 @@ export namespace Prisma {
       managedLivelihoodPrograms: Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>[]
       pmTasks: Prisma.$ProgramManagerTaskPayload<ExtArgs>[]
       pmTaskComments: Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11995,9 +12562,20 @@ export namespace Prisma {
       roleId: string
       status: $Enums.UserStatus
       department: string | null
+      employeeId: string | null
       dob: Date | null
       gender: string | null
+      maritalStatus: string | null
+      bloodGroup: string | null
       address: string | null
+      emergencyContactName: string | null
+      emergencyContactPhone: string | null
+      aadharNumber: string | null
+      panCard: string | null
+      bankName: string | null
+      bankAccountNo: string | null
+      bankIfsc: string | null
+      dateOfJoining: Date | null
       avatar: string | null
       leavesTaken: number
       leavesRemaining: number
@@ -12402,6 +12980,7 @@ export namespace Prisma {
     fellow<T extends User$fellowArgs<ExtArgs> = {}>(args?: Subset<T, User$fellowArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leaves<T extends User$leavesArgs<ExtArgs> = {}>(args?: Subset<T, User$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verifiedTransactions<T extends User$verifiedTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reliefDistributions<T extends User$reliefDistributionsArgs<ExtArgs> = {}>(args?: Subset<T, User$reliefDistributionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attendanceLogs<T extends User$attendanceLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$attendanceLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttendanceLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     taskComments<T extends User$taskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     travelRequests<T extends User$travelRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$travelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12415,6 +12994,7 @@ export namespace Prisma {
     managedLivelihoodPrograms<T extends User$managedLivelihoodProgramsArgs<ExtArgs> = {}>(args?: Subset<T, User$managedLivelihoodProgramsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerLivelihoodProgramPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmTasks<T extends User$pmTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmTaskComments<T extends User$pmTaskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTaskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12453,9 +13033,20 @@ export namespace Prisma {
     readonly roleId: FieldRef<"User", 'String'>
     readonly status: FieldRef<"User", 'UserStatus'>
     readonly department: FieldRef<"User", 'String'>
+    readonly employeeId: FieldRef<"User", 'String'>
     readonly dob: FieldRef<"User", 'DateTime'>
     readonly gender: FieldRef<"User", 'String'>
+    readonly maritalStatus: FieldRef<"User", 'String'>
+    readonly bloodGroup: FieldRef<"User", 'String'>
     readonly address: FieldRef<"User", 'String'>
+    readonly emergencyContactName: FieldRef<"User", 'String'>
+    readonly emergencyContactPhone: FieldRef<"User", 'String'>
+    readonly aadharNumber: FieldRef<"User", 'String'>
+    readonly panCard: FieldRef<"User", 'String'>
+    readonly bankName: FieldRef<"User", 'String'>
+    readonly bankAccountNo: FieldRef<"User", 'String'>
+    readonly bankIfsc: FieldRef<"User", 'String'>
+    readonly dateOfJoining: FieldRef<"User", 'DateTime'>
     readonly avatar: FieldRef<"User", 'String'>
     readonly leavesTaken: FieldRef<"User", 'Int'>
     readonly leavesRemaining: FieldRef<"User", 'Int'>
@@ -12953,6 +13544,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.reliefDistributions
+   */
+  export type User$reliefDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    where?: ReliefDistributionWhereInput
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    cursor?: ReliefDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReliefDistributionScalarFieldEnum | ReliefDistributionScalarFieldEnum[]
+  }
+
+  /**
    * User.attendanceLogs
    */
   export type User$attendanceLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13265,6 +13880,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13280,6 +13919,1143 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: string | null
+    title: string | null
+    message: string | null
+    link: string | null
+    read: boolean | null
+    actorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    type: string | null
+    title: string | null
+    message: string | null
+    link: string | null
+    read: boolean | null
+    actorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    userId: number
+    type: number
+    title: number
+    message: number
+    link: number
+    read: number
+    actorId: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    read?: true
+    actorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    read?: true
+    actorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    type?: true
+    title?: true
+    message?: true
+    link?: true
+    read?: true
+    actorId?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    userId: string
+    type: string
+    title: string
+    message: string
+    link: string | null
+    read: boolean
+    actorId: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    read?: boolean
+    actorId?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    read?: boolean
+    actorId?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    read?: boolean
+    actorId?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    type?: boolean
+    title?: boolean
+    message?: boolean
+    link?: boolean
+    read?: boolean
+    actorId?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "title" | "message" | "link" | "read" | "actorId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      type: string
+      title: string
+      message: string
+      link: string | null
+      read: boolean
+      actorId: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Notifications and returns the data saved in the database.
+     * @param {NotificationCreateManyAndReturnArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications and returns the data updated in the database.
+     * @param {NotificationUpdateManyAndReturnArgs} args - Arguments to update many Notifications.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Notifications and only return the `id`
+     * const notificationWithIdOnly = await prisma.notification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly userId: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'String'>
+    readonly title: FieldRef<"Notification", 'String'>
+    readonly message: FieldRef<"Notification", 'String'>
+    readonly link: FieldRef<"Notification", 'String'>
+    readonly read: FieldRef<"Notification", 'Boolean'>
+    readonly actorId: FieldRef<"Notification", 'String'>
+    readonly metadata: FieldRef<"Notification", 'Json'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly updatedAt: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification createManyAndReturn
+   */
+  export type NotificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification updateManyAndReturn
+   */
+  export type NotificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
   }
 
 
@@ -25425,6 +27201,7 @@ export namespace Prisma {
     id: string | null
     studentId: string | null
     name: string | null
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -25451,6 +27228,7 @@ export namespace Prisma {
     id: string | null
     studentId: string | null
     name: string | null
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -25477,6 +27255,7 @@ export namespace Prisma {
     id: number
     studentId: number
     name: number
+    photoUrl: number
     dob: number
     gender: number
     email: number
@@ -25513,6 +27292,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -25539,6 +27319,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -25565,6 +27346,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -25678,6 +27460,7 @@ export namespace Prisma {
     id: string
     studentId: string
     name: string
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -25723,6 +27506,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -25758,6 +27542,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -25787,6 +27572,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -25816,6 +27602,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -25838,7 +27625,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     school?: boolean | Student$schoolArgs<ExtArgs>
     fellow?: boolean | Student$fellowArgs<ExtArgs>
@@ -25877,6 +27664,7 @@ export namespace Prisma {
       id: string
       studentId: string
       name: string
+      photoUrl: string | null
       dob: Date | null
       gender: string | null
       email: string | null
@@ -26331,6 +28119,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Student", 'String'>
     readonly studentId: FieldRef<"Student", 'String'>
     readonly name: FieldRef<"Student", 'String'>
+    readonly photoUrl: FieldRef<"Student", 'String'>
     readonly dob: FieldRef<"Student", 'DateTime'>
     readonly gender: FieldRef<"Student", 'String'>
     readonly email: FieldRef<"Student", 'String'>
@@ -44649,7 +46438,6 @@ export namespace Prisma {
     annualIncome: number | null
     monthlyIncome: number | null
     householdSize: number | null
-    tierPercent: number | null
   }
 
   export type BeneficiarySumAggregateOutputType = {
@@ -44657,7 +46445,6 @@ export namespace Prisma {
     annualIncome: number | null
     monthlyIncome: number | null
     householdSize: number | null
-    tierPercent: number | null
   }
 
   export type BeneficiaryMinAggregateOutputType = {
@@ -44669,16 +46456,23 @@ export namespace Prisma {
     aadhar: string | null
     rationCard: string | null
     mobNumber: string | null
+    emergencyContact: string | null
+    gender: string | null
     resilienceScore: number | null
     annualIncome: number | null
     monthlyIncome: number | null
     caste: string | null
     religion: string | null
     address: string | null
+    state: string | null
+    district: string | null
+    block: string | null
+    ward: string | null
+    village: string | null
+    photoUrl: string | null
     householdSize: number | null
     primaryIncomeType: string | null
     tier: string | null
-    tierPercent: number | null
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
@@ -44696,16 +46490,23 @@ export namespace Prisma {
     aadhar: string | null
     rationCard: string | null
     mobNumber: string | null
+    emergencyContact: string | null
+    gender: string | null
     resilienceScore: number | null
     annualIncome: number | null
     monthlyIncome: number | null
     caste: string | null
     religion: string | null
     address: string | null
+    state: string | null
+    district: string | null
+    block: string | null
+    ward: string | null
+    village: string | null
+    photoUrl: string | null
     householdSize: number | null
     primaryIncomeType: string | null
     tier: string | null
-    tierPercent: number | null
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
@@ -44723,16 +46524,23 @@ export namespace Prisma {
     aadhar: number
     rationCard: number
     mobNumber: number
+    emergencyContact: number
+    gender: number
     resilienceScore: number
     annualIncome: number
     monthlyIncome: number
     caste: number
     religion: number
     address: number
+    state: number
+    district: number
+    block: number
+    ward: number
+    village: number
+    photoUrl: number
     householdSize: number
     primaryIncomeType: number
     tier: number
-    tierPercent: number
     bankName: number
     bankAccountNo: number
     bankIfsc: number
@@ -44748,7 +46556,6 @@ export namespace Prisma {
     annualIncome?: true
     monthlyIncome?: true
     householdSize?: true
-    tierPercent?: true
   }
 
   export type BeneficiarySumAggregateInputType = {
@@ -44756,7 +46563,6 @@ export namespace Prisma {
     annualIncome?: true
     monthlyIncome?: true
     householdSize?: true
-    tierPercent?: true
   }
 
   export type BeneficiaryMinAggregateInputType = {
@@ -44768,16 +46574,23 @@ export namespace Prisma {
     aadhar?: true
     rationCard?: true
     mobNumber?: true
+    emergencyContact?: true
+    gender?: true
     resilienceScore?: true
     annualIncome?: true
     monthlyIncome?: true
     caste?: true
     religion?: true
     address?: true
+    state?: true
+    district?: true
+    block?: true
+    ward?: true
+    village?: true
+    photoUrl?: true
     householdSize?: true
     primaryIncomeType?: true
     tier?: true
-    tierPercent?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
@@ -44795,16 +46608,23 @@ export namespace Prisma {
     aadhar?: true
     rationCard?: true
     mobNumber?: true
+    emergencyContact?: true
+    gender?: true
     resilienceScore?: true
     annualIncome?: true
     monthlyIncome?: true
     caste?: true
     religion?: true
     address?: true
+    state?: true
+    district?: true
+    block?: true
+    ward?: true
+    village?: true
+    photoUrl?: true
     householdSize?: true
     primaryIncomeType?: true
     tier?: true
-    tierPercent?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
@@ -44822,16 +46642,23 @@ export namespace Prisma {
     aadhar?: true
     rationCard?: true
     mobNumber?: true
+    emergencyContact?: true
+    gender?: true
     resilienceScore?: true
     annualIncome?: true
     monthlyIncome?: true
     caste?: true
     religion?: true
     address?: true
+    state?: true
+    district?: true
+    block?: true
+    ward?: true
+    village?: true
+    photoUrl?: true
     householdSize?: true
     primaryIncomeType?: true
     tier?: true
-    tierPercent?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
@@ -44936,16 +46763,23 @@ export namespace Prisma {
     aadhar: string | null
     rationCard: string | null
     mobNumber: string | null
+    emergencyContact: string | null
+    gender: string | null
     resilienceScore: number
     annualIncome: number | null
     monthlyIncome: number | null
     caste: string | null
     religion: string | null
     address: string | null
+    state: string | null
+    district: string | null
+    block: string | null
+    ward: string | null
+    village: string | null
+    photoUrl: string | null
     householdSize: number
     primaryIncomeType: string | null
     tier: string
-    tierPercent: number
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
@@ -44982,16 +46816,23 @@ export namespace Prisma {
     aadhar?: boolean
     rationCard?: boolean
     mobNumber?: boolean
+    emergencyContact?: boolean
+    gender?: boolean
     resilienceScore?: boolean
     annualIncome?: boolean
     monthlyIncome?: boolean
     caste?: boolean
     religion?: boolean
     address?: boolean
+    state?: boolean
+    district?: boolean
+    block?: boolean
+    ward?: boolean
+    village?: boolean
+    photoUrl?: boolean
     householdSize?: boolean
     primaryIncomeType?: boolean
     tier?: boolean
-    tierPercent?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
@@ -45025,16 +46866,23 @@ export namespace Prisma {
     aadhar?: boolean
     rationCard?: boolean
     mobNumber?: boolean
+    emergencyContact?: boolean
+    gender?: boolean
     resilienceScore?: boolean
     annualIncome?: boolean
     monthlyIncome?: boolean
     caste?: boolean
     religion?: boolean
     address?: boolean
+    state?: boolean
+    district?: boolean
+    block?: boolean
+    ward?: boolean
+    village?: boolean
+    photoUrl?: boolean
     householdSize?: boolean
     primaryIncomeType?: boolean
     tier?: boolean
-    tierPercent?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
@@ -45052,16 +46900,23 @@ export namespace Prisma {
     aadhar?: boolean
     rationCard?: boolean
     mobNumber?: boolean
+    emergencyContact?: boolean
+    gender?: boolean
     resilienceScore?: boolean
     annualIncome?: boolean
     monthlyIncome?: boolean
     caste?: boolean
     religion?: boolean
     address?: boolean
+    state?: boolean
+    district?: boolean
+    block?: boolean
+    ward?: boolean
+    village?: boolean
+    photoUrl?: boolean
     householdSize?: boolean
     primaryIncomeType?: boolean
     tier?: boolean
-    tierPercent?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
@@ -45079,16 +46934,23 @@ export namespace Prisma {
     aadhar?: boolean
     rationCard?: boolean
     mobNumber?: boolean
+    emergencyContact?: boolean
+    gender?: boolean
     resilienceScore?: boolean
     annualIncome?: boolean
     monthlyIncome?: boolean
     caste?: boolean
     religion?: boolean
     address?: boolean
+    state?: boolean
+    district?: boolean
+    block?: boolean
+    ward?: boolean
+    village?: boolean
+    photoUrl?: boolean
     householdSize?: boolean
     primaryIncomeType?: boolean
     tier?: boolean
-    tierPercent?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
@@ -45097,7 +46959,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "rationCard" | "mobNumber" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "householdSize" | "primaryIncomeType" | "tier" | "tierPercent" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
+  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "rationCard" | "mobNumber" | "emergencyContact" | "gender" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "state" | "district" | "block" | "ward" | "village" | "photoUrl" | "householdSize" | "primaryIncomeType" | "tier" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
   export type BeneficiaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
     livestock?: boolean | Beneficiary$livestockArgs<ExtArgs>
@@ -45147,16 +47009,23 @@ export namespace Prisma {
       aadhar: string | null
       rationCard: string | null
       mobNumber: string | null
+      emergencyContact: string | null
+      gender: string | null
       resilienceScore: number
       annualIncome: number | null
       monthlyIncome: number | null
       caste: string | null
       religion: string | null
       address: string | null
+      state: string | null
+      district: string | null
+      block: string | null
+      ward: string | null
+      village: string | null
+      photoUrl: string | null
       householdSize: number
       primaryIncomeType: string | null
       tier: string
-      tierPercent: number
       bankName: string | null
       bankAccountNo: string | null
       bankIfsc: string | null
@@ -45609,16 +47478,23 @@ export namespace Prisma {
     readonly aadhar: FieldRef<"Beneficiary", 'String'>
     readonly rationCard: FieldRef<"Beneficiary", 'String'>
     readonly mobNumber: FieldRef<"Beneficiary", 'String'>
+    readonly emergencyContact: FieldRef<"Beneficiary", 'String'>
+    readonly gender: FieldRef<"Beneficiary", 'String'>
     readonly resilienceScore: FieldRef<"Beneficiary", 'Int'>
     readonly annualIncome: FieldRef<"Beneficiary", 'Float'>
     readonly monthlyIncome: FieldRef<"Beneficiary", 'Float'>
     readonly caste: FieldRef<"Beneficiary", 'String'>
     readonly religion: FieldRef<"Beneficiary", 'String'>
     readonly address: FieldRef<"Beneficiary", 'String'>
+    readonly state: FieldRef<"Beneficiary", 'String'>
+    readonly district: FieldRef<"Beneficiary", 'String'>
+    readonly block: FieldRef<"Beneficiary", 'String'>
+    readonly ward: FieldRef<"Beneficiary", 'String'>
+    readonly village: FieldRef<"Beneficiary", 'String'>
+    readonly photoUrl: FieldRef<"Beneficiary", 'String'>
     readonly householdSize: FieldRef<"Beneficiary", 'Int'>
     readonly primaryIncomeType: FieldRef<"Beneficiary", 'String'>
     readonly tier: FieldRef<"Beneficiary", 'String'>
-    readonly tierPercent: FieldRef<"Beneficiary", 'Int'>
     readonly bankName: FieldRef<"Beneficiary", 'String'>
     readonly bankAccountNo: FieldRef<"Beneficiary", 'String'>
     readonly bankIfsc: FieldRef<"Beneficiary", 'String'>
@@ -59037,6 +60913,1154 @@ export namespace Prisma {
 
 
   /**
+   * Model LivelihoodType
+   */
+
+  export type AggregateLivelihoodType = {
+    _count: LivelihoodTypeCountAggregateOutputType | null
+    _avg: LivelihoodTypeAvgAggregateOutputType | null
+    _sum: LivelihoodTypeSumAggregateOutputType | null
+    _min: LivelihoodTypeMinAggregateOutputType | null
+    _max: LivelihoodTypeMaxAggregateOutputType | null
+  }
+
+  export type LivelihoodTypeAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type LivelihoodTypeSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type LivelihoodTypeMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    category: $Enums.LivelihoodCategory | null
+    label: string | null
+    icon: string | null
+    description: string | null
+    programTargetUnit: string | null
+    active: boolean | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodTypeMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    category: $Enums.LivelihoodCategory | null
+    label: string | null
+    icon: string | null
+    description: string | null
+    programTargetUnit: string | null
+    active: boolean | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LivelihoodTypeCountAggregateOutputType = {
+    id: number
+    key: number
+    category: number
+    label: number
+    icon: number
+    description: number
+    programTargetUnit: number
+    fields: number
+    eventTypes: number
+    tableColumns: number
+    kpiCards: number
+    active: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LivelihoodTypeAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type LivelihoodTypeSumAggregateInputType = {
+    order?: true
+  }
+
+  export type LivelihoodTypeMinAggregateInputType = {
+    id?: true
+    key?: true
+    category?: true
+    label?: true
+    icon?: true
+    description?: true
+    programTargetUnit?: true
+    active?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodTypeMaxAggregateInputType = {
+    id?: true
+    key?: true
+    category?: true
+    label?: true
+    icon?: true
+    description?: true
+    programTargetUnit?: true
+    active?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LivelihoodTypeCountAggregateInputType = {
+    id?: true
+    key?: true
+    category?: true
+    label?: true
+    icon?: true
+    description?: true
+    programTargetUnit?: true
+    fields?: true
+    eventTypes?: true
+    tableColumns?: true
+    kpiCards?: true
+    active?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LivelihoodTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodType to aggregate.
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodTypes to fetch.
+     */
+    orderBy?: LivelihoodTypeOrderByWithRelationInput | LivelihoodTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LivelihoodTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LivelihoodTypes
+    **/
+    _count?: true | LivelihoodTypeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LivelihoodTypeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LivelihoodTypeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LivelihoodTypeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LivelihoodTypeMaxAggregateInputType
+  }
+
+  export type GetLivelihoodTypeAggregateType<T extends LivelihoodTypeAggregateArgs> = {
+        [P in keyof T & keyof AggregateLivelihoodType]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLivelihoodType[P]>
+      : GetScalarType<T[P], AggregateLivelihoodType[P]>
+  }
+
+
+
+
+  export type LivelihoodTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LivelihoodTypeWhereInput
+    orderBy?: LivelihoodTypeOrderByWithAggregationInput | LivelihoodTypeOrderByWithAggregationInput[]
+    by: LivelihoodTypeScalarFieldEnum[] | LivelihoodTypeScalarFieldEnum
+    having?: LivelihoodTypeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LivelihoodTypeCountAggregateInputType | true
+    _avg?: LivelihoodTypeAvgAggregateInputType
+    _sum?: LivelihoodTypeSumAggregateInputType
+    _min?: LivelihoodTypeMinAggregateInputType
+    _max?: LivelihoodTypeMaxAggregateInputType
+  }
+
+  export type LivelihoodTypeGroupByOutputType = {
+    id: string
+    key: string
+    category: $Enums.LivelihoodCategory
+    label: string
+    icon: string
+    description: string | null
+    programTargetUnit: string | null
+    fields: JsonValue
+    eventTypes: JsonValue
+    tableColumns: JsonValue
+    kpiCards: JsonValue
+    active: boolean
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    _count: LivelihoodTypeCountAggregateOutputType | null
+    _avg: LivelihoodTypeAvgAggregateOutputType | null
+    _sum: LivelihoodTypeSumAggregateOutputType | null
+    _min: LivelihoodTypeMinAggregateOutputType | null
+    _max: LivelihoodTypeMaxAggregateOutputType | null
+  }
+
+  type GetLivelihoodTypeGroupByPayload<T extends LivelihoodTypeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LivelihoodTypeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LivelihoodTypeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LivelihoodTypeGroupByOutputType[P]>
+            : GetScalarType<T[P], LivelihoodTypeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LivelihoodTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    category?: boolean
+    label?: boolean
+    icon?: boolean
+    description?: boolean
+    programTargetUnit?: boolean
+    fields?: boolean
+    eventTypes?: boolean
+    tableColumns?: boolean
+    kpiCards?: boolean
+    active?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["livelihoodType"]>
+
+  export type LivelihoodTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    category?: boolean
+    label?: boolean
+    icon?: boolean
+    description?: boolean
+    programTargetUnit?: boolean
+    fields?: boolean
+    eventTypes?: boolean
+    tableColumns?: boolean
+    kpiCards?: boolean
+    active?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["livelihoodType"]>
+
+  export type LivelihoodTypeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    category?: boolean
+    label?: boolean
+    icon?: boolean
+    description?: boolean
+    programTargetUnit?: boolean
+    fields?: boolean
+    eventTypes?: boolean
+    tableColumns?: boolean
+    kpiCards?: boolean
+    active?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["livelihoodType"]>
+
+  export type LivelihoodTypeSelectScalar = {
+    id?: boolean
+    key?: boolean
+    category?: boolean
+    label?: boolean
+    icon?: boolean
+    description?: boolean
+    programTargetUnit?: boolean
+    fields?: boolean
+    eventTypes?: boolean
+    tableColumns?: boolean
+    kpiCards?: boolean
+    active?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LivelihoodTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "category" | "label" | "icon" | "description" | "programTargetUnit" | "fields" | "eventTypes" | "tableColumns" | "kpiCards" | "active" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["livelihoodType"]>
+
+  export type $LivelihoodTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LivelihoodType"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      category: $Enums.LivelihoodCategory
+      label: string
+      icon: string
+      description: string | null
+      programTargetUnit: string | null
+      fields: Prisma.JsonValue
+      eventTypes: Prisma.JsonValue
+      tableColumns: Prisma.JsonValue
+      kpiCards: Prisma.JsonValue
+      active: boolean
+      order: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["livelihoodType"]>
+    composites: {}
+  }
+
+  type LivelihoodTypeGetPayload<S extends boolean | null | undefined | LivelihoodTypeDefaultArgs> = $Result.GetResult<Prisma.$LivelihoodTypePayload, S>
+
+  type LivelihoodTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LivelihoodTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LivelihoodTypeCountAggregateInputType | true
+    }
+
+  export interface LivelihoodTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LivelihoodType'], meta: { name: 'LivelihoodType' } }
+    /**
+     * Find zero or one LivelihoodType that matches the filter.
+     * @param {LivelihoodTypeFindUniqueArgs} args - Arguments to find a LivelihoodType
+     * @example
+     * // Get one LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LivelihoodTypeFindUniqueArgs>(args: SelectSubset<T, LivelihoodTypeFindUniqueArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LivelihoodType that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LivelihoodTypeFindUniqueOrThrowArgs} args - Arguments to find a LivelihoodType
+     * @example
+     * // Get one LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LivelihoodTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, LivelihoodTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodType that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeFindFirstArgs} args - Arguments to find a LivelihoodType
+     * @example
+     * // Get one LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LivelihoodTypeFindFirstArgs>(args?: SelectSubset<T, LivelihoodTypeFindFirstArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LivelihoodType that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeFindFirstOrThrowArgs} args - Arguments to find a LivelihoodType
+     * @example
+     * // Get one LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LivelihoodTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, LivelihoodTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LivelihoodTypes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LivelihoodTypes
+     * const livelihoodTypes = await prisma.livelihoodType.findMany()
+     * 
+     * // Get first 10 LivelihoodTypes
+     * const livelihoodTypes = await prisma.livelihoodType.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const livelihoodTypeWithIdOnly = await prisma.livelihoodType.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LivelihoodTypeFindManyArgs>(args?: SelectSubset<T, LivelihoodTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LivelihoodType.
+     * @param {LivelihoodTypeCreateArgs} args - Arguments to create a LivelihoodType.
+     * @example
+     * // Create one LivelihoodType
+     * const LivelihoodType = await prisma.livelihoodType.create({
+     *   data: {
+     *     // ... data to create a LivelihoodType
+     *   }
+     * })
+     * 
+     */
+    create<T extends LivelihoodTypeCreateArgs>(args: SelectSubset<T, LivelihoodTypeCreateArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LivelihoodTypes.
+     * @param {LivelihoodTypeCreateManyArgs} args - Arguments to create many LivelihoodTypes.
+     * @example
+     * // Create many LivelihoodTypes
+     * const livelihoodType = await prisma.livelihoodType.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LivelihoodTypeCreateManyArgs>(args?: SelectSubset<T, LivelihoodTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LivelihoodTypes and returns the data saved in the database.
+     * @param {LivelihoodTypeCreateManyAndReturnArgs} args - Arguments to create many LivelihoodTypes.
+     * @example
+     * // Create many LivelihoodTypes
+     * const livelihoodType = await prisma.livelihoodType.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LivelihoodTypes and only return the `id`
+     * const livelihoodTypeWithIdOnly = await prisma.livelihoodType.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LivelihoodTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, LivelihoodTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LivelihoodType.
+     * @param {LivelihoodTypeDeleteArgs} args - Arguments to delete one LivelihoodType.
+     * @example
+     * // Delete one LivelihoodType
+     * const LivelihoodType = await prisma.livelihoodType.delete({
+     *   where: {
+     *     // ... filter to delete one LivelihoodType
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LivelihoodTypeDeleteArgs>(args: SelectSubset<T, LivelihoodTypeDeleteArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LivelihoodType.
+     * @param {LivelihoodTypeUpdateArgs} args - Arguments to update one LivelihoodType.
+     * @example
+     * // Update one LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LivelihoodTypeUpdateArgs>(args: SelectSubset<T, LivelihoodTypeUpdateArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LivelihoodTypes.
+     * @param {LivelihoodTypeDeleteManyArgs} args - Arguments to filter LivelihoodTypes to delete.
+     * @example
+     * // Delete a few LivelihoodTypes
+     * const { count } = await prisma.livelihoodType.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LivelihoodTypeDeleteManyArgs>(args?: SelectSubset<T, LivelihoodTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LivelihoodTypes
+     * const livelihoodType = await prisma.livelihoodType.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LivelihoodTypeUpdateManyArgs>(args: SelectSubset<T, LivelihoodTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LivelihoodTypes and returns the data updated in the database.
+     * @param {LivelihoodTypeUpdateManyAndReturnArgs} args - Arguments to update many LivelihoodTypes.
+     * @example
+     * // Update many LivelihoodTypes
+     * const livelihoodType = await prisma.livelihoodType.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LivelihoodTypes and only return the `id`
+     * const livelihoodTypeWithIdOnly = await prisma.livelihoodType.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LivelihoodTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, LivelihoodTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LivelihoodType.
+     * @param {LivelihoodTypeUpsertArgs} args - Arguments to update or create a LivelihoodType.
+     * @example
+     * // Update or create a LivelihoodType
+     * const livelihoodType = await prisma.livelihoodType.upsert({
+     *   create: {
+     *     // ... data to create a LivelihoodType
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LivelihoodType we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LivelihoodTypeUpsertArgs>(args: SelectSubset<T, LivelihoodTypeUpsertArgs<ExtArgs>>): Prisma__LivelihoodTypeClient<$Result.GetResult<Prisma.$LivelihoodTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LivelihoodTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeCountArgs} args - Arguments to filter LivelihoodTypes to count.
+     * @example
+     * // Count the number of LivelihoodTypes
+     * const count = await prisma.livelihoodType.count({
+     *   where: {
+     *     // ... the filter for the LivelihoodTypes we want to count
+     *   }
+     * })
+    **/
+    count<T extends LivelihoodTypeCountArgs>(
+      args?: Subset<T, LivelihoodTypeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LivelihoodTypeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LivelihoodType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LivelihoodTypeAggregateArgs>(args: Subset<T, LivelihoodTypeAggregateArgs>): Prisma.PrismaPromise<GetLivelihoodTypeAggregateType<T>>
+
+    /**
+     * Group by LivelihoodType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LivelihoodTypeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LivelihoodTypeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LivelihoodTypeGroupByArgs['orderBy'] }
+        : { orderBy?: LivelihoodTypeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LivelihoodTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLivelihoodTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LivelihoodType model
+   */
+  readonly fields: LivelihoodTypeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LivelihoodType.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LivelihoodTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LivelihoodType model
+   */
+  interface LivelihoodTypeFieldRefs {
+    readonly id: FieldRef<"LivelihoodType", 'String'>
+    readonly key: FieldRef<"LivelihoodType", 'String'>
+    readonly category: FieldRef<"LivelihoodType", 'LivelihoodCategory'>
+    readonly label: FieldRef<"LivelihoodType", 'String'>
+    readonly icon: FieldRef<"LivelihoodType", 'String'>
+    readonly description: FieldRef<"LivelihoodType", 'String'>
+    readonly programTargetUnit: FieldRef<"LivelihoodType", 'String'>
+    readonly fields: FieldRef<"LivelihoodType", 'Json'>
+    readonly eventTypes: FieldRef<"LivelihoodType", 'Json'>
+    readonly tableColumns: FieldRef<"LivelihoodType", 'Json'>
+    readonly kpiCards: FieldRef<"LivelihoodType", 'Json'>
+    readonly active: FieldRef<"LivelihoodType", 'Boolean'>
+    readonly order: FieldRef<"LivelihoodType", 'Int'>
+    readonly createdAt: FieldRef<"LivelihoodType", 'DateTime'>
+    readonly updatedAt: FieldRef<"LivelihoodType", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LivelihoodType findUnique
+   */
+  export type LivelihoodTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodType to fetch.
+     */
+    where: LivelihoodTypeWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodType findUniqueOrThrow
+   */
+  export type LivelihoodTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodType to fetch.
+     */
+    where: LivelihoodTypeWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodType findFirst
+   */
+  export type LivelihoodTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodType to fetch.
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodTypes to fetch.
+     */
+    orderBy?: LivelihoodTypeOrderByWithRelationInput | LivelihoodTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodTypes.
+     */
+    cursor?: LivelihoodTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodTypes.
+     */
+    distinct?: LivelihoodTypeScalarFieldEnum | LivelihoodTypeScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodType findFirstOrThrow
+   */
+  export type LivelihoodTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodType to fetch.
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodTypes to fetch.
+     */
+    orderBy?: LivelihoodTypeOrderByWithRelationInput | LivelihoodTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LivelihoodTypes.
+     */
+    cursor?: LivelihoodTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodTypes.
+     */
+    distinct?: LivelihoodTypeScalarFieldEnum | LivelihoodTypeScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodType findMany
+   */
+  export type LivelihoodTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter, which LivelihoodTypes to fetch.
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LivelihoodTypes to fetch.
+     */
+    orderBy?: LivelihoodTypeOrderByWithRelationInput | LivelihoodTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LivelihoodTypes.
+     */
+    cursor?: LivelihoodTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LivelihoodTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LivelihoodTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LivelihoodTypes.
+     */
+    distinct?: LivelihoodTypeScalarFieldEnum | LivelihoodTypeScalarFieldEnum[]
+  }
+
+  /**
+   * LivelihoodType create
+   */
+  export type LivelihoodTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a LivelihoodType.
+     */
+    data: XOR<LivelihoodTypeCreateInput, LivelihoodTypeUncheckedCreateInput>
+  }
+
+  /**
+   * LivelihoodType createMany
+   */
+  export type LivelihoodTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LivelihoodTypes.
+     */
+    data: LivelihoodTypeCreateManyInput | LivelihoodTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LivelihoodType createManyAndReturn
+   */
+  export type LivelihoodTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * The data used to create many LivelihoodTypes.
+     */
+    data: LivelihoodTypeCreateManyInput | LivelihoodTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LivelihoodType update
+   */
+  export type LivelihoodTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a LivelihoodType.
+     */
+    data: XOR<LivelihoodTypeUpdateInput, LivelihoodTypeUncheckedUpdateInput>
+    /**
+     * Choose, which LivelihoodType to update.
+     */
+    where: LivelihoodTypeWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodType updateMany
+   */
+  export type LivelihoodTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LivelihoodTypes.
+     */
+    data: XOR<LivelihoodTypeUpdateManyMutationInput, LivelihoodTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodTypes to update
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * Limit how many LivelihoodTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodType updateManyAndReturn
+   */
+  export type LivelihoodTypeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * The data used to update LivelihoodTypes.
+     */
+    data: XOR<LivelihoodTypeUpdateManyMutationInput, LivelihoodTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which LivelihoodTypes to update
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * Limit how many LivelihoodTypes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodType upsert
+   */
+  export type LivelihoodTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the LivelihoodType to update in case it exists.
+     */
+    where: LivelihoodTypeWhereUniqueInput
+    /**
+     * In case the LivelihoodType found by the `where` argument doesn't exist, create a new LivelihoodType with this data.
+     */
+    create: XOR<LivelihoodTypeCreateInput, LivelihoodTypeUncheckedCreateInput>
+    /**
+     * In case the LivelihoodType was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LivelihoodTypeUpdateInput, LivelihoodTypeUncheckedUpdateInput>
+  }
+
+  /**
+   * LivelihoodType delete
+   */
+  export type LivelihoodTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+    /**
+     * Filter which LivelihoodType to delete.
+     */
+    where: LivelihoodTypeWhereUniqueInput
+  }
+
+  /**
+   * LivelihoodType deleteMany
+   */
+  export type LivelihoodTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LivelihoodTypes to delete
+     */
+    where?: LivelihoodTypeWhereInput
+    /**
+     * Limit how many LivelihoodTypes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LivelihoodType without action
+   */
+  export type LivelihoodTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LivelihoodType
+     */
+    select?: LivelihoodTypeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LivelihoodType
+     */
+    omit?: LivelihoodTypeOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model BeneficiaryLivelihood
    */
 
@@ -62663,6 +65687,7 @@ export namespace Prisma {
     humanLossMissing?: boolean
     propertyLossEstimate?: boolean
     resourceNeeds?: boolean | DisasterIncident$resourceNeedsArgs<ExtArgs>
+    reliefDistributions?: boolean | DisasterIncident$reliefDistributionsArgs<ExtArgs>
     _count?: boolean | DisasterIncidentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["disasterIncident"]>
 
@@ -62714,6 +65739,7 @@ export namespace Prisma {
   export type DisasterIncidentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "location" | "type" | "active" | "createdAt" | "updatedAt" | "expectedFamiliesAffected" | "humanLossDied" | "humanLossInjured" | "humanLossMissing" | "propertyLossEstimate", ExtArgs["result"]["disasterIncident"]>
   export type DisasterIncidentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     resourceNeeds?: boolean | DisasterIncident$resourceNeedsArgs<ExtArgs>
+    reliefDistributions?: boolean | DisasterIncident$reliefDistributionsArgs<ExtArgs>
     _count?: boolean | DisasterIncidentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DisasterIncidentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -62723,6 +65749,7 @@ export namespace Prisma {
     name: "DisasterIncident"
     objects: {
       resourceNeeds: Prisma.$IncidentResourceNeedPayload<ExtArgs>[]
+      reliefDistributions: Prisma.$ReliefDistributionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -63132,6 +66159,7 @@ export namespace Prisma {
   export interface Prisma__DisasterIncidentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     resourceNeeds<T extends DisasterIncident$resourceNeedsArgs<ExtArgs> = {}>(args?: Subset<T, DisasterIncident$resourceNeedsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncidentResourceNeedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reliefDistributions<T extends DisasterIncident$reliefDistributionsArgs<ExtArgs> = {}>(args?: Subset<T, DisasterIncident$reliefDistributionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63587,6 +66615,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IncidentResourceNeedScalarFieldEnum | IncidentResourceNeedScalarFieldEnum[]
+  }
+
+  /**
+   * DisasterIncident.reliefDistributions
+   */
+  export type DisasterIncident$reliefDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    where?: ReliefDistributionWhereInput
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    cursor?: ReliefDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReliefDistributionScalarFieldEnum | ReliefDistributionScalarFieldEnum[]
   }
 
   /**
@@ -64850,6 +67902,7 @@ export namespace Prisma {
     updatedAt?: boolean
     ledgerTransactions?: boolean | ResourceItem$ledgerTransactionsArgs<ExtArgs>
     incidentNeeds?: boolean | ResourceItem$incidentNeedsArgs<ExtArgs>
+    reliefItems?: boolean | ResourceItem$reliefItemsArgs<ExtArgs>
     _count?: boolean | ResourceItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["resourceItem"]>
 
@@ -64887,6 +67940,7 @@ export namespace Prisma {
   export type ResourceItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ledgerTransactions?: boolean | ResourceItem$ledgerTransactionsArgs<ExtArgs>
     incidentNeeds?: boolean | ResourceItem$incidentNeedsArgs<ExtArgs>
+    reliefItems?: boolean | ResourceItem$reliefItemsArgs<ExtArgs>
     _count?: boolean | ResourceItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ResourceItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -64897,6 +67951,7 @@ export namespace Prisma {
     objects: {
       ledgerTransactions: Prisma.$InventoryLedgerPayload<ExtArgs>[]
       incidentNeeds: Prisma.$IncidentResourceNeedPayload<ExtArgs>[]
+      reliefItems: Prisma.$ReliefDistributionItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -65302,6 +68357,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ledgerTransactions<T extends ResourceItem$ledgerTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, ResourceItem$ledgerTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     incidentNeeds<T extends ResourceItem$incidentNeedsArgs<ExtArgs> = {}>(args?: Subset<T, ResourceItem$incidentNeedsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncidentResourceNeedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reliefItems<T extends ResourceItem$reliefItemsArgs<ExtArgs> = {}>(args?: Subset<T, ResourceItem$reliefItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -65776,6 +68832,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: IncidentResourceNeedScalarFieldEnum | IncidentResourceNeedScalarFieldEnum[]
+  }
+
+  /**
+   * ResourceItem.reliefItems
+   */
+  export type ResourceItem$reliefItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    where?: ReliefDistributionItemWhereInput
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
   }
 
   /**
@@ -69417,12 +72497,14 @@ export namespace Prisma {
   export type IncidentResourceNeedAvgAggregateOutputType = {
     quantityNeeded: number | null
     quantityReceived: number | null
+    quantityDistributed: number | null
     transactionsCount: number | null
   }
 
   export type IncidentResourceNeedSumAggregateOutputType = {
     quantityNeeded: number | null
     quantityReceived: number | null
+    quantityDistributed: number | null
     transactionsCount: number | null
   }
 
@@ -69432,6 +72514,7 @@ export namespace Prisma {
     resourceItemId: string | null
     quantityNeeded: number | null
     quantityReceived: number | null
+    quantityDistributed: number | null
     transactionsCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -69443,6 +72526,7 @@ export namespace Prisma {
     resourceItemId: string | null
     quantityNeeded: number | null
     quantityReceived: number | null
+    quantityDistributed: number | null
     transactionsCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -69454,6 +72538,7 @@ export namespace Prisma {
     resourceItemId: number
     quantityNeeded: number
     quantityReceived: number
+    quantityDistributed: number
     transactionsCount: number
     createdAt: number
     updatedAt: number
@@ -69464,12 +72549,14 @@ export namespace Prisma {
   export type IncidentResourceNeedAvgAggregateInputType = {
     quantityNeeded?: true
     quantityReceived?: true
+    quantityDistributed?: true
     transactionsCount?: true
   }
 
   export type IncidentResourceNeedSumAggregateInputType = {
     quantityNeeded?: true
     quantityReceived?: true
+    quantityDistributed?: true
     transactionsCount?: true
   }
 
@@ -69479,6 +72566,7 @@ export namespace Prisma {
     resourceItemId?: true
     quantityNeeded?: true
     quantityReceived?: true
+    quantityDistributed?: true
     transactionsCount?: true
     createdAt?: true
     updatedAt?: true
@@ -69490,6 +72578,7 @@ export namespace Prisma {
     resourceItemId?: true
     quantityNeeded?: true
     quantityReceived?: true
+    quantityDistributed?: true
     transactionsCount?: true
     createdAt?: true
     updatedAt?: true
@@ -69501,6 +72590,7 @@ export namespace Prisma {
     resourceItemId?: true
     quantityNeeded?: true
     quantityReceived?: true
+    quantityDistributed?: true
     transactionsCount?: true
     createdAt?: true
     updatedAt?: true
@@ -69599,6 +72689,7 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded: number
     quantityReceived: number
+    quantityDistributed: number
     transactionsCount: number
     createdAt: Date
     updatedAt: Date
@@ -69629,12 +72720,14 @@ export namespace Prisma {
     resourceItemId?: boolean
     quantityNeeded?: boolean
     quantityReceived?: boolean
+    quantityDistributed?: boolean
     transactionsCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
     resourceItem?: boolean | ResourceItemDefaultArgs<ExtArgs>
     transactions?: boolean | IncidentResourceNeed$transactionsArgs<ExtArgs>
+    reliefItems?: boolean | IncidentResourceNeed$reliefItemsArgs<ExtArgs>
     _count?: boolean | IncidentResourceNeedCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["incidentResourceNeed"]>
 
@@ -69644,6 +72737,7 @@ export namespace Prisma {
     resourceItemId?: boolean
     quantityNeeded?: boolean
     quantityReceived?: boolean
+    quantityDistributed?: boolean
     transactionsCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -69657,6 +72751,7 @@ export namespace Prisma {
     resourceItemId?: boolean
     quantityNeeded?: boolean
     quantityReceived?: boolean
+    quantityDistributed?: boolean
     transactionsCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -69670,16 +72765,18 @@ export namespace Prisma {
     resourceItemId?: boolean
     quantityNeeded?: boolean
     quantityReceived?: boolean
+    quantityDistributed?: boolean
     transactionsCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type IncidentResourceNeedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "incidentId" | "resourceItemId" | "quantityNeeded" | "quantityReceived" | "transactionsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["incidentResourceNeed"]>
+  export type IncidentResourceNeedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "incidentId" | "resourceItemId" | "quantityNeeded" | "quantityReceived" | "quantityDistributed" | "transactionsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["incidentResourceNeed"]>
   export type IncidentResourceNeedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
     resourceItem?: boolean | ResourceItemDefaultArgs<ExtArgs>
     transactions?: boolean | IncidentResourceNeed$transactionsArgs<ExtArgs>
+    reliefItems?: boolean | IncidentResourceNeed$reliefItemsArgs<ExtArgs>
     _count?: boolean | IncidentResourceNeedCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type IncidentResourceNeedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -69697,6 +72794,7 @@ export namespace Prisma {
       incident: Prisma.$DisasterIncidentPayload<ExtArgs>
       resourceItem: Prisma.$ResourceItemPayload<ExtArgs>
       transactions: Prisma.$InventoryLedgerPayload<ExtArgs>[]
+      reliefItems: Prisma.$ReliefDistributionItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -69704,6 +72802,7 @@ export namespace Prisma {
       resourceItemId: string
       quantityNeeded: number
       quantityReceived: number
+      quantityDistributed: number
       transactionsCount: number
       createdAt: Date
       updatedAt: Date
@@ -70104,6 +73203,7 @@ export namespace Prisma {
     incident<T extends DisasterIncidentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DisasterIncidentDefaultArgs<ExtArgs>>): Prisma__DisasterIncidentClient<$Result.GetResult<Prisma.$DisasterIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     resourceItem<T extends ResourceItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ResourceItemDefaultArgs<ExtArgs>>): Prisma__ResourceItemClient<$Result.GetResult<Prisma.$ResourceItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     transactions<T extends IncidentResourceNeed$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, IncidentResourceNeed$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reliefItems<T extends IncidentResourceNeed$reliefItemsArgs<ExtArgs> = {}>(args?: Subset<T, IncidentResourceNeed$reliefItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -70138,6 +73238,7 @@ export namespace Prisma {
     readonly resourceItemId: FieldRef<"IncidentResourceNeed", 'String'>
     readonly quantityNeeded: FieldRef<"IncidentResourceNeed", 'Float'>
     readonly quantityReceived: FieldRef<"IncidentResourceNeed", 'Float'>
+    readonly quantityDistributed: FieldRef<"IncidentResourceNeed", 'Float'>
     readonly transactionsCount: FieldRef<"IncidentResourceNeed", 'Int'>
     readonly createdAt: FieldRef<"IncidentResourceNeed", 'DateTime'>
     readonly updatedAt: FieldRef<"IncidentResourceNeed", 'DateTime'>
@@ -70566,6 +73667,30 @@ export namespace Prisma {
   }
 
   /**
+   * IncidentResourceNeed.reliefItems
+   */
+  export type IncidentResourceNeed$reliefItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    where?: ReliefDistributionItemWhereInput
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
+  }
+
+  /**
    * IncidentResourceNeed without action
    */
   export type IncidentResourceNeedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -70581,6 +73706,2428 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: IncidentResourceNeedInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReliefDistribution
+   */
+
+  export type AggregateReliefDistribution = {
+    _count: ReliefDistributionCountAggregateOutputType | null
+    _avg: ReliefDistributionAvgAggregateOutputType | null
+    _sum: ReliefDistributionSumAggregateOutputType | null
+    _min: ReliefDistributionMinAggregateOutputType | null
+    _max: ReliefDistributionMaxAggregateOutputType | null
+  }
+
+  export type ReliefDistributionAvgAggregateOutputType = {
+    familySize: number | null
+  }
+
+  export type ReliefDistributionSumAggregateOutputType = {
+    familySize: number | null
+  }
+
+  export type ReliefDistributionMinAggregateOutputType = {
+    id: string | null
+    incidentId: string | null
+    name: string | null
+    aadhar: string | null
+    mobNumber: string | null
+    address: string | null
+    familySize: number | null
+    handledByUserId: string | null
+    notes: string | null
+    distributedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ReliefDistributionMaxAggregateOutputType = {
+    id: string | null
+    incidentId: string | null
+    name: string | null
+    aadhar: string | null
+    mobNumber: string | null
+    address: string | null
+    familySize: number | null
+    handledByUserId: string | null
+    notes: string | null
+    distributedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type ReliefDistributionCountAggregateOutputType = {
+    id: number
+    incidentId: number
+    name: number
+    aadhar: number
+    mobNumber: number
+    address: number
+    familySize: number
+    handledByUserId: number
+    notes: number
+    distributedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ReliefDistributionAvgAggregateInputType = {
+    familySize?: true
+  }
+
+  export type ReliefDistributionSumAggregateInputType = {
+    familySize?: true
+  }
+
+  export type ReliefDistributionMinAggregateInputType = {
+    id?: true
+    incidentId?: true
+    name?: true
+    aadhar?: true
+    mobNumber?: true
+    address?: true
+    familySize?: true
+    handledByUserId?: true
+    notes?: true
+    distributedAt?: true
+    createdAt?: true
+  }
+
+  export type ReliefDistributionMaxAggregateInputType = {
+    id?: true
+    incidentId?: true
+    name?: true
+    aadhar?: true
+    mobNumber?: true
+    address?: true
+    familySize?: true
+    handledByUserId?: true
+    notes?: true
+    distributedAt?: true
+    createdAt?: true
+  }
+
+  export type ReliefDistributionCountAggregateInputType = {
+    id?: true
+    incidentId?: true
+    name?: true
+    aadhar?: true
+    mobNumber?: true
+    address?: true
+    familySize?: true
+    handledByUserId?: true
+    notes?: true
+    distributedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ReliefDistributionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReliefDistribution to aggregate.
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributions to fetch.
+     */
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReliefDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReliefDistributions
+    **/
+    _count?: true | ReliefDistributionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReliefDistributionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReliefDistributionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReliefDistributionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReliefDistributionMaxAggregateInputType
+  }
+
+  export type GetReliefDistributionAggregateType<T extends ReliefDistributionAggregateArgs> = {
+        [P in keyof T & keyof AggregateReliefDistribution]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReliefDistribution[P]>
+      : GetScalarType<T[P], AggregateReliefDistribution[P]>
+  }
+
+
+
+
+  export type ReliefDistributionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionWhereInput
+    orderBy?: ReliefDistributionOrderByWithAggregationInput | ReliefDistributionOrderByWithAggregationInput[]
+    by: ReliefDistributionScalarFieldEnum[] | ReliefDistributionScalarFieldEnum
+    having?: ReliefDistributionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReliefDistributionCountAggregateInputType | true
+    _avg?: ReliefDistributionAvgAggregateInputType
+    _sum?: ReliefDistributionSumAggregateInputType
+    _min?: ReliefDistributionMinAggregateInputType
+    _max?: ReliefDistributionMaxAggregateInputType
+  }
+
+  export type ReliefDistributionGroupByOutputType = {
+    id: string
+    incidentId: string
+    name: string
+    aadhar: string | null
+    mobNumber: string | null
+    address: string | null
+    familySize: number
+    handledByUserId: string | null
+    notes: string | null
+    distributedAt: Date
+    createdAt: Date
+    _count: ReliefDistributionCountAggregateOutputType | null
+    _avg: ReliefDistributionAvgAggregateOutputType | null
+    _sum: ReliefDistributionSumAggregateOutputType | null
+    _min: ReliefDistributionMinAggregateOutputType | null
+    _max: ReliefDistributionMaxAggregateOutputType | null
+  }
+
+  type GetReliefDistributionGroupByPayload<T extends ReliefDistributionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReliefDistributionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReliefDistributionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReliefDistributionGroupByOutputType[P]>
+            : GetScalarType<T[P], ReliefDistributionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReliefDistributionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    incidentId?: boolean
+    name?: boolean
+    aadhar?: boolean
+    mobNumber?: boolean
+    address?: boolean
+    familySize?: boolean
+    handledByUserId?: boolean
+    notes?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+    items?: boolean | ReliefDistribution$itemsArgs<ExtArgs>
+    _count?: boolean | ReliefDistributionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistribution"]>
+
+  export type ReliefDistributionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    incidentId?: boolean
+    name?: boolean
+    aadhar?: boolean
+    mobNumber?: boolean
+    address?: boolean
+    familySize?: boolean
+    handledByUserId?: boolean
+    notes?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistribution"]>
+
+  export type ReliefDistributionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    incidentId?: boolean
+    name?: boolean
+    aadhar?: boolean
+    mobNumber?: boolean
+    address?: boolean
+    familySize?: boolean
+    handledByUserId?: boolean
+    notes?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistribution"]>
+
+  export type ReliefDistributionSelectScalar = {
+    id?: boolean
+    incidentId?: boolean
+    name?: boolean
+    aadhar?: boolean
+    mobNumber?: boolean
+    address?: boolean
+    familySize?: boolean
+    handledByUserId?: boolean
+    notes?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type ReliefDistributionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "incidentId" | "name" | "aadhar" | "mobNumber" | "address" | "familySize" | "handledByUserId" | "notes" | "distributedAt" | "createdAt", ExtArgs["result"]["reliefDistribution"]>
+  export type ReliefDistributionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+    items?: boolean | ReliefDistribution$itemsArgs<ExtArgs>
+    _count?: boolean | ReliefDistributionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ReliefDistributionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+  }
+  export type ReliefDistributionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    incident?: boolean | DisasterIncidentDefaultArgs<ExtArgs>
+    handledByUser?: boolean | ReliefDistribution$handledByUserArgs<ExtArgs>
+  }
+
+  export type $ReliefDistributionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReliefDistribution"
+    objects: {
+      incident: Prisma.$DisasterIncidentPayload<ExtArgs>
+      handledByUser: Prisma.$UserPayload<ExtArgs> | null
+      items: Prisma.$ReliefDistributionItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      incidentId: string
+      name: string
+      aadhar: string | null
+      mobNumber: string | null
+      address: string | null
+      familySize: number
+      handledByUserId: string | null
+      notes: string | null
+      distributedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["reliefDistribution"]>
+    composites: {}
+  }
+
+  type ReliefDistributionGetPayload<S extends boolean | null | undefined | ReliefDistributionDefaultArgs> = $Result.GetResult<Prisma.$ReliefDistributionPayload, S>
+
+  type ReliefDistributionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReliefDistributionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReliefDistributionCountAggregateInputType | true
+    }
+
+  export interface ReliefDistributionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReliefDistribution'], meta: { name: 'ReliefDistribution' } }
+    /**
+     * Find zero or one ReliefDistribution that matches the filter.
+     * @param {ReliefDistributionFindUniqueArgs} args - Arguments to find a ReliefDistribution
+     * @example
+     * // Get one ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReliefDistributionFindUniqueArgs>(args: SelectSubset<T, ReliefDistributionFindUniqueArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReliefDistribution that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReliefDistributionFindUniqueOrThrowArgs} args - Arguments to find a ReliefDistribution
+     * @example
+     * // Get one ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReliefDistributionFindUniqueOrThrowArgs>(args: SelectSubset<T, ReliefDistributionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReliefDistribution that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionFindFirstArgs} args - Arguments to find a ReliefDistribution
+     * @example
+     * // Get one ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReliefDistributionFindFirstArgs>(args?: SelectSubset<T, ReliefDistributionFindFirstArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReliefDistribution that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionFindFirstOrThrowArgs} args - Arguments to find a ReliefDistribution
+     * @example
+     * // Get one ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReliefDistributionFindFirstOrThrowArgs>(args?: SelectSubset<T, ReliefDistributionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReliefDistributions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReliefDistributions
+     * const reliefDistributions = await prisma.reliefDistribution.findMany()
+     * 
+     * // Get first 10 ReliefDistributions
+     * const reliefDistributions = await prisma.reliefDistribution.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reliefDistributionWithIdOnly = await prisma.reliefDistribution.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReliefDistributionFindManyArgs>(args?: SelectSubset<T, ReliefDistributionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReliefDistribution.
+     * @param {ReliefDistributionCreateArgs} args - Arguments to create a ReliefDistribution.
+     * @example
+     * // Create one ReliefDistribution
+     * const ReliefDistribution = await prisma.reliefDistribution.create({
+     *   data: {
+     *     // ... data to create a ReliefDistribution
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReliefDistributionCreateArgs>(args: SelectSubset<T, ReliefDistributionCreateArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReliefDistributions.
+     * @param {ReliefDistributionCreateManyArgs} args - Arguments to create many ReliefDistributions.
+     * @example
+     * // Create many ReliefDistributions
+     * const reliefDistribution = await prisma.reliefDistribution.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReliefDistributionCreateManyArgs>(args?: SelectSubset<T, ReliefDistributionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReliefDistributions and returns the data saved in the database.
+     * @param {ReliefDistributionCreateManyAndReturnArgs} args - Arguments to create many ReliefDistributions.
+     * @example
+     * // Create many ReliefDistributions
+     * const reliefDistribution = await prisma.reliefDistribution.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReliefDistributions and only return the `id`
+     * const reliefDistributionWithIdOnly = await prisma.reliefDistribution.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReliefDistributionCreateManyAndReturnArgs>(args?: SelectSubset<T, ReliefDistributionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReliefDistribution.
+     * @param {ReliefDistributionDeleteArgs} args - Arguments to delete one ReliefDistribution.
+     * @example
+     * // Delete one ReliefDistribution
+     * const ReliefDistribution = await prisma.reliefDistribution.delete({
+     *   where: {
+     *     // ... filter to delete one ReliefDistribution
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReliefDistributionDeleteArgs>(args: SelectSubset<T, ReliefDistributionDeleteArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReliefDistribution.
+     * @param {ReliefDistributionUpdateArgs} args - Arguments to update one ReliefDistribution.
+     * @example
+     * // Update one ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReliefDistributionUpdateArgs>(args: SelectSubset<T, ReliefDistributionUpdateArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReliefDistributions.
+     * @param {ReliefDistributionDeleteManyArgs} args - Arguments to filter ReliefDistributions to delete.
+     * @example
+     * // Delete a few ReliefDistributions
+     * const { count } = await prisma.reliefDistribution.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReliefDistributionDeleteManyArgs>(args?: SelectSubset<T, ReliefDistributionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReliefDistributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReliefDistributions
+     * const reliefDistribution = await prisma.reliefDistribution.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReliefDistributionUpdateManyArgs>(args: SelectSubset<T, ReliefDistributionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReliefDistributions and returns the data updated in the database.
+     * @param {ReliefDistributionUpdateManyAndReturnArgs} args - Arguments to update many ReliefDistributions.
+     * @example
+     * // Update many ReliefDistributions
+     * const reliefDistribution = await prisma.reliefDistribution.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReliefDistributions and only return the `id`
+     * const reliefDistributionWithIdOnly = await prisma.reliefDistribution.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReliefDistributionUpdateManyAndReturnArgs>(args: SelectSubset<T, ReliefDistributionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReliefDistribution.
+     * @param {ReliefDistributionUpsertArgs} args - Arguments to update or create a ReliefDistribution.
+     * @example
+     * // Update or create a ReliefDistribution
+     * const reliefDistribution = await prisma.reliefDistribution.upsert({
+     *   create: {
+     *     // ... data to create a ReliefDistribution
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReliefDistribution we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReliefDistributionUpsertArgs>(args: SelectSubset<T, ReliefDistributionUpsertArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReliefDistributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionCountArgs} args - Arguments to filter ReliefDistributions to count.
+     * @example
+     * // Count the number of ReliefDistributions
+     * const count = await prisma.reliefDistribution.count({
+     *   where: {
+     *     // ... the filter for the ReliefDistributions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReliefDistributionCountArgs>(
+      args?: Subset<T, ReliefDistributionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReliefDistributionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReliefDistribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReliefDistributionAggregateArgs>(args: Subset<T, ReliefDistributionAggregateArgs>): Prisma.PrismaPromise<GetReliefDistributionAggregateType<T>>
+
+    /**
+     * Group by ReliefDistribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReliefDistributionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReliefDistributionGroupByArgs['orderBy'] }
+        : { orderBy?: ReliefDistributionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReliefDistributionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReliefDistributionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReliefDistribution model
+   */
+  readonly fields: ReliefDistributionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReliefDistribution.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReliefDistributionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    incident<T extends DisasterIncidentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DisasterIncidentDefaultArgs<ExtArgs>>): Prisma__DisasterIncidentClient<$Result.GetResult<Prisma.$DisasterIncidentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    handledByUser<T extends ReliefDistribution$handledByUserArgs<ExtArgs> = {}>(args?: Subset<T, ReliefDistribution$handledByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    items<T extends ReliefDistribution$itemsArgs<ExtArgs> = {}>(args?: Subset<T, ReliefDistribution$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReliefDistribution model
+   */
+  interface ReliefDistributionFieldRefs {
+    readonly id: FieldRef<"ReliefDistribution", 'String'>
+    readonly incidentId: FieldRef<"ReliefDistribution", 'String'>
+    readonly name: FieldRef<"ReliefDistribution", 'String'>
+    readonly aadhar: FieldRef<"ReliefDistribution", 'String'>
+    readonly mobNumber: FieldRef<"ReliefDistribution", 'String'>
+    readonly address: FieldRef<"ReliefDistribution", 'String'>
+    readonly familySize: FieldRef<"ReliefDistribution", 'Int'>
+    readonly handledByUserId: FieldRef<"ReliefDistribution", 'String'>
+    readonly notes: FieldRef<"ReliefDistribution", 'String'>
+    readonly distributedAt: FieldRef<"ReliefDistribution", 'DateTime'>
+    readonly createdAt: FieldRef<"ReliefDistribution", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReliefDistribution findUnique
+   */
+  export type ReliefDistributionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistribution to fetch.
+     */
+    where: ReliefDistributionWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistribution findUniqueOrThrow
+   */
+  export type ReliefDistributionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistribution to fetch.
+     */
+    where: ReliefDistributionWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistribution findFirst
+   */
+  export type ReliefDistributionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistribution to fetch.
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributions to fetch.
+     */
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReliefDistributions.
+     */
+    cursor?: ReliefDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributions.
+     */
+    distinct?: ReliefDistributionScalarFieldEnum | ReliefDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistribution findFirstOrThrow
+   */
+  export type ReliefDistributionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistribution to fetch.
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributions to fetch.
+     */
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReliefDistributions.
+     */
+    cursor?: ReliefDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributions.
+     */
+    distinct?: ReliefDistributionScalarFieldEnum | ReliefDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistribution findMany
+   */
+  export type ReliefDistributionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributions to fetch.
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributions to fetch.
+     */
+    orderBy?: ReliefDistributionOrderByWithRelationInput | ReliefDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReliefDistributions.
+     */
+    cursor?: ReliefDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributions.
+     */
+    distinct?: ReliefDistributionScalarFieldEnum | ReliefDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistribution create
+   */
+  export type ReliefDistributionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReliefDistribution.
+     */
+    data: XOR<ReliefDistributionCreateInput, ReliefDistributionUncheckedCreateInput>
+  }
+
+  /**
+   * ReliefDistribution createMany
+   */
+  export type ReliefDistributionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReliefDistributions.
+     */
+    data: ReliefDistributionCreateManyInput | ReliefDistributionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReliefDistribution createManyAndReturn
+   */
+  export type ReliefDistributionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReliefDistributions.
+     */
+    data: ReliefDistributionCreateManyInput | ReliefDistributionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReliefDistribution update
+   */
+  export type ReliefDistributionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReliefDistribution.
+     */
+    data: XOR<ReliefDistributionUpdateInput, ReliefDistributionUncheckedUpdateInput>
+    /**
+     * Choose, which ReliefDistribution to update.
+     */
+    where: ReliefDistributionWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistribution updateMany
+   */
+  export type ReliefDistributionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReliefDistributions.
+     */
+    data: XOR<ReliefDistributionUpdateManyMutationInput, ReliefDistributionUncheckedUpdateManyInput>
+    /**
+     * Filter which ReliefDistributions to update
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * Limit how many ReliefDistributions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReliefDistribution updateManyAndReturn
+   */
+  export type ReliefDistributionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * The data used to update ReliefDistributions.
+     */
+    data: XOR<ReliefDistributionUpdateManyMutationInput, ReliefDistributionUncheckedUpdateManyInput>
+    /**
+     * Filter which ReliefDistributions to update
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * Limit how many ReliefDistributions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReliefDistribution upsert
+   */
+  export type ReliefDistributionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReliefDistribution to update in case it exists.
+     */
+    where: ReliefDistributionWhereUniqueInput
+    /**
+     * In case the ReliefDistribution found by the `where` argument doesn't exist, create a new ReliefDistribution with this data.
+     */
+    create: XOR<ReliefDistributionCreateInput, ReliefDistributionUncheckedCreateInput>
+    /**
+     * In case the ReliefDistribution was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReliefDistributionUpdateInput, ReliefDistributionUncheckedUpdateInput>
+  }
+
+  /**
+   * ReliefDistribution delete
+   */
+  export type ReliefDistributionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+    /**
+     * Filter which ReliefDistribution to delete.
+     */
+    where: ReliefDistributionWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistribution deleteMany
+   */
+  export type ReliefDistributionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReliefDistributions to delete
+     */
+    where?: ReliefDistributionWhereInput
+    /**
+     * Limit how many ReliefDistributions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReliefDistribution.handledByUser
+   */
+  export type ReliefDistribution$handledByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ReliefDistribution.items
+   */
+  export type ReliefDistribution$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    where?: ReliefDistributionItemWhereInput
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistribution without action
+   */
+  export type ReliefDistributionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistribution
+     */
+    select?: ReliefDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistribution
+     */
+    omit?: ReliefDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReliefDistributionItem
+   */
+
+  export type AggregateReliefDistributionItem = {
+    _count: ReliefDistributionItemCountAggregateOutputType | null
+    _avg: ReliefDistributionItemAvgAggregateOutputType | null
+    _sum: ReliefDistributionItemSumAggregateOutputType | null
+    _min: ReliefDistributionItemMinAggregateOutputType | null
+    _max: ReliefDistributionItemMaxAggregateOutputType | null
+  }
+
+  export type ReliefDistributionItemAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type ReliefDistributionItemSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type ReliefDistributionItemMinAggregateOutputType = {
+    id: string | null
+    distributionId: string | null
+    incidentResourceNeedId: string | null
+    resourceItemId: string | null
+    itemName: string | null
+    unit: string | null
+    quantity: number | null
+    notes: string | null
+  }
+
+  export type ReliefDistributionItemMaxAggregateOutputType = {
+    id: string | null
+    distributionId: string | null
+    incidentResourceNeedId: string | null
+    resourceItemId: string | null
+    itemName: string | null
+    unit: string | null
+    quantity: number | null
+    notes: string | null
+  }
+
+  export type ReliefDistributionItemCountAggregateOutputType = {
+    id: number
+    distributionId: number
+    incidentResourceNeedId: number
+    resourceItemId: number
+    itemName: number
+    unit: number
+    quantity: number
+    notes: number
+    _all: number
+  }
+
+
+  export type ReliefDistributionItemAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type ReliefDistributionItemSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type ReliefDistributionItemMinAggregateInputType = {
+    id?: true
+    distributionId?: true
+    incidentResourceNeedId?: true
+    resourceItemId?: true
+    itemName?: true
+    unit?: true
+    quantity?: true
+    notes?: true
+  }
+
+  export type ReliefDistributionItemMaxAggregateInputType = {
+    id?: true
+    distributionId?: true
+    incidentResourceNeedId?: true
+    resourceItemId?: true
+    itemName?: true
+    unit?: true
+    quantity?: true
+    notes?: true
+  }
+
+  export type ReliefDistributionItemCountAggregateInputType = {
+    id?: true
+    distributionId?: true
+    incidentResourceNeedId?: true
+    resourceItemId?: true
+    itemName?: true
+    unit?: true
+    quantity?: true
+    notes?: true
+    _all?: true
+  }
+
+  export type ReliefDistributionItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReliefDistributionItem to aggregate.
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributionItems to fetch.
+     */
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReliefDistributionItems
+    **/
+    _count?: true | ReliefDistributionItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReliefDistributionItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReliefDistributionItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReliefDistributionItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReliefDistributionItemMaxAggregateInputType
+  }
+
+  export type GetReliefDistributionItemAggregateType<T extends ReliefDistributionItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateReliefDistributionItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReliefDistributionItem[P]>
+      : GetScalarType<T[P], AggregateReliefDistributionItem[P]>
+  }
+
+
+
+
+  export type ReliefDistributionItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReliefDistributionItemWhereInput
+    orderBy?: ReliefDistributionItemOrderByWithAggregationInput | ReliefDistributionItemOrderByWithAggregationInput[]
+    by: ReliefDistributionItemScalarFieldEnum[] | ReliefDistributionItemScalarFieldEnum
+    having?: ReliefDistributionItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReliefDistributionItemCountAggregateInputType | true
+    _avg?: ReliefDistributionItemAvgAggregateInputType
+    _sum?: ReliefDistributionItemSumAggregateInputType
+    _min?: ReliefDistributionItemMinAggregateInputType
+    _max?: ReliefDistributionItemMaxAggregateInputType
+  }
+
+  export type ReliefDistributionItemGroupByOutputType = {
+    id: string
+    distributionId: string
+    incidentResourceNeedId: string | null
+    resourceItemId: string | null
+    itemName: string
+    unit: string
+    quantity: number
+    notes: string | null
+    _count: ReliefDistributionItemCountAggregateOutputType | null
+    _avg: ReliefDistributionItemAvgAggregateOutputType | null
+    _sum: ReliefDistributionItemSumAggregateOutputType | null
+    _min: ReliefDistributionItemMinAggregateOutputType | null
+    _max: ReliefDistributionItemMaxAggregateOutputType | null
+  }
+
+  type GetReliefDistributionItemGroupByPayload<T extends ReliefDistributionItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReliefDistributionItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReliefDistributionItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReliefDistributionItemGroupByOutputType[P]>
+            : GetScalarType<T[P], ReliefDistributionItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReliefDistributionItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    distributionId?: boolean
+    incidentResourceNeedId?: boolean
+    resourceItemId?: boolean
+    itemName?: boolean
+    unit?: boolean
+    quantity?: boolean
+    notes?: boolean
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistributionItem"]>
+
+  export type ReliefDistributionItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    distributionId?: boolean
+    incidentResourceNeedId?: boolean
+    resourceItemId?: boolean
+    itemName?: boolean
+    unit?: boolean
+    quantity?: boolean
+    notes?: boolean
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistributionItem"]>
+
+  export type ReliefDistributionItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    distributionId?: boolean
+    incidentResourceNeedId?: boolean
+    resourceItemId?: boolean
+    itemName?: boolean
+    unit?: boolean
+    quantity?: boolean
+    notes?: boolean
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }, ExtArgs["result"]["reliefDistributionItem"]>
+
+  export type ReliefDistributionItemSelectScalar = {
+    id?: boolean
+    distributionId?: boolean
+    incidentResourceNeedId?: boolean
+    resourceItemId?: boolean
+    itemName?: boolean
+    unit?: boolean
+    quantity?: boolean
+    notes?: boolean
+  }
+
+  export type ReliefDistributionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "distributionId" | "incidentResourceNeedId" | "resourceItemId" | "itemName" | "unit" | "quantity" | "notes", ExtArgs["result"]["reliefDistributionItem"]>
+  export type ReliefDistributionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }
+  export type ReliefDistributionItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }
+  export type ReliefDistributionItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    distribution?: boolean | ReliefDistributionDefaultArgs<ExtArgs>
+    incidentResourceNeed?: boolean | ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>
+    resourceItem?: boolean | ReliefDistributionItem$resourceItemArgs<ExtArgs>
+  }
+
+  export type $ReliefDistributionItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReliefDistributionItem"
+    objects: {
+      distribution: Prisma.$ReliefDistributionPayload<ExtArgs>
+      incidentResourceNeed: Prisma.$IncidentResourceNeedPayload<ExtArgs> | null
+      resourceItem: Prisma.$ResourceItemPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      distributionId: string
+      incidentResourceNeedId: string | null
+      resourceItemId: string | null
+      itemName: string
+      unit: string
+      quantity: number
+      notes: string | null
+    }, ExtArgs["result"]["reliefDistributionItem"]>
+    composites: {}
+  }
+
+  type ReliefDistributionItemGetPayload<S extends boolean | null | undefined | ReliefDistributionItemDefaultArgs> = $Result.GetResult<Prisma.$ReliefDistributionItemPayload, S>
+
+  type ReliefDistributionItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReliefDistributionItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReliefDistributionItemCountAggregateInputType | true
+    }
+
+  export interface ReliefDistributionItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReliefDistributionItem'], meta: { name: 'ReliefDistributionItem' } }
+    /**
+     * Find zero or one ReliefDistributionItem that matches the filter.
+     * @param {ReliefDistributionItemFindUniqueArgs} args - Arguments to find a ReliefDistributionItem
+     * @example
+     * // Get one ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReliefDistributionItemFindUniqueArgs>(args: SelectSubset<T, ReliefDistributionItemFindUniqueArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReliefDistributionItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReliefDistributionItemFindUniqueOrThrowArgs} args - Arguments to find a ReliefDistributionItem
+     * @example
+     * // Get one ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReliefDistributionItemFindUniqueOrThrowArgs>(args: SelectSubset<T, ReliefDistributionItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReliefDistributionItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemFindFirstArgs} args - Arguments to find a ReliefDistributionItem
+     * @example
+     * // Get one ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReliefDistributionItemFindFirstArgs>(args?: SelectSubset<T, ReliefDistributionItemFindFirstArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReliefDistributionItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemFindFirstOrThrowArgs} args - Arguments to find a ReliefDistributionItem
+     * @example
+     * // Get one ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReliefDistributionItemFindFirstOrThrowArgs>(args?: SelectSubset<T, ReliefDistributionItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReliefDistributionItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReliefDistributionItems
+     * const reliefDistributionItems = await prisma.reliefDistributionItem.findMany()
+     * 
+     * // Get first 10 ReliefDistributionItems
+     * const reliefDistributionItems = await prisma.reliefDistributionItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reliefDistributionItemWithIdOnly = await prisma.reliefDistributionItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReliefDistributionItemFindManyArgs>(args?: SelectSubset<T, ReliefDistributionItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReliefDistributionItem.
+     * @param {ReliefDistributionItemCreateArgs} args - Arguments to create a ReliefDistributionItem.
+     * @example
+     * // Create one ReliefDistributionItem
+     * const ReliefDistributionItem = await prisma.reliefDistributionItem.create({
+     *   data: {
+     *     // ... data to create a ReliefDistributionItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReliefDistributionItemCreateArgs>(args: SelectSubset<T, ReliefDistributionItemCreateArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReliefDistributionItems.
+     * @param {ReliefDistributionItemCreateManyArgs} args - Arguments to create many ReliefDistributionItems.
+     * @example
+     * // Create many ReliefDistributionItems
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReliefDistributionItemCreateManyArgs>(args?: SelectSubset<T, ReliefDistributionItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReliefDistributionItems and returns the data saved in the database.
+     * @param {ReliefDistributionItemCreateManyAndReturnArgs} args - Arguments to create many ReliefDistributionItems.
+     * @example
+     * // Create many ReliefDistributionItems
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReliefDistributionItems and only return the `id`
+     * const reliefDistributionItemWithIdOnly = await prisma.reliefDistributionItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReliefDistributionItemCreateManyAndReturnArgs>(args?: SelectSubset<T, ReliefDistributionItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReliefDistributionItem.
+     * @param {ReliefDistributionItemDeleteArgs} args - Arguments to delete one ReliefDistributionItem.
+     * @example
+     * // Delete one ReliefDistributionItem
+     * const ReliefDistributionItem = await prisma.reliefDistributionItem.delete({
+     *   where: {
+     *     // ... filter to delete one ReliefDistributionItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReliefDistributionItemDeleteArgs>(args: SelectSubset<T, ReliefDistributionItemDeleteArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReliefDistributionItem.
+     * @param {ReliefDistributionItemUpdateArgs} args - Arguments to update one ReliefDistributionItem.
+     * @example
+     * // Update one ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReliefDistributionItemUpdateArgs>(args: SelectSubset<T, ReliefDistributionItemUpdateArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReliefDistributionItems.
+     * @param {ReliefDistributionItemDeleteManyArgs} args - Arguments to filter ReliefDistributionItems to delete.
+     * @example
+     * // Delete a few ReliefDistributionItems
+     * const { count } = await prisma.reliefDistributionItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReliefDistributionItemDeleteManyArgs>(args?: SelectSubset<T, ReliefDistributionItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReliefDistributionItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReliefDistributionItems
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReliefDistributionItemUpdateManyArgs>(args: SelectSubset<T, ReliefDistributionItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReliefDistributionItems and returns the data updated in the database.
+     * @param {ReliefDistributionItemUpdateManyAndReturnArgs} args - Arguments to update many ReliefDistributionItems.
+     * @example
+     * // Update many ReliefDistributionItems
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReliefDistributionItems and only return the `id`
+     * const reliefDistributionItemWithIdOnly = await prisma.reliefDistributionItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReliefDistributionItemUpdateManyAndReturnArgs>(args: SelectSubset<T, ReliefDistributionItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReliefDistributionItem.
+     * @param {ReliefDistributionItemUpsertArgs} args - Arguments to update or create a ReliefDistributionItem.
+     * @example
+     * // Update or create a ReliefDistributionItem
+     * const reliefDistributionItem = await prisma.reliefDistributionItem.upsert({
+     *   create: {
+     *     // ... data to create a ReliefDistributionItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReliefDistributionItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReliefDistributionItemUpsertArgs>(args: SelectSubset<T, ReliefDistributionItemUpsertArgs<ExtArgs>>): Prisma__ReliefDistributionItemClient<$Result.GetResult<Prisma.$ReliefDistributionItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReliefDistributionItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemCountArgs} args - Arguments to filter ReliefDistributionItems to count.
+     * @example
+     * // Count the number of ReliefDistributionItems
+     * const count = await prisma.reliefDistributionItem.count({
+     *   where: {
+     *     // ... the filter for the ReliefDistributionItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReliefDistributionItemCountArgs>(
+      args?: Subset<T, ReliefDistributionItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReliefDistributionItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReliefDistributionItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReliefDistributionItemAggregateArgs>(args: Subset<T, ReliefDistributionItemAggregateArgs>): Prisma.PrismaPromise<GetReliefDistributionItemAggregateType<T>>
+
+    /**
+     * Group by ReliefDistributionItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReliefDistributionItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReliefDistributionItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReliefDistributionItemGroupByArgs['orderBy'] }
+        : { orderBy?: ReliefDistributionItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReliefDistributionItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReliefDistributionItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReliefDistributionItem model
+   */
+  readonly fields: ReliefDistributionItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReliefDistributionItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReliefDistributionItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    distribution<T extends ReliefDistributionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReliefDistributionDefaultArgs<ExtArgs>>): Prisma__ReliefDistributionClient<$Result.GetResult<Prisma.$ReliefDistributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    incidentResourceNeed<T extends ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs> = {}>(args?: Subset<T, ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs>>): Prisma__IncidentResourceNeedClient<$Result.GetResult<Prisma.$IncidentResourceNeedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    resourceItem<T extends ReliefDistributionItem$resourceItemArgs<ExtArgs> = {}>(args?: Subset<T, ReliefDistributionItem$resourceItemArgs<ExtArgs>>): Prisma__ResourceItemClient<$Result.GetResult<Prisma.$ResourceItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReliefDistributionItem model
+   */
+  interface ReliefDistributionItemFieldRefs {
+    readonly id: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly distributionId: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly incidentResourceNeedId: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly resourceItemId: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly itemName: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly unit: FieldRef<"ReliefDistributionItem", 'String'>
+    readonly quantity: FieldRef<"ReliefDistributionItem", 'Float'>
+    readonly notes: FieldRef<"ReliefDistributionItem", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReliefDistributionItem findUnique
+   */
+  export type ReliefDistributionItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributionItem to fetch.
+     */
+    where: ReliefDistributionItemWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistributionItem findUniqueOrThrow
+   */
+  export type ReliefDistributionItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributionItem to fetch.
+     */
+    where: ReliefDistributionItemWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistributionItem findFirst
+   */
+  export type ReliefDistributionItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributionItem to fetch.
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributionItems to fetch.
+     */
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReliefDistributionItems.
+     */
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributionItems.
+     */
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistributionItem findFirstOrThrow
+   */
+  export type ReliefDistributionItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributionItem to fetch.
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributionItems to fetch.
+     */
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReliefDistributionItems.
+     */
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributionItems.
+     */
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistributionItem findMany
+   */
+  export type ReliefDistributionItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReliefDistributionItems to fetch.
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReliefDistributionItems to fetch.
+     */
+    orderBy?: ReliefDistributionItemOrderByWithRelationInput | ReliefDistributionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReliefDistributionItems.
+     */
+    cursor?: ReliefDistributionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReliefDistributionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReliefDistributionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReliefDistributionItems.
+     */
+    distinct?: ReliefDistributionItemScalarFieldEnum | ReliefDistributionItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReliefDistributionItem create
+   */
+  export type ReliefDistributionItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReliefDistributionItem.
+     */
+    data: XOR<ReliefDistributionItemCreateInput, ReliefDistributionItemUncheckedCreateInput>
+  }
+
+  /**
+   * ReliefDistributionItem createMany
+   */
+  export type ReliefDistributionItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReliefDistributionItems.
+     */
+    data: ReliefDistributionItemCreateManyInput | ReliefDistributionItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReliefDistributionItem createManyAndReturn
+   */
+  export type ReliefDistributionItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReliefDistributionItems.
+     */
+    data: ReliefDistributionItemCreateManyInput | ReliefDistributionItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReliefDistributionItem update
+   */
+  export type ReliefDistributionItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReliefDistributionItem.
+     */
+    data: XOR<ReliefDistributionItemUpdateInput, ReliefDistributionItemUncheckedUpdateInput>
+    /**
+     * Choose, which ReliefDistributionItem to update.
+     */
+    where: ReliefDistributionItemWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistributionItem updateMany
+   */
+  export type ReliefDistributionItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReliefDistributionItems.
+     */
+    data: XOR<ReliefDistributionItemUpdateManyMutationInput, ReliefDistributionItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ReliefDistributionItems to update
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * Limit how many ReliefDistributionItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReliefDistributionItem updateManyAndReturn
+   */
+  export type ReliefDistributionItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * The data used to update ReliefDistributionItems.
+     */
+    data: XOR<ReliefDistributionItemUpdateManyMutationInput, ReliefDistributionItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ReliefDistributionItems to update
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * Limit how many ReliefDistributionItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReliefDistributionItem upsert
+   */
+  export type ReliefDistributionItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReliefDistributionItem to update in case it exists.
+     */
+    where: ReliefDistributionItemWhereUniqueInput
+    /**
+     * In case the ReliefDistributionItem found by the `where` argument doesn't exist, create a new ReliefDistributionItem with this data.
+     */
+    create: XOR<ReliefDistributionItemCreateInput, ReliefDistributionItemUncheckedCreateInput>
+    /**
+     * In case the ReliefDistributionItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReliefDistributionItemUpdateInput, ReliefDistributionItemUncheckedUpdateInput>
+  }
+
+  /**
+   * ReliefDistributionItem delete
+   */
+  export type ReliefDistributionItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
+    /**
+     * Filter which ReliefDistributionItem to delete.
+     */
+    where: ReliefDistributionItemWhereUniqueInput
+  }
+
+  /**
+   * ReliefDistributionItem deleteMany
+   */
+  export type ReliefDistributionItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReliefDistributionItems to delete
+     */
+    where?: ReliefDistributionItemWhereInput
+    /**
+     * Limit how many ReliefDistributionItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReliefDistributionItem.incidentResourceNeed
+   */
+  export type ReliefDistributionItem$incidentResourceNeedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncidentResourceNeed
+     */
+    select?: IncidentResourceNeedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the IncidentResourceNeed
+     */
+    omit?: IncidentResourceNeedOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: IncidentResourceNeedInclude<ExtArgs> | null
+    where?: IncidentResourceNeedWhereInput
+  }
+
+  /**
+   * ReliefDistributionItem.resourceItem
+   */
+  export type ReliefDistributionItem$resourceItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ResourceItem
+     */
+    select?: ResourceItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ResourceItem
+     */
+    omit?: ResourceItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ResourceItemInclude<ExtArgs> | null
+    where?: ResourceItemWhereInput
+  }
+
+  /**
+   * ReliefDistributionItem without action
+   */
+  export type ReliefDistributionItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReliefDistributionItem
+     */
+    select?: ReliefDistributionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReliefDistributionItem
+     */
+    omit?: ReliefDistributionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReliefDistributionItemInclude<ExtArgs> | null
   }
 
 
@@ -100185,6 +105732,7 @@ export namespace Prisma {
     id: string | null
     studentId: string | null
     name: string | null
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -100209,6 +105757,7 @@ export namespace Prisma {
     id: string | null
     studentId: string | null
     name: string | null
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -100233,6 +105782,7 @@ export namespace Prisma {
     id: number
     studentId: number
     name: number
+    photoUrl: number
     dob: number
     gender: number
     email: number
@@ -100267,6 +105817,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -100291,6 +105842,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -100315,6 +105867,7 @@ export namespace Prisma {
     id?: true
     studentId?: true
     name?: true
+    photoUrl?: true
     dob?: true
     gender?: true
     email?: true
@@ -100426,6 +105979,7 @@ export namespace Prisma {
     id: string
     studentId: string
     name: string
+    photoUrl: string | null
     dob: Date | null
     gender: string | null
     email: string | null
@@ -100469,6 +106023,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -100501,6 +106056,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -100527,6 +106083,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -100553,6 +106110,7 @@ export namespace Prisma {
     id?: boolean
     studentId?: boolean
     name?: boolean
+    photoUrl?: boolean
     dob?: boolean
     gender?: boolean
     email?: boolean
@@ -100573,7 +106131,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
+  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
   export type AfterSchoolStudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     centre?: boolean | AfterSchoolStudent$centreArgs<ExtArgs>
     fellow?: boolean | AfterSchoolStudent$fellowArgs<ExtArgs>
@@ -100608,6 +106166,7 @@ export namespace Prisma {
       id: string
       studentId: string
       name: string
+      photoUrl: string | null
       dob: Date | null
       gender: string | null
       email: string | null
@@ -101059,6 +106618,7 @@ export namespace Prisma {
     readonly id: FieldRef<"AfterSchoolStudent", 'String'>
     readonly studentId: FieldRef<"AfterSchoolStudent", 'String'>
     readonly name: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly photoUrl: FieldRef<"AfterSchoolStudent", 'String'>
     readonly dob: FieldRef<"AfterSchoolStudent", 'DateTime'>
     readonly gender: FieldRef<"AfterSchoolStudent", 'String'>
     readonly email: FieldRef<"AfterSchoolStudent", 'String'>
@@ -111793,9 +117353,20 @@ export namespace Prisma {
     roleId: 'roleId',
     status: 'status',
     department: 'department',
+    employeeId: 'employeeId',
     dob: 'dob',
     gender: 'gender',
+    maritalStatus: 'maritalStatus',
+    bloodGroup: 'bloodGroup',
     address: 'address',
+    emergencyContactName: 'emergencyContactName',
+    emergencyContactPhone: 'emergencyContactPhone',
+    aadharNumber: 'aadharNumber',
+    panCard: 'panCard',
+    bankName: 'bankName',
+    bankAccountNo: 'bankAccountNo',
+    bankIfsc: 'bankIfsc',
+    dateOfJoining: 'dateOfJoining',
     avatar: 'avatar',
     leavesTaken: 'leavesTaken',
     leavesRemaining: 'leavesRemaining',
@@ -111804,6 +117375,23 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    type: 'type',
+    title: 'title',
+    message: 'message',
+    link: 'link',
+    read: 'read',
+    actorId: 'actorId',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
   export const PermissionScalarFieldEnum: {
@@ -111968,6 +117556,7 @@ export namespace Prisma {
     id: 'id',
     studentId: 'studentId',
     name: 'name',
+    photoUrl: 'photoUrl',
     dob: 'dob',
     gender: 'gender',
     email: 'email',
@@ -112208,16 +117797,23 @@ export namespace Prisma {
     aadhar: 'aadhar',
     rationCard: 'rationCard',
     mobNumber: 'mobNumber',
+    emergencyContact: 'emergencyContact',
+    gender: 'gender',
     resilienceScore: 'resilienceScore',
     annualIncome: 'annualIncome',
     monthlyIncome: 'monthlyIncome',
     caste: 'caste',
     religion: 'religion',
     address: 'address',
+    state: 'state',
+    district: 'district',
+    block: 'block',
+    ward: 'ward',
+    village: 'village',
+    photoUrl: 'photoUrl',
     householdSize: 'householdSize',
     primaryIncomeType: 'primaryIncomeType',
     tier: 'tier',
-    tierPercent: 'tierPercent',
     bankName: 'bankName',
     bankAccountNo: 'bankAccountNo',
     bankIfsc: 'bankIfsc',
@@ -112385,6 +117981,27 @@ export namespace Prisma {
   export type LivelihoodProgramScalarFieldEnum = (typeof LivelihoodProgramScalarFieldEnum)[keyof typeof LivelihoodProgramScalarFieldEnum]
 
 
+  export const LivelihoodTypeScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    category: 'category',
+    label: 'label',
+    icon: 'icon',
+    description: 'description',
+    programTargetUnit: 'programTargetUnit',
+    fields: 'fields',
+    eventTypes: 'eventTypes',
+    tableColumns: 'tableColumns',
+    kpiCards: 'kpiCards',
+    active: 'active',
+    order: 'order',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LivelihoodTypeScalarFieldEnum = (typeof LivelihoodTypeScalarFieldEnum)[keyof typeof LivelihoodTypeScalarFieldEnum]
+
+
   export const BeneficiaryLivelihoodScalarFieldEnum: {
     id: 'id',
     beneficiaryId: 'beneficiaryId',
@@ -112530,12 +118147,44 @@ export namespace Prisma {
     resourceItemId: 'resourceItemId',
     quantityNeeded: 'quantityNeeded',
     quantityReceived: 'quantityReceived',
+    quantityDistributed: 'quantityDistributed',
     transactionsCount: 'transactionsCount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type IncidentResourceNeedScalarFieldEnum = (typeof IncidentResourceNeedScalarFieldEnum)[keyof typeof IncidentResourceNeedScalarFieldEnum]
+
+
+  export const ReliefDistributionScalarFieldEnum: {
+    id: 'id',
+    incidentId: 'incidentId',
+    name: 'name',
+    aadhar: 'aadhar',
+    mobNumber: 'mobNumber',
+    address: 'address',
+    familySize: 'familySize',
+    handledByUserId: 'handledByUserId',
+    notes: 'notes',
+    distributedAt: 'distributedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type ReliefDistributionScalarFieldEnum = (typeof ReliefDistributionScalarFieldEnum)[keyof typeof ReliefDistributionScalarFieldEnum]
+
+
+  export const ReliefDistributionItemScalarFieldEnum: {
+    id: 'id',
+    distributionId: 'distributionId',
+    incidentResourceNeedId: 'incidentResourceNeedId',
+    resourceItemId: 'resourceItemId',
+    itemName: 'itemName',
+    unit: 'unit',
+    quantity: 'quantity',
+    notes: 'notes'
+  };
+
+  export type ReliefDistributionItemScalarFieldEnum = (typeof ReliefDistributionItemScalarFieldEnum)[keyof typeof ReliefDistributionItemScalarFieldEnum]
 
 
   export const FellowTaskScalarFieldEnum: {
@@ -112898,6 +118547,7 @@ export namespace Prisma {
     id: 'id',
     studentId: 'studentId',
     name: 'name',
+    photoUrl: 'photoUrl',
     dob: 'dob',
     gender: 'gender',
     email: 'email',
@@ -113050,19 +118700,19 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
   export const NullableJsonNullValueInput: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -113159,6 +118809,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Action'
    */
   export type EnumActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Action'>
@@ -113197,20 +118861,6 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -113335,9 +118985,20 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     department?: StringNullableFilter<"User"> | string | null
+    employeeId?: StringNullableFilter<"User"> | string | null
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: StringNullableFilter<"User"> | string | null
+    maritalStatus?: StringNullableFilter<"User"> | string | null
+    bloodGroup?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
+    emergencyContactName?: StringNullableFilter<"User"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"User"> | string | null
+    aadharNumber?: StringNullableFilter<"User"> | string | null
+    panCard?: StringNullableFilter<"User"> | string | null
+    bankName?: StringNullableFilter<"User"> | string | null
+    bankAccountNo?: StringNullableFilter<"User"> | string | null
+    bankIfsc?: StringNullableFilter<"User"> | string | null
+    dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -113348,6 +119009,7 @@ export namespace Prisma {
     fellow?: XOR<FellowNullableScalarRelationFilter, FellowWhereInput> | null
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
+    reliefDistributions?: ReliefDistributionListRelationFilter
     attendanceLogs?: AttendanceLogListRelationFilter
     taskComments?: FellowTaskCommentListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
@@ -113361,6 +119023,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramListRelationFilter
     pmTasks?: ProgramManagerTaskListRelationFilter
     pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -113373,9 +119036,20 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
+    maritalStatus?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
+    panCard?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
+    bankAccountNo?: SortOrderInput | SortOrder
+    bankIfsc?: SortOrderInput | SortOrder
+    dateOfJoining?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -113386,6 +119060,7 @@ export namespace Prisma {
     fellow?: FellowOrderByWithRelationInput
     leaves?: LeaveOrderByRelationAggregateInput
     verifiedTransactions?: InventoryLedgerOrderByRelationAggregateInput
+    reliefDistributions?: ReliefDistributionOrderByRelationAggregateInput
     attendanceLogs?: AttendanceLogOrderByRelationAggregateInput
     taskComments?: FellowTaskCommentOrderByRelationAggregateInput
     travelRequests?: TravelRequestOrderByRelationAggregateInput
@@ -113399,12 +119074,14 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramOrderByRelationAggregateInput
     pmTasks?: ProgramManagerTaskOrderByRelationAggregateInput
     pmTaskComments?: ProgramManagerTaskCommentOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     username?: string
     email?: string
+    employeeId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -113416,7 +119093,17 @@ export namespace Prisma {
     department?: StringNullableFilter<"User"> | string | null
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: StringNullableFilter<"User"> | string | null
+    maritalStatus?: StringNullableFilter<"User"> | string | null
+    bloodGroup?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
+    emergencyContactName?: StringNullableFilter<"User"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"User"> | string | null
+    aadharNumber?: StringNullableFilter<"User"> | string | null
+    panCard?: StringNullableFilter<"User"> | string | null
+    bankName?: StringNullableFilter<"User"> | string | null
+    bankAccountNo?: StringNullableFilter<"User"> | string | null
+    bankIfsc?: StringNullableFilter<"User"> | string | null
+    dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -113427,6 +119114,7 @@ export namespace Prisma {
     fellow?: XOR<FellowNullableScalarRelationFilter, FellowWhereInput> | null
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
+    reliefDistributions?: ReliefDistributionListRelationFilter
     attendanceLogs?: AttendanceLogListRelationFilter
     taskComments?: FellowTaskCommentListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
@@ -113440,7 +119128,8 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramListRelationFilter
     pmTasks?: ProgramManagerTaskListRelationFilter
     pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
-  }, "id" | "username" | "email">
+    notifications?: NotificationListRelationFilter
+  }, "id" | "username" | "email" | "employeeId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -113452,9 +119141,20 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
+    maritalStatus?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    emergencyContactName?: SortOrderInput | SortOrder
+    emergencyContactPhone?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
+    panCard?: SortOrderInput | SortOrder
+    bankName?: SortOrderInput | SortOrder
+    bankAccountNo?: SortOrderInput | SortOrder
+    bankIfsc?: SortOrderInput | SortOrder
+    dateOfJoining?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -113480,14 +119180,110 @@ export namespace Prisma {
     roleId?: StringWithAggregatesFilter<"User"> | string
     status?: EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
     department?: StringNullableWithAggregatesFilter<"User"> | string | null
+    employeeId?: StringNullableWithAggregatesFilter<"User"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"User"> | string | null
+    maritalStatus?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bloodGroup?: StringNullableWithAggregatesFilter<"User"> | string | null
     address?: StringNullableWithAggregatesFilter<"User"> | string | null
+    emergencyContactName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    emergencyContactPhone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    aadharNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
+    panCard?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bankName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bankAccountNo?: StringNullableWithAggregatesFilter<"User"> | string | null
+    bankIfsc?: StringNullableWithAggregatesFilter<"User"> | string | null
+    dateOfJoining?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     leavesTaken?: IntWithAggregatesFilter<"User"> | number
     leavesRemaining?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    userId?: StringFilter<"Notification"> | string
+    type?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    actorId?: StringNullableFilter<"Notification"> | string | null
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrderInput | SortOrder
+    read?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    userId?: StringFilter<"Notification"> | string
+    type?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    actorId?: StringNullableFilter<"Notification"> | string | null
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrderInput | SortOrder
+    read?: SortOrder
+    actorId?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    userId?: StringWithAggregatesFilter<"Notification"> | string
+    type?: StringWithAggregatesFilter<"Notification"> | string
+    title?: StringWithAggregatesFilter<"Notification"> | string
+    message?: StringWithAggregatesFilter<"Notification"> | string
+    link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    read?: BoolWithAggregatesFilter<"Notification"> | boolean
+    actorId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"Notification">
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
   export type PermissionWhereInput = {
@@ -114381,6 +120177,7 @@ export namespace Prisma {
     id?: StringFilter<"Student"> | string
     studentId?: StringFilter<"Student"> | string
     name?: StringFilter<"Student"> | string
+    photoUrl?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
@@ -114415,6 +120212,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
@@ -114452,6 +120250,7 @@ export namespace Prisma {
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
     name?: StringFilter<"Student"> | string
+    photoUrl?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
@@ -114486,6 +120285,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
@@ -114520,6 +120320,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Student"> | string
     studentId?: StringWithAggregatesFilter<"Student"> | string
     name?: StringWithAggregatesFilter<"Student"> | string
+    photoUrl?: StringNullableWithAggregatesFilter<"Student"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"Student"> | string | null
     email?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -115632,16 +121433,23 @@ export namespace Prisma {
     aadhar?: StringNullableFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableFilter<"Beneficiary"> | string | null
+    emergencyContact?: StringNullableFilter<"Beneficiary"> | string | null
+    gender?: StringNullableFilter<"Beneficiary"> | string | null
     resilienceScore?: IntFilter<"Beneficiary"> | number
     annualIncome?: FloatNullableFilter<"Beneficiary"> | number | null
     monthlyIncome?: FloatNullableFilter<"Beneficiary"> | number | null
     caste?: StringNullableFilter<"Beneficiary"> | string | null
     religion?: StringNullableFilter<"Beneficiary"> | string | null
     address?: StringNullableFilter<"Beneficiary"> | string | null
+    state?: StringNullableFilter<"Beneficiary"> | string | null
+    district?: StringNullableFilter<"Beneficiary"> | string | null
+    block?: StringNullableFilter<"Beneficiary"> | string | null
+    ward?: StringNullableFilter<"Beneficiary"> | string | null
+    village?: StringNullableFilter<"Beneficiary"> | string | null
+    photoUrl?: StringNullableFilter<"Beneficiary"> | string | null
     householdSize?: IntFilter<"Beneficiary"> | number
     primaryIncomeType?: StringNullableFilter<"Beneficiary"> | string | null
     tier?: StringFilter<"Beneficiary"> | string
-    tierPercent?: IntFilter<"Beneficiary"> | number
     bankName?: StringNullableFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableFilter<"Beneficiary"> | string | null
@@ -115674,16 +121482,23 @@ export namespace Prisma {
     aadhar?: SortOrderInput | SortOrder
     rationCard?: SortOrderInput | SortOrder
     mobNumber?: SortOrderInput | SortOrder
+    emergencyContact?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     resilienceScore?: SortOrder
     annualIncome?: SortOrderInput | SortOrder
     monthlyIncome?: SortOrderInput | SortOrder
     caste?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    district?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    ward?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     householdSize?: SortOrder
     primaryIncomeType?: SortOrderInput | SortOrder
     tier?: SortOrder
-    tierPercent?: SortOrder
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
@@ -115719,16 +121534,23 @@ export namespace Prisma {
     aadhar?: StringNullableFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableFilter<"Beneficiary"> | string | null
+    emergencyContact?: StringNullableFilter<"Beneficiary"> | string | null
+    gender?: StringNullableFilter<"Beneficiary"> | string | null
     resilienceScore?: IntFilter<"Beneficiary"> | number
     annualIncome?: FloatNullableFilter<"Beneficiary"> | number | null
     monthlyIncome?: FloatNullableFilter<"Beneficiary"> | number | null
     caste?: StringNullableFilter<"Beneficiary"> | string | null
     religion?: StringNullableFilter<"Beneficiary"> | string | null
     address?: StringNullableFilter<"Beneficiary"> | string | null
+    state?: StringNullableFilter<"Beneficiary"> | string | null
+    district?: StringNullableFilter<"Beneficiary"> | string | null
+    block?: StringNullableFilter<"Beneficiary"> | string | null
+    ward?: StringNullableFilter<"Beneficiary"> | string | null
+    village?: StringNullableFilter<"Beneficiary"> | string | null
+    photoUrl?: StringNullableFilter<"Beneficiary"> | string | null
     householdSize?: IntFilter<"Beneficiary"> | number
     primaryIncomeType?: StringNullableFilter<"Beneficiary"> | string | null
     tier?: StringFilter<"Beneficiary"> | string
-    tierPercent?: IntFilter<"Beneficiary"> | number
     bankName?: StringNullableFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableFilter<"Beneficiary"> | string | null
@@ -115761,16 +121583,23 @@ export namespace Prisma {
     aadhar?: SortOrderInput | SortOrder
     rationCard?: SortOrderInput | SortOrder
     mobNumber?: SortOrderInput | SortOrder
+    emergencyContact?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
     resilienceScore?: SortOrder
     annualIncome?: SortOrderInput | SortOrder
     monthlyIncome?: SortOrderInput | SortOrder
     caste?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    district?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    ward?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     householdSize?: SortOrder
     primaryIncomeType?: SortOrderInput | SortOrder
     tier?: SortOrder
-    tierPercent?: SortOrder
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
@@ -115796,16 +121625,23 @@ export namespace Prisma {
     aadhar?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    emergencyContact?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    gender?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     resilienceScore?: IntWithAggregatesFilter<"Beneficiary"> | number
     annualIncome?: FloatNullableWithAggregatesFilter<"Beneficiary"> | number | null
     monthlyIncome?: FloatNullableWithAggregatesFilter<"Beneficiary"> | number | null
     caste?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     religion?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     address?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    district?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    block?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    ward?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    village?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    photoUrl?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     householdSize?: IntWithAggregatesFilter<"Beneficiary"> | number
     primaryIncomeType?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     tier?: StringWithAggregatesFilter<"Beneficiary"> | string
-    tierPercent?: IntWithAggregatesFilter<"Beneficiary"> | number
     bankName?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     bankAccountNo?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     bankIfsc?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
@@ -116630,6 +122466,110 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodProgram"> | Date | string
   }
 
+  export type LivelihoodTypeWhereInput = {
+    AND?: LivelihoodTypeWhereInput | LivelihoodTypeWhereInput[]
+    OR?: LivelihoodTypeWhereInput[]
+    NOT?: LivelihoodTypeWhereInput | LivelihoodTypeWhereInput[]
+    id?: StringFilter<"LivelihoodType"> | string
+    key?: StringFilter<"LivelihoodType"> | string
+    category?: EnumLivelihoodCategoryFilter<"LivelihoodType"> | $Enums.LivelihoodCategory
+    label?: StringFilter<"LivelihoodType"> | string
+    icon?: StringFilter<"LivelihoodType"> | string
+    description?: StringNullableFilter<"LivelihoodType"> | string | null
+    programTargetUnit?: StringNullableFilter<"LivelihoodType"> | string | null
+    fields?: JsonFilter<"LivelihoodType">
+    eventTypes?: JsonFilter<"LivelihoodType">
+    tableColumns?: JsonFilter<"LivelihoodType">
+    kpiCards?: JsonFilter<"LivelihoodType">
+    active?: BoolFilter<"LivelihoodType"> | boolean
+    order?: IntFilter<"LivelihoodType"> | number
+    createdAt?: DateTimeFilter<"LivelihoodType"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodType"> | Date | string
+  }
+
+  export type LivelihoodTypeOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    category?: SortOrder
+    label?: SortOrder
+    icon?: SortOrder
+    description?: SortOrderInput | SortOrder
+    programTargetUnit?: SortOrderInput | SortOrder
+    fields?: SortOrder
+    eventTypes?: SortOrder
+    tableColumns?: SortOrder
+    kpiCards?: SortOrder
+    active?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodTypeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: LivelihoodTypeWhereInput | LivelihoodTypeWhereInput[]
+    OR?: LivelihoodTypeWhereInput[]
+    NOT?: LivelihoodTypeWhereInput | LivelihoodTypeWhereInput[]
+    category?: EnumLivelihoodCategoryFilter<"LivelihoodType"> | $Enums.LivelihoodCategory
+    label?: StringFilter<"LivelihoodType"> | string
+    icon?: StringFilter<"LivelihoodType"> | string
+    description?: StringNullableFilter<"LivelihoodType"> | string | null
+    programTargetUnit?: StringNullableFilter<"LivelihoodType"> | string | null
+    fields?: JsonFilter<"LivelihoodType">
+    eventTypes?: JsonFilter<"LivelihoodType">
+    tableColumns?: JsonFilter<"LivelihoodType">
+    kpiCards?: JsonFilter<"LivelihoodType">
+    active?: BoolFilter<"LivelihoodType"> | boolean
+    order?: IntFilter<"LivelihoodType"> | number
+    createdAt?: DateTimeFilter<"LivelihoodType"> | Date | string
+    updatedAt?: DateTimeFilter<"LivelihoodType"> | Date | string
+  }, "id" | "key">
+
+  export type LivelihoodTypeOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    category?: SortOrder
+    label?: SortOrder
+    icon?: SortOrder
+    description?: SortOrderInput | SortOrder
+    programTargetUnit?: SortOrderInput | SortOrder
+    fields?: SortOrder
+    eventTypes?: SortOrder
+    tableColumns?: SortOrder
+    kpiCards?: SortOrder
+    active?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LivelihoodTypeCountOrderByAggregateInput
+    _avg?: LivelihoodTypeAvgOrderByAggregateInput
+    _max?: LivelihoodTypeMaxOrderByAggregateInput
+    _min?: LivelihoodTypeMinOrderByAggregateInput
+    _sum?: LivelihoodTypeSumOrderByAggregateInput
+  }
+
+  export type LivelihoodTypeScalarWhereWithAggregatesInput = {
+    AND?: LivelihoodTypeScalarWhereWithAggregatesInput | LivelihoodTypeScalarWhereWithAggregatesInput[]
+    OR?: LivelihoodTypeScalarWhereWithAggregatesInput[]
+    NOT?: LivelihoodTypeScalarWhereWithAggregatesInput | LivelihoodTypeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LivelihoodType"> | string
+    key?: StringWithAggregatesFilter<"LivelihoodType"> | string
+    category?: EnumLivelihoodCategoryWithAggregatesFilter<"LivelihoodType"> | $Enums.LivelihoodCategory
+    label?: StringWithAggregatesFilter<"LivelihoodType"> | string
+    icon?: StringWithAggregatesFilter<"LivelihoodType"> | string
+    description?: StringNullableWithAggregatesFilter<"LivelihoodType"> | string | null
+    programTargetUnit?: StringNullableWithAggregatesFilter<"LivelihoodType"> | string | null
+    fields?: JsonWithAggregatesFilter<"LivelihoodType">
+    eventTypes?: JsonWithAggregatesFilter<"LivelihoodType">
+    tableColumns?: JsonWithAggregatesFilter<"LivelihoodType">
+    kpiCards?: JsonWithAggregatesFilter<"LivelihoodType">
+    active?: BoolWithAggregatesFilter<"LivelihoodType"> | boolean
+    order?: IntWithAggregatesFilter<"LivelihoodType"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"LivelihoodType"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LivelihoodType"> | Date | string
+  }
+
   export type BeneficiaryLivelihoodWhereInput = {
     AND?: BeneficiaryLivelihoodWhereInput | BeneficiaryLivelihoodWhereInput[]
     OR?: BeneficiaryLivelihoodWhereInput[]
@@ -116859,6 +122799,7 @@ export namespace Prisma {
     humanLossMissing?: IntFilter<"DisasterIncident"> | number
     propertyLossEstimate?: FloatFilter<"DisasterIncident"> | number
     resourceNeeds?: IncidentResourceNeedListRelationFilter
+    reliefDistributions?: ReliefDistributionListRelationFilter
   }
 
   export type DisasterIncidentOrderByWithRelationInput = {
@@ -116875,6 +122816,7 @@ export namespace Prisma {
     humanLossMissing?: SortOrder
     propertyLossEstimate?: SortOrder
     resourceNeeds?: IncidentResourceNeedOrderByRelationAggregateInput
+    reliefDistributions?: ReliefDistributionOrderByRelationAggregateInput
   }
 
   export type DisasterIncidentWhereUniqueInput = Prisma.AtLeast<{
@@ -116894,6 +122836,7 @@ export namespace Prisma {
     humanLossMissing?: IntFilter<"DisasterIncident"> | number
     propertyLossEstimate?: FloatFilter<"DisasterIncident"> | number
     resourceNeeds?: IncidentResourceNeedListRelationFilter
+    reliefDistributions?: ReliefDistributionListRelationFilter
   }, "id">
 
   export type DisasterIncidentOrderByWithAggregationInput = {
@@ -117009,6 +122952,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ResourceItem"> | Date | string
     ledgerTransactions?: InventoryLedgerListRelationFilter
     incidentNeeds?: IncidentResourceNeedListRelationFilter
+    reliefItems?: ReliefDistributionItemListRelationFilter
   }
 
   export type ResourceItemOrderByWithRelationInput = {
@@ -117021,6 +122965,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     ledgerTransactions?: InventoryLedgerOrderByRelationAggregateInput
     incidentNeeds?: IncidentResourceNeedOrderByRelationAggregateInput
+    reliefItems?: ReliefDistributionItemOrderByRelationAggregateInput
   }
 
   export type ResourceItemWhereUniqueInput = Prisma.AtLeast<{
@@ -117036,6 +122981,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ResourceItem"> | Date | string
     ledgerTransactions?: InventoryLedgerListRelationFilter
     incidentNeeds?: IncidentResourceNeedListRelationFilter
+    reliefItems?: ReliefDistributionItemListRelationFilter
   }, "id" | "itemName">
 
   export type ResourceItemOrderByWithAggregationInput = {
@@ -117360,12 +123306,14 @@ export namespace Prisma {
     resourceItemId?: StringFilter<"IncidentResourceNeed"> | string
     quantityNeeded?: FloatFilter<"IncidentResourceNeed"> | number
     quantityReceived?: FloatFilter<"IncidentResourceNeed"> | number
+    quantityDistributed?: FloatFilter<"IncidentResourceNeed"> | number
     transactionsCount?: IntFilter<"IncidentResourceNeed"> | number
     createdAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
     updatedAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
     incident?: XOR<DisasterIncidentScalarRelationFilter, DisasterIncidentWhereInput>
     resourceItem?: XOR<ResourceItemScalarRelationFilter, ResourceItemWhereInput>
     transactions?: InventoryLedgerListRelationFilter
+    reliefItems?: ReliefDistributionItemListRelationFilter
   }
 
   export type IncidentResourceNeedOrderByWithRelationInput = {
@@ -117374,12 +123322,14 @@ export namespace Prisma {
     resourceItemId?: SortOrder
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     incident?: DisasterIncidentOrderByWithRelationInput
     resourceItem?: ResourceItemOrderByWithRelationInput
     transactions?: InventoryLedgerOrderByRelationAggregateInput
+    reliefItems?: ReliefDistributionItemOrderByRelationAggregateInput
   }
 
   export type IncidentResourceNeedWhereUniqueInput = Prisma.AtLeast<{
@@ -117392,12 +123342,14 @@ export namespace Prisma {
     resourceItemId?: StringFilter<"IncidentResourceNeed"> | string
     quantityNeeded?: FloatFilter<"IncidentResourceNeed"> | number
     quantityReceived?: FloatFilter<"IncidentResourceNeed"> | number
+    quantityDistributed?: FloatFilter<"IncidentResourceNeed"> | number
     transactionsCount?: IntFilter<"IncidentResourceNeed"> | number
     createdAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
     updatedAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
     incident?: XOR<DisasterIncidentScalarRelationFilter, DisasterIncidentWhereInput>
     resourceItem?: XOR<ResourceItemScalarRelationFilter, ResourceItemWhereInput>
     transactions?: InventoryLedgerListRelationFilter
+    reliefItems?: ReliefDistributionItemListRelationFilter
   }, "id" | "incidentId_resourceItemId">
 
   export type IncidentResourceNeedOrderByWithAggregationInput = {
@@ -117406,6 +123358,7 @@ export namespace Prisma {
     resourceItemId?: SortOrder
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -117425,9 +123378,181 @@ export namespace Prisma {
     resourceItemId?: StringWithAggregatesFilter<"IncidentResourceNeed"> | string
     quantityNeeded?: FloatWithAggregatesFilter<"IncidentResourceNeed"> | number
     quantityReceived?: FloatWithAggregatesFilter<"IncidentResourceNeed"> | number
+    quantityDistributed?: FloatWithAggregatesFilter<"IncidentResourceNeed"> | number
     transactionsCount?: IntWithAggregatesFilter<"IncidentResourceNeed"> | number
     createdAt?: DateTimeWithAggregatesFilter<"IncidentResourceNeed"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"IncidentResourceNeed"> | Date | string
+  }
+
+  export type ReliefDistributionWhereInput = {
+    AND?: ReliefDistributionWhereInput | ReliefDistributionWhereInput[]
+    OR?: ReliefDistributionWhereInput[]
+    NOT?: ReliefDistributionWhereInput | ReliefDistributionWhereInput[]
+    id?: StringFilter<"ReliefDistribution"> | string
+    incidentId?: StringFilter<"ReliefDistribution"> | string
+    name?: StringFilter<"ReliefDistribution"> | string
+    aadhar?: StringNullableFilter<"ReliefDistribution"> | string | null
+    mobNumber?: StringNullableFilter<"ReliefDistribution"> | string | null
+    address?: StringNullableFilter<"ReliefDistribution"> | string | null
+    familySize?: IntFilter<"ReliefDistribution"> | number
+    handledByUserId?: StringNullableFilter<"ReliefDistribution"> | string | null
+    notes?: StringNullableFilter<"ReliefDistribution"> | string | null
+    distributedAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
+    incident?: XOR<DisasterIncidentScalarRelationFilter, DisasterIncidentWhereInput>
+    handledByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    items?: ReliefDistributionItemListRelationFilter
+  }
+
+  export type ReliefDistributionOrderByWithRelationInput = {
+    id?: SortOrder
+    incidentId?: SortOrder
+    name?: SortOrder
+    aadhar?: SortOrderInput | SortOrder
+    mobNumber?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    familySize?: SortOrder
+    handledByUserId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+    incident?: DisasterIncidentOrderByWithRelationInput
+    handledByUser?: UserOrderByWithRelationInput
+    items?: ReliefDistributionItemOrderByRelationAggregateInput
+  }
+
+  export type ReliefDistributionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReliefDistributionWhereInput | ReliefDistributionWhereInput[]
+    OR?: ReliefDistributionWhereInput[]
+    NOT?: ReliefDistributionWhereInput | ReliefDistributionWhereInput[]
+    incidentId?: StringFilter<"ReliefDistribution"> | string
+    name?: StringFilter<"ReliefDistribution"> | string
+    aadhar?: StringNullableFilter<"ReliefDistribution"> | string | null
+    mobNumber?: StringNullableFilter<"ReliefDistribution"> | string | null
+    address?: StringNullableFilter<"ReliefDistribution"> | string | null
+    familySize?: IntFilter<"ReliefDistribution"> | number
+    handledByUserId?: StringNullableFilter<"ReliefDistribution"> | string | null
+    notes?: StringNullableFilter<"ReliefDistribution"> | string | null
+    distributedAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
+    incident?: XOR<DisasterIncidentScalarRelationFilter, DisasterIncidentWhereInput>
+    handledByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    items?: ReliefDistributionItemListRelationFilter
+  }, "id">
+
+  export type ReliefDistributionOrderByWithAggregationInput = {
+    id?: SortOrder
+    incidentId?: SortOrder
+    name?: SortOrder
+    aadhar?: SortOrderInput | SortOrder
+    mobNumber?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    familySize?: SortOrder
+    handledByUserId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: ReliefDistributionCountOrderByAggregateInput
+    _avg?: ReliefDistributionAvgOrderByAggregateInput
+    _max?: ReliefDistributionMaxOrderByAggregateInput
+    _min?: ReliefDistributionMinOrderByAggregateInput
+    _sum?: ReliefDistributionSumOrderByAggregateInput
+  }
+
+  export type ReliefDistributionScalarWhereWithAggregatesInput = {
+    AND?: ReliefDistributionScalarWhereWithAggregatesInput | ReliefDistributionScalarWhereWithAggregatesInput[]
+    OR?: ReliefDistributionScalarWhereWithAggregatesInput[]
+    NOT?: ReliefDistributionScalarWhereWithAggregatesInput | ReliefDistributionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReliefDistribution"> | string
+    incidentId?: StringWithAggregatesFilter<"ReliefDistribution"> | string
+    name?: StringWithAggregatesFilter<"ReliefDistribution"> | string
+    aadhar?: StringNullableWithAggregatesFilter<"ReliefDistribution"> | string | null
+    mobNumber?: StringNullableWithAggregatesFilter<"ReliefDistribution"> | string | null
+    address?: StringNullableWithAggregatesFilter<"ReliefDistribution"> | string | null
+    familySize?: IntWithAggregatesFilter<"ReliefDistribution"> | number
+    handledByUserId?: StringNullableWithAggregatesFilter<"ReliefDistribution"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"ReliefDistribution"> | string | null
+    distributedAt?: DateTimeWithAggregatesFilter<"ReliefDistribution"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ReliefDistribution"> | Date | string
+  }
+
+  export type ReliefDistributionItemWhereInput = {
+    AND?: ReliefDistributionItemWhereInput | ReliefDistributionItemWhereInput[]
+    OR?: ReliefDistributionItemWhereInput[]
+    NOT?: ReliefDistributionItemWhereInput | ReliefDistributionItemWhereInput[]
+    id?: StringFilter<"ReliefDistributionItem"> | string
+    distributionId?: StringFilter<"ReliefDistributionItem"> | string
+    incidentResourceNeedId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    resourceItemId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    itemName?: StringFilter<"ReliefDistributionItem"> | string
+    unit?: StringFilter<"ReliefDistributionItem"> | string
+    quantity?: FloatFilter<"ReliefDistributionItem"> | number
+    notes?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    distribution?: XOR<ReliefDistributionScalarRelationFilter, ReliefDistributionWhereInput>
+    incidentResourceNeed?: XOR<IncidentResourceNeedNullableScalarRelationFilter, IncidentResourceNeedWhereInput> | null
+    resourceItem?: XOR<ResourceItemNullableScalarRelationFilter, ResourceItemWhereInput> | null
+  }
+
+  export type ReliefDistributionItemOrderByWithRelationInput = {
+    id?: SortOrder
+    distributionId?: SortOrder
+    incidentResourceNeedId?: SortOrderInput | SortOrder
+    resourceItemId?: SortOrderInput | SortOrder
+    itemName?: SortOrder
+    unit?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    distribution?: ReliefDistributionOrderByWithRelationInput
+    incidentResourceNeed?: IncidentResourceNeedOrderByWithRelationInput
+    resourceItem?: ResourceItemOrderByWithRelationInput
+  }
+
+  export type ReliefDistributionItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReliefDistributionItemWhereInput | ReliefDistributionItemWhereInput[]
+    OR?: ReliefDistributionItemWhereInput[]
+    NOT?: ReliefDistributionItemWhereInput | ReliefDistributionItemWhereInput[]
+    distributionId?: StringFilter<"ReliefDistributionItem"> | string
+    incidentResourceNeedId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    resourceItemId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    itemName?: StringFilter<"ReliefDistributionItem"> | string
+    unit?: StringFilter<"ReliefDistributionItem"> | string
+    quantity?: FloatFilter<"ReliefDistributionItem"> | number
+    notes?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    distribution?: XOR<ReliefDistributionScalarRelationFilter, ReliefDistributionWhereInput>
+    incidentResourceNeed?: XOR<IncidentResourceNeedNullableScalarRelationFilter, IncidentResourceNeedWhereInput> | null
+    resourceItem?: XOR<ResourceItemNullableScalarRelationFilter, ResourceItemWhereInput> | null
+  }, "id">
+
+  export type ReliefDistributionItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    distributionId?: SortOrder
+    incidentResourceNeedId?: SortOrderInput | SortOrder
+    resourceItemId?: SortOrderInput | SortOrder
+    itemName?: SortOrder
+    unit?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    _count?: ReliefDistributionItemCountOrderByAggregateInput
+    _avg?: ReliefDistributionItemAvgOrderByAggregateInput
+    _max?: ReliefDistributionItemMaxOrderByAggregateInput
+    _min?: ReliefDistributionItemMinOrderByAggregateInput
+    _sum?: ReliefDistributionItemSumOrderByAggregateInput
+  }
+
+  export type ReliefDistributionItemScalarWhereWithAggregatesInput = {
+    AND?: ReliefDistributionItemScalarWhereWithAggregatesInput | ReliefDistributionItemScalarWhereWithAggregatesInput[]
+    OR?: ReliefDistributionItemScalarWhereWithAggregatesInput[]
+    NOT?: ReliefDistributionItemScalarWhereWithAggregatesInput | ReliefDistributionItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReliefDistributionItem"> | string
+    distributionId?: StringWithAggregatesFilter<"ReliefDistributionItem"> | string
+    incidentResourceNeedId?: StringNullableWithAggregatesFilter<"ReliefDistributionItem"> | string | null
+    resourceItemId?: StringNullableWithAggregatesFilter<"ReliefDistributionItem"> | string | null
+    itemName?: StringWithAggregatesFilter<"ReliefDistributionItem"> | string
+    unit?: StringWithAggregatesFilter<"ReliefDistributionItem"> | string
+    quantity?: FloatWithAggregatesFilter<"ReliefDistributionItem"> | number
+    notes?: StringNullableWithAggregatesFilter<"ReliefDistributionItem"> | string | null
   }
 
   export type FellowTaskWhereInput = {
@@ -119324,6 +125449,7 @@ export namespace Prisma {
     id?: StringFilter<"AfterSchoolStudent"> | string
     studentId?: StringFilter<"AfterSchoolStudent"> | string
     name?: StringFilter<"AfterSchoolStudent"> | string
+    photoUrl?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     dob?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     gender?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -119355,6 +125481,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
@@ -119389,6 +125516,7 @@ export namespace Prisma {
     OR?: AfterSchoolStudentWhereInput[]
     NOT?: AfterSchoolStudentWhereInput | AfterSchoolStudentWhereInput[]
     name?: StringFilter<"AfterSchoolStudent"> | string
+    photoUrl?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     dob?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     gender?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -119420,6 +125548,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrderInput | SortOrder
     dob?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
@@ -119452,6 +125581,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"AfterSchoolStudent"> | string
     studentId?: StringWithAggregatesFilter<"AfterSchoolStudent"> | string
     name?: StringWithAggregatesFilter<"AfterSchoolStudent"> | string
+    photoUrl?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     dob?: DateTimeNullableWithAggregatesFilter<"AfterSchoolStudent"> | Date | string | null
     gender?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     email?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
@@ -120194,9 +126324,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -120207,6 +126348,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -120220,6 +126362,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -120232,9 +126375,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -120244,6 +126398,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -120257,6 +126412,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -120268,9 +126424,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -120281,6 +126448,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -120294,6 +126462,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -120306,9 +126475,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -120318,6 +126498,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -120331,6 +126512,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -120343,9 +126525,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -120362,9 +126555,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -120382,12 +126586,120 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateInput = {
+    id?: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    userId: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    userId: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -121385,6 +127697,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -121416,6 +127729,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -121447,6 +127761,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121478,6 +127793,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121509,6 +127825,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -121535,6 +127852,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121558,6 +127876,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122692,16 +129011,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -122734,16 +129060,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -122776,16 +129109,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122818,16 +129158,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122860,16 +129207,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -122887,16 +129241,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122914,16 +129275,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123815,6 +130183,132 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LivelihoodTypeCreateInput = {
+    id?: string
+    key: string
+    category: $Enums.LivelihoodCategory
+    label: string
+    icon?: string
+    description?: string | null
+    programTargetUnit?: string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodTypeUncheckedCreateInput = {
+    id?: string
+    key: string
+    category: $Enums.LivelihoodCategory
+    label: string
+    icon?: string
+    description?: string | null
+    programTargetUnit?: string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodTypeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    label?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    programTargetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodTypeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    label?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    programTargetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodTypeCreateManyInput = {
+    id?: string
+    key: string
+    category: $Enums.LivelihoodCategory
+    label: string
+    icon?: string
+    description?: string | null
+    programTargetUnit?: string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: boolean
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LivelihoodTypeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    label?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    programTargetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LivelihoodTypeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    category?: EnumLivelihoodCategoryFieldUpdateOperationsInput | $Enums.LivelihoodCategory
+    label?: StringFieldUpdateOperationsInput | string
+    icon?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    programTargetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    fields?: JsonNullValueInput | InputJsonValue
+    eventTypes?: JsonNullValueInput | InputJsonValue
+    tableColumns?: JsonNullValueInput | InputJsonValue
+    kpiCards?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BeneficiaryLivelihoodCreateInput = {
     id?: string
     attributes: JsonNullValueInput | InputJsonValue
@@ -124045,6 +130539,7 @@ export namespace Prisma {
     humanLossMissing?: number
     propertyLossEstimate?: number
     resourceNeeds?: IncidentResourceNeedCreateNestedManyWithoutIncidentInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutIncidentInput
   }
 
   export type DisasterIncidentUncheckedCreateInput = {
@@ -124061,6 +130556,7 @@ export namespace Prisma {
     humanLossMissing?: number
     propertyLossEstimate?: number
     resourceNeeds?: IncidentResourceNeedUncheckedCreateNestedManyWithoutIncidentInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutIncidentInput
   }
 
   export type DisasterIncidentUpdateInput = {
@@ -124077,6 +130573,7 @@ export namespace Prisma {
     humanLossMissing?: IntFieldUpdateOperationsInput | number
     propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
     resourceNeeds?: IncidentResourceNeedUpdateManyWithoutIncidentNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutIncidentNestedInput
   }
 
   export type DisasterIncidentUncheckedUpdateInput = {
@@ -124093,6 +130590,7 @@ export namespace Prisma {
     humanLossMissing?: IntFieldUpdateOperationsInput | number
     propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
     resourceNeeds?: IncidentResourceNeedUncheckedUpdateManyWithoutIncidentNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutIncidentNestedInput
   }
 
   export type DisasterIncidentCreateManyInput = {
@@ -124220,6 +130718,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     ledgerTransactions?: InventoryLedgerCreateNestedManyWithoutResourceItemInput
     incidentNeeds?: IncidentResourceNeedCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemUncheckedCreateInput = {
@@ -124232,6 +130731,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     ledgerTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutResourceItemInput
     incidentNeeds?: IncidentResourceNeedUncheckedCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemUpdateInput = {
@@ -124244,6 +130744,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ledgerTransactions?: InventoryLedgerUpdateManyWithoutResourceItemNestedInput
     incidentNeeds?: IncidentResourceNeedUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutResourceItemNestedInput
   }
 
   export type ResourceItemUncheckedUpdateInput = {
@@ -124256,6 +130757,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ledgerTransactions?: InventoryLedgerUncheckedUpdateManyWithoutResourceItemNestedInput
     incidentNeeds?: IncidentResourceNeedUncheckedUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemNestedInput
   }
 
   export type ResourceItemCreateManyInput = {
@@ -124609,12 +131111,14 @@ export namespace Prisma {
     id?: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     incident: DisasterIncidentCreateNestedOneWithoutResourceNeedsInput
     resourceItem: ResourceItemCreateNestedOneWithoutIncidentNeedsInput
     transactions?: InventoryLedgerCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedUncheckedCreateInput = {
@@ -124623,22 +131127,26 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: InventoryLedgerUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     incident?: DisasterIncidentUpdateOneRequiredWithoutResourceNeedsNestedInput
     resourceItem?: ResourceItemUpdateOneRequiredWithoutIncidentNeedsNestedInput
     transactions?: InventoryLedgerUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateInput = {
@@ -124647,10 +131155,12 @@ export namespace Prisma {
     resourceItemId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedCreateManyInput = {
@@ -124659,6 +131169,7 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -124668,6 +131179,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -124679,9 +131191,184 @@ export namespace Prisma {
     resourceItemId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionCreateInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    incident: DisasterIncidentCreateNestedOneWithoutReliefDistributionsInput
+    handledByUser?: UserCreateNestedOneWithoutReliefDistributionsInput
+    items?: ReliefDistributionItemCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionUncheckedCreateInput = {
+    id?: string
+    incidentId: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    handledByUserId?: string | null
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    items?: ReliefDistributionItemUncheckedCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    incident?: DisasterIncidentUpdateOneRequiredWithoutReliefDistributionsNestedInput
+    handledByUser?: UserUpdateOneWithoutReliefDistributionsNestedInput
+    items?: ReliefDistributionItemUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReliefDistributionItemUncheckedUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionCreateManyInput = {
+    id?: string
+    incidentId: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    handledByUserId?: string | null
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type ReliefDistributionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionItemCreateInput = {
+    id?: string
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+    distribution: ReliefDistributionCreateNestedOneWithoutItemsInput
+    incidentResourceNeed?: IncidentResourceNeedCreateNestedOneWithoutReliefItemsInput
+    resourceItem?: ResourceItemCreateNestedOneWithoutReliefItemsInput
+  }
+
+  export type ReliefDistributionItemUncheckedCreateInput = {
+    id?: string
+    distributionId: string
+    incidentResourceNeedId?: string | null
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distribution?: ReliefDistributionUpdateOneRequiredWithoutItemsNestedInput
+    incidentResourceNeed?: IncidentResourceNeedUpdateOneWithoutReliefItemsNestedInput
+    resourceItem?: ResourceItemUpdateOneWithoutReliefItemsNestedInput
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemCreateManyInput = {
+    id?: string
+    distributionId: string
+    incidentResourceNeedId?: string | null
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FellowTaskCreateInput = {
@@ -126677,6 +133364,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -126706,6 +133394,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -126735,6 +133424,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126764,6 +133454,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126793,6 +133484,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -126817,6 +133509,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126839,6 +133532,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127727,6 +134421,12 @@ export namespace Prisma {
     none?: InventoryLedgerWhereInput
   }
 
+  export type ReliefDistributionListRelationFilter = {
+    every?: ReliefDistributionWhereInput
+    some?: ReliefDistributionWhereInput
+    none?: ReliefDistributionWhereInput
+  }
+
   export type AttendanceLogListRelationFilter = {
     every?: AttendanceLogWhereInput
     some?: AttendanceLogWhereInput
@@ -127799,6 +134499,12 @@ export namespace Prisma {
     none?: ProgramManagerTaskCommentWhereInput
   }
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -127808,6 +134514,10 @@ export namespace Prisma {
   }
 
   export type InventoryLedgerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReliefDistributionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -127859,6 +134569,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -127869,9 +134583,20 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    employeeId?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
+    maritalStatus?: SortOrder
+    bloodGroup?: SortOrder
     address?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    aadharNumber?: SortOrder
+    panCard?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    dateOfJoining?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -127894,9 +134619,20 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    employeeId?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
+    maritalStatus?: SortOrder
+    bloodGroup?: SortOrder
     address?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    aadharNumber?: SortOrder
+    panCard?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    dateOfJoining?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -127914,9 +134650,20 @@ export namespace Prisma {
     roleId?: SortOrder
     status?: SortOrder
     department?: SortOrder
+    employeeId?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
+    maritalStatus?: SortOrder
+    bloodGroup?: SortOrder
     address?: SortOrder
+    emergencyContactName?: SortOrder
+    emergencyContactPhone?: SortOrder
+    aadharNumber?: SortOrder
+    panCard?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    dateOfJoining?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -127967,6 +134714,100 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    actorId?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    type?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    actorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumActionFilter<$PrismaModel = never> = {
@@ -128058,11 +134899,6 @@ export namespace Prisma {
     in?: $Enums.PermissionType[] | ListEnumPermissionTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.PermissionType[] | ListEnumPermissionTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumPermissionTypeFilter<$PrismaModel> | $Enums.PermissionType
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type UserPermissionUserIdPermissionIdCompoundUniqueInput = {
@@ -128791,6 +135627,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -128821,6 +135658,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -128847,6 +135685,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -129631,16 +136470,23 @@ export namespace Prisma {
     aadhar?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
+    emergencyContact?: SortOrder
+    gender?: SortOrder
     resilienceScore?: SortOrder
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    district?: SortOrder
+    block?: SortOrder
+    ward?: SortOrder
+    village?: SortOrder
+    photoUrl?: SortOrder
     householdSize?: SortOrder
     primaryIncomeType?: SortOrder
     tier?: SortOrder
-    tierPercent?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
@@ -129654,7 +136500,6 @@ export namespace Prisma {
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     householdSize?: SortOrder
-    tierPercent?: SortOrder
   }
 
   export type BeneficiaryMaxOrderByAggregateInput = {
@@ -129666,16 +136511,23 @@ export namespace Prisma {
     aadhar?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
+    emergencyContact?: SortOrder
+    gender?: SortOrder
     resilienceScore?: SortOrder
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    district?: SortOrder
+    block?: SortOrder
+    ward?: SortOrder
+    village?: SortOrder
+    photoUrl?: SortOrder
     householdSize?: SortOrder
     primaryIncomeType?: SortOrder
     tier?: SortOrder
-    tierPercent?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
@@ -129693,16 +136545,23 @@ export namespace Prisma {
     aadhar?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
+    emergencyContact?: SortOrder
+    gender?: SortOrder
     resilienceScore?: SortOrder
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    district?: SortOrder
+    block?: SortOrder
+    ward?: SortOrder
+    village?: SortOrder
+    photoUrl?: SortOrder
     householdSize?: SortOrder
     primaryIncomeType?: SortOrder
     tier?: SortOrder
-    tierPercent?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
@@ -129716,7 +136575,6 @@ export namespace Prisma {
     annualIncome?: SortOrder
     monthlyIncome?: SortOrder
     householdSize?: SortOrder
-    tierPercent?: SortOrder
   }
 
   export type FamilyMemberCountOrderByAggregateInput = {
@@ -130225,6 +137083,60 @@ export namespace Prisma {
     _max?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
   }
 
+  export type LivelihoodTypeCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    category?: SortOrder
+    label?: SortOrder
+    icon?: SortOrder
+    description?: SortOrder
+    programTargetUnit?: SortOrder
+    fields?: SortOrder
+    eventTypes?: SortOrder
+    tableColumns?: SortOrder
+    kpiCards?: SortOrder
+    active?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodTypeAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type LivelihoodTypeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    category?: SortOrder
+    label?: SortOrder
+    icon?: SortOrder
+    description?: SortOrder
+    programTargetUnit?: SortOrder
+    active?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodTypeMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    category?: SortOrder
+    label?: SortOrder
+    icon?: SortOrder
+    description?: SortOrder
+    programTargetUnit?: SortOrder
+    active?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LivelihoodTypeSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
   export type LivelihoodEventListRelationFilter = {
     every?: LivelihoodEventWhereInput
     some?: LivelihoodEventWhereInput
@@ -130445,6 +137357,16 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ReliefDistributionItemListRelationFilter = {
+    every?: ReliefDistributionItemWhereInput
+    some?: ReliefDistributionItemWhereInput
+    none?: ReliefDistributionItemWhereInput
+  }
+
+  export type ReliefDistributionItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ResourceItemCountOrderByAggregateInput = {
     id?: SortOrder
     itemName?: SortOrder
@@ -130533,29 +137455,6 @@ export namespace Prisma {
   export type InventoryLedgerSumOrderByAggregateInput = {
     quantity?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type AttendanceLogCountOrderByAggregateInput = {
     id?: SortOrder
@@ -130637,32 +137536,6 @@ export namespace Prisma {
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
   }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
 
   export type EnumLeaveStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeaveStatus | EnumLeaveStatusFieldRefInput<$PrismaModel>
@@ -130733,6 +137606,7 @@ export namespace Prisma {
     resourceItemId?: SortOrder
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -130741,6 +137615,7 @@ export namespace Prisma {
   export type IncidentResourceNeedAvgOrderByAggregateInput = {
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
   }
 
@@ -130750,6 +137625,7 @@ export namespace Prisma {
     resourceItemId?: SortOrder
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -130761,6 +137637,7 @@ export namespace Prisma {
     resourceItemId?: SortOrder
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -130769,7 +137646,109 @@ export namespace Prisma {
   export type IncidentResourceNeedSumOrderByAggregateInput = {
     quantityNeeded?: SortOrder
     quantityReceived?: SortOrder
+    quantityDistributed?: SortOrder
     transactionsCount?: SortOrder
+  }
+
+  export type ReliefDistributionCountOrderByAggregateInput = {
+    id?: SortOrder
+    incidentId?: SortOrder
+    name?: SortOrder
+    aadhar?: SortOrder
+    mobNumber?: SortOrder
+    address?: SortOrder
+    familySize?: SortOrder
+    handledByUserId?: SortOrder
+    notes?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReliefDistributionAvgOrderByAggregateInput = {
+    familySize?: SortOrder
+  }
+
+  export type ReliefDistributionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    incidentId?: SortOrder
+    name?: SortOrder
+    aadhar?: SortOrder
+    mobNumber?: SortOrder
+    address?: SortOrder
+    familySize?: SortOrder
+    handledByUserId?: SortOrder
+    notes?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReliefDistributionMinOrderByAggregateInput = {
+    id?: SortOrder
+    incidentId?: SortOrder
+    name?: SortOrder
+    aadhar?: SortOrder
+    mobNumber?: SortOrder
+    address?: SortOrder
+    familySize?: SortOrder
+    handledByUserId?: SortOrder
+    notes?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReliefDistributionSumOrderByAggregateInput = {
+    familySize?: SortOrder
+  }
+
+  export type ReliefDistributionScalarRelationFilter = {
+    is?: ReliefDistributionWhereInput
+    isNot?: ReliefDistributionWhereInput
+  }
+
+  export type ResourceItemNullableScalarRelationFilter = {
+    is?: ResourceItemWhereInput | null
+    isNot?: ResourceItemWhereInput | null
+  }
+
+  export type ReliefDistributionItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    distributionId?: SortOrder
+    incidentResourceNeedId?: SortOrder
+    resourceItemId?: SortOrder
+    itemName?: SortOrder
+    unit?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReliefDistributionItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type ReliefDistributionItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    distributionId?: SortOrder
+    incidentResourceNeedId?: SortOrder
+    resourceItemId?: SortOrder
+    itemName?: SortOrder
+    unit?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReliefDistributionItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    distributionId?: SortOrder
+    incidentResourceNeedId?: SortOrder
+    resourceItemId?: SortOrder
+    itemName?: SortOrder
+    unit?: SortOrder
+    quantity?: SortOrder
+    notes?: SortOrder
+  }
+
+  export type ReliefDistributionItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
   }
 
   export type FellowTaskCountOrderByAggregateInput = {
@@ -131921,6 +138900,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -131949,6 +138929,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -131973,6 +138954,7 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     name?: SortOrder
+    photoUrl?: SortOrder
     dob?: SortOrder
     gender?: SortOrder
     email?: SortOrder
@@ -132490,6 +139472,13 @@ export namespace Prisma {
     connect?: InventoryLedgerWhereUniqueInput | InventoryLedgerWhereUniqueInput[]
   }
 
+  export type ReliefDistributionCreateNestedManyWithoutHandledByUserInput = {
+    create?: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput> | ReliefDistributionCreateWithoutHandledByUserInput[] | ReliefDistributionUncheckedCreateWithoutHandledByUserInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutHandledByUserInput | ReliefDistributionCreateOrConnectWithoutHandledByUserInput[]
+    createMany?: ReliefDistributionCreateManyHandledByUserInputEnvelope
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+  }
+
   export type AttendanceLogCreateNestedManyWithoutUserInput = {
     create?: XOR<AttendanceLogCreateWithoutUserInput, AttendanceLogUncheckedCreateWithoutUserInput> | AttendanceLogCreateWithoutUserInput[] | AttendanceLogUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AttendanceLogCreateOrConnectWithoutUserInput | AttendanceLogCreateOrConnectWithoutUserInput[]
@@ -132581,6 +139570,13 @@ export namespace Prisma {
     connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -132606,6 +139602,13 @@ export namespace Prisma {
     connectOrCreate?: InventoryLedgerCreateOrConnectWithoutHandledByUserInput | InventoryLedgerCreateOrConnectWithoutHandledByUserInput[]
     createMany?: InventoryLedgerCreateManyHandledByUserInputEnvelope
     connect?: InventoryLedgerWhereUniqueInput | InventoryLedgerWhereUniqueInput[]
+  }
+
+  export type ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput = {
+    create?: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput> | ReliefDistributionCreateWithoutHandledByUserInput[] | ReliefDistributionUncheckedCreateWithoutHandledByUserInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutHandledByUserInput | ReliefDistributionCreateOrConnectWithoutHandledByUserInput[]
+    createMany?: ReliefDistributionCreateManyHandledByUserInputEnvelope
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
   }
 
   export type AttendanceLogUncheckedCreateNestedManyWithoutUserInput = {
@@ -132699,6 +139702,13 @@ export namespace Prisma {
     connect?: ProgramManagerTaskCommentWhereUniqueInput | ProgramManagerTaskCommentWhereUniqueInput[]
   }
 
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type EnumUserStatusFieldUpdateOperationsInput = {
     set?: $Enums.UserStatus
   }
@@ -132773,6 +139783,20 @@ export namespace Prisma {
     update?: InventoryLedgerUpdateWithWhereUniqueWithoutHandledByUserInput | InventoryLedgerUpdateWithWhereUniqueWithoutHandledByUserInput[]
     updateMany?: InventoryLedgerUpdateManyWithWhereWithoutHandledByUserInput | InventoryLedgerUpdateManyWithWhereWithoutHandledByUserInput[]
     deleteMany?: InventoryLedgerScalarWhereInput | InventoryLedgerScalarWhereInput[]
+  }
+
+  export type ReliefDistributionUpdateManyWithoutHandledByUserNestedInput = {
+    create?: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput> | ReliefDistributionCreateWithoutHandledByUserInput[] | ReliefDistributionUncheckedCreateWithoutHandledByUserInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutHandledByUserInput | ReliefDistributionCreateOrConnectWithoutHandledByUserInput[]
+    upsert?: ReliefDistributionUpsertWithWhereUniqueWithoutHandledByUserInput | ReliefDistributionUpsertWithWhereUniqueWithoutHandledByUserInput[]
+    createMany?: ReliefDistributionCreateManyHandledByUserInputEnvelope
+    set?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    disconnect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    delete?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    update?: ReliefDistributionUpdateWithWhereUniqueWithoutHandledByUserInput | ReliefDistributionUpdateWithWhereUniqueWithoutHandledByUserInput[]
+    updateMany?: ReliefDistributionUpdateManyWithWhereWithoutHandledByUserInput | ReliefDistributionUpdateManyWithWhereWithoutHandledByUserInput[]
+    deleteMany?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
   }
 
   export type AttendanceLogUpdateManyWithoutUserNestedInput = {
@@ -132957,6 +139981,20 @@ export namespace Prisma {
     deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -133007,6 +140045,20 @@ export namespace Prisma {
     update?: InventoryLedgerUpdateWithWhereUniqueWithoutHandledByUserInput | InventoryLedgerUpdateWithWhereUniqueWithoutHandledByUserInput[]
     updateMany?: InventoryLedgerUpdateManyWithWhereWithoutHandledByUserInput | InventoryLedgerUpdateManyWithWhereWithoutHandledByUserInput[]
     deleteMany?: InventoryLedgerScalarWhereInput | InventoryLedgerScalarWhereInput[]
+  }
+
+  export type ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput = {
+    create?: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput> | ReliefDistributionCreateWithoutHandledByUserInput[] | ReliefDistributionUncheckedCreateWithoutHandledByUserInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutHandledByUserInput | ReliefDistributionCreateOrConnectWithoutHandledByUserInput[]
+    upsert?: ReliefDistributionUpsertWithWhereUniqueWithoutHandledByUserInput | ReliefDistributionUpsertWithWhereUniqueWithoutHandledByUserInput[]
+    createMany?: ReliefDistributionCreateManyHandledByUserInputEnvelope
+    set?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    disconnect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    delete?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    update?: ReliefDistributionUpdateWithWhereUniqueWithoutHandledByUserInput | ReliefDistributionUpdateWithWhereUniqueWithoutHandledByUserInput[]
+    updateMany?: ReliefDistributionUpdateManyWithWhereWithoutHandledByUserInput | ReliefDistributionUpdateManyWithWhereWithoutHandledByUserInput[]
+    deleteMany?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
   }
 
   export type AttendanceLogUncheckedUpdateManyWithoutUserNestedInput = {
@@ -133189,6 +140241,34 @@ export namespace Prisma {
     update?: ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput | ProgramManagerTaskCommentUpdateWithWhereUniqueWithoutAuthorInput[]
     updateMany?: ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput | ProgramManagerTaskCommentUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: ProgramManagerTaskCommentScalarWhereInput | ProgramManagerTaskCommentScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type RolePermissionCreateNestedManyWithoutPermissionInput = {
@@ -136496,11 +143576,25 @@ export namespace Prisma {
     connect?: IncidentResourceNeedWhereUniqueInput | IncidentResourceNeedWhereUniqueInput[]
   }
 
+  export type ReliefDistributionCreateNestedManyWithoutIncidentInput = {
+    create?: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput> | ReliefDistributionCreateWithoutIncidentInput[] | ReliefDistributionUncheckedCreateWithoutIncidentInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutIncidentInput | ReliefDistributionCreateOrConnectWithoutIncidentInput[]
+    createMany?: ReliefDistributionCreateManyIncidentInputEnvelope
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+  }
+
   export type IncidentResourceNeedUncheckedCreateNestedManyWithoutIncidentInput = {
     create?: XOR<IncidentResourceNeedCreateWithoutIncidentInput, IncidentResourceNeedUncheckedCreateWithoutIncidentInput> | IncidentResourceNeedCreateWithoutIncidentInput[] | IncidentResourceNeedUncheckedCreateWithoutIncidentInput[]
     connectOrCreate?: IncidentResourceNeedCreateOrConnectWithoutIncidentInput | IncidentResourceNeedCreateOrConnectWithoutIncidentInput[]
     createMany?: IncidentResourceNeedCreateManyIncidentInputEnvelope
     connect?: IncidentResourceNeedWhereUniqueInput | IncidentResourceNeedWhereUniqueInput[]
+  }
+
+  export type ReliefDistributionUncheckedCreateNestedManyWithoutIncidentInput = {
+    create?: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput> | ReliefDistributionCreateWithoutIncidentInput[] | ReliefDistributionUncheckedCreateWithoutIncidentInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutIncidentInput | ReliefDistributionCreateOrConnectWithoutIncidentInput[]
+    createMany?: ReliefDistributionCreateManyIncidentInputEnvelope
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
   }
 
   export type IncidentResourceNeedUpdateManyWithoutIncidentNestedInput = {
@@ -136517,6 +143611,20 @@ export namespace Prisma {
     deleteMany?: IncidentResourceNeedScalarWhereInput | IncidentResourceNeedScalarWhereInput[]
   }
 
+  export type ReliefDistributionUpdateManyWithoutIncidentNestedInput = {
+    create?: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput> | ReliefDistributionCreateWithoutIncidentInput[] | ReliefDistributionUncheckedCreateWithoutIncidentInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutIncidentInput | ReliefDistributionCreateOrConnectWithoutIncidentInput[]
+    upsert?: ReliefDistributionUpsertWithWhereUniqueWithoutIncidentInput | ReliefDistributionUpsertWithWhereUniqueWithoutIncidentInput[]
+    createMany?: ReliefDistributionCreateManyIncidentInputEnvelope
+    set?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    disconnect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    delete?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    update?: ReliefDistributionUpdateWithWhereUniqueWithoutIncidentInput | ReliefDistributionUpdateWithWhereUniqueWithoutIncidentInput[]
+    updateMany?: ReliefDistributionUpdateManyWithWhereWithoutIncidentInput | ReliefDistributionUpdateManyWithWhereWithoutIncidentInput[]
+    deleteMany?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
+  }
+
   export type IncidentResourceNeedUncheckedUpdateManyWithoutIncidentNestedInput = {
     create?: XOR<IncidentResourceNeedCreateWithoutIncidentInput, IncidentResourceNeedUncheckedCreateWithoutIncidentInput> | IncidentResourceNeedCreateWithoutIncidentInput[] | IncidentResourceNeedUncheckedCreateWithoutIncidentInput[]
     connectOrCreate?: IncidentResourceNeedCreateOrConnectWithoutIncidentInput | IncidentResourceNeedCreateOrConnectWithoutIncidentInput[]
@@ -136529,6 +143637,20 @@ export namespace Prisma {
     update?: IncidentResourceNeedUpdateWithWhereUniqueWithoutIncidentInput | IncidentResourceNeedUpdateWithWhereUniqueWithoutIncidentInput[]
     updateMany?: IncidentResourceNeedUpdateManyWithWhereWithoutIncidentInput | IncidentResourceNeedUpdateManyWithWhereWithoutIncidentInput[]
     deleteMany?: IncidentResourceNeedScalarWhereInput | IncidentResourceNeedScalarWhereInput[]
+  }
+
+  export type ReliefDistributionUncheckedUpdateManyWithoutIncidentNestedInput = {
+    create?: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput> | ReliefDistributionCreateWithoutIncidentInput[] | ReliefDistributionUncheckedCreateWithoutIncidentInput[]
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutIncidentInput | ReliefDistributionCreateOrConnectWithoutIncidentInput[]
+    upsert?: ReliefDistributionUpsertWithWhereUniqueWithoutIncidentInput | ReliefDistributionUpsertWithWhereUniqueWithoutIncidentInput[]
+    createMany?: ReliefDistributionCreateManyIncidentInputEnvelope
+    set?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    disconnect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    delete?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    connect?: ReliefDistributionWhereUniqueInput | ReliefDistributionWhereUniqueInput[]
+    update?: ReliefDistributionUpdateWithWhereUniqueWithoutIncidentInput | ReliefDistributionUpdateWithWhereUniqueWithoutIncidentInput[]
+    updateMany?: ReliefDistributionUpdateManyWithWhereWithoutIncidentInput | ReliefDistributionUpdateManyWithWhereWithoutIncidentInput[]
+    deleteMany?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
   }
 
   export type InventoryLedgerCreateNestedManyWithoutResourceItemInput = {
@@ -136545,6 +143667,13 @@ export namespace Prisma {
     connect?: IncidentResourceNeedWhereUniqueInput | IncidentResourceNeedWhereUniqueInput[]
   }
 
+  export type ReliefDistributionItemCreateNestedManyWithoutResourceItemInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput> | ReliefDistributionItemCreateWithoutResourceItemInput[] | ReliefDistributionItemUncheckedCreateWithoutResourceItemInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutResourceItemInput | ReliefDistributionItemCreateOrConnectWithoutResourceItemInput[]
+    createMany?: ReliefDistributionItemCreateManyResourceItemInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+  }
+
   export type InventoryLedgerUncheckedCreateNestedManyWithoutResourceItemInput = {
     create?: XOR<InventoryLedgerCreateWithoutResourceItemInput, InventoryLedgerUncheckedCreateWithoutResourceItemInput> | InventoryLedgerCreateWithoutResourceItemInput[] | InventoryLedgerUncheckedCreateWithoutResourceItemInput[]
     connectOrCreate?: InventoryLedgerCreateOrConnectWithoutResourceItemInput | InventoryLedgerCreateOrConnectWithoutResourceItemInput[]
@@ -136557,6 +143686,13 @@ export namespace Prisma {
     connectOrCreate?: IncidentResourceNeedCreateOrConnectWithoutResourceItemInput | IncidentResourceNeedCreateOrConnectWithoutResourceItemInput[]
     createMany?: IncidentResourceNeedCreateManyResourceItemInputEnvelope
     connect?: IncidentResourceNeedWhereUniqueInput | IncidentResourceNeedWhereUniqueInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedCreateNestedManyWithoutResourceItemInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput> | ReliefDistributionItemCreateWithoutResourceItemInput[] | ReliefDistributionItemUncheckedCreateWithoutResourceItemInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutResourceItemInput | ReliefDistributionItemCreateOrConnectWithoutResourceItemInput[]
+    createMany?: ReliefDistributionItemCreateManyResourceItemInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
   }
 
   export type InventoryLedgerUpdateManyWithoutResourceItemNestedInput = {
@@ -136587,6 +143723,20 @@ export namespace Prisma {
     deleteMany?: IncidentResourceNeedScalarWhereInput | IncidentResourceNeedScalarWhereInput[]
   }
 
+  export type ReliefDistributionItemUpdateManyWithoutResourceItemNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput> | ReliefDistributionItemCreateWithoutResourceItemInput[] | ReliefDistributionItemUncheckedCreateWithoutResourceItemInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutResourceItemInput | ReliefDistributionItemCreateOrConnectWithoutResourceItemInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutResourceItemInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutResourceItemInput[]
+    createMany?: ReliefDistributionItemCreateManyResourceItemInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutResourceItemInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutResourceItemInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutResourceItemInput | ReliefDistributionItemUpdateManyWithWhereWithoutResourceItemInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+  }
+
   export type InventoryLedgerUncheckedUpdateManyWithoutResourceItemNestedInput = {
     create?: XOR<InventoryLedgerCreateWithoutResourceItemInput, InventoryLedgerUncheckedCreateWithoutResourceItemInput> | InventoryLedgerCreateWithoutResourceItemInput[] | InventoryLedgerUncheckedCreateWithoutResourceItemInput[]
     connectOrCreate?: InventoryLedgerCreateOrConnectWithoutResourceItemInput | InventoryLedgerCreateOrConnectWithoutResourceItemInput[]
@@ -136613,6 +143763,20 @@ export namespace Prisma {
     update?: IncidentResourceNeedUpdateWithWhereUniqueWithoutResourceItemInput | IncidentResourceNeedUpdateWithWhereUniqueWithoutResourceItemInput[]
     updateMany?: IncidentResourceNeedUpdateManyWithWhereWithoutResourceItemInput | IncidentResourceNeedUpdateManyWithWhereWithoutResourceItemInput[]
     deleteMany?: IncidentResourceNeedScalarWhereInput | IncidentResourceNeedScalarWhereInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput> | ReliefDistributionItemCreateWithoutResourceItemInput[] | ReliefDistributionItemUncheckedCreateWithoutResourceItemInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutResourceItemInput | ReliefDistributionItemCreateOrConnectWithoutResourceItemInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutResourceItemInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutResourceItemInput[]
+    createMany?: ReliefDistributionItemCreateManyResourceItemInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutResourceItemInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutResourceItemInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutResourceItemInput | ReliefDistributionItemUpdateManyWithWhereWithoutResourceItemInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
   }
 
   export type ResourceItemCreateNestedOneWithoutLedgerTransactionsInput = {
@@ -136712,11 +143876,25 @@ export namespace Prisma {
     connect?: InventoryLedgerWhereUniqueInput | InventoryLedgerWhereUniqueInput[]
   }
 
+  export type ReliefDistributionItemCreateNestedManyWithoutIncidentResourceNeedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput> | ReliefDistributionItemCreateWithoutIncidentResourceNeedInput[] | ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput | ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput[]
+    createMany?: ReliefDistributionItemCreateManyIncidentResourceNeedInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+  }
+
   export type InventoryLedgerUncheckedCreateNestedManyWithoutIncidentResourceNeedInput = {
     create?: XOR<InventoryLedgerCreateWithoutIncidentResourceNeedInput, InventoryLedgerUncheckedCreateWithoutIncidentResourceNeedInput> | InventoryLedgerCreateWithoutIncidentResourceNeedInput[] | InventoryLedgerUncheckedCreateWithoutIncidentResourceNeedInput[]
     connectOrCreate?: InventoryLedgerCreateOrConnectWithoutIncidentResourceNeedInput | InventoryLedgerCreateOrConnectWithoutIncidentResourceNeedInput[]
     createMany?: InventoryLedgerCreateManyIncidentResourceNeedInputEnvelope
     connect?: InventoryLedgerWhereUniqueInput | InventoryLedgerWhereUniqueInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedCreateNestedManyWithoutIncidentResourceNeedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput> | ReliefDistributionItemCreateWithoutIncidentResourceNeedInput[] | ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput | ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput[]
+    createMany?: ReliefDistributionItemCreateManyIncidentResourceNeedInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
   }
 
   export type DisasterIncidentUpdateOneRequiredWithoutResourceNeedsNestedInput = {
@@ -136749,6 +143927,20 @@ export namespace Prisma {
     deleteMany?: InventoryLedgerScalarWhereInput | InventoryLedgerScalarWhereInput[]
   }
 
+  export type ReliefDistributionItemUpdateManyWithoutIncidentResourceNeedNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput> | ReliefDistributionItemCreateWithoutIncidentResourceNeedInput[] | ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput | ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutIncidentResourceNeedInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutIncidentResourceNeedInput[]
+    createMany?: ReliefDistributionItemCreateManyIncidentResourceNeedInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutIncidentResourceNeedInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutIncidentResourceNeedInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutIncidentResourceNeedInput | ReliefDistributionItemUpdateManyWithWhereWithoutIncidentResourceNeedInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+  }
+
   export type InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput = {
     create?: XOR<InventoryLedgerCreateWithoutIncidentResourceNeedInput, InventoryLedgerUncheckedCreateWithoutIncidentResourceNeedInput> | InventoryLedgerCreateWithoutIncidentResourceNeedInput[] | InventoryLedgerUncheckedCreateWithoutIncidentResourceNeedInput[]
     connectOrCreate?: InventoryLedgerCreateOrConnectWithoutIncidentResourceNeedInput | InventoryLedgerCreateOrConnectWithoutIncidentResourceNeedInput[]
@@ -136761,6 +143953,138 @@ export namespace Prisma {
     update?: InventoryLedgerUpdateWithWhereUniqueWithoutIncidentResourceNeedInput | InventoryLedgerUpdateWithWhereUniqueWithoutIncidentResourceNeedInput[]
     updateMany?: InventoryLedgerUpdateManyWithWhereWithoutIncidentResourceNeedInput | InventoryLedgerUpdateManyWithWhereWithoutIncidentResourceNeedInput[]
     deleteMany?: InventoryLedgerScalarWhereInput | InventoryLedgerScalarWhereInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput> | ReliefDistributionItemCreateWithoutIncidentResourceNeedInput[] | ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput | ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutIncidentResourceNeedInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutIncidentResourceNeedInput[]
+    createMany?: ReliefDistributionItemCreateManyIncidentResourceNeedInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutIncidentResourceNeedInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutIncidentResourceNeedInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutIncidentResourceNeedInput | ReliefDistributionItemUpdateManyWithWhereWithoutIncidentResourceNeedInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+  }
+
+  export type DisasterIncidentCreateNestedOneWithoutReliefDistributionsInput = {
+    create?: XOR<DisasterIncidentCreateWithoutReliefDistributionsInput, DisasterIncidentUncheckedCreateWithoutReliefDistributionsInput>
+    connectOrCreate?: DisasterIncidentCreateOrConnectWithoutReliefDistributionsInput
+    connect?: DisasterIncidentWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReliefDistributionsInput = {
+    create?: XOR<UserCreateWithoutReliefDistributionsInput, UserUncheckedCreateWithoutReliefDistributionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReliefDistributionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReliefDistributionItemCreateNestedManyWithoutDistributionInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput> | ReliefDistributionItemCreateWithoutDistributionInput[] | ReliefDistributionItemUncheckedCreateWithoutDistributionInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutDistributionInput | ReliefDistributionItemCreateOrConnectWithoutDistributionInput[]
+    createMany?: ReliefDistributionItemCreateManyDistributionInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedCreateNestedManyWithoutDistributionInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput> | ReliefDistributionItemCreateWithoutDistributionInput[] | ReliefDistributionItemUncheckedCreateWithoutDistributionInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutDistributionInput | ReliefDistributionItemCreateOrConnectWithoutDistributionInput[]
+    createMany?: ReliefDistributionItemCreateManyDistributionInputEnvelope
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+  }
+
+  export type DisasterIncidentUpdateOneRequiredWithoutReliefDistributionsNestedInput = {
+    create?: XOR<DisasterIncidentCreateWithoutReliefDistributionsInput, DisasterIncidentUncheckedCreateWithoutReliefDistributionsInput>
+    connectOrCreate?: DisasterIncidentCreateOrConnectWithoutReliefDistributionsInput
+    upsert?: DisasterIncidentUpsertWithoutReliefDistributionsInput
+    connect?: DisasterIncidentWhereUniqueInput
+    update?: XOR<XOR<DisasterIncidentUpdateToOneWithWhereWithoutReliefDistributionsInput, DisasterIncidentUpdateWithoutReliefDistributionsInput>, DisasterIncidentUncheckedUpdateWithoutReliefDistributionsInput>
+  }
+
+  export type UserUpdateOneWithoutReliefDistributionsNestedInput = {
+    create?: XOR<UserCreateWithoutReliefDistributionsInput, UserUncheckedCreateWithoutReliefDistributionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReliefDistributionsInput
+    upsert?: UserUpsertWithoutReliefDistributionsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReliefDistributionsInput, UserUpdateWithoutReliefDistributionsInput>, UserUncheckedUpdateWithoutReliefDistributionsInput>
+  }
+
+  export type ReliefDistributionItemUpdateManyWithoutDistributionNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput> | ReliefDistributionItemCreateWithoutDistributionInput[] | ReliefDistributionItemUncheckedCreateWithoutDistributionInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutDistributionInput | ReliefDistributionItemCreateOrConnectWithoutDistributionInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput[]
+    createMany?: ReliefDistributionItemCreateManyDistributionInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutDistributionInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutDistributionInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutDistributionInput | ReliefDistributionItemUpdateManyWithWhereWithoutDistributionInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutDistributionNestedInput = {
+    create?: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput> | ReliefDistributionItemCreateWithoutDistributionInput[] | ReliefDistributionItemUncheckedCreateWithoutDistributionInput[]
+    connectOrCreate?: ReliefDistributionItemCreateOrConnectWithoutDistributionInput | ReliefDistributionItemCreateOrConnectWithoutDistributionInput[]
+    upsert?: ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput | ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput[]
+    createMany?: ReliefDistributionItemCreateManyDistributionInputEnvelope
+    set?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    disconnect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    delete?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    connect?: ReliefDistributionItemWhereUniqueInput | ReliefDistributionItemWhereUniqueInput[]
+    update?: ReliefDistributionItemUpdateWithWhereUniqueWithoutDistributionInput | ReliefDistributionItemUpdateWithWhereUniqueWithoutDistributionInput[]
+    updateMany?: ReliefDistributionItemUpdateManyWithWhereWithoutDistributionInput | ReliefDistributionItemUpdateManyWithWhereWithoutDistributionInput[]
+    deleteMany?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+  }
+
+  export type ReliefDistributionCreateNestedOneWithoutItemsInput = {
+    create?: XOR<ReliefDistributionCreateWithoutItemsInput, ReliefDistributionUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutItemsInput
+    connect?: ReliefDistributionWhereUniqueInput
+  }
+
+  export type IncidentResourceNeedCreateNestedOneWithoutReliefItemsInput = {
+    create?: XOR<IncidentResourceNeedCreateWithoutReliefItemsInput, IncidentResourceNeedUncheckedCreateWithoutReliefItemsInput>
+    connectOrCreate?: IncidentResourceNeedCreateOrConnectWithoutReliefItemsInput
+    connect?: IncidentResourceNeedWhereUniqueInput
+  }
+
+  export type ResourceItemCreateNestedOneWithoutReliefItemsInput = {
+    create?: XOR<ResourceItemCreateWithoutReliefItemsInput, ResourceItemUncheckedCreateWithoutReliefItemsInput>
+    connectOrCreate?: ResourceItemCreateOrConnectWithoutReliefItemsInput
+    connect?: ResourceItemWhereUniqueInput
+  }
+
+  export type ReliefDistributionUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<ReliefDistributionCreateWithoutItemsInput, ReliefDistributionUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ReliefDistributionCreateOrConnectWithoutItemsInput
+    upsert?: ReliefDistributionUpsertWithoutItemsInput
+    connect?: ReliefDistributionWhereUniqueInput
+    update?: XOR<XOR<ReliefDistributionUpdateToOneWithWhereWithoutItemsInput, ReliefDistributionUpdateWithoutItemsInput>, ReliefDistributionUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type IncidentResourceNeedUpdateOneWithoutReliefItemsNestedInput = {
+    create?: XOR<IncidentResourceNeedCreateWithoutReliefItemsInput, IncidentResourceNeedUncheckedCreateWithoutReliefItemsInput>
+    connectOrCreate?: IncidentResourceNeedCreateOrConnectWithoutReliefItemsInput
+    upsert?: IncidentResourceNeedUpsertWithoutReliefItemsInput
+    disconnect?: IncidentResourceNeedWhereInput | boolean
+    delete?: IncidentResourceNeedWhereInput | boolean
+    connect?: IncidentResourceNeedWhereUniqueInput
+    update?: XOR<XOR<IncidentResourceNeedUpdateToOneWithWhereWithoutReliefItemsInput, IncidentResourceNeedUpdateWithoutReliefItemsInput>, IncidentResourceNeedUncheckedUpdateWithoutReliefItemsInput>
+  }
+
+  export type ResourceItemUpdateOneWithoutReliefItemsNestedInput = {
+    create?: XOR<ResourceItemCreateWithoutReliefItemsInput, ResourceItemUncheckedCreateWithoutReliefItemsInput>
+    connectOrCreate?: ResourceItemCreateOrConnectWithoutReliefItemsInput
+    upsert?: ResourceItemUpsertWithoutReliefItemsInput
+    disconnect?: ResourceItemWhereInput | boolean
+    delete?: ResourceItemWhereInput | boolean
+    connect?: ResourceItemWhereUniqueInput
+    update?: XOR<XOR<ResourceItemUpdateToOneWithWhereWithoutReliefItemsInput, ResourceItemUpdateWithoutReliefItemsInput>, ResourceItemUncheckedUpdateWithoutReliefItemsInput>
   }
 
   export type FellowCreateNestedOneWithoutTasksInput = {
@@ -138809,6 +146133,29 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumActionFilter<$PrismaModel = never> = {
     equals?: $Enums.Action | EnumActionFieldRefInput<$PrismaModel>
@@ -138942,29 +146289,6 @@ export namespace Prisma {
     _min?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
     _max?: NestedEnumLivelihoodCategoryFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type NestedEnumLeaveStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeaveStatus | EnumLeaveStatusFieldRefInput<$PrismaModel>
@@ -139022,9 +146346,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -139034,6 +146369,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -139047,6 +146383,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -139058,9 +146395,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -139070,6 +146418,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -139083,6 +146432,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -139148,9 +146498,20 @@ export namespace Prisma {
     roleId?: StringFilter<"User"> | string
     status?: EnumUserStatusFilter<"User"> | $Enums.UserStatus
     department?: StringNullableFilter<"User"> | string | null
+    employeeId?: StringNullableFilter<"User"> | string | null
     dob?: DateTimeNullableFilter<"User"> | Date | string | null
     gender?: StringNullableFilter<"User"> | string | null
+    maritalStatus?: StringNullableFilter<"User"> | string | null
+    bloodGroup?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
+    emergencyContactName?: StringNullableFilter<"User"> | string | null
+    emergencyContactPhone?: StringNullableFilter<"User"> | string | null
+    aadharNumber?: StringNullableFilter<"User"> | string | null
+    panCard?: StringNullableFilter<"User"> | string | null
+    bankName?: StringNullableFilter<"User"> | string | null
+    bankAccountNo?: StringNullableFilter<"User"> | string | null
+    bankIfsc?: StringNullableFilter<"User"> | string | null
+    dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -139364,6 +146725,44 @@ export namespace Prisma {
 
   export type InventoryLedgerCreateManyHandledByUserInputEnvelope = {
     data: InventoryLedgerCreateManyHandledByUserInput | InventoryLedgerCreateManyHandledByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReliefDistributionCreateWithoutHandledByUserInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    incident: DisasterIncidentCreateNestedOneWithoutReliefDistributionsInput
+    items?: ReliefDistributionItemCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionUncheckedCreateWithoutHandledByUserInput = {
+    id?: string
+    incidentId: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    items?: ReliefDistributionItemUncheckedCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionCreateOrConnectWithoutHandledByUserInput = {
+    where: ReliefDistributionWhereUniqueInput
+    create: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput>
+  }
+
+  export type ReliefDistributionCreateManyHandledByUserInputEnvelope = {
+    data: ReliefDistributionCreateManyHandledByUserInput | ReliefDistributionCreateManyHandledByUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -139821,6 +147220,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutUserInput = {
+    id?: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -140014,6 +147449,39 @@ export namespace Prisma {
     incidentResourceNeedId?: StringNullableFilter<"InventoryLedger"> | string | null
     notes?: StringNullableFilter<"InventoryLedger"> | string | null
     createdAt?: DateTimeFilter<"InventoryLedger"> | Date | string
+  }
+
+  export type ReliefDistributionUpsertWithWhereUniqueWithoutHandledByUserInput = {
+    where: ReliefDistributionWhereUniqueInput
+    update: XOR<ReliefDistributionUpdateWithoutHandledByUserInput, ReliefDistributionUncheckedUpdateWithoutHandledByUserInput>
+    create: XOR<ReliefDistributionCreateWithoutHandledByUserInput, ReliefDistributionUncheckedCreateWithoutHandledByUserInput>
+  }
+
+  export type ReliefDistributionUpdateWithWhereUniqueWithoutHandledByUserInput = {
+    where: ReliefDistributionWhereUniqueInput
+    data: XOR<ReliefDistributionUpdateWithoutHandledByUserInput, ReliefDistributionUncheckedUpdateWithoutHandledByUserInput>
+  }
+
+  export type ReliefDistributionUpdateManyWithWhereWithoutHandledByUserInput = {
+    where: ReliefDistributionScalarWhereInput
+    data: XOR<ReliefDistributionUpdateManyMutationInput, ReliefDistributionUncheckedUpdateManyWithoutHandledByUserInput>
+  }
+
+  export type ReliefDistributionScalarWhereInput = {
+    AND?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
+    OR?: ReliefDistributionScalarWhereInput[]
+    NOT?: ReliefDistributionScalarWhereInput | ReliefDistributionScalarWhereInput[]
+    id?: StringFilter<"ReliefDistribution"> | string
+    incidentId?: StringFilter<"ReliefDistribution"> | string
+    name?: StringFilter<"ReliefDistribution"> | string
+    aadhar?: StringNullableFilter<"ReliefDistribution"> | string | null
+    mobNumber?: StringNullableFilter<"ReliefDistribution"> | string | null
+    address?: StringNullableFilter<"ReliefDistribution"> | string | null
+    familySize?: IntFilter<"ReliefDistribution"> | number
+    handledByUserId?: StringNullableFilter<"ReliefDistribution"> | string | null
+    notes?: StringNullableFilter<"ReliefDistribution"> | string | null
+    distributedAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"ReliefDistribution"> | Date | string
   }
 
   export type AttendanceLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -140416,6 +147884,251 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProgramManagerTaskComment"> | Date | string
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    userId?: StringFilter<"Notification"> | string
+    type?: StringFilter<"Notification"> | string
+    title?: StringFilter<"Notification"> | string
+    message?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    actorId?: StringNullableFilter<"Notification"> | string | null
+    metadata?: JsonNullableFilter<"Notification">
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
   export type RolePermissionCreateWithoutPermissionInput = {
     id?: string
     createdAt?: Date | string
@@ -140619,9 +148332,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -140631,6 +148355,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -140644,6 +148369,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -140656,9 +148382,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -140667,6 +148404,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -140680,6 +148418,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -140732,9 +148471,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -140744,6 +148494,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -140757,6 +148508,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -140769,9 +148521,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -140780,6 +148543,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -140793,6 +148557,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -140852,6 +148617,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -140882,6 +148648,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -141107,6 +148874,7 @@ export namespace Prisma {
     id?: StringFilter<"Student"> | string
     studentId?: StringFilter<"Student"> | string
     name?: StringFilter<"Student"> | string
+    photoUrl?: StringNullableFilter<"Student"> | string | null
     dob?: DateTimeNullableFilter<"Student"> | Date | string | null
     gender?: StringNullableFilter<"Student"> | string | null
     email?: StringNullableFilter<"Student"> | string | null
@@ -141269,9 +149037,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -141281,6 +149060,7 @@ export namespace Prisma {
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -141294,6 +149074,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -141306,9 +149087,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -141317,6 +149109,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -141330,6 +149123,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -141363,6 +149157,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -141393,6 +149188,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -141811,6 +149607,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -141839,6 +149636,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -141985,9 +149783,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -141997,6 +149806,7 @@ export namespace Prisma {
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -142010,6 +149820,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -142022,9 +149833,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -142033,6 +149855,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -142046,6 +149869,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -142359,6 +150183,7 @@ export namespace Prisma {
     id?: StringFilter<"AfterSchoolStudent"> | string
     studentId?: StringFilter<"AfterSchoolStudent"> | string
     name?: StringFilter<"AfterSchoolStudent"> | string
+    photoUrl?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     dob?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     gender?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -142690,9 +150515,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -142703,6 +150539,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -142715,6 +150552,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -142727,9 +150565,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -142739,6 +150588,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -142751,6 +150601,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -142853,9 +150704,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -142866,6 +150728,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -142878,6 +150741,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -142890,9 +150754,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -142902,6 +150777,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -142914,6 +150790,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutPerformanceObservationsInput = {
@@ -142994,9 +150871,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -143007,6 +150895,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -143019,6 +150908,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -143031,9 +150921,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -143043,6 +150944,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -143055,6 +150957,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -143157,9 +151060,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -143170,6 +151084,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -143182,6 +151097,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -143194,9 +151110,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -143206,6 +151133,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -143218,6 +151146,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -143497,16 +151426,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -143538,16 +151474,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -143893,16 +151836,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -143934,16 +151884,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144079,6 +152036,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144109,6 +152067,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144183,6 +152142,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144213,6 +152173,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144332,6 +152293,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144362,6 +152324,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144463,6 +152426,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144493,6 +152457,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144584,6 +152549,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144614,6 +152580,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144715,6 +152682,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144745,6 +152713,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144836,6 +152805,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144866,6 +152836,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -144912,6 +152883,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144942,6 +152914,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -144977,16 +152950,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -145018,16 +152998,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -145075,16 +153062,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -145116,16 +153110,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -145157,16 +153158,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -145198,16 +153206,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -145255,16 +153270,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -145296,16 +153318,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -145741,9 +153770,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -145754,6 +153794,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -145766,6 +153807,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedSchoolsInput = {
@@ -145778,9 +153820,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -145790,6 +153843,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -145802,6 +153856,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedSchoolsInput = {
@@ -145884,9 +153939,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -145897,6 +153963,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -145909,6 +153976,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
@@ -145921,9 +153989,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -145933,6 +154012,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -145945,6 +154025,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SchoolUpsertWithoutProgramManagersInput = {
@@ -146017,9 +154098,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146030,6 +154122,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -146042,6 +154135,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedCentresInput = {
@@ -146054,9 +154148,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146066,6 +154171,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -146078,6 +154184,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedCentresInput = {
@@ -146154,9 +154261,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146167,6 +154285,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -146179,6 +154298,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedCentresInput = {
@@ -146191,9 +154311,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146203,6 +154334,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -146215,6 +154347,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
@@ -146281,9 +154414,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146294,6 +154438,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -146306,6 +154451,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
@@ -146318,9 +154464,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146330,6 +154487,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -146342,6 +154500,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
@@ -146402,9 +154561,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146415,6 +154585,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -146427,6 +154598,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
@@ -146439,9 +154611,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146451,6 +154634,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -146463,6 +154647,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
@@ -146513,9 +154698,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146526,6 +154722,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -146538,6 +154735,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmTasksInput = {
@@ -146550,9 +154748,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146562,6 +154771,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -146574,6 +154784,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmTasksInput = {
@@ -146627,9 +154838,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146640,6 +154862,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -146652,6 +154875,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTasksInput = {
@@ -146664,9 +154888,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146676,6 +154911,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -146688,6 +154924,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -146746,9 +154983,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146759,6 +155007,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -146771,6 +155020,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
@@ -146783,9 +155033,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -146795,6 +155056,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -146807,6 +155069,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
@@ -146871,9 +155134,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146884,6 +155158,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -146896,6 +155171,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
@@ -146908,9 +155184,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -146920,6 +155207,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -146932,6 +155220,7 @@ export namespace Prisma {
     managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SchoolCreateWithoutProgramsInput = {
@@ -147272,6 +155561,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -147302,6 +155592,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -148176,16 +156467,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148217,16 +156515,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148274,16 +156579,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148315,16 +156627,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148356,16 +156675,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148397,16 +156723,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148482,16 +156815,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148523,16 +156863,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148699,16 +157046,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148740,16 +157094,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148818,16 +157179,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148859,16 +157227,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -148927,16 +157302,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -148968,16 +157350,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -149082,16 +157471,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149123,16 +157519,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149351,16 +157754,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -149392,16 +157802,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -149472,16 +157889,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149513,16 +157937,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149765,16 +158196,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -149806,16 +158244,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -149930,16 +158375,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -149971,16 +158423,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -150354,11 +158813,13 @@ export namespace Prisma {
     id?: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     resourceItem: ResourceItemCreateNestedOneWithoutIncidentNeedsInput
     transactions?: InventoryLedgerCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedUncheckedCreateWithoutIncidentInput = {
@@ -150366,10 +158827,12 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: InventoryLedgerUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedCreateOrConnectWithoutIncidentInput = {
@@ -150379,6 +158842,44 @@ export namespace Prisma {
 
   export type IncidentResourceNeedCreateManyIncidentInputEnvelope = {
     data: IncidentResourceNeedCreateManyIncidentInput | IncidentResourceNeedCreateManyIncidentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReliefDistributionCreateWithoutIncidentInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    handledByUser?: UserCreateNestedOneWithoutReliefDistributionsInput
+    items?: ReliefDistributionItemCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionUncheckedCreateWithoutIncidentInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    handledByUserId?: string | null
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    items?: ReliefDistributionItemUncheckedCreateNestedManyWithoutDistributionInput
+  }
+
+  export type ReliefDistributionCreateOrConnectWithoutIncidentInput = {
+    where: ReliefDistributionWhereUniqueInput
+    create: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput>
+  }
+
+  export type ReliefDistributionCreateManyIncidentInputEnvelope = {
+    data: ReliefDistributionCreateManyIncidentInput | ReliefDistributionCreateManyIncidentInput[]
     skipDuplicates?: boolean
   }
 
@@ -150407,9 +158908,26 @@ export namespace Prisma {
     resourceItemId?: StringFilter<"IncidentResourceNeed"> | string
     quantityNeeded?: FloatFilter<"IncidentResourceNeed"> | number
     quantityReceived?: FloatFilter<"IncidentResourceNeed"> | number
+    quantityDistributed?: FloatFilter<"IncidentResourceNeed"> | number
     transactionsCount?: IntFilter<"IncidentResourceNeed"> | number
     createdAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
     updatedAt?: DateTimeFilter<"IncidentResourceNeed"> | Date | string
+  }
+
+  export type ReliefDistributionUpsertWithWhereUniqueWithoutIncidentInput = {
+    where: ReliefDistributionWhereUniqueInput
+    update: XOR<ReliefDistributionUpdateWithoutIncidentInput, ReliefDistributionUncheckedUpdateWithoutIncidentInput>
+    create: XOR<ReliefDistributionCreateWithoutIncidentInput, ReliefDistributionUncheckedCreateWithoutIncidentInput>
+  }
+
+  export type ReliefDistributionUpdateWithWhereUniqueWithoutIncidentInput = {
+    where: ReliefDistributionWhereUniqueInput
+    data: XOR<ReliefDistributionUpdateWithoutIncidentInput, ReliefDistributionUncheckedUpdateWithoutIncidentInput>
+  }
+
+  export type ReliefDistributionUpdateManyWithWhereWithoutIncidentInput = {
+    where: ReliefDistributionScalarWhereInput
+    data: XOR<ReliefDistributionUpdateManyMutationInput, ReliefDistributionUncheckedUpdateManyWithoutIncidentInput>
   }
 
   export type InventoryLedgerCreateWithoutResourceItemInput = {
@@ -150446,11 +158964,13 @@ export namespace Prisma {
     id?: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     incident: DisasterIncidentCreateNestedOneWithoutResourceNeedsInput
     transactions?: InventoryLedgerCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedUncheckedCreateWithoutResourceItemInput = {
@@ -150458,10 +158978,12 @@ export namespace Prisma {
     incidentId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     transactions?: InventoryLedgerUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedCreateOrConnectWithoutResourceItemInput = {
@@ -150471,6 +158993,36 @@ export namespace Prisma {
 
   export type IncidentResourceNeedCreateManyResourceItemInputEnvelope = {
     data: IncidentResourceNeedCreateManyResourceItemInput | IncidentResourceNeedCreateManyResourceItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReliefDistributionItemCreateWithoutResourceItemInput = {
+    id?: string
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+    distribution: ReliefDistributionCreateNestedOneWithoutItemsInput
+    incidentResourceNeed?: IncidentResourceNeedCreateNestedOneWithoutReliefItemsInput
+  }
+
+  export type ReliefDistributionItemUncheckedCreateWithoutResourceItemInput = {
+    id?: string
+    distributionId: string
+    incidentResourceNeedId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemCreateOrConnectWithoutResourceItemInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    create: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput>
+  }
+
+  export type ReliefDistributionItemCreateManyResourceItemInputEnvelope = {
+    data: ReliefDistributionItemCreateManyResourceItemInput | ReliefDistributionItemCreateManyResourceItemInput[]
     skipDuplicates?: boolean
   }
 
@@ -150506,6 +159058,36 @@ export namespace Prisma {
     data: XOR<IncidentResourceNeedUpdateManyMutationInput, IncidentResourceNeedUncheckedUpdateManyWithoutResourceItemInput>
   }
 
+  export type ReliefDistributionItemUpsertWithWhereUniqueWithoutResourceItemInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    update: XOR<ReliefDistributionItemUpdateWithoutResourceItemInput, ReliefDistributionItemUncheckedUpdateWithoutResourceItemInput>
+    create: XOR<ReliefDistributionItemCreateWithoutResourceItemInput, ReliefDistributionItemUncheckedCreateWithoutResourceItemInput>
+  }
+
+  export type ReliefDistributionItemUpdateWithWhereUniqueWithoutResourceItemInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    data: XOR<ReliefDistributionItemUpdateWithoutResourceItemInput, ReliefDistributionItemUncheckedUpdateWithoutResourceItemInput>
+  }
+
+  export type ReliefDistributionItemUpdateManyWithWhereWithoutResourceItemInput = {
+    where: ReliefDistributionItemScalarWhereInput
+    data: XOR<ReliefDistributionItemUpdateManyMutationInput, ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemInput>
+  }
+
+  export type ReliefDistributionItemScalarWhereInput = {
+    AND?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+    OR?: ReliefDistributionItemScalarWhereInput[]
+    NOT?: ReliefDistributionItemScalarWhereInput | ReliefDistributionItemScalarWhereInput[]
+    id?: StringFilter<"ReliefDistributionItem"> | string
+    distributionId?: StringFilter<"ReliefDistributionItem"> | string
+    incidentResourceNeedId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    resourceItemId?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+    itemName?: StringFilter<"ReliefDistributionItem"> | string
+    unit?: StringFilter<"ReliefDistributionItem"> | string
+    quantity?: FloatFilter<"ReliefDistributionItem"> | number
+    notes?: StringNullableFilter<"ReliefDistributionItem"> | string | null
+  }
+
   export type ResourceItemCreateWithoutLedgerTransactionsInput = {
     id?: string
     itemName: string
@@ -150515,6 +159097,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     incidentNeeds?: IncidentResourceNeedCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemUncheckedCreateWithoutLedgerTransactionsInput = {
@@ -150526,6 +159109,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     incidentNeeds?: IncidentResourceNeedUncheckedCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemCreateOrConnectWithoutLedgerTransactionsInput = {
@@ -150542,9 +159126,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -150554,6 +159149,7 @@ export namespace Prisma {
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -150567,6 +159163,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -150579,9 +159176,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -150590,6 +159198,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -150603,6 +159212,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -150614,11 +159224,13 @@ export namespace Prisma {
     id?: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     incident: DisasterIncidentCreateNestedOneWithoutResourceNeedsInput
     resourceItem: ResourceItemCreateNestedOneWithoutIncidentNeedsInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedUncheckedCreateWithoutTransactionsInput = {
@@ -150627,9 +159239,11 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
   }
 
   export type IncidentResourceNeedCreateOrConnectWithoutTransactionsInput = {
@@ -150657,6 +159271,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     incidentNeeds?: IncidentResourceNeedUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutResourceItemNestedInput
   }
 
   export type ResourceItemUncheckedUpdateWithoutLedgerTransactionsInput = {
@@ -150668,6 +159283,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     incidentNeeds?: IncidentResourceNeedUncheckedUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemNestedInput
   }
 
   export type UserUpsertWithoutVerifiedTransactionsInput = {
@@ -150690,9 +159306,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -150702,6 +159329,7 @@ export namespace Prisma {
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -150715,6 +159343,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -150727,9 +159356,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -150738,6 +159378,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -150751,6 +159392,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -150768,11 +159410,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     incident?: DisasterIncidentUpdateOneRequiredWithoutResourceNeedsNestedInput
     resourceItem?: ResourceItemUpdateOneRequiredWithoutIncidentNeedsNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateWithoutTransactionsInput = {
@@ -150781,9 +159425,11 @@ export namespace Prisma {
     resourceItemId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type UserCreateWithoutAttendanceLogsInput = {
@@ -150795,9 +159441,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -150808,6 +159465,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
@@ -150820,6 +159478,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -150832,9 +159491,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -150844,6 +159514,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
@@ -150856,6 +159527,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -150883,9 +159555,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -150896,6 +159579,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
@@ -150908,6 +159592,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -150920,9 +159605,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -150932,6 +159628,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
@@ -150944,6 +159641,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -150955,9 +159653,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -150967,6 +159676,7 @@ export namespace Prisma {
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -150980,6 +159690,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -150992,9 +159703,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -151003,6 +159725,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -151016,6 +159739,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -151043,9 +159767,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -151055,6 +159790,7 @@ export namespace Prisma {
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -151068,6 +159804,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -151080,9 +159817,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -151091,6 +159839,7 @@ export namespace Prisma {
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -151104,6 +159853,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DisasterIncidentCreateWithoutResourceNeedsInput = {
@@ -151119,6 +159869,7 @@ export namespace Prisma {
     humanLossInjured?: number
     humanLossMissing?: number
     propertyLossEstimate?: number
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutIncidentInput
   }
 
   export type DisasterIncidentUncheckedCreateWithoutResourceNeedsInput = {
@@ -151134,6 +159885,7 @@ export namespace Prisma {
     humanLossInjured?: number
     humanLossMissing?: number
     propertyLossEstimate?: number
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutIncidentInput
   }
 
   export type DisasterIncidentCreateOrConnectWithoutResourceNeedsInput = {
@@ -151150,6 +159902,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ledgerTransactions?: InventoryLedgerCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemUncheckedCreateWithoutIncidentNeedsInput = {
@@ -151161,6 +159914,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     ledgerTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutResourceItemInput
+    reliefItems?: ReliefDistributionItemUncheckedCreateNestedManyWithoutResourceItemInput
   }
 
   export type ResourceItemCreateOrConnectWithoutIncidentNeedsInput = {
@@ -151198,6 +159952,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ReliefDistributionItemCreateWithoutIncidentResourceNeedInput = {
+    id?: string
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+    distribution: ReliefDistributionCreateNestedOneWithoutItemsInput
+    resourceItem?: ResourceItemCreateNestedOneWithoutReliefItemsInput
+  }
+
+  export type ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput = {
+    id?: string
+    distributionId: string
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemCreateOrConnectWithoutIncidentResourceNeedInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    create: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput>
+  }
+
+  export type ReliefDistributionItemCreateManyIncidentResourceNeedInputEnvelope = {
+    data: ReliefDistributionItemCreateManyIncidentResourceNeedInput | ReliefDistributionItemCreateManyIncidentResourceNeedInput[]
+    skipDuplicates?: boolean
+  }
+
   export type DisasterIncidentUpsertWithoutResourceNeedsInput = {
     update: XOR<DisasterIncidentUpdateWithoutResourceNeedsInput, DisasterIncidentUncheckedUpdateWithoutResourceNeedsInput>
     create: XOR<DisasterIncidentCreateWithoutResourceNeedsInput, DisasterIncidentUncheckedCreateWithoutResourceNeedsInput>
@@ -151222,6 +160006,7 @@ export namespace Prisma {
     humanLossInjured?: IntFieldUpdateOperationsInput | number
     humanLossMissing?: IntFieldUpdateOperationsInput | number
     propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutIncidentNestedInput
   }
 
   export type DisasterIncidentUncheckedUpdateWithoutResourceNeedsInput = {
@@ -151237,6 +160022,7 @@ export namespace Prisma {
     humanLossInjured?: IntFieldUpdateOperationsInput | number
     humanLossMissing?: IntFieldUpdateOperationsInput | number
     propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutIncidentNestedInput
   }
 
   export type ResourceItemUpsertWithoutIncidentNeedsInput = {
@@ -151259,6 +160045,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ledgerTransactions?: InventoryLedgerUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutResourceItemNestedInput
   }
 
   export type ResourceItemUncheckedUpdateWithoutIncidentNeedsInput = {
@@ -151270,6 +160057,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ledgerTransactions?: InventoryLedgerUncheckedUpdateManyWithoutResourceItemNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemNestedInput
   }
 
   export type InventoryLedgerUpsertWithWhereUniqueWithoutIncidentResourceNeedInput = {
@@ -151286,6 +160074,564 @@ export namespace Prisma {
   export type InventoryLedgerUpdateManyWithWhereWithoutIncidentResourceNeedInput = {
     where: InventoryLedgerScalarWhereInput
     data: XOR<InventoryLedgerUpdateManyMutationInput, InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedInput>
+  }
+
+  export type ReliefDistributionItemUpsertWithWhereUniqueWithoutIncidentResourceNeedInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    update: XOR<ReliefDistributionItemUpdateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedUpdateWithoutIncidentResourceNeedInput>
+    create: XOR<ReliefDistributionItemCreateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedCreateWithoutIncidentResourceNeedInput>
+  }
+
+  export type ReliefDistributionItemUpdateWithWhereUniqueWithoutIncidentResourceNeedInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    data: XOR<ReliefDistributionItemUpdateWithoutIncidentResourceNeedInput, ReliefDistributionItemUncheckedUpdateWithoutIncidentResourceNeedInput>
+  }
+
+  export type ReliefDistributionItemUpdateManyWithWhereWithoutIncidentResourceNeedInput = {
+    where: ReliefDistributionItemScalarWhereInput
+    data: XOR<ReliefDistributionItemUpdateManyMutationInput, ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedInput>
+  }
+
+  export type DisasterIncidentCreateWithoutReliefDistributionsInput = {
+    id?: string
+    name: string
+    location: string
+    type: string
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    expectedFamiliesAffected?: number
+    humanLossDied?: number
+    humanLossInjured?: number
+    humanLossMissing?: number
+    propertyLossEstimate?: number
+    resourceNeeds?: IncidentResourceNeedCreateNestedManyWithoutIncidentInput
+  }
+
+  export type DisasterIncidentUncheckedCreateWithoutReliefDistributionsInput = {
+    id?: string
+    name: string
+    location: string
+    type: string
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    expectedFamiliesAffected?: number
+    humanLossDied?: number
+    humanLossInjured?: number
+    humanLossMissing?: number
+    propertyLossEstimate?: number
+    resourceNeeds?: IncidentResourceNeedUncheckedCreateNestedManyWithoutIncidentInput
+  }
+
+  export type DisasterIncidentCreateOrConnectWithoutReliefDistributionsInput = {
+    where: DisasterIncidentWhereUniqueInput
+    create: XOR<DisasterIncidentCreateWithoutReliefDistributionsInput, DisasterIncidentUncheckedCreateWithoutReliefDistributionsInput>
+  }
+
+  export type UserCreateWithoutReliefDistributionsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReliefDistributionsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReliefDistributionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReliefDistributionsInput, UserUncheckedCreateWithoutReliefDistributionsInput>
+  }
+
+  export type ReliefDistributionItemCreateWithoutDistributionInput = {
+    id?: string
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+    incidentResourceNeed?: IncidentResourceNeedCreateNestedOneWithoutReliefItemsInput
+    resourceItem?: ResourceItemCreateNestedOneWithoutReliefItemsInput
+  }
+
+  export type ReliefDistributionItemUncheckedCreateWithoutDistributionInput = {
+    id?: string
+    incidentResourceNeedId?: string | null
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemCreateOrConnectWithoutDistributionInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    create: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput>
+  }
+
+  export type ReliefDistributionItemCreateManyDistributionInputEnvelope = {
+    data: ReliefDistributionItemCreateManyDistributionInput | ReliefDistributionItemCreateManyDistributionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DisasterIncidentUpsertWithoutReliefDistributionsInput = {
+    update: XOR<DisasterIncidentUpdateWithoutReliefDistributionsInput, DisasterIncidentUncheckedUpdateWithoutReliefDistributionsInput>
+    create: XOR<DisasterIncidentCreateWithoutReliefDistributionsInput, DisasterIncidentUncheckedCreateWithoutReliefDistributionsInput>
+    where?: DisasterIncidentWhereInput
+  }
+
+  export type DisasterIncidentUpdateToOneWithWhereWithoutReliefDistributionsInput = {
+    where?: DisasterIncidentWhereInput
+    data: XOR<DisasterIncidentUpdateWithoutReliefDistributionsInput, DisasterIncidentUncheckedUpdateWithoutReliefDistributionsInput>
+  }
+
+  export type DisasterIncidentUpdateWithoutReliefDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedFamiliesAffected?: IntFieldUpdateOperationsInput | number
+    humanLossDied?: IntFieldUpdateOperationsInput | number
+    humanLossInjured?: IntFieldUpdateOperationsInput | number
+    humanLossMissing?: IntFieldUpdateOperationsInput | number
+    propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
+    resourceNeeds?: IncidentResourceNeedUpdateManyWithoutIncidentNestedInput
+  }
+
+  export type DisasterIncidentUncheckedUpdateWithoutReliefDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedFamiliesAffected?: IntFieldUpdateOperationsInput | number
+    humanLossDied?: IntFieldUpdateOperationsInput | number
+    humanLossInjured?: IntFieldUpdateOperationsInput | number
+    humanLossMissing?: IntFieldUpdateOperationsInput | number
+    propertyLossEstimate?: FloatFieldUpdateOperationsInput | number
+    resourceNeeds?: IncidentResourceNeedUncheckedUpdateManyWithoutIncidentNestedInput
+  }
+
+  export type UserUpsertWithoutReliefDistributionsInput = {
+    update: XOR<UserUpdateWithoutReliefDistributionsInput, UserUncheckedUpdateWithoutReliefDistributionsInput>
+    create: XOR<UserCreateWithoutReliefDistributionsInput, UserUncheckedCreateWithoutReliefDistributionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReliefDistributionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReliefDistributionsInput, UserUncheckedUpdateWithoutReliefDistributionsInput>
+  }
+
+  export type UserUpdateWithoutReliefDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReliefDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    update: XOR<ReliefDistributionItemUpdateWithoutDistributionInput, ReliefDistributionItemUncheckedUpdateWithoutDistributionInput>
+    create: XOR<ReliefDistributionItemCreateWithoutDistributionInput, ReliefDistributionItemUncheckedCreateWithoutDistributionInput>
+  }
+
+  export type ReliefDistributionItemUpdateWithWhereUniqueWithoutDistributionInput = {
+    where: ReliefDistributionItemWhereUniqueInput
+    data: XOR<ReliefDistributionItemUpdateWithoutDistributionInput, ReliefDistributionItemUncheckedUpdateWithoutDistributionInput>
+  }
+
+  export type ReliefDistributionItemUpdateManyWithWhereWithoutDistributionInput = {
+    where: ReliefDistributionItemScalarWhereInput
+    data: XOR<ReliefDistributionItemUpdateManyMutationInput, ReliefDistributionItemUncheckedUpdateManyWithoutDistributionInput>
+  }
+
+  export type ReliefDistributionCreateWithoutItemsInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    incident: DisasterIncidentCreateNestedOneWithoutReliefDistributionsInput
+    handledByUser?: UserCreateNestedOneWithoutReliefDistributionsInput
+  }
+
+  export type ReliefDistributionUncheckedCreateWithoutItemsInput = {
+    id?: string
+    incidentId: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    handledByUserId?: string | null
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type ReliefDistributionCreateOrConnectWithoutItemsInput = {
+    where: ReliefDistributionWhereUniqueInput
+    create: XOR<ReliefDistributionCreateWithoutItemsInput, ReliefDistributionUncheckedCreateWithoutItemsInput>
+  }
+
+  export type IncidentResourceNeedCreateWithoutReliefItemsInput = {
+    id?: string
+    quantityNeeded?: number
+    quantityReceived?: number
+    quantityDistributed?: number
+    transactionsCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    incident: DisasterIncidentCreateNestedOneWithoutResourceNeedsInput
+    resourceItem: ResourceItemCreateNestedOneWithoutIncidentNeedsInput
+    transactions?: InventoryLedgerCreateNestedManyWithoutIncidentResourceNeedInput
+  }
+
+  export type IncidentResourceNeedUncheckedCreateWithoutReliefItemsInput = {
+    id?: string
+    incidentId: string
+    resourceItemId: string
+    quantityNeeded?: number
+    quantityReceived?: number
+    quantityDistributed?: number
+    transactionsCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactions?: InventoryLedgerUncheckedCreateNestedManyWithoutIncidentResourceNeedInput
+  }
+
+  export type IncidentResourceNeedCreateOrConnectWithoutReliefItemsInput = {
+    where: IncidentResourceNeedWhereUniqueInput
+    create: XOR<IncidentResourceNeedCreateWithoutReliefItemsInput, IncidentResourceNeedUncheckedCreateWithoutReliefItemsInput>
+  }
+
+  export type ResourceItemCreateWithoutReliefItemsInput = {
+    id?: string
+    itemName: string
+    availableStock?: number
+    unit: string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ledgerTransactions?: InventoryLedgerCreateNestedManyWithoutResourceItemInput
+    incidentNeeds?: IncidentResourceNeedCreateNestedManyWithoutResourceItemInput
+  }
+
+  export type ResourceItemUncheckedCreateWithoutReliefItemsInput = {
+    id?: string
+    itemName: string
+    availableStock?: number
+    unit: string
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ledgerTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutResourceItemInput
+    incidentNeeds?: IncidentResourceNeedUncheckedCreateNestedManyWithoutResourceItemInput
+  }
+
+  export type ResourceItemCreateOrConnectWithoutReliefItemsInput = {
+    where: ResourceItemWhereUniqueInput
+    create: XOR<ResourceItemCreateWithoutReliefItemsInput, ResourceItemUncheckedCreateWithoutReliefItemsInput>
+  }
+
+  export type ReliefDistributionUpsertWithoutItemsInput = {
+    update: XOR<ReliefDistributionUpdateWithoutItemsInput, ReliefDistributionUncheckedUpdateWithoutItemsInput>
+    create: XOR<ReliefDistributionCreateWithoutItemsInput, ReliefDistributionUncheckedCreateWithoutItemsInput>
+    where?: ReliefDistributionWhereInput
+  }
+
+  export type ReliefDistributionUpdateToOneWithWhereWithoutItemsInput = {
+    where?: ReliefDistributionWhereInput
+    data: XOR<ReliefDistributionUpdateWithoutItemsInput, ReliefDistributionUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ReliefDistributionUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    incident?: DisasterIncidentUpdateOneRequiredWithoutReliefDistributionsNestedInput
+    handledByUser?: UserUpdateOneWithoutReliefDistributionsNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IncidentResourceNeedUpsertWithoutReliefItemsInput = {
+    update: XOR<IncidentResourceNeedUpdateWithoutReliefItemsInput, IncidentResourceNeedUncheckedUpdateWithoutReliefItemsInput>
+    create: XOR<IncidentResourceNeedCreateWithoutReliefItemsInput, IncidentResourceNeedUncheckedCreateWithoutReliefItemsInput>
+    where?: IncidentResourceNeedWhereInput
+  }
+
+  export type IncidentResourceNeedUpdateToOneWithWhereWithoutReliefItemsInput = {
+    where?: IncidentResourceNeedWhereInput
+    data: XOR<IncidentResourceNeedUpdateWithoutReliefItemsInput, IncidentResourceNeedUncheckedUpdateWithoutReliefItemsInput>
+  }
+
+  export type IncidentResourceNeedUpdateWithoutReliefItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityNeeded?: FloatFieldUpdateOperationsInput | number
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
+    transactionsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    incident?: DisasterIncidentUpdateOneRequiredWithoutResourceNeedsNestedInput
+    resourceItem?: ResourceItemUpdateOneRequiredWithoutIncidentNeedsNestedInput
+    transactions?: InventoryLedgerUpdateManyWithoutIncidentResourceNeedNestedInput
+  }
+
+  export type IncidentResourceNeedUncheckedUpdateWithoutReliefItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    resourceItemId?: StringFieldUpdateOperationsInput | string
+    quantityNeeded?: FloatFieldUpdateOperationsInput | number
+    quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
+    transactionsCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactions?: InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
+  }
+
+  export type ResourceItemUpsertWithoutReliefItemsInput = {
+    update: XOR<ResourceItemUpdateWithoutReliefItemsInput, ResourceItemUncheckedUpdateWithoutReliefItemsInput>
+    create: XOR<ResourceItemCreateWithoutReliefItemsInput, ResourceItemUncheckedCreateWithoutReliefItemsInput>
+    where?: ResourceItemWhereInput
+  }
+
+  export type ResourceItemUpdateToOneWithWhereWithoutReliefItemsInput = {
+    where?: ResourceItemWhereInput
+    data: XOR<ResourceItemUpdateWithoutReliefItemsInput, ResourceItemUncheckedUpdateWithoutReliefItemsInput>
+  }
+
+  export type ResourceItemUpdateWithoutReliefItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    availableStock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ledgerTransactions?: InventoryLedgerUpdateManyWithoutResourceItemNestedInput
+    incidentNeeds?: IncidentResourceNeedUpdateManyWithoutResourceItemNestedInput
+  }
+
+  export type ResourceItemUncheckedUpdateWithoutReliefItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    availableStock?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ledgerTransactions?: InventoryLedgerUncheckedUpdateManyWithoutResourceItemNestedInput
+    incidentNeeds?: IncidentResourceNeedUncheckedUpdateManyWithoutResourceItemNestedInput
   }
 
   export type FellowCreateWithoutTasksInput = {
@@ -151514,9 +160860,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -151527,6 +160884,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
@@ -151539,6 +160897,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -151551,9 +160910,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -151563,6 +160933,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
@@ -151575,6 +160946,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -151639,9 +161011,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -151652,6 +161035,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
@@ -151664,6 +161048,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -151676,9 +161061,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -151688,6 +161084,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
@@ -151700,6 +161097,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -151711,16 +161109,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -151752,16 +161157,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -151809,16 +161221,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -151850,16 +161269,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -151891,16 +161317,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -151932,16 +161365,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -151989,16 +161429,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152030,16 +161477,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152071,16 +161525,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152112,16 +161573,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152169,16 +161637,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152210,16 +161685,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152251,16 +161733,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152292,16 +161781,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152349,16 +161845,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152390,16 +161893,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152431,16 +161941,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152472,16 +161989,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152529,16 +162053,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152570,16 +162101,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152611,16 +162149,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152652,16 +162197,23 @@ export namespace Prisma {
     aadhar?: string | null
     rationCard?: string | null
     mobNumber?: string | null
+    emergencyContact?: string | null
+    gender?: string | null
     resilienceScore?: number
     annualIncome?: number | null
     monthlyIncome?: number | null
     caste?: string | null
     religion?: string | null
     address?: string | null
+    state?: string | null
+    district?: string | null
+    block?: string | null
+    ward?: string | null
+    village?: string | null
+    photoUrl?: string | null
     householdSize?: number
     primaryIncomeType?: string | null
     tier?: string
-    tierPercent?: number
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
@@ -152709,16 +162261,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152750,16 +162309,23 @@ export namespace Prisma {
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
     resilienceScore?: IntFieldUpdateOperationsInput | number
     annualIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     monthlyIncome?: NullableFloatFieldUpdateOperationsInput | number | null
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    district?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    ward?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     householdSize?: IntFieldUpdateOperationsInput | number
     primaryIncomeType?: NullableStringFieldUpdateOperationsInput | string | null
     tier?: StringFieldUpdateOperationsInput | string
-    tierPercent?: IntFieldUpdateOperationsInput | number
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152860,9 +162426,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -152873,6 +162450,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -152885,6 +162463,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -152897,9 +162476,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -152909,6 +162499,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -152921,6 +162512,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -153023,9 +162615,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153036,6 +162639,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -153048,6 +162652,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -153060,9 +162665,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153072,6 +162688,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -153084,6 +162701,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -153452,9 +163070,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153465,6 +163094,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -153477,6 +163107,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -153489,9 +163120,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153501,6 +163143,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -153513,6 +163156,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -153615,9 +163259,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153628,6 +163283,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -153640,6 +163296,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -153652,9 +163309,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153664,6 +163332,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -153676,6 +163345,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -153687,9 +163357,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153700,6 +163381,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
@@ -153712,6 +163394,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -153724,9 +163407,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153736,6 +163430,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
@@ -153748,6 +163443,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -153764,9 +163460,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153777,6 +163484,7 @@ export namespace Prisma {
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
@@ -153789,6 +163497,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -153801,9 +163510,20 @@ export namespace Prisma {
     roleId: string
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -153813,6 +163533,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
@@ -153825,6 +163546,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
@@ -153884,9 +163606,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153897,6 +163630,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
@@ -153909,6 +163643,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -153921,9 +163656,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153933,6 +163679,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
@@ -153945,6 +163692,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -153967,9 +163715,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -153980,6 +163739,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -153992,6 +163752,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -154004,9 +163765,20 @@ export namespace Prisma {
     roleId?: StringFieldUpdateOperationsInput | string
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -154016,6 +163788,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -154028,6 +163801,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -154509,6 +164283,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -154539,6 +164314,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -154805,6 +164581,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154835,6 +164612,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -155586,6 +165364,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -155614,6 +165393,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -156869,6 +166649,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -156897,6 +166678,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -156969,6 +166751,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -156997,6 +166780,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157114,6 +166898,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157142,6 +166927,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157235,6 +167021,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157263,6 +167050,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157346,6 +167134,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157374,6 +167163,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157467,6 +167257,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157495,6 +167286,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157578,6 +167370,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157606,6 +167399,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157650,6 +167444,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157678,6 +167473,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157706,6 +167502,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157734,6 +167531,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -157944,6 +167742,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157972,6 +167771,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158571,9 +168371,20 @@ export namespace Prisma {
     mobile?: string | null
     status?: $Enums.UserStatus
     department?: string | null
+    employeeId?: string | null
     dob?: Date | string | null
     gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
     address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -158597,9 +168408,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -158609,6 +168431,7 @@ export namespace Prisma {
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
@@ -158622,6 +168445,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -158633,9 +168457,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -158645,6 +168480,7 @@ export namespace Prisma {
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -158658,6 +168494,7 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -158669,9 +168506,20 @@ export namespace Prisma {
     mobile?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
     department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -158726,6 +168574,19 @@ export namespace Prisma {
     quantity: number
     incidentResourceNeedId?: string | null
     notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReliefDistributionCreateManyHandledByUserInput = {
+    id?: string
+    incidentId: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    notes?: string | null
+    distributedAt?: Date | string
     createdAt?: Date | string
   }
 
@@ -158888,6 +168749,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type NotificationCreateManyUserInput = {
+    id?: string
+    type: string
+    title: string
+    message: string
+    link?: string | null
+    read?: boolean
+    actorId?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserPermissionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
@@ -158972,6 +168846,47 @@ export namespace Prisma {
     quantity?: FloatFieldUpdateOperationsInput | number
     incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionUpdateWithoutHandledByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    incident?: DisasterIncidentUpdateOneRequiredWithoutReliefDistributionsNestedInput
+    items?: ReliefDistributionItemUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateWithoutHandledByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReliefDistributionItemUncheckedUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateManyWithoutHandledByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -159458,6 +169373,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    actorId?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RolePermissionCreateManyPermissionInput = {
     id?: string
     roleId: string
@@ -159528,6 +169482,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -159612,6 +169567,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159642,6 +169598,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159672,6 +169629,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159834,6 +169792,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -159988,6 +169947,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -160058,6 +170018,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160088,6 +170049,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160118,6 +170080,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160540,6 +170503,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160568,6 +170532,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160596,6 +170561,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -161098,6 +171064,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -161320,6 +171287,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -161350,6 +171318,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -161380,6 +171349,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162161,20 +172131,36 @@ export namespace Prisma {
     resourceItemId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ReliefDistributionCreateManyIncidentInput = {
+    id?: string
+    name: string
+    aadhar?: string | null
+    mobNumber?: string | null
+    address?: string | null
+    familySize?: number
+    handledByUserId?: string | null
+    notes?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
   }
 
   export type IncidentResourceNeedUpdateWithoutIncidentInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resourceItem?: ResourceItemUpdateOneRequiredWithoutIncidentNeedsNestedInput
     transactions?: InventoryLedgerUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateWithoutIncidentInput = {
@@ -162182,10 +172168,12 @@ export namespace Prisma {
     resourceItemId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateManyWithoutIncidentInput = {
@@ -162193,9 +172181,51 @@ export namespace Prisma {
     resourceItemId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionUpdateWithoutIncidentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    handledByUser?: UserUpdateOneWithoutReliefDistributionsNestedInput
+    items?: ReliefDistributionItemUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateWithoutIncidentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReliefDistributionItemUncheckedUpdateManyWithoutDistributionNestedInput
+  }
+
+  export type ReliefDistributionUncheckedUpdateManyWithoutIncidentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    familySize?: IntFieldUpdateOperationsInput | number
+    handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InventoryLedgerCreateManyResourceItemInput = {
@@ -162213,9 +172243,20 @@ export namespace Prisma {
     incidentId: string
     quantityNeeded?: number
     quantityReceived?: number
+    quantityDistributed?: number
     transactionsCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ReliefDistributionItemCreateManyResourceItemInput = {
+    id?: string
+    distributionId: string
+    incidentResourceNeedId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
   }
 
   export type InventoryLedgerUpdateWithoutResourceItemInput = {
@@ -162252,11 +172293,13 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     incident?: DisasterIncidentUpdateOneRequiredWithoutResourceNeedsNestedInput
     transactions?: InventoryLedgerUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateWithoutResourceItemInput = {
@@ -162264,10 +172307,12 @@ export namespace Prisma {
     incidentId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactions?: InventoryLedgerUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
+    reliefItems?: ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedNestedInput
   }
 
   export type IncidentResourceNeedUncheckedUpdateManyWithoutResourceItemInput = {
@@ -162275,9 +172320,40 @@ export namespace Prisma {
     incidentId?: StringFieldUpdateOperationsInput | string
     quantityNeeded?: FloatFieldUpdateOperationsInput | number
     quantityReceived?: FloatFieldUpdateOperationsInput | number
+    quantityDistributed?: FloatFieldUpdateOperationsInput | number
     transactionsCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionItemUpdateWithoutResourceItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distribution?: ReliefDistributionUpdateOneRequiredWithoutItemsNestedInput
+    incidentResourceNeed?: IncidentResourceNeedUpdateOneWithoutReliefItemsNestedInput
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateWithoutResourceItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutResourceItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type InventoryLedgerCreateManyIncidentResourceNeedInput = {
@@ -162288,6 +172364,16 @@ export namespace Prisma {
     handledByUserId?: string | null
     notes?: string | null
     createdAt?: Date | string
+  }
+
+  export type ReliefDistributionItemCreateManyIncidentResourceNeedInput = {
+    id?: string
+    distributionId: string
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
   }
 
   export type InventoryLedgerUpdateWithoutIncidentResourceNeedInput = {
@@ -162318,6 +172404,76 @@ export namespace Prisma {
     handledByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReliefDistributionItemUpdateWithoutIncidentResourceNeedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    distribution?: ReliefDistributionUpdateOneRequiredWithoutItemsNestedInput
+    resourceItem?: ResourceItemUpdateOneWithoutReliefItemsNestedInput
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateWithoutIncidentResourceNeedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutIncidentResourceNeedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    distributionId?: StringFieldUpdateOperationsInput | string
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemCreateManyDistributionInput = {
+    id?: string
+    incidentResourceNeedId?: string | null
+    resourceItemId?: string | null
+    itemName: string
+    unit?: string
+    quantity: number
+    notes?: string | null
+  }
+
+  export type ReliefDistributionItemUpdateWithoutDistributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    incidentResourceNeed?: IncidentResourceNeedUpdateOneWithoutReliefItemsNestedInput
+    resourceItem?: ResourceItemUpdateOneWithoutReliefItemsNestedInput
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateWithoutDistributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ReliefDistributionItemUncheckedUpdateManyWithoutDistributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    incidentResourceNeedId?: NullableStringFieldUpdateOperationsInput | string | null
+    resourceItemId?: NullableStringFieldUpdateOperationsInput | string | null
+    itemName?: StringFieldUpdateOperationsInput | string
+    unit?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type FellowTaskCommentCreateManyTaskInput = {
@@ -162698,6 +172854,7 @@ export namespace Prisma {
     id?: string
     studentId: string
     name: string
+    photoUrl?: string | null
     dob?: Date | string | null
     gender?: string | null
     email?: string | null
@@ -162780,6 +172937,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162808,6 +172966,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162836,6 +172995,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    photoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null

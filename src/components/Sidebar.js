@@ -6,9 +6,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS } from "@/lib/fellowTabs";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCollapse }) {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, logout, can } = useAuth();
 
   // Dropdown states
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -22,7 +24,6 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
       [
         "/education",
         "/education/fellows",
-        "/education/program-managers",
         "/education/students",
         "/education/schools",
         "/education/pta",
@@ -183,6 +184,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Education Submenu */}
+          {can("education") && (
           <div className="flex flex-col gap-1">
             <button
               onClick={() => handleFolderToggle(eduOpen, setEduOpen)}
@@ -226,15 +228,6 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                     Fellows
                   </Link>
                 )}
-                {user?.roleName === "ADMIN" && (
-                  <Link
-                    className={sublinkClass(pathname === "/education/program-managers")}
-                    href="/education/program-managers"
-                    onClick={onClose}
-                  >
-                    Program Managers
-                  </Link>
-                )}
                 <Link
                   className={sublinkClass(pathname === "/education/students")}
                   href="/education/students"
@@ -275,9 +268,10 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
               </div>
             )}
           </div>
+          )}
 
           {/* Fellow Observations Submenu */}
-          {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+          {can("fellow-observations") && (
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => handleFolderToggle(observationsOpen, setObservationsOpen)}
@@ -323,7 +317,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Livelihood Submenu */}
-          {true && (
+          {can("livelihood") && (
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => handleFolderToggle(livelihoodOpen, setLivelihoodOpen)}
@@ -385,7 +379,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           {/* Fellow Workspace removed, now accessed via Dashboard Modal */}
 
           {/* Disaster Relief */}
-          {user?.roleName !== "FELLOW" && (
+          {can("disaster-relief") && (
             <Link
               href="/disaster-relief"
               className={navItemClass(pathname === "/disaster-relief")}
@@ -411,7 +405,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Travel - Fellow & Program Manager */}
-          {(user?.roleName === "FELLOW" || user?.roleName === "PROGRAM_MANAGER") && (
+          {(user?.roleName === "FELLOW" || PROGRAM_ROLES.includes(user?.roleName)) && can("travel") && (
             <Link
               href="/travel"
               className={navItemClass(pathname === "/travel")}
@@ -424,7 +418,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Travel Management - Admin/Manager only */}
-          {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+          {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && can("travel-management") && (
             <Link
               href="/travel/manage"
               className={navItemClass(pathname === "/travel/manage")}
@@ -437,7 +431,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* HR Management */}
-          {user?.roleName !== "FELLOW" && (
+          {can("employees") && (
             <Link
               href="/hr"
               className={navItemClass(pathname === "/hr")}

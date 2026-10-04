@@ -59,23 +59,34 @@ model Role {
 }
 
 model User {
-  id              String     @id @default(uuid())
-  name            String
-  username        String     @unique
-  email           String     @unique
-  password        String
-  mobile          String?
-  roleId          String
-  status          UserStatus @default(PENDING)
-  department      String?
-  dob             DateTime?
-  gender          String?
-  address         String?
-  avatar          String?
-  leavesTaken     Int        @default(0)
-  leavesRemaining Int        @default(15)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id                    String     @id @default(uuid())
+  name                  String
+  username              String     @unique
+  email                 String     @unique
+  password              String
+  mobile                String?
+  roleId                String
+  status                UserStatus @default(PENDING)
+  department            String?
+  employeeId            String?    @unique
+  dob                   DateTime?
+  gender                String?
+  maritalStatus         String?
+  bloodGroup            String?
+  address               String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  aadharNumber          String?
+  panCard               String?
+  bankName              String?
+  bankAccountNo         String?
+  bankIfsc              String?
+  dateOfJoining         DateTime?
+  avatar                String?
+  leavesTaken           Int        @default(0)
+  leavesRemaining       Int        @default(15)
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
 
   role        Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
   permissions UserPermission[]
@@ -83,6 +94,7 @@ model User {
   fellow                  Fellow?
   leaves                  Leave[]
   verifiedTransactions    InventoryLedger[]
+  reliefDistributions     ReliefDistribution[]
   attendanceLogs          AttendanceLog[]
   taskComments            FellowTaskComment[]
   travelRequests          TravelRequest[]
@@ -97,6 +109,27 @@ model User {
   managedLivelihoodPrograms ProgramManagerLivelihoodProgram[]
   pmTasks                   ProgramManagerTask[]
   pmTaskComments            ProgramManagerTaskComment[]
+
+  notifications Notification[]
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  actorId   String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }
 
 model Permission {
@@ -289,6 +322,7 @@ model Student {
   id              String    @id @default(uuid())
   studentId       String    @unique
   name            String
+  photoUrl        String?
   dob             DateTime?
   gender          String?
   email           String?
@@ -547,16 +581,23 @@ model Beneficiary {
   aadhar            String?
   rationCard        String?
   mobNumber         String?
+  emergencyContact  String?
+  gender            String?
   resilienceScore   Int       @default(50)
   annualIncome      Float?
   monthlyIncome     Float?
   caste             String?
   religion          String?
   address           String?
+  state             String?
+  district          String?
+  block             String?
+  ward              String?
+  village           String?
+  photoUrl          String?
   householdSize     Int       @default(4)
   primaryIncomeType String?
   tier              String    @default("Tier 2")
-  tierPercent       Int       @default(50)
   bankName          String?
   bankAccountNo     String?
   bankIfsc          String?
@@ -733,6 +774,26 @@ model LivelihoodProgram {
   fellows         FellowLivelihoodProgram[]
 }
 
+model LivelihoodType {
+  id                String             @id @default(uuid())
+  key               String             @unique
+  category          LivelihoodCategory
+  label             String
+  icon              String             @default("category")
+  description       String?
+  programTargetUnit String?
+  fields            Json               @default("[]")
+  eventTypes        Json               @default("[]")
+  tableColumns      Json               @default("[]")
+  kpiCards          Json               @default("[]")
+  active            Boolean            @default(true)
+  order             Int                @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([category])
+}
+
 model BeneficiaryLivelihood {
   id            String   @id @default(uuid())
   beneficiaryId String
@@ -790,7 +851,8 @@ model DisasterIncident {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  resourceNeeds IncidentResourceNeed[]
+  resourceNeeds       IncidentResourceNeed[]
+  reliefDistributions ReliefDistribution[]
 
   expectedFamiliesAffected Int   @default(0)
   humanLossDied            Int   @default(0)
@@ -820,6 +882,7 @@ model ResourceItem {
 
   ledgerTransactions InventoryLedger[]
   incidentNeeds      IncidentResourceNeed[]
+  reliefItems        ReliefDistributionItem[]
 }
 
 model InventoryLedger {
@@ -877,20 +940,61 @@ model Leave {
 }
 
 model IncidentResourceNeed {
-  id                String   @id @default(uuid())
-  incidentId        String
-  resourceItemId    String
-  quantityNeeded    Float    @default(0.0)
-  quantityReceived  Float    @default(0.0)
-  transactionsCount Int      @default(0)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                  String   @id @default(uuid())
+  incidentId          String
+  resourceItemId      String
+  quantityNeeded      Float    @default(0.0)
+  quantityReceived    Float    @default(0.0)
+  quantityDistributed Float    @default(0.0)
+  transactionsCount   Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  incident     DisasterIncident  @relation(fields: [incidentId], references: [id], onDelete: Cascade)
-  resourceItem ResourceItem      @relation(fields: [resourceItemId], references: [id], onDelete: Cascade)
+  incident     DisasterIncident         @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  resourceItem ResourceItem             @relation(fields: [resourceItemId], references: [id], onDelete: Cascade)
   transactions InventoryLedger[]
+  reliefItems  ReliefDistributionItem[]
 
   @@unique([incidentId, resourceItemId])
+}
+
+model ReliefDistribution {
+  id              String   @id @default(uuid())
+  incidentId      String
+  name            String
+  aadhar          String?
+  mobNumber       String?
+  address         String?
+  familySize      Int      @default(1)
+  handledByUserId String?
+  notes           String?
+  distributedAt   DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  incident      DisasterIncident         @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  handledByUser User?                    @relation(fields: [handledByUserId], references: [id])
+  items         ReliefDistributionItem[]
+
+  @@index([incidentId])
+  @@index([aadhar])
+}
+
+model ReliefDistributionItem {
+  id                     String  @id @default(uuid())
+  distributionId         String
+  incidentResourceNeedId String?
+  resourceItemId         String?
+  itemName               String
+  unit                   String  @default("units")
+  quantity               Float
+  notes                  String?
+
+  distribution         ReliefDistribution    @relation(fields: [distributionId], references: [id], onDelete: Cascade)
+  incidentResourceNeed IncidentResourceNeed? @relation(fields: [incidentResourceNeedId], references: [id], onDelete: SetNull)
+  resourceItem         ResourceItem?         @relation(fields: [resourceItemId], references: [id], onDelete: SetNull)
+
+  @@index([distributionId])
+  @@index([resourceItemId])
 }
 
 model FellowTask {
@@ -1288,6 +1392,7 @@ model AfterSchoolStudent {
   id              String    @id @default(uuid())
   studentId       String    @unique
   name            String
+  photoUrl        String?
   dob             DateTime?
   gender          String?
   email           String?

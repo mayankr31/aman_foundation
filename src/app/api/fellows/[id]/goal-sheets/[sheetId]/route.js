@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import {
+  notifyUsers,
+  getReviewerUserIdsForFellow,
+  getFellowUserId,
+  NOTIFICATION_TYPES,
+} from "@/lib/notifications";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -17,6 +26,10 @@ export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     const { id, sheetId } = await context.params;
     const fellowId = await resolveFellowId(id);
@@ -44,6 +57,10 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     const { id, sheetId } = await context.params;
     const fellowId = await resolveFellowId(id);
     if (!fellowId) {
@@ -63,7 +80,7 @@ export async function PATCH(req, context) {
 
     // Manager review action — admin/program_manager writes Q6, Q7, Q12, Q13
     if (action === "review") {
-      if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+      if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
         return NextResponse.json(
           { error: "Forbidden: Only managers can write reviews" },
           { status: 403 }
@@ -76,6 +93,16 @@ export async function PATCH(req, context) {
           responses: responses || goalSheet.responses,
           status: "REVIEWED",
         },
+      });
+
+      // Notify the fellow that their goal sheet has been reviewed.
+      const fellowUserId = await getFellowUserId(fellowId);
+      await notifyUsers([fellowUserId], {
+        type: NOTIFICATION_TYPES.GOAL_SHEET_REVIEWED,
+        title: "Goal Sheet Reviewed",
+        message: `${user.name || "Your manager"} has reviewed your goal sheet.`,
+        link: `/profile?tab=goals`,
+        actorId: user.id,
       });
 
       return NextResponse.json({ success: true, data: updated });
@@ -100,6 +127,18 @@ export async function PATCH(req, context) {
       data: updateData,
     });
 
+    // Notify reviewers when the fellow edits their own goal sheet.
+    if (user.id === fellow?.userId) {
+      const reviewers = await getReviewerUserIdsForFellow(fellowId);
+      await notifyUsers(reviewers, {
+        type: NOTIFICATION_TYPES.GOAL_SHEET_SUBMITTED,
+        title: "Goal Sheet Updated",
+        message: `${fellow?.name || "A fellow"} has updated their goal sheet. It's time for review.`,
+        link: `/education/fellows/${fellowId}?tab=goals`,
+        actorId: user.id,
+      });
+    }
+
     return NextResponse.json({ success: true, data: updated });
   } catch (err) {
     console.error("Update goal sheet error:", err);
@@ -111,6 +150,10 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     const { id, sheetId } = await context.params;
     const fellowId = await resolveFellowId(id);

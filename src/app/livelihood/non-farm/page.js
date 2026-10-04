@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
-import { getTypesByCategory, getTypeConfig } from "@/lib/livelihoodTypes";
+import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
+import LivelihoodTypesModal from "@/components/LivelihoodTypesModal";
 
 export default function NonFarmPrograms() {
   const { token } = useAuth();
+  const { getTypeConfig, getTypesByCategory, refresh: refreshTypes } = useLivelihoodTypes(token);
   const [programs, setPrograms] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showTypesModal, setShowTypesModal] = useState(false);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [newName, setNewName] = useState("");
@@ -99,12 +102,20 @@ export default function NonFarmPrograms() {
           <h2 className="text-[2.75rem] font-headline tracking-[-0.02em] leading-tight text-on-surface mb-2 font-bold">Non-Farm Programs</h2>
           <p className="text-on-surface-variant font-body text-sm max-w-2xl">Livestock &amp; allied activities: goat rearing, fish farming, poultry, and more.</p>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="bg-amber-600 text-white px-6 py-3 rounded-full text-xs font-semibold hover:bg-amber-700 transition-all flex items-center gap-2 shadow-lg shadow-amber-600/30 active:scale-95 cursor-pointer border-none"
-        >
-          <span className="material-symbols-outlined text-sm">add_box</span>Add Program
-        </button>
+        <div className="flex gap-3 shrink-0">
+          <button
+            onClick={() => setShowTypesModal(true)}
+            className="text-amber-700 hover:bg-amber-50 px-5 py-3 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-amber-200 bg-transparent"
+          >
+            <span className="material-symbols-outlined text-sm">category</span>Manage Types
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="bg-amber-600 text-white px-6 py-3 rounded-full text-xs font-semibold hover:bg-amber-700 transition-all flex items-center gap-2 shadow-lg shadow-amber-600/30 active:scale-95 cursor-pointer border-none"
+          >
+            <span className="material-symbols-outlined text-sm">add_box</span>Add Program
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -127,7 +138,7 @@ export default function NonFarmPrograms() {
         {loading ? (
           <p className="text-sm text-on-surface-variant text-center py-8">Loading...</p>
         ) : programs.length === 0 ? (
-          <p className="text-sm text-on-surface-variant text-center py-8 italic">No non-farm programs yet. Click "Add Program" to create one.</p>
+          <p className="text-sm text-on-surface-variant text-center py-8 italic">No non-farm programs yet. Click &ldquo;Add Program&rdquo; to create one.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((prog) => {
@@ -219,6 +230,15 @@ export default function NonFarmPrograms() {
             </div>
           </div>
         </div>
+      )}
+
+      {showTypesModal && (
+        <LivelihoodTypesModal
+          category="NON_FARM"
+          token={token}
+          onClose={() => setShowTypesModal(false)}
+          onChanged={refreshTypes}
+        />
       )}
     </div>
   );

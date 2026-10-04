@@ -72,6 +72,7 @@ export default function StudentsModule() {
 
   // Form states for adding a student
   const [newStudentForm, setNewStudentForm] = useState(EMPTY_STUDENT_FORM);
+  const [newStudentPhoto, setNewStudentPhoto] = useState(null);
 
   const handleNewStudentChange = (name, value) => {
     setNewStudentForm((f) => ({ ...f, [name]: value }));
@@ -117,6 +118,16 @@ export default function StudentsModule() {
       });
       const json = await res.json();
       if (json.success) {
+        const newId = json.data?.id;
+        if (newStudentPhoto && newId) {
+          const fd = new FormData();
+          fd.append("photo", newStudentPhoto);
+          await fetch(`/api/students/${newId}/photo`, {
+            method: "POST",
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            body: fd
+          });
+        }
         const loadRes = await fetch("/api/students", {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
@@ -125,6 +136,7 @@ export default function StudentsModule() {
           setStudents(loadJson.data);
         }
         setNewStudentForm(EMPTY_STUDENT_FORM);
+        setNewStudentPhoto(null);
         setShowAddModal(false);
       } else {
         alert(json.error || "Failed to add student");
@@ -402,9 +414,13 @@ export default function StudentsModule() {
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg shrink-0 ${bgClass}`}
+                          className={`w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-bold text-lg shrink-0 ${bgClass}`}
                         >
-                          {initials}
+                          {s.photoUrl ? (
+                            <img alt="student" className="w-full h-full object-cover" src={s.photoUrl} />
+                          ) : (
+                            initials
+                          )}
                         </div>
                         <div>
                           <div className="font-bold text-on-surface">{s.name}</div>
@@ -540,6 +556,29 @@ export default function StudentsModule() {
             </div>
             <div className="p-6">
               <form onSubmit={handleAddStudent} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="md:col-span-2 flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center shrink-0">
+                    {newStudentPhoto ? (
+                      <img alt="preview" className="w-full h-full object-cover" src={URL.createObjectURL(newStudentPhoto)} />
+                    ) : (
+                      <span className="material-symbols-outlined text-on-surface-variant">person</span>
+                    )}
+                  </div>
+                  <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-surface-container transition-colors cursor-pointer">
+                    {newStudentPhoto ? "Change Photo" : "Upload Photo"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => setNewStudentPhoto(e.target.files?.[0] || null)}
+                    />
+                  </label>
+                  {newStudentPhoto && (
+                    <button type="button" onClick={() => setNewStudentPhoto(null)} className="text-sm text-error font-semibold hover:underline cursor-pointer">
+                      Remove
+                    </button>
+                  )}
+                </div>
                 <FormField label="Full Name" name="name" value={newStudentForm.name} onChange={handleNewStudentChange} required placeholder="e.g. Aarav Kumar" />
                 <FormField label="Student ID (Optional)" name="studentId" value={newStudentForm.studentId} onChange={handleNewStudentChange} placeholder="Leave blank to auto-generate" />
                 <div className="md:col-span-2">

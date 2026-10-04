@@ -4,6 +4,9 @@ import { authenticateUser } from "@/lib/auth";
 import { getManagedFellowIds, isFellowManaged } from "@/lib/scope";
 import { computeOverallScore } from "@/data/fellowPerformanceConstants";
 import { getActiveRatingCategories, isValidRating } from "@/lib/performanceCategories";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const LEGACY_RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
 
@@ -12,7 +15,11 @@ export async function GET(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json(
         { error: "Forbidden: Admin or Program Manager access only" },
         { status: 403 }
@@ -20,7 +27,7 @@ export async function GET(req) {
     }
 
     let where = {};
-    if (user.role.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role.name)) {
       const fellowIds = await getManagedFellowIds(user.id);
       where = { fellowId: { in: fellowIds } };
     }
@@ -48,7 +55,11 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json(
         { error: "Forbidden: Only managers can create fellow performance records" },
         { status: 403 }
@@ -90,7 +101,7 @@ export async function POST(req) {
       legacyRatings[key] = ratings[key] ?? null;
     }
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
       return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
     }
 

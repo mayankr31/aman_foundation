@@ -139,12 +139,37 @@ exports.Prisma.UserScalarFieldEnum = {
   roleId: 'roleId',
   status: 'status',
   department: 'department',
+  employeeId: 'employeeId',
   dob: 'dob',
   gender: 'gender',
+  maritalStatus: 'maritalStatus',
+  bloodGroup: 'bloodGroup',
   address: 'address',
+  emergencyContactName: 'emergencyContactName',
+  emergencyContactPhone: 'emergencyContactPhone',
+  aadharNumber: 'aadharNumber',
+  panCard: 'panCard',
+  bankName: 'bankName',
+  bankAccountNo: 'bankAccountNo',
+  bankIfsc: 'bankIfsc',
+  dateOfJoining: 'dateOfJoining',
   avatar: 'avatar',
   leavesTaken: 'leavesTaken',
   leavesRemaining: 'leavesRemaining',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  link: 'link',
+  read: 'read',
+  actorId: 'actorId',
+  metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -281,6 +306,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   name: 'name',
+  photoUrl: 'photoUrl',
   dob: 'dob',
   gender: 'gender',
   email: 'email',
@@ -470,16 +496,23 @@ exports.Prisma.BeneficiaryScalarFieldEnum = {
   aadhar: 'aadhar',
   rationCard: 'rationCard',
   mobNumber: 'mobNumber',
+  emergencyContact: 'emergencyContact',
+  gender: 'gender',
   resilienceScore: 'resilienceScore',
   annualIncome: 'annualIncome',
   monthlyIncome: 'monthlyIncome',
   caste: 'caste',
   religion: 'religion',
   address: 'address',
+  state: 'state',
+  district: 'district',
+  block: 'block',
+  ward: 'ward',
+  village: 'village',
+  photoUrl: 'photoUrl',
   householdSize: 'householdSize',
   primaryIncomeType: 'primaryIncomeType',
   tier: 'tier',
-  tierPercent: 'tierPercent',
   bankName: 'bankName',
   bankAccountNo: 'bankAccountNo',
   bankIfsc: 'bankIfsc',
@@ -611,6 +644,24 @@ exports.Prisma.LivelihoodProgramScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LivelihoodTypeScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  category: 'category',
+  label: 'label',
+  icon: 'icon',
+  description: 'description',
+  programTargetUnit: 'programTargetUnit',
+  fields: 'fields',
+  eventTypes: 'eventTypes',
+  tableColumns: 'tableColumns',
+  kpiCards: 'kpiCards',
+  active: 'active',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BeneficiaryLivelihoodScalarFieldEnum = {
   id: 'id',
   beneficiaryId: 'beneficiaryId',
@@ -729,9 +780,35 @@ exports.Prisma.IncidentResourceNeedScalarFieldEnum = {
   resourceItemId: 'resourceItemId',
   quantityNeeded: 'quantityNeeded',
   quantityReceived: 'quantityReceived',
+  quantityDistributed: 'quantityDistributed',
   transactionsCount: 'transactionsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReliefDistributionScalarFieldEnum = {
+  id: 'id',
+  incidentId: 'incidentId',
+  name: 'name',
+  aadhar: 'aadhar',
+  mobNumber: 'mobNumber',
+  address: 'address',
+  familySize: 'familySize',
+  handledByUserId: 'handledByUserId',
+  notes: 'notes',
+  distributedAt: 'distributedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ReliefDistributionItemScalarFieldEnum = {
+  id: 'id',
+  distributionId: 'distributionId',
+  incidentResourceNeedId: 'incidentResourceNeedId',
+  resourceItemId: 'resourceItemId',
+  itemName: 'itemName',
+  unit: 'unit',
+  quantity: 'quantity',
+  notes: 'notes'
 };
 
 exports.Prisma.FellowTaskScalarFieldEnum = {
@@ -1016,6 +1093,7 @@ exports.Prisma.AfterSchoolStudentScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
   name: 'name',
+  photoUrl: 'photoUrl',
   dob: 'dob',
   gender: 'gender',
   email: 'email',
@@ -1135,12 +1213,12 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -1198,6 +1276,7 @@ exports.TravelStatus = exports.$Enums.TravelStatus = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
+  Notification: 'Notification',
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   UserPermission: 'UserPermission',
@@ -1237,6 +1316,7 @@ exports.Prisma.ModelName = {
   BeneficiarySugarcane: 'BeneficiarySugarcane',
   SugarcaneProgram: 'SugarcaneProgram',
   LivelihoodProgram: 'LivelihoodProgram',
+  LivelihoodType: 'LivelihoodType',
   BeneficiaryLivelihood: 'BeneficiaryLivelihood',
   LivelihoodEvent: 'LivelihoodEvent',
   FellowLivelihoodProgram: 'FellowLivelihoodProgram',
@@ -1247,6 +1327,8 @@ exports.Prisma.ModelName = {
   AttendanceLog: 'AttendanceLog',
   Leave: 'Leave',
   IncidentResourceNeed: 'IncidentResourceNeed',
+  ReliefDistribution: 'ReliefDistribution',
+  ReliefDistributionItem: 'ReliefDistributionItem',
   FellowTask: 'FellowTask',
   FellowTaskComment: 'FellowTaskComment',
   ResilienceSurvey: 'ResilienceSurvey',

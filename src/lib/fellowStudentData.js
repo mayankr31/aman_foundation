@@ -1,23 +1,14 @@
 import { prisma } from "@/lib/prisma";
-import { sortSubjectOptions } from "@/data/assessmentOptions";
+import { sortSubjectOptions, deriveSession, currentSession, ACADEMIC_YEAR_START_MONTH } from "@/data/assessmentOptions";
+
+export { deriveSession, currentSession, ACADEMIC_YEAR_START_MONTH };
 
 export const PHASES = ["BASELINE", "MIDLINE", "ENDLINE"];
-export const ACADEMIC_YEAR_START_MONTH = 3; // April (0-indexed). Months >= April => new session, Jan-Mar => previous session.
 export const FLN_PASS_RATIO = 0.7; // 70% category marks needed to qualify at that level
 export const READING_FLUENCY_KEY = "READING_FLUENCY";
 export const READING_FLUENCY_TITLE = "Reading Fluency";
 export const SOURCES = ["school", "afterSchool"];
 const UNQUALIFIED_KEY = "__UNQUALIFIED";
-
-export function deriveSession(dateOrString) {
-  const d = new Date(dateOrString);
-  const startYear = d.getMonth() >= ACADEMIC_YEAR_START_MONTH ? d.getFullYear() : d.getFullYear() - 1;
-  return `${startYear}-${startYear + 1}`;
-}
-
-export function currentSession() {
-  return deriveSession(new Date());
-}
 
 function emptyPhases() {
   return { BASELINE: { counts: {}, assessed: 0 }, MIDLINE: { counts: {}, assessed: 0 }, ENDLINE: { counts: {}, assessed: 0 } };
@@ -302,5 +293,121 @@ export async function getFellowStudentData(fellowId, session, source = "school")
     flnCategories: flnCategories.map((c) => ({ id: c.id, name: c.name, order: c.order })),
     sections,
     notes: noteMap,
+  };
+}
+
+// Raw per-form assessment rows for a fellow's students in one academic session.
+// Used by the "Export Assessment Data" bulk export on the Student Data tab.
+export async function getFellowAssessmentExport(fellowId, session, source = "school") {
+  if (!SOURCES.includes(source)) source = "school";
+
+  const fellow = await prisma.Fellow.findUnique({
+    where: { id: fellowId },
+    select: {
+      name: true,
+      students: { select: { id: true } },
+      afterSchoolStudents: { select: { id: true } },
+    },
+  });
+
+  if (!fellow) return null;
+
+  const isAfterSchool = source === "afterSchool";
+  const studentIds = isAfterSchool
+    ? (fellow.afterSchoolStudents || []).map((s) => s.id)
+    : (fellow.students || []).map((s) => s.id);
+
+  const [subjectTemplates, flnCategories, selQuestions] = await Promise.all([
+    prisma.SubjectAssessmentTemplate.findMany({ orderBy: { order: "asc" } }),
+    prisma.FLNCategory.findMany({
+      include: { questions: { orderBy: { order: "asc" } } },
+      orderBy: { order: "asc" },
+    }),
+    isAfterSchool
+      ? Promise.resolve([])
+      : prisma.SELQuestion.findMany({ orderBy: { order: "asc" } }),
+  ]);
+
+  const forms = studentIds.length
+    ? isAfterSchool
+      ? await prisma.AfterSchoolAssessmentForm.findMany({
+          where: { studentId: { in: studentIds } },
+          orderBy: { date: "asc" },
+          include: {
+            student: { select: { name: true, gender: true, dob: true, grade: true } },
+            fellow: { select: { name: true } },
+            centre: { select: { name: true } },
+            subjectResponses: {
+              include: { subjectTemplate: { select: { id: true, name: true, order: true } } },
+            },
+            flnResponses: {
+              include: { flnQuestion: { include: { category: true } } },
+            },
+          },
+        })
+      : await prisma.AssessmentForm.findMany({
+          where: { studentId: { in: studentIds } },
+          orderBy: { date: "asc" },
+          include: {
+            student: { select: { name: true, gender: true, dob: true, grade: true } },
+            fellow: { select: { name: true } },
+            school: { select: { name: true } },
+            subjectResponses: {
+              include: { subjectTemplate: { select: { id: true, name: true, order: true } } },
+            },
+            flnResponses: {
+              include: { flnQuestion: { include: { category: true } } },
+            },
+            selResponses: {
+              include: { selQuestion: { select: { id: true, questionText: true, order: true } } },
+            },
+          },
+        })
+    : [];
+
+  const relevant = session
+    ? forms.filter((f) => deriveSession(f.date) === session)
+    : forms;
+
+  return {
+    fellowName: fellow.name,
+    session: session || null,
+    source,
+    subjectTemplates: subjectTemplates.map((t) => ({ id: t.id, name: t.name, order: t.order })),
+    flnQuestions: flnCategories.flatMap((c) =>
+      (c.questions || []).map((q) => ({
+        id: q.id,
+        questionText: q.questionText,
+        order: q.order,
+        categoryName: c.name,
+        categoryOrder: c.order,
+      }))
+    ),
+    selQuestions: selQuestions.map((q) => ({ id: q.id, questionText: q.questionText, order: q.order })),
+    rows: relevant.map((f) => ({
+      id: f.id,
+      assessmentType: f.assessmentType,
+      date: f.date,
+      isEnrolledInSchool: f.isEnrolledInSchool,
+      reasonNotEnrolled: f.reasonNotEnrolled,
+      studentName: f.student?.name || "",
+      studentGender: f.student?.gender || "",
+      studentDob: f.student?.dob || null,
+      studentGrade: f.student?.grade || "",
+      fellowName: f.fellow?.name || fellow.name,
+      schoolName: isAfterSchool ? f.centre?.name || "" : f.school?.name || "",
+      subjectResponses: (f.subjectResponses || []).map((r) => ({
+        subjectTemplateId: r.subjectTemplateId,
+        selectedOption: r.selectedOption,
+      })),
+      flnResponses: (f.flnResponses || []).map((r) => ({
+        flnQuestionId: r.flnQuestionId,
+        score: r.score,
+      })),
+      selResponses: (f.selResponses || []).map((r) => ({
+        selQuestionId: r.selQuestionId,
+        answer: r.answer,
+      })),
+    })),
   };
 }

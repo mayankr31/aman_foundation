@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function canPmAccessBeneficiary(userId, beneficiaryId) {
   const row = await prisma.beneficiaryLivelihood.findFirst({
@@ -115,10 +118,14 @@ export async function PATCH(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
       user.role.name !== "FELLOW" &&
-      user.role.name !== "PROGRAM_MANAGER"
+      !PROGRAM_ROLES.includes(user.role.name)
     ) {
       return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
@@ -131,7 +138,7 @@ export async function PATCH(req, { params }) {
     }
 
     if (
-      user.role.name === "PROGRAM_MANAGER" &&
+      PROGRAM_ROLES.includes(user.role.name) &&
       !(await canPmAccessBeneficiary(user.id, beneficiaryId))
     ) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
@@ -151,16 +158,22 @@ export async function PATCH(req, { params }) {
           aadhar: body.aadhar,
           rationCard: body.rationCard,
           mobNumber: body.mobNumber,
+          emergencyContact: body.emergencyContact,
+          gender: body.gender,
           resilienceScore: body.resilienceScore !== undefined ? parseInt(body.resilienceScore) : undefined,
           annualIncome: body.annualIncome !== undefined ? parseFloat(body.annualIncome) : null,
           monthlyIncome: body.monthlyIncome !== undefined ? parseFloat(body.monthlyIncome) : null,
           caste: body.caste,
           religion: body.religion,
           address: body.address,
+          state: body.state,
+          district: body.district,
+          block: body.block,
+          ward: body.ward,
+          village: body.village,
           householdSize: body.householdSize !== undefined ? parseInt(body.householdSize) : undefined,
           primaryIncomeType: body.primaryIncomeType,
           tier: body.tier,
-          tierPercent: body.tierPercent !== undefined ? parseInt(body.tierPercent) : undefined,
           bankName: body.bankName,
           bankAccountNo: body.bankAccountNo,
           bankIfsc: body.bankIfsc,
@@ -247,10 +260,14 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
       user.role.name !== "FELLOW" &&
-      user.role.name !== "PROGRAM_MANAGER"
+      !PROGRAM_ROLES.includes(user.role.name)
     ) {
       return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
@@ -263,7 +280,7 @@ export async function DELETE(req, { params }) {
     }
 
     if (
-      user.role.name === "PROGRAM_MANAGER" &&
+      PROGRAM_ROLES.includes(user.role.name) &&
       !(await canPmAccessBeneficiary(user.id, beneficiaryId))
     ) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });

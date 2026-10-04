@@ -2,12 +2,19 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 // GET /api/livelihood/programs/[id]/program-managers
 export async function GET(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const { id: programId } = await params;
     const program = await prisma.livelihoodProgram.findUnique({ where: { id: programId } });
@@ -17,7 +24,7 @@ export async function GET(req, { params }) {
       where: { programId },
       include: {
         user: {
-          select: { id: true, name: true, username: true, email: true, mobile: true, status: true },
+          select: { id: true, name: true, username: true, email: true, mobile: true, status: true, role: { select: { name: true } } },
         },
       },
       orderBy: { createdAt: "asc" },
@@ -37,6 +44,10 @@ export async function POST(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (!isAdmin(user)) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
     }
@@ -49,7 +60,7 @@ export async function POST(req, { params }) {
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
-    if (!target || target.role.name !== "PROGRAM_MANAGER") {
+    if (!target || !PROGRAM_ROLES.includes(target.role.name)) {
       return NextResponse.json({ error: "Program Manager user not found" }, { status: 404 });
     }
 
@@ -73,6 +84,10 @@ export async function DELETE(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (!isAdmin(user)) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

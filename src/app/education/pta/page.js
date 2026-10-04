@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function PtaPrograms() {
   const { token, user } = useAuth();
   const isAdmin = user?.roleName === "ADMIN";
-  const canManageEvents = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+  const canManageEvents = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalType, setModalType] = useState("Program"); // "Program" or "Event"
 

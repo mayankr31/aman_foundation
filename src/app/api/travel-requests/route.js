@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+import { notifyUsers, getAdminUserIds, NOTIFICATION_TYPES } from "@/lib/notifications";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    const isAdminOrManager = user.role.name === "ADMIN" || user.role.name === "PROGRAM_MANAGER";
+    if (!(await checkPermission(user, "dashboard", "travel", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
+
+    const isAdminOrManager = user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
 
     const where = isAdminOrManager ? {} : { userId: user.id };
 
@@ -37,7 +45,11 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "FELLOW" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "travel", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
+
+    if (user.role.name !== "FELLOW" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Only fellows and program managers can create travel requests" }, { status: 403 });
     }
 
@@ -63,6 +75,15 @@ export async function POST(req) {
           select: { id: true, name: true, email: true }
         }
       }
+    });
+
+    const admins = await getAdminUserIds();
+    await notifyUsers(admins, {
+      type: NOTIFICATION_TYPES.TRAVEL_REQUESTED,
+      title: "New Travel Request",
+      message: `${user.name || request.user.name || "A staff member"} submitted a travel request to ${destination} for approval.`,
+      link: `/travel/manage`,
+      actorId: user.id,
     });
 
     return NextResponse.json({ success: true, data: request }, { status: 201 });

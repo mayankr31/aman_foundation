@@ -344,7 +344,7 @@ export default function RegisterPage() {
                     <option value="" disabled>Select your role</option>
                     {roles.map(r => (
                       <option key={r.id} value={r.id}>
-                        {r.name.replace('_', ' ')}
+                        {r.name.replaceAll('_', ' ')}
                       </option>
                     ))}
                   </select>

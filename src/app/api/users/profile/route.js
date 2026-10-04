@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { getEffectivePermissions } from "@/lib/permissions";
 
 export async function GET(req) {
   try {
@@ -36,7 +37,8 @@ export async function GET(req) {
     }
 
     const { password: _pw, ...safeUser } = fullUser;
-    return NextResponse.json({ success: true, data: safeUser });
+    const permissions = await getEffectivePermissions(fullUser);
+    return NextResponse.json({ success: true, data: { ...safeUser, permissions } });
   } catch (error) {
     console.error("Fetch profile error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -49,7 +51,11 @@ export async function PATCH(req) {
     if (error) return error;
 
     const body = await req.json();
-    const { name, email, mobile, address, gender, dob, avatar } = body;
+    const {
+      name, email, mobile, address, gender, dob, avatar,
+      maritalStatus, bloodGroup, emergencyContactName, emergencyContactPhone,
+      aadharNumber, panCard, bankName, bankAccountNo, bankIfsc, dateOfJoining,
+    } = body;
 
     // Update user details
     const updatedUser = await prisma.$transaction(async (tx) => {
@@ -65,6 +71,16 @@ export async function PATCH(req) {
           gender: gender !== undefined ? gender : undefined,
           dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,
           avatar: avatar !== undefined ? avatar : undefined,
+          maritalStatus: maritalStatus !== undefined ? maritalStatus : undefined,
+          bloodGroup: bloodGroup !== undefined ? bloodGroup : undefined,
+          emergencyContactName: emergencyContactName !== undefined ? emergencyContactName : undefined,
+          emergencyContactPhone: emergencyContactPhone !== undefined ? emergencyContactPhone : undefined,
+          aadharNumber: aadharNumber !== undefined ? aadharNumber : undefined,
+          panCard: panCard !== undefined ? panCard : undefined,
+          bankName: bankName !== undefined ? bankName : undefined,
+          bankAccountNo: bankAccountNo !== undefined ? bankAccountNo : undefined,
+          bankIfsc: bankIfsc !== undefined ? bankIfsc : undefined,
+          dateOfJoining: dateOfJoining !== undefined ? (dateOfJoining ? new Date(dateOfJoining) : null) : undefined,
         },
         include: {
           role: true,
@@ -81,7 +97,7 @@ export async function PATCH(req) {
             phone: mobile !== undefined ? mobile : undefined,
             address: address !== undefined ? address : undefined,
             gender: gender !== undefined ? gender : undefined,
-            dob: dob ? new Date(dob) : null,
+            dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,
             avatar: avatar !== undefined ? avatar : undefined,
           }
         });

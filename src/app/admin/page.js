@@ -363,7 +363,7 @@ export default function AdminPage() {
                             <td className="py-4 px-6 text-slate-500">{item.mobile || '—'}</td>
                             <td className="py-4 px-6 font-semibold dark:text-gray-300 text-slate-700">
                               <span className="px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px]">
-                                {item.role?.name?.replace('_', ' ')}
+                                {item.role?.name?.replaceAll('_', ' ')}
                               </span>
                             </td>
                             <td className="py-4 px-6">
@@ -505,7 +505,7 @@ export default function AdminPage() {
                         </span>
                       </div>
                       <h3 className="text-base font-extrabold dark:text-white text-slate-800">
-                        {roleItem.name.replace('_', ' ')}
+                        {roleItem.name.replaceAll('_', ' ')}
                       </h3>
                       <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
                         {roleItem.description || 'Provides default capability profile inside system apps.'}

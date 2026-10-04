@@ -2,16 +2,23 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isLivelihoodProgramManaged, getFellowIdByUserId, isLivelihoodProgramAssignedToFellow } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     const { id } = await params;
 
     let allowed = isAdmin(user);
-    if (!allowed && user.role.name === "PROGRAM_MANAGER") {
+    if (!allowed && PROGRAM_ROLES.includes(user.role.name)) {
       allowed = await isLivelihoodProgramManaged(user.id, id);
     }
     if (!allowed && user.role.name === "FELLOW") {
@@ -31,7 +38,7 @@ export async function GET(req, { params }) {
         programManagers: {
           include: {
             user: {
-              select: { id: true, name: true, username: true, email: true, mobile: true },
+              select: { id: true, name: true, username: true, email: true, mobile: true, role: { select: { name: true } } },
             },
           },
           orderBy: { createdAt: "asc" },
@@ -81,9 +88,13 @@ export async function PATCH(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
-      user.role.name !== "PROGRAM_MANAGER" &&
+      !PROGRAM_ROLES.includes(user.role.name) &&
       user.role.name !== "FELLOW"
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -91,7 +102,7 @@ export async function PATCH(req, { params }) {
 
     const { id } = await params;
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isLivelihoodProgramManaged(user.id, id))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
       return NextResponse.json(
         { error: "Forbidden: You are not assigned to this program" },
         { status: 403 }
@@ -132,9 +143,13 @@ export async function DELETE(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
-      user.role.name !== "PROGRAM_MANAGER"
+      !PROGRAM_ROLES.includes(user.role.name)
     ) {
       return NextResponse.json(
         { error: "Forbidden: Admin or Program Manager access only" },
@@ -144,7 +159,7 @@ export async function DELETE(req, { params }) {
 
     const { id } = await params;
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isLivelihoodProgramManaged(user.id, id))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
       return NextResponse.json(
         { error: "Forbidden: You are not assigned to this program" },
         { status: 403 }

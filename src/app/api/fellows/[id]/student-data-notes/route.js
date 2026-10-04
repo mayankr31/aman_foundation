@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { PHASES, READING_FLUENCY_KEY, SOURCES } from "@/lib/fellowStudentData";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -19,6 +22,10 @@ export async function PUT(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     const { id } = await context.params;
     const fellowId = await resolveFellowId(id);
 
@@ -28,7 +35,7 @@ export async function PUT(req, context) {
 
     const fellow = await prisma.fellow.findUnique({ where: { id: fellowId }, select: { userId: true } });
     const isFellowSelf = fellow?.userId === user.id;
-    const isManager = ["ADMIN", "PROGRAM_MANAGER"].includes(user.role.name);
+    const isManager = ["ADMIN", ...PROGRAM_ROLES].includes(user.role.name);
     if (!isFellowSelf && !isManager) {
       return NextResponse.json({ error: "Forbidden: You cannot edit these notes" }, { status: 403 });
     }

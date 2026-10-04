@@ -16,6 +16,8 @@ import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
 export default function FellowProfileDetail() {
@@ -462,7 +464,7 @@ function FellowProfileDetailContent() {
                         >
                           {sheet.status}
                         </span>
-                        {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                        {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -496,7 +498,7 @@ function FellowProfileDetailContent() {
               fellowName={fellow.name}
               token={token}
               source="school"
-              canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
+              canEditNotes={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
             />
           )}
 
@@ -506,7 +508,7 @@ function FellowProfileDetailContent() {
               fellowName={fellow.name}
               token={token}
               source="afterSchool"
-              canEditNotes={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER" || user?.roleName === "FELLOW"}
+              canEditNotes={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
             />
           )}
 
@@ -514,7 +516,7 @@ function FellowProfileDetailContent() {
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
-                {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                   <button
                     onClick={() => setShowAddCoachingModal(true)}
                     className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
@@ -539,7 +541,7 @@ function FellowProfileDetailContent() {
                             {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                           </p>
                         </div>
-                        {(user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER") && (
+                        {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                           <button
                             onClick={() => handleDeleteCoachingRecord(record.id)}
                             className="text-on-surface-variant hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
@@ -684,7 +686,7 @@ function FellowProfileDetailContent() {
             <IndividualFeedbackView
               fellowId={fellow.id}
               token={token}
-              canManage={user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER"}
+              canManage={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)}
             />
           )}
 

@@ -2,15 +2,22 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedTeamUserIds } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "employees", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    }
+
     const isAdmin = user.role.name === "ADMIN";
     const isHr = user.role.name === "HR";
-    const isPm = user.role.name === "PROGRAM_MANAGER";
+    const isPm = PROGRAM_ROLES.includes(user.role.name);
 
     if (!isAdmin && !isHr && !isPm) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
@@ -18,6 +25,10 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const roleFilter = searchParams.get("role");
+    const rolesFilter = searchParams.get("roles");
+    const rolesList = rolesFilter
+      ? rolesFilter.split(",").map((r) => r.trim()).filter(Boolean)
+      : null;
 
     // Program Managers only see their team (fellows of assigned schools/centres).
     let scopeWhere;
@@ -26,9 +37,15 @@ export async function GET(req) {
       scopeWhere = { id: { in: team } };
     }
 
+    const roleWhere = rolesList?.length
+      ? { role: { name: { in: rolesList } } }
+      : roleFilter
+      ? { role: { name: roleFilter } }
+      : null;
+
     const where = {
       ...(scopeWhere || {}),
-      ...(roleFilter ? { role: { name: roleFilter } } : {}),
+      ...(roleWhere || {}),
     };
 
     const users = await prisma.user.findMany({
@@ -41,6 +58,7 @@ export async function GET(req) {
         mobile: true,
         status: true,
         department: true,
+        avatar: true,
         role: {
           select: {
             id: true,

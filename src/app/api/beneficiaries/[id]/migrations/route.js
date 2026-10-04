@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -33,6 +34,10 @@ export async function GET(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
@@ -56,6 +61,10 @@ export async function POST(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
@@ -106,6 +115,10 @@ export async function PUT(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
@@ -178,6 +191,10 @@ export async function DELETE(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

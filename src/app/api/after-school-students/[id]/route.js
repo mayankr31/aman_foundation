@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedCentreIds, getFellowIdByUserId } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -44,6 +47,10 @@ export async function GET(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     const { id } = await context.params;
     const studentId = await resolveStudentId(id);
 
@@ -56,7 +63,7 @@ export async function GET(req, context) {
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
       }
-    } else if (user.role.name === "PROGRAM_MANAGER") {
+    } else if (PROGRAM_ROLES.includes(user.role.name)) {
       const ok = await canPmAccess(studentId, user.id);
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
@@ -121,10 +128,14 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
       user.role.name !== "FELLOW" &&
-      user.role.name !== "PROGRAM_MANAGER"
+      !PROGRAM_ROLES.includes(user.role.name)
     ) {
       return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
@@ -141,7 +152,7 @@ export async function PATCH(req, context) {
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
       }
-    } else if (user.role.name === "PROGRAM_MANAGER") {
+    } else if (PROGRAM_ROLES.includes(user.role.name)) {
       const ok = await canPmAccess(studentId, user.id);
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
@@ -150,7 +161,7 @@ export async function PATCH(req, context) {
 
     const body = await req.json();
 
-    if (user.role.name === "PROGRAM_MANAGER" && body.centreId) {
+    if (PROGRAM_ROLES.includes(user.role.name) && body.centreId) {
       const managed = await getManagedCentreIds(user.id);
       if (!managed.includes(body.centreId)) {
         return NextResponse.json({ error: "Forbidden: You can only move students within your assigned centres" }, { status: 403 });
@@ -205,6 +216,10 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

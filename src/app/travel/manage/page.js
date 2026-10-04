@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function TravelManagePage() {
   const { token, user, isInitializing } = useAuth();
   const router = useRouter();
@@ -20,7 +22,7 @@ export default function TravelManagePage() {
   };
 
   useEffect(() => {
-    if (!isInitializing && user && user.roleName !== "ADMIN" && user.roleName !== "PROGRAM_MANAGER") {
+    if (!isInitializing && user && user.roleName !== "ADMIN" && !PROGRAM_ROLES.includes(user.roleName)) {
       router.replace("/");
       return;
     }

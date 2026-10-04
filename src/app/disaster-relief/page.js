@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useAuth } from "@/lib/useAuth";
 
 export default function DisasterRelief() {
@@ -18,6 +18,8 @@ export default function DisasterRelief() {
   const [providers, setProviders] = useState([]);
   const [resourceNeeds, setResourceNeeds] = useState([]);
   const [ledgerLogs, setLedgerLogs] = useState([]);
+  const [distributions, setDistributions] = useState([]);
+  const [expandedDistribution, setExpandedDistribution] = useState(null);
 
   // Transaction form states
   const [showLedgerModal, setShowLedgerModal] = useState(false);
@@ -40,6 +42,13 @@ export default function DisasterRelief() {
   const [providerForm, setProviderForm] = useState({
     name: "", capabilityType: "", contactDetails: "", status: "Active"
   });
+
+  const emptyDistributionForm = {
+    incidentId: "", name: "", aadhar: "", mobNumber: "", address: "", familySize: "1", notes: "",
+    items: [{ resourceNeedId: "", quantity: "" }]
+  };
+  const [showDistributionModal, setShowDistributionModal] = useState(false);
+  const [distributionForm, setDistributionForm] = useState(emptyDistributionForm);
 
   const loadData = async () => {
     try {
@@ -70,14 +79,24 @@ export default function DisasterRelief() {
       if (jsonNeeds.success) {
         setResourceNeeds(jsonNeeds.data.map(n => ({
           id: n.id,
+          incidentId: n.incidentId,
           resourceItemId: n.resourceItemId,
           calamity: n.incident?.name || "Unknown",
           item: n.resourceItem?.itemName || "Unknown",
           unit: n.resourceItem?.unit || "units",
           needed: n.quantityNeeded,
           received: n.quantityReceived,
+          distributed: n.quantityDistributed || 0,
+          available: n.resourceItem?.availableStock ?? 0,
           transactions: n.transactionsCount
         })));
+      }
+
+      // Load relief distributions (per-person/family aid given)
+      const resDistributions = await fetch("/api/disaster-relief/distributions", { headers });
+      const jsonDistributions = await resDistributions.json();
+      if (jsonDistributions.success) {
+        setDistributions(jsonDistributions.data);
       }
 
       // Load ledger logs
@@ -221,6 +240,86 @@ export default function DisasterRelief() {
     }
   };
 
+  const updateDistributionItem = (idx, field, value) => {
+    setDistributionForm((f) => ({
+      ...f,
+      items: f.items.map((it, i) => (i === idx ? { ...it, [field]: value } : it))
+    }));
+  };
+
+  const addDistributionItem = () => {
+    setDistributionForm((f) => ({ ...f, items: [...f.items, { resourceNeedId: "", quantity: "" }] }));
+  };
+
+  const removeDistributionItem = (idx) => {
+    setDistributionForm((f) => ({
+      ...f,
+      items: f.items.length > 1 ? f.items.filter((_, i) => i !== idx) : f.items
+    }));
+  };
+
+  const handleAddDistribution = async (e) => {
+    e.preventDefault();
+    const validItems = distributionForm.items.filter((it) => it.resourceNeedId && it.quantity);
+    if (!distributionForm.incidentId || !distributionForm.name || validItems.length === 0) {
+      alert("Please select a calamity, enter the recipient name and add at least one aid item.");
+      return;
+    }
+
+    const itemsPayload = validItems.map((it) => {
+      const need = resourceNeeds.find((n) => n.id === it.resourceNeedId);
+      return {
+        incidentResourceNeedId: need.id,
+        resourceItemId: need.resourceItemId,
+        itemName: need.item,
+        unit: need.unit,
+        quantity: it.quantity
+      };
+    });
+
+    try {
+      const res = await fetch("/api/disaster-relief/distributions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ ...distributionForm, items: itemsPayload })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setShowDistributionModal(false);
+        setDistributionForm(emptyDistributionForm);
+        loadData();
+      } else {
+        alert(json.error || "Failed to log distribution");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error logging distribution");
+    }
+  };
+
+  const handleDeleteDistribution = async (id) => {
+    if (!confirm("Delete this distribution? Stock will be restored.")) return;
+    try {
+      const res = await fetch(`/api/disaster-relief/distributions/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (json.success) {
+        setExpandedDistribution(null);
+        loadData();
+      } else {
+        alert(json.error || "Failed to delete distribution");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting distribution");
+    }
+  };
+
   return (
     <div className="flex-grow flex flex-col overflow-y-auto">
       {/* Header */}
@@ -325,7 +424,7 @@ export default function DisasterRelief() {
 
             {/* Registries Segment Tabs */}
             <div className="flex border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
-              {["Help Providers", "Resource Inventory"].map((tab) => {
+              {["Help Providers", "Resource Inventory", "Relief Distributions"].map((tab) => {
                 const isActive = activeTab === tab;
                 return (
                   <button
@@ -417,6 +516,8 @@ export default function DisasterRelief() {
                           <th className="py-3 px-4">Associated Calamity</th>
                           <th className="py-3 px-4 text-center">Stock Needed</th>
                           <th className="py-3 px-4 text-center">Stock Received</th>
+                          <th className="py-3 px-4 text-center">Distributed</th>
+                          <th className="py-3 px-4 text-center">Available Stock</th>
                           <th className="py-3 px-4 text-center">Fulfillment</th>
                           <th className="py-3 px-4 text-right">Transactions</th>
                         </tr>
@@ -424,7 +525,7 @@ export default function DisasterRelief() {
                       <tbody>
                         {resourceNeeds.length === 0 ? (
                           <tr>
-                            <td colSpan="6" className="py-8 text-center text-on-surface-variant">No resources currently needed.</td>
+                            <td colSpan="8" className="py-8 text-center text-on-surface-variant">No resources currently needed.</td>
                           </tr>
                         ) : (
                           resourceNeeds.map((item) => {
@@ -435,6 +536,8 @@ export default function DisasterRelief() {
                                 <td className="py-4 px-4 text-on-surface-variant text-xs">{item.calamity}</td>
                                 <td className="py-4 px-4 text-center text-error font-semibold">{item.needed} {item.unit}</td>
                                 <td className="py-4 px-4 text-center text-primary font-semibold">{item.received} {item.unit}</td>
+                                <td className="py-4 px-4 text-center text-secondary font-semibold">{item.distributed} {item.unit}</td>
+                                <td className="py-4 px-4 text-center font-semibold text-on-surface">{item.available} {item.unit}</td>
                                 <td className="py-4 px-4 text-center">
                                   <div className="flex items-center justify-center gap-2">
                                     <div className="w-16 h-2 bg-surface-container rounded-full overflow-hidden">
@@ -455,6 +558,94 @@ export default function DisasterRelief() {
                   </div>
                 </div>
               )}
+
+              {activeTab === "Relief Distributions" && (
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-headline font-bold text-xl text-on-surface">People / Family Relief Transactions</h3>
+                    <button
+                      onClick={() => { setDistributionForm(emptyDistributionForm); setShowDistributionModal(true); }}
+                      className="bg-gradient-to-br from-secondary to-secondary-container text-on-secondary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_2px_8px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2 cursor-pointer border-none"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">volunteer_activism</span>
+                      <span className="whitespace-nowrap">Log Distribution</span>
+                    </button>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse font-sans text-sm whitespace-nowrap">
+                      <thead>
+                        <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
+                          <th className="py-3 px-4">Recipient</th>
+                          <th className="py-3 px-4">Aadhar</th>
+                          <th className="py-3 px-4">Mobile</th>
+                          <th className="py-3 px-4">Address</th>
+                          <th className="py-3 px-4 text-center">Family</th>
+                          <th className="py-3 px-4">Calamity</th>
+                          <th className="py-3 px-4 text-center">Items</th>
+                          <th className="py-3 px-4 text-right">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {distributions.length === 0 ? (
+                          <tr>
+                            <td colSpan="8" className="py-8 text-center text-on-surface-variant">No relief distributions recorded.</td>
+                          </tr>
+                        ) : (
+                          distributions.map((d) => (
+                            <Fragment key={d.id}>
+                              <tr
+                                onClick={() => setExpandedDistribution(expandedDistribution === d.id ? null : d.id)}
+                                className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
+                              >
+                                <td className="py-4 px-4 font-bold text-on-surface">
+                                  <span className="inline-flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[16px] text-slate-400">{expandedDistribution === d.id ? "expand_less" : "expand_more"}</span>
+                                    {d.name}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-4 text-xs font-mono text-slate-500">{d.aadhar || "—"}</td>
+                                <td className="py-4 px-4 text-xs font-mono text-slate-500">{d.mobNumber || "—"}</td>
+                                <td className="py-4 px-4 text-xs text-on-surface-variant max-w-[180px] truncate">{d.address || "—"}</td>
+                                <td className="py-4 px-4 text-center text-on-surface-variant">{d.familySize}</td>
+                                <td className="py-4 px-4 text-xs text-on-surface-variant">{d.incident?.name || "—"}</td>
+                                <td className="py-4 px-4 text-center">
+                                  <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold">{d.items?.length || 0}</span>
+                                </td>
+                                <td className="py-4 px-4 text-right text-xs text-on-surface-variant">{new Date(d.distributedAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}</td>
+                              </tr>
+                              {expandedDistribution === d.id && (
+                                <tr className="border-b border-surface-container bg-surface-container-low/30">
+                                  <td colSpan="8" className="px-6 py-4">
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Aid Given</p>
+                                    <div className="space-y-2 mb-4">
+                                      {d.items?.map((it) => (
+                                        <div key={it.id} className="flex justify-between items-center text-sm bg-surface-container-lowest rounded-lg px-4 py-2 border border-outline-variant/10">
+                                          <span className="font-semibold text-on-surface">{it.itemName}</span>
+                                          <span className="text-on-surface-variant">{it.quantity} {it.unit}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {d.notes && <p className="text-xs text-on-surface-variant mb-3">Notes: {d.notes}</p>}
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-[10px] text-slate-400 font-mono">Logged by {d.handledByUser?.name || "System"}</span>
+                                      <button
+                                        onClick={(e) => { e.stopPropagation(); handleDeleteDistribution(d.id); }}
+                                        className="text-error text-xs font-semibold hover:underline cursor-pointer bg-transparent border-none"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                            </Fragment>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -463,7 +654,7 @@ export default function DisasterRelief() {
             
             {/* Distribution log */}
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <h3 className="font-headline font-bold text-base text-on-surface mb-2">Relief Distribution Logs</h3>
+              <h3 className="font-headline font-bold text-base text-on-surface mb-2">Supply Ledger Logs</h3>
               <p className="text-xs text-on-surface-variant mb-6 font-sans">Synced Realtime</p>
               <div className="relative border-l border-surface-container ml-3 space-y-6 font-sans text-sm font-medium max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
                 {ledgerLogs.length === 0 ? (
@@ -783,6 +974,136 @@ export default function DisasterRelief() {
                   className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Add Provider
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Log Relief Distribution Modal */}
+      {showDistributionModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Log Relief Distribution</h3>
+              <button
+                onClick={() => setShowDistributionModal(false)}
+                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleAddDistribution} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Associated Calamity <span className="text-error">*</span></label>
+                <select
+                  required
+                  value={distributionForm.incidentId}
+                  onChange={(e) => setDistributionForm({ ...distributionForm, incidentId: e.target.value, items: [{ resourceNeedId: "", quantity: "" }] })}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                >
+                  <option value="">-- Select Calamity --</option>
+                  {incidentsList.map((inc) => (
+                    <option key={inc.id} value={inc.id}>{inc.name} ({inc.location})</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1 col-span-2">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Recipient Name <span className="text-error">*</span></label>
+                  <input required type="text" placeholder="e.g. Ramesh Das" value={distributionForm.name} onChange={(e) => setDistributionForm({ ...distributionForm, name: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aadhar Number</label>
+                  <input type="text" placeholder="XXXX XXXX XXXX" value={distributionForm.aadhar} onChange={(e) => setDistributionForm({ ...distributionForm, aadhar: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Mobile Number</label>
+                  <input type="text" placeholder="+91 XXXXX XXXXX" value={distributionForm.mobNumber} onChange={(e) => setDistributionForm({ ...distributionForm, mobNumber: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Family Size</label>
+                  <input type="number" min="1" placeholder="1" value={distributionForm.familySize} onChange={(e) => setDistributionForm({ ...distributionForm, familySize: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Address</label>
+                  <input type="text" placeholder="Village / Ward" value={distributionForm.address} onChange={(e) => setDistributionForm({ ...distributionForm, address: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aid Items Given <span className="text-error">*</span></label>
+                  <button
+                    type="button"
+                    onClick={addDistributionItem}
+                    disabled={!distributionForm.incidentId}
+                    className="text-primary text-xs font-semibold flex items-center gap-1 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed bg-transparent border-none"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">add</span> Add Item
+                  </button>
+                </div>
+                {!distributionForm.incidentId && (
+                  <p className="text-xs text-on-surface-variant">Select a calamity first to list its resource needs.</p>
+                )}
+                {distributionForm.items.map((it, idx) => {
+                  const needOptions = resourceNeeds.filter((n) => n.incidentId === distributionForm.incidentId);
+                  const selected = needOptions.find((n) => n.id === it.resourceNeedId);
+                  return (
+                    <div key={idx} className="flex gap-2 items-start">
+                      <select
+                        value={it.resourceNeedId}
+                        onChange={(e) => updateDistributionItem(idx, "resourceNeedId", e.target.value)}
+                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                      >
+                        <option value="">-- Select Item --</option>
+                        {needOptions.map((n) => (
+                          <option key={n.id} value={n.id}>{n.item} (available: {n.available} {n.unit})</option>
+                        ))}
+                      </select>
+                      <input
+                        type="number"
+                        step="any"
+                        min="0"
+                        placeholder="Qty"
+                        value={it.quantity}
+                        onChange={(e) => updateDistributionItem(idx, "quantity", e.target.value)}
+                        className="w-24 px-3 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                      />
+                      <span className="w-12 py-2 text-xs text-on-surface-variant">{selected?.unit || "unit"}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeDistributionItem(idx)}
+                        disabled={distributionForm.items.length === 1}
+                        className="p-2 text-error hover:bg-error-container/20 rounded-full cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-transparent border-none"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Notes</label>
+                <textarea rows="2" placeholder="e.g. Distributed at relief camp" value={distributionForm.notes} onChange={(e) => setDistributionForm({ ...distributionForm, notes: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent resize-none text-on-surface" />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDistributionModal(false)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary/95 transition-colors cursor-pointer border-none"
+                >
+                  Log Distribution
                 </button>
               </div>
             </form>

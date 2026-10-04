@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdminOrPm, isFellowManaged } from "@/lib/scope";
+import { notifyUsers, getFellowUserId, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -25,8 +29,23 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
+    const fellow = await prisma.fellow.findUnique({
+      where: { id: fellowId },
+      select: { userId: true },
+    });
+    if (!fellow) {
+      return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
+    }
+
+    const isOwner = user.id === fellow.userId;
+    if (!isOwner) {
+      if (!(await checkPermission(user, "dashboard", "fellow-observations", "READ"))) {
+        return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+      }
+
+      if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
+      }
     }
 
     const records = await prisma.individualFeedback.findMany({
@@ -51,6 +70,10 @@ export async function POST(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
+
     if (!isAdminOrPm(user)) {
       return NextResponse.json({ error: "Forbidden: Only managers can create feedback" }, { status: 403 });
     }
@@ -61,7 +84,7 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isFellowManaged(user.id, fellowId))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
     }
 
@@ -105,6 +128,15 @@ export async function POST(req, context) {
           select: { id: true, name: true, email: true }
         }
       }
+    });
+
+    const fellowUserId = await getFellowUserId(fellowId);
+    await notifyUsers([fellowUserId], {
+      type: NOTIFICATION_TYPES.FEEDBACK_ADDED,
+      title: "Individual Feedback Added",
+      message: `New individual feedback (${record.subject}) has been added to your profile.`,
+      link: `/profile?tab=individual-feedback`,
+      actorId: user.id,
     });
 
     return NextResponse.json({ success: true, data: record }, { status: 201 });

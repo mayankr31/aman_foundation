@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
     <div className="flex flex-col gap-1">
@@ -122,7 +124,7 @@ export default function SchoolProfileDetail() {
       fetch("/api/programs", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllPrograms(j.data); });
     }
     if (modal === "managers") {
-      fetch("/api/users?role=PROGRAM_MANAGER", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllProgramManagers(j.data); });
+      fetch("/api/users?roles=" + PROGRAM_ROLES.join(","), { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllProgramManagers(j.data); });
     }
   }, [modal, token]);
 
@@ -227,15 +229,15 @@ export default function SchoolProfileDetail() {
   async function handleAssignManager(userId) {
     const res = await fetch(`/api/schools/${id}/program-managers`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
-    if (!json.success) toast.error(json.error || "Failed to assign Program Manager");
+    if (!json.success) toast.error(json.error || "Failed to assign staff");
     await loadSchool();
   }
 
   async function handleRemoveManager(userId) {
-    if (!confirm("Remove this Program Manager from the school?")) return;
+    if (!confirm("Remove this staff member from the school?")) return;
     const res = await fetch(`/api/schools/${id}/program-managers`, { method: "DELETE", headers: authHeaders(), body: JSON.stringify({ userId }) });
     const json = await res.json();
-    if (!json.success) toast.error(json.error || "Failed to remove Program Manager");
+    if (!json.success) toast.error(json.error || "Failed to remove staff");
     await loadSchool();
   }
 
@@ -698,12 +700,12 @@ export default function SchoolProfileDetail() {
             )}
           </div>
 
-          {/* Program Managers */}
+          {/* Assigned Staff */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">supervisor_account</span>
-                Program Managers ({assignedManagers.length})
+                Assigned Staff ({assignedManagers.length})
               </h3>
               {isAdmin && (
                 <button onClick={() => { setModal("managers"); setSearchQ(""); }}
@@ -713,7 +715,7 @@ export default function SchoolProfileDetail() {
               )}
             </div>
             {assignedManagers.length === 0 ? (
-              <p className="text-sm text-on-surface-variant text-center py-4">No Program Managers assigned yet.</p>
+              <p className="text-sm text-on-surface-variant text-center py-4">No staff assigned yet.</p>
             ) : (
               <div className="space-y-3">
                 {assignedManagers.map(pm => (
@@ -725,6 +727,11 @@ export default function SchoolProfileDetail() {
                       <div>
                         <p className="font-semibold text-on-surface text-sm">{pm.user?.name || "—"}</p>
                         <p className="text-xs text-on-surface-variant">{pm.user?.email || ""}</p>
+                        {pm.user?.role?.name && (
+                          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
+                            {pm.user.role.name.replaceAll("_", " ")}
+                          </span>
+                        )}
                       </div>
                     </div>
                     {isAdmin && (
@@ -1127,15 +1134,15 @@ export default function SchoolProfileDetail() {
         </Modal>
       )}
 
-      {/* Manage Program Managers */}
+      {/* Manage Assigned Staff */}
       {modal === "managers" && (
-        <Modal title="Manage Program Managers" onClose={() => setModal(null)}>
-          <p className="text-sm text-on-surface-variant mb-4">Assign or remove Program Managers for this school. Program Managers can manage the fellows and students of this school.</p>
-          <input type="text" placeholder="Search program managers..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+        <Modal title="Manage Assigned Staff" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">Assign or remove staff for this school. Assigned staff can manage the fellows and students of this school.</p>
+          <input type="text" placeholder="Search staff..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
             className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {filteredManagers.length === 0 && (
-              <p className="text-sm text-on-surface-variant text-center py-4">No Program Manager accounts found.</p>
+              <p className="text-sm text-on-surface-variant text-center py-4">No staff accounts found.</p>
             )}
             {filteredManagers.map(m => {
               const isAssigned = schoolManagerIds.has(m.id);
@@ -1144,6 +1151,11 @@ export default function SchoolProfileDetail() {
                   <div>
                     <p className="font-semibold text-on-surface text-sm">{m.name}</p>
                     <p className="text-xs text-on-surface-variant">{m.email}</p>
+                    {m.role?.name && (
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
+                        {m.role.name.replaceAll("_", " ")}
+                      </span>
+                    )}
                   </div>
                   <button
                     onClick={() => isAssigned ? handleRemoveManager(m.id) : handleAssignManager(m.id)}

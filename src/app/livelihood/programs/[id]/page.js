@@ -4,12 +4,15 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
-import { getTypeConfig } from "@/lib/livelihoodTypes";
+import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
   const { token, user } = useAuth();
+  const { getTypeConfig } = useLivelihoodTypes(token);
   const isAdmin = user?.roleName === "ADMIN";
 
   const [program, setProgram] = useState(null);
@@ -178,7 +181,7 @@ export default function ProgramDetail() {
     setSearchManagerQ("");
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch("/api/users?role=PROGRAM_MANAGER", { headers });
+      const res = await fetch("/api/users?roles=" + PROGRAM_ROLES.join(","), { headers });
       const json = await res.json();
       if (json.success) setAllProgramManagers(json.data);
     } catch (err) {
@@ -191,7 +194,7 @@ export default function ProgramDetail() {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "POST", headers, body: JSON.stringify({ userId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to assign Program Manager");
+      if (!json.success) alert(json.error || "Failed to assign staff");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Assign program manager error:", err);
@@ -199,12 +202,12 @@ export default function ProgramDetail() {
   };
 
   const handleRemoveManager = async (userId) => {
-    if (!confirm("Remove this Program Manager from the program?")) return;
+    if (!confirm("Remove this staff member from the program?")) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
       const res = await fetch(`/api/livelihood/programs/${id}/program-managers`, { method: "DELETE", headers, body: JSON.stringify({ userId }) });
       const json = await res.json();
-      if (!json.success) alert(json.error || "Failed to remove Program Manager");
+      if (!json.success) alert(json.error || "Failed to remove staff");
       setRefreshTrigger((p) => p + 1);
     } catch (err) {
       console.error("Remove program manager error:", err);
@@ -481,12 +484,12 @@ export default function ProgramDetail() {
         {program.totalTarget && <span>Target: <strong className="text-on-surface">{program.totalTarget} {config?.programTargetUnit || "units"}</strong></span>}
       </div>
 
-      {/* Program Managers */}
+      {/* Assigned Staff */}
       <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">supervisor_account</span>
-            Program Managers ({assignedManagers.length})
+            Assigned Staff ({assignedManagers.length})
           </h3>
           {isAdmin && (
             <button
@@ -498,7 +501,7 @@ export default function ProgramDetail() {
           )}
         </div>
         {assignedManagers.length === 0 ? (
-          <p className="text-sm text-slate-400 italic">No Program Managers assigned to this program yet.</p>
+          <p className="text-sm text-slate-400 italic">No staff assigned to this program yet.</p>
         ) : (
           <div className="flex flex-wrap gap-3">
             {assignedManagers.map((pm) => (
@@ -509,6 +512,11 @@ export default function ProgramDetail() {
                 <div className="leading-tight">
                   <p className="text-sm font-semibold text-on-surface">{pm.user?.name || "—"}</p>
                   <p className="text-[11px] text-slate-400">{pm.user?.email || ""}</p>
+                  {pm.user?.role?.name && (
+                    <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-semibold uppercase tracking-wide">
+                      {pm.user.role.name.replaceAll("_", " ")}
+                    </span>
+                  )}
                 </div>
                 {isAdmin && (
                   <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
@@ -583,7 +591,7 @@ export default function ProgramDetail() {
               {assignments.length === 0 ? (
                 <tr>
                   <td colSpan={4 + (config?.tableColumns?.length || 0)} className="px-6 py-12 text-center text-sm text-slate-400 italic">
-                    No beneficiaries enrolled yet. Click "Add Beneficiary" to get started.
+                    No beneficiaries enrolled yet. Click &ldquo;Add Beneficiary&rdquo; to get started.
                   </td>
                 </tr>
               ) : (
@@ -892,23 +900,23 @@ export default function ProgramDetail() {
         </div>
       )}
 
-      {/* Manage Program Managers */}
+      {/* Manage Assigned Staff */}
       {showManagerModal && (
         <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="flex justify-between items-center p-6 border-b border-outline-variant/20 sticky top-0 bg-surface-container-lowest z-10">
-              <h3 className="text-lg font-bold text-on-surface">Manage Program Managers</h3>
+              <h3 className="text-lg font-bold text-on-surface">Manage Assigned Staff</h3>
               <button onClick={() => setShowManagerModal(false)} className="p-1.5 hover:bg-surface-container rounded-full transition-colors cursor-pointer border-none bg-transparent">
                 <span className="material-symbols-outlined text-on-surface-variant">close</span>
               </button>
             </div>
             <div className="p-6">
-              <p className="text-sm text-on-surface-variant mb-4">Assign or remove Program Managers for this program. Program Managers can manage the beneficiaries enrolled in it.</p>
-              <input type="text" placeholder="Search program managers..." value={searchManagerQ} onChange={(e) => setSearchManagerQ(e.target.value)}
+              <p className="text-sm text-on-surface-variant mb-4">Assign or remove staff for this program. Assigned staff can manage the beneficiaries enrolled in it.</p>
+              <input type="text" placeholder="Search staff..." value={searchManagerQ} onChange={(e) => setSearchManagerQ(e.target.value)}
                 className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {filteredManagers.length === 0 && (
-                  <p className="text-sm text-on-surface-variant text-center py-4">No Program Manager accounts found.</p>
+                  <p className="text-sm text-on-surface-variant text-center py-4">No staff accounts found.</p>
                 )}
                 {filteredManagers.map((m) => {
                   const isAssigned = programManagerIds.has(m.id);
@@ -917,6 +925,11 @@ export default function ProgramDetail() {
                       <div>
                         <p className="font-semibold text-on-surface text-sm">{m.name}</p>
                         <p className="text-xs text-on-surface-variant">{m.email}</p>
+                        {m.role?.name && (
+                          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
+                            {m.role.name.replaceAll("_", " ")}
+                          </span>
+                        )}
                       </div>
                       <button
                         onClick={() => (isAssigned ? handleRemoveManager(m.id) : handleAssignManager(m.id))}

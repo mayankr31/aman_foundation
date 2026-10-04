@@ -1,5 +1,7 @@
 import { FELLOW_WORKSPACE_LINKS } from "@/lib/fellowTabs";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 const EDUCATION_LINKS = [
   { label: "Students", href: "/education/students", kpiKey: "students", icon: "groups" },
   { label: "Schools", href: "/education/schools", kpiKey: "schools", icon: "school" },
@@ -20,13 +22,6 @@ const EDUCATION_LINKS = [
 const PTA_LINK = { label: "PTA & Programs", href: "/education/pta", icon: "event" };
 
 const FELLOWS_LINK = { label: "Fellows", href: "/education/fellows", kpiKey: "fellows", icon: "badge" };
-
-const PROGRAM_MANAGERS_LINK = {
-  label: "Program Managers",
-  href: "/education/program-managers",
-  kpiKey: "programManagers",
-  icon: "supervisor_account",
-};
 
 const PM_REFLECTION_LINK = {
   label: "PM Reflection",
@@ -78,7 +73,7 @@ export function getDashboardSections(role) {
     ];
   }
 
-  const canManage = role === "ADMIN" || role === "PROGRAM_MANAGER";
+  const canManage = role === "ADMIN" || PROGRAM_ROLES.includes(role);
 
   return [
     {
@@ -97,7 +92,7 @@ export function getDashboardSections(role) {
             tone: "sky",
             links:
               role === "ADMIN"
-                ? [FELLOWS_LINK, PROGRAM_MANAGERS_LINK, PM_REFLECTION_LINK, FELLOW_PERFORMANCE_LINK]
+                ? [FELLOWS_LINK, PM_REFLECTION_LINK, FELLOW_PERFORMANCE_LINK]
                 : [FELLOWS_LINK],
           },
         ]
@@ -136,7 +131,7 @@ export function getDashboardKpiConfig(role) {
     ];
   }
 
-  if (role === "PROGRAM_MANAGER") {
+  if (PROGRAM_ROLES.includes(role)) {
     return [
       { key: "schools", label: "Managed Schools", icon: "school", tone: "emerald" },
       { key: "afterSchools", label: "Managed After Schools", icon: "cottage", tone: "emerald" },
@@ -155,7 +150,6 @@ export function getDashboardKpiConfig(role) {
     { key: "afterSchoolStudents", label: "After School Students", icon: "escalator_warning", tone: "emerald" },
     { key: "afterSchools", label: "After Schools", icon: "cottage", tone: "emerald" },
     { key: "fellows", label: "Fellows", icon: "badge", tone: "sky" },
-    { key: "programManagers", label: "Program Managers", icon: "supervisor_account", tone: "sky" },
     { key: "beneficiaries", label: "Beneficiaries", icon: "volunteer_activism", tone: "amber" },
     { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
     { key: "nonFarmPrograms", label: "Non-Farm Programs", icon: "pets", tone: "amber" },

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function Header({ onMenuToggle }) {
   const { user } = useAuth();
@@ -26,9 +27,7 @@ export default function Header({ onMenuToggle }) {
       </div>
       <div className="flex items-center gap-4">
         <div className="flex gap-2">
-          <button className="text-slate-500 hover:text-teal-600 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full p-2 flex items-center justify-center">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
+          <NotificationBell />
           <button className="text-slate-500 hover:text-teal-600 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full p-2 flex items-center justify-center">
             <span className="material-symbols-outlined">settings</span>
           </button>
@@ -43,8 +42,12 @@ export default function Header({ onMenuToggle }) {
               {user?.email || "no-email@amanfoundation.org"}
             </span>
           </div>
-          <div className="w-8 h-8 rounded-full bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-black text-xs shrink-0 border border-[#1a7a5e]/10">
-            {initials}
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-black text-xs shrink-0 border border-[#1a7a5e]/10">
+            {user?.avatar ? (
+              <img alt="avatar" className="w-full h-full object-cover" src={user.avatar} />
+            ) : (
+              initials
+            )}
           </div>
         </Link>
       </div>

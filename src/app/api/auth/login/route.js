@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
+import { getEffectivePermissions } from "@/lib/permissions";
 
 export async function POST(req) {
   try {
@@ -66,6 +67,8 @@ export async function POST(req) {
       roleId: user.roleId,
     });
 
+    const permissions = await getEffectivePermissions(user);
+
     return NextResponse.json({
       success: true,
       data: {
@@ -79,6 +82,7 @@ export async function POST(req) {
           name: user.name,
           fellowId: user.fellow?.id || null,
           fellowName: user.fellow?.name || null,
+          permissions,
         }
       }
     });

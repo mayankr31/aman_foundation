@@ -15,6 +15,8 @@ import {
   MATRIX_COLORS,
 } from "@/data/pmReflectionConstants";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 const LEVEL_STYLES = {
   Novice: "bg-red-100 text-red-700",
   Beginner: "bg-amber-100 text-amber-700",
@@ -55,7 +57,7 @@ export default function FellowPmReflectionPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [exporting, setExporting] = useState(false);
 
-  const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
 
   const colorName = (hex) => {
     if (!hex) return "Gray";

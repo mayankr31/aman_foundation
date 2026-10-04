@@ -4,6 +4,7 @@ import { authenticateUser } from "@/lib/auth";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
+import { checkPermission } from "@/lib/permissions";
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "lesson-plans");
 
@@ -29,6 +30,10 @@ export async function POST(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
 
     const formData = await req.formData();
     const logId = formData.get("logId");
@@ -81,6 +86,10 @@ export async function DELETE(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
 
     const { searchParams } = new URL(req.url);
     const logId = searchParams.get("logId");

@@ -1,19 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useToast } from "@/context/ToastContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
+import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
+import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+
+const SHOW_TAKE_KYOR_BUTTON = false;
 
 export default function BeneficiaryProfileDetail() {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 flex justify-center items-center h-96">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      }
+    >
+      <BeneficiaryProfileDetailContent />
+    </Suspense>
+  );
+}
+
+function BeneficiaryProfileDetailContent() {
   const { id } = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { token, isInitializing } = useAuth();
   const toast = useToast();
-  const [activeTab, setActiveTab] = useState("Program History");
+  const activeTab = labelFromSlug(searchParams.get("tab")) || "Program History";
   const [beneficiary, setBeneficiary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
@@ -28,16 +48,21 @@ export default function BeneficiaryProfileDetail() {
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
   const [mobNumber, setMobNumber] = useState("");
+  const [emergencyContact, setEmergencyContact] = useState("");
+  const [gender, setGender] = useState("");
   const [caste, setCaste] = useState("");
   const [religion, setReligion] = useState("");
   const [address, setAddress] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [district, setDistrict] = useState("");
+  const [block, setBlock] = useState("");
+  const [ward, setWard] = useState("");
+  const [village, setVillage] = useState("");
   const [householdSize, setHouseholdSize] = useState(4);
   const [primaryIncomeType, setPrimaryIncomeType] = useState("");
   const [annualIncome, setAnnualIncome] = useState("");
   const [monthlyIncome, setMonthlyIncome] = useState("");
-  const [resilienceScore, setResilienceScore] = useState(50);
   const [tier, setTier] = useState("Tier 2");
-  const [tierPercent, setTierPercent] = useState(50);
   
   // ID proofs
   const [aadhar, setAadhar] = useState("");
@@ -53,8 +78,10 @@ export default function BeneficiaryProfileDetail() {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [livestock, setLivestock] = useState([]);
 
-  // Scheme enrollments & Livelihood sub-programs
-  const [enrolledSchemes, setEnrolledSchemes] = useState([]);
+  // Livelihood programs & assignments
+  const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
+  const [selectedProgramIds, setSelectedProgramIds] = useState([]);
+  const [originalAssignments, setOriginalAssignments] = useState({});
   // Resilience Surveys
   const [surveys, setSurveys] = useState([]);
   const [adaptiveSurveys, setAdaptiveSurveys] = useState([]);
@@ -62,6 +89,11 @@ export default function BeneficiaryProfileDetail() {
   const [transformativeSurveys, setTransformativeSurveys] = useState([]);
   const [vulnerabilitySurveys, setVulnerabilitySurveys] = useState([]);
   const [solutionPlans, setSolutionPlans] = useState([]);
+  const [editingSurvey, setEditingSurvey] = useState(null);
+
+  // Profile photo
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const photoInputRef = useRef(null);
 
   // Resilience score calculation selections (null = use latest submission)
   const [calcSelection, setCalcSelection] = useState({ adaptive: null, absorptive: null, transformative: null });
@@ -106,16 +138,21 @@ export default function BeneficiaryProfileDetail() {
         setName(b.name || "");
         setDob(b.dob ? b.dob.split("T")[0] : "");
         setMobNumber(b.mobNumber || "");
+        setEmergencyContact(b.emergencyContact || "");
+        setGender(b.gender || "");
         setCaste(b.caste || "");
         setReligion(b.religion || "");
         setAddress(b.address || "");
+        setStateName(b.state || "");
+        setDistrict(b.district || "");
+        setBlock(b.block || "");
+        setWard(b.ward || "");
+        setVillage(b.village || "");
         setHouseholdSize(b.householdSize || 4);
         setPrimaryIncomeType(b.primaryIncomeType || "");
         setAnnualIncome(b.annualIncome !== null ? b.annualIncome : "");
         setMonthlyIncome(b.monthlyIncome !== null ? b.monthlyIncome : "");
-        setResilienceScore(b.resilienceScore || 50);
         setTier(b.tier || "Tier 2");
-        setTierPercent(b.tierPercent || 50);
 
         setAadhar(b.aadhar || "");
         setPanCard(b.panCard || "");
@@ -125,7 +162,12 @@ export default function BeneficiaryProfileDetail() {
         setBankAccountNo(b.bankAccountNo || "");
         setBankIfsc(b.bankIfsc || "");
 
-        setEnrolledSchemes((b.schemeEnrollments || []).map(se => se.scheme.name));
+        const assignments = {};
+        (b.livelihoodDetails || []).forEach((d) => {
+          if (d.programId) assignments[d.programId] = d.id;
+        });
+        setOriginalAssignments(assignments);
+        setSelectedProgramIds(Object.keys(assignments));
 
         setFamilyMembers((b.familyMembers || []).map(f => ({
           name: f.name || "",
@@ -206,7 +248,14 @@ export default function BeneficiaryProfileDetail() {
           }
         }
 
-        // Singular scheme details removed
+        // Fetch livelihood programs (for program assignment)
+        const programsRes = await fetch("/api/livelihood/programs", { headers });
+        if (programsRes.ok) {
+          const programsData = await programsRes.json();
+          if (programsData.success) {
+            setLivelihoodPrograms(programsData.data.programs || []);
+          }
+        }
       }
     } catch (err) {
       console.error("Failed to load beneficiary detail:", err);
@@ -251,23 +300,95 @@ export default function BeneficiaryProfileDetail() {
     }
   };
 
+  const handleUpdateSurvey = async ({ responses, scores }) => {
+    if (!editingSurvey) return;
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const res = await fetch(`/api/beneficiaries/${id}/resilience-surveys/${editingSurvey.id}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ responses, scores }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success("KYOR form updated successfully.");
+        setEditingSurvey(null);
+        const refreshRes = await fetch(`/api/beneficiaries/${id}/resilience-surveys`, { headers });
+        if (refreshRes.ok) {
+          const data = await refreshRes.json();
+          if (data.success) setSurveys(data.data);
+        }
+      } else {
+        toast.error(json.error || "Failed to update KYOR form.");
+      }
+    } catch (err) {
+      console.error("Update survey error:", err);
+      toast.error("Failed to update KYOR form.");
+    }
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      const fd = new FormData();
+      fd.append("photo", file);
+      const res = await fetch(`/api/beneficiaries/${beneficiary?.id || id}/photo`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success("Profile photo updated.");
+        loadBeneficiaryDetail();
+      } else {
+        toast.error(json.error || "Failed to upload photo.");
+      }
+    } catch (err) {
+      console.error("Photo upload error:", err);
+      toast.error("Failed to upload photo.");
+    } finally {
+      setUploadingPhoto(false);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+    }
+  };
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      };
+
       const payload = {
         name,
         dob: dob || null,
         mobNumber,
+        emergencyContact,
+        gender,
         caste,
         religion,
-        address,
+        address:
+          [village, ward, block, district, stateName]
+            .map((s) => (s || "").trim())
+            .filter(Boolean)
+            .join(", ") || address,
+        state: stateName,
+        district,
+        block,
+        ward,
+        village,
         householdSize: parseInt(householdSize),
         primaryIncomeType,
         annualIncome: annualIncome !== "" ? parseFloat(annualIncome) : null,
         monthlyIncome: monthlyIncome !== "" ? parseFloat(monthlyIncome) : null,
-        resilienceScore: parseInt(resilienceScore),
         tier,
-        tierPercent: parseInt(tierPercent),
         aadhar,
         panCard,
         rationCard,
@@ -276,21 +397,37 @@ export default function BeneficiaryProfileDetail() {
         bankIfsc,
         familyMembers: familyMembers.filter(m => m.name.trim() !== ""),
         livestock: livestock.filter(l => l.tagNumber.trim() !== ""),
-        schemes: enrolledSchemes,
-        // Detailed assignments removed from beneficiary PATCH
+        // Detailed assignments are applied separately below
       };
 
       const res = await fetch(`/api/beneficiaries/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
+        headers,
         body: JSON.stringify(payload)
       });
 
       const json = await res.json();
       if (json.success) {
+        // Apply livelihood program assignment changes
+        const toAdd = selectedProgramIds.filter((programId) => !originalAssignments[programId]);
+        const toRemove = Object.entries(originalAssignments).filter(
+          ([programId]) => !selectedProgramIds.includes(programId)
+        );
+
+        for (const programId of toAdd) {
+          await fetch(`/api/livelihood/programs/${programId}/assignments`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({ beneficiaryId: beneficiary.id, attributes: {} })
+          });
+        }
+        for (const [programId, assignId] of toRemove) {
+          await fetch(`/api/livelihood/programs/${programId}/assignments/${assignId}`, {
+            method: "DELETE",
+            headers
+          });
+        }
+
         setShowEditModal(false);
         loadBeneficiaryDetail();
       } else {
@@ -600,8 +737,42 @@ export default function BeneficiaryProfileDetail() {
   if (!absorptiveSelection) missingCapacityTypes.push("Absorptive Capacity");
   if (!transformativeSelection) missingCapacityTypes.push("Transformative Capacity");
 
-  const score = resilienceScoreComputed ?? beneficiary.resilienceScore ?? 50;
-  const strokeDashoffset = 251.2 - (score / 100) * 251.2;
+  const score = resilienceScoreComputed;
+  const strokeDashoffset = score !== null ? 251.2 - (score / 100) * 251.2 : 251.2;
+
+  // Basic-detail fields that must be locked (read-only) in the KYOR form.
+  const getProfileKyorFields = () => {
+    const pairs = [
+      ["B.3", beneficiary.state],
+      ["B.4", beneficiary.district],
+      ["B.5", beneficiary.block],
+      ["B.6", beneficiary.ward],
+      ["B.7", beneficiary.village],
+      ["B.8", beneficiary.name],
+      ["B.9", beneficiary.gender],
+      ["B.10", beneficiary.householdSize != null ? String(beneficiary.householdSize) : ""],
+      ["B.14", beneficiary.primaryIncomeType],
+      ["B.16_Min", beneficiary.monthlyIncome != null ? String(beneficiary.monthlyIncome) : ""],
+      ["B.16_Max", beneficiary.monthlyIncome != null ? String(beneficiary.monthlyIncome) : ""],
+      ["B.18", beneficiary.caste],
+    ];
+    const prefill = {};
+    const locks = [];
+    pairs.forEach(([key, value]) => {
+      if (value !== undefined && value !== null && String(value).trim() !== "") {
+        prefill[key] = value;
+      }
+    });
+    pairs.forEach(([key, value]) => {
+      if (key === "B.16_Min" || key === "B.16_Max") return;
+      if (value !== undefined && value !== null && String(value).trim() !== "") {
+        locks.push(key);
+      }
+    });
+    if (prefill["B.16_Min"]) locks.push("B.16");
+    return { prefill, locks };
+  };
+  const kyorProfileFields = getProfileKyorFields();
 
   const isGoatEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Goat Rearing");
   const isCaneEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Sugarcane");
@@ -682,8 +853,37 @@ export default function BeneficiaryProfileDetail() {
         <div className="lg:col-span-8 bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl -mr-20 -mt-20 transition-transform group-hover:scale-110 duration-700"></div>
           <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md relative bg-primary/10 text-primary flex items-center justify-center font-bold text-4xl">
-              {beneficiary.name.split(" ").map((n) => n[0]).join("")}
+            <div className="relative shrink-0">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-surface shadow-md bg-primary/10 text-primary flex items-center justify-center font-bold text-4xl">
+                {beneficiary.photoUrl ? (
+                  <img
+                    src={beneficiary.photoUrl}
+                    alt={beneficiary.name}
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={() => setLightboxPhoto(beneficiary.photoUrl)}
+                  />
+                ) : (
+                  beneficiary.name.split(" ").map((n) => n[0]).join("")
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => photoInputRef.current?.click()}
+                disabled={uploadingPhoto}
+                title={beneficiary.photoUrl ? "Replace photo" : "Add photo"}
+                className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md border border-surface cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[18px]">
+                  {uploadingPhoto ? "hourglass_top" : "photo_camera"}
+                </span>
+              </button>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handlePhotoUpload}
+              />
             </div>
             <div className="flex-grow pt-2">
               <div className="flex flex-col md:flex-row md:items-center gap-3 mb-1">
@@ -730,12 +930,11 @@ export default function BeneficiaryProfileDetail() {
                 </div>
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Socio-Economic Tier</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden max-w-[100px]">
-                      <div className="bg-primary h-full rounded-full" style={{ width: `${beneficiary.tierPercent}%` }}></div>
-                    </div>
-                    <span className="font-bold text-on-surface text-xs">{beneficiary.tier}</span>
-                  </div>
+                  <p className="font-bold text-on-surface">{beneficiary.tier}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Emergency Contact</p>
+                  <p className="font-bold text-on-surface">{beneficiary.emergencyContact || "N/A"}</p>
                 </div>
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Annual Income</p>
@@ -783,21 +982,32 @@ export default function BeneficiaryProfileDetail() {
               ></circle>
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-4xl font-bold text-on-surface tracking-tighter">{score}</span>
-              <span className="text-xs text-on-surface-variant font-medium uppercase tracking-widest mt-1">
-                / 100
+              <span className="text-4xl font-bold text-on-surface tracking-tighter">
+                {score !== null ? score : "N/A"}
               </span>
+              {score !== null && (
+                <span className="text-xs text-on-surface-variant font-medium uppercase tracking-widest mt-1">
+                  / 100
+                </span>
+              )}
             </div>
           </div>
-          <div className="mt-6 flex items-center gap-2 text-primary bg-primary-container/10 px-3 py-1.5 rounded-full relative z-10 font-sans">
-            <span className="material-symbols-outlined text-[16px]">trending_up</span>
-            <span className="text-xs font-bold uppercase tracking-wider">Updated Realtime</span>
-          </div>
+          {score !== null ? (
+            <div className="mt-6 flex items-center gap-2 text-primary bg-primary-container/10 px-3 py-1.5 rounded-full relative z-10 font-sans">
+              <span className="material-symbols-outlined text-[16px]">trending_up</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Updated Realtime</span>
+            </div>
+          ) : (
+            <div className="mt-6 flex items-center gap-2 text-on-surface-variant bg-surface-container-high px-3 py-1.5 rounded-full relative z-10 font-sans">
+              <span className="material-symbols-outlined text-[16px]">pending</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Not calculated yet</span>
+            </div>
+          )}
         </div>
 
         {/* Tabs Navigation */}
         <div className="lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest flex overflow-x-auto no-scrollbar font-sans">
-          {["Program History", "Family Directory", "ID Proofs & Bank Details", "Impact Summary", "Income Tracking", "Resilience Measurement Tool", "Adaptive Capacity", "Absorptive Capacity", "Transformative Capacity", "Vulnerability", "Solution Board & Planning", "Migration History"].map((tab) => {
+          {BENEFICIARY_TABS.map(({ label: tab }) => {
             const isActive = activeTab === tab;
             const tabLabel = tab === "Family Directory" && beneficiary.familyMembers?.length
               ? `Family Directory (${beneficiary.familyMembers.length})`
@@ -809,7 +1019,7 @@ export default function BeneficiaryProfileDetail() {
             return (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(tab)}`, { scroll: false })}
                 className={`px-5 py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
                   isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
                 }`}
@@ -828,7 +1038,7 @@ export default function BeneficiaryProfileDetail() {
                 <span className="material-symbols-outlined text-primary shrink-0">info</span>
                 <div>
                   <p className="font-bold text-primary mb-1">How Program History is Added</p>
-                  <p>Scheme enrollment history is generated dynamically from the beneficiary's database linkage. You can add or remove schemes and select sub-programs by clicking <strong>Edit Profile</strong> above and opening the <strong>Scheme Specific</strong> tab.</p>
+                  <p>Program enrollment history is generated dynamically from the beneficiary&apos;s database linkage. You can assign or remove programs by clicking <strong>Edit Profile</strong> above and opening the <strong>Programs</strong> tab.</p>
                 </div>
               </div>
 
@@ -991,25 +1201,28 @@ export default function BeneficiaryProfileDetail() {
             </div>
           )}
 
-          {activeTab === "Resilience Measurement Tool" && (
+          {activeTab === "KYOR Form" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
                     <span className="material-symbols-outlined text-primary font-bold">assignment</span>
-                    Resilience Measurement Tool
+                    KYOR Form
                   </h3>
                   <p className="text-sm text-on-surface-variant font-sans mt-1">
                     Assess the family's capacity to absorb, adapt and transform.
                   </p>
                 </div>
-                <Link
-                  href={`/beneficiaries/${id}/kyr-survey`}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Take New Survey
-                </Link>
+                {/* Set SHOW_TAKE_KYOR_BUTTON to true to re-enable the survey entry point. */}
+                {SHOW_TAKE_KYOR_BUTTON && (
+                  <Link
+                    href={`/beneficiaries/${id}/kyr-survey`}
+                    className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Take KYOR Form
+                  </Link>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1043,11 +1256,19 @@ export default function BeneficiaryProfileDetail() {
                         </div>
                       </div>
                       
-                      <div className="pt-4 border-t border-surface-container-highest">
+                      <div className="pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
                         <Link href={`/beneficiaries/${id}/responses/kyr/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
+                        <button
+                          type="button"
+                          onClick={() => setEditingSurvey(survey)}
+                          className="text-secondary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">edit</span>
+                          Edit
+                        </button>
                       </div>
                     </div>
                   ))
@@ -1849,7 +2070,7 @@ export default function BeneficiaryProfileDetail() {
                 { key: "IDBank", label: "IDs & Bank Details" },
                 { key: "Family", label: "Family Registry" },
                 { key: "Livestock", label: "Livestock Inventory" },
-                { key: "Schemes", label: "Scheme Specific" }
+                { key: "Programs", label: "Programs" }
               ].map(tab => (
                 <button
                   key={tab.key}
@@ -1878,8 +2099,22 @@ export default function BeneficiaryProfileDetail() {
                     <input type="date" value={dob} onChange={e => setDob(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
+                    <label className="font-semibold uppercase tracking-wider text-slate-400">Gender</label>
+                    <select value={gender} onChange={e => setGender(e.target.value)} className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface">
+                      <option value="">— Select —</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Don't want to respond">Don&apos;t want to respond</option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Mobile Number</label>
                     <input type="text" value={mobNumber} onChange={e => setMobNumber(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="font-semibold uppercase tracking-wider text-slate-400">Emergency Contact Number</label>
+                    <input type="text" value={emergencyContact} onChange={e => setEmergencyContact(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Caste</label>
@@ -1906,10 +2141,6 @@ export default function BeneficiaryProfileDetail() {
                     <input type="number" value={householdSize} onChange={e => setHouseholdSize(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <label className="font-semibold uppercase tracking-wider text-slate-400">Resilience Index (0-100)</label>
-                    <input type="number" min="0" max="100" value={resilienceScore} onChange={e => setResilienceScore(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                  </div>
-                  <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Socio-Economic Tier</label>
                     <select value={tier} onChange={e => setTier(e.target.value)} className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface">
                       <option value="Tier 1">Tier 1 (Lowest Income)</option>
@@ -1917,13 +2148,15 @@ export default function BeneficiaryProfileDetail() {
                       <option value="Tier 3">Tier 3 (Developing)</option>
                     </select>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="font-semibold uppercase tracking-wider text-slate-400">Tier Percent (Progress)</label>
-                    <input type="number" value={tierPercent} onChange={e => setTierPercent(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                  </div>
-                  <div className="col-span-3 flex flex-col gap-1">
+                  <div className="col-span-1 md:col-span-3">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Address / Location</label>
-                    <textarea value={address} rows="2" onChange={e => setAddress(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface resize-none" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mt-1">
+                      <input type="text" placeholder="State" value={stateName} onChange={e => setStateName(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" placeholder="District" value={district} onChange={e => setDistrict(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" placeholder="Block" value={block} onChange={e => setBlock(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" placeholder="Ward / GP" value={ward} onChange={e => setWard(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" placeholder="Village" value={village} onChange={e => setVillage(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    </div>
                   </div>
                 </div>
               )}
@@ -2069,53 +2302,48 @@ export default function BeneficiaryProfileDetail() {
                 </div>
               )}
 
-              {editTab === "Schemes" && (
+              {editTab === "Programs" && (
                 <div className="space-y-6 text-xs">
-                  <div className="p-4 border border-outline-variant/10 bg-surface-container-low/20 rounded-xl space-y-3">
-                    <h4 className="font-bold text-sm text-on-surface uppercase tracking-wide">Scheme Enrollments</h4>
-                    <div className="flex gap-6 mt-1 text-sm font-medium">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={enrolledSchemes.includes("Goat Rearing")}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setEnrolledSchemes([...enrolledSchemes, "Goat Rearing"]);
-                            } else {
-                              setEnrolledSchemes(enrolledSchemes.filter(s => s !== "Goat Rearing"));
-                            }
-                          }}
-                          className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
-                        />
-                        <span>Enroll in Goat Rearing</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={enrolledSchemes.includes("Sugarcane")}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setEnrolledSchemes([...enrolledSchemes, "Sugarcane"]);
-                            } else {
-                              setEnrolledSchemes(enrolledSchemes.filter(s => s !== "Sugarcane"));
-                            }
-                          }}
-                          className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
-                        />
-                        <span>Enroll in Sugarcane Cultivation</span>
-                      </label>
-                    </div>
-                  </div>
+                  {["FARM", "NON_FARM"].map((category) => {
+                    const label = category === "FARM" ? "Farm Programs" : "Non-Farm Programs";
+                    const programs = livelihoodPrograms.filter((p) => p.category === category);
+                    if (programs.length === 0) return null;
+                    return (
+                      <div key={category} className="p-4 border border-outline-variant/10 bg-surface-container-low/20 rounded-xl space-y-3">
+                        <h4 className="font-bold text-sm text-on-surface uppercase tracking-wide">{label}</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {programs.map((p) => {
+                            const checked = selectedProgramIds.includes(p.id);
+                            return (
+                              <label key={p.id} className="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedProgramIds((prev) => [...prev, p.id]);
+                                    } else {
+                                      setSelectedProgramIds((prev) => prev.filter((pid) => pid !== p.id));
+                                    }
+                                  }}
+                                  className="rounded border-outline-variant text-primary focus:ring-primary w-4 h-4"
+                                />
+                                <span>{p.name}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
 
-                  {(enrolledSchemes.includes("Goat Rearing") || enrolledSchemes.includes("Sugarcane")) && (
-                    <p className="text-sm text-on-surface-variant italic p-4 bg-surface-container-low/20 rounded-xl border border-outline-variant/10">
-                      Specific program details (e.g. goats assigned, crop stages, yields) are now managed directly from the respective Program Detail pages.
-                    </p>
+                  {livelihoodPrograms.length === 0 && (
+                    <p className="text-center text-on-surface-variant italic">No livelihood programs available.</p>
                   )}
 
-                  {!enrolledSchemes.includes("Goat Rearing") && !enrolledSchemes.includes("Sugarcane") && (
-                    <p className="text-center text-on-surface-variant italic">Select a scheme above to enroll this beneficiary.</p>
-                  )}
+                  <p className="text-sm text-on-surface-variant italic p-4 bg-surface-container-low/20 rounded-xl border border-outline-variant/10">
+                    Program assignments are applied when you click &quot;Save Profile Updates&quot;.
+                  </p>
                 </div>
               )}
 
@@ -2139,6 +2367,38 @@ export default function BeneficiaryProfileDetail() {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Edit KYOR Survey Modal */}
+      {editingSurvey && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[92vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b border-surface-container pb-4">
+              <div>
+                <h3 className="text-xl font-bold">Edit Submitted KYOR Form</h3>
+                <p className="text-xs text-on-surface-variant mt-1">
+                  Update the responses submitted on {new Date(editingSurvey.surveyDate).toLocaleDateString()}.
+                </p>
+              </div>
+              <button
+                onClick={() => setEditingSurvey(null)}
+                className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <ResilienceSurveyForm
+              key={editingSurvey.id}
+              mode="embedded"
+              prefill={{ ...(editingSurvey.responses || {}), ...kyorProfileFields.prefill }}
+              lockQuestionIds={kyorProfileFields.locks}
+              submitLabel="Update Survey"
+              title="Edit KYOR Form"
+              onBack={() => setEditingSurvey(null)}
+              onSubmit={handleUpdateSurvey}
+            />
           </div>
         </div>
       )}

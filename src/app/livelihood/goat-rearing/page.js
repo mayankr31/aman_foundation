@@ -123,7 +123,6 @@ export default function GoatRearing() {
             householdSize: 4,
             primaryIncomeType: "Livestock",
             tier: "Tier 2",
-            tierPercent: 50,
             resilienceScore: 50,
             schemes: ["Goat Rearing"]
           })
@@ -275,7 +274,6 @@ export default function GoatRearing() {
         monthlyIncome: existingBen.monthlyIncome,
         resilienceScore: existingBen.resilienceScore,
         tier: existingBen.tier,
-        tierPercent: existingBen.tierPercent,
         aadhar: existingBen.aadhar,
         panCard: existingBen.panCard,
         rationCard: existingBen.rationCard,

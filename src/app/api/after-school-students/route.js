@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedCentreIds, getFellowIdByUserId } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     const { searchParams } = new URL(req.url);
     const gradeGroup = searchParams.get("gradeGroup");
@@ -26,7 +33,7 @@ export async function GET(req) {
           }
         }
       };
-    } else if (user.role.name === "PROGRAM_MANAGER") {
+    } else if (PROGRAM_ROLES.includes(user.role.name)) {
       const managed = await getManagedCentreIds(user.id);
       if (centreId && centreId !== "All Centres") {
         if (!managed.includes(centreId)) where.centreId = { in: [] };
@@ -60,8 +67,12 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     const isAdmin = user.role.name === "ADMIN";
-    const isPm = user.role.name === "PROGRAM_MANAGER";
+    const isPm = PROGRAM_ROLES.includes(user.role.name);
     const isFellow = user.role.name === "FELLOW";
     if (!isAdmin && !isPm && !isFellow) {
       return NextResponse.json({ error: "Forbidden: Admin, Program Manager or Fellow access only" }, { status: 403 });

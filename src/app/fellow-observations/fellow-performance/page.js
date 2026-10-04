@@ -8,6 +8,8 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import FellowPerformanceForm from "@/components/FellowPerformanceForm";
 import RatingCategoriesModal from "@/components/RatingCategoriesModal";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 function formatDate(value) {
   if (!value) return "—";
   return new Date(value).toLocaleDateString(undefined, {
@@ -37,7 +39,7 @@ export default function FellowPerformancePage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [exporting, setExporting] = useState(false);
 
-  const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
 
   useEffect(() => {
     if (user && !canManage) {

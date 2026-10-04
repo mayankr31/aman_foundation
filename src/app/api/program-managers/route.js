@@ -2,11 +2,16 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "employees", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    }
 
     if (!isAdmin(user)) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

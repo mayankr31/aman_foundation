@@ -2,12 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
 
 // GET /api/livelihood/programs/[id]/fellows
 export async function GET(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const { id: programId } = await params;
     const program = await prisma.livelihoodProgram.findUnique({ where: { id: programId } });
@@ -36,6 +41,10 @@ export async function POST(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (!isAdmin(user)) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
@@ -73,6 +82,10 @@ export async function DELETE(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     if (!isAdmin(user)) {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

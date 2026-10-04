@@ -44,6 +44,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
   const [savingKey, setSavingKey] = useState(null);
   const [editingNote, setEditingNote] = useState(null); // { phase, key, value }
   const [exporting, setExporting] = useState(false);
+  const [exportingAssessments, setExportingAssessments] = useState(false);
 
   useEffect(() => {
     if (!fellowId || !token) return;
@@ -202,6 +203,97 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
     }
   }
 
+  async function handleExportAssessments() {
+    if (!report) return;
+    setExportingAssessments(true);
+    try {
+      const params = new URLSearchParams({ source });
+      if (session) params.set("session", session);
+      const res = await fetch(`/api/fellows/${fellowId}/assessment-export?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Failed to load assessment data");
+
+      const data = json.data;
+      if (!data.rows.length) {
+        alert("No assessments to export for this session.");
+        return;
+      }
+
+      const isAfter = source === "afterSchool";
+      const subjectTemplates = [...(data.subjectTemplates || [])].sort((a, b) => a.order - b.order);
+      const flnQuestions = data.flnQuestions || [];
+      const selQuestions = [...(data.selQuestions || [])].sort((a, b) => a.order - b.order);
+      const phaseLabel = { BASELINE: "Baseline", MIDLINE: "Midline", ENDLINE: "Endline" };
+
+      const header = [
+        "Fellow Name",
+        "Student Name",
+        "Gender",
+        "Age",
+        "Class/Grade",
+        isAfter ? "Centre Name" : "School Name",
+        "Assessment Type",
+        "Is the child enrolled in School?",
+        "If no why?",
+        ...subjectTemplates.map((t) => t.name),
+        ...flnQuestions.map((q) => q.questionText),
+        "Total FLN Marks",
+        ...(isAfter ? [] : selQuestions.map((q) => q.questionText)),
+      ];
+
+      const rows = data.rows.map((form) => {
+        const subjectMap = {};
+        (form.subjectResponses || []).forEach((r) => { subjectMap[r.subjectTemplateId] = r.selectedOption; });
+        const flnMap = {};
+        (form.flnResponses || []).forEach((r) => { flnMap[r.flnQuestionId] = r.score; });
+        const selMap = {};
+        (form.selResponses || []).forEach((r) => { selMap[r.selQuestionId] = r.answer; });
+
+        const age = form.studentDob
+          ? Math.floor((new Date() - new Date(form.studentDob)) / 31557600000)
+          : "";
+        const totalFln = (form.flnResponses || []).reduce((sum, r) => sum + (r.score || 0), 0);
+        const enrolled = form.isEnrolledInSchool === null || form.isEnrolledInSchool === undefined
+          ? ""
+          : form.isEnrolledInSchool
+            ? "Yes"
+            : "No";
+
+        return [
+          form.fellowName || fellowName || "",
+          form.studentName || "",
+          form.studentGender || "",
+          age,
+          form.studentGrade || "",
+          form.schoolName || "",
+          phaseLabel[form.assessmentType] || form.assessmentType || "",
+          enrolled,
+          form.reasonNotEnrolled || "",
+          ...subjectTemplates.map((t) => subjectMap[t.id] ?? ""),
+          ...flnQuestions.map((q) => flnMap[q.id] ?? ""),
+          totalFln,
+          ...(isAfter ? [] : selQuestions.map((q) => selMap[q.id] ?? "")),
+        ];
+      });
+
+      const imported = await import("xlsx");
+      const XLSX = imported.default || imported;
+      const worksheet = XLSX.utils.aoa_to_sheet([header, ...rows]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Assessments");
+      const suffix = isAfter ? "after_school_" : "";
+      const date = new Date().toISOString().split("T")[0];
+      XLSX.writeFile(workbook, `${suffix}student_assessments_${data.session || date}.xlsx`);
+    } catch (err) {
+      console.error("Failed to export assessment data:", err);
+      alert("Failed to export assessment data. Please try again.");
+    } finally {
+      setExportingAssessments(false);
+    }
+  }
+
   if (!report && !error) {
     return (
       <div className="p-8 flex justify-center items-center h-64">
@@ -301,16 +393,28 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Export</label>
-            <button
-              type="button"
-              onClick={handleExport}
-              disabled={exporting || report.totalStudents === 0}
-              className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Export the selected session to Excel"
-            >
-              <span className="material-symbols-outlined text-[16px]">download</span>
-              {exporting ? "Exporting..." : "Export"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleExport}
+                disabled={exporting || report.totalStudents === 0}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Export the aggregate levels for the selected session to Excel"
+              >
+                <span className="material-symbols-outlined text-[16px]">download</span>
+                {exporting ? "Exporting..." : "Export Levels"}
+              </button>
+              <button
+                type="button"
+                onClick={handleExportAssessments}
+                disabled={exportingAssessments || report.totalStudents === 0}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs font-semibold hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Export every assessment form for the selected session to Excel"
+              >
+                <span className="material-symbols-outlined text-[16px]">download</span>
+                {exportingAssessments ? "Exporting..." : "Export Assessment Data"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

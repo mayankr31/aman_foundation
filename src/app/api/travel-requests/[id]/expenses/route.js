@@ -4,6 +4,8 @@ import { authenticateUser } from "@/lib/auth";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
+import { checkPermission } from "@/lib/permissions";
+import { notifyUsers, getAdminUserIds, NOTIFICATION_TYPES } from "@/lib/notifications";
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "travel-expenses");
 
@@ -29,6 +31,10 @@ export async function POST(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "travel", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
 
     const { id } = await context.params;
 
@@ -82,6 +88,15 @@ export async function POST(req, context) {
     await prisma.travelRequest.update({
       where: { id },
       data: { status: "COMPLETED" }
+    });
+
+    const admins = await getAdminUserIds();
+    await notifyUsers(admins, {
+      type: NOTIFICATION_TYPES.TRAVEL_EXPENSE_SUBMITTED,
+      title: "Travel Expense Submitted",
+      message: `Actual expenses for the trip to ${travelRequest.destination} have been submitted.`,
+      link: `/travel/manage`,
+      actorId: user.id,
     });
 
     return NextResponse.json({ success: true, data: expense }, { status: 201 });

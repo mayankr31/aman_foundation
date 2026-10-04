@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
 
 function canAccess(user, userId) {
   return user.role.name === "ADMIN" || user.role.name === "HR" || user.id === userId;
@@ -10,6 +11,10 @@ export async function GET(request, { params }) {
   try {
     const { user, error } = await authenticateUser(request);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "employees", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    }
 
     const { userId } = await params;
     if (!canAccess(user, userId)) {
@@ -65,6 +70,10 @@ export async function POST(request, { params }) {
   try {
     const { user, error } = await authenticateUser(request);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "employees", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    }
 
     const { userId } = await params;
     if (!canAccess(user, userId)) {

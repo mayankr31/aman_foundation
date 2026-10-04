@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedTeamUserIds } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export const dynamic = 'force-dynamic';
 
@@ -10,8 +13,12 @@ export async function GET(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "attendance", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
+
     let where;
-    if (user.role.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role.name)) {
       const team = await getManagedTeamUserIds(user.id);
       where = { userId: { in: [...team, user.id] } };
     } else if (user.role.name !== "ADMIN" && user.role.name !== "HR") {
@@ -153,6 +160,10 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
+
     const body = await req.json();
     const { logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkInLat, checkInLng, lessonPlanText } = body;
 
@@ -186,6 +197,10 @@ export async function PATCH(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
 
     const body = await req.json();
     const { id, logdate, intimelog, outtimelog, workhours, workstatus, ef1, ef2, logininfo, logoutinfo, checkOutLat, checkOutLng, lessonPlanText } = body;

@@ -2,15 +2,22 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isEducationProgramManaged } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "education", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
+
     const { id } = await context.params;
 
-    if (user.role.name === "PROGRAM_MANAGER" && !(await isEducationProgramManaged(user.id, id))) {
+    if (PROGRAM_ROLES.includes(user.role.name) && !(await isEducationProgramManaged(user.id, id))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
@@ -46,6 +53,10 @@ export async function PATCH(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
@@ -86,6 +97,10 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     if (user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });

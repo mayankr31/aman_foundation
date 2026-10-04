@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "travel", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
 
     const { id } = await context.params;
 
@@ -26,7 +34,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Travel request not found" }, { status: 404 });
     }
 
-    const isAdminOrManager = user.role.name === "ADMIN" || user.role.name === "PROGRAM_MANAGER";
+    const isAdminOrManager = user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
     if (request.userId !== user.id && !isAdminOrManager) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -43,7 +51,11 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "travel", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Forbidden: Only admins and managers can approve/reject" }, { status: 403 });
     }
 
@@ -83,6 +95,29 @@ export async function PATCH(req, context) {
       }
     });
 
+    // Notify the request creator about the decision.
+    const isRejected = status === "REJECTED";
+    const isCompleted = status === "COMPLETED";
+    await notifyUsers([existing.userId], {
+      type: isRejected
+        ? NOTIFICATION_TYPES.TRAVEL_REJECTED
+        : isCompleted
+          ? NOTIFICATION_TYPES.TRAVEL_COMPLETED
+          : NOTIFICATION_TYPES.TRAVEL_APPROVED,
+      title: isRejected
+        ? "Travel Request Rejected"
+        : isCompleted
+          ? "Travel Request Completed"
+          : "Travel Request Approved",
+      message: isRejected
+        ? `Your travel request to ${request.destination} was rejected.${rejectionReason ? ` Reason: ${rejectionReason}` : ""}`
+        : isCompleted
+          ? `Your travel request to ${request.destination} has been marked completed.`
+          : `Your travel request to ${request.destination} was approved.`,
+      link: `/travel`,
+      actorId: user.id,
+    });
+
     return NextResponse.json({ success: true, data: request });
   } catch (error) {
     console.error("Update travel request error:", error);
@@ -94,6 +129,10 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "travel", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    }
 
     const { id } = await context.params;
 

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -17,6 +20,10 @@ export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
 
     const { id, reflectionId } = await context.params;
     const fellowId = await resolveFellowId(id);
@@ -49,7 +56,11 @@ export async function PATCH(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Forbidden: Only managers can edit PM reflections" }, { status: 403 });
     }
 
@@ -96,7 +107,11 @@ export async function DELETE(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (user.role.name !== "ADMIN" && user.role.name !== "PROGRAM_MANAGER") {
+    if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
+    }
+
+    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
       return NextResponse.json({ error: "Forbidden: Only managers can delete PM reflections" }, { status: 403 });
     }
 

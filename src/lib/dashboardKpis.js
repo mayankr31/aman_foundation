@@ -6,13 +6,14 @@ import {
   getManagedFellowIds,
 } from "@/lib/scope";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 const EMPTY_KPIS = {
   students: 0,
   schools: 0,
   afterSchoolStudents: 0,
   afterSchools: 0,
   fellows: 0,
-  programManagers: 0,
   beneficiaries: 0,
   farmPrograms: 0,
   nonFarmPrograms: 0,
@@ -25,7 +26,6 @@ async function getAdminKpis() {
     afterSchoolStudents,
     afterSchools,
     fellows,
-    programManagers,
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
@@ -35,7 +35,6 @@ async function getAdminKpis() {
     prisma.afterSchoolStudent.count(),
     prisma.afterSchoolCentre.count(),
     prisma.fellow.count(),
-    prisma.user.count({ where: { role: { name: "PROGRAM_MANAGER" } } }),
     prisma.beneficiary.count(),
     prisma.livelihoodProgram.count({ where: { category: "FARM" } }),
     prisma.livelihoodProgram.count({ where: { category: "NON_FARM" } }),
@@ -47,7 +46,6 @@ async function getAdminKpis() {
     afterSchoolStudents,
     afterSchools,
     fellows,
-    programManagers,
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
@@ -140,7 +138,6 @@ async function getFellowKpis(user) {
     afterSchoolStudents,
     afterSchools,
     fellows: 0,
-    programManagers: 0,
     beneficiaries,
     farmPrograms,
     nonFarmPrograms,
@@ -153,7 +150,7 @@ export async function getDashboardKpis(user) {
   if (role === "ADMIN") {
     return { role, kpis: await getAdminKpis() };
   }
-  if (role === "PROGRAM_MANAGER") {
+  if (PROGRAM_ROLES.includes(role)) {
     return { role, kpis: await getProgramManagerKpis(user) };
   }
   if (role === "FELLOW") {

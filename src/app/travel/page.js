@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function TravelPage() {
   const { token, user, isInitializing } = useAuth();
   const router = useRouter();
@@ -30,7 +32,7 @@ export default function TravelPage() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  const isAllowed = user?.roleName === "FELLOW" || user?.roleName === "PROGRAM_MANAGER";
+  const isAllowed = user?.roleName === "FELLOW" || PROGRAM_ROLES.includes(user?.roleName);
 
   useEffect(() => {
     if (!isInitializing && !isAllowed) {
@@ -51,7 +53,7 @@ export default function TravelPage() {
       });
       const json = await res.json();
       if (json.success) {
-        const mine = user?.roleName === "PROGRAM_MANAGER"
+        const mine = PROGRAM_ROLES.includes(user?.roleName)
           ? json.data.filter((r) => r.userId === user.id)
           : json.data;
         setRequests(mine);

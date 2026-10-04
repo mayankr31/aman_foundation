@@ -223,7 +223,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
               <ShieldCheck size={20} />
             </div>
             <div>
-              <h3 className={`text-xl font-bold tracking-tight ${theme.textWhite}`}>{role?.name?.replace('_', ' ')}</h3>
+              <h3 className={`text-xl font-bold tracking-tight ${theme.textWhite}`}>{role?.name?.replaceAll('_', ' ')}</h3>
               <p className={`text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>Edit Role Permissions</p>
             </div>
           </div>

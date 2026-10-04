@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isLivelihoodProgramManaged } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const { searchParams } = new URL(req.url);
     const tier = searchParams.get("tier");
@@ -20,7 +27,7 @@ export async function GET(req) {
         mode: "insensitive"
       };
     }
-    if (user.role.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role.name)) {
       where.livelihoodDetails = {
         some: { program: { programManagers: { some: { userId: user.id } } } },
       };
@@ -72,10 +79,14 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
       user.role.name !== "FELLOW" &&
-      user.role.name !== "PROGRAM_MANAGER"
+      !PROGRAM_ROLES.includes(user.role.name)
     ) {
       return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
@@ -89,16 +100,22 @@ export async function POST(req) {
       aadhar,
       rationCard,
       mobNumber,
+      emergencyContact,
+      gender,
       resilienceScore,
       annualIncome,
       monthlyIncome,
       caste,
       religion,
       address,
+      state,
+      district,
+      block,
+      ward,
+      village,
       householdSize,
       primaryIncomeType,
       tier,
-      tierPercent,
       bankName,
       bankAccountNo,
       bankIfsc,
@@ -111,7 +128,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Name and Enrolment ID are required" }, { status: 400 });
     }
 
-    if (user.role.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role.name)) {
       if (programId && !(await isLivelihoodProgramManaged(user.id, programId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
       }
@@ -126,16 +143,22 @@ export async function POST(req) {
         aadhar,
         rationCard,
         mobNumber,
+        emergencyContact,
+        gender,
         resilienceScore: resilienceScore ? parseInt(resilienceScore) : 50,
         annualIncome: annualIncome ? parseFloat(annualIncome) : null,
         monthlyIncome: monthlyIncome ? parseFloat(monthlyIncome) : null,
         caste,
         religion,
         address,
+        state,
+        district,
+        block,
+        ward,
+        village,
         householdSize: householdSize ? parseInt(householdSize) : 4,
         primaryIncomeType,
         tier: tier || "Tier 2",
-        tierPercent: tierPercent ? parseInt(tierPercent) : 50,
         bankName,
         bankAccountNo,
         bankIfsc,

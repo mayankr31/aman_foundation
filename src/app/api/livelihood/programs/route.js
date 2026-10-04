@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
@@ -16,7 +23,7 @@ export async function GET(req) {
     if (category && category !== "all") where.category = category;
     if (type) where.type = type;
     if (status) where.status = status;
-    if (user.role.name === "PROGRAM_MANAGER") {
+    if (PROGRAM_ROLES.includes(user.role.name)) {
       where.programManagers = { some: { userId: user.id } };
     } else if (user.role.name === "FELLOW") {
       where.fellows = { some: { fellow: { userId: user.id } } };
@@ -31,7 +38,7 @@ export async function GET(req) {
     });
 
     // Also return old-style programs for backward compatibility
-    const showLegacy = user.role.name !== "PROGRAM_MANAGER" && user.role.name !== "FELLOW";
+    const showLegacy = !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW";
     const goatRearingPrograms = showLegacy
       ? await prisma.goatRearingProgram.findMany({ orderBy: { name: "asc" } })
       : [];
@@ -58,9 +65,13 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
+
     if (
       user.role.name !== "ADMIN" &&
-      user.role.name !== "PROGRAM_MANAGER" &&
+      !PROGRAM_ROLES.includes(user.role.name) &&
       user.role.name !== "FELLOW"
     ) {
       return NextResponse.json(

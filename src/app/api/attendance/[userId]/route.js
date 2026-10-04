@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedTeamUserIds } from "@/lib/scope";
+import { checkPermission } from "@/lib/permissions";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export const dynamic = 'force-dynamic';
 
@@ -10,10 +13,14 @@ export async function GET(req, context) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
+    if (!(await checkPermission(user, "dashboard", "attendance", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
+    }
+
     const { userId } = await context.params;
 
     // ADMIN and HR can view any user's logs. PROGRAM_MANAGER can view their team (and self).
-    if (user.role.name === "PROGRAM_MANAGER" && userId !== user.id) {
+    if (PROGRAM_ROLES.includes(user.role.name) && userId !== user.id) {
       const team = await getManagedTeamUserIds(user.id);
       if (!team.includes(userId)) {
         return NextResponse.json({ error: "Forbidden: This user is not in your team" }, { status: 403 });

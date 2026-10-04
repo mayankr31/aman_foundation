@@ -7,14 +7,9 @@ import { useRouter } from "next/navigation";
 
 export default function HrEmployeeManagement() {
   const router = useRouter();
-  const { token, user: currentUser } = useAuth();
-  const isAdmin = currentUser?.roleName === "ADMIN";
+  const { token } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Modals
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [showProfileModal, setShowProfileModal] = useState(false);
 
   // Toast Notification State
   const [showToast, setShowToast] = useState(false);
@@ -71,36 +66,7 @@ export default function HrEmployeeManagement() {
   }, [users, directorySearch, directoryDept]);
 
   const handleRowClick = (user) => {
-    if (!isAdmin) return;
-    setSelectedUser({ ...user });
-    setShowProfileModal(true);
-  };
-
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`/api/users/${selectedUser.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: selectedUser.name,
-          email: selectedUser.email,
-          department: selectedUser.department
-        })
-      });
-      if (res.ok) {
-        triggerToast("Profile updated successfully");
-        setShowProfileModal(false);
-        fetchData();
-      } else {
-        triggerToast("Failed to update profile");
-      }
-    } catch (err) {
-      triggerToast("Error updating profile");
-    }
+    router.push(`/hr/${user.id}`);
   };
 
   // Employees Logic only
@@ -127,7 +93,7 @@ export default function HrEmployeeManagement() {
           Attendance Logs
         </Link>
         <Link href="/hr/leaves" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Leave Workflow
+          Leave Requests
         </Link>
       </div>
 
@@ -174,14 +140,29 @@ export default function HrEmployeeManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEmployees.map((emp) => (
-                    <tr key={emp.id} onClick={() => handleRowClick(emp)} className={`border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors ${isAdmin ? "cursor-pointer" : ""}`}>
-                      <td className="py-4 px-4 font-bold text-on-surface">{emp.name || emp.username}</td>
+                  {filteredEmployees.map((emp) => {
+                    const name = emp.name || emp.username || "?";
+                    const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2);
+                    return (
+                    <tr key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
+                      <td className="py-4 px-4 font-bold text-on-surface">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                            {emp.avatar ? (
+                              <img alt="avatar" className="w-full h-full object-cover" src={emp.avatar} />
+                            ) : (
+                              initials
+                            )}
+                          </div>
+                          <span>{name}</span>
+                        </div>
+                      </td>
                       <td className="py-4 px-4 text-xs text-on-surface-variant">{emp.email}</td>
                       <td className="py-4 px-4 text-on-surface-variant">{emp.department || "Unassigned"}</td>
                       <td className="py-4 px-4 text-xs font-semibold text-slate-500">{emp.role?.name?.replace("_", " ")}</td>
                     </tr>
-                  ))}
+                    );
+                  })}
                   {filteredEmployees.length === 0 && (
                     <tr>
                       <td colSpan="4" className="py-8 text-center text-on-surface-variant">No employees found.</td>
@@ -192,69 +173,6 @@ export default function HrEmployeeManagement() {
             </div>
           </div>
       </div>
-
-      {showProfileModal && selectedUser && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">User Profile</h3>
-              <button onClick={() => setShowProfileModal(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer">
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleUpdateProfile} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</label>
-                <input
-                  type="text"
-                  value={selectedUser.name || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Email</label>
-                <input
-                  type="email"
-                  value={selectedUser.email || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Role (Read Only)</label>
-                <input
-                  type="text"
-                  value={selectedUser.role?.name?.replace("_", " ") || ""}
-                  disabled
-                  className="px-4 py-2 border rounded-lg border-outline-variant bg-slate-50 text-slate-500 dark:bg-slate-800"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Department</label>
-                <select
-                  value={selectedUser.department || ""}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, department: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
-                >
-                  <option value="">Unassigned</option>
-                  <option value="Operations">Operations</option>
-                  <option value="Logistics">Logistics</option>
-                  <option value="Education">Education</option>
-                  <option value="HR">HR</option>
-                  <option value="Finance">Finance</option>
-                </select>
-              </div>
-              <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowProfileModal(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer">Save Changes</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Task Modal removed from here as it belongs to Attendance Logs */}
 
       {showToast && (
         <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">

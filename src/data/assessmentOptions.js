@@ -1,3 +1,17 @@
+// Academic session is derived from the assessment date: months from April
+// onwards belong to the session starting that year, Jan-Mar to the previous.
+export const ACADEMIC_YEAR_START_MONTH = 3; // April (0-indexed)
+
+export function deriveSession(dateOrString) {
+  const d = new Date(dateOrString);
+  const startYear = d.getMonth() >= ACADEMIC_YEAR_START_MONTH ? d.getFullYear() : d.getFullYear() - 1;
+  return `${startYear}-${startYear + 1}`;
+}
+
+export function currentSession() {
+  return deriveSession(new Date());
+}
+
 // Canonical progression order for subject assessment levels. This is the
 // intended low-to-high order and is independent of the order stored in the
 // SubjectAssessmentTemplate.options array.

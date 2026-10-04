@@ -5,6 +5,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function FellowsModule() {
   const { token, user } = useAuth();
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function FellowsModule() {
   const [newEmail, setNewEmail] = useState("");
   const [newPhone, setNewPhone] = useState("");
 
-  const canManage = user?.roleName === "ADMIN" || user?.roleName === "PROGRAM_MANAGER";
+  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
 
   const fetchFellowsData = useCallback(async () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -253,7 +255,18 @@ export default function FellowsModule() {
                   key={i}
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors"
                 >
-                  <td className="px-8 py-4 font-semibold text-on-surface">{f.name}</td>
+                  <td className="px-8 py-4 font-semibold text-on-surface">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                        {f.avatar ? (
+                          <img alt="avatar" className="w-full h-full object-cover" src={f.avatar} />
+                        ) : (
+                          f.name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2)
+                        )}
+                      </div>
+                      <span>{f.name}</span>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 text-sm text-on-surface-variant">{f.location}</td>
                   <td className="px-6 py-4 text-sm">
                     <span

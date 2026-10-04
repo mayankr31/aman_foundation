@@ -1,4 +1,5 @@
 export const FELLOW_TABS = [
+  { label: "Personal Details", slug: "personal-details", icon: "badge" },
   { label: "Monthly Planner", slug: "monthly-planner", icon: "calendar_month" },
   { label: "Goals", slug: "goals", icon: "flag" },
   { label: "Student Data", slug: "student-data", icon: "groups" },

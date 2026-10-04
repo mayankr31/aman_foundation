@@ -1,11 +1,22 @@
 import { prisma } from "@/lib/prisma";
 
+// Roles that share Program Manager scope/behaviour for now.
+export const PROGRAM_ROLES = [
+  "PROGRAM_MANAGER",
+  "ACCOUNTANT",
+  "PROGRAM_COORDINATOR",
+  "FIELD_EXECUTIVE",
+  "PROGRAM_DIRECTOR",
+  "PROGRAM_LEAD",
+  "CLASS_ASSISTANT",
+];
+
 export function isAdmin(user) {
   return user?.role?.name === "ADMIN";
 }
 
 export function isProgramManager(user) {
-  return user?.role?.name === "PROGRAM_MANAGER";
+  return PROGRAM_ROLES.includes(user?.role?.name);
 }
 
 export function isAdminOrPm(user) {

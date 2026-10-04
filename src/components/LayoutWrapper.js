@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { getPageForPath } from "@/lib/routePermissions";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Loader2 } from "lucide-react";
@@ -10,11 +11,13 @@ import { Loader2 } from "lucide-react";
 export default function LayoutWrapper({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { token, isInitializing } = useAuth();
+  const { token, isInitializing, can } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
+  const requiredPage = getPageForPath(pathname);
+  const isAllowed = !requiredPage || can(requiredPage);
 
   useEffect(() => {
     if (isInitializing) return;
@@ -23,8 +26,10 @@ export default function LayoutWrapper({ children }) {
       router.push("/login");
     } else if (token && isAuthPage) {
       router.push("/");
+    } else if (token && !isAuthPage && !isAllowed) {
+      router.push("/");
     }
-  }, [token, isInitializing, isAuthPage, pathname]);
+  }, [token, isInitializing, isAuthPage, pathname, isAllowed]);
 
   if (isInitializing) {
     return (
@@ -36,6 +41,15 @@ export default function LayoutWrapper({ children }) {
 
   // Redirecting state bypass
   if (!token && !isAuthPage) {
+    return (
+      <div className="flex items-center justify-center w-full min-h-screen bg-surface">
+        <Loader2 className="w-8 h-8 animate-spin text-[#1a7a5e]" />
+      </div>
+    );
+  }
+
+  // Permission denied / redirecting
+  if (token && !isAuthPage && !isAllowed) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen bg-surface">
         <Loader2 className="w-8 h-8 animate-spin text-[#1a7a5e]" />

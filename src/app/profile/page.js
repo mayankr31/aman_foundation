@@ -15,8 +15,11 @@ import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import StudentDataView from "@/components/StudentDataView";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
+import BasicDetailsView from "@/components/BasicDetailsView";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
@@ -51,6 +54,17 @@ function ProfilePageContent() {
   const [editGender, setEditGender] = useState("");
   const [editDob, setEditDob] = useState("");
   const [editAvatar, setEditAvatar] = useState("");
+  const [editDateOfJoining, setEditDateOfJoining] = useState("");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [editMaritalStatus, setEditMaritalStatus] = useState("");
+  const [editBloodGroup, setEditBloodGroup] = useState("");
+  const [editEmergencyContactName, setEditEmergencyContactName] = useState("");
+  const [editEmergencyContactPhone, setEditEmergencyContactPhone] = useState("");
+  const [editAadharNumber, setEditAadharNumber] = useState("");
+  const [editPanCard, setEditPanCard] = useState("");
+  const [editBankName, setEditBankName] = useState("");
+  const [editBankAccountNo, setEditBankAccountNo] = useState("");
+  const [editBankIfsc, setEditBankIfsc] = useState("");
 
   // Fellow specific dashboard states
   const [goalSheets, setGoalSheets] = useState([]);
@@ -95,6 +109,16 @@ function ProfilePageContent() {
               : (userProfile.dob ? userProfile.dob.split("T")[0] : "")
           );
           setEditAvatar(userProfile.fellow ? (userProfile.fellow.avatar || "") : (userProfile.avatar || ""));
+          setEditDateOfJoining(userProfile.dateOfJoining ? userProfile.dateOfJoining.split("T")[0] : "");
+          setEditMaritalStatus(userProfile.maritalStatus || "");
+          setEditBloodGroup(userProfile.bloodGroup || "");
+          setEditEmergencyContactName(userProfile.emergencyContactName || "");
+          setEditEmergencyContactPhone(userProfile.emergencyContactPhone || "");
+          setEditAadharNumber(userProfile.aadharNumber || "");
+          setEditPanCard(userProfile.panCard || "");
+          setEditBankName(userProfile.bankName || "");
+          setEditBankAccountNo(userProfile.bankAccountNo || "");
+          setEditBankIfsc(userProfile.bankIfsc || "");
 
           if (userProfile.fellow) {
             const fellowId = userProfile.fellow.id;
@@ -243,10 +267,20 @@ function ProfilePageContent() {
           name: editName,
           email: editEmail,
           mobile: editMobile,
-          address: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editAddress : undefined,
-          gender: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editGender : undefined,
-          dob: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editDob : undefined,
-          avatar: (profile.fellow || profile.role?.name === "PROGRAM_MANAGER") ? editAvatar : undefined
+          address: editAddress,
+          gender: editGender,
+          dob: editDob,
+          avatar: editAvatar,
+          dateOfJoining: editDateOfJoining,
+          maritalStatus: editMaritalStatus,
+          bloodGroup: editBloodGroup,
+          emergencyContactName: editEmergencyContactName,
+          emergencyContactPhone: editEmergencyContactPhone,
+          aadharNumber: editAadharNumber,
+          panCard: editPanCard,
+          bankName: editBankName,
+          bankAccountNo: editBankAccountNo,
+          bankIfsc: editBankIfsc
         })
       });
       const json = await res.json();
@@ -275,6 +309,50 @@ function ProfilePageContent() {
     } catch (err) {
       console.error(err);
       toast.error("Error updating profile");
+    }
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !profile?.id) return;
+    setUploadingAvatar(true);
+    try {
+      const fd = new FormData();
+      fd.append("avatar", file);
+      const res = await fetch(`/api/users/${profile.id}/avatar`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd
+      });
+      const json = await res.json();
+      if (json.success) {
+        const url = json.data.avatar;
+        setEditAvatar(url);
+        setProfile((prev) => ({
+          ...prev,
+          avatar: url,
+          fellow: prev.fellow ? { ...prev.fellow, avatar: url } : prev.fellow
+        }));
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          try {
+            const cached = JSON.parse(decodeURIComponent(atob(storedUser)));
+            cached.avatar = url;
+            localStorage.setItem("user", btoa(encodeURIComponent(JSON.stringify(cached))));
+          } catch (e) {
+            console.error("Failed to sync avatar cache", e);
+          }
+        }
+        toast.success("Photo updated successfully!");
+      } else {
+        toast.error(json.error || "Failed to upload photo");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error uploading photo");
+    } finally {
+      setUploadingAvatar(false);
+      e.target.value = "";
     }
   };
 
@@ -335,7 +413,7 @@ function ProfilePageContent() {
   }
 
   const isFellow = !!profile.fellow;
-  const isPm = profile.role?.name === "PROGRAM_MANAGER";
+  const isPm = PROGRAM_ROLES.includes(profile.role?.name);
   const avatarUrl = profile.fellow?.avatar || profile.avatar || "";
   const initials = profile.name
     .split(" ")
@@ -428,12 +506,16 @@ function ProfilePageContent() {
                     </div>
                   </div>
                 )}
-                {isPm && (
+                {!isFellow && (
                   <div className="text-xs font-medium text-slate-500 font-sans flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2">
-                    <div>
-                      <span className="font-bold text-on-surface">Department:</span> {profile.department || "Unassigned"}
-                    </div>
-                    <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                    {profile.department && (
+                      <>
+                        <div>
+                          <span className="font-bold text-on-surface">Department:</span> {profile.department}
+                        </div>
+                        <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                      </>
+                    )}
                     <div>
                       <span className="font-bold text-on-surface">Date of Birth:</span>{" "}
                       {personalDob
@@ -477,6 +559,28 @@ function ProfilePageContent() {
           <form onSubmit={handleUpdateProfile} className="relative z-10 space-y-6 font-sans text-sm">
             <h3 className="text-lg font-bold text-on-surface mb-4">Edit Profile details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2 md:col-span-2">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Profile Photo</label>
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center shrink-0">
+                    {editAvatar ? (
+                      <img alt="avatar" className="w-full h-full object-cover" src={editAvatar} />
+                    ) : (
+                      <span className="text-lg font-bold text-on-surface-variant">{initials}</span>
+                    )}
+                  </div>
+                  <label className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                    {uploadingAvatar ? "Uploading..." : "Upload Photo"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={uploadingAvatar}
+                      onChange={handleAvatarUpload}
+                    />
+                  </label>
+                </div>
+              </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</label>
                 <input
@@ -506,10 +610,18 @@ function ProfilePageContent() {
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
-              {(isFellow || isPm) && (
-                <>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Joining</label>
+                <input
+                  type="date"
+                  value={editDateOfJoining}
+                  onChange={(e) => setEditDateOfJoining(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <>
                   <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">District / Address</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Address</label>
                     <input
                       type="text"
                       value={editAddress}
@@ -539,18 +651,97 @@ function ProfilePageContent() {
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
-                  <div className="flex flex-col gap-1 md:col-span-2">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Avatar URL</label>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Marital Status</label>
+                    <select
+                      value={editMaritalStatus}
+                      onChange={(e) => setEditMaritalStatus(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    >
+                      <option value="">Select</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Divorced">Divorced</option>
+                      <option value="Widowed">Widowed</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Blood Group</label>
+                    <select
+                      value={editBloodGroup}
+                      onChange={(e) => setEditBloodGroup(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                    >
+                      <option value="">Select</option>
+                      {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((g) => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Name</label>
                     <input
                       type="text"
-                      value={editAvatar}
-                      placeholder="https://example.com/avatar.png"
-                      onChange={(e) => setEditAvatar(e.target.value)}
+                      value={editEmergencyContactName}
+                      onChange={(e) => setEditEmergencyContactName(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Phone</label>
+                    <input
+                      type="text"
+                      value={editEmergencyContactPhone}
+                      onChange={(e) => setEditEmergencyContactPhone(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aadhaar Number</label>
+                    <input
+                      type="text"
+                      value={editAadharNumber}
+                      onChange={(e) => setEditAadharNumber(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">PAN Card</label>
+                    <input
+                      type="text"
+                      value={editPanCard}
+                      onChange={(e) => setEditPanCard(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank Name</label>
+                    <input
+                      type="text"
+                      value={editBankName}
+                      onChange={(e) => setEditBankName(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank Account Number</label>
+                    <input
+                      type="text"
+                      value={editBankAccountNo}
+                      onChange={(e) => setEditBankAccountNo(e.target.value)}
+                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank IFSC</label>
+                    <input
+                      type="text"
+                      value={editBankIfsc}
+                      onChange={(e) => setEditBankIfsc(e.target.value)}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
                 </>
-              )}
             </div>
             <div className="flex justify-end gap-3 pt-2">
               <button
@@ -571,6 +762,17 @@ function ProfilePageContent() {
               )}
 
             </div>
+
+      {/* Personal Details (non-fellow roles) */}
+      {!isFellow && (
+        <div className="mb-8">
+          <h3 className="font-headline font-bold text-xl text-on-surface mb-4 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">badge</span>
+            Personal Details
+          </h3>
+          <BasicDetailsView person={profile} />
+        </div>
+      )}
 
       {/* Program Manager assignments */}
       {isPm && (
@@ -725,6 +927,9 @@ function ProfilePageContent() {
           </div>
 
           <div>
+              {activeTab === "Personal Details" && (
+                <BasicDetailsView person={profile} />
+              )}
               {activeTab === "Monthly Planner" && (
                 <MonthlyPlanner fellowId={profile.fellow.id} />
               )}
