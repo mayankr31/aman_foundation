@@ -87,9 +87,12 @@ model User {
   leavesRemaining       Int        @default(15)
   createdAt             DateTime   @default(now())
   updatedAt             DateTime   @updatedAt
+  createdById           String?
 
-  role        Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
-  permissions UserPermission[]
+  role         Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  permissions  UserPermission[]
+  createdBy    User?            @relation("UserCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers User[]           @relation("UserCreator")
 
   fellow                  Fellow?
   leaves                  Leave[]

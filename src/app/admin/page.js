@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2 } from 'lucide-react';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
 import RolePermissionsModal from '@/components/users/RolePermissionsModal';
 import AddRoleModal from '@/components/users/AddRoleModal';
+import CreateUserModal from '@/components/users/CreateUserModal';
+import ResetPasswordModal from '@/components/users/ResetPasswordModal';
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 
 export default function AdminPage() {
@@ -30,6 +32,8 @@ export default function AdminPage() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
+  const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [resetPasswordUser, setResetPasswordUser] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
@@ -223,6 +227,15 @@ export default function AdminPage() {
               className="px-5 py-2.5 rounded-full bg-[#1a7a5e] hover:bg-[#135d47] text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
             >
               <Plus size={14} /> Add Role
+            </button>
+          )}
+
+          {activeTab !== 'roles' && (
+            <button
+              onClick={() => setIsCreateUserOpen(true)}
+              className="px-5 py-2.5 rounded-full bg-[#1a7a5e] hover:bg-[#135d47] text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
+            >
+              <UserPlus size={14} /> Create User
             </button>
           )}
 
@@ -447,6 +460,15 @@ export default function AdminPage() {
                                         Deactivate
                                       </button>
                                     )}
+                                    {item.status === 'ACTIVE' && item.createdById === currentUser?.id && (
+                                      <button
+                                        onClick={() => setResetPasswordUser(item)}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20 transition-all hover:scale-105"
+                                      >
+                                        <KeyRound size={12} />
+                                        Reset Password
+                                      </button>
+                                    )}
                                     <button
                                       onClick={() => setSelectedUser(item)}
                                       className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 dark:text-gray-300 dark:border-white/10 border border-slate-200 text-slate-600 transition-all hover:scale-105"
@@ -561,6 +583,24 @@ export default function AdminPage() {
         isDarkMode={isDarkMode}
         token={token}
         onRoleAdded={(newRole) => setRoles(prev => [...prev, newRole])}
+      />
+
+      <CreateUserModal
+        isOpen={isCreateUserOpen}
+        onClose={() => setIsCreateUserOpen(false)}
+        isDarkMode={isDarkMode}
+        token={token}
+        roles={roles}
+        onUserCreated={(newUser) => setUsers(prev => [newUser, ...prev])}
+      />
+
+      <ResetPasswordModal
+        isOpen={!!resetPasswordUser}
+        onClose={() => setResetPasswordUser(null)}
+        isDarkMode={isDarkMode}
+        token={token}
+        user={resetPasswordUser}
+        onReset={() => {}}
       />
 
       <ConfirmDeleteModal

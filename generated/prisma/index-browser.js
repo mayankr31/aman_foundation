@@ -157,7 +157,8 @@ exports.Prisma.UserScalarFieldEnum = {
   leavesTaken: 'leavesTaken',
   leavesRemaining: 'leavesRemaining',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  createdById: 'createdById'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {

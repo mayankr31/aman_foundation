@@ -9180,6 +9180,7 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     permissions: number
+    createdUsers: number
     leaves: number
     verifiedTransactions: number
     reliefDistributions: number
@@ -9201,6 +9202,7 @@ export namespace Prisma {
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     permissions?: boolean | UserCountOutputTypeCountPermissionsArgs
+    createdUsers?: boolean | UserCountOutputTypeCountCreatedUsersArgs
     leaves?: boolean | UserCountOutputTypeCountLeavesArgs
     verifiedTransactions?: boolean | UserCountOutputTypeCountVerifiedTransactionsArgs
     reliefDistributions?: boolean | UserCountOutputTypeCountReliefDistributionsArgs
@@ -9236,6 +9238,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPermissionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserPermissionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
   /**
@@ -12044,6 +12053,7 @@ export namespace Prisma {
     leavesRemaining: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    createdById: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -12075,6 +12085,7 @@ export namespace Prisma {
     leavesRemaining: number | null
     createdAt: Date | null
     updatedAt: Date | null
+    createdById: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -12106,6 +12117,7 @@ export namespace Prisma {
     leavesRemaining: number
     createdAt: number
     updatedAt: number
+    createdById: number
     _all: number
   }
 
@@ -12149,6 +12161,7 @@ export namespace Prisma {
     leavesRemaining?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -12180,6 +12193,7 @@ export namespace Prisma {
     leavesRemaining?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -12211,6 +12225,7 @@ export namespace Prisma {
     leavesRemaining?: true
     createdAt?: true
     updatedAt?: true
+    createdById?: true
     _all?: true
   }
 
@@ -12329,6 +12344,7 @@ export namespace Prisma {
     leavesRemaining: number
     createdAt: Date
     updatedAt: Date
+    createdById: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -12379,8 +12395,11 @@ export namespace Prisma {
     leavesRemaining?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
+    createdUsers?: boolean | User$createdUsersArgs<ExtArgs>
     fellow?: boolean | User$fellowArgs<ExtArgs>
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
@@ -12431,7 +12450,9 @@ export namespace Prisma {
     leavesRemaining?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -12463,7 +12484,9 @@ export namespace Prisma {
     leavesRemaining?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -12495,12 +12518,15 @@ export namespace Prisma {
     leavesRemaining?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    createdById?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt" | "createdById", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
+    createdUsers?: boolean | User$createdUsersArgs<ExtArgs>
     fellow?: boolean | User$fellowArgs<ExtArgs>
     leaves?: boolean | User$leavesArgs<ExtArgs>
     verifiedTransactions?: boolean | User$verifiedTransactionsArgs<ExtArgs>
@@ -12523,9 +12549,11 @@ export namespace Prisma {
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
   }
   export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
+    createdBy?: boolean | User$createdByArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12533,6 +12561,8 @@ export namespace Prisma {
     objects: {
       role: Prisma.$RolePayload<ExtArgs>
       permissions: Prisma.$UserPermissionPayload<ExtArgs>[]
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      createdUsers: Prisma.$UserPayload<ExtArgs>[]
       fellow: Prisma.$FellowPayload<ExtArgs> | null
       leaves: Prisma.$LeavePayload<ExtArgs>[]
       verifiedTransactions: Prisma.$InventoryLedgerPayload<ExtArgs>[]
@@ -12581,6 +12611,7 @@ export namespace Prisma {
       leavesRemaining: number
       createdAt: Date
       updatedAt: Date
+      createdById: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -12977,6 +13008,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     role<T extends RoleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoleDefaultArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     permissions<T extends User$permissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdBy<T extends User$createdByArgs<ExtArgs> = {}>(args?: Subset<T, User$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdUsers<T extends User$createdUsersArgs<ExtArgs> = {}>(args?: Subset<T, User$createdUsersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fellow<T extends User$fellowArgs<ExtArgs> = {}>(args?: Subset<T, User$fellowArgs<ExtArgs>>): Prisma__FellowClient<$Result.GetResult<Prisma.$FellowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     leaves<T extends User$leavesArgs<ExtArgs> = {}>(args?: Subset<T, User$leavesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeavePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verifiedTransactions<T extends User$verifiedTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$verifiedTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InventoryLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13052,6 +13085,7 @@ export namespace Prisma {
     readonly leavesRemaining: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly createdById: FieldRef<"User", 'String'>
   }
     
 
@@ -13474,6 +13508,49 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserPermissionScalarFieldEnum | UserPermissionScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdBy
+   */
+  export type User$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * User.createdUsers
+   */
+  export type User$createdUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -117371,7 +117448,8 @@ export namespace Prisma {
     leavesTaken: 'leavesTaken',
     leavesRemaining: 'leavesRemaining',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    createdById: 'createdById'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -119004,8 +119082,11 @@ export namespace Prisma {
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    createdById?: StringNullableFilter<"User"> | string | null
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     permissions?: UserPermissionListRelationFilter
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdUsers?: UserListRelationFilter
     fellow?: XOR<FellowNullableScalarRelationFilter, FellowWhereInput> | null
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
@@ -119055,8 +119136,11 @@ export namespace Prisma {
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     role?: RoleOrderByWithRelationInput
     permissions?: UserPermissionOrderByRelationAggregateInput
+    createdBy?: UserOrderByWithRelationInput
+    createdUsers?: UserOrderByRelationAggregateInput
     fellow?: FellowOrderByWithRelationInput
     leaves?: LeaveOrderByRelationAggregateInput
     verifiedTransactions?: InventoryLedgerOrderByRelationAggregateInput
@@ -119109,8 +119193,11 @@ export namespace Prisma {
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    createdById?: StringNullableFilter<"User"> | string | null
     role?: XOR<RoleScalarRelationFilter, RoleWhereInput>
     permissions?: UserPermissionListRelationFilter
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdUsers?: UserListRelationFilter
     fellow?: XOR<FellowNullableScalarRelationFilter, FellowWhereInput> | null
     leaves?: LeaveListRelationFilter
     verifiedTransactions?: InventoryLedgerListRelationFilter
@@ -119160,6 +119247,7 @@ export namespace Prisma {
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -119199,6 +119287,7 @@ export namespace Prisma {
     leavesRemaining?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    createdById?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type NotificationWhereInput = {
@@ -126345,6 +126434,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -126394,7 +126485,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -126445,6 +126538,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -126494,7 +126589,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -126544,6 +126641,7 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -126605,6 +126703,7 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NotificationCreateInput = {
@@ -134404,6 +134503,11 @@ export namespace Prisma {
     none?: UserPermissionWhereInput
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type FellowNullableScalarRelationFilter = {
     is?: FellowWhereInput | null
     isNot?: FellowWhereInput | null
@@ -134602,6 +134706,7 @@ export namespace Prisma {
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -134638,6 +134743,7 @@ export namespace Prisma {
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -134669,6 +134775,7 @@ export namespace Prisma {
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    createdById?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -135077,11 +135184,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
   }
 
   export type GoalSheetListRelationFilter = {
@@ -139452,6 +139554,19 @@ export namespace Prisma {
     connect?: UserPermissionWhereUniqueInput | UserPermissionWhereUniqueInput[]
   }
 
+  export type UserCreateNestedOneWithoutCreatedUsersInput = {
+    create?: XOR<UserCreateWithoutCreatedUsersInput, UserUncheckedCreateWithoutCreatedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedUsersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput> | UserCreateWithoutCreatedByInput[] | UserUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedByInput | UserCreateOrConnectWithoutCreatedByInput[]
+    createMany?: UserCreateManyCreatedByInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
   export type FellowCreateNestedOneWithoutUserInput = {
     create?: XOR<FellowCreateWithoutUserInput, FellowUncheckedCreateWithoutUserInput>
     connectOrCreate?: FellowCreateOrConnectWithoutUserInput
@@ -139582,6 +139697,13 @@ export namespace Prisma {
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
     createMany?: UserPermissionCreateManyUserInputEnvelope
     connect?: UserPermissionWhereUniqueInput | UserPermissionWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput> | UserCreateWithoutCreatedByInput[] | UserUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedByInput | UserCreateOrConnectWithoutCreatedByInput[]
+    createMany?: UserCreateManyCreatedByInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
   export type FellowUncheckedCreateNestedOneWithoutUserInput = {
@@ -139745,6 +139867,30 @@ export namespace Prisma {
     update?: UserPermissionUpdateWithWhereUniqueWithoutUserInput | UserPermissionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserPermissionUpdateManyWithWhereWithoutUserInput | UserPermissionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserPermissionScalarWhereInput | UserPermissionScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutCreatedUsersNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedUsersInput, UserUncheckedCreateWithoutCreatedUsersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedUsersInput
+    upsert?: UserUpsertWithoutCreatedUsersInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedUsersInput, UserUpdateWithoutCreatedUsersInput>, UserUncheckedUpdateWithoutCreatedUsersInput>
+  }
+
+  export type UserUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput> | UserCreateWithoutCreatedByInput[] | UserUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedByInput | UserCreateOrConnectWithoutCreatedByInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutCreatedByInput | UserUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: UserCreateManyCreatedByInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutCreatedByInput | UserUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutCreatedByInput | UserUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type FellowUpdateOneWithoutUserNestedInput = {
@@ -140007,6 +140153,20 @@ export namespace Prisma {
     update?: UserPermissionUpdateWithWhereUniqueWithoutUserInput | UserPermissionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserPermissionUpdateManyWithWhereWithoutUserInput | UserPermissionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserPermissionScalarWhereInput | UserPermissionScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput> | UserCreateWithoutCreatedByInput[] | UserUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedByInput | UserCreateOrConnectWithoutCreatedByInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutCreatedByInput | UserUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: UserCreateManyCreatedByInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutCreatedByInput | UserUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutCreatedByInput | UserUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type FellowUncheckedUpdateOneWithoutUserNestedInput = {
@@ -146366,6 +146526,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -146414,7 +146576,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -146517,6 +146681,7 @@ export namespace Prisma {
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    createdById?: StringNullableFilter<"User"> | string | null
   }
 
   export type RolePermissionUpsertWithWhereUniqueWithoutRoleInput = {
@@ -146594,6 +146759,225 @@ export namespace Prisma {
 
   export type UserPermissionCreateManyUserInputEnvelope = {
     data: UserPermissionCreateManyUserInput | UserPermissionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutCreatedUsersInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedUsersInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedUsersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedUsersInput, UserUncheckedCreateWithoutCreatedUsersInput>
+  }
+
+  export type UserCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedByInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type UserCreateManyCreatedByInputEnvelope = {
+    data: UserCreateManyCreatedByInput | UserCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -147315,6 +147699,135 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UserPermission"> | Date | string
   }
 
+  export type UserUpsertWithoutCreatedUsersInput = {
+    update: XOR<UserUpdateWithoutCreatedUsersInput, UserUncheckedUpdateWithoutCreatedUsersInput>
+    create: XOR<UserCreateWithoutCreatedUsersInput, UserUncheckedCreateWithoutCreatedUsersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedUsersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedUsersInput, UserUncheckedUpdateWithoutCreatedUsersInput>
+  }
+
+  export type UserUpdateWithoutCreatedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutCreatedByInput, UserUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<UserCreateWithoutCreatedByInput, UserUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutCreatedByInput, UserUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutCreatedByInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
   export type FellowUpsertWithoutUserInput = {
     update: XOR<FellowUpdateWithoutUserInput, FellowUncheckedUpdateWithoutUserInput>
     create: XOR<FellowCreateWithoutUserInput, FellowUncheckedCreateWithoutUserInput>
@@ -147947,6 +148460,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -147995,7 +148510,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -148061,6 +148578,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -148109,7 +148628,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -148352,6 +148873,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -148401,6 +148924,8 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -148491,6 +149016,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -148540,6 +149067,8 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -149058,6 +149587,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
@@ -149106,7 +149637,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -149804,6 +150337,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
@@ -149852,7 +150387,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -150536,6 +151073,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -150584,7 +151123,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -150725,6 +151266,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -150773,7 +151316,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -150892,6 +151437,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -150940,7 +151487,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -151081,6 +151630,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -151129,7 +151680,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -153791,6 +154344,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -153839,7 +154394,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -153960,6 +154517,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -154008,7 +154567,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -154119,6 +154680,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -154167,7 +154730,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -154282,6 +154847,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -154330,7 +154897,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -154435,6 +155004,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -154483,7 +155054,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -154582,6 +155155,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -154630,7 +155205,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -154719,6 +155296,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -154767,7 +155346,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -154859,6 +155440,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -154907,7 +155490,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -155004,6 +155589,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -155052,7 +155639,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -155155,6 +155744,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -155203,7 +155794,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -159147,6 +159740,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
@@ -159195,7 +159790,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -159327,6 +159924,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
@@ -159375,7 +159974,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -159462,6 +160063,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -159510,7 +160113,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -159576,6 +160181,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -159624,7 +160231,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -159674,6 +160283,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
     reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
@@ -159722,7 +160333,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
     reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -159788,6 +160401,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
     reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
@@ -159836,7 +160451,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
     reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -160159,6 +160776,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -160207,7 +160826,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -160346,6 +160967,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -160394,7 +161017,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -160881,6 +161506,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -160929,7 +161556,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -161032,6 +161661,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -161080,7 +161711,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -162447,6 +163080,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -162495,7 +163130,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -162636,6 +163273,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -162684,7 +163323,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -163091,6 +163732,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -163139,7 +163782,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -163280,6 +163925,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -163328,7 +163975,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -163378,6 +164027,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -163426,7 +164077,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -163481,6 +164134,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     role: RoleCreateNestedOneWithoutUsersInput
     permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
     fellow?: FellowCreateNestedOneWithoutUserInput
     leaves?: LeaveCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
@@ -163529,7 +164184,9 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
     permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
     fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
     leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
     verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
@@ -163627,6 +164284,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -163675,7 +164334,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -163736,6 +164397,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: RoleUpdateOneRequiredWithoutUsersNestedInput
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -163784,7 +164447,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -168390,6 +169055,7 @@ export namespace Prisma {
     leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    createdById?: string | null
   }
 
   export type RolePermissionCreateManyRoleInput = {
@@ -168428,6 +169094,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUpdateOneWithoutUserNestedInput
     leaves?: LeaveUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
@@ -168476,7 +169144,9 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
     fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
     leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
     verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
@@ -168525,6 +169195,7 @@ export namespace Prisma {
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RolePermissionUpdateWithoutRoleInput = {
@@ -168552,6 +169223,37 @@ export namespace Prisma {
     id?: string
     permissionId: string
     type?: $Enums.PermissionType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateManyCreatedByInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -168782,6 +169484,139 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     permissionId?: StringFieldUpdateOperationsInput | string
     type?: EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
