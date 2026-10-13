@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function HrEmployeeManagement() {
   const router = useRouter();
@@ -65,6 +67,8 @@ export default function HrEmployeeManagement() {
     });
   }, [users, directorySearch, directoryDept]);
 
+  const { pageItems: pagedEmployees, currentPage, setCurrentPage } = usePagination(filteredEmployees, 10);
+
   const handleRowClick = (user) => {
     router.push(`/hr/${user.id}`);
   };
@@ -72,8 +76,8 @@ export default function HrEmployeeManagement() {
   // Employees Logic only
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full">
-      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
+      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Dashboard</span>
       </Link>
@@ -81,7 +85,7 @@ export default function HrEmployeeManagement() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Administration Module</p>
-          <h2 className="text-3xl md:text-[2.75rem] font-headline font-semibold tracking-tight leading-none text-on-surface">Human Resources &amp; Personnel</h2>
+          <h2 className="page-title text-on-surface">Human Resources &amp; Personnel</h2>
         </div>
       </div>
 
@@ -130,23 +134,23 @@ export default function HrEmployeeManagement() {
             </div>
 
             <div className="w-full overflow-x-auto">
-              <table className="w-full text-left border-collapse font-sans text-sm">
+              <table className="w-full min-w-[720px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                    <th className="py-3 px-4">Name</th>
-                    <th className="py-3 px-4">Email</th>
-                    <th className="py-3 px-4">Department</th>
-                    <th className="py-3 px-4">Role</th>
+                    <th className="w-[26%] py-3 px-4">Name</th>
+                    <th className="w-[34%] py-3 px-4">Email</th>
+                    <th className="w-[20%] py-3 px-4">Department</th>
+                    <th className="w-[20%] py-3 px-4">Role</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEmployees.map((emp) => {
+                  {pagedEmployees.map((emp) => {
                     const name = emp.name || emp.username || "?";
                     const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2);
                     return (
                     <tr key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
                       <td className="py-4 px-4 font-bold text-on-surface">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
                             {emp.avatar ? (
                               <img alt="avatar" className="w-full h-full object-cover" src={emp.avatar} />
@@ -154,12 +158,12 @@ export default function HrEmployeeManagement() {
                               initials
                             )}
                           </div>
-                          <span>{name}</span>
+                          <span className="break-words">{name}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-xs text-on-surface-variant">{emp.email}</td>
-                      <td className="py-4 px-4 text-on-surface-variant">{emp.department || "Unassigned"}</td>
-                      <td className="py-4 px-4 text-xs font-semibold text-slate-500">{emp.role?.name?.replace("_", " ")}</td>
+                      <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
+                      <td className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
+                      <td className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{emp.role?.name?.replace("_", " ")}</td>
                     </tr>
                     );
                   })}
@@ -171,11 +175,12 @@ export default function HrEmployeeManagement() {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalItems={filteredEmployees.length} itemsPerPage={10} onPageChange={setCurrentPage} />
           </div>
       </div>
 
       {showToast && (
-        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
+        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">check_circle</span>
           {toastMessage}
         </div>

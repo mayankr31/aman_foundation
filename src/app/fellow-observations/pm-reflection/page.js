@@ -8,6 +8,8 @@ import { useToast } from "@/context/ToastContext";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import PMReflectionForm from "@/components/PMReflectionForm";
 import PMReflectionViewer from "@/components/PMReflectionViewer";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 import {
   COMPETENCY_CATEGORIES,
   CATEGORY_COUNT,
@@ -44,6 +46,7 @@ export default function FellowPmReflectionPage() {
 
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [formFellowId, setFormFellowId] = useState(null);
   const [editingReflection, setEditingReflection] = useState(null);
@@ -58,6 +61,12 @@ export default function FellowPmReflectionPage() {
   const [exporting, setExporting] = useState(false);
 
   const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
+
+  const filteredRows = rows.filter((row) => {
+    if (!searchQuery.trim()) return true;
+    return (row.name || "").toLowerCase().includes(searchQuery.trim().toLowerCase());
+  });
+  const { pageItems: pagedRows, currentPage, setCurrentPage } = usePagination(filteredRows, 10);
 
   const colorName = (hex) => {
     if (!hex) return "Gray";
@@ -291,7 +300,7 @@ export default function FellowPmReflectionPage() {
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
       <Link
         href="/education/fellows"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -303,7 +312,7 @@ export default function FellowPmReflectionPage() {
 
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+          <h2 className="page-title text-on-surface mb-3">
             PM Reflection
           </h2>
           <p className="text-sm font-medium text-on-surface-variant max-w-3xl leading-relaxed">
@@ -315,11 +324,39 @@ export default function FellowPmReflectionPage() {
         <button
           onClick={handleExport}
           disabled={exporting}
-          className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="material-symbols-outlined text-[18px]">download</span>
           {exporting ? "Exporting..." : "Export"}
         </button>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-3 mb-6 font-sans">
+        <div className="flex-1 min-w-[220px]">
+          <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
+            Search by Fellow Name
+          </label>
+          <div className="relative">
+            <span className="material-symbols-outlined text-[20px] text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2">
+              search
+            </span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search fellow..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+            />
+          </div>
+        </div>
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery("")}
+            className="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors text-xs font-semibold cursor-pointer"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mb-6 font-sans text-xs text-on-surface-variant">
@@ -398,7 +435,7 @@ export default function FellowPmReflectionPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => {
+              {pagedRows.map((row) => {
                 const reflection = row.latestReflection;
                 return (
                   <tr
@@ -433,7 +470,7 @@ export default function FellowPmReflectionPage() {
                       {reflection?.notes ? (
                         <p
                           title={reflection.notes}
-                          className="text-xs text-on-surface-variant line-clamp-2 max-w-[240px]"
+                          className="text-xs text-on-surface-variant max-w-[240px] whitespace-normal break-words"
                         >
                           {reflection.notes}
                         </p>
@@ -471,10 +508,11 @@ export default function FellowPmReflectionPage() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={currentPage} totalItems={filteredRows.length} itemsPerPage={10} onPageChange={setCurrentPage} />
 
-        {rows.length === 0 && (
+        {filteredRows.length === 0 && (
           <p className="text-center py-12 text-sm text-on-surface-variant font-sans">
-            No fellows found.
+            {rows.length === 0 ? "No fellows found." : "No fellows match your search."}
           </p>
         )}
       </div>

@@ -233,14 +233,14 @@ export default function PMReflectionForm({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-sm font-semibold"
+              className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-sm font-semibold"
             >
               Close
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer text-sm disabled:opacity-50"
+              className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
               {saving ? "Saving..." : isNew ? "Save Reflection" : "Update Reflection"}
             </button>

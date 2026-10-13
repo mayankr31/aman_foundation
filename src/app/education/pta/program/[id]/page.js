@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 function Modal({ title, onClose, children }) {
   return (
@@ -26,6 +28,7 @@ export default function PtaProgramDetail() {
   const { token, isInitializing } = useAuth();
   const [program, setProgram] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { pageItems: pagedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(program?.events || [], 6);
   const [modal, setModal] = useState(null); // 'editProgram' | 'addSchool'
   const [saving, setSaving] = useState(false);
   const [allSchools, setAllSchools] = useState([]);
@@ -180,7 +183,7 @@ export default function PtaProgramDetail() {
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back */}
-      <Link href="/education/pta" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+      <Link href="/education/pta" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to PTA Hub</span>
       </Link>
@@ -194,7 +197,7 @@ export default function PtaProgramDetail() {
           </div>
           <div className="pt-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize">{program.title}</h2>
+              <h2 className="page-title text-on-surface capitalize">{program.title}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${program.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                 {program.status}
               </span>
@@ -208,7 +211,7 @@ export default function PtaProgramDetail() {
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start">
           <button onClick={() => setModal("editProgram")}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
             <span className="material-symbols-outlined text-[18px]">edit</span> Edit Program
           </button>
         </div>
@@ -304,7 +307,7 @@ export default function PtaProgramDetail() {
               <p className="text-center py-8 text-on-surface-variant text-sm">No events scheduled for this program yet.</p>
             ) : (
               <div className="space-y-4">
-                {program.events.map(ev => (
+                {pagedEvents.map(ev => (
                   <Link key={ev.id} href={`/education/pta/event/${ev.id}`}
                     className="p-4 bg-surface-container-low rounded-lg flex justify-between items-start hover:bg-surface-container transition-colors block group">
                     <div>
@@ -316,6 +319,7 @@ export default function PtaProgramDetail() {
                     </span>
                   </Link>
                 ))}
+                <Pagination currentPage={eventsPage} totalItems={program.events.length} itemsPerPage={6} onPageChange={setEventsPage} />
               </div>
             )}
           </div>
@@ -400,8 +404,8 @@ export default function PtaProgramDetail() {
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>
@@ -506,8 +510,8 @@ export default function PtaProgramDetail() {
               </div>
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Scheduling..." : "Schedule Event"}
               </button>
             </div>

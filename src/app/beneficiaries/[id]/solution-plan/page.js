@@ -179,7 +179,7 @@ export default function SolutionPlanPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full font-sans">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-6 w-fit font-bold text-sm">
+      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
         Back to Beneficiary Profile
       </Link>
@@ -235,7 +235,7 @@ export default function SolutionPlanPage() {
 
               {/* Activities Table */}
               <div className="p-4 bg-surface-container-lowest overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[900px]">
+                <table className="w-full table-fixed text-left border-collapse min-w-[900px]">
                   <thead>
                     <tr>
                       <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[30%]">Key Activities planned</th>
@@ -327,7 +327,7 @@ export default function SolutionPlanPage() {
           <button 
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="gradient-primary bg-primary text-on-primary px-8 py-3 rounded-full font-bold text-sm hover:opacity-90 transition-opacity shadow-glow disabled:opacity-50"
+            className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full font-bold text-sm hover:opacity-90 transition-opacity shadow-glow disabled:opacity-50"
           >
             {isSubmitting ? "Saving Plan..." : editingPlanId ? "Update Solution Plan" : "Save Solution Plan"}
           </button>

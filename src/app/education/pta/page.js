@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import EmptyState from "@/components/ui/EmptyState";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -159,6 +162,9 @@ export default function PtaPrograms() {
         return d.getMonth() === month && d.getFullYear() === year;
       });
 
+  const { pageItems: pagedPrograms, currentPage: programsPage, setCurrentPage: setProgramsPage } = usePagination(programs, 6);
+  const { pageItems: pagedDisplayedEvents, currentPage: eventsPage, setCurrentPage: setEventsPage } = usePagination(displayedEvents, 6);
+
   // Form states
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -171,7 +177,10 @@ export default function PtaPrograms() {
 
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-    if (!newName || !newDesc) return;
+    if (!newName || !newDesc) {
+      alert("Title and Description are required.");
+      return;
+    }
 
     try {
       const headers = {
@@ -264,7 +273,7 @@ export default function PtaPrograms() {
       <div className="flex flex-col px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
         <Link
           href="/education"
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
         >
           <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
             arrow_back
@@ -278,7 +287,7 @@ export default function PtaPrograms() {
             <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2 font-sans">
               Education Module
             </p>
-            <h1 className="text-2xl md:text-[2.75rem] font-headline font-semibold text-on-background leading-tight">
+            <h1 className="page-title text-on-background">
               PTA &amp; Programs Hub
             </h1>
           </div>
@@ -289,7 +298,7 @@ export default function PtaPrograms() {
                   setModalType("Event");
                   setShowAddModal(true);
                 }}
-                className="flex-1 md:flex-none bg-surface-container-lowest text-on-surface border border-outline-variant/30 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-low transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="flex-1 md:flex-none bg-surface-container-lowest text-on-surface border border-outline-variant/30 px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-low transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[18px]">calendar_month</span>
                 <span className="whitespace-nowrap">Schedule Meeting</span>
@@ -301,7 +310,7 @@ export default function PtaPrograms() {
                   setModalType("Program");
                   setShowAddModal(true);
                 }}
-                className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer"
+                className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[18px]">add</span>
                 <span className="whitespace-nowrap">Launch Program</span>
@@ -321,7 +330,7 @@ export default function PtaPrograms() {
               <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2">
                 Running Programs
               </p>
-              <div className="text-4xl font-headline font-bold text-on-surface">{programs.length} Active</div>
+              <div className="stat-value text-on-surface">{programs.length} Active</div>
               <p className="text-xs text-on-surface-variant mt-2">Continuous impact assessment</p>
             </div>
 
@@ -329,7 +338,7 @@ export default function PtaPrograms() {
               <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2">
                 Meetings Held
               </p>
-              <div className="text-4xl font-headline font-bold text-on-surface">{events.filter(e => e.status === "Completed").length}</div>
+              <div className="stat-value text-on-surface">{events.filter(e => e.status === "Completed").length}</div>
               <p className="text-xs text-on-surface-variant mt-2">Parent-Teacher linkages complete</p>
             </div>
           </div>
@@ -342,7 +351,14 @@ export default function PtaPrograms() {
                 Long-Running Programs
               </h3>
               <div className="space-y-4">
-                {programs.map((p) => (
+                {programs.length === 0 && (
+                  <EmptyState
+                    icon="workspace_premium"
+                    title="No programs yet"
+                    message="There are no long-running PTA programs to display."
+                  />
+                )}
+                {pagedPrograms.map((p) => (
                   <Link
                     key={p.id}
                     href={`/education/pta/program/${p.id}`}
@@ -361,6 +377,7 @@ export default function PtaPrograms() {
                     </div>
                   </Link>
                 ))}
+                <Pagination currentPage={programsPage} totalItems={programs.length} itemsPerPage={6} onPageChange={setProgramsPage} />
               </div>
             </div>
           </div>
@@ -458,7 +475,7 @@ export default function PtaPrograms() {
                 </h4>
 
                 <div className="space-y-3">
-                  {displayedEvents.map((e) => (
+                  {pagedDisplayedEvents.map((e) => (
                     <Link
                       key={e.id}
                       href={`/education/pta/event/${e.id}`}
@@ -482,6 +499,7 @@ export default function PtaPrograms() {
                       No events scheduled for this period.
                     </p>
                   )}
+                  <Pagination currentPage={eventsPage} totalItems={displayedEvents.length} itemsPerPage={6} onPageChange={setEventsPage} />
                 </div>
               </div>
             </div>
@@ -611,7 +629,7 @@ export default function PtaPrograms() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
                 >
                   Launch Now
                 </button>

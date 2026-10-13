@@ -209,7 +209,6 @@ export async function PATCH(req, context) {
         guardianPhone: body.guardianPhone,
         enrolmentDate: body.enrolmentDate ? new Date(body.enrolmentDate) : undefined,
         primaryLanguage: body.primaryLanguage,
-        status: body.status,
         schoolId: body.schoolId,
         fellowId: body.fellowId,
         beneficiaryId: body.beneficiaryId !== undefined ? (body.beneficiaryId || null) : undefined,

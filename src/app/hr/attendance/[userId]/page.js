@@ -356,7 +356,7 @@ export default function UserAttendanceDetails({ params }) {
 
   return (
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full font-sans bg-gray-50/50">
-      <Link href="/hr" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+      <Link href="/hr" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest">Back to HR Management</span>
       </Link>

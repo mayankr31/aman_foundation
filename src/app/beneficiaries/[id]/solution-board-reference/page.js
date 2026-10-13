@@ -26,7 +26,7 @@ export default function SolutionBoardReferencePage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full font-sans">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-6 w-fit font-bold text-sm">
+      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
         Back to Beneficiary Profile
       </Link>
@@ -163,7 +163,7 @@ export default function SolutionBoardReferencePage() {
             </p>
             
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="w-full table-fixed text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[20%]">Category</th>
@@ -203,7 +203,7 @@ export default function SolutionBoardReferencePage() {
           <section>
             <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Gram Panchayat Contact Details</h2>
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full text-left border-collapse min-w-[600px]">
+              <table className="w-full table-fixed text-left border-collapse min-w-[600px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Gram Panchayat</th>
@@ -229,7 +229,7 @@ export default function SolutionBoardReferencePage() {
           <section>
             <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Additional NGOs/Training Centers for Kanakapura</h2>
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full text-left border-collapse min-w-[800px]">
+              <table className="w-full table-fixed text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Organization Name</th>

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -15,6 +17,26 @@ export default function TravelManagePage() {
 
   const [showRejectModal, setShowRejectModal] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [staffFilter, setStaffFilter] = useState("All");
+
+  const staffOptions = useMemo(
+    () => Array.from(new Set(requests.map(r => r.user?.name).filter(Boolean))).sort(),
+    [requests]
+  );
+  const filteredRequests = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return requests.filter(r => {
+      const matchesSearch =
+        !q ||
+        (r.destination || "").toLowerCase().includes(q) ||
+        (r.purpose || "").toLowerCase().includes(q) ||
+        (r.user?.name || "").toLowerCase().includes(q);
+      const matchesStaff = staffFilter === "All" || r.user?.name === staffFilter;
+      return matchesSearch && matchesStaff;
+    });
+  }, [requests, searchQuery, staffFilter]);
+  const { pageItems: pagedRequests, currentPage, setCurrentPage } = usePagination(filteredRequests, 10);
 
   const triggerToast = (msg) => {
     setToast({ show: true, message: msg });
@@ -145,7 +167,7 @@ export default function TravelManagePage() {
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="mb-8">
-        <h2 className="text-3xl font-headline font-black text-on-surface mb-2">Travel Management</h2>
+        <h2 className="page-title text-on-surface mb-2">Travel Management</h2>
         <div className="flex items-center gap-4">
           <p className="text-sm text-on-surface-variant">Review and approve travel requests.</p>
           {pendingCount > 0 && (
@@ -156,14 +178,51 @@ export default function TravelManagePage() {
         </div>
       </div>
 
+      <div className="flex flex-wrap items-end gap-3 mb-6">
+        <div className="flex-1 min-w-[220px]">
+          <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">Search</label>
+          <div className="relative">
+            <span className="material-symbols-outlined text-[20px] text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2">search</span>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by destination, purpose or staff..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">Staff</label>
+          <select
+            value={staffFilter}
+            onChange={(e) => setStaffFilter(e.target.value)}
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+          >
+            <option value="All">All Staff</option>
+            {staffOptions.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        {(searchQuery || staffFilter !== "All") && (
+          <button
+            onClick={() => { setSearchQuery(""); setStaffFilter("All"); }}
+            className="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors text-xs font-semibold cursor-pointer"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
       <div className="space-y-4">
-        {requests.length === 0 ? (
+        {filteredRequests.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-xl p-12 text-center border border-outline-variant/10">
             <span className="material-symbols-outlined text-5xl text-slate-300 mb-4 block">flight</span>
             <p className="text-on-surface-variant font-medium">No travel requests found.</p>
           </div>
         ) : (
-          requests.map(req => (
+          pagedRequests.map(req => (
             <div key={req.id} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 space-y-4">
               <div className="flex justify-between items-start flex-wrap gap-3">
                 <div>
@@ -275,6 +334,7 @@ export default function TravelManagePage() {
             </div>
           ))
         )}
+        <Pagination currentPage={currentPage} totalItems={filteredRequests.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {/* Rejection Modal */}
@@ -305,7 +365,7 @@ export default function TravelManagePage() {
                   Cancel
                 </button>
                 <button type="submit"
-                  className="px-5 py-2 rounded-full bg-rose-600 text-white font-semibold hover:bg-rose-700 transition-colors cursor-pointer">
+                  className="px-4 py-2 rounded-full bg-rose-600 text-white font-semibold hover:bg-rose-700 transition-colors cursor-pointer">
                   Confirm Rejection
                 </button>
               </div>
@@ -315,7 +375,7 @@ export default function TravelManagePage() {
       )}
 
       {toast.show && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
           {toast.message}
         </div>

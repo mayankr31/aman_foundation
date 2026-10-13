@@ -84,7 +84,10 @@ export default function FellowsModule() {
 
   const handleSaveFellow = async (e) => {
     e.preventDefault();
-    if (!newFellowName || !newLocation || !editingFellowId) return;
+    if (!newFellowName || !newLocation || !editingFellowId) {
+      alert("Fellow Name and Location are required.");
+      return;
+    }
 
     const payload = {
       name: newFellowName,
@@ -159,7 +162,7 @@ export default function FellowsModule() {
       {/* Header Section */}
       <Link
         href="/education"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -171,10 +174,10 @@ export default function FellowsModule() {
 
       {/* Header Section */}
       <div className="mb-6">
-        <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+        <h2 className="page-title text-on-surface mb-3">
           Fellows Progress Tracking
         </h2>
-        <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
+        <p className="page-description">
           Monitor individual literacy goals and progress across all active educational districts near Kalgachia, Assam.
         </p>
       </div>
@@ -215,7 +218,7 @@ export default function FellowsModule() {
 
         <button
           onClick={handleExport}
-          className="bg-surface-container text-on-surface px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2 whitespace-nowrap"
+          className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2 whitespace-nowrap"
         >
           <span className="material-symbols-outlined text-[18px]">download</span>
           Export
@@ -230,7 +233,7 @@ export default function FellowsModule() {
             Total Fellows
           </p>
           <div className="flex items-baseline gap-3">
-            <h3 className="text-4xl font-headline font-black text-on-surface tracking-tight">
+            <h3 className="stat-value text-on-surface tracking-tight">
               {fellows.length}
             </h3>
           </div>
@@ -238,25 +241,28 @@ export default function FellowsModule() {
       </div>
 
       {/* List View */}
-        <div className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-hidden border border-surface-container-highest">
-          <table className="w-full text-left border-collapse font-sans">
+        <div className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-x-auto border border-surface-container-highest">
+          <table className="w-full min-w-[720px] table-fixed text-left border-collapse font-sans">
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant text-[0.75rem] uppercase tracking-[0.05em] font-semibold">
-                <th className="px-8 py-4">Name</th>
-                <th className="px-6 py-4">District</th>
-                <th className="px-6 py-4">Literacy Goal</th>
-                <th className="px-6 py-4">Last Updated</th>
-                <th className="px-8 py-4 text-right">Actions</th>
+                <th className="w-[24%] px-8 py-4">Name</th>
+                <th className="w-[18%] px-6 py-4">District</th>
+                <th className="w-[20%] px-6 py-4">Literacy Goal</th>
+                <th className="w-[18%] px-6 py-4">Last Updated</th>
+                <th className="w-[20%] px-8 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {paginatedFellows.map((f, i) => (
+              {paginatedFellows.map((f, i) => {
+                const profileHref = `/education/fellows/${encodeURIComponent(f.name.replace(/\s+/g, '-'))}`;
+                return (
                 <tr
                   key={i}
-                  className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors"
+                  onClick={() => router.push(profileHref)}
+                  className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors cursor-pointer"
                 >
                   <td className="px-8 py-4 font-semibold text-on-surface">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
                         {f.avatar ? (
                           <img alt="avatar" className="w-full h-full object-cover" src={f.avatar} />
@@ -264,10 +270,10 @@ export default function FellowsModule() {
                           f.name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2)
                         )}
                       </div>
-                      <span>{f.name}</span>
+                      <span className="break-words">{f.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-on-surface-variant">{f.location}</td>
+                  <td className="px-6 py-4 text-sm text-on-surface-variant break-words">{f.location}</td>
                   <td className="px-6 py-4 text-sm">
                     <span
                       className={`px-2.5 py-1 rounded-full text-xs font-bold ${
@@ -283,14 +289,15 @@ export default function FellowsModule() {
                   <td className="px-8 py-4 text-right">
                     <div className="flex items-center justify-end gap-4">
                       <Link
-                        href={`/education/fellows/${encodeURIComponent(f.name.replace(/\s+/g, '-'))}`}
+                        href={profileHref}
+                        onClick={(e) => e.stopPropagation()}
                         className="text-primary hover:text-primary-container text-sm font-semibold transition-colors cursor-pointer"
                       >
                         View Profile
                       </Link>
                       {canManage && (
                         <button
-                          onClick={() => openEditModal(f)}
+                          onClick={(e) => { e.stopPropagation(); openEditModal(f); }}
                           className="text-on-surface-variant hover:text-primary text-sm font-semibold transition-colors cursor-pointer"
                         >
                           Edit
@@ -299,7 +306,8 @@ export default function FellowsModule() {
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -448,7 +456,7 @@ export default function FellowsModule() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
                 >
                   Save Changes
                 </button>

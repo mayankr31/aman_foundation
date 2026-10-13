@@ -343,7 +343,7 @@ export default function MonthlyPlanner({ fellowId }) {
                   <button type="button" onClick={() => setShowAddForm(false)} className="px-4 py-2 text-sm font-medium rounded-full border hover:bg-slate-200 cursor-pointer transition-colors">
                     Cancel
                   </button>
-                  <button type="submit" className="px-5 py-2 text-sm font-medium rounded-full bg-primary text-white cursor-pointer hover:bg-primary-container shadow-md shadow-primary/20 transition-all">
+                  <button type="submit" className="px-4 py-2 text-sm font-medium rounded-full bg-primary text-white cursor-pointer hover:bg-primary-container shadow-md shadow-primary/20 transition-all">
                     Save Task
                   </button>
                 </div>

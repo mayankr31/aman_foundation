@@ -118,14 +118,14 @@ export default function ResetPasswordModal({ isOpen, onClose, isDarkMode, token,
             <button
               type="button"
               onClick={onClose}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform"
+              className="px-4 py-2 rounded-xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
               Reset Password

@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { deriveAcademicStatus, getAcademicStatusClass, PERFORMANCE_FILTERS } from "@/lib/academicStatus";
 
 const EMPTY_STUDENT_FORM = {
   name: "",
@@ -19,7 +21,6 @@ const EMPTY_STUDENT_FORM = {
   guardianPhone: "",
   address: "",
   enrolmentDate: "",
-  status: "On Track",
   schoolId: "",
 };
 
@@ -33,7 +34,7 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
     "px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface";
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
         <select name={name} value={value} onChange={(e) => onChange(name, e.target.value)} required={required} className={inputClasses}>
           {options.map((o, index) => {
@@ -58,6 +59,7 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
 }
 
 export default function StudentsModule() {
+  const router = useRouter();
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeFilter, setGradeFilter] = useState("All Grades");
@@ -99,7 +101,10 @@ export default function StudentsModule() {
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!newStudentForm.name || !newStudentForm.schoolId) return;
+    if (!newStudentForm.name || !newStudentForm.schoolId) {
+      alert("Full Name and Partner School are required.");
+      return;
+    }
 
     try {
       const res = await fetch("/api/students", {
@@ -169,7 +174,7 @@ export default function StudentsModule() {
       "Address": s.address || "",
       "Enrolment Date": s.enrolmentDate ? new Date(s.enrolmentDate).toLocaleDateString() : "",
       "Attendance (%)": s.attendance ?? 0,
-      "Status": s.status,
+      "Academic Status": deriveAcademicStatus(s.attendance),
       "Migrated": s.isMigrated ? "Yes" : "No",
     }));
 
@@ -217,16 +222,6 @@ export default function StudentsModule() {
     return { color, bar, glow: att > 90 };
   };
 
-  const getStatusClass = (status) => {
-    const statusClasses = {
-      "On Track": "bg-primary-fixed text-on-primary-fixed",
-      "Satisfactory": "bg-surface-container text-on-surface-variant",
-      "Needs Attention": "bg-error-container text-on-error-container",
-      "Excelling": "bg-primary-fixed text-on-primary-fixed"
-    };
-    return statusClasses[status] || "bg-surface-container text-on-surface-variant";
-  };
-
   const filteredStudents = students.filter((s) => {
     const matchesSearch =
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -239,10 +234,7 @@ export default function StudentsModule() {
 
     const matchesPerformance =
       performanceFilter === "All Performance" ||
-      (performanceFilter === "Excellent" && s.status === "Excelling") ||
-      (performanceFilter === "Satisfactory" &&
-        (s.status === "On Track" || s.status === "Satisfactory")) ||
-      (performanceFilter === "Needs Attention" && s.status === "Needs Attention");
+      deriveAcademicStatus(s.attendance) === performanceFilter;
 
     const matchesSchool =
       schoolFilter === "All Schools" || (s.school && s.school.id === schoolFilter);
@@ -263,11 +255,11 @@ export default function StudentsModule() {
   );
 
   return (
-    <div className="p-6 md:p-8 lg:p-12 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Header Section */}
       <Link
         href="/education"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -279,10 +271,10 @@ export default function StudentsModule() {
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
         <div>
-          <h2 className="text-3xl md:text-[2.75rem] font-bold text-on-surface tracking-tight leading-tight font-headline">
+          <h2 className="page-title text-on-surface">
             Students Directory
           </h2>
-          <p className="text-on-surface-variant mt-2 max-w-2xl text-sm md:text-base">
+          <p className="page-description mt-2">
             Manage enrolled students, track academic progress, and monitor school linkages across all program areas.
           </p>
         </div>
@@ -301,14 +293,14 @@ export default function StudentsModule() {
           </div>
           <button
             onClick={handleExport}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export</span>
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-all font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)]"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary hover:opacity-90 transition-all font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)]"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="whitespace-nowrap">Add Student</span>
@@ -324,7 +316,7 @@ export default function StudentsModule() {
             <span className="text-xs uppercase tracking-widest text-on-surface-variant font-label">
               Total Enrolled
             </span>
-            <span className="text-3xl font-black text-on-surface tracking-tighter">{students.length.toLocaleString()}</span>
+            <span className="stat-value text-on-surface">{students.length.toLocaleString()}</span>
             <div className="flex items-center gap-1 text-primary text-xs font-medium mt-1">
               <span className="material-symbols-outlined text-xs">school</span>
               <span>Across {schools.length} partner {schools.length === 1 ? "school" : "schools"}</span>
@@ -352,10 +344,9 @@ export default function StudentsModule() {
             onChange={(e) => { setPerformanceFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
           >
-            <option>All Performance</option>
-            <option>Excellent</option>
-            <option>Satisfactory</option>
-            <option>Needs Attention</option>
+            {PERFORMANCE_FILTERS.map((f) => (
+              <option key={f}>{f}</option>
+            ))}
           </select>
           <select
             value={migratedFilter}
@@ -388,13 +379,13 @@ export default function StudentsModule() {
       {/* Student Data Container */}
       <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px] font-sans">
+          <table className="w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
               <tr className="text-xs uppercase tracking-widest text-on-surface-variant font-label border-b border-surface-container">
-                <th className="px-6 py-4 font-semibold">Student Info</th>
-                <th className="px-6 py-4 font-semibold">School Linkage</th>
-                <th className="px-6 py-4 font-semibold">Academic Progress</th>
-                <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                <th className="w-[28%] px-6 py-4 font-semibold">Student Info</th>
+                <th className="w-[30%] px-6 py-4 font-semibold">School Linkage</th>
+                <th className="w-[24%] px-6 py-4 font-semibold">Academic Progress</th>
+                <th className="w-[18%] px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -402,12 +393,15 @@ export default function StudentsModule() {
                 const initials = getInitials(s.name);
                 const bgClass = getBgClass(s.name);
                 const { color: attendanceColor, bar: barColor, glow: hasGlow } = getAttendanceColors(s.attendance);
-                const statusClass = getStatusClass(s.status);
+                const academicStatus = deriveAcademicStatus(s.attendance);
+                const statusClass = getAcademicStatusClass(academicStatus);
                 
+                const profileHref = `/education/students/${encodeURIComponent(s.name.replace(/\s+/g, '-'))}`;
                 return (
                   <tr
                     key={s.id}
-                    className={`group hover:bg-surface-container-low/50 transition-colors ${
+                    onClick={() => router.push(profileHref)}
+                    className={`group hover:bg-surface-container-low/50 transition-colors cursor-pointer ${
                       index > 0 ? "border-t border-surface-container-low" : ""
                     }`}
                   >
@@ -422,15 +416,15 @@ export default function StudentsModule() {
                             initials
                           )}
                         </div>
-                        <div>
-                          <div className="font-bold text-on-surface">{s.name}</div>
-                          <div className="text-xs text-on-surface-variant mt-0.5">ID: {s.studentId}</div>
+                        <div className="min-w-0">
+                          <div className="font-bold text-on-surface break-words">{s.name}</div>
+                          <div className="text-xs text-on-surface-variant mt-0.5 break-words">ID: {s.studentId}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-5">
-                      <div className="font-medium text-on-surface">{s.school ? s.school.name : "Unassigned"}</div>
-                      <div className="text-xs text-on-surface-variant mt-0.5">
+                      <div className="font-medium text-on-surface break-words">{s.school ? s.school.name : "Unassigned"}</div>
+                      <div className="text-xs text-on-surface-variant mt-0.5 break-words">
                         {s.grade} • {s.district || "Kalgachia"}
                       </div>
                     </td>
@@ -453,14 +447,15 @@ export default function StudentsModule() {
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider w-max mt-1 ${statusClass}`}
                         >
-                          {s.status}
+                          {academicStatus}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-5 text-right">
                       <Link
-                        href={`/education/students/${encodeURIComponent(s.name.replace(/\s+/g, '-'))}`}
-                        className="text-primary hover:bg-primary/5 px-4 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline"
+                        href={profileHref}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline"
                       >
                         View Profile
                       </Link>
@@ -605,18 +600,17 @@ export default function StudentsModule() {
                   <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} placeholder="Village / Town, Post Office" />
                 </div>
                 <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} />
-                <FormField label="Status" name="status" value={newStudentForm.status} onChange={handleNewStudentChange} options={["On Track", "Needs Attention", "At Risk", "Graduated", "Inactive"]} />
                 <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+                    className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
                   >
                     Add Student
                   </button>

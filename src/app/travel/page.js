@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -10,6 +12,7 @@ export default function TravelPage() {
   const { token, user, isInitializing } = useAuth();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
+  const { pageItems: pagedRequests, currentPage, setCurrentPage } = usePagination(requests, 10);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: "" });
 
@@ -67,7 +70,10 @@ export default function TravelPage() {
 
   const handleCreateRequest = async (e) => {
     e.preventDefault();
-    if (!newDestination || !newPurpose || !newStartDate || !newEndDate) return;
+    if (!newDestination || !newPurpose || !newStartDate || !newEndDate) {
+      alert("Destination, Purpose, Start Date and End Date are required.");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/travel-requests", {
@@ -169,12 +175,12 @@ export default function TravelPage() {
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-3xl font-headline font-black text-on-surface mb-2">Travel Requests</h2>
+          <h2 className="page-title text-on-surface mb-2">Travel Requests</h2>
           <p className="text-sm text-on-surface-variant">Submit and manage your travel requests.</p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
-          className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
           New Travel Request
@@ -189,7 +195,7 @@ export default function TravelPage() {
             <p className="text-xs text-slate-400 mt-1">Submit a new travel request to get started.</p>
           </div>
         ) : (
-          requests.map(req => (
+          pagedRequests.map(req => (
             <div key={req.id} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 space-y-4">
               <div className="flex justify-between items-start flex-wrap gap-3">
                 <div>
@@ -261,6 +267,7 @@ export default function TravelPage() {
             </div>
           ))
         )}
+        <Pagination currentPage={currentPage} totalItems={requests.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {/* New Travel Request Modal */}
@@ -310,7 +317,7 @@ export default function TravelPage() {
                   Cancel
                 </button>
                 <button type="submit" disabled={submitting}
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
                   {submitting ? "Submitting..." : "Submit Request"}
                 </button>
               </div>
@@ -402,7 +409,7 @@ export default function TravelPage() {
                   Cancel
                 </button>
                 <button type="submit" disabled={submittingExpense}
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
                   {submittingExpense ? "Submitting..." : "Submit Expenses"}
                 </button>
               </div>
@@ -412,7 +419,7 @@ export default function TravelPage() {
       )}
 
       {toast.show && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
           {toast.message}
         </div>

@@ -7,6 +7,8 @@ import { useToast } from "@/context/ToastContext";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import FellowPerformanceForm from "@/components/FellowPerformanceForm";
 import RatingCategoriesModal from "@/components/RatingCategoriesModal";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -145,6 +147,7 @@ export default function FellowPerformancePage() {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const hasFilters = searchQuery || dateFrom || dateTo;
+  const { pageItems: pagedRecords, currentPage, setCurrentPage } = usePagination(filteredRecords, 10);
 
   const handleExport = async () => {
     if (!filteredRecords.length) {
@@ -205,7 +208,7 @@ export default function FellowPerformancePage() {
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-[2.5rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+          <h2 className="page-title text-on-surface mb-3">
             Fellow Performance Tracking
           </h2>
           <p className="text-sm font-medium text-on-surface-variant max-w-3xl leading-relaxed">
@@ -216,21 +219,21 @@ export default function FellowPerformancePage() {
           <button
             onClick={handleExport}
             disabled={exporting}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined text-[18px]">download</span>
             {exporting ? "Exporting..." : "Export"}
           </button>
           <button
             onClick={() => setShowCategoriesModal(true)}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">tune</span>
             Manage Ratings
           </button>
           <button
             onClick={openAddForm}
-            className="bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             Add Fellow Performance
@@ -323,7 +326,7 @@ export default function FellowPerformancePage() {
               </tr>
             </thead>
             <tbody>
-              {filteredRecords.map((record) => (
+              {pagedRecords.map((record) => (
                 <tr
                   key={record.id}
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors align-top"
@@ -334,8 +337,8 @@ export default function FellowPerformancePage() {
                   <td className="px-4 py-3 font-semibold text-on-surface">
                     {record.fellow?.name || "—"}
                   </td>
-                  <td className="px-4 py-3 text-on-surface-variant">{record.classGroup || "—"}</td>
-                  <td className="px-4 py-3 text-on-surface-variant">{record.subject || "—"}</td>
+                  <td className="px-4 py-3 text-on-surface-variant break-words">{record.classGroup || "—"}</td>
+                  <td className="px-4 py-3 text-on-surface-variant break-words">{record.subject || "—"}</td>
                   {categories.map((col) => (
                     <td key={col.key} className="px-3 py-3 text-center text-on-surface">
                       {record.ratings?.[col.key] ?? record[col.key] ?? "—"}
@@ -346,13 +349,13 @@ export default function FellowPerformancePage() {
                       {record.overallScore ?? "—"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px]">
+                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px] whitespace-normal break-words align-top">
                     {record.strength || "—"}
                   </td>
-                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px]">
+                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px] whitespace-normal break-words align-top">
                     {record.aod || "—"}
                   </td>
-                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px]">
+                  <td className="px-4 py-3 text-on-surface-variant text-xs max-w-[220px] whitespace-normal break-words align-top">
                     {record.trend || "—"}
                   </td>
                   <td className="px-4 py-3">
@@ -377,6 +380,7 @@ export default function FellowPerformancePage() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={currentPage} totalItems={filteredRecords.length} itemsPerPage={10} onPageChange={setCurrentPage} />
 
         {filteredRecords.length === 0 && (
           <p className="text-center py-12 text-sm text-on-surface-variant font-sans">

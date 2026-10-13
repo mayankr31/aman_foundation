@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
+import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -13,7 +14,7 @@ const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
         <select
           name={name}
@@ -68,22 +69,19 @@ export default function StudentProfileDetail() {
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [learningAssessments, setLearningAssessments] = useState([]);
   const [homeworkRecords, setHomeworkRecords] = useState([]);
-  const [assessmentDateFilter, setAssessmentDateFilter] = useState("");
-  const [homeworkDateFilter, setHomeworkDateFilter] = useState("");
   const [assessmentForms, setAssessmentForms] = useState([]);
   const [transitions, setTransitions] = useState([]);
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [searchQ, setSearchQ] = useState("");
 
-  const [academicYearFilter, setAcademicYearFilter] = useState("");
-  const [academicMonthFilter, setAcademicMonthFilter] = useState("");
+  // Global date-range filter (applies to all dated sections on this page)
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   // Form states
   const [editForm, setEditForm] = useState({});
   const [transitionForm, setTransitionForm] = useState({ academicYear: "", month: "", status: "CONTINUING_EDUCATION", description: "", location: "" });
   const [editTransitionId, setEditTransitionId] = useState(null);
-  const [attendanceYearFilter, setAttendanceYearFilter] = useState("All Years");
-  const [attendanceMonthFilter, setAttendanceMonthFilter] = useState("All Months");
 
   // Assessment form state
   const [activeFormTab, setActiveFormTab] = useState("basic");
@@ -134,7 +132,6 @@ export default function StudentProfileDetail() {
           guardianPhone: json.data.guardianPhone || "",
           enrolmentDate: json.data.enrolmentDate ? json.data.enrolmentDate.split("T")[0] : "",
           primaryLanguage: json.data.primaryLanguage || "",
-          status: json.data.status || "On Track",
         });
       }
     } catch (err) {
@@ -149,6 +146,17 @@ export default function StudentProfileDetail() {
       loadStudent();
     }
   }, [loadStudent, isInitializing]);
+
+  // Scroll to a section anchor when the page is opened with a #hash deep link.
+  useEffect(() => {
+    if (!student || typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (!hash) return;
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    const timer = setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+    return () => clearTimeout(timer);
+  }, [student]);
 
   // Fetch schools for the school-assign modal
   useEffect(() => {
@@ -614,18 +622,60 @@ export default function StudentProfileDetail() {
 
   const name = student.name;
 
-  const attendanceYears = ["All Years", ...Array.from(new Set(attendanceLogs.map(log => {
-    const yearMatch = log.month.match(/\b(20\d{2})\b/);
-    return yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
-  }))).sort((a, b) => b.localeCompare(a))];
-  const attendanceMonths = ["All Months", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  // ── Global date-range helpers ──────────────────────────────────────────────
+  // Build a local YYYY-MM-DD string (avoids UTC off-by-one from toISOString).
+  const toLocalDateKey = (d) => {
+    const dt = new Date(d);
+    if (Number.isNaN(dt.getTime())) return "";
+    return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+  };
+  const hasDateRange = Boolean(dateFrom || dateTo);
+  const inDateRange = (dateValue) => {
+    if (!hasDateRange) return true;
+    const key = toLocalDateKey(dateValue);
+    if (!key) return true;
+    if (dateFrom && key < dateFrom) return false;
+    if (dateTo && key > dateTo) return false;
+    return true;
+  };
+
+  // Parse a free-form month string ("Apr 2026", "April 2026", "Apr", "2026-04") into "YYYY-MM".
+  // Seed data stores bare month names with no year, so fall back to the selected range's year, then current year.
+  const MONTH_INDEX = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+  const parseMonthYear = (monthStr, fallbackYear) => {
+    if (!monthStr) return "";
+    const str = String(monthStr).trim();
+    let year = null;
+    let month = null;
+    const yearMatch = str.match(/\b(20\d{2})\b/);
+    if (yearMatch) year = parseInt(yearMatch[1], 10);
+    const isoMatch = str.match(/\b(20\d{2})-(\d{1,2})\b/);
+    if (isoMatch) {
+      year = parseInt(isoMatch[1], 10);
+      month = parseInt(isoMatch[2], 10);
+    } else {
+      const nameMatch = str.match(/[A-Za-z]{3,}/);
+      if (nameMatch) {
+        const key = nameMatch[0].slice(0, 3).toLowerCase();
+        if (MONTH_INDEX[key]) month = MONTH_INDEX[key];
+      }
+    }
+    if (!month) return "";
+    if (!year) year = fallbackYear || new Date().getFullYear();
+    return `${year}-${String(month).padStart(2, "0")}`;
+  };
+
+  const rangeFromYM = dateFrom ? dateFrom.slice(0, 7) : "";
+  const rangeToYM = dateTo ? dateTo.slice(0, 7) : "";
+  const fallbackYear = (dateFrom || dateTo) ? parseInt((dateFrom || dateTo).slice(0, 4), 10) : null;
 
   const filteredAttendanceLogs = attendanceLogs.filter(log => {
-    const yearMatch = log.month.match(/\b(20\d{2})\b/);
-    const y = yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
-    const matchYear = attendanceYearFilter === "All Years" || y === attendanceYearFilter;
-    const matchMonth = attendanceMonthFilter === "All Months" || log.month.toLowerCase().includes(attendanceMonthFilter.toLowerCase());
-    return matchYear && matchMonth;
+    if (!hasDateRange) return true;
+    const ym = parseMonthYear(log.month, fallbackYear);
+    if (!ym) return true;
+    if (rangeFromYM && ym < rangeFromYM) return false;
+    if (rangeToYM && ym > rangeToYM) return false;
+    return true;
   });
 
   const academicMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -642,15 +692,19 @@ export default function StudentProfileDetail() {
   const filteredAssessmentForms = assessmentForms.filter(f => {
     if (assessmentTypeFilter && f.assessmentType !== assessmentTypeFilter) return false;
     if (assessmentSessionFilter && (!f.date || deriveSession(f.date) !== assessmentSessionFilter)) return false;
+    if (!inDateRange(f.date)) return false;
     return true;
   });
+
+  const filteredLearningAssessments = learningAssessments.filter(a => inDateRange(a.date));
+  const filteredHomeworkRecords = homeworkRecords.filter(h => inDateRange(h.date));
 
   const isAdminOrManager = user && (user.roleName === "ADMIN" || PROGRAM_ROLES.includes(user.roleName));
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back Link */}
-      <Link href="/education/students" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+      <Link href="/education/students" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Students Directory</span>
       </Link>
@@ -674,9 +728,9 @@ export default function StudentProfileDetail() {
           </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize">{student.name}</h2>
-              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${student.status === "On Track" ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"}`}>
-                {student.status}
+              <h2 className="page-title text-on-surface capitalize">{student.name}</h2>
+              <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${getAcademicStatusClass(deriveAcademicStatus(student.attendance))}`}>
+                {deriveAcademicStatus(student.attendance)}
               </span>
               {student.isMigrated && (
                 <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant">
@@ -699,7 +753,7 @@ export default function StudentProfileDetail() {
           <button
             onClick={() => setShowConfirmMigrate(true)}
             disabled={saving}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 disabled:opacity-50"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 disabled:opacity-50"
           >
             <span className="material-symbols-outlined text-[18px]">
               {student.isMigrated ? "undo" : "moving"}
@@ -708,14 +762,14 @@ export default function StudentProfileDetail() {
           </button>
           <button
             onClick={() => setModal("edit")}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">edit</span>
             Edit Student Info
           </button>
           <button
             onClick={() => setModal("school")}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">school</span>
             Manage School
@@ -723,14 +777,48 @@ export default function StudentProfileDetail() {
         </div>
       </header>
 
+      {/* Global Date Range Filter */}
+      <div className="flex flex-wrap items-end gap-3 mb-8 font-sans">
+        <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide flex items-center gap-1.5">
+          <span className="material-symbols-outlined text-[18px] text-primary">date_range</span>
+          Filter by date
+        </span>
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">From</label>
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">To</label>
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+          />
+        </div>
+        {hasDateRange && (
+          <button
+            onClick={() => { setDateFrom(""); setDateTo(""); }}
+            className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors text-xs font-semibold cursor-pointer"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
       {/* Bento Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column */}
         <div className="lg:col-span-8 space-y-8">
 
           {/* Demographics */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-xl text-on-surface mb-6 flex items-center gap-2">
+          <div id="demographics" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="section-title text-on-surface mb-6 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary">badge</span>
               Demographics &amp; Enrolment Records
             </h3>
@@ -754,12 +842,21 @@ export default function StudentProfileDetail() {
           </div>
 
           {/* Academic Assessments */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+          <div id="academic-assessments" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">analytics</span>
                 Academic Assessments
               </h3>
+              {isAdminOrManager && (
+                <button
+                  onClick={() => { loadTemplates(); setModal("assessment_templates"); }}
+                  className="bg-surface-container text-on-surface px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer border border-outline-variant/20"
+                >
+                  <span className="material-symbols-outlined text-[16px]">tune</span>
+                  Manage Templates
+                </button>
+              )}
             </div>
 
             {/* Filters */}
@@ -787,7 +884,7 @@ export default function StudentProfileDetail() {
               <div className="flex gap-2 ml-auto">
                 <button
                   onClick={() => { loadTemplates().then(() => openNewAssessmentForm()); }}
-                  className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[16px]">add</span>
                   New Assessment
@@ -875,189 +972,20 @@ export default function StudentProfileDetail() {
               </div>
             )}
           </div>
-        </div>
-
-        {/* Right Column */}
-        <div className="lg:col-span-4 space-y-8">
-
-          {/* Attendance Ledger */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex flex-col gap-4 mb-6">
-              <div className="flex items-center justify-between">
-                <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">calendar_month</span>
-                  Attendance Ledger
-                </h3>
-              </div>
-              <div className="flex gap-2">
-                <select
-                  value={attendanceYearFilter}
-                  onChange={(e) => setAttendanceYearFilter(e.target.value)}
-                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary flex-1"
-                >
-                  {attendanceYears.map(y => <option key={y} value={y}>{y}</option>)}
-                </select>
-                <select
-                  value={attendanceMonthFilter}
-                  onChange={(e) => setAttendanceMonthFilter(e.target.value)}
-                  className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary flex-1"
-                >
-                  {attendanceMonths.map(m => <option key={m} value={m}>{m}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="space-y-4 font-sans text-sm">
-              {filteredAttendanceLogs.length === 0 && (
-                <p className="text-center py-4 text-on-surface-variant text-xs">No attendance records found.</p>
-              )}
-              {filteredAttendanceLogs.map((log) => (
-                <div key={log.id} className="flex flex-col gap-1.5 py-2 border-b border-surface-container last:border-none">
-                  <div className="flex justify-between font-semibold">
-                    <span className="text-on-surface">{log.month}</span>
-                    <span className="text-primary">{log.percentage}% ({log.present}/{log.total})</span>
-                  </div>
-                  <div className="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary h-full rounded-full transition-all" style={{ width: `${log.percentage}%` }}></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dropout Risk */}
-          <div className={`bg-surface-container-lowest rounded-xl p-6 shadow-ambient border ${dropoutRisk.risk === "High" ? "border-error/30" : dropoutRisk.risk === "Medium" ? "border-yellow-500/30" : "border-outline-variant/10"}`}>
-            <h3 className="font-headline font-bold text-base text-on-surface mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">warning</span>
-              Dropout Risk
-            </h3>
-            <div className="space-y-3 font-sans text-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-on-surface-variant">Risk Level</span>
-                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${dropoutRisk.color}`}>{dropoutRisk.risk}</span>
-              </div>
-              <div className="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
-                <div className={`h-full rounded-full transition-all ${dropoutRisk.barColor}`} style={{ width: `${Math.max(dropoutRisk.att, 5)}%` }}></div>
-              </div>
-              <p className="text-xs text-on-surface-variant">Attendance: {dropoutRisk.att}%</p>
-              <ul className="text-xs text-on-surface-variant space-y-1 list-disc pl-4">
-                {dropoutRisk.reasons.map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Program Linkages */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">hub</span>
-              Program Linkages
-            </h3>
-            <div className="space-y-4 font-sans text-sm">
-              <div className="p-4 bg-surface rounded-lg">
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Partner School</p>
-                {student.school ? (
-                  <Link href={`/education/schools/${student.school.id}`} className="font-semibold text-primary hover:underline">
-                    {student.school.name}
-                  </Link>
-                ) : (
-                  <span className="font-semibold text-on-surface-variant">Unassigned</span>
-                )}
-                <p className="text-xs text-on-surface-variant mt-1">
-                  {student.school ? `${student.school.location || ""}` : "Not yet linked to any institution."}
-                </p>
-              </div>
-
-              <div className="p-4 bg-surface rounded-lg">
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Fellows (via School)</p>
-                {student.school?.fellows && student.school.fellows.length > 0 ? (
-                  <div className="space-y-2">
-                    {student.school.fellows.map(fs => (
-                      <div key={fs.fellow?.id || fs.id} className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
-                          {fs.fellow?.name ? fs.fellow.name[0].toUpperCase() : "?"}
-                        </div>
-                        <Link href={`/education/fellows/${fs.fellow?.id}`} className="font-semibold text-primary text-sm hover:underline">
-                          {fs.fellow?.name || "—"}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="text-xs text-on-surface-variant">
-                    {student.school ? "No fellows assigned to this school." : "Assign a school first."}
-                  </span>
-                )}
-              </div>
-
-              <div className="p-4 bg-surface rounded-lg">
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Beneficiary Family</p>
-                {student.beneficiary ? (
-                  <div className="flex items-center justify-between">
-                    <Link href={`/beneficiaries/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
-                      {student.beneficiary.name}
-                    </Link>
-                    <button onClick={() => handleUnlinkBeneficiary()}
-                      className="text-error hover:underline text-xs font-medium cursor-pointer">Unlink</button>
-                  </div>
-                ) : (
-                  <button onClick={() => { setModal("linkBeneficiary"); setSearchQ(""); loadBeneficiaries(); }}
-                    className="text-primary text-xs font-medium hover:underline cursor-pointer">
-                    + Link to Beneficiary
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {isAdminOrManager && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary">settings</span>
-                    Assessment Templates
-                  </h3>
-                  <p className="text-xs text-on-surface-variant mt-1">
-                    FLN, SEL, and subject template setup
-                  </p>
-                </div>
-                <button
-                  onClick={() => { loadTemplates(); setModal("assessment_templates"); }}
-                  className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
-                >
-                  <span className="material-symbols-outlined text-[16px]">tune</span>
-                  Manage
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Learning Assessment History */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="learning-assessment-history" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">menu_book</span>
                 Learning Assessment History
               </h3>
-              <input
-                type="date"
-                value={assessmentDateFilter}
-                onChange={(e) => setAssessmentDateFilter(e.target.value)}
-                className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-xs focus:outline-none focus:border-primary"
-              />
             </div>
-            {learningAssessments.length === 0 ? (
+            {filteredLearningAssessments.length === 0 ? (
               <p className="text-center py-4 text-on-surface-variant text-xs">No learning assessments recorded yet.</p>
             ) : (
               <div className="space-y-2 max-h-64 overflow-y-auto font-sans text-sm">
-                {learningAssessments
-                  .filter(a => {
-                    if (!assessmentDateFilter) return true;
-                    const d = new Date(a.date);
-                    const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                    return localStr === assessmentDateFilter;
-                  })
+                {filteredLearningAssessments
                   .map(assess => (
                   <div key={assess.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
                     <span className="text-on-surface-variant text-xs">
@@ -1073,30 +1001,18 @@ export default function StudentProfileDetail() {
           </div>
 
           {/* Homework History */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="homework-history" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">assignment</span>
                 Homework History
               </h3>
-              <input
-                type="date"
-                value={homeworkDateFilter}
-                onChange={(e) => setHomeworkDateFilter(e.target.value)}
-                className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-xs focus:outline-none focus:border-primary"
-              />
             </div>
-            {homeworkRecords.length === 0 ? (
+            {filteredHomeworkRecords.length === 0 ? (
               <p className="text-center py-4 text-on-surface-variant text-xs">No homework records yet.</p>
             ) : (
               <div className="space-y-2 max-h-64 overflow-y-auto font-sans text-sm">
-                {homeworkRecords
-                  .filter(h => {
-                    if (!homeworkDateFilter) return true;
-                    const d = new Date(h.date);
-                    const localStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-                    return localStr === homeworkDateFilter;
-                  })
+                {filteredHomeworkRecords
                   .map(hw => {
                   const statusColors = {
                     DONE: "bg-primary/10 text-primary",
@@ -1120,9 +1036,9 @@ export default function StudentProfileDetail() {
           </div>
 
           {/* School Transition History */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="transition-history" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">trending_up</span>
                 School Transition History
               </h3>
@@ -1187,6 +1103,124 @@ export default function StudentProfileDetail() {
             )}
           </div>
         </div>
+
+        {/* Right Column */}
+        <div className="lg:col-span-4 space-y-8">
+
+          {/* Attendance Ledger */}
+          <div id="attendance-ledger" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex flex-col gap-4 mb-6">
+              <div className="flex items-center justify-between">
+                <h3 className="section-title text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">calendar_month</span>
+                  Attendance Ledger
+                </h3>
+              </div>
+            </div>
+            <div className="space-y-4 font-sans text-sm">
+              {filteredAttendanceLogs.length === 0 && (
+                <p className="text-center py-4 text-on-surface-variant text-xs">No attendance records found.</p>
+              )}
+              {filteredAttendanceLogs.map((log) => (
+                <div key={log.id} className="flex flex-col gap-1.5 py-2 border-b border-surface-container last:border-none">
+                  <div className="flex justify-between font-semibold">
+                    <span className="text-on-surface">{log.month}</span>
+                    <span className="text-primary">{log.percentage}% ({log.present}/{log.total})</span>
+                  </div>
+                  <div className="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full rounded-full transition-all" style={{ width: `${log.percentage}%` }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dropout Risk */}
+          <div id="dropout-risk" className={`scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border ${dropoutRisk.risk === "High" ? "border-error/30" : dropoutRisk.risk === "Medium" ? "border-yellow-500/30" : "border-outline-variant/10"}`}>
+            <h3 className="section-title text-on-surface mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">warning</span>
+              Dropout Risk
+            </h3>
+            <div className="space-y-3 font-sans text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-on-surface-variant">Risk Level</span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${dropoutRisk.color}`}>{dropoutRisk.risk}</span>
+              </div>
+              <div className="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full transition-all ${dropoutRisk.barColor}`} style={{ width: `${Math.max(dropoutRisk.att, 5)}%` }}></div>
+              </div>
+              <p className="text-xs text-on-surface-variant">Attendance: {dropoutRisk.att}%</p>
+              <ul className="text-xs text-on-surface-variant space-y-1 list-disc pl-4">
+                {dropoutRisk.reasons.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Program Linkages */}
+          <div id="program-linkages" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="section-title text-on-surface mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">hub</span>
+              Program Linkages
+            </h3>
+            <div className="space-y-4 font-sans text-sm">
+              <div className="p-4 bg-surface rounded-lg">
+                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">Partner School</p>
+                {student.school ? (
+                  <Link href={`/education/schools/${student.school.id}`} className="font-semibold text-primary hover:underline">
+                    {student.school.name}
+                  </Link>
+                ) : (
+                  <span className="font-semibold text-on-surface-variant">Unassigned</span>
+                )}
+                <p className="text-xs text-on-surface-variant mt-1">
+                  {student.school ? `${student.school.location || ""}` : "Not yet linked to any institution."}
+                </p>
+              </div>
+
+              <div className="p-4 bg-surface rounded-lg">
+                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Fellows (via School)</p>
+                {student.school?.fellows && student.school.fellows.length > 0 ? (
+                  <div className="space-y-2">
+                    {student.school.fellows.map(fs => (
+                      <div key={fs.fellow?.id || fs.id} className="flex items-center gap-2">
+                        <div className="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                          {fs.fellow?.name ? fs.fellow.name[0].toUpperCase() : "?"}
+                        </div>
+                        <Link href={`/education/fellows/${fs.fellow?.id}`} className="font-semibold text-primary text-sm hover:underline">
+                          {fs.fellow?.name || "—"}
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-xs text-on-surface-variant">
+                    {student.school ? "No fellows assigned to this school." : "Assign a school first."}
+                  </span>
+                )}
+              </div>
+
+              <div className="p-4 bg-surface rounded-lg">
+                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Beneficiary Family</p>
+                {student.beneficiary ? (
+                  <div className="flex items-center justify-between">
+                    <Link href={`/beneficiaries/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
+                      {student.beneficiary.name}
+                    </Link>
+                    <button onClick={() => handleUnlinkBeneficiary()}
+                      className="text-error hover:underline text-xs font-medium cursor-pointer">Unlink</button>
+                  </div>
+                ) : (
+                  <button onClick={() => { setModal("linkBeneficiary"); setSearchQ(""); loadBeneficiaries(); }}
+                    className="text-primary text-xs font-medium hover:underline cursor-pointer">
+                    + Link to Beneficiary
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ─── MODALS ──────────────────────────────────────────────────────────────── */}
@@ -1235,11 +1269,11 @@ export default function StudentProfileDetail() {
               <InputField label="Guardian Phone" name="guardianPhone" value={editForm.guardianPhone} onChange={e => setEditForm(f => ({ ...f, guardianPhone: e.target.value }))} />
               <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} />
               <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} />
-              <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["On Track", "Needs Attention", "At Risk", "Graduated", "Inactive"]} />
+
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>
@@ -1285,7 +1319,7 @@ export default function StudentProfileDetail() {
                   key={tab}
                   type="button"
                   onClick={() => setActiveFormTab(tab)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                     activeFormTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
                   }`}
                 >
@@ -1487,8 +1521,8 @@ export default function StudentProfileDetail() {
             )}
 
             <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
-              <button type="button" onClick={() => { setModal(null); setEditingFormId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => { setModal(null); setEditingFormId(null); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : editingFormId ? "Update" : "Save Assessment"}
               </button>
             </div>
@@ -1509,7 +1543,7 @@ export default function StudentProfileDetail() {
                   key={tab}
                   type="button"
                   onClick={() => setTemplateModalTab(tab)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                     templateModalTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
                   }`}
                 >
@@ -1735,8 +1769,8 @@ export default function StudentProfileDetail() {
             )}
 
             <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
-              <button type="button" onClick={() => setTemplateEditor(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setTemplateEditor(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : "Save"}
               </button>
             </div>
@@ -1762,8 +1796,8 @@ export default function StudentProfileDetail() {
             )}
             <InputField label="Location" name="location" value={transitionForm.location} onChange={e => setTransitionForm(f => ({ ...f, location: e.target.value }))} />
             <div className="flex justify-end gap-3">
-              <button type="button" onClick={() => { setModal(null); setEditTransitionId(null); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => { setModal(null); setEditTransitionId(null); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : editTransitionId ? "Update" : "Add Transition"}
               </button>
             </div>

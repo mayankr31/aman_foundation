@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -27,6 +29,7 @@ export default function LeaveWorkflow() {
   };
 
   const canReview = ["ADMIN", "HR", ...PROGRAM_ROLES].includes(currentUser?.roleName);
+  const { pageItems: pagedLeaves, currentPage, setCurrentPage } = usePagination(leaves, 10);
 
   useEffect(() => {
     if (currentUser && !canReview) {
@@ -101,8 +104,8 @@ export default function LeaveWorkflow() {
   }
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full">
-      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
+      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Dashboard</span>
       </Link>
@@ -110,7 +113,7 @@ export default function LeaveWorkflow() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Administration Module</p>
-          <h2 className="text-3xl md:text-[2.75rem] font-headline font-semibold tracking-tight leading-none text-on-surface">Human Resources &amp; Personnel</h2>
+          <h2 className="page-title text-on-surface">Human Resources &amp; Personnel</h2>
         </div>
       </div>
 
@@ -135,26 +138,26 @@ export default function LeaveWorkflow() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse font-sans text-sm">
+          <table className="w-full min-w-[860px] table-fixed text-left border-collapse font-sans text-sm">
             <thead>
               <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                <th className="py-3 px-4">Applicant</th>
-                <th className="py-3 px-4">Role</th>
-                <th className="py-3 px-4">Type</th>
-                <th className="py-3 px-4">Dates</th>
-                <th className="py-3 px-4">Reason</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Actions</th>
+                <th className="w-[16%] py-3 px-4">Applicant</th>
+                <th className="w-[12%] py-3 px-4">Role</th>
+                <th className="w-[12%] py-3 px-4">Type</th>
+                <th className="w-[15%] py-3 px-4">Dates</th>
+                <th className="w-[23%] py-3 px-4">Reason</th>
+                <th className="w-[12%] py-3 px-4">Status</th>
+                <th className="w-[10%] py-3 px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {leaves.map((leave) => (
+              {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                  <td className="py-4 px-4 font-bold text-on-surface">{leave.user?.name || "Unknown"}</td>
-                  <td className="py-4 px-4 text-xs font-semibold text-slate-500">{leave.user?.role?.name?.replace("_", " ")}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs">{leave.dates}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant max-w-[200px] truncate" title={leave.reason}>{leave.reason}</td>
+                  <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
+                  <td className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
+                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.type}</td>
+                  <td className="py-4 px-4 font-mono text-xs break-words align-top">{leave.dates}</td>
+                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">
                       <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
@@ -201,10 +204,11 @@ export default function LeaveWorkflow() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={currentPage} totalItems={leaves.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {showToast && (
-        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
+        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
           {toastMessage}
         </div>
@@ -230,11 +234,11 @@ export default function LeaveWorkflow() {
               ></textarea>
             </div>
             <div className="flex gap-4 justify-end pt-4 border-t border-outline-variant/10">
-              <button onClick={() => setRejectingLeaveId(null)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
+              <button onClick={() => setRejectingLeaveId(null)} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
               <button 
                 onClick={submitRejection} 
                 disabled={isSubmittingRejection} 
-                className="px-6 py-2.5 rounded-full bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-transform flex items-center gap-2 disabled:opacity-60 cursor-pointer"
+                className="px-4 py-2 rounded-full bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-transform flex items-center gap-2 disabled:opacity-60 cursor-pointer"
               >
                 {isSubmittingRejection ? "Rejecting..." : "Confirm Rejection"}
               </button>

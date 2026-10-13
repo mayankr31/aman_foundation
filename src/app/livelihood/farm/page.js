@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import LivelihoodTypesModal from "@/components/LivelihoodTypesModal";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function FarmPrograms() {
   const { token } = useAuth();
@@ -13,6 +15,7 @@ export default function FarmPrograms() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showTypesModal, setShowTypesModal] = useState(false);
+  const { pageItems: pagedPrograms, currentPage, setCurrentPage } = usePagination(programs, 9);
 
   // Add program modal
   const [showAddModal, setShowAddModal] = useState(false);
@@ -94,27 +97,28 @@ export default function FarmPrograms() {
   });
 
   return (
-    <div className="p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full pb-24">
-      <Link href="/livelihood" className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 transition-colors mb-6 group w-fit">
+    <div className="p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
+      <Link href="/livelihood" className="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest">Back to Livelihood Hub</span>
       </Link>
 
+      <div className="flex flex-col gap-8">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-[2.75rem] font-headline tracking-[-0.02em] leading-tight text-on-surface mb-2 font-bold">Farm Programs</h2>
-          <p className="text-on-surface-variant font-body text-sm max-w-2xl">Cultivation-based initiatives: sugarcane, maize, rice, and other crop programs.</p>
+          <h2 className="page-title text-on-surface">Farm Programs</h2>
+          <p className="page-description mt-2">Cultivation-based initiatives: sugarcane, maize, rice, and other crop programs.</p>
         </div>
         <div className="flex gap-3 shrink-0">
           <button
             onClick={() => setShowTypesModal(true)}
-            className="text-emerald-700 hover:bg-emerald-50 px-5 py-3 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-emerald-200 bg-transparent"
+            className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-primary/20 bg-transparent"
           >
             <span className="material-symbols-outlined text-sm">category</span>Manage Types
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-emerald-700 text-white px-6 py-3 rounded-full text-xs font-semibold hover:bg-emerald-800 transition-all flex items-center gap-2 shadow-lg shadow-emerald-700/30 active:scale-95 cursor-pointer border-none"
+            className="bg-primary text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg shadow-primary/30 active:scale-95 cursor-pointer border-none"
           >
             <span className="material-symbols-outlined text-sm">add_box</span>Add Program
           </button>
@@ -125,15 +129,15 @@ export default function FarmPrograms() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-surface-container-lowest rounded-lg p-6 shadow-ambient border border-outline-variant/10">
           <span className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4 block font-bold">Active Programs</span>
-          <span className="text-4xl font-headline font-bold text-emerald-700">{programs.length}</span>
+          <span className="stat-value text-primary">{programs.length}</span>
         </div>
         <div className="bg-surface-container-lowest rounded-lg p-6 shadow-ambient border border-outline-variant/10">
           <span className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4 block font-bold">Total Participants</span>
-          <span className="text-4xl font-headline font-bold text-on-surface">{totalParticipants}</span>
+          <span className="stat-value text-on-surface">{totalParticipants}</span>
         </div>
         <div className="bg-surface-container-lowest rounded-lg p-6 shadow-ambient border border-outline-variant/10">
           <span className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4 block font-bold">Total Target (Ha)</span>
-          <span className="text-4xl font-headline font-bold text-on-surface">{totalTarget.toLocaleString("en-IN")}</span>
+          <span className="stat-value text-on-surface">{totalTarget.toLocaleString("en-IN")}</span>
         </div>
       </div>
 
@@ -146,7 +150,7 @@ export default function FarmPrograms() {
           <p className="text-sm text-on-surface-variant text-center py-8 italic">No farm programs yet. Click &ldquo;Add Program&rdquo; to create one.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programs.map((prog) => {
+            {pagedPrograms.map((prog) => {
               const config = getTypeConfig(prog.type);
               return (
                 <div key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors relative group">
@@ -160,7 +164,7 @@ export default function FarmPrograms() {
                     </button>
                   </div>
                   <Link href={`/livelihood/programs/${prog.id}`} className="no-underline text-left block">
-                    <span className="px-2.5 py-0.5 rounded text-[9px] bg-emerald-100 text-emerald-700 uppercase tracking-wider font-bold">
+                    <span className="px-2.5 py-0.5 rounded text-[9px] bg-primary/10 text-primary uppercase tracking-wider font-bold">
                       {config?.label || prog.type}
                     </span>
                     <h4 className="font-bold text-base text-on-surface mt-2">{prog.name}</h4>
@@ -172,7 +176,7 @@ export default function FarmPrograms() {
                       </div>
                       <div>
                         <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Participants</p>
-                        <p className="text-emerald-700 font-bold mt-0.5">{prog._count?.assignments || 0} Families</p>
+                        <p className="text-primary font-bold mt-0.5">{prog._count?.assignments || 0} Families</p>
                       </div>
                     </div>
                   </Link>
@@ -181,6 +185,7 @@ export default function FarmPrograms() {
             })}
           </div>
         )}
+        <Pagination currentPage={currentPage} totalItems={programs.length} itemsPerPage={9} onPageChange={setCurrentPage} />
       </div>
 
       {/* Add Program Modal */}
@@ -196,7 +201,7 @@ export default function FarmPrograms() {
             <form onSubmit={handleAdd} className="space-y-4 text-sm">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Program Type</label>
-                <select value={newType} onChange={(e) => setNewType(e.target.value)} required className="px-4 py-2 border rounded-lg focus:outline-none focus:border-emerald-500 border-outline-variant bg-transparent text-on-surface font-sans">
+                <select value={newType} onChange={(e) => setNewType(e.target.value)} required className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans">
                   <option value="">Select type...</option>
                   {farmTypes.map((t) => (
                     <option key={t.type} value={t.type}>{t.label} {t.icon}</option>
@@ -205,19 +210,19 @@ export default function FarmPrograms() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Program Name</label>
-                <input type="text" required placeholder="e.g. Kalgachia Cane Development 2026" value={newName} onChange={(e) => setNewName(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-emerald-500 border-outline-variant bg-transparent text-on-surface font-sans" />
+                <input type="text" required placeholder="e.g. Kalgachia Cane Development 2026" value={newName} onChange={(e) => setNewName(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Description</label>
-                <textarea placeholder="Describe program details..." value={newDesc} onChange={(e) => setNewDesc(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-emerald-500 border-outline-variant bg-transparent text-on-surface font-sans resize-none" rows="3" />
+                <textarea placeholder="Describe program details..." value={newDesc} onChange={(e) => setNewDesc(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans resize-none" rows="3" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Total Target (Ha)</label>
-                <input type="number" step="0.1" placeholder="e.g. 25.5" value={newTarget} onChange={(e) => setNewTarget(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-emerald-500 border-outline-variant bg-transparent text-on-surface font-sans" />
+                <input type="number" step="0.1" placeholder="e.g. 25.5" value={newTarget} onChange={(e) => setNewTarget(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer bg-transparent">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-emerald-700 text-white font-semibold hover:bg-emerald-800 transition-colors cursor-pointer border-none">Create Program</button>
+                <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer border-none">Create Program</button>
               </div>
             </form>
           </div>
@@ -232,7 +237,7 @@ export default function FarmPrograms() {
             <p className="text-sm text-on-surface-variant">Are you sure you want to delete <strong>{deleteName}</strong>? This will permanently remove all associated beneficiary assignments and events.</p>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => { setDeleteId(null); setDeleteName(""); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer bg-transparent">Cancel</button>
-              <button onClick={handleDelete} className="px-5 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Delete</button>
+              <button onClick={handleDelete} className="px-4 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Delete</button>
             </div>
           </div>
         </div>
@@ -246,6 +251,7 @@ export default function FarmPrograms() {
           onChanged={refreshTypes}
         />
       )}
+      </div>
     </div>
   );
 }

@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
@@ -44,6 +46,8 @@ function FellowProfileDetailContent() {
   const [loading, setLoading] = useState(true);
   const [goalSheets, setGoalSheets] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
+  const { pageItems: pagedGoalSheets, currentPage: goalSheetsPage, setCurrentPage: setGoalSheetsPage } = usePagination(goalSheets, 10);
+  const { pageItems: pagedCoaching, currentPage: coachingPage, setCurrentPage: setCoachingPage } = usePagination(coachingRecords, 10);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
@@ -277,7 +281,7 @@ function FellowProfileDetailContent() {
       {user?.roleName !== "FELLOW" ? (
         <Link
           href="/education/fellows"
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
         >
           <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
             arrow_back
@@ -289,7 +293,7 @@ function FellowProfileDetailContent() {
       ) : (
         <Link
           href="/education"
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
         >
           <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
             arrow_back
@@ -319,7 +323,7 @@ function FellowProfileDetailContent() {
           </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize">
+              <h2 className="page-title text-on-surface capitalize">
                 {fellow.name}
               </h2>
             </div>
@@ -339,13 +343,13 @@ function FellowProfileDetailContent() {
           </div>
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start">
-          <button className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+          <button className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
             <span className="material-symbols-outlined text-[18px]">mail</span>
             Contact Fellow
           </button>
           <button
             onClick={() => setShowPDFModal(true)}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">book</span>
             Learning Framework
@@ -355,7 +359,7 @@ function FellowProfileDetailContent() {
 
       {/* Placement Summary */}
       <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 mb-8">
-        <h3 className="font-headline font-bold text-base text-on-surface mb-4">Placement Summary</h3>
+        <h3 className="section-title text-on-surface mb-4">Placement Summary</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 font-sans text-sm">
           <div className="flex flex-col gap-1">
             <span className="text-xs text-on-surface-variant uppercase tracking-wide">Active Placement</span>
@@ -406,7 +410,7 @@ function FellowProfileDetailContent() {
           {activeTab === "Goals" && (
             <div className="space-y-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl text-on-surface">Goal Sheets</h3>
+                <h3 className="section-title text-on-surface">Goal Sheets</h3>
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
@@ -427,7 +431,7 @@ function FellowProfileDetailContent() {
                   No goal sheets have been created yet. Click &quot;Create New Goal Sheet&quot; to start.
                 </div>
               ) : (
-                goalSheets.map((sheet) => (
+                pagedGoalSheets.map((sheet) => (
                   <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
                     <div className="flex justify-between items-start gap-4">
                       <button
@@ -438,7 +442,7 @@ function FellowProfileDetailContent() {
                         }}
                         className="text-left flex-1 cursor-pointer"
                       >
-                        <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
+                        <h3 className="section-title text-on-surface flex items-center gap-2">
                           Goal Sheet
                           <span className="text-xs font-normal text-on-surface-variant">
                             {new Date(sheet.date).toLocaleDateString("en-US", {
@@ -489,6 +493,7 @@ function FellowProfileDetailContent() {
                   </div>
                 ))
               )}
+              <Pagination currentPage={goalSheetsPage} totalItems={goalSheets.length} itemsPerPage={10} onPageChange={setGoalSheetsPage} />
             </div>
           )}
 
@@ -515,7 +520,7 @@ function FellowProfileDetailContent() {
           {activeTab === "Coaching & Classroom Observation" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
+                <h3 className="section-title text-on-surface">Coaching & Classroom Observation Records</h3>
                 {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                   <button
                     onClick={() => setShowAddCoachingModal(true)}
@@ -532,7 +537,7 @@ function FellowProfileDetailContent() {
                     No coaching or classroom observation records available yet.
                   </div>
                 ) : (
-                  coachingRecords.map((record) => (
+                  pagedCoaching.map((record) => (
                     <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
                       <div className="flex justify-between items-start mb-3">
                         <div>
@@ -596,13 +601,14 @@ function FellowProfileDetailContent() {
                     </div>
                   ))
                 )}
+                <Pagination currentPage={coachingPage} totalItems={coachingRecords.length} itemsPerPage={10} onPageChange={setCoachingPage} />
               </div>
             </div>
           )}
 
           {activeTab === "Engagement Survey" && (
             <div className="space-y-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface">Engagement Survey</h3>
+              <h3 className="section-title text-on-surface">Engagement Survey</h3>
 
               {engagementSurveys.length === 0 ? (
                 <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
@@ -643,7 +649,7 @@ function FellowProfileDetailContent() {
 
           {activeTab === "Look Beyond Survey" && (
             <div className="space-y-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface">Look Beyond Survey</h3>
+              <h3 className="section-title text-on-surface">Look Beyond Survey</h3>
 
               {lookBeyondSurveys.length === 0 ? (
                 <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
@@ -790,7 +796,7 @@ function FellowProfileDetailContent() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
                 >
                   Save Record
                 </button>

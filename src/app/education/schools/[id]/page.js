@@ -1,18 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
+import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
         <select name={name} value={value} onChange={onChange}
           className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
@@ -44,11 +47,13 @@ function Modal({ title, onClose, children }) {
 
 export default function SchoolProfileDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const { token, isInitializing, user } = useAuth();
   const toast = useToast();
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(school?.students || [], 10);
   const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance' | 'managers'
 
   // For assignment modals
@@ -109,6 +114,17 @@ export default function SchoolProfileDetail() {
       loadSchool();
     }
   }, [loadSchool, isInitializing]);
+
+  // Scroll to a section anchor when the page is opened with a #hash deep link.
+  useEffect(() => {
+    if (!school || typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (!hash) return;
+    const target = document.getElementById(hash.slice(1));
+    if (!target) return;
+    const timer = setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+    return () => clearTimeout(timer);
+  }, [school]);
 
   // Load relevant lists when modals open
   useEffect(() => {
@@ -331,7 +347,7 @@ export default function SchoolProfileDetail() {
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back */}
-      <Link href="/education/schools" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+      <Link href="/education/schools" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Schools Directory</span>
       </Link>
@@ -351,7 +367,7 @@ export default function SchoolProfileDetail() {
           )}
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize leading-tight">{school.name}</h2>
+              <h2 className="page-title text-on-surface capitalize">{school.name}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${school.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                 {school.status}
               </span>
@@ -378,11 +394,11 @@ export default function SchoolProfileDetail() {
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
           {isAdmin && (
             <button onClick={() => setModal("edit")}
-              className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+              className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
               <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
             </button>
           )}
-          <button className="bg-gradient-to-br from-primary to-primary-container text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
+          <button className="bg-gradient-to-br from-primary to-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
             <span className="material-symbols-outlined text-[18px]">download</span> Export Report
           </button>
         </div>
@@ -404,9 +420,9 @@ export default function SchoolProfileDetail() {
           )}
 
           {/* Programs */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="active-programs" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">campaign</span>
                 Active Program Participation
               </h3>
@@ -441,10 +457,10 @@ export default function SchoolProfileDetail() {
           </div>
 
           {/* Daily Attendance Calendar */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="daily-attendance" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
               <div className="flex items-center gap-3">
-                <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+                <h3 className="section-title text-on-surface flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">calendar_month</span>
                   Daily Attendance
                 </h3>
@@ -529,9 +545,9 @@ export default function SchoolProfileDetail() {
           </div>
 
           {/* Enrolled Students */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="enrolled-students" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">groups</span>
                 Enrolled Students ({totalEnrolled})
               </h3>
@@ -546,28 +562,32 @@ export default function SchoolProfileDetail() {
               <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No students enrolled. Click "Manage Students" to assign.</p>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-left font-sans text-sm">
+                <table className="w-full min-w-[720px] table-fixed text-left font-sans text-sm">
                   <thead>
                     <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                      <th className="py-3 px-3">Name</th>
-                      <th className="py-3 px-3">Student ID</th>
-                      <th className="py-3 px-3">Grade</th>
-                      <th className="py-3 px-3">Status</th>
-                      <th className="py-3 px-3">Risk</th>
-                      <th className="py-3 px-3 text-right">Action</th>
+                      <th className="w-[24%] py-3 px-3">Name</th>
+                      <th className="w-[16%] py-3 px-3">Student ID</th>
+                      <th className="w-[14%] py-3 px-3">Grade</th>
+                      <th className="w-[14%] py-3 px-3">Status</th>
+                      <th className="w-[12%] py-3 px-3">Risk</th>
+                      <th className="w-[20%] py-3 px-3 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {enrolledStudents.map(s => (
-                      <tr key={s.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
+                    {pagedEnrolledStudents.map(s => (
+                      <tr
+                        key={s.id}
+                        onClick={() => router.push(`/education/students/${s.id}`)}
+                        className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
+                      >
                         <td className="py-3 px-3">
-                          <Link href={`/education/students/${s.id}`} className="font-semibold text-primary hover:underline">{s.name}</Link>
+                          <Link href={`/education/students/${s.id}`} onClick={(e) => e.stopPropagation()} className="font-semibold text-primary hover:underline break-words">{s.name}</Link>
                         </td>
-                        <td className="py-3 px-3 text-on-surface-variant">{s.studentId}</td>
+                        <td className="py-3 px-3 text-on-surface-variant break-words">{s.studentId}</td>
                         <td className="py-3 px-3 text-on-surface-variant">{s.grade}</td>
                         <td className="py-3 px-3">
-                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${s.status === "On Track" ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"}`}>
-                            {s.status}
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${getAcademicStatusClass(deriveAcademicStatus(s.attendance))}`}>
+                            {deriveAcademicStatus(s.attendance)}
                           </span>
                         </td>
                         <td className="py-3 px-3">
@@ -581,12 +601,13 @@ export default function SchoolProfileDetail() {
                           })()}
                         </td>
                         <td className="py-3 px-3 text-right">
-                          <button onClick={() => handleRemoveStudent(s.id)} className="text-error hover:underline text-xs font-medium cursor-pointer">Remove</button>
+                          <button onClick={(e) => { e.stopPropagation(); handleRemoveStudent(s.id); }} className="text-error hover:underline text-xs font-medium cursor-pointer">Remove</button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <Pagination currentPage={studentsPage} totalItems={enrolledStudents.length} itemsPerPage={10} onPageChange={setStudentsPage} />
               </div>
             )}
           </div>
@@ -596,8 +617,8 @@ export default function SchoolProfileDetail() {
         <div className="lg:col-span-4 space-y-8">
 
           {/* School Metrics */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-6">School Metrics</h3>
+          <div id="metrics" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="section-title text-on-surface mb-6">School Metrics</h3>
             <div className="space-y-4 font-sans text-sm">
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Total Enrolled</span>
@@ -623,8 +644,8 @@ export default function SchoolProfileDetail() {
           </div>
 
           {/* Gender Ratio */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="font-headline font-bold text-base text-on-surface mb-4">Gender Ratio</h3>
+          <div id="gender-ratio" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="section-title text-on-surface mb-4">Gender Ratio</h3>
             {totalEnrolled === 0 ? (
               <p className="text-sm text-on-surface-variant text-center py-4">No students enrolled yet.</p>
             ) : (
@@ -663,9 +684,9 @@ export default function SchoolProfileDetail() {
           </div>
 
           {/* Assigned Fellows */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="assigned-fellows" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">people</span>
                 Fellows ({assignedFellows.length})
               </h3>
@@ -701,9 +722,9 @@ export default function SchoolProfileDetail() {
           </div>
 
           {/* Assigned Staff */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+          <div id="assigned-staff" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+              <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">supervisor_account</span>
                 Assigned Staff ({assignedManagers.length})
               </h3>
@@ -756,7 +777,7 @@ export default function SchoolProfileDetail() {
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-4 border-b border-outline-variant/20 pb-4">
                 <h4 className="font-bold text-lg text-on-surface">Date: {attendanceDate}</h4>
-                <button type="button" onClick={() => setViewOnlyMode(false)} className="px-4 py-1.5 rounded-full bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors cursor-pointer text-sm">
+                <button type="button" onClick={() => setViewOnlyMode(false)} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors cursor-pointer text-sm">
                   Edit Attendance
                 </button>
               </div>
@@ -810,7 +831,7 @@ export default function SchoolProfileDetail() {
                 </div>
               )}
               <div className="flex justify-end pt-4 mt-4 border-t border-outline-variant/20">
-                <button type="button" onClick={() => { setModal(null); setViewOnlyMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm font-semibold">Close</button>
+                <button type="button" onClick={() => { setModal(null); setViewOnlyMode(false); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm font-semibold">Close</button>
               </div>
             </div>
           ) : !attendanceReviewMode ? (
@@ -944,12 +965,12 @@ export default function SchoolProfileDetail() {
               </div>
 
               <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
-                <button type="button" onClick={() => { setModal(null); setAttendanceReviewMode(false); }} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+                <button type="button" onClick={() => { setModal(null); setAttendanceReviewMode(false); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
                 <div className="flex gap-2">
-                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Absent")} className="px-5 py-2 rounded-full bg-error text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Absent")} className="px-4 py-2 rounded-full bg-error text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                     Review as Absent
                   </button>
-                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Present")} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Present")} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                     Review as Present
                   </button>
                 </div>
@@ -999,8 +1020,8 @@ export default function SchoolProfileDetail() {
               )}
 
               <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
-                <button type="button" disabled={saving} onClick={() => setAttendanceReviewMode(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50">Back</button>
-                <button type="button" disabled={saving} onClick={handleConfirmAttendance} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                <button type="button" disabled={saving} onClick={() => setAttendanceReviewMode(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50">Back</button>
+                <button type="button" disabled={saving} onClick={handleConfirmAttendance} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                   {saving ? "Saving..." : (isEditingAttendance ? "Update Attendance" : "Mark Attendance")}
                 </button>
               </div>
@@ -1036,8 +1057,8 @@ export default function SchoolProfileDetail() {
               <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>

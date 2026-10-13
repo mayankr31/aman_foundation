@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useToast } from "@/context/ToastContext";
 
 const inputCls =
-  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-emerald-500 border-outline-variant bg-transparent text-on-surface text-sm";
+  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm";
 const labelCls =
   "block text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1";
 const addBtnCls =
@@ -349,7 +349,7 @@ export default function LivelihoodTypeEditor({ category, token, initial, onCance
         <button type="button" onClick={onCancel} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer bg-transparent text-sm">
           Cancel
         </button>
-        <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-emerald-700 text-white font-semibold hover:bg-emerald-800 transition-colors cursor-pointer border-none text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+        <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer border-none text-sm disabled:opacity-50 disabled:cursor-not-allowed">
           {saving ? "Saving..." : isEdit ? "Save Changes" : "Create Type"}
         </button>
       </div>

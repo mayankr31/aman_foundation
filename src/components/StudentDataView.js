@@ -398,7 +398,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
                 type="button"
                 onClick={handleExport}
                 disabled={exporting || report.totalStudents === 0}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export the aggregate levels for the selected session to Excel"
               >
                 <span className="material-symbols-outlined text-[16px]">download</span>
@@ -408,7 +408,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
                 type="button"
                 onClick={handleExportAssessments}
                 disabled={exportingAssessments || report.totalStudents === 0}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs font-semibold hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs font-semibold hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export every assessment form for the selected session to Excel"
               >
                 <span className="material-symbols-outlined text-[16px]">download</span>

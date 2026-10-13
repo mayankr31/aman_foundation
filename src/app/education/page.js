@@ -7,11 +7,11 @@ export default function EducationHub() {
   const { user } = useAuth();
 
   return (
-    <div className="flex-1 p-8 lg:p-12">
+    <div className="flex-1 p-6 md:p-10 pb-24">
       {/* Back link */}
       <Link
         href="/"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal">
           arrow_back
@@ -27,7 +27,7 @@ export default function EducationHub() {
           <span className="material-symbols-outlined text-[16px]">hub</span>
           Central Hub
         </div>
-        <h1 className="text-[2.75rem] leading-tight font-bold text-on-surface mb-4 tracking-[-0.02em] font-headline">
+        <h1 className="page-title text-on-surface mb-4">
           Education Management
         </h1>
         <p className="text-lg text-on-surface-variant leading-relaxed max-w-2xl">

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function SugarcaneCultivation() {
   const { token } = useAuth();
@@ -359,13 +361,15 @@ export default function SugarcaneCultivation() {
     };
   });
 
+  const { pageItems: pagedProgramStats, currentPage, setCurrentPage } = usePagination(programStats, 9);
+
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto w-full flex flex-col gap-8 pb-24">
+    <div className="p-6 md:p-10 max-w-7xl mx-auto w-full pb-24">
       {/* Header Section */}
       <div>
         <Link
           href="/livelihood"
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
         >
           <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
             arrow_back
@@ -374,12 +378,13 @@ export default function SugarcaneCultivation() {
             Back to Livelihood Hub
           </span>
         </Link>
+        <div className="flex flex-col gap-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <span className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">
               Livelihood Module
             </span>
-            <h2 className="text-4xl md:text-5xl font-headline tracking-[-0.02em] font-semibold text-on-surface">
+            <h2 className="page-title text-on-surface">
               Sugarcane Cultivation
             </h2>
             <p className="text-on-surface-variant mt-2 max-w-2xl text-body font-body leading-relaxed text-sm">
@@ -387,13 +392,13 @@ export default function SugarcaneCultivation() {
             </p>
           </div>
           <div className="flex gap-3 shrink-0">
-            <button className="bg-surface-container-highest text-on-surface px-6 py-3 rounded-full text-sm font-medium hover:bg-surface-variant transition-colors flex items-center gap-2 font-sans border border-outline-variant/10 cursor-pointer">
+            <button className="bg-surface-container-highest text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-variant transition-colors flex items-center gap-2 font-sans border border-outline-variant/10 cursor-pointer">
               <span className="material-symbols-outlined text-sm">download</span>
               Export Report
             </button>
             <button
               onClick={() => setShowAddProgramModal(true)}
-              className="bg-secondary text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-secondary-container transition-all flex items-center gap-2 shadow-lg shadow-secondary/30 active:scale-95 font-sans cursor-pointer border-none"
+              className="bg-secondary text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-secondary-container transition-all flex items-center gap-2 shadow-lg shadow-secondary/30 active:scale-95 font-sans cursor-pointer border-none"
             >
               <span className="material-symbols-outlined text-sm">add_box</span>
               Add Program
@@ -415,7 +420,7 @@ export default function SugarcaneCultivation() {
               <span className="material-symbols-outlined text-[14px]">trending_up</span> +12%
             </div>
           </div>
-          <div className="text-4xl font-headline font-bold text-on-surface mb-1">
+          <div className="stat-value text-on-surface mb-1">
             {farmers.length}
           </div>
           <p className="text-sm text-on-surface-variant">Enrolled this season</p>
@@ -428,7 +433,7 @@ export default function SugarcaneCultivation() {
             </span>
             <span className="material-symbols-outlined text-tertiary">landscape</span>
           </div>
-          <div className="text-4xl font-headline font-bold text-on-surface mb-1">
+          <div className="stat-value text-on-surface mb-1">
             {farmers.reduce((acc, f) => acc + f.parcel, 0).toFixed(1)} <span className="text-xl text-on-surface-variant">Hectares</span>
           </div>
           <p className="text-sm text-on-surface-variant">Across Kalgachia circle</p>
@@ -442,7 +447,7 @@ export default function SugarcaneCultivation() {
             </span>
             <span className="material-symbols-outlined text-secondary">monitoring</span>
           </div>
-          <div className="text-4xl font-headline font-bold text-on-surface mb-1 relative z-10">
+          <div className="stat-value text-on-surface mb-1 relative z-10">
             {farmers.reduce((acc, f) => acc + f.estYield, 0).toFixed(0)} <span className="text-xl text-on-surface-variant">Tons</span>
           </div>
           <p className="text-sm text-on-surface-variant relative z-10">Expected Q4 Harvest</p>
@@ -545,7 +550,7 @@ export default function SugarcaneCultivation() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
-            {programStats.map((prog) => (
+            {pagedProgramStats.map((prog) => (
               <Link href={`/livelihood/sugarcane/${prog.id}`} key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors block text-left no-underline">
                 <div>
                   <span className="px-2.5 py-0.5 rounded text-[9px] bg-secondary-container/20 text-secondary uppercase tracking-wider font-bold">
@@ -574,6 +579,7 @@ export default function SugarcaneCultivation() {
               <p className="col-span-3 text-center text-xs text-slate-400 py-4 italic">No sugarcane programs logged in the system.</p>
             )}
           </div>
+          <Pagination currentPage={currentPage} totalItems={programStats.length} itemsPerPage={9} onPageChange={setCurrentPage} />
         </div>
       </div>
 
@@ -639,7 +645,7 @@ export default function SugarcaneCultivation() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary-container transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary-container transition-colors cursor-pointer border-none"
                 >
                   Create Program
                 </button>
@@ -650,6 +656,7 @@ export default function SugarcaneCultivation() {
       )}
 
 
+      </div>
     </div>
   );
 }

@@ -111,6 +111,10 @@ export default function HrEmployeeProfilePage() {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    if (!form.name?.trim() || !form.email?.trim()) {
+      toast.error?.("Name and email are required.");
+      return;
+    }
     setSaving(true);
     try {
       const res = await fetch(`/api/users/${id}`, {
@@ -166,9 +170,9 @@ export default function HrEmployeeProfilePage() {
     </div>
   );
 
-  const input = (label, field, type = "text") => (
+  const input = (label, field, type = "text", required = false) => (
     <div className="flex flex-col gap-1">
-      <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{label}</label>
+      <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       <input
         type={type}
         value={form[field] ?? ""}
@@ -200,7 +204,7 @@ export default function HrEmployeeProfilePage() {
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-5xl mx-auto w-full">
       <Link
         href="/hr"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform font-bold">
           arrow_back
@@ -221,7 +225,7 @@ export default function HrEmployeeProfilePage() {
               )}
             </div>
             <div className="text-center md:text-left">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize mb-1">
+              <h2 className="page-title text-on-surface capitalize mb-1">
                 {employee.name || employee.username}
               </h2>
               <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 text-sm text-on-surface-variant">
@@ -239,7 +243,7 @@ export default function HrEmployeeProfilePage() {
                 setForm(buildForm(employee));
                 setIsEditing(true);
               }}
-              className="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20"
+              className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20"
             >
               <span className="material-symbols-outlined text-[18px]">edit</span>
               Edit Details
@@ -263,7 +267,7 @@ export default function HrEmployeeProfilePage() {
                   <span className="text-2xl font-bold font-headline text-on-surface-variant">{initials}</span>
                 )}
               </div>
-              <label className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+              <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                 {uploading ? "Uploading..." : "Upload Photo"}
                 <input
                   type="file"
@@ -279,8 +283,8 @@ export default function HrEmployeeProfilePage() {
           <section>
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Employment</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {input("Full Name", "name")}
-              {input("Email", "email", "email")}
+              {input("Full Name", "name", "text", true)}
+              {input("Email", "email", "email", true)}
               {input("Mobile / Phone", "mobile")}
               {input("Employee ID", "employeeId")}
               {select("Department", "department", DEPARTMENTS)}
@@ -336,14 +340,14 @@ export default function HrEmployeeProfilePage() {
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold"
+              className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-60"
+              className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-60"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>

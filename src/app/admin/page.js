@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { Suspense, useState, useEffect, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
@@ -11,18 +12,45 @@ import AddRoleModal from '@/components/users/AddRoleModal';
 import CreateUserModal from '@/components/users/CreateUserModal';
 import ResetPasswordModal from '@/components/users/ResetPasswordModal';
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import Pagination from '@/components/ui/Pagination';
+
+const ADMIN_TABS = ['users', 'deactivated', 'approvals', 'roles'];
 
 export default function AdminPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-emerald-600 dark:text-teal-400" />
+        </div>
+      }
+    >
+      <AdminPageContent />
+    </Suspense>
+  );
+}
+
+function AdminPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
   
-  // Tab control
-  const [activeTab, setActiveTab] = useState('users'); // 'users' | 'approvals' | 'roles' | 'deactivated'
+  // Tab control — derived from the URL so deep links (e.g. global search) work.
+  const tabParam = searchParams.get('tab');
+  const activeTab = ADMIN_TABS.includes(tabParam) ? tabParam : 'users'; // 'users' | 'approvals' | 'roles' | 'deactivated'
+
+  const selectTab = (tab) => {
+    setCurrentPage(1);
+    router.replace(tab === 'users' ? '/admin' : `/admin?tab=${tab}`, { scroll: false });
+  };
+
   const [roles, setRoles] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartments, setSelectedDepartments] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   
   const handleDepartmentChange = (userId, value) => {
     setSelectedDepartments(prev => ({ ...prev, [userId]: value }));
@@ -54,10 +82,10 @@ export default function AdminPage() {
     }
   }, [token]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (silent = false) => {
     if (!token) return;
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const res = await fetch('/api/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -68,7 +96,7 @@ export default function AdminPage() {
       setError(err.message);
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -109,6 +137,17 @@ export default function AdminPage() {
 
       toast.success(`User status updated to ${newStatus}.`);
       setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: newStatus } : u));
+      if (newStatus === 'ACTIVE') {
+        setSelectedDepartments(prev => {
+          if (!(userId in prev)) return prev;
+          const next = { ...prev };
+          delete next[userId];
+          return next;
+        });
+      }
+      // Re-sync from the server so status/department changes are reflected
+      // correctly across the Active / Deactivated / Approvals tabs.
+      await fetchUsers(true);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -177,7 +216,10 @@ export default function AdminPage() {
   // Filtered lists
   const pendingUsers = useMemo(() => users.filter(u => u.status === 'PENDING'), [users]);
   const activeUsers = useMemo(() => users.filter(u => u.status === 'ACTIVE'), [users]);
-  const deactivatedUsers = useMemo(() => users.filter(u => u.status === 'INACTIVE'), [users]);
+  const deactivatedUsers = useMemo(
+    () => users.filter(u => u.status === 'INACTIVE' || u.status === 'REJECTED'),
+    [users]
+  );
 
   const filteredUsers = useMemo(() => {
     let list = activeUsers;
@@ -196,6 +238,14 @@ export default function AdminPage() {
     );
   }, [activeTab, pendingUsers, activeUsers, deactivatedUsers, searchQuery]);
 
+  const USERS_PER_PAGE = 10;
+  const totalUserPages = Math.max(1, Math.ceil(filteredUsers.length / USERS_PER_PAGE));
+  const safeUserPage = Math.min(currentPage, totalUserPages);
+  const paginatedUsers = useMemo(
+    () => filteredUsers.slice((safeUserPage - 1) * USERS_PER_PAGE, safeUserPage * USERS_PER_PAGE),
+    [filteredUsers, safeUserPage]
+  );
+
   if (currentUser?.roleName !== 'ADMIN') {
     return (
       <div className="flex items-center justify-center min-h-[60vh] flex-col gap-3 font-sans">
@@ -207,12 +257,12 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto w-full space-y-8 font-sans">
+    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-8 font-sans">
       
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="page-title text-slate-900 dark:text-white">
             Admin Portal
           </h1>
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mt-2">
@@ -224,7 +274,7 @@ export default function AdminPage() {
           {activeTab === 'roles' && (
             <button
               onClick={() => setIsAddRoleOpen(true)}
-              className="px-5 py-2.5 rounded-full bg-[#1a7a5e] hover:bg-[#135d47] text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
+              className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
             >
               <Plus size={14} /> Add Role
             </button>
@@ -233,7 +283,7 @@ export default function AdminPage() {
           {activeTab !== 'roles' && (
             <button
               onClick={() => setIsCreateUserOpen(true)}
-              className="px-5 py-2.5 rounded-full bg-[#1a7a5e] hover:bg-[#135d47] text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
+              className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
             >
               <UserPlus size={14} /> Create User
             </button>
@@ -245,7 +295,7 @@ export default function AdminPage() {
           </div>
           
           <button
-            onClick={() => setActiveTab('approvals')}
+            onClick={() => selectTab('approvals')}
             className={`relative px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all border ${
               activeTab === 'approvals'
                 ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
@@ -265,8 +315,8 @@ export default function AdminPage() {
       {/* Tabs */}
       <div className="flex gap-2 p-1 rounded-xl bg-slate-100 dark:bg-white/5 w-fit">
         <button
-          onClick={() => setActiveTab('users')}
-          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          onClick={() => selectTab('users')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
             activeTab === 'users'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -276,8 +326,8 @@ export default function AdminPage() {
           Active Users
         </button>
         <button
-          onClick={() => setActiveTab('deactivated')}
-          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          onClick={() => selectTab('deactivated')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
             activeTab === 'deactivated'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -287,8 +337,8 @@ export default function AdminPage() {
           Deactivated
         </button>
         <button
-          onClick={() => setActiveTab('approvals')}
-          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          onClick={() => selectTab('approvals')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
             activeTab === 'approvals'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -298,8 +348,8 @@ export default function AdminPage() {
           Approvals Queue
         </button>
         <button
-          onClick={() => setActiveTab('roles')}
-          className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          onClick={() => selectTab('roles')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
             activeTab === 'roles'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -324,10 +374,10 @@ export default function AdminPage() {
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
-                  placeholder={`Search ${activeTab === 'users' ? 'users' : 'pending approvals'} by name, email...`}
+                  placeholder={`Search ${activeTab === 'users' ? 'users' : activeTab === 'approvals' ? 'pending approvals' : 'deactivated users'} by name, email...`}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3.5 rounded-2xl text-xs font-medium border outline-none transition-all bg-white dark:bg-[#0d1320] dark:border-white/5 border-slate-200 dark:text-white text-slate-900 placeholder-slate-400 dark:placeholder-slate-600 focus:border-[#1a7a5e] shadow-sm"
+                  onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                  className="w-full pl-10 pr-4 py-3.5 rounded-2xl text-xs font-medium border outline-none transition-all bg-white dark:bg-[#0d1320] dark:border-white/5 border-slate-200 dark:text-white text-slate-900 placeholder-slate-400 dark:placeholder-slate-600 focus:border-primary shadow-sm"
                 />
               </div>
 
@@ -342,20 +392,20 @@ export default function AdminPage() {
               ) : (
                 <div className="bg-white dark:bg-[#0d1320] border border-slate-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[900px] text-left border-collapse text-xs">
+                    <table className="w-full min-w-[900px] table-fixed text-left border-collapse text-xs">
                       <thead>
                         <tr className="bg-slate-50 dark:bg-white/[0.02] text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                          <th className="py-4 px-6">Name</th>
-                          <th className="py-4 px-6">Username</th>
-                          <th className="py-4 px-6">Email Address</th>
-                          <th className="py-4 px-6">Mobile</th>
-                          <th className="py-4 px-6">Role</th>
-                          <th className="py-4 px-6">Status</th>
-                          <th className="py-4 px-6 text-right">Actions</th>
+                          <th className="w-[18%] py-4 px-6 align-middle">Name</th>
+                          <th className="w-[14%] py-4 px-6 align-middle">Username</th>
+                          <th className="w-[22%] py-4 px-6 align-middle">Email Address</th>
+                          <th className="w-[12%] py-4 px-6 align-middle">Mobile</th>
+                          <th className="w-[12%] py-4 px-6 align-middle">Role</th>
+                          <th className="w-[10%] py-4 px-6 align-middle">Status</th>
+                          <th className="w-[12%] py-4 px-6 text-center align-middle whitespace-nowrap">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredUsers.map((item, idx) => (
+                        {paginatedUsers.map((item, idx) => (
                           <motion.tr
                             key={item.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -363,23 +413,23 @@ export default function AdminPage() {
                             transition={{ delay: idx * 0.02 }}
                             className="border-t border-slate-200 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.01] transition-colors"
                           >
-                            <td className="py-4 px-6 font-bold dark:text-white text-slate-800">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-bold">
+                            <td className="py-4 px-6 align-middle font-bold dark:text-white text-slate-800">
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className="w-8 h-8 shrink-0 rounded-lg bg-primary/15 text-primary flex items-center justify-center font-bold">
                                   {item.name ? item.name.charAt(0).toUpperCase() : item.username.charAt(0).toUpperCase()}
                                 </div>
-                                {item.name || item.username}
+                                <span className="break-words">{item.name || item.username}</span>
                               </div>
                             </td>
-                            <td className="py-4 px-6 text-slate-500">@{item.username}</td>
-                            <td className="py-4 px-6 text-slate-500">{item.email}</td>
-                            <td className="py-4 px-6 text-slate-500">{item.mobile || '—'}</td>
-                            <td className="py-4 px-6 font-semibold dark:text-gray-300 text-slate-700">
-                              <span className="px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px]">
+                            <td className="py-4 px-6 align-middle text-slate-500 break-words">@{item.username}</td>
+                            <td className="py-4 px-6 align-middle text-slate-500 break-words">{item.email}</td>
+                            <td className="py-4 px-6 align-middle text-slate-500">{item.mobile || '—'}</td>
+                            <td className="py-4 px-6 align-middle font-semibold dark:text-gray-300 text-slate-700">
+                              <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] whitespace-nowrap align-middle">
                                 {item.role?.name?.replaceAll('_', ' ')}
                               </span>
                             </td>
-                            <td className="py-4 px-6">
+                            <td className="py-4 px-6 align-middle">
                               <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
                                 item.status === 'ACTIVE'
                                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
@@ -390,8 +440,8 @@ export default function AdminPage() {
                                 {item.status}
                               </span>
                             </td>
-                            <td className="py-4 px-6">
-                              <div className="flex items-center justify-end gap-2">
+                            <td className="py-4 px-6 align-middle">
+                              <div className="flex items-center justify-center gap-2 flex-wrap">
                                 {activeTab === 'approvals' ? (
                                   <>
                                     <select
@@ -495,6 +545,7 @@ export default function AdminPage() {
                       </tbody>
                     </table>
                   </div>
+                  <Pagination currentPage={safeUserPage} totalItems={filteredUsers.length} itemsPerPage={USERS_PER_PAGE} onPageChange={setCurrentPage} />
                 </div>
               )}
             </>
@@ -503,6 +554,15 @@ export default function AdminPage() {
           {/* ROLES TAB */}
           {activeTab === 'roles' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {roles.length === 0 && (
+                <div className="md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-20 rounded-3xl border border-dashed dark:border-white/5 border-slate-200 bg-white dark:bg-[#0d1320] text-center">
+                  <div className="w-16 h-16 rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 flex items-center justify-center mb-4">
+                    <Shield size={32} />
+                  </div>
+                  <h3 className="text-base font-bold dark:text-white text-slate-800">No roles found</h3>
+                  <p className="text-xs text-slate-400 max-w-xs mt-1">Add a role to get started.</p>
+                </div>
+              )}
               {roles.map(roleItem => {
                 const isAdmin = roleItem.name === 'ADMIN';
 
@@ -538,7 +598,7 @@ export default function AdminPage() {
                       <div className="flex gap-2 mt-6">
                         <button
                           onClick={() => setSelectedRole(roleItem)}
-                          className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-[#1a7a5e]/15 text-[#1a7a5e] hover:bg-[#1a7a5e]/25 border border-[#1a7a5e]/10 transition-colors"
+                          className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-primary/15 text-primary hover:bg-primary/25 border border-primary/10 transition-colors"
                         >
                           <ShieldAlert size={12} />
                           Permissions

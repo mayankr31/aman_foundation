@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function LeaveApplication() {
   const { token, user: currentUser } = useAuth();
@@ -22,6 +24,7 @@ export default function LeaveApplication() {
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const { pageItems: pagedLeaves, currentPage, setCurrentPage } = usePagination(leaves, 10);
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -102,11 +105,11 @@ export default function LeaveApplication() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Self Service</p>
-          <h2 className="text-3xl md:text-[2.75rem] font-headline font-semibold tracking-tight leading-none text-on-surface">Leave Application</h2>
+          <h2 className="page-title text-on-surface">Leave Application</h2>
         </div>
         <button 
           onClick={() => setIsApplying(true)}
-          className="bg-primary hover:bg-primary-container text-white px-6 py-3 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer"
+          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer"
         >
           <span className="material-symbols-outlined text-sm">add</span>
           Apply for Leave
@@ -117,7 +120,7 @@ export default function LeaveApplication() {
         <div className="bg-surface-container-lowest border border-outline-variant/10 p-6 rounded-2xl shadow-ambient flex items-center justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Leaves Taken</p>
-            <h4 className="text-4xl font-headline font-bold mt-2 text-on-surface">{leavesTaken}</h4>
+            <h4 className="stat-value mt-2 text-on-surface">{leavesTaken}</h4>
           </div>
           <div className="p-4 rounded-2xl bg-teal-50 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400">
             <span className="material-symbols-outlined text-3xl">event_available</span>
@@ -126,7 +129,7 @@ export default function LeaveApplication() {
         <div className="bg-surface-container-lowest border border-outline-variant/10 p-6 rounded-2xl shadow-ambient flex items-center justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Leaves Remaining</p>
-            <h4 className="text-4xl font-headline font-bold mt-2 text-on-surface">{leavesRemaining}</h4>
+            <h4 className="stat-value mt-2 text-on-surface">{leavesRemaining}</h4>
           </div>
           <div className="p-4 rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400">
             <span className="material-symbols-outlined text-3xl">event_busy</span>
@@ -140,21 +143,21 @@ export default function LeaveApplication() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse font-sans text-sm">
+          <table className="w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
             <thead>
               <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                <th className="py-3 px-4">Leave Type</th>
-                <th className="py-3 px-4">Requested Dates</th>
-                <th className="py-3 px-4">Reason</th>
-                <th className="py-3 px-4">Status</th>
+                <th className="w-[22%] py-3 px-4">Leave Type</th>
+                <th className="w-[26%] py-3 px-4">Requested Dates</th>
+                <th className="w-[34%] py-3 px-4">Reason</th>
+                <th className="w-[18%] py-3 px-4">Status</th>
               </tr>
             </thead>
             <tbody>
-              {leaves.map((leave) => (
+              {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                  <td className="py-4 px-4 font-bold text-on-surface">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs text-on-surface-variant">{leave.dates}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant max-w-xs truncate" title={leave.reason}>{leave.reason}</td>
+                  <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.type}</td>
+                  <td className="py-4 px-4 font-mono text-xs text-on-surface-variant break-words align-top">{leave.dates}</td>
+                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">
                       <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
@@ -181,6 +184,7 @@ export default function LeaveApplication() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={currentPage} totalItems={leaves.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {isApplying && (
@@ -243,11 +247,11 @@ export default function LeaveApplication() {
             </div>
 
             <div className="flex gap-4 justify-end pt-4 border-t border-outline-variant/10">
-              <button onClick={() => setIsApplying(false)} className="px-6 py-2.5 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
+              <button onClick={() => setIsApplying(false)} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
               <button 
                 onClick={handleApplyLeave} 
                 disabled={isSubmitting} 
-                className="px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-transform flex items-center gap-2 disabled:opacity-60 cursor-pointer"
+                className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-transform flex items-center gap-2 disabled:opacity-60 cursor-pointer"
               >
                 {isSubmitting ? "Submitting..." : "Submit Request"}
               </button>
@@ -257,7 +261,7 @@ export default function LeaveApplication() {
       )}
 
       {showToast && (
-        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
+        <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
           <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
           {toastMessage}
         </div>

@@ -539,14 +539,14 @@ export default function AttendanceModal({ isOpen, onClose }) {
             <div className="flex justify-end gap-4 mt-8 pt-4 border-t">
               <button
                 onClick={() => setCheckoutMode(false)}
-                className="px-6 py-3 border rounded-lg font-bold hover:bg-slate-50 transition-colors"
+                className="px-4 py-2 border rounded-lg font-bold hover:bg-slate-50 transition-colors"
               >
                 Back
               </button>
               <button
                 onClick={handleConfirmCheckOut}
                 disabled={isCheckingOut}
-                className="px-6 py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20 flex justify-center items-center gap-2"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20 flex justify-center items-center gap-2"
               >
                 {isCheckingOut && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
                 {isCheckingOut ? "Checking out..." : "Confirm Check Out"}
@@ -749,7 +749,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
                     <button
                       onClick={handleSaveLessonPlan}
                       disabled={isUploadingLP || (!lessonPlanText.trim() && selectedFiles.length === 0)}
-                      className="px-6 py-2 bg-primary hover:bg-primary-container text-white font-semibold rounded-lg transition-colors cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="px-4 py-2 bg-primary hover:bg-primary-container text-white font-semibold rounded-lg transition-colors cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       {isUploadingLP && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
                       {isUploadingLP ? "Saving..." : "Save Lesson Plan"}
@@ -762,7 +762,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
         )}
 
         {showToast && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[400]">
             <span className="material-symbols-outlined text-emerald-400 text-lg">info</span>
             {toastMessage}
           </div>

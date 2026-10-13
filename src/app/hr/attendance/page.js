@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function HrAttendanceLogs() {
   const router = useRouter();
@@ -106,6 +108,8 @@ export default function HrAttendanceLogs() {
     });
   }, [attendanceLogs, attendanceSearch]);
 
+  const { pageItems: pagedAttendance, currentPage, setCurrentPage } = usePagination(groupedAttendance, 10);
+
   const renderStatusPill = (status) => {
     let dotColor = "bg-emerald-500 animate-pulse";
     let badgeClass = "bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/30";
@@ -125,8 +129,8 @@ export default function HrAttendanceLogs() {
   };
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full">
-      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
+      <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Dashboard</span>
       </Link>
@@ -134,7 +138,7 @@ export default function HrAttendanceLogs() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Administration Module</p>
-          <h2 className="text-3xl md:text-[2.75rem] font-headline font-semibold tracking-tight leading-none text-on-surface">Human Resources &amp; Personnel</h2>
+          <h2 className="page-title text-on-surface">Human Resources &amp; Personnel</h2>
         </div>
       </div>
 
@@ -167,32 +171,32 @@ export default function HrAttendanceLogs() {
             </div>
             
             <div className="w-full overflow-x-auto">
-              <table className="w-full text-left border-collapse font-sans text-sm">
+              <table className="w-full min-w-[760px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold text-xs uppercase tracking-wider">
-                    <th className="py-3 px-4">Employee</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4">Work Hours</th>
-                    <th className="py-3 px-4">Login Time</th>
-                    <th className="py-3 px-4">Daily Tasks</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
+                    <th className="w-[26%] py-3 px-4">Employee</th>
+                    <th className="w-[14%] py-3 px-4">Status</th>
+                    <th className="w-[14%] py-3 px-4">Work Hours</th>
+                    <th className="w-[14%] py-3 px-4">Login Time</th>
+                    <th className="w-[20%] py-3 px-4">Daily Tasks</th>
+                    <th className="w-[12%] py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {groupedAttendance.map((log) => {
+                  {pagedAttendance.map((log) => {
                     const name = log.user?.name || log.email || "Unknown";
                     const initial = name.charAt(0).toUpperCase();
                     
                     return (
-                      <tr key={log.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
+                      <tr key={log.id} onClick={() => router.push(`/hr/attendance/${log.userId}`)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
                         <td className="py-4 px-4">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
                             <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 font-bold text-sm shrink-0">
                               {initial}
                             </div>
-                            <div className="flex flex-col">
-                              <span className="font-bold text-on-surface text-[13px]">{name}</span>
-                              <span className="text-[11px] text-on-surface-variant/70">{log.email}</span>
+                            <div className="flex flex-col min-w-0">
+                              <span className="font-bold text-on-surface text-[13px] break-words">{name}</span>
+                              <span className="text-[11px] text-on-surface-variant/70 break-words">{log.email}</span>
                             </div>
                           </div>
                         </td>
@@ -205,7 +209,7 @@ export default function HrAttendanceLogs() {
                               const completed = log.taskDetails.filter(t => t.completed).length;
                               const pending = log.taskDetails.length - completed;
                               return (
-                                <button onClick={() => handleTaskClick(log)} className="flex flex-col items-start gap-0.5 cursor-pointer">
+                                <button onClick={(e) => { e.stopPropagation(); handleTaskClick(log); }} className="flex flex-col items-start gap-0.5 cursor-pointer">
                                   <span className="flex items-center gap-1 text-blue-600 hover:underline">
                                     <span className="material-symbols-outlined text-[18px]">check_box</span>
                                     <span>{log.taskDetails.length} {log.taskDetails.length === 1 ? 'task' : 'tasks'}</span>
@@ -242,6 +246,7 @@ export default function HrAttendanceLogs() {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalItems={groupedAttendance.length} itemsPerPage={10} onPageChange={setCurrentPage} />
           </div>
         )}
       </div>

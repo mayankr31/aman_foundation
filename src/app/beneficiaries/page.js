@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/context/ToastContext";
 import { useAuth } from "@/lib/useAuth";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import Pagination from "@/components/ui/Pagination";
 
 const emptyAddForm = {
   name: "",
@@ -34,6 +36,7 @@ const emptyAddForm = {
 };
 
 export default function BeneficiaryMasterDirectory() {
+  const router = useRouter();
   const toast = useToast();
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +44,7 @@ export default function BeneficiaryMasterDirectory() {
   const [programFilter, setProgramFilter] = useState("All Programs");
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [migratedFilter, setMigratedFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -108,6 +112,7 @@ export default function BeneficiaryMasterDirectory() {
     setProgramFilter("All Programs");
     setLocationFilter("All Locations");
     setMigratedFilter("All");
+    setCurrentPage(1);
   };
 
   const farmPrograms = livelihoodPrograms.filter((p) => p.category === "FARM");
@@ -256,6 +261,14 @@ export default function BeneficiaryMasterDirectory() {
     return matchesSearch && matchesTier && matchesProgram && matchesLocation && matchesMigrated;
   });
 
+  const ITEMS_PER_PAGE = 10;
+  const totalPages = Math.max(1, Math.ceil(filteredBeneficiaries.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedBeneficiaries = filteredBeneficiaries.slice(
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE
+  );
+
   const inputClass =
     "px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs";
   const labelClass =
@@ -266,7 +279,7 @@ export default function BeneficiaryMasterDirectory() {
       {/* Back Link */}
       <Link
         href="/livelihood"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -282,7 +295,7 @@ export default function BeneficiaryMasterDirectory() {
           <span className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">
             Livelihood Database
           </span>
-          <h2 className="text-3xl md:text-[2.75rem] font-bold text-on-surface tracking-tight leading-tight font-headline">
+          <h2 className="page-title text-on-surface">
             Beneficiaries Master Registry
           </h2>
           <p className="text-on-surface-variant mt-2 max-w-2xl text-sm">
@@ -298,14 +311,14 @@ export default function BeneficiaryMasterDirectory() {
               className="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full border-none focus:ring-2 focus:ring-primary text-sm placeholder-on-surface-variant/70 focus:outline-none text-on-surface"
               placeholder="Search master database..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
               type="text"
             />
           </div>
 
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center gap-2 px-5 py-2 bg-primary text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-semibold text-sm cursor-pointer"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-semibold text-sm cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">person_add</span>
             Add Beneficiary
@@ -331,7 +344,7 @@ export default function BeneficiaryMasterDirectory() {
           </span>
           <select
             value={locationFilter}
-            onChange={(e) => setLocationFilter(e.target.value)}
+            onChange={(e) => { setLocationFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
           >
             <option value="All Locations">All Locations</option>
@@ -345,7 +358,7 @@ export default function BeneficiaryMasterDirectory() {
 
           <select
             value={tierFilter}
-            onChange={(e) => setTierFilter(e.target.value)}
+            onChange={(e) => { setTierFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
           >
             <option value="All Tiers">All Tiers</option>
@@ -356,7 +369,7 @@ export default function BeneficiaryMasterDirectory() {
 
           <select
             value={programFilter}
-            onChange={(e) => setProgramFilter(e.target.value)}
+            onChange={(e) => { setProgramFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
           >
             <option value="All Programs">All Programs</option>
@@ -367,7 +380,7 @@ export default function BeneficiaryMasterDirectory() {
 
           <select
             value={migratedFilter}
-            onChange={(e) => setMigratedFilter(e.target.value)}
+            onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
             className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
           >
             <option value="All">All Status</option>
@@ -387,22 +400,23 @@ export default function BeneficiaryMasterDirectory() {
       {/* Directory Table */}
       <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px] font-sans">
+          <table className="w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
               <tr className="text-xs uppercase tracking-widest text-on-surface-variant font-bold border-b border-surface-container">
-                <th className="px-6 py-4">Beneficiary Name</th>
-                <th className="px-6 py-4">District / Location</th>
-                <th className="px-6 py-4">Social Economic Tier</th>
-                <th className="px-6 py-4">Program Linkage</th>
-                <th className="px-6 py-4">Resilience Index (KYOR)</th>
-                <th className="px-6 py-4 text-right">Action</th>
+                <th className="w-[22%] px-6 py-4">Beneficiary Name</th>
+                <th className="w-[20%] px-6 py-4">District / Location</th>
+                <th className="w-[14%] px-6 py-4">Social Economic Tier</th>
+                <th className="w-[22%] px-6 py-4">Program Linkage</th>
+                <th className="w-[12%] px-6 py-4">Resilience Index (KYOR)</th>
+                <th className="w-[10%] px-6 py-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="text-sm font-medium">
-              {filteredBeneficiaries.map((b, index) => (
+              {paginatedBeneficiaries.map((b, index) => (
                 <tr
                   key={b.id}
-                  className={`hover:bg-surface-container-low/50 transition-colors ${
+                  onClick={() => router.push(`/beneficiaries/${encodeURIComponent(b.id)}`)}
+                  className={`hover:bg-surface-container-low/50 transition-colors cursor-pointer ${
                     index > 0 ? "border-t border-surface-container-low" : ""
                   }`}
                 >
@@ -415,15 +429,15 @@ export default function BeneficiaryMasterDirectory() {
                           b.name.split(" ").map((n) => n[0]).join("")
                         )}
                       </div>
-                      <div>
-                        <div className="font-bold text-on-surface">{b.name}</div>
-                        <div className="text-xs text-on-surface-variant mt-0.5">ID: {b.enrolmentId}</div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-on-surface break-words">{b.name}</div>
+                        <div className="text-xs text-on-surface-variant mt-0.5 break-words">ID: {b.enrolmentId}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-5">
-                    <div className="text-on-surface font-semibold">{b.location}</div>
-                    <div className="text-xs text-on-surface-variant mt-0.5">{b.income}</div>
+                    <div className="text-on-surface font-semibold break-words">{b.location}</div>
+                    <div className="text-xs text-on-surface-variant mt-0.5 break-words">{b.income}</div>
                   </td>
                   <td className="px-6 py-5">
                     <span className="text-xs text-on-surface font-bold">{b.tier}</span>
@@ -446,7 +460,8 @@ export default function BeneficiaryMasterDirectory() {
                   <td className="px-6 py-5 text-right">
                     <Link
                       href={`/beneficiaries/${encodeURIComponent(b.id)}`}
-                      className="text-primary hover:bg-primary/5 px-4 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline cursor-pointer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline cursor-pointer"
                     >
                       View File
                     </Link>
@@ -463,6 +478,7 @@ export default function BeneficiaryMasterDirectory() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={safePage} totalItems={filteredBeneficiaries.length} itemsPerPage={ITEMS_PER_PAGE} onPageChange={setCurrentPage} />
       </div>
 
       {/* Add Beneficiary Modal */}
@@ -809,13 +825,13 @@ export default function BeneficiaryMasterDirectory() {
                   <button
                     type="button"
                     onClick={closeAddModal}
-                    className="px-5 py-2 rounded-full border border-outline-variant hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium cursor-pointer"
+                    className="px-4 py-2 rounded-full border border-outline-variant hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors font-medium cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 rounded-full bg-primary text-white hover:bg-primary/95 shadow-glow transition-all font-semibold cursor-pointer flex items-center gap-2"
+                    className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 shadow-glow transition-all font-semibold cursor-pointer flex items-center gap-2"
                   >
                     Next: KYOR Form
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>

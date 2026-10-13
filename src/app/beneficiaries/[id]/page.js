@@ -792,11 +792,11 @@ function BeneficiaryProfileDetailContent() {
   };
 
   return (
-    <div className="p-4 md:p-8 lg:p-12 pb-24 md:pb-12 max-w-7xl mx-auto w-full">
+    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full">
       {/* Back link */}
       <Link
         href="/beneficiaries"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -812,14 +812,14 @@ function BeneficiaryProfileDetailContent() {
           <p className="text-label-md text-on-surface-variant mb-2 font-sans font-bold uppercase tracking-widest text-[10px]">
             Livelihood Management
           </p>
-          <h1 className="text-3xl md:text-[2.75rem] font-bold text-on-surface tracking-tight leading-tight font-headline">
+          <h1 className="page-title text-on-surface">
             Beneficiary Profile File
           </h1>
         </div>
         <div className="flex gap-3 font-sans flex-wrap">
           <button
             onClick={() => setShowConfirmMigrate(true)}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">
               {beneficiary.isMigrated ? "undo" : "moving"}
@@ -828,18 +828,18 @@ function BeneficiaryProfileDetailContent() {
           </button>
           <button
             onClick={() => setShowEditModal(true)}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
           >
             <span className="material-symbols-outlined text-[18px]">edit</span>
             Edit Profile
           </button>
-          <button className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-body-md font-medium shadow-glow hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border-none">
+          <button className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-body-md font-medium shadow-glow hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border-none">
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Data
           </button>
           <button
             onClick={() => setShowConfirmDelete(true)}
-            className="bg-error-container text-on-error-container px-5 py-2.5 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
+            className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
           >
             <span className="material-symbols-outlined text-[18px]">delete</span>
             Delete
@@ -982,7 +982,7 @@ function BeneficiaryProfileDetailContent() {
               ></circle>
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-4xl font-bold text-on-surface tracking-tighter">
+              <span className="stat-value text-on-surface">
                 {score !== null ? score : "N/A"}
               </span>
               {score !== null && (
@@ -1217,7 +1217,7 @@ function BeneficiaryProfileDetailContent() {
                 {SHOW_TAKE_KYOR_BUTTON && (
                   <Link
                     href={`/beneficiaries/${id}/kyr-survey`}
-                    className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
                     Take KYOR Form
@@ -1295,7 +1295,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <Link
                   href={`/beneficiaries/${id}/adaptive-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Take New Survey
@@ -1347,7 +1347,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <Link
                   href={`/beneficiaries/${id}/absorptive-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Take New Survey
@@ -1399,7 +1399,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <Link
                   href={`/beneficiaries/${id}/transformative-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Take New Survey
@@ -1451,7 +1451,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <Link
                   href={`/beneficiaries/${id}/vulnerability`}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Take New Survey
@@ -1500,14 +1500,14 @@ function BeneficiaryProfileDetailContent() {
                 <div className="flex flex-col gap-3 min-w-[200px]">
                   <Link
                     href={`/beneficiaries/${id}/solution-board-reference`}
-                    className="w-full bg-surface-container-highest text-on-surface border border-outline-variant/30 px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-surface-container-highest/80 transition-colors flex items-center justify-center gap-2 text-center"
+                    className="w-full bg-surface-container-highest text-on-surface border border-outline-variant/30 px-4 py-2 rounded-full text-sm font-semibold hover:bg-surface-container-highest/80 transition-colors flex items-center justify-center gap-2 text-center"
                   >
                     <span className="material-symbols-outlined text-[18px]">menu_book</span>
                     View Reference Board
                   </Link>
                   <Link
                     href={`/beneficiaries/${id}/solution-plan`}
-                    className="w-full gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
+                    className="w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
                     Create Solution Plan
@@ -1573,7 +1573,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <button
                   onClick={() => handleOpenIncomeForm()}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Add Income
@@ -1646,7 +1646,7 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <button
                   onClick={() => handleOpenMigrationForm()}
-                  className="gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   Add Migration
@@ -2035,7 +2035,7 @@ function BeneficiaryProfileDetailContent() {
             <button
               onClick={handleCalculateResilience}
               disabled={resilienceScoreComputed === null || isCalculatingResilience}
-              className="mt-4 w-full gradient-primary bg-primary text-on-primary px-5 py-2.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="material-symbols-outlined text-[18px]">calculate</span>
               {isCalculatingResilience ? "Calculating..." : "Calculate & Save Resilience Score"}
@@ -2354,14 +2354,14 @@ function BeneficiaryProfileDetailContent() {
               <button
                 type="button"
                 onClick={() => setShowEditModal(false)}
-                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleUpdateProfile}
-                className="px-5 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+                className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
               >
                 Save Profile Updates
               </button>
@@ -2492,14 +2492,14 @@ function BeneficiaryProfileDetailContent() {
               <button
                 type="button"
                 onClick={handleCloseIncomeForm}
-                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleIncomeSave}
-                className="px-5 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+                className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
               >
                 {editIncomeId ? "Update Record" : "Save Record"}
               </button>
@@ -2600,14 +2600,14 @@ function BeneficiaryProfileDetailContent() {
               <button
                 type="button"
                 onClick={handleCloseMigrationForm}
-                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleMigrationSave}
-                className="px-5 py-2.5 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+                className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
               >
                 {editMigrationId ? "Update Record" : "Save Record"}
               </button>
@@ -2702,7 +2702,7 @@ function BeneficiaryProfileDetailContent() {
               <button
                 type="button"
                 onClick={() => setShowLinkStudentModal(false)}
-                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
               >
                 Close
               </button>

@@ -7,7 +7,7 @@ import { extractMapEmbedUrl } from "@/lib/mapUrl";
 function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}</label>
+      <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
         <select name={name} value={value} onChange={onChange}
           className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
@@ -77,7 +77,10 @@ export default function AfterSchoolCentresModule() {
  
   const handleAddCentre = async (e) => {
     e.preventDefault();
-    if (!addForm.name || !addForm.location) return;
+    if (!addForm.name || !addForm.location) {
+      alert("Centre Name and Location are required.");
+      return;
+    }
 
     try {
       const res = await fetch("/api/after-school-centres", {
@@ -148,7 +151,7 @@ export default function AfterSchoolCentresModule() {
     return matchesSearch && matchesLocation;
   });
 
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 9;
   const totalPages = Math.ceil(filteredCentres.length / ITEMS_PER_PAGE);
   const paginatedCentres = filteredCentres.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -160,11 +163,11 @@ export default function AfterSchoolCentresModule() {
   }, [searchQuery, selectedLocation]);
 
   return (
-    <div className="p-6 lg:p-10 flex flex-col gap-10 max-w-[1600px] mx-auto w-full">
+    <div className="p-6 md:p-10 pb-24 max-w-[1600px] mx-auto w-full">
       {/* Editorial Header */}
       <Link
         href="/education"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal">
           arrow_back
@@ -173,12 +176,13 @@ export default function AfterSchoolCentresModule() {
           Back to Education Hub
         </span>
       </Link>
+      <div className="flex flex-col gap-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h2 className="font-headline text-[2.75rem] leading-none tracking-[-0.02em] text-on-surface mb-3">
+          <h2 className="page-title text-on-surface">
             After School Centres Directory
           </h2>
-          <p className="font-body text-lg text-on-surface-variant max-w-2xl">
+          <p className="page-description mt-2">
             Monitoring after school centre profiles, program participation, and geographic impact across targeted regions.
           </p>
         </div>
@@ -190,14 +194,14 @@ export default function AfterSchoolCentresModule() {
             <span className="material-symbols-outlined text-primary text-[20px]">school</span>
             <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Total Centres</p>
           </div>
-          <p className="font-headline text-3xl text-on-surface">{centres.length}</p>
+          <p className="stat-value text-on-surface">{centres.length}</p>
         </div>
         <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
           <div className="flex items-center gap-2 mb-2">
             <span className="material-symbols-outlined text-primary text-[20px]">groups</span>
             <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Active Students</p>
           </div>
-          <p className="font-headline text-3xl text-primary">
+          <p className="stat-value text-primary">
             {centres.reduce((acc, c) => acc + (c.enrolled ?? 0), 0).toLocaleString()}
           </p>
         </div>
@@ -206,7 +210,7 @@ export default function AfterSchoolCentresModule() {
             <span className="material-symbols-outlined text-primary text-[20px]">campaign</span>
             <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Total Programs</p>
           </div>
-          <p className="font-headline text-3xl text-on-surface">
+          <p className="stat-value text-on-surface">
             {centres.reduce((acc, c) => acc + (c.programs ?? 0), 0)}
           </p>
         </div>
@@ -215,7 +219,7 @@ export default function AfterSchoolCentresModule() {
             <span className="material-symbols-outlined text-primary text-[20px]">check_circle</span>
             <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Active Centres</p>
           </div>
-          <p className="font-headline text-3xl text-on-surface">
+          <p className="stat-value text-on-surface">
             {centres.filter((c) => c.status === "Active").length}
           </p>
         </div>
@@ -238,14 +242,14 @@ export default function AfterSchoolCentresModule() {
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           <button
             onClick={handleExport}
-            className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/10"
+            className="flex-1 md:flex-none px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/10"
           >
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export Data</span>
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex-1 md:flex-none px-5 py-2.5 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)] cursor-pointer"
+            className="flex-1 md:flex-none px-4 py-2 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)] cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="whitespace-nowrap">Add Centre</span>
@@ -257,7 +261,7 @@ export default function AfterSchoolCentresModule() {
       <div className="mt-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 border-b border-surface-variant/20 pb-4">
           <div>
-            <h3 className="font-headline text-2xl tracking-tight text-on-surface">Featured Profiles</h3>
+            <h3 className="section-title text-on-surface">Featured Profiles</h3>
             <p className="text-xs text-on-surface-variant mt-1 font-body">Showing {filteredCentres.length} partner centres</p>
           </div>
           
@@ -437,14 +441,15 @@ export default function AfterSchoolCentresModule() {
               <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setShowAddModal(false)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm">
+              <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm">
                 Add Centre
               </button>
             </div>
           </form>
         </Modal>
       )}
+      </div>
     </div>
   );
 }

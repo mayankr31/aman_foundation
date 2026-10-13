@@ -380,7 +380,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
           ].map((opt) => (
             <label
               key={opt.key}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg border cursor-pointer transition-colors ${
                 q1 === opt.key
                   ? "border-primary bg-primary-fixed/10"
                   : "border-outline-variant hover:border-primary/50"
@@ -821,14 +821,14 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="px-6 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold text-sm"
+          className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold text-sm"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer text-sm flex items-center gap-2 disabled:opacity-60"
+          className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer text-sm flex items-center gap-2 disabled:opacity-60"
         >
           {isSubmitting ? (
             <>

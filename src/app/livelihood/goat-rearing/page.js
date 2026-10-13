@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 export default function GoatRearing() {
   const { token } = useAuth();
@@ -12,6 +14,7 @@ export default function GoatRearing() {
   const [totalGoats, setTotalGoats] = useState(3740);
   const [goatBeneficiaries, setGoatBeneficiaries] = useState([]);
   const [goatRearingPrograms, setGoatRearingPrograms] = useState([]);
+  const { pageItems: pagedGoatPrograms, currentPage, setCurrentPage } = usePagination(goatRearingPrograms, 9);
   const [allBens, setAllBens] = useState([]);
   const [avgRoi, setAvgRoi] = useState(145);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -352,11 +355,11 @@ export default function GoatRearing() {
   const heights = trajectoryHeights[timeframe];
 
   return (
-    <div className="p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full pb-24">
+    <div className="p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
       {/* Page Header */}
       <Link
         href="/livelihood"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
@@ -365,23 +368,24 @@ export default function GoatRearing() {
           Back to Livelihood Hub
         </span>
       </Link>
+      <div className="flex flex-col gap-8">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-[2.75rem] font-headline tracking-[-0.02em] leading-tight text-on-surface mb-2 font-bold">
+          <h2 className="page-title text-on-surface">
             Goat Rearing Distribution &amp; Health
           </h2>
-          <p className="text-on-surface-variant font-body text-sm max-w-2xl">
+          <p className="page-description mt-2">
             Monitoring livelihood impact through livestock distribution metrics, health tracking, and return on investment for rural beneficiaries.
           </p>
         </div>
         <div className="flex gap-3 shrink-0 font-sans">
-          <button className="bg-surface-container-highest text-on-surface px-6 py-3 rounded-full text-xs font-semibold hover:bg-surface-variant transition-colors flex items-center gap-2 border border-outline-variant/10 cursor-pointer">
+          <button className="bg-surface-container-highest text-on-surface px-4 py-2 rounded-full text-xs font-semibold hover:bg-surface-variant transition-colors flex items-center gap-2 border border-outline-variant/10 cursor-pointer">
             <span className="material-symbols-outlined text-sm">download</span>
             Export Data
           </button>
           <button
             onClick={() => setShowAddProgramModal(true)}
-            className="bg-secondary text-white px-6 py-3 rounded-full text-xs font-semibold hover:bg-secondary-container transition-all flex items-center gap-2 shadow-lg shadow-secondary/30 active:scale-95 cursor-pointer border-none"
+            className="bg-secondary text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-secondary-container transition-all flex items-center gap-2 shadow-lg shadow-secondary/30 active:scale-95 cursor-pointer border-none"
           >
             <span className="material-symbols-outlined text-sm">add_box</span>
             Add Program
@@ -401,7 +405,7 @@ export default function GoatRearing() {
               Total Beneficiaries
             </span>
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-headline font-bold text-primary">{beneficiaryCount.toLocaleString()}</span>
+              <span className="stat-value text-primary">{beneficiaryCount.toLocaleString()}</span>
               <span className="text-sm font-medium text-primary-fixed-dim bg-primary-fixed/20 px-2 py-1 rounded-full flex items-center gap-1">
                 <span className="material-symbols-outlined text-[10px]">trending_up</span> +12%
               </span>
@@ -417,7 +421,7 @@ export default function GoatRearing() {
               Active Livestock
             </span>
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-headline font-bold text-on-surface">{totalGoats.toLocaleString()}</span>
+              <span className="stat-value text-on-surface">{totalGoats.toLocaleString()}</span>
             </div>
             <div className="mt-4 flex flex-col gap-2 font-sans">
               <div className="flex justify-between text-xs font-semibold">
@@ -443,7 +447,7 @@ export default function GoatRearing() {
               Avg. Household ROI
             </span>
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-headline font-bold">{avgRoi}%</span>
+              <span className="stat-value">{avgRoi}%</span>
             </div>
             <p className="text-xs text-on-primary/70 mt-4 font-body leading-relaxed">
               Estimated return over 24 months based on initial capital investment and organic herd growth.
@@ -520,7 +524,7 @@ export default function GoatRearing() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">
-            {goatRearingPrograms.map((prog) => {
+            {pagedGoatPrograms.map((prog) => {
               const participants = goatBeneficiaries.filter(b => b.goatRearingDetails?.some(d => d.goatRearingProgramId === prog.id));
               const goats = participants.reduce((sum, b) => {
                 const progDetails = b.goatRearingDetails?.filter(d => d.goatRearingProgramId === prog.id) || [];
@@ -552,6 +556,7 @@ export default function GoatRearing() {
               <p className="col-span-3 text-center text-xs text-slate-400 py-4 italic">No goat rearing programs logged in the system.</p>
             )}
           </div>
+          <Pagination currentPage={currentPage} totalItems={goatRearingPrograms.length} itemsPerPage={9} onPageChange={setCurrentPage} />
         </div>
       </div>
 
@@ -604,7 +609,7 @@ export default function GoatRearing() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary-container transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary-container transition-colors cursor-pointer border-none"
                 >
                   Create Program
                 </button>
@@ -615,6 +620,7 @@ export default function GoatRearing() {
       )}
 
 
+      </div>
     </div>
   );
 }

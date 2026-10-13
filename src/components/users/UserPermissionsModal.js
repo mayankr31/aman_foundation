@@ -358,14 +358,14 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
             <div className={`flex gap-4 justify-end pt-6 mt-6 border-t ${theme.borderLight}`}>
               <button
                 onClick={onClose}
-                className={`px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
+                className={`px-4 py-2 rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className={`px-8 py-3 rounded-2xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform shadow-xl`}
+                className={`px-5 py-2.5 rounded-2xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform shadow-xl`}
               >
                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                 Save Overrides

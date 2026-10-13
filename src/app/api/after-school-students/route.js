@@ -17,12 +17,10 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const gradeGroup = searchParams.get("gradeGroup");
-    const status = searchParams.get("status");
     const centreId = searchParams.get("centreId");
 
     const where = {};
     if (gradeGroup && gradeGroup !== "All Grades") where.gradeGroup = gradeGroup;
-    if (status && status !== "All Performance") where.status = status;
     if (centreId && centreId !== "All Centres") where.centreId = centreId;
 
     if (user.role.name === "FELLOW") {
@@ -95,7 +93,6 @@ export async function POST(req) {
       guardianPhone,
       enrolmentDate,
       primaryLanguage,
-      status,
       centreId,
       fellowId
     } = body;
@@ -154,7 +151,6 @@ export async function POST(req) {
         guardianPhone,
         enrolmentDate: enrolmentDate ? new Date(enrolmentDate) : null,
         primaryLanguage,
-        status: status || "On Track",
         centreId,
         fellowId: resolvedFellowId
       }

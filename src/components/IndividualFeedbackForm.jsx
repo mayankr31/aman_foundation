@@ -270,7 +270,7 @@ export default function IndividualFeedbackForm({
             <button
               type="submit"
               disabled={saving}
-              className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-60"
+              className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-60"
             >
               {saving ? "Saving..." : isNew ? "Save Feedback" : "Update Feedback"}
             </button>

@@ -100,7 +100,7 @@ export default function PtaEventDetail() {
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back */}
-      <Link href="/education/pta" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit">
+      <Link href="/education/pta" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to PTA Hub</span>
       </Link>
@@ -114,7 +114,7 @@ export default function PtaEventDetail() {
           </div>
           <div className="pt-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="text-3xl font-headline font-black text-on-surface capitalize">{event.title}</h2>
+              <h2 className="page-title text-on-surface capitalize">{event.title}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${statusClass}`}>{event.status}</span>
             </div>
             <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2">
@@ -135,7 +135,7 @@ export default function PtaEventDetail() {
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start">
           <button onClick={() => setModal("edit")}
-            className="bg-surface-container text-on-surface px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
+            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
             <span className="material-symbols-outlined text-[18px]">edit</span> Edit Meeting
           </button>
         </div>
@@ -156,12 +156,14 @@ export default function PtaEventDetail() {
           </div>
 
           {/* Schools Involved */}
-          {linkedSchools.length > 0 && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <h3 className="font-headline font-bold text-xl text-on-surface mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary">school</span>
-                Schools Involved
-              </h3>
+          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <h3 className="font-headline font-bold text-xl text-on-surface mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">school</span>
+              Schools Involved
+            </h3>
+            {linkedSchools.length === 0 ? (
+              <p className="text-center py-6 text-sm text-on-surface-variant italic font-sans">No schools linked to this event yet.</p>
+            ) : (
               <div className="space-y-3">
                 {linkedSchools.map(sp => (
                   <Link key={sp.schoolId} href={`/education/schools/${sp.schoolId}`}
@@ -174,8 +176,8 @@ export default function PtaEventDetail() {
                   </Link>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Right: Event Details */}
@@ -264,8 +266,8 @@ export default function PtaEventDetail() {
               </div>
             </div>
             <div className="flex justify-end gap-3 pt-4">
-              <button type="button" onClick={() => setModal(null)} className="px-5 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+              <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                 {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>

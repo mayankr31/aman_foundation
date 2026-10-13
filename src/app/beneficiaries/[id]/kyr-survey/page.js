@@ -96,7 +96,7 @@ export default function KYRSurveyPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto w-full">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-6 w-fit font-sans font-bold text-sm">
+      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-sans font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
         Back to Beneficiary Profile
       </Link>

@@ -256,6 +256,14 @@ function ProfilePageContent() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    if (!editName?.trim() || !editEmail?.trim()) {
+      toast.error("Name and email are required.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(editEmail)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
     try {
       const res = await fetch("/api/users/profile", {
         method: "PATCH",
@@ -437,7 +445,7 @@ function ProfilePageContent() {
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Profile Title */}
       <div className="mb-6">
-        <h2 className="text-[2.75rem] font-headline font-black text-on-surface tracking-[-0.02em] leading-none mb-3">
+        <h2 className="page-title text-on-surface mb-3">
           My Profile settings
         </h2>
         <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
@@ -461,7 +469,7 @@ function ProfilePageContent() {
               </div>
               <div className="text-center md:text-left pt-2">
                 <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-2">
-                  <h2 className="text-3xl font-headline font-black text-on-surface capitalize">
+                  <h2 className="page-title text-on-surface capitalize">
                     {profile.name}
                   </h2>
                   <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
@@ -540,7 +548,7 @@ function ProfilePageContent() {
             </div>
             <button
               onClick={() => setIsEditing(true)}
-              className="bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
+              className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
             >
               <span className="material-symbols-outlined text-[18px]">edit</span>
               Edit Profile
@@ -548,7 +556,7 @@ function ProfilePageContent() {
             {profile.role?.name === "FELLOW" && (
               <button
                 onClick={() => setShowPDFModal(true)}
-                className="bg-surface-container text-on-surface px-6 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
+                className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
               >
                 <span className="material-symbols-outlined text-[18px]">book</span>
                 Learning Framework
@@ -569,7 +577,7 @@ function ProfilePageContent() {
                       <span className="text-lg font-bold text-on-surface-variant">{initials}</span>
                     )}
                   </div>
-                  <label className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                  <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                     {uploadingAvatar ? "Uploading..." : "Upload Photo"}
                     <input
                       type="file"
@@ -582,7 +590,7 @@ function ProfilePageContent() {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</label>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name<span className="text-error ml-0.5">*</span></label>
                 <input
                   type="text"
                   required
@@ -592,7 +600,7 @@ function ProfilePageContent() {
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Email</label>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Email<span className="text-error ml-0.5">*</span></label>
                 <input
                   type="email"
                   required
@@ -747,13 +755,13 @@ function ProfilePageContent() {
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold"
+                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
               >
                 Save Changes
               </button>

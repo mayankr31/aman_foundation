@@ -113,7 +113,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
 
         <form onSubmit={handleSave} className="space-y-4">
           <div className="flex flex-col gap-2">
-            <label className={labelClass}>Full Name</label>
+            <label className={labelClass}>Full Name<span className="text-error ml-0.5">*</span></label>
             <input
               type="text"
               placeholder="e.g. Priya Sharma"
@@ -124,7 +124,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={labelClass}>Email Address</label>
+            <label className={labelClass}>Email Address<span className="text-error ml-0.5">*</span></label>
             <input
               type="email"
               placeholder="user@example.com"
@@ -146,7 +146,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={labelClass}>Password</label>
+            <label className={labelClass}>Password<span className="text-error ml-0.5">*</span></label>
             <input
               type="text"
               placeholder="Minimum 8 characters"
@@ -158,7 +158,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={labelClass}>Role</label>
+            <label className={labelClass}>Role<span className="text-error ml-0.5">*</span></label>
             <select
               value={roleId}
               onChange={(e) => setRoleId(e.target.value)}
@@ -177,14 +177,14 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
             <button
               type="button"
               onClick={onClose}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${theme.textLight}`}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform"
+              className="px-4 py-2 rounded-xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-primary hover:scale-105 transition-transform"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
               Create User

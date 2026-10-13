@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -374,6 +376,7 @@ export default function ProgramDetail() {
 
   // KPI aggregates
   const assignments = program?.assignments || [];
+  const { pageItems: pagedAssignments, currentPage, setCurrentPage } = usePagination(assignments, 10);
   const getSum = (key) => assignments.reduce((s, a) => s + (Number(a.attributes?.[key]) || 0), 0);
   const getAvg = (key) => {
     const vals = assignments.map((a) => Number(a.attributes?.[key])).filter((v) => !isNaN(v));
@@ -417,13 +420,14 @@ export default function ProgramDetail() {
   );
 
   return (
-    <div className="p-8 flex-1 flex flex-col gap-8 max-w-7xl mx-auto w-full pb-24">
+    <div className="p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
       {/* Back */}
-      <Link href={backLink} className={`flex items-center gap-2 text-slate-500 hover:text-${accentColor}-600 transition-colors mb-6 group w-fit`}>
+      <Link href={backLink} className={`flex items-center gap-2 text-slate-500 hover:text-${accentColor}-600 transition-colors mb-4 group w-fit`}>
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest">Back to {program.category === "FARM" ? "Farm" : "Non-Farm"} Programs</span>
       </Link>
 
+      <div className="flex flex-col gap-8">
       {/* Header */}
       <div className="flex justify-between items-end">
         <div>
@@ -433,20 +437,19 @@ export default function ProgramDetail() {
             </span>
             <span className="text-xs text-on-surface-variant">{program.category === "FARM" ? "Farm" : "Non-Farm"}</span>
           </div>
-          <h2 className="text-[2.5rem] font-headline tracking-[-0.02em] leading-tight text-on-surface font-bold">{program.name}</h2>
-          <p className="text-on-surface-variant font-body text-sm mt-1">{program.description || "No description"}</p>
+          <h2 className="page-title text-on-surface">{program.name}</h2>
+          <p className="page-description mt-2">{program.description || "No description"}</p>
         </div>
         <div className="flex gap-3 shrink-0">
           <button
             onClick={() => setShowDeleteProgram(true)}
-            className="text-red-600 hover:bg-red-50 px-4 py-3 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-red-200 bg-transparent"
+            className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-red-200 bg-transparent"
           >
             <span className="material-symbols-outlined text-sm">delete</span>Delete Program
           </button>
           <button
             onClick={openEnrollModal}
-            className={`bg-${accentColor}-700 text-white px-6 py-3 rounded-full text-xs font-semibold hover:bg-${accentColor}-800 transition-all flex items-center gap-2 shadow-lg active:scale-95 cursor-pointer border-none`}
-            style={{ backgroundColor: program.category === "FARM" ? "#047857" : "#d97706" }}
+            className="bg-primary text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg active:scale-95 cursor-pointer border-none"
           >
             <span className="material-symbols-outlined text-sm">person_add</span>Add Beneficiary
           </button>
@@ -471,7 +474,7 @@ export default function ProgramDetail() {
             return (
               <div key={kpi.key} className="bg-surface-container-lowest rounded-lg p-6 shadow-ambient border border-outline-variant/10">
                 <span className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4 block font-bold">{kpi.label}</span>
-                <span className="text-4xl font-headline font-bold text-on-surface">{display}</span>
+                <span className="stat-value text-on-surface">{display}</span>
               </div>
             );
           })}
@@ -575,16 +578,16 @@ export default function ProgramDetail() {
           <h3 className="text-lg font-bold text-on-surface">Enrolled Beneficiaries</h3>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm font-sans">
+          <table className="w-full min-w-[760px] table-fixed text-sm font-sans">
             <thead className="bg-surface-container-low text-xs uppercase tracking-wider text-on-surface-variant text-left font-bold">
               <tr>
-                <th className="px-6 py-3">#</th>
-                <th className="px-6 py-3">Participant</th>
+                <th className="w-[5%] px-4 py-3">#</th>
+                <th className="w-[22%] px-6 py-3">Participant</th>
                 {config?.tableColumns?.map((col) => (
-                  <th key={col.key} className="px-6 py-3">{col.label}</th>
+                  <th key={col.key} className="px-4 py-3">{col.label}</th>
                 ))}
-                <th className="px-6 py-3">Enrolled</th>
-                <th className="px-6 py-3 text-right">Actions</th>
+                <th className="w-[12%] px-4 py-3">Enrolled</th>
+                <th className="w-[16%] px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -595,20 +598,21 @@ export default function ProgramDetail() {
                   </td>
                 </tr>
               ) : (
-                assignments.map((assign, idx) => {
+                pagedAssignments.map((assign, idx) => {
                   const b = assign.beneficiary || {};
+                  const rowNumber = (currentPage - 1) * 10 + idx + 1;
                   const isExpanded = expandedAssignId === assign.id;
                   return (
                     <><tr key={assign.id} className={`hover:bg-surface-container-low transition-colors ${idx % 2 === 0 ? "bg-white dark:bg-slate-900" : "bg-surface-container-lowest"}`}>
-                      <td className="px-6 py-3 font-mono text-xs text-slate-400">{idx + 1}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-slate-400">{rowNumber}</td>
                       <td className="px-6 py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface shrink-0">
                             {b.name?.[0]?.toUpperCase() || "?"}
                           </div>
-                          <div>
-                            <p className="font-semibold text-on-surface text-sm">{b.name || "—"}</p>
-                            <p className="text-xs text-slate-400">{b.enrolmentId || ""} {b.address ? `· ${b.address}` : ""}</p>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-on-surface text-sm break-words">{b.name || "—"}</p>
+                            <p className="text-xs text-slate-400 break-words">{b.enrolmentId || ""} {b.address ? `· ${b.address}` : ""}</p>
                           </div>
                         </div>
                       </td>
@@ -623,9 +627,9 @@ export default function ProgramDetail() {
                           const colors = { "Planting": "bg-blue-100 text-blue-700", "Growing": "bg-green-100 text-green-700", "Harvesting": "bg-amber-100 text-amber-700", "Preparation": "bg-slate-100 text-slate-700", "Post-Harvest": "bg-purple-100 text-purple-700", "Nursery": "bg-teal-100 text-teal-700", "Transplanting": "bg-lime-100 text-lime-700", "Tillering": "bg-cyan-100 text-cyan-700", "Flowering": "bg-pink-100 text-pink-700" };
                           return <td key={col.key} className="px-6 py-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${colors[val] || "bg-slate-100 text-slate-700"}`}>{val || "—"}</span></td>;
                         }
-                        return <td key={col.key} className="px-6 py-3 text-sm">{display}</td>;
+                        return <td key={col.key} className="px-4 py-3 text-sm break-words">{display}</td>;
                       })}
-                      <td className="px-6 py-3 text-xs text-slate-400">{new Date(assign.enrolledAt).toLocaleDateString("en-IN")}</td>
+                      <td className="px-4 py-3 text-xs text-slate-400">{new Date(assign.enrolledAt).toLocaleDateString("en-IN")}</td>
                       <td className="px-6 py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
                           {config?.eventTypes?.length > 0 && (
@@ -696,6 +700,7 @@ export default function ProgramDetail() {
             </tbody>
           </table>
         </div>
+        <Pagination currentPage={currentPage} totalItems={assignments.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
 
       {/* ====== MODALS ====== */}
@@ -740,7 +745,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowEnrollModal(false)} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Enroll</button>
+                <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Enroll</button>
               </div>
             </form>
           </div>
@@ -778,7 +783,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Save Changes</button>
+                <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Save Changes</button>
               </div>
             </form>
           </div>
@@ -793,7 +798,7 @@ export default function ProgramDetail() {
             <p className="text-sm text-on-surface-variant">Remove <strong>{deleteAssignName}</strong> from this program? Their events will also be deleted.</p>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => { setDeleteAssignId(null); setDeleteAssignName(""); }} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-              <button onClick={handleDeleteAssignment} className="px-5 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Remove</button>
+              <button onClick={handleDeleteAssignment} className="px-4 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Remove</button>
             </div>
           </div>
         </div>
@@ -807,7 +812,7 @@ export default function ProgramDetail() {
             <p className="text-sm text-on-surface-variant">Delete <strong>{program.name}</strong> permanently? This removes all {assignments.length} assignments and their events.</p>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => setShowDeleteProgram(false)} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-              <button onClick={handleDeleteProgram} className="px-5 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Delete Permanently</button>
+              <button onClick={handleDeleteProgram} className="px-4 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Delete Permanently</button>
             </div>
           </div>
         </div>
@@ -853,7 +858,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowEventModal(false)} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Log Event</button>
+                <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Log Event</button>
               </div>
             </form>
           </div>
@@ -893,7 +898,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowEditEventModal(false)} className="px-4 py-2 rounded-full border border-outline-variant cursor-pointer bg-transparent">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Save Changes</button>
+                <button type="submit" className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-dark transition-colors cursor-pointer border-none">Save Changes</button>
               </div>
             </form>
           </div>
@@ -993,6 +998,7 @@ export default function ProgramDetail() {
           <img src={lightboxPhoto} alt="Event" className="max-w-full max-h-[90vh] rounded-lg object-contain" />
         </div>
       )}
+      </div>
     </div>
   );
 }

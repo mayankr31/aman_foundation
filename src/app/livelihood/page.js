@@ -7,7 +7,7 @@ export default function LivelihoodHub() {
     <main className="flex-1 p-12 bg-surface">
       <Link
         href="/"
-        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+        className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal">
           arrow_back

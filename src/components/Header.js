@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
 import NotificationBell from "@/components/NotificationBell";
+import GlobalSearch from "@/components/GlobalSearch";
 
 export default function Header({ onMenuToggle }) {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ export default function Header({ onMenuToggle }) {
     : "U";
 
   return (
-    <header className="bg-white/85 dark:bg-slate-950/85 backdrop-blur-md text-teal-700 dark:text-teal-400 font-sans text-sm tracking-wide uppercase font-semibold sticky top-0 z-40 w-full flex justify-between items-center h-16 px-8 border-b border-surface-container/50 transition-all duration-300 flex-shrink-0">
+    <header className="bg-white/85 dark:bg-slate-950/85 backdrop-blur-md text-teal-700 dark:text-teal-400 font-sans text-sm tracking-wide uppercase font-semibold sticky top-0 z-40 w-full flex justify-between items-center h-16 px-4 sm:px-8 border-b border-surface-container/50 transition-all duration-300 flex-shrink-0">
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuToggle}
@@ -21,10 +22,11 @@ export default function Header({ onMenuToggle }) {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <span className="text-xl font-black text-slate-900 dark:text-white normal-case tracking-normal">
+        <span className="hidden sm:inline text-xl font-black text-slate-900 dark:text-white normal-case tracking-normal whitespace-nowrap">
           Impact Portal
         </span>
       </div>
+      <GlobalSearch />
       <div className="flex items-center gap-4">
         <div className="flex gap-2">
           <NotificationBell />

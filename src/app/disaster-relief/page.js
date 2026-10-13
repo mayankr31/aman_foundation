@@ -1,17 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, Fragment } from "react";
+import { Suspense, useState, useEffect, Fragment } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
+
+const RELIEF_TAB_SLUGS = {
+  "Help Providers": "help-providers",
+  "Resource Inventory": "resource-inventory",
+  "Relief Distributions": "relief-distributions",
+};
+const RELIEF_SLUG_LABELS = Object.fromEntries(
+  Object.entries(RELIEF_TAB_SLUGS).map(([label, slug]) => [slug, label])
+);
 
 export default function DisasterRelief() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      }
+    >
+      <DisasterReliefContent />
+    </Suspense>
+  );
+}
+
+function DisasterReliefContent() {
   const { token, isInitializing } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [broadcastMsg, setBroadcastMsg] = useState("");
   const [broadcastSeverity, setBroadcastSeverity] = useState("Urgent");
 
-  const [activeTab, setActiveTab] = useState("Help Providers");
+  // Active tab — derived from the URL so deep links (e.g. global search) work.
+  const activeTab = RELIEF_SLUG_LABELS[searchParams.get("tab")] || "Help Providers";
+
+  const selectTab = (tab) => {
+    router.replace(`/disaster-relief?tab=${RELIEF_TAB_SLUGS[tab]}`, { scroll: false });
+  };
 
   // Live state registries
   const [incidentsList, setIncidentsList] = useState([]);
@@ -49,6 +82,10 @@ export default function DisasterRelief() {
   };
   const [showDistributionModal, setShowDistributionModal] = useState(false);
   const [distributionForm, setDistributionForm] = useState(emptyDistributionForm);
+
+  const { pageItems: pagedProviders, currentPage: providersPage, setCurrentPage: setProvidersPage } = usePagination(providers, 10);
+  const { pageItems: pagedResourceNeeds, currentPage: resourceNeedsPage, setCurrentPage: setResourceNeedsPage } = usePagination(resourceNeeds, 10);
+  const { pageItems: pagedDistributions, currentPage: distributionsPage, setCurrentPage: setDistributionsPage } = usePagination(distributions, 10);
 
   const loadData = async () => {
     try {
@@ -326,7 +363,7 @@ export default function DisasterRelief() {
       <div className="flex flex-col px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
         <Link
           href="/"
-          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-6 group w-fit"
+          className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
         >
           <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
             arrow_back
@@ -341,21 +378,21 @@ export default function DisasterRelief() {
             <p className="text-[0.75rem] uppercase tracking-[0.05em] font-semibold text-on-surface-variant mb-2 font-sans">
               Operations Portal
             </p>
-            <h1 className="text-2xl md:text-[2.75rem] font-headline font-semibold text-on-background leading-tight">
+            <h1 className="page-title text-on-background">
               Disaster Relief Management
             </h1>
           </div>
           <div className="flex flex-wrap gap-3 font-sans shrink-0">
             <button
               onClick={() => setShowCalamityModal(true)}
-              className="flex-1 md:flex-none bg-surface-container-low text-on-surface border border-outline-variant px-5 py-2.5 rounded-full text-sm font-medium hover:bg-surface-container-lowest transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 md:flex-none bg-surface-container-low text-on-surface border border-outline-variant px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-lowest transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">emergency</span>
               <span className="whitespace-nowrap">Add Calamity</span>
             </button>
             <button
               onClick={() => setShowBroadcastModal(true)}
-              className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer border-none"
+              className="flex-1 md:flex-none bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity shadow-[0_4px_12px_rgba(0,104,87,0.2)] flex items-center justify-center gap-2 cursor-pointer border-none"
             >
               <span className="material-symbols-outlined text-[18px]">add_alert</span>
               <span className="whitespace-nowrap">Broadcast Alert</span>
@@ -429,7 +466,7 @@ export default function DisasterRelief() {
                 return (
                   <button
                     key={tab}
-                    onClick={() => setActiveTab(tab)}
+                    onClick={() => selectTab(tab)}
                     className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                       isActive
                         ? "font-semibold text-primary border-b-2 border-primary"
@@ -456,12 +493,13 @@ export default function DisasterRelief() {
                       <span className="whitespace-nowrap">Add Provider</span>
                     </button>
                   </div>
-                  <table className="w-full text-left border-collapse font-sans text-sm">
+                  <div className="overflow-x-auto">
+                  <table className="w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
                     <thead>
                       <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                        <th className="py-3 px-4">Responder Name</th>
-                        <th className="py-3 px-4">Immediate Support Capability</th>
-                        <th className="py-3 px-4">Contact Details</th>
+                        <th className="w-[30%] py-3 px-4">Responder Name</th>
+                        <th className="w-[40%] py-3 px-4">Immediate Support Capability</th>
+                        <th className="w-[30%] py-3 px-4">Contact Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -470,20 +508,22 @@ export default function DisasterRelief() {
                           <td colSpan="3" className="py-8 text-center text-on-surface-variant">No help providers registered.</td>
                         </tr>
                       ) : (
-                        providers.map((p) => (
+                        pagedProviders.map((p) => (
                           <tr key={p.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                            <td className="py-4 px-4 font-bold text-on-surface">{p.name}</td>
+                            <td className="py-4 px-4 font-bold text-on-surface break-words">{p.name}</td>
                             <td className="py-4 px-4 text-on-surface-variant">
-                              <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold">
+                              <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold break-words inline-block">
                                 {p.type}
                               </span>
                             </td>
-                            <td className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono">{p.contact}</td>
+                            <td className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono break-words">{p.contact}</td>
                           </tr>
                         ))
                       )}
                     </tbody>
                   </table>
+                  </div>
+                  <Pagination currentPage={providersPage} totalItems={providers.length} itemsPerPage={10} onPageChange={setProvidersPage} />
                 </div>
               )}
 
@@ -509,17 +549,17 @@ export default function DisasterRelief() {
                     </div>
                   </div>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse font-sans text-sm whitespace-nowrap">
+                    <table className="w-full min-w-[900px] table-fixed text-left border-collapse font-sans text-sm">
                       <thead>
                         <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                          <th className="py-3 px-4">Aid Needed (Item)</th>
-                          <th className="py-3 px-4">Associated Calamity</th>
-                          <th className="py-3 px-4 text-center">Stock Needed</th>
-                          <th className="py-3 px-4 text-center">Stock Received</th>
-                          <th className="py-3 px-4 text-center">Distributed</th>
-                          <th className="py-3 px-4 text-center">Available Stock</th>
-                          <th className="py-3 px-4 text-center">Fulfillment</th>
-                          <th className="py-3 px-4 text-right">Transactions</th>
+                          <th className="w-[20%] py-3 px-4">Aid Needed (Item)</th>
+                          <th className="w-[18%] py-3 px-4">Associated Calamity</th>
+                          <th className="w-[9%] py-3 px-4 text-center">Stock Needed</th>
+                          <th className="w-[9%] py-3 px-4 text-center">Stock Received</th>
+                          <th className="w-[9%] py-3 px-4 text-center">Distributed</th>
+                          <th className="w-[9%] py-3 px-4 text-center">Available Stock</th>
+                          <th className="w-[14%] py-3 px-4 text-center">Fulfillment</th>
+                          <th className="w-[12%] py-3 px-4 text-right">Transactions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -528,12 +568,12 @@ export default function DisasterRelief() {
                             <td colSpan="8" className="py-8 text-center text-on-surface-variant">No resources currently needed.</td>
                           </tr>
                         ) : (
-                          resourceNeeds.map((item) => {
+                          pagedResourceNeeds.map((item) => {
                             const percent = item.needed > 0 ? Math.min(100, Math.round((item.received / item.needed) * 100)) : 0;
                             return (
                               <tr key={item.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                                <td className="py-4 px-4 font-bold text-on-surface">{item.item}</td>
-                                <td className="py-4 px-4 text-on-surface-variant text-xs">{item.calamity}</td>
+                                <td className="py-4 px-4 font-bold text-on-surface break-words">{item.item}</td>
+                                <td className="py-4 px-4 text-on-surface-variant text-xs break-words">{item.calamity}</td>
                                 <td className="py-4 px-4 text-center text-error font-semibold">{item.needed} {item.unit}</td>
                                 <td className="py-4 px-4 text-center text-primary font-semibold">{item.received} {item.unit}</td>
                                 <td className="py-4 px-4 text-center text-secondary font-semibold">{item.distributed} {item.unit}</td>
@@ -555,6 +595,7 @@ export default function DisasterRelief() {
                         )}
                       </tbody>
                     </table>
+                    <Pagination currentPage={resourceNeedsPage} totalItems={resourceNeeds.length} itemsPerPage={10} onPageChange={setResourceNeedsPage} />
                   </div>
                 </div>
               )}
@@ -572,17 +613,17 @@ export default function DisasterRelief() {
                     </button>
                   </div>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse font-sans text-sm whitespace-nowrap">
+                    <table className="w-full min-w-[960px] table-fixed text-left border-collapse font-sans text-sm">
                       <thead>
                         <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                          <th className="py-3 px-4">Recipient</th>
-                          <th className="py-3 px-4">Aadhar</th>
-                          <th className="py-3 px-4">Mobile</th>
-                          <th className="py-3 px-4">Address</th>
-                          <th className="py-3 px-4 text-center">Family</th>
-                          <th className="py-3 px-4">Calamity</th>
-                          <th className="py-3 px-4 text-center">Items</th>
-                          <th className="py-3 px-4 text-right">Date</th>
+                          <th className="w-[16%] py-3 px-4">Recipient</th>
+                          <th className="w-[12%] py-3 px-4">Aadhar</th>
+                          <th className="w-[12%] py-3 px-4">Mobile</th>
+                          <th className="w-[26%] py-3 px-4">Address</th>
+                          <th className="w-[8%] py-3 px-4 text-center">Family</th>
+                          <th className="w-[12%] py-3 px-4">Calamity</th>
+                          <th className="w-[7%] py-3 px-4 text-center">Items</th>
+                          <th className="w-[7%] py-3 px-4 text-right">Date</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -591,23 +632,23 @@ export default function DisasterRelief() {
                             <td colSpan="8" className="py-8 text-center text-on-surface-variant">No relief distributions recorded.</td>
                           </tr>
                         ) : (
-                          distributions.map((d) => (
+                          pagedDistributions.map((d) => (
                             <Fragment key={d.id}>
                               <tr
                                 onClick={() => setExpandedDistribution(expandedDistribution === d.id ? null : d.id)}
                                 className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                               >
-                                <td className="py-4 px-4 font-bold text-on-surface">
-                                  <span className="inline-flex items-center gap-1">
-                                    <span className="material-symbols-outlined text-[16px] text-slate-400">{expandedDistribution === d.id ? "expand_less" : "expand_more"}</span>
-                                    {d.name}
+                                <td className="py-4 px-4 font-bold text-on-surface break-words">
+                                  <span className="inline-flex items-start gap-1">
+                                    <span className="material-symbols-outlined text-[16px] text-slate-400 shrink-0">{expandedDistribution === d.id ? "expand_less" : "expand_more"}</span>
+                                    <span className="break-words">{d.name}</span>
                                   </span>
                                 </td>
-                                <td className="py-4 px-4 text-xs font-mono text-slate-500">{d.aadhar || "—"}</td>
-                                <td className="py-4 px-4 text-xs font-mono text-slate-500">{d.mobNumber || "—"}</td>
-                                <td className="py-4 px-4 text-xs text-on-surface-variant max-w-[180px] truncate">{d.address || "—"}</td>
+                                <td className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.aadhar || "—"}</td>
+                                <td className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.mobNumber || "—"}</td>
+                                <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.address || "—"}</td>
                                 <td className="py-4 px-4 text-center text-on-surface-variant">{d.familySize}</td>
-                                <td className="py-4 px-4 text-xs text-on-surface-variant">{d.incident?.name || "—"}</td>
+                                <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.incident?.name || "—"}</td>
                                 <td className="py-4 px-4 text-center">
                                   <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold">{d.items?.length || 0}</span>
                                 </td>
@@ -643,6 +684,7 @@ export default function DisasterRelief() {
                         )}
                       </tbody>
                     </table>
+                    <Pagination currentPage={distributionsPage} totalItems={distributions.length} itemsPerPage={10} onPageChange={setDistributionsPage} />
                   </div>
                 </div>
               )}
@@ -741,7 +783,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Broadcast Now
                 </button>
@@ -792,7 +834,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary/95 transition-colors cursor-pointer border-none"
                 >
                   Log Transaction
                 </button>
@@ -860,7 +902,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Add Calamity
                 </button>
@@ -925,7 +967,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Save Resource Need
                 </button>
@@ -971,7 +1013,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
                   Add Provider
                 </button>
@@ -1101,7 +1143,7 @@ export default function DisasterRelief() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary/95 transition-colors cursor-pointer border-none"
+                  className="px-4 py-2 rounded-full bg-secondary text-white font-semibold hover:bg-secondary/95 transition-colors cursor-pointer border-none"
                 >
                   Log Distribution
                 </button>
