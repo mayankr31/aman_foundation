@@ -1,7 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # Aman Foundation — Production Docker Compose
 # Stack: Traefik v3 → Next.js 16 + Prisma
-# Domain: aman.cloudtales.in
+# Domain: app.amanindia.org
 # ═══════════════════════════════════════════════════════════════════════════════
 
 services:
@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://aman.cloudtales.in}
+        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://app.amanindia.org}
     image: aman_foundation_app:latest
     container_name: aman_foundation_app
     restart: unless-stopped
@@ -21,13 +21,13 @@ services:
       NODE_ENV: production
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
-      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://aman.cloudtales.in}
+      NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://app.amanindia.org}
     labels:
       - "traefik.enable=true"
       # ── Pin Traefik to the correct network ───────────────────────────────
       - "traefik.docker.network=kvskhelsathi_default"
-      # ── Main app router (aman.cloudtales.in) ─────────────────────────────
-      - "traefik.http.routers.aman-foundation.rule=Host(`aman.cloudtales.in`)"
+      # ── Main app router (app.amanindia.org) ─────────────────────────────
+      - "traefik.http.routers.aman-foundation.rule=Host(`app.amanindia.org`)"
       - "traefik.http.routers.aman-foundation.entrypoints=websecure"
       - "traefik.http.routers.aman-foundation.tls.certresolver=letsencrypt"
       - "traefik.http.services.aman-foundation.loadbalancer.server.port=3000"
