@@ -63,6 +63,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Make public/ (and the runtime uploads dir) writable by the non-root app user.
+# Without this, upload routes that write to public/uploads fail with EACCES (500).
+RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public
+
 # Copy Prisma schema + custom generated client (output = "../generated/prisma")
 COPY --from=builder --chown=nextjs:nodejs /app/generated ./generated
 COPY --from=deps /app/prisma ./prisma

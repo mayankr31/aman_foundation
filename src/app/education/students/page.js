@@ -16,9 +16,13 @@ const EMPTY_STUDENT_FORM = {
   district: "",
   primaryLanguage: "",
   email: "",
-  phone: "",
   guardianName: "",
   guardianPhone: "",
+  guardianRelation: "",
+  fatherName: "",
+  fatherMobile: "",
+  motherName: "",
+  motherMobile: "",
   address: "",
   enrolmentDate: "",
   schoolId: "",
@@ -168,9 +172,13 @@ export default function StudentsModule() {
       "District": s.district || "",
       "Primary Language": s.primaryLanguage || "",
       "Guardian Name": s.guardianName || "",
+      "Guardian Relation": s.guardianRelation || "",
       "Guardian Phone": s.guardianPhone || "",
+      "Father's Name": s.fatherName || "",
+      "Father's Mobile": s.fatherMobile || "",
+      "Mother's Name": s.motherName || "",
+      "Mother's Mobile": s.motherMobile || "",
       "Email": s.email || "",
-      "Phone": s.phone || "",
       "Address": s.address || "",
       "Enrolment Date": s.enrolmentDate ? new Date(s.enrolmentDate).toLocaleDateString() : "",
       "Attendance (%)": s.attendance ?? 0,
@@ -593,9 +601,13 @@ export default function StudentsModule() {
                 <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} placeholder="e.g. Kalgachia" />
                 <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} placeholder="e.g. Hindi" />
                 <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} />
+                <FormField label="Guardian Relation" name="guardianRelation" value={newStudentForm.guardianRelation} onChange={handleNewStudentChange} placeholder="e.g. Father" />
                 <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} />
                 <FormField label="Email" name="email" type="email" value={newStudentForm.email} onChange={handleNewStudentChange} />
-                <FormField label="Phone" name="phone" value={newStudentForm.phone} onChange={handleNewStudentChange} />
+                <FormField label="Father's Name" name="fatherName" value={newStudentForm.fatherName} onChange={handleNewStudentChange} />
+                <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} />
+                <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} />
+                <FormField label="Mother's Mobile" name="motherMobile" value={newStudentForm.motherMobile} onChange={handleNewStudentChange} />
                 <div className="md:col-span-2">
                   <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} placeholder="Village / Town, Post Office" />
                 </div>

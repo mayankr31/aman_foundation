@@ -4,7 +4,7 @@ export const BENEFICIARY_TABS = [
   { label: "ID Proofs & Bank Details", slug: "id-proofs-bank-details" },
   { label: "Impact Summary", slug: "impact-summary" },
   { label: "Income Tracking", slug: "income-tracking" },
-  { label: "KYOR Form", slug: "kyor-form" },
+  { label: "KYR Form", slug: "kyr-form" },
   { label: "Adaptive Capacity", slug: "adaptive-capacity" },
   { label: "Absorptive Capacity", slug: "absorptive-capacity" },
   { label: "Transformative Capacity", slug: "transformative-capacity" },

@@ -16,6 +16,7 @@ import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import StudentDataView from "@/components/StudentDataView";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
 
@@ -56,6 +57,7 @@ function ProfilePageContent() {
   const [editAvatar, setEditAvatar] = useState("");
   const [editDateOfJoining, setEditDateOfJoining] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [editMaritalStatus, setEditMaritalStatus] = useState("");
   const [editBloodGroup, setEditBloodGroup] = useState("");
   const [editEmergencyContactName, setEditEmergencyContactName] = useState("");
@@ -462,7 +464,7 @@ function ProfilePageContent() {
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
                 {avatarUrl ? (
-                  <img alt="avatar" className="w-full h-full object-cover" src={avatarUrl} />
+                  <img alt="avatar" className="w-full h-full object-cover cursor-pointer" src={avatarUrl} onClick={() => setLightboxPhoto(avatarUrl)} />
                 ) : (
                   <span className="text-3xl font-bold font-headline text-on-surface-variant">{initials}</span>
                 )}
@@ -1270,6 +1272,8 @@ function ProfilePageContent() {
           onClose={() => setViewingLookBeyond(null)}
         />
       )}
+
+      <PhotoLightbox src={lightboxPhoto} alt="Profile photo" onClose={() => setLightboxPhoto(null)} />
     </div>
   );
 }

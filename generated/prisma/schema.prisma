@@ -322,30 +322,35 @@ model FellowReview {
 }
 
 model Student {
-  id              String    @id @default(uuid())
-  studentId       String    @unique
-  name            String
-  photoUrl        String?
-  dob             DateTime?
-  gender          String?
-  email           String?
-  phone           String?
-  address         String?
-  grade           String
-  gradeGroup      String
-  district        String?
-  attendance      Float     @default(0.0)
-  guardianName    String?
-  guardianPhone   String?
-  enrolmentDate   DateTime?
-  primaryLanguage String?
-  status          String    @default("On Track")
-  schoolId        String?
-  fellowId        String?
-  beneficiaryId   String?
-  isMigrated      Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id               String    @id @default(uuid())
+  studentId        String    @unique
+  name             String
+  photoUrl         String?
+  dob              DateTime?
+  gender           String?
+  email            String?
+  phone            String?
+  address          String?
+  grade            String
+  gradeGroup       String
+  district         String?
+  attendance       Float     @default(0.0)
+  guardianName     String?
+  guardianPhone    String?
+  guardianRelation String?
+  fatherName       String?
+  fatherMobile     String?
+  motherName       String?
+  motherMobile     String?
+  enrolmentDate    DateTime?
+  primaryLanguage  String?
+  status           String    @default("On Track")
+  schoolId         String?
+  fellowId         String?
+  beneficiaryId    String?
+  isMigrated       Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   school              School?                @relation(fields: [schoolId], references: [id])
   fellow              Fellow?                @relation(fields: [fellowId], references: [id])
@@ -1392,28 +1397,33 @@ model AfterSchoolCentreProgram {
 }
 
 model AfterSchoolStudent {
-  id              String    @id @default(uuid())
-  studentId       String    @unique
-  name            String
-  photoUrl        String?
-  dob             DateTime?
-  gender          String?
-  email           String?
-  phone           String?
-  address         String?
-  grade           String?
-  gradeGroup      String?
-  district        String?
-  attendance      Float     @default(0.0)
-  guardianName    String?
-  guardianPhone   String?
-  enrolmentDate   DateTime?
-  primaryLanguage String?
-  status          String    @default("On Track")
-  centreId        String?
-  fellowId        String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id               String    @id @default(uuid())
+  studentId        String    @unique
+  name             String
+  photoUrl         String?
+  dob              DateTime?
+  gender           String?
+  email            String?
+  phone            String?
+  address          String?
+  grade            String?
+  gradeGroup       String?
+  district         String?
+  attendance       Float     @default(0.0)
+  guardianName     String?
+  guardianPhone    String?
+  guardianRelation String?
+  fatherName       String?
+  fatherMobile     String?
+  motherName       String?
+  motherMobile     String?
+  enrolmentDate    DateTime?
+  primaryLanguage  String?
+  status           String    @default("On Track")
+  centreId         String?
+  fellowId         String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   centre              AfterSchoolCentre?                @relation(fields: [centreId], references: [id], onDelete: SetNull)
   fellow              Fellow?                           @relation(fields: [fellowId], references: [id], onDelete: SetNull)

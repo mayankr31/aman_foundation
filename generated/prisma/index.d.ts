@@ -27290,6 +27290,11 @@ export namespace Prisma {
     attendance: number | null
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string | null
@@ -27317,6 +27322,11 @@ export namespace Prisma {
     attendance: number | null
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string | null
@@ -27344,6 +27354,11 @@ export namespace Prisma {
     attendance: number
     guardianName: number
     guardianPhone: number
+    guardianRelation: number
+    fatherName: number
+    fatherMobile: number
+    motherName: number
+    motherMobile: number
     enrolmentDate: number
     primaryLanguage: number
     status: number
@@ -27381,6 +27396,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -27408,6 +27428,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -27435,6 +27460,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -27549,6 +27579,11 @@ export namespace Prisma {
     attendance: number
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string
@@ -27595,6 +27630,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -27631,6 +27671,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -27661,6 +27706,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -27691,6 +27741,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -27702,7 +27757,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     school?: boolean | Student$schoolArgs<ExtArgs>
     fellow?: boolean | Student$fellowArgs<ExtArgs>
@@ -27753,6 +27808,11 @@ export namespace Prisma {
       attendance: number
       guardianName: string | null
       guardianPhone: string | null
+      guardianRelation: string | null
+      fatherName: string | null
+      fatherMobile: string | null
+      motherName: string | null
+      motherMobile: string | null
       enrolmentDate: Date | null
       primaryLanguage: string | null
       status: string
@@ -28208,6 +28268,11 @@ export namespace Prisma {
     readonly attendance: FieldRef<"Student", 'Float'>
     readonly guardianName: FieldRef<"Student", 'String'>
     readonly guardianPhone: FieldRef<"Student", 'String'>
+    readonly guardianRelation: FieldRef<"Student", 'String'>
+    readonly fatherName: FieldRef<"Student", 'String'>
+    readonly fatherMobile: FieldRef<"Student", 'String'>
+    readonly motherName: FieldRef<"Student", 'String'>
+    readonly motherMobile: FieldRef<"Student", 'String'>
     readonly enrolmentDate: FieldRef<"Student", 'DateTime'>
     readonly primaryLanguage: FieldRef<"Student", 'String'>
     readonly status: FieldRef<"Student", 'String'>
@@ -105821,6 +105886,11 @@ export namespace Prisma {
     attendance: number | null
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string | null
@@ -105846,6 +105916,11 @@ export namespace Prisma {
     attendance: number | null
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string | null
@@ -105871,6 +105946,11 @@ export namespace Prisma {
     attendance: number
     guardianName: number
     guardianPhone: number
+    guardianRelation: number
+    fatherName: number
+    fatherMobile: number
+    motherName: number
+    motherMobile: number
     enrolmentDate: number
     primaryLanguage: number
     status: number
@@ -105906,6 +105986,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -105931,6 +106016,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -105956,6 +106046,11 @@ export namespace Prisma {
     attendance?: true
     guardianName?: true
     guardianPhone?: true
+    guardianRelation?: true
+    fatherName?: true
+    fatherMobile?: true
+    motherName?: true
+    motherMobile?: true
     enrolmentDate?: true
     primaryLanguage?: true
     status?: true
@@ -106068,6 +106163,11 @@ export namespace Prisma {
     attendance: number
     guardianName: string | null
     guardianPhone: string | null
+    guardianRelation: string | null
+    fatherName: string | null
+    fatherMobile: string | null
+    motherName: string | null
+    motherMobile: string | null
     enrolmentDate: Date | null
     primaryLanguage: string | null
     status: string
@@ -106112,6 +106212,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -106145,6 +106250,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -106172,6 +106282,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -106199,6 +106314,11 @@ export namespace Prisma {
     attendance?: boolean
     guardianName?: boolean
     guardianPhone?: boolean
+    guardianRelation?: boolean
+    fatherName?: boolean
+    fatherMobile?: boolean
+    motherName?: boolean
+    motherMobile?: boolean
     enrolmentDate?: boolean
     primaryLanguage?: boolean
     status?: boolean
@@ -106208,7 +106328,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
+  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
   export type AfterSchoolStudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     centre?: boolean | AfterSchoolStudent$centreArgs<ExtArgs>
     fellow?: boolean | AfterSchoolStudent$fellowArgs<ExtArgs>
@@ -106255,6 +106375,11 @@ export namespace Prisma {
       attendance: number
       guardianName: string | null
       guardianPhone: string | null
+      guardianRelation: string | null
+      fatherName: string | null
+      fatherMobile: string | null
+      motherName: string | null
+      motherMobile: string | null
       enrolmentDate: Date | null
       primaryLanguage: string | null
       status: string
@@ -106707,6 +106832,11 @@ export namespace Prisma {
     readonly attendance: FieldRef<"AfterSchoolStudent", 'Float'>
     readonly guardianName: FieldRef<"AfterSchoolStudent", 'String'>
     readonly guardianPhone: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly guardianRelation: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly fatherName: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly fatherMobile: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly motherName: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly motherMobile: FieldRef<"AfterSchoolStudent", 'String'>
     readonly enrolmentDate: FieldRef<"AfterSchoolStudent", 'DateTime'>
     readonly primaryLanguage: FieldRef<"AfterSchoolStudent", 'String'>
     readonly status: FieldRef<"AfterSchoolStudent", 'String'>
@@ -117646,6 +117776,11 @@ export namespace Prisma {
     attendance: 'attendance',
     guardianName: 'guardianName',
     guardianPhone: 'guardianPhone',
+    guardianRelation: 'guardianRelation',
+    fatherName: 'fatherName',
+    fatherMobile: 'fatherMobile',
+    motherName: 'motherName',
+    motherMobile: 'motherMobile',
     enrolmentDate: 'enrolmentDate',
     primaryLanguage: 'primaryLanguage',
     status: 'status',
@@ -118637,6 +118772,11 @@ export namespace Prisma {
     attendance: 'attendance',
     guardianName: 'guardianName',
     guardianPhone: 'guardianPhone',
+    guardianRelation: 'guardianRelation',
+    fatherName: 'fatherName',
+    fatherMobile: 'fatherMobile',
+    motherName: 'motherName',
+    motherMobile: 'motherMobile',
     enrolmentDate: 'enrolmentDate',
     primaryLanguage: 'primaryLanguage',
     status: 'status',
@@ -120278,6 +120418,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"Student"> | number
     guardianName?: StringNullableFilter<"Student"> | string | null
     guardianPhone?: StringNullableFilter<"Student"> | string | null
+    guardianRelation?: StringNullableFilter<"Student"> | string | null
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    fatherMobile?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    motherMobile?: StringNullableFilter<"Student"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -120313,6 +120458,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrderInput | SortOrder
     guardianPhone?: SortOrderInput | SortOrder
+    guardianRelation?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    fatherMobile?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    motherMobile?: SortOrderInput | SortOrder
     enrolmentDate?: SortOrderInput | SortOrder
     primaryLanguage?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -120351,6 +120501,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"Student"> | number
     guardianName?: StringNullableFilter<"Student"> | string | null
     guardianPhone?: StringNullableFilter<"Student"> | string | null
+    guardianRelation?: StringNullableFilter<"Student"> | string | null
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    fatherMobile?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    motherMobile?: StringNullableFilter<"Student"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -120386,6 +120541,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrderInput | SortOrder
     guardianPhone?: SortOrderInput | SortOrder
+    guardianRelation?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    fatherMobile?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    motherMobile?: SortOrderInput | SortOrder
     enrolmentDate?: SortOrderInput | SortOrder
     primaryLanguage?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -120421,6 +120581,11 @@ export namespace Prisma {
     attendance?: FloatWithAggregatesFilter<"Student"> | number
     guardianName?: StringNullableWithAggregatesFilter<"Student"> | string | null
     guardianPhone?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    guardianRelation?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    fatherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    fatherMobile?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    motherMobile?: StringNullableWithAggregatesFilter<"Student"> | string | null
     enrolmentDate?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     primaryLanguage?: StringNullableWithAggregatesFilter<"Student"> | string | null
     status?: StringWithAggregatesFilter<"Student"> | string
@@ -125550,6 +125715,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"AfterSchoolStudent"> | number
     guardianName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     guardianPhone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    guardianRelation?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     status?: StringFilter<"AfterSchoolStudent"> | string
@@ -125582,6 +125752,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrderInput | SortOrder
     guardianPhone?: SortOrderInput | SortOrder
+    guardianRelation?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    fatherMobile?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    motherMobile?: SortOrderInput | SortOrder
     enrolmentDate?: SortOrderInput | SortOrder
     primaryLanguage?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -125617,6 +125792,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"AfterSchoolStudent"> | number
     guardianName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     guardianPhone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    guardianRelation?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     status?: StringFilter<"AfterSchoolStudent"> | string
@@ -125649,6 +125829,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrderInput | SortOrder
     guardianPhone?: SortOrderInput | SortOrder
+    guardianRelation?: SortOrderInput | SortOrder
+    fatherName?: SortOrderInput | SortOrder
+    fatherMobile?: SortOrderInput | SortOrder
+    motherName?: SortOrderInput | SortOrder
+    motherMobile?: SortOrderInput | SortOrder
     enrolmentDate?: SortOrderInput | SortOrder
     primaryLanguage?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -125682,6 +125867,11 @@ export namespace Prisma {
     attendance?: FloatWithAggregatesFilter<"AfterSchoolStudent"> | number
     guardianName?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     guardianPhone?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    guardianRelation?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    fatherName?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    fatherMobile?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    motherName?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    motherMobile?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     enrolmentDate?: DateTimeNullableWithAggregatesFilter<"AfterSchoolStudent"> | Date | string | null
     primaryLanguage?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     status?: StringWithAggregatesFilter<"AfterSchoolStudent"> | string
@@ -127808,6 +127998,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -127840,6 +128035,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -127872,6 +128072,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -127904,6 +128109,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -127936,6 +128146,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -127963,6 +128178,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -127987,6 +128207,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -133475,6 +133700,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -133505,6 +133735,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -133535,6 +133770,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -133565,6 +133805,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -133595,6 +133840,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -133620,6 +133870,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -133643,6 +133898,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -135741,6 +136001,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -135772,6 +136037,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -135799,6 +136069,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -139014,6 +139289,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -139043,6 +139323,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -139068,6 +139353,11 @@ export namespace Prisma {
     attendance?: SortOrder
     guardianName?: SortOrder
     guardianPhone?: SortOrder
+    guardianRelation?: SortOrder
+    fatherName?: SortOrder
+    fatherMobile?: SortOrder
+    motherName?: SortOrder
+    motherMobile?: SortOrder
     enrolmentDate?: SortOrder
     primaryLanguage?: SortOrder
     status?: SortOrder
@@ -149158,6 +149448,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -149189,6 +149484,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -149415,6 +149715,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"Student"> | number
     guardianName?: StringNullableFilter<"Student"> | string | null
     guardianPhone?: StringNullableFilter<"Student"> | string | null
+    guardianRelation?: StringNullableFilter<"Student"> | string | null
+    fatherName?: StringNullableFilter<"Student"> | string | null
+    fatherMobile?: StringNullableFilter<"Student"> | string | null
+    motherName?: StringNullableFilter<"Student"> | string | null
+    motherMobile?: StringNullableFilter<"Student"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"Student"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"Student"> | string | null
     status?: StringFilter<"Student"> | string
@@ -149702,6 +150007,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -149733,6 +150043,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -150152,6 +150467,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -150181,6 +150501,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -150732,6 +151057,11 @@ export namespace Prisma {
     attendance?: FloatFilter<"AfterSchoolStudent"> | number
     guardianName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     guardianPhone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    guardianRelation?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    fatherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherName?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    motherMobile?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     enrolmentDate?: DateTimeNullableFilter<"AfterSchoolStudent"> | Date | string | null
     primaryLanguage?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     status?: StringFilter<"AfterSchoolStudent"> | string
@@ -152601,6 +152931,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -152632,6 +152967,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -152707,6 +153047,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -152738,6 +153083,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -152858,6 +153208,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -152889,6 +153244,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -152991,6 +153351,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -153022,6 +153387,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -153114,6 +153484,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -153145,6 +153520,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -153247,6 +153627,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -153278,6 +153663,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -153370,6 +153760,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -153401,6 +153796,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -153448,6 +153848,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -153479,6 +153884,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -156166,6 +156576,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -156197,6 +156612,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -164960,6 +165380,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -164991,6 +165416,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -165258,6 +165688,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -165289,6 +165724,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -166041,6 +166481,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -166070,6 +166515,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167326,6 +167776,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167355,6 +167810,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167428,6 +167888,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -167457,6 +167922,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -167575,6 +168045,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167604,6 +168079,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167698,6 +168178,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -167727,6 +168212,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -167811,6 +168301,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167840,6 +168335,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -167934,6 +168434,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -167963,6 +168468,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -168047,6 +168557,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -168076,6 +168591,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -168121,6 +168641,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -168150,6 +168675,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -168179,6 +168709,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -168208,6 +168743,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -168419,6 +168959,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -168448,6 +168993,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170329,6 +170879,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -170414,6 +170969,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170445,6 +171005,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170476,6 +171041,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170639,6 +171209,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -170794,6 +171369,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -170865,6 +171445,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170896,6 +171481,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -170927,6 +171517,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -171350,6 +171945,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -171379,6 +171979,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -171408,6 +172013,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -171911,6 +172521,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -172134,6 +172749,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -172165,6 +172785,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -172196,6 +172821,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -173701,6 +174331,11 @@ export namespace Prisma {
     attendance?: number
     guardianName?: string | null
     guardianPhone?: string | null
+    guardianRelation?: string | null
+    fatherName?: string | null
+    fatherMobile?: string | null
+    motherName?: string | null
+    motherMobile?: string | null
     enrolmentDate?: Date | string | null
     primaryLanguage?: string | null
     status?: string
@@ -173784,6 +174419,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -173813,6 +174453,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -173842,6 +174487,11 @@ export namespace Prisma {
     attendance?: FloatFieldUpdateOperationsInput | number
     guardianName?: NullableStringFieldUpdateOperationsInput | string | null
     guardianPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    guardianRelation?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    fatherMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    motherName?: NullableStringFieldUpdateOperationsInput | string | null
+    motherMobile?: NullableStringFieldUpdateOperationsInput | string | null
     enrolmentDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     primaryLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string

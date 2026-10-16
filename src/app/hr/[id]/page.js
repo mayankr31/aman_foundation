@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import PhotoLightbox from "@/components/PhotoLightbox";
 
 const DEPARTMENTS = ["Operations", "Logistics", "Education", "HR", "Finance"];
 
@@ -45,6 +46,7 @@ export default function HrEmployeeProfilePage() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({});
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   useEffect(() => {
     if (token && id) {
@@ -219,7 +221,7 @@ export default function HrEmployeeProfilePage() {
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
               {employee.avatar ? (
-                <img alt="avatar" className="w-full h-full object-cover" src={employee.avatar} />
+                <img alt="avatar" className="w-full h-full object-cover cursor-pointer" src={employee.avatar} onClick={() => setLightboxPhoto(employee.avatar)} />
               ) : (
                 <span className="text-3xl font-bold font-headline text-on-surface-variant">{initials}</span>
               )}
@@ -408,6 +410,8 @@ export default function HrEmployeeProfilePage() {
           </section>
         </div>
       )}
+
+      <PhotoLightbox src={lightboxPhoto} alt="Employee photo" onClose={() => setLightboxPhoto(null)} />
     </div>
   );
 }

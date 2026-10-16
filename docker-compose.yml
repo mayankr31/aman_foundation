@@ -37,9 +37,16 @@ services:
       - "traefik.http.middlewares.aman-secure-headers.headers.stsPreload=true"
       - "traefik.http.middlewares.aman-secure-headers.headers.forceSTSHeader=true"
       - "traefik.http.routers.aman-foundation.middlewares=aman-secure-headers@docker"
+    volumes:
+      # Persist uploaded photos/files across container rebuilds.
+      - aman_uploads:/app/public/uploads
     networks:
       - web
       - internal
+
+# ─── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  aman_uploads:
 
 # ─── Networks ─────────────────────────────────────────────────────────────────
 networks:

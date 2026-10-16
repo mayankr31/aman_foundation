@@ -52,7 +52,7 @@ export default function ResilienceSurveyForm({
   prefill = {},
   hideQuestionIds = [],
   lockQuestionIds = [],
-  title = "KYOR Form",
+  title = "KYR Form",
   submitLabel = "Submit Survey",
   onSubmit,
   onBack,

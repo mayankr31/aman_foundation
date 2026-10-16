@@ -103,7 +103,7 @@ export default function KYRSurveyPage() {
 
       {loading ? (
         <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 p-10 text-center text-sm text-on-surface-variant font-sans">
-          Loading KYOR form...
+          Loading KYR form...
         </div>
       ) : (
         <ResilienceSurveyForm

@@ -15,6 +15,7 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import StudentDataView from "@/components/StudentDataView";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
 
@@ -44,6 +45,7 @@ function FellowProfileDetailContent() {
   const toast = useToast();
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [goalSheets, setGoalSheets] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
   const { pageItems: pagedGoalSheets, currentPage: goalSheetsPage, setCurrentPage: setGoalSheetsPage } = usePagination(goalSheets, 10);
@@ -312,8 +314,9 @@ function FellowProfileDetailContent() {
             {fellow.avatar ? (
               <img
                 alt="Fellow avatar"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
                 src={fellow.avatar}
+                onClick={() => setLightboxPhoto(fellow.avatar)}
               />
             ) : (
               <div className="w-full h-full bg-surface-container-high flex items-center justify-center text-on-surface-variant text-3xl font-bold font-headline">
@@ -833,6 +836,8 @@ function FellowProfileDetailContent() {
           onClose={() => setViewingLookBeyond(null)}
         />
       )}
+
+      <PhotoLightbox src={lightboxPhoto} alt="Fellow photo" onClose={() => setLightboxPhoto(null)} />
     </div>
   );
 }

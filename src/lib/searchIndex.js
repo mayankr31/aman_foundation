@@ -45,7 +45,7 @@ const BENEFICIARY_TAB_KEYWORDS = {
   "id-proofs-bank-details": ["id proof", "id proofs", "bank", "bank details", "aadhaar", "documents"],
   "impact-summary": ["impact", "summary"],
   "income-tracking": ["income", "earnings", "livelihood income"],
-  "kyor-form": ["kyor", "kyr", "resilience", "resilience measurement tool", "survey"],
+  "kyr-form": ["kyr", "know your resilience", "resilience", "resilience measurement tool", "survey"],
   "adaptive-capacity": ["adaptive", "adaptive capacity", "capacity"],
   "absorptive-capacity": ["absorptive", "absorptive capacity", "capacity"],
   "transformative-capacity": ["transformative", "transformative capacity", "capacity"],

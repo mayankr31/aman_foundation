@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 
@@ -63,6 +64,7 @@ export default function StudentProfileDetail() {
   const [saving, setSaving] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [editPhoto, setEditPhoto] = useState(null);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [modal, setModal] = useState(null); // 'edit' | 'school' | 'attendance' | 'assessment_form'
   const [showConfirmMigrate, setShowConfirmMigrate] = useState(false);
   const [schools, setSchools] = useState([]);
@@ -123,13 +125,17 @@ export default function StudentProfileDetail() {
           dob: json.data.dob ? json.data.dob.split("T")[0] : "",
           gender: json.data.gender || "",
           email: json.data.email || "",
-          phone: json.data.phone || "",
           address: json.data.address || "",
           grade: json.data.grade || "",
           gradeGroup: json.data.gradeGroup || "",
           district: json.data.district || "",
           guardianName: json.data.guardianName || "",
           guardianPhone: json.data.guardianPhone || "",
+          guardianRelation: json.data.guardianRelation || "",
+          fatherName: json.data.fatherName || "",
+          fatherMobile: json.data.fatherMobile || "",
+          motherName: json.data.motherName || "",
+          motherMobile: json.data.motherMobile || "",
           enrolmentDate: json.data.enrolmentDate ? json.data.enrolmentDate.split("T")[0] : "",
           primaryLanguage: json.data.primaryLanguage || "",
         });
@@ -716,7 +722,7 @@ export default function StudentProfileDetail() {
           <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
             <div className="w-full h-full rounded-full overflow-hidden bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-4xl border-4 border-surface shadow-md">
               {student.photoUrl ? (
-                <img alt="student" className="w-full h-full object-cover" src={student.photoUrl} />
+                <img alt="student" className="w-full h-full object-cover cursor-pointer" src={student.photoUrl} onClick={() => setLightboxPhoto(student.photoUrl)} />
               ) : (
                 name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)
               )}
@@ -826,12 +832,15 @@ export default function StudentProfileDetail() {
               {[
                 ["Full Name", name],
                 ["Age / Gender", `${student.dob ? `${Math.floor((new Date() - new Date(student.dob)) / 31557600000)} Years` : "—"} / ${student.gender || "—"}`],
-                ["Guardian Contact", `${student.guardianName || "—"} (${student.guardianPhone || "—"})`],
+                ["Guardian Contact", `${student.guardianName || "—"}${student.guardianRelation ? ` (${student.guardianRelation})` : ""} — ${student.guardianPhone || "—"}`],
+                ["Father's Name", student.fatherName || "—"],
+                ["Father's Mobile", student.fatherMobile || "—"],
+                ["Mother's Name", student.motherName || "—"],
+                ["Mother's Mobile", student.motherMobile || "—"],
                 ["Enrolment Date", student.enrolmentDate ? new Date(student.enrolmentDate).toLocaleDateString() : "—"],
                 ["Primary Language", student.primaryLanguage || "—"],
                 ["Home Location", `${student.address || "—"}, ${student.district || "—"}`],
                 ["Email", student.email || "—"],
-                ["Phone", student.phone || "—"],
               ].map(([label, val]) => (
                 <div key={label} className="border-b border-surface-container pb-3">
                   <p className="text-on-surface-variant mb-1 font-medium">{label}</p>
@@ -1264,9 +1273,13 @@ export default function StudentProfileDetail() {
               <InputField label="District" name="district" value={editForm.district} onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))} />
               <InputField label="Primary Language" name="primaryLanguage" value={editForm.primaryLanguage} onChange={e => setEditForm(f => ({ ...f, primaryLanguage: e.target.value }))} />
               <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
-              <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
               <InputField label="Guardian Name" name="guardianName" value={editForm.guardianName} onChange={e => setEditForm(f => ({ ...f, guardianName: e.target.value }))} />
+              <InputField label="Guardian Relation" name="guardianRelation" value={editForm.guardianRelation} onChange={e => setEditForm(f => ({ ...f, guardianRelation: e.target.value }))} />
               <InputField label="Guardian Phone" name="guardianPhone" value={editForm.guardianPhone} onChange={e => setEditForm(f => ({ ...f, guardianPhone: e.target.value }))} />
+              <InputField label="Father's Name" name="fatherName" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} />
+              <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} />
+              <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} />
+              <InputField label="Mother's Mobile" name="motherMobile" value={editForm.motherMobile} onChange={e => setEditForm(f => ({ ...f, motherMobile: e.target.value }))} />
               <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} />
               <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} />
 
@@ -1846,6 +1859,8 @@ export default function StudentProfileDetail() {
         confirmText="Delete"
         variant="danger"
       />
+
+      <PhotoLightbox src={lightboxPhoto} alt="Student photo" onClose={() => setLightboxPhoto(null)} />
 
     </div>
   );

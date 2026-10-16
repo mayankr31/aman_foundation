@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import PhotoLightbox from "@/components/PhotoLightbox";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -50,6 +51,9 @@ export default function SchoolProfileDetail() {
   const router = useRouter();
   const { token, isInitializing, user } = useAuth();
   const toast = useToast();
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [lightboxPhoto, setLightboxPhoto] = useState(null);
+  const photoInputRef = useRef(null);
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -220,6 +224,30 @@ export default function SchoolProfileDetail() {
     } finally { setSaving(false); }
   }
 
+  async function handlePhotoUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      const fd = new FormData();
+      fd.append("photo", file);
+      const res = await fetch(`/api/schools/${id}/photo`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd
+      });
+      const json = await res.json();
+      if (json.success) { await loadSchool(); toast.success("School image updated"); }
+      else toast.error(json.error || "Failed to upload image");
+    } catch (err) {
+      console.error("Failed to upload school image:", err);
+      toast.error("Error uploading image");
+    } finally {
+      setUploadingPhoto(false);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+    }
+  }
+
   async function handleAssignStudent(studentId) {
     await fetch(`/api/schools/${id}/students`, { method: "POST", headers: authHeaders(), body: JSON.stringify({ studentId }) });
     await loadSchool();
@@ -356,15 +384,23 @@ export default function SchoolProfileDetail() {
       <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-          {school.img ? (
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-surface-container overflow-hidden shrink-0 border-4 border-surface shadow-md">
-              <img alt="School" className="w-full h-full object-cover" src={school.img} />
-            </div>
-          ) : (
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center text-4xl font-bold shrink-0 border-4 border-surface shadow-md">
-              {school.name[0]}
-            </div>
-          )}
+          <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
+            {school.img ? (
+              <div className="w-full h-full rounded-xl bg-surface-container overflow-hidden border-4 border-surface shadow-md">
+                <img alt="School" className="w-full h-full object-cover cursor-pointer" src={school.img} onClick={() => setLightboxPhoto(school.img)} />
+              </div>
+            ) : (
+              <div className="w-full h-full rounded-xl bg-primary-container text-on-primary-container flex items-center justify-center text-4xl font-bold border-4 border-surface shadow-md">
+                {school.name[0]}
+              </div>
+            )}
+            {isAdmin && (
+              <label className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container transition-colors" title={school.img ? "Replace image" : "Upload image"}>
+                <span className="material-symbols-outlined text-[18px]">{uploadingPhoto ? "hourglass_top" : "photo_camera"}</span>
+                <input ref={photoInputRef} type="file" accept="image/*" className="hidden" disabled={uploadingPhoto} onChange={handlePhotoUpload} />
+              </label>
+            )}
+          </div>
           <div className="pt-2">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h2 className="page-title text-on-surface capitalize">{school.name}</h2>
@@ -1190,6 +1226,8 @@ export default function SchoolProfileDetail() {
           </div>
         </Modal>
       )}
+
+      <PhotoLightbox src={lightboxPhoto} alt="School photo" onClose={() => setLightboxPhoto(null)} />
     </div>
   );
 }

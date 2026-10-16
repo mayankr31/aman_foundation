@@ -5,8 +5,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export default function FellowsModule() {
   const { token, user } = useAuth();
   const router = useRouter();
@@ -18,19 +16,8 @@ export default function FellowsModule() {
   }, [user, router]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showAddModal, setShowAddModal] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState("All");
   const [fellows, setFellows] = useState([]);
-  const [editingFellowId, setEditingFellowId] = useState(null);
-
-  // Form states
-  const [newFellowName, setNewFellowName] = useState("");
-  const [newLocation, setNewLocation] = useState("");
-  const [newProgress, setNewProgress] = useState(50);
-  const [newEmail, setNewEmail] = useState("");
-  const [newPhone, setNewPhone] = useState("");
-
-  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
 
   const fetchFellowsData = useCallback(async () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -40,15 +27,6 @@ export default function FellowsModule() {
       fellows: fellowJson.success ? fellowJson.data : null,
     };
   }, [token]);
-
-  const loadFellows = async () => {
-    try {
-      const { fellows: f } = await fetchFellowsData();
-      if (f) setFellows(f);
-    } catch (err) {
-      console.error("Failed to load fellows:", err);
-    }
-  };
 
   useEffect(() => {
     let active = true;
@@ -62,62 +40,6 @@ export default function FellowsModule() {
       active = false;
     };
   }, [fetchFellowsData]);
-
-  const resetForm = () => {
-    setEditingFellowId(null);
-    setNewFellowName("");
-    setNewLocation("");
-    setNewProgress(50);
-    setNewEmail("");
-    setNewPhone("");
-  };
-
-  const openEditModal = (f) => {
-    setEditingFellowId(f.id);
-    setNewFellowName(f.name || "");
-    setNewLocation(f.location || "");
-    setNewProgress(f.progress ?? 0);
-    setNewEmail(f.email || "");
-    setNewPhone(f.phone || "");
-    setShowAddModal(true);
-  };
-
-  const handleSaveFellow = async (e) => {
-    e.preventDefault();
-    if (!newFellowName || !newLocation || !editingFellowId) {
-      alert("Fellow Name and Location are required.");
-      return;
-    }
-
-    const payload = {
-      name: newFellowName,
-      address: newLocation,
-      progress: parseInt(newProgress),
-      email: newEmail || undefined,
-      phone: newPhone || undefined,
-    };
-
-    try {
-      const res = await fetch(`/api/fellows/${editingFellowId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      if (json.success) {
-        await loadFellows();
-        resetForm();
-        setShowAddModal(false);
-      } else {
-        alert(json.error || "Failed to update fellow");
-      }
-    } catch (err) {
-      console.error("Failed to save fellow:", err);
-    }
-  };
 
   const districts = ["All", ...new Set(fellows.map((f) => f.location || f.address))];
 
@@ -295,14 +217,6 @@ export default function FellowsModule() {
                       >
                         View Profile
                       </Link>
-                      {canManage && (
-                        <button
-                          onClick={(e) => { e.stopPropagation(); openEditModal(f); }}
-                          className="text-on-surface-variant hover:text-primary text-sm font-semibold transition-colors cursor-pointer"
-                        >
-                          Edit
-                        </button>
-                      )}
                     </div>
                   </td>
                 </tr>
@@ -366,104 +280,6 @@ export default function FellowsModule() {
 
       {filteredFellows.length === 0 && (
         <p className="text-center py-12 text-xs text-slate-400 font-sans">No fellows match your search.</p>
-      )}
-
-      {/* Edit Fellow Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">
-                Edit Educational Fellow
-              </h3>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <form onSubmit={handleSaveFellow} className="space-y-4 text-sm">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Fellow Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Bilal Ahmed"
-                  value={newFellowName}
-                  onChange={(e) => setNewFellowName(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  District / Location
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Balikuri, Kalgachia"
-                  value={newLocation}
-                  onChange={(e) => setNewLocation(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Baseline Literacy Progress (%)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  required
-                  value={newProgress}
-                  onChange={(e) => setNewProgress(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Phone
-                </label>
-                <input
-                  type="text"
-                  value={newPhone}
-                  onChange={(e) => setNewPhone(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent"
-                />
-              </div>
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
       )}
     </div>
   );

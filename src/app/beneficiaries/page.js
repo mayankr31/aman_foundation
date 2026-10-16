@@ -138,7 +138,7 @@ export default function BeneficiaryMasterDirectory() {
       toast.error("Please select a livelihood program.");
       return;
     }
-    setAddStep("kyor");
+    setAddStep("kyr");
   };
 
   const handleCreateBeneficiary = async ({ responses, scores }) => {
@@ -197,7 +197,7 @@ export default function BeneficiaryMasterDirectory() {
 
       const newId = json.data.id;
 
-      // Save the KYOR survey for the newly created beneficiary
+      // Save the KYR survey for the newly created beneficiary
       const surveyRes = await fetch(`/api/beneficiaries/${newId}/resilience-surveys`, {
         method: "POST",
         headers: {
@@ -211,7 +211,7 @@ export default function BeneficiaryMasterDirectory() {
       if (surveyJson.success) {
         toast.success(`Registered new beneficiary: ${addForm.name.trim()}`);
       } else {
-        toast.error("Beneficiary created, but KYOR form could not be saved.");
+        toast.error("Beneficiary created, but KYR form could not be saved.");
       }
 
       await refreshBeneficiaries();
@@ -222,7 +222,7 @@ export default function BeneficiaryMasterDirectory() {
     }
   };
 
-  const kyorPrefill = {
+  const kyrPrefill = {
     "B.3": addForm.state,
     "B.4": addForm.district,
     "B.5": addForm.block,
@@ -236,7 +236,7 @@ export default function BeneficiaryMasterDirectory() {
     "B.16_Max": addForm.monthlyIncome,
     "B.18": addForm.caste,
   };
-  const kyorHidden = ["B.3", "B.4", "B.5", "B.6", "B.7", "B.8", "B.9", "B.10", "B.14", "B.16", "B.18"];
+  const kyrHidden = ["B.3", "B.4", "B.5", "B.6", "B.7", "B.8", "B.9", "B.10", "B.14", "B.16", "B.18"];
 
   const filteredBeneficiaries = beneficiaries.filter((b) => {
     const matchesSearch =
@@ -407,7 +407,7 @@ export default function BeneficiaryMasterDirectory() {
                 <th className="w-[20%] px-6 py-4">District / Location</th>
                 <th className="w-[14%] px-6 py-4">Social Economic Tier</th>
                 <th className="w-[22%] px-6 py-4">Program Linkage</th>
-                <th className="w-[12%] px-6 py-4">Resilience Index (KYOR)</th>
+                <th className="w-[12%] px-6 py-4">Resilience Index (KYR)</th>
                 <th className="w-[10%] px-6 py-4 text-right">Action</th>
               </tr>
             </thead>
@@ -463,7 +463,7 @@ export default function BeneficiaryMasterDirectory() {
                       onClick={(e) => e.stopPropagation()}
                       className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline cursor-pointer"
                     >
-                      View File
+                      View
                     </Link>
                   </td>
                 </tr>
@@ -491,7 +491,7 @@ export default function BeneficiaryMasterDirectory() {
                 <p className="text-xs text-on-surface-variant mt-1">
                   {addStep === "details"
                     ? "Step 1 of 2 — Basic details, documents and program assignment."
-                    : "Step 2 of 2 — Fill the KYOR form for this household."}
+                    : "Step 2 of 2 — Fill the KYR form for this household."}
                 </p>
               </div>
               <button
@@ -508,8 +508,8 @@ export default function BeneficiaryMasterDirectory() {
                 1. Basic Details
               </span>
               <span className="flex-1 h-px bg-surface-container-highest" />
-              <span className={addStep === "kyor" ? "text-primary" : "text-on-surface-variant"}>
-                2. KYOR Form
+              <span className={addStep === "kyr" ? "text-primary" : "text-on-surface-variant"}>
+                2. KYR Form
               </span>
             </div>
 
@@ -833,18 +833,18 @@ export default function BeneficiaryMasterDirectory() {
                     type="submit"
                     className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 shadow-glow transition-all font-semibold cursor-pointer flex items-center gap-2"
                   >
-                    Next: KYOR Form
+                    Next: KYR Form
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
                   </button>
                 </div>
               </form>
             )}
 
-            {addStep === "kyor" && (
+            {addStep === "kyr" && (
               <ResilienceSurveyForm
                 mode="embedded"
-                prefill={kyorPrefill}
-                hideQuestionIds={kyorHidden}
+                prefill={kyrPrefill}
+                hideQuestionIds={kyrHidden}
                 onBack={() => setAddStep("details")}
                 onSubmit={handleCreateBeneficiary}
               />

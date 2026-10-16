@@ -5,12 +5,13 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { useToast } from "@/context/ToastContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 
-const SHOW_TAKE_KYOR_BUTTON = false;
+const SHOW_TAKE_KYR_BUTTON = false;
 
 export default function BeneficiaryProfileDetail() {
   return (
@@ -314,7 +315,7 @@ function BeneficiaryProfileDetailContent() {
       });
       const json = await res.json();
       if (json.success) {
-        toast.success("KYOR form updated successfully.");
+        toast.success("KYR form updated successfully.");
         setEditingSurvey(null);
         const refreshRes = await fetch(`/api/beneficiaries/${id}/resilience-surveys`, { headers });
         if (refreshRes.ok) {
@@ -322,11 +323,11 @@ function BeneficiaryProfileDetailContent() {
           if (data.success) setSurveys(data.data);
         }
       } else {
-        toast.error(json.error || "Failed to update KYOR form.");
+        toast.error(json.error || "Failed to update KYR form.");
       }
     } catch (err) {
       console.error("Update survey error:", err);
-      toast.error("Failed to update KYOR form.");
+      toast.error("Failed to update KYR form.");
     }
   };
 
@@ -740,8 +741,8 @@ function BeneficiaryProfileDetailContent() {
   const score = resilienceScoreComputed;
   const strokeDashoffset = score !== null ? 251.2 - (score / 100) * 251.2 : 251.2;
 
-  // Basic-detail fields that must be locked (read-only) in the KYOR form.
-  const getProfileKyorFields = () => {
+  // Basic-detail fields that must be locked (read-only) in the KYR form.
+  const getProfileKyrFields = () => {
     const pairs = [
       ["B.3", beneficiary.state],
       ["B.4", beneficiary.district],
@@ -772,7 +773,7 @@ function BeneficiaryProfileDetailContent() {
     if (prefill["B.16_Min"]) locks.push("B.16");
     return { prefill, locks };
   };
-  const kyorProfileFields = getProfileKyorFields();
+  const kyrProfileFields = getProfileKyrFields();
 
   const isGoatEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Goat Rearing");
   const isCaneEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Sugarcane");
@@ -1201,26 +1202,26 @@ function BeneficiaryProfileDetailContent() {
             </div>
           )}
 
-          {activeTab === "KYOR Form" && (
+          {activeTab === "KYR Form" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
                     <span className="material-symbols-outlined text-primary font-bold">assignment</span>
-                    KYOR Form
+                    KYR Form
                   </h3>
                   <p className="text-sm text-on-surface-variant font-sans mt-1">
                     Assess the family's capacity to absorb, adapt and transform.
                   </p>
                 </div>
-                {/* Set SHOW_TAKE_KYOR_BUTTON to true to re-enable the survey entry point. */}
-                {SHOW_TAKE_KYOR_BUTTON && (
+                {/* Set SHOW_TAKE_KYR_BUTTON to true to re-enable the survey entry point. */}
+                {SHOW_TAKE_KYR_BUTTON && (
                   <Link
                     href={`/beneficiaries/${id}/kyr-survey`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
-                    Take KYOR Form
+                    Take KYR Form
                   </Link>
                 )}
               </div>
@@ -1975,10 +1976,10 @@ function BeneficiaryProfileDetailContent() {
             </div>
           </div>
 
-          {/* Resilience Score (KYOR) - always visible */}
+          {/* Resilience Score (KYR) - always visible */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="text-xs uppercase tracking-widest text-on-surface-variant mb-4 font-sans font-bold">
-              Resilience Score (KYOR)
+              Resilience Score (KYR)
             </h3>
 
             <div className="flex items-center justify-between mb-3 font-sans">
@@ -2371,13 +2372,13 @@ function BeneficiaryProfileDetailContent() {
         </div>
       )}
 
-      {/* Edit KYOR Survey Modal */}
+      {/* Edit KYR Survey Modal */}
       {editingSurvey && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-surface-container pb-4">
               <div>
-                <h3 className="text-xl font-bold">Edit Submitted KYOR Form</h3>
+                <h3 className="text-xl font-bold">Edit Submitted KYR Form</h3>
                 <p className="text-xs text-on-surface-variant mt-1">
                   Update the responses submitted on {new Date(editingSurvey.surveyDate).toLocaleDateString()}.
                 </p>
@@ -2392,10 +2393,10 @@ function BeneficiaryProfileDetailContent() {
             <ResilienceSurveyForm
               key={editingSurvey.id}
               mode="embedded"
-              prefill={{ ...(editingSurvey.responses || {}), ...kyorProfileFields.prefill }}
-              lockQuestionIds={kyorProfileFields.locks}
+              prefill={{ ...(editingSurvey.responses || {}), ...kyrProfileFields.prefill }}
+              lockQuestionIds={kyrProfileFields.locks}
               submitLabel="Update Survey"
-              title="Edit KYOR Form"
+              title="Edit KYR Form"
               onBack={() => setEditingSurvey(null)}
               onSubmit={handleUpdateSurvey}
             />
@@ -2712,25 +2713,7 @@ function BeneficiaryProfileDetailContent() {
       )}
 
       {/* Photo Lightbox */}
-      {lightboxPhoto && (
-        <div
-          className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-8 cursor-pointer"
-          onClick={() => setLightboxPhoto(null)}
-        >
-          <button
-            onClick={() => setLightboxPhoto(null)}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors cursor-pointer border-none text-white"
-          >
-            <span className="material-symbols-outlined text-2xl">close</span>
-          </button>
-          <img
-            src={lightboxPhoto}
-            alt="Event evidence"
-            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
+      <PhotoLightbox src={lightboxPhoto} alt="Beneficiary photo" onClose={() => setLightboxPhoto(null)} />
 
       <ConfirmActionModal
         isOpen={showConfirmMigrate}
