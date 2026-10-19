@@ -306,12 +306,12 @@ export default function SchoolsModule() {
                       <span className="material-symbols-outlined text-on-surface-variant">school</span>
                     )}
                   </div>
-                  <div>
-                    <h4 className="font-headline text-lg text-on-surface leading-tight group-hover:text-primary transition-colors">
+                  <div className="min-w-0">
+                    <h4 className="font-headline text-lg text-on-surface leading-tight group-hover:text-primary transition-colors break-words">
                       {s.name}
                     </h4>
-                    <p className="font-body text-sm text-on-surface-variant flex items-center gap-1 mt-1">
-                      <span className="material-symbols-outlined text-[14px]">location_on</span>{" "}
+                    <p className="font-body text-sm text-on-surface-variant flex items-center gap-1 mt-1 break-words">
+                      <span className="material-symbols-outlined text-[14px] shrink-0">location_on</span>{" "}
                       {s.location}
                     </p>
                   </div>
@@ -351,7 +351,7 @@ export default function SchoolsModule() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-8 flex justify-center items-center gap-2 font-sans">
+          <div className="mt-8 flex flex-wrap justify-center items-center gap-2 font-sans">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
@@ -359,7 +359,7 @@ export default function SchoolsModule() {
             >
               Prev
             </button>
-            <div className="flex items-center gap-1 mx-2">
+            <div className="hidden sm:flex items-center gap-1 mx-2">
               {(() => {
                 const pages = [];
                 if (totalPages <= 5) {
@@ -391,6 +391,9 @@ export default function SchoolsModule() {
                 ));
               })()}
             </div>
+            <span className="sm:hidden text-xs font-semibold text-on-surface-variant px-1">
+              Page {currentPage} of {totalPages}
+            </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
@@ -406,7 +409,7 @@ export default function SchoolsModule() {
       {showAddModal && (
         <Modal title="Add New Partner School" onClose={() => setShowAddModal(false)}>
           <form onSubmit={handleAddSchool} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField label="School Name" name="name" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} required />
               <InputField label="Principal / Headmaster Name" name="principalName" value={addForm.principalName} onChange={e => setAddForm(f => ({ ...f, principalName: e.target.value }))} />
               <InputField label="UDISE Code" name="udiseCode" value={addForm.udiseCode} onChange={e => setAddForm(f => ({ ...f, udiseCode: e.target.value }))} />

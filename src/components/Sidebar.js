@@ -93,7 +93,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
       {/* SideNavBar */}
       <nav
         id="side-nav"
-        className={`bg-slate-50 dark:bg-slate-900 text-teal-800 dark:text-teal-400 font-sans tracking-tight text-sm font-medium h-screen w-64 fixed left-0 top-0 overflow-y-auto shadow-[8px_0_24px_rgba(0,0,0,0.04)] z-[60] flex flex-col p-6 gap-2 border-r border-slate-100 dark:border-slate-800 transition-all duration-300 ease-in-out ${
+        className={`bg-slate-50 dark:bg-slate-900 text-teal-800 dark:text-teal-400 font-sans tracking-tight text-sm font-medium h-dvh w-64 fixed left-0 top-0 overflow-y-auto shadow-[8px_0_24px_rgba(0,0,0,0.04)] z-[60] flex flex-col p-4 sm:p-6 gap-2 border-r border-slate-100 dark:border-slate-800 transition-all duration-300 ease-in-out ${
           collapsed ? "md:w-20 md:px-3" : "md:w-64"
         } ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
@@ -423,6 +423,32 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             >
               <span className="material-symbols-outlined">flight_takeoff</span>
               <span className={labelClass}>Travel Management</span>
+            </Link>
+          )}
+
+          {/* Reimbursements - all non-admin staff */}
+          {user?.roleName !== "ADMIN" && can("reimbursements") && (
+            <Link
+              href="/reimbursements"
+              className={navItemClass(pathname === "/reimbursements" || pathname === "/reimbursements/new")}
+              onClick={onClose}
+              title="Reimbursements"
+            >
+              <span className="material-symbols-outlined">receipt_long</span>
+              <span className={labelClass}>Reimbursements</span>
+            </Link>
+          )}
+
+          {/* Reimbursement Management - Admin/PM */}
+          {can("reimbursement-management") && (
+            <Link
+              href="/reimbursements/manage"
+              className={navItemClass(pathname === "/reimbursements/manage")}
+              onClick={onClose}
+              title="Reimbursement Management"
+            >
+              <span className="material-symbols-outlined">approval</span>
+              <span className={labelClass}>Reimbursement Management</span>
             </Link>
           )}
 

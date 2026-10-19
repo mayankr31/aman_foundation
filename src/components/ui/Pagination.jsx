@@ -16,11 +16,11 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
   }
 
   return (
-    <div className={`px-6 py-4 flex items-center justify-between border-t border-surface-container-low font-sans ${className}`}>
-      <span className="text-xs text-on-surface-variant">
+    <div className={`px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-surface-container-low font-sans ${className}`}>
+      <span className="text-xs text-on-surface-variant text-center sm:text-left">
         Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
       </span>
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-wrap gap-2 items-center justify-center">
         <button
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
@@ -28,7 +28,7 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
         >
           Prev
         </button>
-        <div className="flex items-center gap-1 mx-2">
+        <div className="hidden sm:flex items-center gap-1 mx-2">
           {pages.map((page, index) => (
             <button
               key={index}
@@ -46,6 +46,9 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
             </button>
           ))}
         </div>
+        <span className="sm:hidden text-xs font-semibold text-on-surface-variant px-1">
+          Page {currentPage} of {totalPages}
+        </span>
         <button
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}

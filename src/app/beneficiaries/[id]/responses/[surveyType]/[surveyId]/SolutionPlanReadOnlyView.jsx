@@ -5,8 +5,8 @@ export default function SolutionPlanReadOnlyView({ planData }) {
 
   return (
     <div className="font-sans space-y-8">
-      <div className="bg-primary/10 p-6 rounded-xl border border-primary/20 text-center">
-        <h3 className="text-2xl font-bold text-primary mb-2">Customized Action Plan</h3>
+      <div className="bg-primary/10 p-4 sm:p-6 rounded-xl border border-primary/20 text-center">
+        <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">Customized Action Plan</h3>
         <p className="text-on-surface-variant max-w-2xl mx-auto">
           This is a roadmap of actionable priorities tailored for this household to build resilience and improve their capacity over time.
         </p>
@@ -28,7 +28,7 @@ export default function SolutionPlanReadOnlyView({ planData }) {
             </div>
 
             {/* Activities List */}
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <h5 className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Planned Interventions</h5>
               {p.activities && p.activities.length > 0 ? (
                 <ul className="space-y-3">
@@ -38,7 +38,7 @@ export default function SolutionPlanReadOnlyView({ planData }) {
                         <span className="material-symbols-outlined text-primary mt-0.5">check_circle</span>
                         <p className="text-sm font-semibold text-on-surface">{act.activity}</p>
                       </div>
-                      <div className="flex items-center gap-4 text-xs font-medium text-slate-500 sm:w-[24rem] flex-shrink-0">
+                      <div className="grid grid-cols-2 gap-3 text-xs font-medium text-slate-500 sm:flex sm:items-center sm:gap-4 sm:w-[24rem] sm:flex-shrink-0">
                         <div className="flex flex-col w-1/4">
                           <span className="uppercase tracking-wider text-[9px] mb-1">Timeline</span>
                           <span className="truncate" title={act.timeline}>{act.timeline || "N/A"}</span>

@@ -160,7 +160,7 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 max-h-[70vh] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden z-[60] normal-case tracking-normal font-sans">
+        <div className="fixed left-3 right-3 top-16 w-auto max-h-[calc(100dvh-5rem)] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden z-[60] normal-case tracking-normal font-sans sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 sm:max-h-[70vh]">
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-slate-800 dark:text-white">Notifications</span>
@@ -225,7 +225,7 @@ export default function NotificationBell() {
                   </div>
                   <button
                     onClick={(e) => handleDeleteOne(e, n)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-rose-500 p-0.5 rounded"
+                    className="absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-slate-400 hover:text-rose-500 p-0.5 rounded"
                     aria-label="Delete notification"
                   >
                     <span className="material-symbols-outlined text-base">close</span>

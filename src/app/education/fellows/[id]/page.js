@@ -307,7 +307,7 @@ function FellowProfileDetailContent() {
       )}
 
       {/* Hero Section */}
-      <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
+      <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md">
@@ -324,18 +324,18 @@ function FellowProfileDetailContent() {
               </div>
             )}
           </div>
-          <div className="pt-2">
+          <div className="pt-2 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="page-title text-on-surface capitalize">
+              <h2 className="page-title text-on-surface capitalize break-words">
                 {fellow.name}
               </h2>
             </div>
-            <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">location_on</span>
+            <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2 break-words">
+              <span className="material-symbols-outlined text-sm text-primary shrink-0">location_on</span>
               {fellowLocation} • {fellow.students ? fellow.students.length : 0} Assigned Students
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
-              <div>
+              <div className="min-w-0 break-all">
                 <span className="font-bold text-on-surface">Email:</span> {fellow.email || "fellow@aman.org"}
               </div>
               <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
@@ -345,7 +345,7 @@ function FellowProfileDetailContent() {
             </div>
           </div>
         </div>
-        <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start">
+        <div className="flex flex-wrap gap-3 relative z-10 shrink-0 self-end lg:self-start">
           <button className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
             <span className="material-symbols-outlined text-[18px]">mail</span>
             Contact Fellow
@@ -383,8 +383,25 @@ function FellowProfileDetailContent() {
         </div>
       </div>
 
+      {/* Mobile tab selector */}
+      <div className="md:hidden mb-6 font-sans">
+        <label htmlFor="fellow-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+          Profile section
+        </label>
+        <select
+          id="fellow-tab"
+          value={activeTab}
+          onChange={(e) => router.replace(`/education/fellows/${id}?tab=${FELLOW_TABS.find((t) => t.label === e.target.value)?.slug || ""}`, { scroll: false })}
+          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+        >
+          {FELLOW_TABS.map((tab) => (
+            <option key={tab.slug} value={tab.label}>{tab.label}</option>
+          ))}
+        </select>
+      </div>
+
       {/* Tabs */}
-      <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
         {FELLOW_TABS.map((tab) => {
           const isActive = activeTab === tab.label;
           return (
@@ -393,7 +410,7 @@ function FellowProfileDetailContent() {
               onClick={() =>
                 router.replace(`/education/fellows/${id}?tab=${tab.slug}`, { scroll: false })
               }
-              className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
+              className={`px-3 sm:px-6 py-2.5 sm:py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                 isActive
                   ? "font-semibold text-primary border-b-2 border-primary"
                   : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
@@ -412,7 +429,7 @@ function FellowProfileDetailContent() {
           )}
           {activeTab === "Goals" && (
             <div className="space-y-6">
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                 <h3 className="section-title text-on-surface">Goal Sheets</h3>
                 <div className="flex gap-2">
                   <button
@@ -436,7 +453,7 @@ function FellowProfileDetailContent() {
               ) : (
                 pagedGoalSheets.map((sheet) => (
                   <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
-                    <div className="flex justify-between items-start gap-4">
+                    <div className="flex flex-wrap justify-between items-start gap-3">
                       <button
                         onClick={() => {
                           setEditingGoalSheet(sheet);
@@ -498,7 +515,7 @@ function FellowProfileDetailContent() {
 
           {activeTab === "Coaching & Classroom Observation" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                 <h3 className="section-title text-on-surface">Coaching & Classroom Observation Records</h3>
                 {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                   <button
@@ -528,7 +545,7 @@ function FellowProfileDetailContent() {
                         {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                           <button
                             onClick={() => handleDeleteCoachingRecord(record.id)}
-                            className="text-on-surface-variant hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                            className="text-on-surface-variant hover:text-red-600 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                             title="Delete record"
                           >
                             <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -564,10 +581,10 @@ function FellowProfileDetailContent() {
                               href={record.fileUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
+                              className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors max-w-full"
                             >
-                              <span className="material-symbols-outlined text-[16px]">attach_file</span>
-                              {record.fileUrl.split("/").pop()}
+                              <span className="material-symbols-outlined text-[16px] shrink-0">attach_file</span>
+                              <span className="truncate">{record.fileUrl.split("/").pop()}</span>
                             </a>
                           )}
                         </div>
@@ -705,7 +722,7 @@ function FellowProfileDetailContent() {
       {/* Add Coaching & Classroom Observation Record Modal */}
       {showAddCoachingModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add Coaching & Classroom Observation Record</h3>
               <button

@@ -148,7 +148,7 @@ export default function LeaveApplication() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
+          <table className="mobile-card-table w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
             <thead>
               <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                 <th className="w-[22%] py-3 px-4">Leave Type</th>
@@ -160,10 +160,10 @@ export default function LeaveApplication() {
             <tbody>
               {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                  <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs text-on-surface-variant break-words align-top">{formatStoredDates(leave.dates)}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
-                  <td className="py-4 px-4">
+                  <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.type}</td>
+                  <td data-label="Requested Dates" className="py-4 px-4 font-mono text-xs text-on-surface-variant break-words align-top">{formatStoredDates(leave.dates)}</td>
+                  <td data-label="Reason" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
+                  <td data-label="Status" className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">
                       <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                         leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
@@ -194,7 +194,7 @@ export default function LeaveApplication() {
 
       {isApplying && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-surface-container-lowest rounded-[2rem] shadow-2xl w-full max-w-xl p-8 relative">
+          <div className="bg-surface-container-lowest rounded-2xl sm:rounded-[2rem] shadow-2xl w-full max-w-xl p-4 sm:p-8 relative max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-8 border-b border-outline-variant/10 pb-4">
               <h3 className="text-2xl font-headline font-bold text-on-surface">Apply for Leave</h3>
               <button onClick={() => setIsApplying(false)} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">
@@ -222,7 +222,7 @@ export default function LeaveApplication() {
               </label>
 
               {newLeave.isMultiple ? (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">From Date</label>
                     <input type="date" value={newLeave.fromDate} onChange={e => setNewLeave({...newLeave, fromDate: e.target.value})} className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface [color-scheme:light] dark:[color-scheme:dark]" />

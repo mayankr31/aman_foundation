@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function LivelihoodHub() {
   return (
-    <main className="flex-1 p-12 bg-surface">
+    <main className="flex-1 p-6 md:p-12 bg-surface">
       <Link
         href="/"
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -91,8 +91,8 @@ export default function LivelihoodHub() {
           href="/beneficiaries"
         >
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary-container rounded-full opacity-50 blur-2xl"></div>
-          <div className="relative z-10 flex items-center justify-between">
-            <div>
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="min-w-0">
               <div className="flex items-center gap-4 mb-3">
                 <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
                   <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>
@@ -107,7 +107,7 @@ export default function LivelihoodHub() {
                 Central database for all program participants. View complete profiles, program history, resilience scoring, and cross-module engagement data.
               </p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
               <span className="text-label-md text-primary-fixed font-medium tracking-widest">
                 Access Database
               </span>

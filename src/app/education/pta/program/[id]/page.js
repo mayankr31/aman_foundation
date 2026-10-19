@@ -190,21 +190,21 @@ export default function PtaProgramDetail() {
       </Link>
 
       {/* Hero */}
-      <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
+      <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
-        <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold shrink-0 ${program.iconBg || "bg-primary/10 text-primary"}`}>
+        <div className="flex flex-row gap-4 sm:gap-6 items-start relative z-10 min-w-0">
+          <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-3xl font-bold shrink-0 ${program.iconBg || "bg-primary/10 text-primary"}`}>
             <span className="material-symbols-outlined text-3xl">{program.icon || "campaign"}</span>
           </div>
-          <div className="pt-1">
+          <div className="pt-1 min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="page-title text-on-surface capitalize">{program.title}</h2>
+              <h2 className="page-title text-on-surface capitalize break-words">{program.title}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${program.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                 {program.status}
               </span>
             </div>
-            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">schedule</span>
+            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2 break-words">
+              <span className="material-symbols-outlined text-sm text-primary shrink-0">schedule</span>
               {program.duration || "Duration TBD"} • {program.participantsText || "Participants TBD"}
             </p>
             <p className="text-sm text-on-surface-variant leading-relaxed max-w-xl">{program.description || "No description provided."}</p>
@@ -226,7 +226,7 @@ export default function PtaProgramDetail() {
 
           {/* Schools in this Program */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">school</span>
                 Schools in this Program ({program.schools?.length || 0})
@@ -260,7 +260,7 @@ export default function PtaProgramDetail() {
 
           {/* After School Centres in this Program */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-tertiary">meeting_room</span>
                 After School Centres in this Program ({program.afterSchoolCentres?.length || 0})
@@ -294,7 +294,7 @@ export default function PtaProgramDetail() {
 
           {/* Events */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h3 className="font-headline font-bold text-xl text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-secondary">event</span>
                 Program Events
@@ -310,12 +310,12 @@ export default function PtaProgramDetail() {
               <div className="space-y-4">
                 {pagedEvents.map(ev => (
                   <Link key={ev.id} href={`/education/pta/event/${ev.id}`}
-                    className="p-4 bg-surface-container-low rounded-lg flex justify-between items-start hover:bg-surface-container transition-colors block group">
-                    <div>
-                      <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors">{ev.title}</h4>
-                      <p className="text-xs text-on-surface-variant mt-1">{ev.location} • {formatDate(ev.date)}</p>
+                    className="p-4 bg-surface-container-low rounded-lg flex justify-between items-start gap-3 hover:bg-surface-container transition-colors block group">
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors break-words">{ev.title}</h4>
+                      <p className="text-xs text-on-surface-variant mt-1 break-words">{ev.location} • {formatDate(ev.date)}</p>
                     </div>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${ev.status === "Scheduled" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${ev.status === "Scheduled" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                       {ev.status}
                     </span>
                   </Link>
@@ -331,23 +331,23 @@ export default function PtaProgramDetail() {
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-4">Program Details</h3>
             <div className="space-y-3 font-sans text-sm">
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Duration</span>
                 <span className="font-semibold text-on-surface">{program.duration || "—"}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Status</span>
                 <span className={`font-semibold ${program.status === "Active" ? "text-primary" : "text-on-surface"}`}>{program.status}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Schools Enrolled</span>
                 <span className="font-semibold text-on-surface">{program.schools?.length || 0}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">After School Centres</span>
                 <span className="font-semibold text-on-surface">{program.afterSchoolCentres?.length || 0}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Events</span>
                 <span className="font-semibold text-on-surface">{program.events?.length || 0}</span>
               </div>
@@ -383,7 +383,7 @@ export default function PtaProgramDetail() {
               <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows="3"
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Duration</label>
                 <input value={editForm.duration} onChange={e => setEditForm(f => ({ ...f, duration: e.target.value }))}
@@ -484,7 +484,7 @@ export default function PtaProgramDetail() {
               <textarea value={eventForm.description} onChange={e => setEventForm(f => ({ ...f, description: e.target.value }))} required rows="3" placeholder="Explain the event's agenda..."
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Date</label>
                 <input type="date" value={eventForm.date} onChange={e => setEventForm(f => ({ ...f, date: e.target.value }))} required
@@ -496,7 +496,7 @@ export default function PtaProgramDetail() {
                   className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Location / Venue</label>
                 <input value={eventForm.location} onChange={e => setEventForm(f => ({ ...f, location: e.target.value }))} placeholder="e.g. Auditorium"

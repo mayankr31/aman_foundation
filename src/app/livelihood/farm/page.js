@@ -104,12 +104,12 @@ export default function FarmPrograms() {
       </Link>
 
       <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h2 className="page-title text-on-surface">Farm Programs</h2>
           <p className="page-description mt-2">Cultivation-based initiatives: sugarcane, maize, rice, and other crop programs.</p>
         </div>
-        <div className="flex gap-3 shrink-0">
+        <div className="flex flex-wrap gap-3 shrink-0">
           <button
             onClick={() => setShowTypesModal(true)}
             className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-primary/20 bg-transparent"
@@ -154,7 +154,7 @@ export default function FarmPrograms() {
               const config = getTypeConfig(prog.type);
               return (
                 <div key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors relative group">
-                  <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute top-3 right-3 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => { e.preventDefault(); setDeleteId(prog.id); setDeleteName(prog.name); }}
                       className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
@@ -191,7 +191,7 @@ export default function FarmPrograms() {
       {/* Add Program Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add Farm Program</h3>
               <button onClick={() => setShowAddModal(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent">
@@ -232,7 +232,7 @@ export default function FarmPrograms() {
       {/* Delete Confirmation Modal */}
       {deleteId && (
         <div className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4" onClick={() => { setDeleteId(null); setDeleteName(""); }}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-4 sm:p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold text-on-surface">Delete Program</h3>
             <p className="text-sm text-on-surface-variant">Are you sure you want to delete <strong>{deleteName}</strong>? This will permanently remove all associated beneficiary assignments and events.</p>
             <div className="flex justify-end gap-3 pt-2">

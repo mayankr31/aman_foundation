@@ -406,6 +406,8 @@ exports.Prisma.IncomeRecordScalarFieldEnum = {
   beneficiaryId: 'beneficiaryId',
   amount: 'amount',
   incomeDate: 'incomeDate',
+  incomeMonth: 'incomeMonth',
+  incomeYear: 'incomeYear',
   source: 'source',
   notes: 'notes',
   createdAt: 'createdAt',
@@ -987,6 +989,44 @@ exports.Prisma.TravelExpenseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ReimbursementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  purpose: 'purpose',
+  notes: 'notes',
+  totalClaimed: 'totalClaimed',
+  totalApproved: 'totalApproved',
+  totalReimbursed: 'totalReimbursed',
+  status: 'status',
+  bankName: 'bankName',
+  bankAccountNo: 'bankAccountNo',
+  bankIfsc: 'bankIfsc',
+  rejectionReason: 'rejectionReason',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  reimbursedBy: 'reimbursedBy',
+  reimbursedAt: 'reimbursedAt',
+  paymentMode: 'paymentMode',
+  paymentReference: 'paymentReference',
+  paymentNotes: 'paymentNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReimbursementItemScalarFieldEnum = {
+  id: 'id',
+  reimbursementId: 'reimbursementId',
+  expenseDate: 'expenseDate',
+  category: 'category',
+  description: 'description',
+  amount: 'amount',
+  approvedAmount: 'approvedAmount',
+  receiptFiles: 'receiptFiles',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FLNCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1299,6 +1339,13 @@ exports.TravelStatus = exports.$Enums.TravelStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.ReimbursementStatus = exports.$Enums.ReimbursementStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  REIMBURSED: 'REIMBURSED'
+};
+
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
@@ -1369,6 +1416,8 @@ exports.Prisma.ModelName = {
   IndividualFeedback: 'IndividualFeedback',
   TravelRequest: 'TravelRequest',
   TravelExpense: 'TravelExpense',
+  Reimbursement: 'Reimbursement',
+  ReimbursementItem: 'ReimbursementItem',
   FLNCategory: 'FLNCategory',
   FLNQuestion: 'FLNQuestion',
   SELQuestion: 'SELQuestion',

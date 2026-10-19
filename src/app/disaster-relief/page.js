@@ -455,7 +455,7 @@ function DisasterReliefContent() {
               <div className="space-y-6">
                 {incidentsList.map((incident) => (
                   <div key={incident.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-                    <div className="flex justify-between items-start mb-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-3 mb-6">
                       <div>
                         <h2 className="text-2xl font-headline font-bold text-error flex items-center gap-2">
                           <span className="material-symbols-outlined">warning</span>
@@ -510,15 +510,32 @@ function DisasterReliefContent() {
               </div>
             )}
 
+            {/* Mobile registry selector */}
+            <div className="md:hidden font-sans">
+              <label htmlFor="disaster-registry" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+                Registry
+              </label>
+              <select
+                id="disaster-registry"
+                value={activeTab}
+                onChange={(e) => selectTab(e.target.value)}
+                className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+              >
+                {["Help Providers", "Resource Inventory", "Relief Distributions"].map((tab) => (
+                  <option key={tab} value={tab}>{tab}</option>
+                ))}
+              </select>
+            </div>
+
             {/* Registries Segment Tabs */}
-            <div className="flex border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
+            <div className="hidden md:flex border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
               {["Help Providers", "Resource Inventory", "Relief Distributions"].map((tab) => {
                 const isActive = activeTab === tab;
                 return (
                   <button
                     key={tab}
                     onClick={() => selectTab(tab)}
-                    className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
+                    className={`px-4 sm:px-6 py-2.5 sm:py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                       isActive
                         ? "font-semibold text-primary border-b-2 border-primary"
                         : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
@@ -531,10 +548,10 @@ function DisasterReliefContent() {
             </div>
 
             {/* Dynamic Registries Table */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10 min-w-0">
               {activeTab === "Help Providers" && (
                 <div>
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                     <h3 className="font-headline font-bold text-xl text-on-surface">Help Providers &amp; Responder Roster</h3>
                     <button
                       onClick={() => setShowProviderModal(true)}
@@ -545,7 +562,7 @@ function DisasterReliefContent() {
                     </button>
                   </div>
                   <div className="overflow-x-auto">
-                  <table className="w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
+                  <table className="mobile-card-table w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
                     <thead>
                       <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                         <th className="w-[30%] py-3 px-4">Responder Name</th>
@@ -561,13 +578,13 @@ function DisasterReliefContent() {
                       ) : (
                         pagedProviders.map((p) => (
                           <tr key={p.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                            <td className="py-4 px-4 font-bold text-on-surface break-words">{p.name}</td>
-                            <td className="py-4 px-4 text-on-surface-variant">
+                            <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words">{p.name}</td>
+                            <td data-label="Immediate Support Capability" className="py-4 px-4 text-on-surface-variant">
                               <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold break-words inline-block">
                                 {p.type}
                               </span>
                             </td>
-                            <td className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono break-words">{p.contact}</td>
+                            <td data-label="Contact Details" className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono break-words">{p.contact}</td>
                           </tr>
                         ))
                       )}
@@ -580,7 +597,7 @@ function DisasterReliefContent() {
 
               {activeTab === "Resource Inventory" && (
                 <div>
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                     <h3 className="font-headline font-bold text-xl text-on-surface">Calamity Resource Needs</h3>
                     <div className="flex gap-2">
                       <button
@@ -599,8 +616,8 @@ function DisasterReliefContent() {
                       </button>
                     </div>
                   </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[900px] table-fixed text-left border-collapse font-sans text-sm">
+                  <div className="overflow-x-auto max-h-[60vh] overflow-y-auto pr-1">
+                    <table className="mobile-card-table w-full min-w-[900px] table-fixed text-left border-collapse font-sans text-sm">
                       <thead>
                         <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                           <th className="w-[20%] py-3 px-4">Aid Needed (Item)</th>
@@ -623,13 +640,13 @@ function DisasterReliefContent() {
                             const percent = item.needed > 0 ? Math.min(100, Math.round((item.received / item.needed) * 100)) : 0;
                             return (
                               <tr key={item.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                                <td className="py-4 px-4 font-bold text-on-surface break-words">{item.item}</td>
-                                <td className="py-4 px-4 text-on-surface-variant text-xs break-words">{item.calamity}</td>
-                                <td className="py-4 px-4 text-center text-error font-semibold">{item.needed} {item.unit}</td>
-                                <td className="py-4 px-4 text-center text-primary font-semibold">{item.received} {item.unit}</td>
-                                <td className="py-4 px-4 text-center text-secondary font-semibold">{item.distributed} {item.unit}</td>
-                                <td className="py-4 px-4 text-center font-semibold text-on-surface">{item.available} {item.unit}</td>
-                                <td className="py-4 px-4 text-center">
+                                <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words">{item.item}</td>
+                                <td data-label="Associated Calamity" className="py-4 px-4 text-on-surface-variant text-xs break-words">{item.calamity}</td>
+                                <td data-label="Stock Needed" className="py-4 px-4 text-center text-error font-semibold">{item.needed} {item.unit}</td>
+                                <td data-label="Stock Received" className="py-4 px-4 text-center text-primary font-semibold">{item.received} {item.unit}</td>
+                                <td data-label="Distributed" className="py-4 px-4 text-center text-secondary font-semibold">{item.distributed} {item.unit}</td>
+                                <td data-label="Available Stock" className="py-4 px-4 text-center font-semibold text-on-surface">{item.available} {item.unit}</td>
+                                <td data-label="Fulfillment" className="py-4 px-4 text-center">
                                   <div className="flex items-center justify-center gap-2">
                                     <div className="w-16 h-2 bg-surface-container rounded-full overflow-hidden">
                                       <div className="h-full bg-primary" style={{ width: `${percent}%` }}></div>
@@ -637,7 +654,7 @@ function DisasterReliefContent() {
                                     <span className="text-xs font-bold text-on-surface-variant">{percent}%</span>
                                   </div>
                                 </td>
-                                <td className="py-4 px-4 text-right font-mono text-xs text-on-surface-variant">
+                                <td data-label="Transactions" className="py-4 px-4 text-right font-mono text-xs text-on-surface-variant">
                                   {item.transactions} Parts
                                 </td>
                               </tr>
@@ -646,14 +663,14 @@ function DisasterReliefContent() {
                         )}
                       </tbody>
                     </table>
-                    <Pagination currentPage={resourceNeedsPage} totalItems={resourceNeeds.length} itemsPerPage={10} onPageChange={setResourceNeedsPage} />
                   </div>
+                  <Pagination currentPage={resourceNeedsPage} totalItems={resourceNeeds.length} itemsPerPage={10} onPageChange={setResourceNeedsPage} />
                 </div>
               )}
 
               {activeTab === "Relief Distributions" && (
                 <div>
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                     <h3 className="font-headline font-bold text-xl text-on-surface">People / Family Relief Transactions</h3>
                     <button
                       onClick={() => { setDistributionForm(emptyDistributionForm); setShowDistributionModal(true); }}
@@ -663,8 +680,8 @@ function DisasterReliefContent() {
                       <span className="whitespace-nowrap">Log Distribution</span>
                     </button>
                   </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[960px] table-fixed text-left border-collapse font-sans text-sm">
+                  <div className="overflow-x-auto max-h-[60vh] overflow-y-auto pr-1">
+                    <table className="mobile-card-table w-full min-w-[960px] table-fixed text-left border-collapse font-sans text-sm">
                       <thead>
                         <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                           <th className="w-[16%] py-3 px-4">Recipient</th>
@@ -689,21 +706,21 @@ function DisasterReliefContent() {
                                 onClick={() => setExpandedDistribution(expandedDistribution === d.id ? null : d.id)}
                                 className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                               >
-                                <td className="py-4 px-4 font-bold text-on-surface break-words">
+                                <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words">
                                   <span className="inline-flex items-start gap-1">
                                     <span className="material-symbols-outlined text-[16px] text-slate-400 shrink-0">{expandedDistribution === d.id ? "expand_less" : "expand_more"}</span>
                                     <span className="break-words">{d.name}</span>
                                   </span>
                                 </td>
-                                <td className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.aadhar || "—"}</td>
-                                <td className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.mobNumber || "—"}</td>
-                                <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.address || "—"}</td>
-                                <td className="py-4 px-4 text-center text-on-surface-variant">{d.familySize}</td>
-                                <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.incident?.name || "—"}</td>
-                                <td className="py-4 px-4 text-center">
+                                <td data-label="Aadhar" className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.aadhar || "—"}</td>
+                                <td data-label="Mobile" className="py-4 px-4 text-xs font-mono text-slate-500 break-words">{d.mobNumber || "—"}</td>
+                                <td data-label="Address" className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.address || "—"}</td>
+                                <td data-label="Family" className="py-4 px-4 text-center text-on-surface-variant">{d.familySize}</td>
+                                <td data-label="Calamity" className="py-4 px-4 text-xs text-on-surface-variant break-words">{d.incident?.name || "—"}</td>
+                                <td data-label="Items" className="py-4 px-4 text-center">
                                   <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold">{d.items?.length || 0}</span>
                                 </td>
-                                <td className="py-4 px-4 text-right text-xs text-on-surface-variant">{formatDate(d.distributedAt)}</td>
+                                <td data-label="Date" className="py-4 px-4 text-right text-xs text-on-surface-variant">{formatDate(d.distributedAt)}</td>
                               </tr>
                               {expandedDistribution === d.id && (
                                 <tr className="border-b border-surface-container bg-surface-container-low/30">
@@ -735,8 +752,8 @@ function DisasterReliefContent() {
                         )}
                       </tbody>
                     </table>
-                    <Pagination currentPage={distributionsPage} totalItems={distributions.length} itemsPerPage={10} onPageChange={setDistributionsPage} />
                   </div>
+                  <Pagination currentPage={distributionsPage} totalItems={distributions.length} itemsPerPage={10} onPageChange={setDistributionsPage} />
                 </div>
               )}
             </div>
@@ -746,7 +763,7 @@ function DisasterReliefContent() {
           <div className="lg:col-span-4 space-y-6">
             
             {/* Distribution log */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
+            <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10 min-w-0">
               <h3 className="font-headline font-bold text-base text-on-surface mb-2">Supply Ledger Logs</h3>
               <p className="text-xs text-on-surface-variant mb-6 font-sans">Synced Realtime</p>
               <div className="relative border-l border-surface-container ml-3 space-y-6 font-sans text-sm font-medium max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
@@ -786,7 +803,7 @@ function DisasterReliefContent() {
       {/* Broadcast Alert Modal */}
       {showBroadcastModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Broadcast Regional Emergency Alert</h3>
               <button
@@ -847,7 +864,7 @@ function DisasterReliefContent() {
       {/* Log Transaction Modal */}
       {showLedgerModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Log Supply Transaction</h3>
               <button
@@ -977,7 +994,7 @@ function DisasterReliefContent() {
       {/* Add Resource Need Modal */}
       {showResourceNeedModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add/Update Resource Need</h3>
               <button
@@ -1042,7 +1059,7 @@ function DisasterReliefContent() {
       {/* Add Help Provider Modal */}
       {showProviderModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add Help Provider</h3>
               <button

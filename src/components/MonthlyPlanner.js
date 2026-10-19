@@ -159,10 +159,10 @@ export default function MonthlyPlanner({ fellowId }) {
   };
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 font-sans">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10 font-sans">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
         <h3 className="font-headline font-bold text-xl text-on-surface">Monthly Planner</h3>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4">
           <button onClick={handlePrevMonth} className="p-2 hover:bg-slate-100 rounded-full transition-colors cursor-pointer">
             <span className="material-symbols-outlined text-[20px]">chevron_left</span>
           </button>
@@ -178,15 +178,16 @@ export default function MonthlyPlanner({ fellowId }) {
       {loading ? (
         <div className="py-20 text-center">Loading tasks...</div>
       ) : (
+        <div>
         <div className="grid grid-cols-7 gap-px bg-surface-container-high border border-surface-container-high rounded-lg overflow-hidden">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="bg-surface-container-low p-2 text-center text-xs font-bold text-on-surface-variant uppercase tracking-wider">
+          {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+            <div key={day} className="bg-surface-container-low p-1.5 sm:p-2 text-center text-[10px] sm:text-xs font-bold text-on-surface-variant uppercase tracking-wider">
               {day}
             </div>
           ))}
           
           {days.map((date, i) => {
-            if (!date) return <div key={`empty-${i}`} className="bg-surface-container-lowest min-h-[100px]"></div>;
+            if (!date) return <div key={`empty-${i}`} className="bg-surface-container-lowest min-h-[72px] sm:min-h-[120px]"></div>;
             
             const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
             const dayTasks = tasks.filter(t => {
@@ -200,45 +201,51 @@ export default function MonthlyPlanner({ fellowId }) {
               <div 
                 key={i} 
                 onClick={() => handleDayClick(date)}
-                className={`min-h-[120px] p-2 hover:bg-slate-50 cursor-pointer transition-colors relative group flex flex-col ${bgClass}`}
+                className={`min-h-[72px] sm:min-h-[120px] p-1 sm:p-2 hover:bg-slate-50 cursor-pointer transition-colors relative group flex flex-col ${bgClass}`}
               >
-                <div className="flex justify-between items-start mb-2">
-                  <span className={`text-sm font-semibold w-7 h-7 flex items-center justify-center rounded-full ${
+                <div className="flex justify-between items-start mb-0.5 sm:mb-2">
+                  <span className={`text-xs sm:text-sm font-semibold w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-full ${
                     date.toDateString() === new Date().toDateString() ? 'bg-primary text-white' : 'text-on-surface'
                   }`}>
                     {date.getDate()}
                   </span>
                   {!isSunday && (
-                    <button className="opacity-0 group-hover:opacity-100 text-primary hover:bg-primary/10 rounded-full w-6 h-6 flex items-center justify-center transition-all">
+                    <button className="hidden sm:flex opacity-0 group-hover:opacity-100 text-primary hover:bg-primary/10 rounded-full w-6 h-6 items-center justify-center transition-all">
                       <span className="material-symbols-outlined text-[16px]">add</span>
                     </button>
                   )}
                 </div>
                 
-                <div className="flex-1 flex flex-col justify-center items-center h-full pb-2 mt-2 w-full">
+                <div className="flex-1 flex flex-col justify-center items-center h-full pb-1 sm:pb-2 mt-0.5 sm:mt-2 w-full">
                   {dayTasks.length > 0 ? (() => {
                     const completedCount = dayTasks.filter(t => t.status === "Completed").length;
                     const pendingCount = dayTasks.length - completedCount;
                     return (
-                      <div className="flex flex-col gap-1 w-full text-[11px] font-bold text-center">
-                        {pendingCount > 0 && (
-                          <div className="bg-rose-50 text-rose-700 border border-rose-100 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30 px-1.5 py-0.5 rounded-md">
-                            {pendingCount} Pending
-                          </div>
-                        )}
-                        {completedCount > 0 && (
-                          <div className="bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30 px-1.5 py-0.5 rounded-md">
-                            {completedCount} Completed
-                          </div>
-                        )}
-                      </div>
+                      <>
+                        <div className="hidden sm:flex flex-col gap-1 w-full text-[11px] font-bold text-center">
+                          {pendingCount > 0 && (
+                            <div className="bg-rose-50 text-rose-700 border border-rose-100 dark:bg-rose-950/20 dark:text-rose-400 dark:border-rose-900/30 px-1.5 py-0.5 rounded-md">
+                              {pendingCount} Pending
+                            </div>
+                          )}
+                          {completedCount > 0 && (
+                            <div className="bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/30 px-1.5 py-0.5 rounded-md">
+                              {completedCount} Completed
+                            </div>
+                          )}
+                        </div>
+                        <div className="sm:hidden flex flex-col items-center gap-0.5 text-[9px] font-bold">
+                          {pendingCount > 0 && <span className="text-rose-600">{pendingCount}P</span>}
+                          {completedCount > 0 && <span className="text-emerald-600">{completedCount}C</span>}
+                        </div>
+                      </>
                     );
                   })() : isSunday ? (
-                    <div className="text-[9px] uppercase font-bold tracking-widest text-slate-400 text-center px-1">
+                    <div className="hidden sm:block text-[9px] uppercase font-bold tracking-widest text-slate-400 text-center px-1">
                       Weekend
                     </div>
                   ) : (
-                    <div className="text-[10px] uppercase font-bold tracking-widest text-slate-400 text-center px-1">
+                    <div className="hidden sm:block text-[10px] uppercase font-bold tracking-widest text-slate-400 text-center px-1">
                       No task added
                     </div>
                   )}
@@ -247,11 +254,12 @@ export default function MonthlyPlanner({ fellowId }) {
             );
           })}
         </div>
+        </div>
       )}
 
       {showDayModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6">
+          <div className="bg-white rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Tasks for {formatDate(selectedDate)}</h3>
               <button onClick={() => setShowDayModal(false)} className="text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors cursor-pointer">
@@ -285,7 +293,7 @@ export default function MonthlyPlanner({ fellowId }) {
                   </div>
                   <button 
                     onClick={(e) => handleDeleteTask(task.id, e)}
-                    className="text-red-400 hover:text-red-600 p-1 opacity-0 group-hover/taskitem:opacity-100 transition-opacity cursor-pointer flex shrink-0"
+                    className="text-red-400 hover:text-red-600 p-1 opacity-100 sm:opacity-0 sm:group-hover/taskitem:opacity-100 transition-opacity cursor-pointer flex shrink-0"
                     title="Delete Task"
                   >
                     <span className="material-symbols-outlined text-[18px] leading-none">delete</span>

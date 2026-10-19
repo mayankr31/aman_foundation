@@ -174,14 +174,14 @@ export default function TravelPage() {
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-8">
         <div>
           <h2 className="page-title text-on-surface mb-2">Travel Requests</h2>
           <p className="text-sm text-on-surface-variant">Submit and manage your travel requests.</p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
-          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-md cursor-pointer shrink-0 w-fit"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
           New Travel Request
@@ -224,7 +224,7 @@ export default function TravelPage() {
               )}
 
               {req.status === "APPROVED" && (
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center gap-3">
                   <span className="text-xs text-emerald-600 font-semibold">
                     Approved by {req.approver?.name || "Manager"} on {formatDate(req.approvedAt)}
                   </span>
@@ -246,9 +246,9 @@ export default function TravelPage() {
                   {req.expenses[0].expenseDetails && Array.isArray(req.expenses[0].expenseDetails) && (
                     <div className="mt-2 space-y-1">
                       {req.expenses[0].expenseDetails.map((d, idx) => (
-                        <div key={idx} className="flex justify-between text-sm text-slate-600">
-                          <span>{d.category} - {d.description}</span>
-                          <span className="font-semibold">{parseFloat(d.amount)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
+                        <div key={idx} className="flex justify-between gap-3 text-sm text-slate-600">
+                          <span className="min-w-0 break-words">{d.category} - {d.description}</span>
+                          <span className="font-semibold shrink-0">{parseFloat(d.amount)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
                         </div>
                       ))}
                     </div>
@@ -274,7 +274,7 @@ export default function TravelPage() {
       {/* New Travel Request Modal */}
       {showNewModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">New Travel Request</h3>
               <button onClick={() => setShowNewModal(false)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer">
@@ -294,7 +294,7 @@ export default function TravelPage() {
                   value={newPurpose} onChange={e => setNewPurpose(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase">Start Date</label>
                   <input type="date" required value={newStartDate} onChange={e => setNewStartDate(e.target.value)}

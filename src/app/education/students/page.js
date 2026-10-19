@@ -333,62 +333,66 @@ export default function StudentsModule() {
           </div>
         </div>
 
-        <div className="md:col-span-3 bg-surface-container-lowest rounded-xl p-6 flex flex-wrap gap-4 items-center shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
-          <span className="text-xs uppercase tracking-widest text-on-surface-variant font-label mr-2">
-            Filters
-          </span>
-          <select
-            value={gradeFilter}
-            onChange={(e) => { setGradeFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-          >
-            <option>All Grades</option>
-            <option>Primary</option>
-            <option>Middle</option>
-            <option>Secondary</option>
-            <option>Senior Secondary</option>
-          </select>
-          <select
-            value={performanceFilter}
-            onChange={(e) => { setPerformanceFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-          >
-            {PERFORMANCE_FILTERS.map((f) => (
-              <option key={f}>{f}</option>
-            ))}
-          </select>
-          <select
-            value={migratedFilter}
-            onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-          >
-            <option>All</option>
-            <option>Not Migrated</option>
-            <option>Migrated</option>
-          </select>
-          <select
-            value={schoolFilter}
-            onChange={(e) => { setSchoolFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-          >
-            <option value="All Schools">All Schools</option>
-            {schools.map((sch) => (
-              <option key={sch.id} value={sch.id}>{sch.name}</option>
-            ))}
-          </select>
-          <button
-            onClick={clearFilters}
-            className="text-primary text-sm font-medium hover:underline ml-auto cursor-pointer"
-          >
-            Clear Filters
-          </button>
+        <div className="md:col-span-3 bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-label">
+              Filters
+            </span>
+            <button
+              onClick={clearFilters}
+              className="text-primary text-xs font-semibold hover:underline cursor-pointer"
+            >
+              Clear
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <select
+              value={gradeFilter}
+              onChange={(e) => { setGradeFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+            >
+              <option>All Grades</option>
+              <option>Primary</option>
+              <option>Middle</option>
+              <option>Secondary</option>
+              <option>Senior Secondary</option>
+            </select>
+            <select
+              value={performanceFilter}
+              onChange={(e) => { setPerformanceFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+            >
+              {PERFORMANCE_FILTERS.map((f) => (
+                <option key={f}>{f}</option>
+              ))}
+            </select>
+            <select
+              value={migratedFilter}
+              onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+            >
+              <option>All</option>
+              <option>Not Migrated</option>
+              <option>Migrated</option>
+            </select>
+            <select
+              value={schoolFilter}
+              onChange={(e) => { setSchoolFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+            >
+              <option value="All Schools">All Schools</option>
+              {schools.map((sch) => (
+                <option key={sch.id} value={sch.id}>{sch.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Student Data Container */}
       <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)]">
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
+          <table className="mobile-card-table w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
               <tr className="text-xs uppercase tracking-widest text-on-surface-variant font-label border-b border-surface-container">
                 <th className="w-[28%] px-6 py-4 font-semibold">Student Info</th>
@@ -414,7 +418,7 @@ export default function StudentsModule() {
                       index > 0 ? "border-t border-surface-container-low" : ""
                     }`}
                   >
-                    <td className="px-6 py-5">
+                    <td data-label="" className="px-6 py-5">
                       <div className="flex items-center gap-4">
                         <div
                           className={`w-10 h-10 rounded-full overflow-hidden flex items-center justify-center font-bold text-lg shrink-0 ${bgClass}`}
@@ -431,14 +435,14 @@ export default function StudentsModule() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-5">
+                    <td data-label="School Linkage" className="px-6 py-5">
                       <div className="font-medium text-on-surface break-words">{s.school ? s.school.name : "Unassigned"}</div>
                       <div className="text-xs text-on-surface-variant mt-0.5 break-words">
                         {s.grade} • {s.district || "Kalgachia"}
                       </div>
                     </td>
-                    <td className="px-6 py-5">
-                      <div className="flex flex-col gap-1.5 w-32">
+                    <td data-label="Academic Progress" className="px-6 py-5">
+                      <div className="flex flex-col gap-1.5 w-full max-w-[8rem]">
                         <div className="flex justify-between text-xs font-medium">
                           <span className="text-on-surface">Attendance</span>
                           <span className={attendanceColor}>{s.attendance}%</span>
@@ -460,7 +464,7 @@ export default function StudentsModule() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-5 text-right">
+                    <td data-label="Actions" className="px-6 py-5 text-right">
                       <Link
                         href={profileHref}
                         onClick={(e) => e.stopPropagation()}
@@ -485,13 +489,13 @@ export default function StudentsModule() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 flex items-center justify-between border-t border-surface-container-low mt-2 font-sans">
-            <span className="text-xs text-on-surface-variant">
+          <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-surface-container-low mt-2 font-sans">
+            <span className="text-xs text-on-surface-variant text-center sm:text-left">
               Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to{" "}
               {Math.min(currentPage * ITEMS_PER_PAGE, filteredStudents.length)} of{" "}
               {filteredStudents.length} entries
             </span>
-            <div className="flex gap-2 items-center">
+            <div className="flex flex-wrap gap-2 items-center justify-center">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
@@ -500,7 +504,7 @@ export default function StudentsModule() {
                 Prev
               </button>
               
-              <div className="flex items-center gap-1 mx-2">
+              <div className="hidden sm:flex items-center gap-1 mx-2">
                 {(() => {
                   const pages = [];
                   if (totalPages <= 5) {
@@ -532,6 +536,9 @@ export default function StudentsModule() {
                   ));
                 })()}
               </div>
+              <span className="sm:hidden text-xs font-semibold text-on-surface-variant px-1">
+                Page {currentPage} of {totalPages}
+              </span>
 
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}

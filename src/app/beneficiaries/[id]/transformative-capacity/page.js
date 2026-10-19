@@ -266,7 +266,7 @@ export default function TransformativeCapacitySurveyPage() {
                           : 'hover:bg-surface-container-lowest border-b-4 border-b-transparent'
                       }`}
                     >
-                      <div className="w-24 h-24 bg-surface-container mb-3 rounded-md flex items-center justify-center overflow-hidden relative border border-outline-variant/20">
+                      <div className="w-16 h-16 md:w-24 md:h-24 bg-surface-container mb-3 rounded-md flex items-center justify-center overflow-hidden relative border border-outline-variant/20">
                         <ImageWithFallback srcPrefix={opt.img} alt={opt.label} sizes="(max-width: 768px) 100vw, 20vw" />
                       </div>
                       <span className={`text-xs font-medium ${responses[q.id] === opt.value ? 'text-primary font-bold' : 'text-on-surface'}`}>

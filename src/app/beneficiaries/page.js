@@ -356,69 +356,72 @@ export default function BeneficiaryMasterDirectory() {
           </div>
         </div>
 
-        <div className="md:col-span-3 bg-surface-container-lowest rounded-xl p-6 flex flex-wrap gap-4 items-center shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
-          <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mr-2">
-            Filter Registry
-          </span>
-          <select
-            value={locationFilter}
-            onChange={(e) => { setLocationFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
-          >
-            <option value="All Locations">All Locations</option>
-            <option value="Bartari">Bartari</option>
-            <option value="Digjani">Digjani</option>
-            <option value="Sawpur">Sawpur</option>
-            <option value="Balikuri">Balikuri</option>
-            <option value="Moinbari">Moinbari</option>
-            <option value="Gunialguri">Gunialguri</option>
-          </select>
+        <div className="md:col-span-3 bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">
+              Filter Registry
+            </span>
+            <button
+              onClick={clearFilters}
+              className="text-primary text-xs font-semibold hover:underline cursor-pointer font-sans"
+            >
+              Clear
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <select
+              value={locationFilter}
+              onChange={(e) => { setLocationFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
+            >
+              <option value="All Locations">All Locations</option>
+              <option value="Bartari">Bartari</option>
+              <option value="Digjani">Digjani</option>
+              <option value="Sawpur">Sawpur</option>
+              <option value="Balikuri">Balikuri</option>
+              <option value="Moinbari">Moinbari</option>
+              <option value="Gunialguri">Gunialguri</option>
+            </select>
 
-          <select
-            value={tierFilter}
-            onChange={(e) => { setTierFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
-          >
-            <option value="All Tiers">All Tiers</option>
-            <option value="Tier 1">Tier 1 (Critical)</option>
-            <option value="Tier 2">Tier 2 (Progressing)</option>
-            <option value="Tier 3">Tier 3 (Stable)</option>
-          </select>
+            <select
+              value={tierFilter}
+              onChange={(e) => { setTierFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
+            >
+              <option value="All Tiers">All Tiers</option>
+              <option value="Tier 1">Tier 1 (Critical)</option>
+              <option value="Tier 2">Tier 2 (Progressing)</option>
+              <option value="Tier 3">Tier 3 (Stable)</option>
+            </select>
 
-          <select
-            value={programFilter}
-            onChange={(e) => { setProgramFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
-          >
-            <option value="All Programs">All Programs</option>
-            {livelihoodPrograms.map((p) => (
-              <option key={p.id} value={p.name}>{p.name}</option>
-            ))}
-          </select>
+            <select
+              value={programFilter}
+              onChange={(e) => { setProgramFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
+            >
+              <option value="All Programs">All Programs</option>
+              {livelihoodPrograms.map((p) => (
+                <option key={p.id} value={p.name}>{p.name}</option>
+              ))}
+            </select>
 
-          <select
-            value={migratedFilter}
-            onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-surface-container border-none rounded-full text-sm py-1.5 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
-          >
-            <option value="All">All Status</option>
-            <option value="Not Migrated">Not Migrated</option>
-            <option value="Migrated">Migrated</option>
-          </select>
-
-          <button
-            onClick={clearFilters}
-            className="text-primary text-sm font-medium hover:underline ml-auto cursor-pointer font-sans"
-          >
-            Clear Filters
-          </button>
+            <select
+              value={migratedFilter}
+              onChange={(e) => { setMigratedFilter(e.target.value); setCurrentPage(1); }}
+              className="w-full min-w-0 bg-surface-container border-none rounded-full text-sm py-2 pl-4 pr-8 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer focus:outline-none dark:bg-slate-900"
+            >
+              <option value="All">All Status</option>
+              <option value="Not Migrated">Not Migrated</option>
+              <option value="Migrated">Migrated</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Directory Table */}
       <div className="bg-surface-container-lowest rounded-xl overflow-hidden pt-4 pb-2 shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
+          <table className="mobile-card-table w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
               <tr className="text-xs uppercase tracking-widest text-on-surface-variant font-bold border-b border-surface-container">
                 <th className="w-[22%] px-6 py-4">Beneficiary Name</th>
@@ -438,7 +441,7 @@ export default function BeneficiaryMasterDirectory() {
                     index > 0 ? "border-t border-surface-container-low" : ""
                   }`}
                 >
-                  <td className="px-6 py-5">
+                  <td data-label="" className="px-6 py-5">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
                         {b.photoUrl ? (
@@ -453,14 +456,14 @@ export default function BeneficiaryMasterDirectory() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-5">
+                  <td data-label="District / Location" className="px-6 py-5">
                     <div className="text-on-surface font-semibold break-words">{b.location}</div>
                     <div className="text-xs text-on-surface-variant mt-0.5 break-words">{b.income}</div>
                   </td>
-                  <td className="px-6 py-5">
+                  <td data-label="Social Economic Tier" className="px-6 py-5">
                     <span className="text-xs text-on-surface font-bold">{b.tier}</span>
                   </td>
-                  <td className="px-6 py-5">
+                  <td data-label="Program Linkage" className="px-6 py-5">
                     <div className="flex flex-wrap gap-1.5">
                       {b.programs.map((p, i) => (
                         <span key={i} className="bg-primary-fixed/20 text-on-primary-fixed text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
@@ -469,13 +472,13 @@ export default function BeneficiaryMasterDirectory() {
                       ))}
                     </div>
                   </td>
-                  <td className="px-6 py-5">
+                  <td data-label="Resilience Index (KYR)" className="px-6 py-5">
                     <div className="flex items-center gap-2 font-bold">
                       <span className="material-symbols-outlined text-sm text-primary">trending_up</span>
                       <span>{b.resilienceScore} / 100</span>
                     </div>
                   </td>
-                  <td className="px-6 py-5 text-right">
+                  <td data-label="Actions" className="px-6 py-5 text-right">
                     <Link
                       href={`/beneficiaries/${encodeURIComponent(b.id)}`}
                       onClick={(e) => e.stopPropagation()}

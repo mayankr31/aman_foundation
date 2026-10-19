@@ -142,7 +142,23 @@ export default function HrAttendanceLogs() {
         </div>
       </div>
 
-      <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+      <div className="md:hidden mb-6 font-sans">
+        <label htmlFor="hr-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+          HR section
+        </label>
+        <select
+          id="hr-tab"
+          value="/hr/attendance"
+          onChange={(e) => router.push(e.target.value)}
+          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+        >
+          <option value="/hr">Employees</option>
+          <option value="/hr/attendance">Attendance Logs</option>
+          <option value="/hr/leaves">Leave Requests</option>
+        </select>
+      </div>
+
+      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans">
         <Link href="/hr" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
           Employees
         </Link>
@@ -159,19 +175,19 @@ export default function HrAttendanceLogs() {
           <div className="p-10 text-center text-slate-500">Loading attendance data...</div>
         ) : (
           <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
               <h3 className="font-headline font-bold text-xl text-on-surface">Daily Attendance Ledger</h3>
               <input
                 type="text"
                 placeholder="Search employee..."
                 value={attendanceSearch}
                 onChange={(e) => setAttendanceSearch(e.target.value)}
-                className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
+                className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
               />
             </div>
             
             <div className="w-full overflow-x-auto">
-              <table className="w-full min-w-[760px] table-fixed text-left border-collapse font-sans text-sm">
+              <table className="mobile-card-table w-full min-w-[760px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold text-xs uppercase tracking-wider">
                     <th className="w-[26%] py-3 px-4">Employee</th>
@@ -189,7 +205,7 @@ export default function HrAttendanceLogs() {
                     
                     return (
                       <tr key={log.id} onClick={() => router.push(`/hr/attendance/${log.userId}`)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
-                        <td className="py-4 px-4">
+                        <td data-label="" className="py-4 px-4">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-100 text-blue-600 font-bold text-sm shrink-0">
                               {initial}
@@ -200,10 +216,10 @@ export default function HrAttendanceLogs() {
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-4">{renderStatusPill(log.workstatus)}</td>
-                        <td className="py-4 px-4 text-on-surface font-medium text-xs">{log.workhours || "N/A"}</td>
-                        <td className="py-4 px-4 text-on-surface text-xs font-semibold">{log.intimelog || "N/A"}</td>
-                        <td className="py-4 px-4">
+                        <td data-label="Status" className="py-4 px-4">{renderStatusPill(log.workstatus)}</td>
+                        <td data-label="Work Hours" className="py-4 px-4 text-on-surface font-medium text-xs">{log.workhours || "N/A"}</td>
+                        <td data-label="Login Time" className="py-4 px-4 text-on-surface text-xs font-semibold">{log.intimelog || "N/A"}</td>
+                        <td data-label="Daily Tasks" className="py-4 px-4">
                           <div className="flex items-center gap-1.5 text-xs font-medium">
                             {log.taskDetails && log.taskDetails.length > 0 ? (() => {
                               const completed = log.taskDetails.filter(t => t.completed).length;
@@ -227,7 +243,7 @@ export default function HrAttendanceLogs() {
                             )}
                           </div>
                         </td>
-                        <td className="py-4 px-4 text-right">
+                        <td data-label="Actions" className="py-4 px-4 text-right">
                           <button 
                             onClick={() => router.push(`/hr/attendance/${log.userId}`)}
                             className="text-blue-600 hover:underline hover:opacity-85 font-bold cursor-pointer"

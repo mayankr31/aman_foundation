@@ -456,7 +456,7 @@ function ProfilePageContent() {
       </div>
 
       {/* Hero Card & Edit Profile Form */}
-      <div className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient border border-surface-container-low mb-8 relative overflow-hidden group">
+      <div className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient border border-surface-container-low mb-8 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 duration-700"></div>
         
         {!isEditing ? (
@@ -469,18 +469,18 @@ function ProfilePageContent() {
                   <span className="text-3xl font-bold font-headline text-on-surface-variant">{initials}</span>
                 )}
               </div>
-              <div className="text-center md:text-left pt-2">
+              <div className="text-center md:text-left pt-2 min-w-0">
                 <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-2">
-                  <h2 className="page-title text-on-surface capitalize">
+                  <h2 className="page-title text-on-surface capitalize break-words">
                     {profile.name}
                   </h2>
                   <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                     {profile.role?.name || "User"}
                   </span>
                 </div>
-                <p className="text-on-surface-variant font-medium mb-3 flex justify-center md:justify-start items-center gap-2">
+                <p className="text-on-surface-variant font-medium mb-3 flex flex-wrap justify-center md:justify-start items-center gap-2 break-words">
                   <span className="material-symbols-outlined text-sm text-primary">mail</span>
-                  {profile.email}
+                  <span className="break-all">{profile.email}</span>
                   {profile.mobile && (
                     <>
                       <span className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></span>
@@ -914,15 +914,32 @@ function ProfilePageContent() {
             </div>
           </div>
 
+          {/* Mobile tab selector */}
+          <div className="md:hidden mb-6 font-sans">
+            <label htmlFor="profile-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+              Profile section
+            </label>
+            <select
+              id="profile-tab"
+              value={activeTab}
+              onChange={(e) => router.replace(`/profile?tab=${FELLOW_TABS.find((t) => t.label === e.target.value)?.slug || ""}`, { scroll: false })}
+              className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+            >
+              {FELLOW_TABS.map((tab) => (
+                <option key={tab.slug} value={tab.label}>{tab.label}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Tabs */}
-          <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+          <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
             {FELLOW_TABS.map((tab) => {
               const isActive = activeTab === tab.label;
               return (
                 <button
                   key={tab.slug}
                   onClick={() => router.replace(`/profile?tab=${tab.slug}`, { scroll: false })}
-                  className={`px-6 py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
+                  className={`px-3 sm:px-6 py-2.5 sm:py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
                       ? "font-semibold text-primary border-b-2 border-primary"
                       : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
@@ -943,7 +960,7 @@ function ProfilePageContent() {
               )}
               {activeTab === "Goals" && (
                 <div className="space-y-6">
-                  <div className="flex justify-between items-center mb-6">
+                  <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                     <h3 className="font-headline font-bold text-xl text-on-surface">Goal Sheets</h3>
                     <button
                       onClick={() => {
@@ -964,7 +981,7 @@ function ProfilePageContent() {
                   ) : (
                     goalSheets.map((sheet) => (
                       <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
-                        <div className="flex justify-between items-start gap-4">
+                        <div className="flex flex-wrap justify-between items-start gap-3">
                           <button
                             onClick={() => {
                               setEditingGoalSheet(sheet);
@@ -996,7 +1013,7 @@ function ProfilePageContent() {
                             </span>
                             <button
                               onClick={() => handleDeleteGoalSheet(sheet.id)}
-                              className="text-on-surface-variant hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              className="text-on-surface-variant hover:text-red-600 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer"
                               title="Delete goal sheet"
                             >
                               <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -1059,10 +1076,10 @@ function ProfilePageContent() {
                                   href={record.fileUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors"
+                                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors max-w-full"
                                 >
-                                  <span className="material-symbols-outlined text-[16px]">attach_file</span>
-                                  {record.fileUrl.split("/").pop()}
+                                  <span className="material-symbols-outlined text-[16px] shrink-0">attach_file</span>
+                                  <span className="truncate">{record.fileUrl.split("/").pop()}</span>
                                 </a>
                               )}
                             </div>
@@ -1090,7 +1107,7 @@ function ProfilePageContent() {
                     </div>
                   ) : (
                     <>
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-wrap justify-between items-center gap-3">
                         <h3 className="font-headline font-bold text-xl text-on-surface">Engagement Survey</h3>
                         <button
                           onClick={() => setShowEngagementForm(true)}
@@ -1108,8 +1125,8 @@ function ProfilePageContent() {
                       ) : (
                         <div className="space-y-4">
                           {engagementSurveys.map((survey) => (
-                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
-                              <div>
+                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center gap-3">
+                              <div className="min-w-0">
                                 <p className="font-semibold text-on-surface text-sm">Engagement Survey</p>
                                 <p className="text-xs text-on-surface-variant mt-1">
                                   {formatDate(survey.surveyDate)}
@@ -1151,7 +1168,7 @@ function ProfilePageContent() {
                     </div>
                   ) : (
                     <>
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-wrap justify-between items-center gap-3">
                         <h3 className="font-headline font-bold text-xl text-on-surface">Look Beyond Survey</h3>
                         <button
                           onClick={() => setShowLookBeyondForm(true)}
@@ -1169,8 +1186,8 @@ function ProfilePageContent() {
                       ) : (
                         <div className="space-y-4">
                           {lookBeyondSurveys.map((survey) => (
-                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
-                              <div>
+                            <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center gap-3">
+                              <div className="min-w-0">
                                 <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
                                 <p className="text-xs text-on-surface-variant mt-1">
                                   {formatDate(survey.surveyDate)}

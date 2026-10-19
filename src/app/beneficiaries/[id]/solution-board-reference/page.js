@@ -163,7 +163,7 @@ export default function SolutionBoardReferencePage() {
             </p>
             
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full table-fixed text-left border-collapse min-w-[800px]">
+              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[20%]">Category</th>
@@ -174,17 +174,17 @@ export default function SolutionBoardReferencePage() {
                 <tbody>
                   {solutionBoardData.map((row, idx) => (
                     <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td className="border border-surface-container-highest p-4 font-bold text-primary align-top">
+                      <td data-label="" className="border border-surface-container-highest p-4 font-bold text-primary align-top">
                         {row.category}
                       </td>
-                      <td className="border border-surface-container-highest p-4 align-top">
+                      <td data-label="Options" className="border border-surface-container-highest p-4 align-top">
                         <ul className="list-disc pl-5 space-y-2 text-sm text-on-surface">
                           {row.options.map((opt, i) => (
                             <li key={i}>{opt}</li>
                           ))}
                         </ul>
                       </td>
-                      <td className="border border-surface-container-highest p-4 align-top">
+                      <td data-label="Source of Support" className="border border-surface-container-highest p-4 align-top">
                         <ul className="list-disc pl-5 space-y-2 text-sm text-on-surface">
                           {row.support.map((sup, i) => (
                             <li key={i}>{renderSupportText(sup)}</li>
@@ -203,7 +203,7 @@ export default function SolutionBoardReferencePage() {
           <section>
             <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Gram Panchayat Contact Details</h2>
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full table-fixed text-left border-collapse min-w-[600px]">
+              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[600px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Gram Panchayat</th>
@@ -214,9 +214,9 @@ export default function SolutionBoardReferencePage() {
                 <tbody>
                   {gramPanchayatContacts.map((row, idx) => (
                     <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td className="border border-surface-container-highest p-4 text-on-surface">{row.panchayat}</td>
-                      <td className="border border-surface-container-highest p-4 text-on-surface">{row.pdo}</td>
-                      <td className="border border-surface-container-highest p-4 text-primary font-semibold">{row.number}</td>
+                      <td data-label="" className="border border-surface-container-highest p-4 text-on-surface">{row.panchayat}</td>
+                      <td data-label="Panchayat Development Officer (PDO)" className="border border-surface-container-highest p-4 text-on-surface">{row.pdo}</td>
+                      <td data-label="Contact Number" className="border border-surface-container-highest p-4 text-primary font-semibold">{row.number}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -229,7 +229,7 @@ export default function SolutionBoardReferencePage() {
           <section>
             <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Additional NGOs/Training Centers for Kanakapura</h2>
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="w-full table-fixed text-left border-collapse min-w-[800px]">
+              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-primary/10">
                     <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Organization Name</th>
@@ -241,10 +241,10 @@ export default function SolutionBoardReferencePage() {
                 <tbody>
                   {ngoContacts.map((row, idx) => (
                     <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td className="border border-surface-container-highest p-4 text-on-surface font-semibold">{row.name}</td>
-                      <td className="border border-surface-container-highest p-4 text-on-surface">{row.focus}</td>
-                      <td className="border border-surface-container-highest p-4 text-on-surface">{row.number || "-"}</td>
-                      <td className="border border-surface-container-highest p-4 text-primary">
+                      <td data-label="" className="border border-surface-container-highest p-4 text-on-surface font-semibold">{row.name}</td>
+                      <td data-label="Focus Area" className="border border-surface-container-highest p-4 text-on-surface">{row.focus}</td>
+                      <td data-label="Contact Number" className="border border-surface-container-highest p-4 text-on-surface">{row.number || "-"}</td>
+                      <td data-label="Website" className="border border-surface-container-highest p-4 text-primary">
                         <a href={`https://${row.website}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
                           {row.website}
                         </a>

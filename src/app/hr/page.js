@@ -89,7 +89,23 @@ export default function HrEmployeeManagement() {
         </div>
       </div>
 
-      <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+      <div className="md:hidden mb-6 font-sans">
+        <label htmlFor="hr-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+          HR section
+        </label>
+        <select
+          id="hr-tab"
+          value="/hr"
+          onChange={(e) => router.push(e.target.value)}
+          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+        >
+          <option value="/hr">Employees</option>
+          <option value="/hr/attendance">Attendance Logs</option>
+          <option value="/hr/leaves">Leave Requests</option>
+        </select>
+      </div>
+
+      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans">
         <div className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-semibold text-primary border-b-2 border-primary cursor-default">
           Employees
         </div>
@@ -134,7 +150,7 @@ export default function HrEmployeeManagement() {
             </div>
 
             <div className="w-full overflow-x-auto">
-              <table className="w-full min-w-[720px] table-fixed text-left border-collapse font-sans text-sm">
+              <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                     <th className="w-[26%] py-3 px-4">Name</th>
@@ -149,7 +165,7 @@ export default function HrEmployeeManagement() {
                     const initials = name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2);
                     return (
                     <tr key={emp.id} onClick={() => handleRowClick(emp)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
-                      <td className="py-4 px-4 font-bold text-on-surface">
+                      <td data-label="" className="py-4 px-4 font-bold text-on-surface">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
                             {emp.avatar ? (
@@ -161,9 +177,9 @@ export default function HrEmployeeManagement() {
                           <span className="break-words">{name}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
-                      <td className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
-                      <td className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{emp.role?.name?.replace("_", " ")}</td>
+                      <td data-label="Email" className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
+                      <td data-label="Department" className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
+                      <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{emp.role?.name?.replace("_", " ")}</td>
                     </tr>
                     );
                   })}

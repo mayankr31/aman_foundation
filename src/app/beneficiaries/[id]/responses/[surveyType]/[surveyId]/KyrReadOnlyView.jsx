@@ -30,7 +30,7 @@ export default function KyrReadOnlyView({ responses }) {
           {Object.entries(val).map(([k, v]) => (
             <li key={k} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 border-b border-surface-container-highest last:border-0 pb-1.5 last:pb-0">
               <span className="font-bold text-on-surface text-xs min-w-[120px]">{k}:</span>
-              <span className="text-on-surface-variant">{Array.isArray(v) ? v.join(", ") : String(v)}</span>
+              <span className="text-on-surface-variant break-words min-w-0">{Array.isArray(v) ? v.join(", ") : String(v)}</span>
             </li>
           ))}
         </ul>

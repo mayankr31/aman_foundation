@@ -91,7 +91,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`${theme.bg} border ${theme.border} p-8 rounded-[2rem] shadow-2xl w-full max-w-md relative`}
+        className={`${theme.bg} border ${theme.border} p-5 sm:p-8 rounded-[2rem] shadow-2xl w-full max-w-md relative max-h-[90vh] overflow-y-auto`}
       >
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">

@@ -256,7 +256,7 @@ export default function ResilienceSurveyForm({
         </span>
       </div>
       {description && <p className="text-xs text-on-surface-variant mb-2">{description}</p>}
-      <table className="w-full text-left text-sm whitespace-nowrap min-w-max">
+      <table className="mobile-card-table w-full text-left text-sm whitespace-nowrap min-w-max">
         <thead>
           <tr>
             <th className="p-2 border-b border-surface-container-highest">Items</th>
@@ -266,9 +266,9 @@ export default function ResilienceSurveyForm({
         <tbody>
           {rows.map((r) => (
             <tr key={r}>
-              <td className="p-2 border-b border-surface-container-highest">{r}</td>
+              <td data-label="" className="p-2 border-b border-surface-container-highest">{r}</td>
               {cols.map((c) => (
-                <td key={c} className="p-2 border-b border-surface-container-highest text-center">
+                <td key={c} data-label={c} className="p-2 border-b border-surface-container-highest text-center">
                   <input
                     type={isMulti ? "checkbox" : "radio"}
                     name={`${id}_${r}`}
@@ -546,7 +546,7 @@ export default function ResilienceSurveyForm({
   return (
     <div className={mode === "page" ? "bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden" : "border border-outline-variant/20 rounded-xl overflow-hidden"}>
       {/* Progress Header */}
-      <div className="bg-surface-container-low p-6 border-b border-outline-variant/10">
+      <div className="bg-surface-container-low p-4 sm:p-6 border-b border-outline-variant/10">
         <h1 className="text-2xl font-bold font-headline text-on-surface mb-2">{title}</h1>
         <div className="flex items-center justify-between text-sm font-sans text-on-surface-variant font-medium">
           <span>{sections[currentSectionIndex]}</span>
@@ -561,7 +561,7 @@ export default function ResilienceSurveyForm({
       </div>
 
       {/* Content Body */}
-      <div className="p-6 md:p-8 min-h-[400px]">
+      <div className="p-4 sm:p-6 md:p-8 min-h-[400px]">
         {sectionErrors.length > 0 && (
           <div className="mb-5 p-3 rounded-lg border border-error/30 bg-error-container/10 font-sans">
             <p className="text-xs font-bold text-error mb-1">Please answer the required questions marked with * :</p>
@@ -572,7 +572,7 @@ export default function ResilienceSurveyForm({
       </div>
 
       {/* Footer Actions */}
-      <div className="bg-surface-container-low p-6 border-t border-outline-variant/10 flex items-center justify-between font-sans">
+      <div className="bg-surface-container-low p-4 sm:p-6 border-t border-outline-variant/10 flex flex-wrap items-center justify-between gap-3 font-sans">
         <button
           type="button"
           onClick={handlePrev}

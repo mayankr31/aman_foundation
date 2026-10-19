@@ -238,15 +238,15 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`${theme.bg} border ${theme.border} p-8 rounded-[2rem] shadow-2xl w-full max-w-3xl relative my-8`}
+        className={`${theme.bg} border ${theme.border} p-5 sm:p-8 rounded-[2rem] shadow-2xl w-full max-w-3xl relative my-8`}
       >
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 min-w-0">
             <div className={`w-10 h-10 rounded-xl ${isDarkMode ? 'bg-[#1a7a5e]/20 text-[#1a7a5e]' : 'bg-[#eef9f5] text-[#1a7a5e]'} flex items-center justify-center shrink-0`}>
               <ShieldAlert size={20} />
             </div>
-            <div>
-              <h3 className={`text-xl font-bold tracking-tight ${theme.textWhite}`}>{user?.name || user?.username}</h3>
+            <div className="min-w-0">
+              <h3 className={`text-xl font-bold tracking-tight truncate ${theme.textWhite}`}>{user?.name || user?.username}</h3>
               <p className={`text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>Custom Override Permissions</p>
             </div>
           </div>
@@ -262,8 +262,8 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
         ) : (
           <>
             <div className={`border-t ${theme.borderLight} my-4`} />
-            <div className="max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
-              <table className="w-full">
+            <div className="max-h-[50vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
+              <table className="mobile-card-table w-full min-w-[420px]">
                 <thead className={`sticky top-0 ${theme.bg} z-10`}>
                   <tr className={`text-left text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>
                     <th className="py-3 pr-4">Page / Feature</th>
@@ -312,10 +312,10 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
 
                     return (
                       <tr key={name} className={`border-t ${theme.borderLight}`}>
-                        <td className={`py-4 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
+                        <td data-label="" className={`py-4 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
                           {name.replace(/_/g, ' ')}
                         </td>
-                        <td className="py-4 px-4 text-center">
+                        <td data-label="Read" className="py-4 px-4 text-center">
                           {readPerm && (
                             <button
                               onClick={() => handleToggle(readPerm.id, 'READ', readState?.hasPermission)}
@@ -331,7 +331,7 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
                             </button>
                           )}
                         </td>
-                        <td className="py-4 pl-4 text-center">
+                        <td data-label="Write" className="py-4 pl-4 text-center">
                           {writePerm && (
                             <button
                               onClick={() => handleToggle(writePerm.id, 'WRITE', writeState?.hasPermission)}

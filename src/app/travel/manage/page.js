@@ -310,9 +310,9 @@ export default function TravelManagePage() {
                   {req.expenses[0].expenseDetails && Array.isArray(req.expenses[0].expenseDetails) && (
                     <div className="mt-3 space-y-1">
                       {req.expenses[0].expenseDetails.map((d, idx) => (
-                        <div key={idx} className="flex justify-between text-sm text-slate-600">
-                          <span>{d.category} - {d.description}</span>
-                          <span className="font-semibold">{parseFloat(d.amount)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
+                        <div key={idx} className="flex justify-between gap-3 text-sm text-slate-600">
+                          <span className="min-w-0 break-words">{d.category} - {d.description}</span>
+                          <span className="font-semibold shrink-0">{parseFloat(d.amount)?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })}</span>
                         </div>
                       ))}
                     </div>
@@ -341,7 +341,7 @@ export default function TravelManagePage() {
       {/* Rejection Modal */}
       {showRejectModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Reject Travel Request</h3>
               <button onClick={() => setShowRejectModal(null)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer">

@@ -165,14 +165,13 @@ export default function FellowsModule() {
 
       {/* List View */}
         <div className="bg-surface-container-lowest rounded-xl ambient-shadow overflow-x-auto border border-surface-container-highest">
-          <table className="w-full min-w-[720px] table-fixed text-left border-collapse font-sans">
+          <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left border-collapse font-sans">
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant text-[0.75rem] uppercase tracking-[0.05em] font-semibold">
-                <th className="w-[24%] px-8 py-4">Name</th>
-                <th className="w-[18%] px-6 py-4">District</th>
-                <th className="w-[20%] px-6 py-4">Literacy Goal</th>
-                <th className="w-[18%] px-6 py-4">Last Updated</th>
-                <th className="w-[20%] px-8 py-4 text-right">Actions</th>
+                <th className="w-[30%] px-8 py-4">Name</th>
+                <th className="w-[20%] px-6 py-4">District</th>
+                <th className="w-[25%] px-6 py-4">Literacy Goal</th>
+                <th className="w-[25%] px-8 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -184,7 +183,7 @@ export default function FellowsModule() {
                   onClick={() => router.push(profileHref)}
                   className="border-b border-surface-container-highest hover:bg-surface-container-low transition-colors cursor-pointer"
                 >
-                  <td className="px-8 py-4 font-semibold text-on-surface">
+                  <td data-label="" className="px-8 py-4 font-semibold text-on-surface">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
                         {f.avatar ? (
@@ -196,8 +195,8 @@ export default function FellowsModule() {
                       <span className="break-words">{f.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-on-surface-variant break-words">{f.location}</td>
-                  <td className="px-6 py-4 text-sm">
+                  <td data-label="District" className="px-6 py-4 text-sm text-on-surface-variant break-words">{f.location}</td>
+                  <td data-label="Literacy Goal" className="px-6 py-4 text-sm">
                     <span
                       className={`px-2.5 py-1 rounded-full text-xs font-bold ${
                         f.progress > 70
@@ -208,8 +207,7 @@ export default function FellowsModule() {
                       {f.progress}%
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-on-surface-variant">{f.lastUpdated}</td>
-                  <td className="px-8 py-4 text-right">
+                  <td data-label="Actions" className="px-8 py-4 text-right">
                     <div className="flex items-center justify-end gap-4">
                       <Link
                         href={profileHref}
@@ -229,7 +227,7 @@ export default function FellowsModule() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-8 flex justify-center items-center gap-2 font-sans">
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-2 font-sans">
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
@@ -237,7 +235,7 @@ export default function FellowsModule() {
           >
             Prev
           </button>
-          <div className="flex items-center gap-1 mx-2">
+          <div className="hidden sm:flex items-center gap-1 mx-2">
             {(() => {
               const pages = [];
               if (totalPages <= 5) {
@@ -269,6 +267,9 @@ export default function FellowsModule() {
               ));
             })()}
           </div>
+          <span className="sm:hidden text-xs font-semibold text-on-surface-variant px-1">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}

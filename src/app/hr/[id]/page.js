@@ -217,7 +217,7 @@ export default function HrEmployeeProfilePage() {
         </span>
       </Link>
 
-      <div className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient border border-surface-container-low mb-8 relative overflow-hidden">
+      <div className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient border border-surface-container-low mb-8 relative overflow-hidden">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
@@ -258,7 +258,7 @@ export default function HrEmployeeProfilePage() {
       {isEditing ? (
         <form
           onSubmit={handleSave}
-          className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient border border-surface-container-low space-y-8 font-sans"
+          className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient border border-surface-container-low space-y-8 font-sans"
         >
           <section>
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Profile Photo</h3>

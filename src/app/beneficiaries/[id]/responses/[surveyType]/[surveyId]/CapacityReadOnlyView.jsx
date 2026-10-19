@@ -79,9 +79,9 @@ export default function CapacityReadOnlyView({ type, responses }) {
                        />
                     </div>
                   )}
-                  <div className="flex-grow">
+                  <div className="flex-grow min-w-0">
                     <span className="inline-block px-2 py-1 bg-primary text-on-primary text-[10px] font-bold uppercase rounded mb-2">Selected Answer</span>
-                    <p className="text-base sm:text-lg font-bold text-on-surface">{option.label}</p>
+                    <p className="text-base sm:text-lg font-bold text-on-surface break-words">{option.label}</p>
                     <p className="text-sm text-on-surface-variant mt-1">Score value: {option.score}</p>
                   </div>
                 </div>

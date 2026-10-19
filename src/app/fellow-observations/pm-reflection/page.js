@@ -376,8 +376,100 @@ export default function FellowPmReflectionPage() {
         ))}
       </div>
 
+      <div className="md:hidden space-y-3">
+        {pagedRows.map((row) => {
+          const reflection = row.latestReflection;
+          return (
+            <div key={row.id} className="bg-surface-container-lowest rounded-xl border border-surface-container-highest p-4 shadow-ambient">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-on-surface break-words">{row.name}</h3>
+                  <p className="text-xs text-on-surface-variant mt-1">
+                    {reflection?.date ? formatDate(reflection.date) : "No reflection yet"}
+                  </p>
+                </div>
+              </div>
+
+              {reflection && (
+                <details className="mt-3 rounded-lg border border-surface-container-high bg-surface-container-low/30">
+                  <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-primary">
+                    View competency ratings
+                  </summary>
+                  <div className="p-3 pt-1 space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      {COMPETENCY_CATEGORIES.map((category) => (
+                        <div key={category.key} className="min-w-0">
+                          <p className="text-[10px] font-bold uppercase tracking-wide text-on-surface-variant">
+                            {category.label}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {Array.from({ length: CATEGORY_COUNT }, (_, i) => {
+                              const key = `${category.prefix}${i + 1}`;
+                              const level = reflection?.responses?.[key];
+                              return (
+                                <span key={key} className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold ${LEVEL_STYLES[level] || "bg-surface-container text-on-surface-variant"}`}>
+                                  {category.prefix}{i + 1} {level ? LEVEL_ABBR[level] : "—"}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-wide text-on-surface-variant">Skill / Will</p>
+                      <div className="grid grid-cols-2 gap-1.5 mt-1">
+                        {MATRIX_HEADERS.map((header) => (
+                          <span key={header.key} className="flex items-center gap-1.5 text-[9px] font-semibold text-on-surface-variant" title={header.full}>
+                            <span
+                              className="w-3 h-3 rounded-full border border-black/10 shrink-0"
+                              style={{ backgroundColor: reflection?.matrix?.[header.key] || "#d1d5db" }}
+                            />
+                            {header.label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              )}
+
+              {reflection?.notes && (
+                <p className="mt-3 text-xs text-on-surface-variant break-words">{reflection.notes}</p>
+              )}
+
+              <div className="mt-3 pt-3 border-t border-surface-container-high flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => openEditForm(row.id, reflection)}
+                  disabled={!reflection}
+                  className="text-xs font-semibold text-primary hover:underline disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  Edit latest
+                </button>
+                <button
+                  onClick={() => openAddForm(row.id)}
+                  className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Add new
+                </button>
+                <button
+                  onClick={() => openHistory(row)}
+                  disabled={!reflection}
+                  className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  History
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        {pagedRows.length === 0 && (
+          <p className="text-center py-8 text-xs text-on-surface-variant">No fellows found.</p>
+        )}
+      </div>
+
       <div className="w-full min-w-0 bg-surface-container-lowest rounded-xl ambient-shadow overflow-hidden border border-surface-container-highest">
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <table className="text-left border-collapse font-sans text-sm min-w-max">
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant text-[0.7rem] uppercase tracking-[0.05em] font-semibold">
@@ -512,7 +604,7 @@ export default function FellowPmReflectionPage() {
         <Pagination currentPage={currentPage} totalItems={filteredRows.length} itemsPerPage={10} onPageChange={setCurrentPage} />
 
         {filteredRows.length === 0 && (
-          <p className="text-center py-12 text-sm text-on-surface-variant font-sans">
+          <p className="hidden md:block text-center py-12 text-sm text-on-surface-variant font-sans">
             {rows.length === 0 ? "No fellows found." : "No fellows match your search."}
           </p>
         )}

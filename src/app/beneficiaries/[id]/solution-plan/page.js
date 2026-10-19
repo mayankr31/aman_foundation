@@ -210,8 +210,8 @@ export default function SolutionPlanPage() {
             <div key={priority.id} className="border border-surface-container-highest rounded-xl overflow-hidden">
               {/* Priority Header */}
               <div className="bg-primary/10 p-4 border-b border-surface-container-highest flex flex-col md:flex-row md:items-center gap-4 justify-between">
-                <div className="flex-grow flex flex-col md:flex-row md:items-center gap-4">
-                  <span className="font-bold whitespace-nowrap min-w-[140px]">
+                <div className="flex-grow min-w-0 flex flex-col md:flex-row md:items-center gap-4">
+                  <span className="font-bold md:whitespace-nowrap md:min-w-[140px]">
                     Q{pIndex + 2} - Priority {pIndex + 1}:
                   </span>
                   <input 
@@ -219,7 +219,7 @@ export default function SolutionPlanPage() {
                     placeholder="Enter Priority Area (e.g. Cash Savings, Health Status)" 
                     value={priority.name}
                     onChange={(e) => updatePriorityName(priority.id, e.target.value)}
-                    className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
+                    className="w-full min-w-0 bg-surface-container-lowest border border-outline-variant/50 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none"
                   />
                 </div>
                 {priorities.length > 1 && (
@@ -235,7 +235,7 @@ export default function SolutionPlanPage() {
 
               {/* Activities Table */}
               <div className="p-4 bg-surface-container-lowest overflow-x-auto">
-                <table className="w-full table-fixed text-left border-collapse min-w-[900px]">
+                <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[900px]">
                   <thead>
                     <tr>
                       <th className="bg-surface-container-low border border-surface-container-highest p-3 text-xs font-bold uppercase tracking-wider w-[30%]">Key Activities planned</th>
@@ -249,7 +249,7 @@ export default function SolutionPlanPage() {
                   <tbody>
                     {priority.activities.map((activity, aIndex) => (
                       <tr key={activity.id}>
-                        <td className="border border-surface-container-highest p-2 align-top">
+                        <td data-label="Key Activities planned" className="border border-surface-container-highest p-2 align-top">
                           <textarea 
                             placeholder="Describe activity..."
                             value={activity.activity}
@@ -257,7 +257,7 @@ export default function SolutionPlanPage() {
                             className="w-full bg-transparent border-none focus:ring-1 focus:ring-primary rounded resize-y min-h-[60px] text-sm p-2 outline-none"
                           />
                         </td>
-                        <td className="border border-surface-container-highest p-2 align-top">
+                        <td data-label="Timeline" className="border border-surface-container-highest p-2 align-top">
                           <input 
                             type="text" 
                             placeholder="e.g. 3 Months"
@@ -266,7 +266,7 @@ export default function SolutionPlanPage() {
                             className="w-full bg-transparent border-none focus:ring-1 focus:ring-primary rounded text-sm p-2 outline-none"
                           />
                         </td>
-                        <td className="border border-surface-container-highest p-2 align-top">
+                        <td data-label="Completion Status" className="border border-surface-container-highest p-2 align-top">
                           <input 
                             type="text" 
                             placeholder="e.g. Completed, Pending, In Progress"
@@ -275,7 +275,7 @@ export default function SolutionPlanPage() {
                             className="w-full bg-transparent border-none focus:ring-1 focus:ring-primary rounded text-sm p-2 outline-none"
                           />
                         </td>
-                        <td className="border border-surface-container-highest p-2 align-top text-center">
+                        <td data-label="Support needed?" className="border border-surface-container-highest p-2 align-top text-center">
                           <select 
                             value={activity.supportNeeded}
                             onChange={(e) => updateActivity(priority.id, activity.id, "supportNeeded", e.target.value)}
@@ -285,7 +285,7 @@ export default function SolutionPlanPage() {
                             <option value="No">No</option>
                           </select>
                         </td>
-                        <td className="border border-surface-container-highest p-2 align-top">
+                        <td data-label="By Whom" className="border border-surface-container-highest p-2 align-top">
                           <input 
                             type="text" 
                             placeholder="e.g. NGO, Self"
@@ -295,7 +295,7 @@ export default function SolutionPlanPage() {
                             disabled={activity.supportNeeded === "No"}
                           />
                         </td>
-                        <td className="border border-surface-container-highest p-2 align-top text-center">
+                        <td data-label="Actions" className="border border-surface-container-highest p-2 align-top text-center">
                           {priority.activities.length > 1 && (
                             <button 
                               onClick={() => removeActivity(priority.id, activity.id)}

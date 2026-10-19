@@ -51,6 +51,8 @@ const ALL_PAGES = [
   "leaves",
   "travel",
   "travel-management",
+  "reimbursements",
+  "reimbursement-management",
   "attendance",
   "admin",
 ];
@@ -60,7 +62,7 @@ const ACTIONS = ["READ", "WRITE"];
 // Per-role page grants.
 const ROLE_PAGES = {
   ADMIN: ALL_PAGES,
-  FELLOW: ["dashboard", "education", "livelihood", "leaves", "travel", "attendance"],
+  FELLOW: ["dashboard", "education", "livelihood", "leaves", "travel", "reimbursements", "attendance"],
   HR: [
     "dashboard",
     "education",
@@ -68,6 +70,7 @@ const ROLE_PAGES = {
     "disaster-relief",
     "employees",
     "leaves",
+    "reimbursements",
     "attendance",
   ],
 };
@@ -83,6 +86,7 @@ const PROGRAM_STAFF_PAGES = [
   "leaves",
   "travel",
   "travel-management",
+  "reimbursements",
   "attendance",
 ];
 
@@ -146,6 +150,24 @@ async function main() {
       }
     }
     console.log(`Granted ${pages.length} pages to ${roleName}.`);
+  }
+
+  // Reimbursement management is restricted to Admin and Program Managers by
+  // default. Other roles can be granted it from Admin > Role Permissions.
+  const pmRole = await prisma.role.findUnique({ where: { name: "PROGRAM_MANAGER" } });
+  if (pmRole) {
+    for (const action of ACTIONS) {
+      const perm = permissionByKey[`reimbursement-management:${action}`];
+      if (!perm) continue;
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: { roleId: pmRole.id, permissionId: perm.id },
+        },
+        update: {},
+        create: { roleId: pmRole.id, permissionId: perm.id },
+      });
+    }
+    console.log("Granted reimbursement management to PROGRAM_MANAGER.");
   }
 
   console.log("Role & permission seeding completed.");

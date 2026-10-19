@@ -270,7 +270,7 @@ function AdminPageContent() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           {activeTab === 'roles' && (
             <button
               onClick={() => setIsAddRoleOpen(true)}
@@ -312,11 +312,29 @@ function AdminPageContent() {
         </div>
       </div>
 
+      {/* Mobile tab selector */}
+      <div className="md:hidden font-sans">
+        <label htmlFor="admin-tab" className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
+          Admin section
+        </label>
+        <select
+          id="admin-tab"
+          value={activeTab}
+          onChange={(e) => selectTab(e.target.value)}
+          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-bold text-slate-900 outline-none focus:border-primary dark:border-white/10 dark:bg-[#0d1320] dark:text-white"
+        >
+          <option value="users">Active Users</option>
+          <option value="deactivated">Deactivated</option>
+          <option value="approvals">Approvals Queue</option>
+          <option value="roles">Role Switches</option>
+        </select>
+      </div>
+
       {/* Tabs */}
-      <div className="flex gap-2 p-1 rounded-xl bg-slate-100 dark:bg-white/5 w-fit">
+      <div className="hidden md:flex gap-2 p-1 rounded-xl bg-slate-100 dark:bg-white/5 w-full sm:w-fit overflow-x-auto no-scrollbar tabs-mobile-wrap">
         <button
           onClick={() => selectTab('users')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 transition-all flex items-center gap-2 ${
             activeTab === 'users'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -327,7 +345,7 @@ function AdminPageContent() {
         </button>
         <button
           onClick={() => selectTab('deactivated')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 transition-all flex items-center gap-2 ${
             activeTab === 'deactivated'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -338,7 +356,7 @@ function AdminPageContent() {
         </button>
         <button
           onClick={() => selectTab('approvals')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 transition-all flex items-center gap-2 ${
             activeTab === 'approvals'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -349,7 +367,7 @@ function AdminPageContent() {
         </button>
         <button
           onClick={() => selectTab('roles')}
-          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 transition-all flex items-center gap-2 ${
             activeTab === 'roles'
               ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
               : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
@@ -392,7 +410,7 @@ function AdminPageContent() {
               ) : (
                 <div className="bg-white dark:bg-[#0d1320] border border-slate-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[900px] table-fixed text-left border-collapse text-xs">
+                    <table className="mobile-card-table w-full min-w-[900px] table-fixed text-left border-collapse text-xs">
                       <thead>
                         <tr className="bg-slate-50 dark:bg-white/[0.02] text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                           <th className="w-[18%] py-4 px-6 align-middle">Name</th>
@@ -413,7 +431,7 @@ function AdminPageContent() {
                             transition={{ delay: idx * 0.02 }}
                             className="border-t border-slate-200 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.01] transition-colors"
                           >
-                            <td className="py-4 px-6 align-middle font-bold dark:text-white text-slate-800">
+                            <td data-label="" className="py-4 px-6 align-middle font-bold dark:text-white text-slate-800">
                               <div className="flex items-center gap-3 min-w-0">
                                 <div className="w-8 h-8 shrink-0 rounded-lg bg-primary/15 text-primary flex items-center justify-center font-bold">
                                   {item.name ? item.name.charAt(0).toUpperCase() : item.username.charAt(0).toUpperCase()}
@@ -421,15 +439,15 @@ function AdminPageContent() {
                                 <span className="break-words">{item.name || item.username}</span>
                               </div>
                             </td>
-                            <td className="py-4 px-6 align-middle text-slate-500 break-words">@{item.username}</td>
-                            <td className="py-4 px-6 align-middle text-slate-500 break-words">{item.email}</td>
-                            <td className="py-4 px-6 align-middle text-slate-500">{item.mobile || '—'}</td>
-                            <td className="py-4 px-6 align-middle font-semibold dark:text-gray-300 text-slate-700">
+                            <td data-label="Username" className="py-4 px-6 align-middle text-slate-500 break-words">@{item.username}</td>
+                            <td data-label="Email" className="py-4 px-6 align-middle text-slate-500 break-words">{item.email}</td>
+                            <td data-label="Mobile" className="py-4 px-6 align-middle text-slate-500">{item.mobile || '—'}</td>
+                            <td data-label="Role" className="py-4 px-6 align-middle font-semibold dark:text-gray-300 text-slate-700">
                               <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] whitespace-nowrap align-middle">
                                 {item.role?.name?.replaceAll('_', ' ')}
                               </span>
                             </td>
-                            <td className="py-4 px-6 align-middle">
+                            <td data-label="Status" className="py-4 px-6 align-middle">
                               <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
                                 item.status === 'ACTIVE'
                                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
@@ -440,7 +458,7 @@ function AdminPageContent() {
                                 {item.status}
                               </span>
                             </td>
-                            <td className="py-4 px-6 align-middle">
+                            <td data-label="Actions" className="py-4 px-6 align-middle">
                               <div className="flex items-center justify-center gap-2 flex-wrap">
                                 {activeTab === 'approvals' ? (
                                   <>

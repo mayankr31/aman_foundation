@@ -363,8 +363,8 @@ export default function UserAttendanceDetails({ params }) {
       </Link>
 
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-headline font-semibold text-on-surface mb-2">Employee: {userData.name}</h2>
-        <p className="text-sm text-on-surface-variant font-medium">{userData.email} • {userData.department || "Unassigned"}</p>
+        <h2 className="text-2xl md:text-3xl font-headline font-semibold text-on-surface mb-2 break-words">Employee: {userData.name}</h2>
+        <p className="text-sm text-on-surface-variant font-medium break-words">{userData.email} • {userData.department || "Unassigned"}</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
@@ -431,8 +431,8 @@ export default function UserAttendanceDetails({ params }) {
 
         <div className="rounded-lg border border-gray-200 overflow-hidden">
           <div className="grid grid-cols-7 gap-0 border-b border-gray-200 bg-gray-50">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-              <div key={day} className="py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider border-r border-gray-200 last:border-r-0">
+            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
+              <div key={day} className="py-2 sm:py-3 text-center text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider border-r border-gray-200 last:border-r-0">
                 {day}
               </div>
             ))}
@@ -440,7 +440,7 @@ export default function UserAttendanceDetails({ params }) {
 
           <div className="grid grid-cols-7 gap-0">
             {[...Array(firstDayOfMonth)].map((_, index) => (
-              <div key={`empty-${index}`} className="h-28 border-r border-b border-gray-100 bg-gray-50/50"></div>
+              <div key={`empty-${index}`} className="h-14 sm:h-28 border-r border-b border-gray-100 bg-gray-50/50"></div>
             ))}
 
             {[...Array(daysInMonth)].map((_, index) => {
@@ -467,14 +467,14 @@ export default function UserAttendanceDetails({ params }) {
                 <div
                   key={day}
                   onClick={() => dayData && setSelectedDate(dayData)}
-                  className={`h-28 border-r border-b border-gray-100 p-2 relative flex flex-col group ${colorClass} ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''} ${dayData ? 'cursor-pointer hover:opacity-90' : ''}`}
+                  className={`h-14 sm:h-28 border-r border-b border-gray-100 p-1 sm:p-2 relative flex flex-col group ${colorClass} ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''} ${dayData ? 'cursor-pointer hover:opacity-90' : ''}`}
                 >
-                  <span className={`text-sm font-semibold self-end mb-1 ${isToday ? 'text-blue-600' : 'text-slate-600'}`}>
+                  <span className={`text-[11px] sm:text-sm font-semibold self-center sm:self-end mb-0.5 sm:mb-1 ${isToday ? 'text-blue-600' : 'text-slate-600'}`}>
                     {day}
                   </span>
                   
                   {!dayData && isWeekend && (
-                    <div className="flex flex-col gap-1 mt-auto items-center justify-center h-full opacity-50">
+                    <div className="hidden sm:flex flex-col gap-1 mt-auto items-center justify-center h-full opacity-50">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                         Weekend
                       </span>
@@ -482,7 +482,7 @@ export default function UserAttendanceDetails({ params }) {
                   )}
 
                   {dayData && (
-                    <div className="flex flex-col gap-1 mt-auto">
+                    <div className="hidden sm:flex flex-col gap-1 mt-auto">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-800 bg-white/60 px-1.5 py-0.5 rounded w-fit">
                         {dayData.status}
                       </span>
@@ -495,7 +495,7 @@ export default function UserAttendanceDetails({ params }) {
                      const completed = dayData.taskDetails.filter(t => t.completed).length;
                      const pending = dayData.taskDetails.length - completed;
                      return (
-                       <div className="absolute top-2 left-2 flex gap-1">
+                       <div className="hidden sm:flex absolute top-2 left-2 gap-1">
                          {pending > 0 && (
                            <span className="bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm" title={`${pending} pending`}>
                              {pending}P
@@ -509,6 +509,9 @@ export default function UserAttendanceDetails({ params }) {
                        </div>
                      );
                   })()}
+                  {dayData && (
+                    <span className="sm:hidden absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-slate-700/70" />
+                  )}
                 </div>
               );
             })}
@@ -518,7 +521,7 @@ export default function UserAttendanceDetails({ params }) {
 
       {selectedDate && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-6">
+          <div className="bg-white rounded-xl max-w-lg w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
               <h3 className="text-lg font-bold text-gray-900">
                 Details for {formatDate(selectedDate.logdate || selectedDate.createdAt)}
@@ -532,12 +535,12 @@ export default function UserAttendanceDetails({ params }) {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check In</p>
                 <p className="font-bold text-gray-800">{selectedDate.intimelog || 'N/A'}</p>
-                <p className="text-[10px] text-gray-500 mt-2 leading-tight" title={checkInLocation}>{isLocLoading ? 'Loading location...' : checkInLocation}</p>
+                <p className="text-[10px] text-gray-500 mt-2 leading-tight break-words" title={checkInLocation}>{isLocLoading ? 'Loading location...' : checkInLocation}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
                 <p className="font-bold text-gray-800">{selectedDate.outtimelog || 'N/A'}</p>
-                <p className="text-[10px] text-gray-500 mt-2 leading-tight" title={checkOutLocation}>{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
+                <p className="text-[10px] text-gray-500 mt-2 leading-tight break-words" title={checkOutLocation}>{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg col-span-2 flex justify-between items-center">
                  <div>
@@ -561,10 +564,10 @@ export default function UserAttendanceDetails({ params }) {
                       <span className={`material-symbols-outlined text-[18px] ${task.completed ? 'text-emerald-500' : 'text-gray-400'}`}>
                         {task.completed ? 'check_circle' : 'radio_button_unchecked'}
                       </span>
-                      <div className="flex flex-col">
-                        <span className={task.completed ? 'line-through text-gray-500 font-normal' : 'text-gray-800 font-semibold'}>{task.text}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className={`break-words ${task.completed ? 'line-through text-gray-500 font-normal' : 'text-gray-800 font-semibold'}`}>{task.text}</span>
                         {task.description && (
-                          <span className="text-xs text-slate-500 mt-0.5">{task.description}</span>
+                          <span className="text-xs text-slate-500 mt-0.5 break-words">{task.description}</span>
                         )}
                         {task.completed && task.completionDate && (
                           <span className="text-[10px] text-emerald-600 font-semibold mt-0.5">
@@ -609,10 +612,10 @@ export default function UserAttendanceDetails({ params }) {
                               href={fileUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-sm text-blue-600 hover:underline bg-white px-3 py-1.5 rounded border border-gray-200"
+                              className="flex items-center gap-2 text-sm text-blue-600 hover:underline bg-white px-3 py-1.5 rounded border border-gray-200 max-w-full"
                             >
-                              <span className="material-symbols-outlined text-[16px]">description</span>
-                              {fileUrl.split("/").pop()}
+                              <span className="material-symbols-outlined text-[16px] shrink-0">description</span>
+                              <span className="truncate">{fileUrl.split("/").pop()}</span>
                             </a>
                           )
                         ))}

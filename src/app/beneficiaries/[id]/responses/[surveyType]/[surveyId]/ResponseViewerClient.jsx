@@ -33,14 +33,14 @@ export default function ResponseViewerClient({ surveyType, surveyData, beneficia
   };
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 relative overflow-hidden">
+    <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 relative overflow-hidden">
       {/* Decorative top border */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary to-secondary"></div>
       
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-surface-container-highest">
-        <div>
-          <h2 className="text-2xl font-bold text-on-surface flex items-center gap-2 font-headline">
-            <span className="material-symbols-outlined text-primary text-3xl font-bold">{getSurveyIcon()}</span>
+        <div className="min-w-0">
+          <h2 className="text-xl sm:text-2xl font-bold text-on-surface flex items-center gap-2 font-headline break-words">
+            <span className="material-symbols-outlined text-primary text-3xl font-bold shrink-0">{getSurveyIcon()}</span>
             {getSurveyTitle()}
           </h2>
           <p className="text-sm text-on-surface-variant font-sans mt-1">

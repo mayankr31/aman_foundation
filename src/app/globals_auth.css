@@ -207,6 +207,15 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 480px) {
+  .form-panel {
+    padding: 2rem 1.25rem;
+  }
+  .form-title {
+    font-size: 1.9rem;
+  }
+}
+
 .form-panel__inner {
   width: 100%;
   max-width: 390px;
@@ -660,3 +669,12 @@
 @keyframes spin-auth {
   to { transform: rotate(360deg); }
 }
+
+@supports (height: 100dvh) {
+  .split-layout,
+  .brand-panel,
+  .form-panel {
+    height: 100dvh;
+  }
+}
+

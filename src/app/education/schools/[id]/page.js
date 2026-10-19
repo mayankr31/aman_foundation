@@ -379,7 +379,7 @@ export default function SchoolProfileDetail() {
       </Link>
 
       {/* Hero Header */}
-      <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
+      <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
@@ -399,15 +399,15 @@ export default function SchoolProfileDetail() {
               </label>
             )}
           </div>
-          <div className="pt-2">
+          <div className="pt-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="page-title text-on-surface capitalize">{school.name}</h2>
+              <h2 className="page-title text-on-surface capitalize break-words">{school.name}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${school.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                 {school.status}
               </span>
             </div>
-            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">location_on</span>
+            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2 break-words">
+              <span className="material-symbols-outlined text-sm text-primary shrink-0">location_on</span>
               {school.location} • Regional Impact Partner
             </p>
             <div className="flex flex-col gap-2 mt-2 text-xs font-medium text-slate-500 font-sans">
@@ -417,11 +417,11 @@ export default function SchoolProfileDetail() {
                 <div><span className="font-bold text-on-surface">UDISE Code:</span> {school.udiseCode || "—"}</div>
               </div>
               <div className="flex flex-wrap gap-4">
-                <div><span className="font-bold text-on-surface">Email:</span> {school.email || "—"}</div>
+                <div className="min-w-0 break-all"><span className="font-bold text-on-surface">Email:</span> {school.email || "—"}</div>
                 <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
                 <div><span className="font-bold text-on-surface">Phone:</span> {school.phone || "—"}</div>
               </div>
-              {school.address && <div><span className="font-bold text-on-surface">Address:</span> {school.address}</div>}
+              {school.address && <div className="break-words"><span className="font-bold text-on-surface">Address:</span> {school.address}</div>}
             </div>
           </div>
         </div>
@@ -454,8 +454,8 @@ export default function SchoolProfileDetail() {
           )}
 
           {/* Programs */}
-          <div id="active-programs" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+          <div id="active-programs" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">campaign</span>
                 Active Program Participation
@@ -544,12 +544,12 @@ export default function SchoolProfileDetail() {
               </div>
             </div>
             
-            <div className="grid grid-cols-7 gap-2">
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="text-center text-xs font-bold text-on-surface-variant py-2 uppercase tracking-wider">{day}</div>
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                <div key={day} className="text-center text-[10px] sm:text-xs font-bold text-on-surface-variant py-1.5 sm:py-2 uppercase tracking-wider">{day}</div>
               ))}
               {Array.from({ length: new Date(currentYear, currentMonth - 1, 1).getDay() }).map((_, i) => (
-                <div key={`empty-${i}`} className="p-2"></div>
+                <div key={`empty-${i}`} className="p-1"></div>
               ))}
               {Array.from({ length: new Date(currentYear, currentMonth, 0).getDate() }).map((_, i) => {
                 const dateNum = i + 1;
@@ -564,23 +564,26 @@ export default function SchoolProfileDetail() {
                   <button 
                     key={dateNum}
                     onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceSelection(new Set(enrolledStudents.map(s => s.id))); setAttendanceReviewMode(false); setSearchQ(""); setIncludeLearningAssessment(false); setIncludeHomework(false); setLearningAssessmentMap({}); setHomeworkMap({}); }}
-                    className={`aspect-square p-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer relative ${dayData ? 'border-primary/30 hover:border-primary/60 bg-surface-container-lowest' : 'border-outline-variant/30 hover:border-outline-variant bg-surface-container-low/20'} ${isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest font-bold !border-primary' : ''}`}
+                    className={`aspect-square p-1 sm:p-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer relative ${dayData ? 'border-primary/30 hover:border-primary/60 bg-surface-container-lowest' : 'border-outline-variant/30 hover:border-outline-variant bg-surface-container-low/20'} ${isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest font-bold !border-primary' : ''}`}
                   >
-                    <span className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-on-surface'}`}>{dateNum}</span>
+                    <span className={`text-xs sm:text-sm font-semibold ${isToday ? 'text-primary' : 'text-on-surface'}`}>{dateNum}</span>
                     {dayData && (
-                      <span className={`text-[10px] font-bold mt-1 px-1.5 py-0.5 rounded-full ${dayData.percentage >= 80 ? 'bg-primary/20 text-primary' : dayData.percentage >= 50 ? 'bg-secondary/20 text-secondary' : 'bg-error/20 text-error'}`}>
+                      <span className={`hidden sm:inline text-[10px] font-bold mt-1 px-1.5 py-0.5 rounded-full ${dayData.percentage >= 80 ? 'bg-primary/20 text-primary' : dayData.percentage >= 50 ? 'bg-secondary/20 text-secondary' : 'bg-error/20 text-error'}`}>
                         {dayData.percentage}%
                       </span>
+                    )}
+                    {dayData && (
+                      <span className={`sm:hidden w-1.5 h-1.5 rounded-full mt-0.5 ${dayData.percentage >= 80 ? 'bg-primary' : dayData.percentage >= 50 ? 'bg-secondary' : 'bg-error'}`} />
                     )}
                   </button>
                 );
               })}
+              </div>
             </div>
-          </div>
 
           {/* Enrolled Students */}
-          <div id="enrolled-students" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-6">
+          <div id="enrolled-students" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">groups</span>
                 Enrolled Students ({totalEnrolled})
@@ -595,8 +598,9 @@ export default function SchoolProfileDetail() {
             {enrolledStudents.length === 0 ? (
               <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No students enrolled. Click "Manage Students" to assign.</p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[720px] table-fixed text-left font-sans text-sm">
+              <>
+              <div className="max-h-[55vh] overflow-auto pr-1">
+                <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left font-sans text-sm">
                   <thead>
                     <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                       <th className="w-[24%] py-3 px-3">Name</th>
@@ -614,17 +618,17 @@ export default function SchoolProfileDetail() {
                         onClick={() => router.push(`/education/students/${s.id}`)}
                         className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer"
                       >
-                        <td className="py-3 px-3">
+                        <td data-label="" className="py-3 px-3">
                           <Link href={`/education/students/${s.id}`} onClick={(e) => e.stopPropagation()} className="font-semibold text-primary hover:underline break-words">{s.name}</Link>
                         </td>
-                        <td className="py-3 px-3 text-on-surface-variant break-words">{s.studentId}</td>
-                        <td className="py-3 px-3 text-on-surface-variant">{s.grade}</td>
-                        <td className="py-3 px-3">
+                        <td data-label="Student ID" className="py-3 px-3 text-on-surface-variant break-words">{s.studentId}</td>
+                        <td data-label="Grade" className="py-3 px-3 text-on-surface-variant">{s.grade}</td>
+                        <td data-label="Status" className="py-3 px-3">
                           <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${getAcademicStatusClass(deriveAcademicStatus(s.attendance))}`}>
                             {deriveAcademicStatus(s.attendance)}
                           </span>
                         </td>
-                        <td className="py-3 px-3">
+                        <td data-label="Risk" className="py-3 px-3">
                           {(() => {
                             const att = s.attendance || 0;
                             let risk = "Low";
@@ -634,15 +638,16 @@ export default function SchoolProfileDetail() {
                             return <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${color}`}>{risk}</span>;
                           })()}
                         </td>
-                        <td className="py-3 px-3 text-right">
+                        <td data-label="Actions" className="py-3 px-3 text-right">
                           <button onClick={(e) => { e.stopPropagation(); handleRemoveStudent(s.id); }} className="text-error hover:underline text-xs font-medium cursor-pointer">Remove</button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <Pagination currentPage={studentsPage} totalItems={enrolledStudents.length} itemsPerPage={10} onPageChange={setStudentsPage} />
               </div>
+              <Pagination currentPage={studentsPage} totalItems={enrolledStudents.length} itemsPerPage={10} onPageChange={setStudentsPage} />
+              </>
             )}
           </div>
         </div>
@@ -730,19 +735,19 @@ export default function SchoolProfileDetail() {
             ) : (
               <div className="space-y-3">
                 {assignedFellows.map(fs => (
-                  <div key={fs.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none font-sans text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
+                  <div key={fs.id} className="flex items-center justify-between gap-2 py-2 border-b border-surface-container last:border-none font-sans text-sm">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold shrink-0">
                         {fs.fellow?.name?.[0]?.toUpperCase() || "?"}
                       </div>
-                      <div>
+                      <div className="min-w-0">
                         <Link href={`/education/fellows/${fs.fellowId}`} className="font-semibold text-primary hover:underline text-sm">
                           {fs.fellow?.name || "—"}
                         </Link>
-                        <p className="text-xs text-on-surface-variant">{fs.fellow?.email || ""}</p>
+                        <p className="text-xs text-on-surface-variant truncate max-w-[180px]">{fs.fellow?.email || ""}</p>
                       </div>
                     </div>
-                    <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                    <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error shrink-0">
                       <span className="material-symbols-outlined text-[14px]">remove_circle</span>
                     </button>
                   </div>
@@ -770,14 +775,14 @@ export default function SchoolProfileDetail() {
             ) : (
               <div className="space-y-3">
                 {assignedManagers.map(pm => (
-                  <div key={pm.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none font-sans text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold">
+                  <div key={pm.id} className="flex items-center justify-between gap-2 py-2 border-b border-surface-container last:border-none font-sans text-sm">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold shrink-0">
                         {pm.user?.name?.[0]?.toUpperCase() || "?"}
                       </div>
-                      <div>
-                        <p className="font-semibold text-on-surface text-sm">{pm.user?.name || "—"}</p>
-                        <p className="text-xs text-on-surface-variant">{pm.user?.email || ""}</p>
+                      <div className="min-w-0">
+                        <p className="font-semibold text-on-surface text-sm truncate">{pm.user?.name || "—"}</p>
+                        <p className="text-xs text-on-surface-variant truncate max-w-[180px]">{pm.user?.email || ""}</p>
                         {pm.user?.role?.name && (
                           <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
                             {pm.user.role.name.replaceAll("_", " ")}
@@ -1073,7 +1078,7 @@ export default function SchoolProfileDetail() {
       {modal === "edit" && (
         <Modal title="Edit School Profile" onClose={() => setModal(null)}>
           <form onSubmit={handleEditSave} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField label="School Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
               <InputField label="Principal / Headmaster Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} />
               <InputField label="UDISE Code" name="udiseCode" value={editForm.udiseCode} onChange={e => setEditForm(f => ({ ...f, udiseCode: e.target.value }))} />

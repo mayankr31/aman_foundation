@@ -12,7 +12,7 @@ import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiar
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
-import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory } from "@/lib/incomeCategories";
+import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory, MONTH_OPTIONS, getIncomePeriod, formatIncomePeriod } from "@/lib/incomeCategories";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import { computeBeneficiaryImpact, formatNumber } from "@/lib/beneficiaryImpact";
 
@@ -190,9 +190,11 @@ function BeneficiaryProfileDetailContent() {
   // Income Tracking
   const [incomeRecords, setIncomeRecords] = useState([]);
   const [showIncomeModal, setShowIncomeModal] = useState(false);
-  const [incomeForm, setIncomeForm] = useState({ amount: "", incomeDate: "", source: "", notes: "" });
+  const [incomeForm, setIncomeForm] = useState({ amount: "", month: "", year: "", source: "", notes: "" });
   const [incomeOtherSource, setIncomeOtherSource] = useState("");
   const [editIncomeId, setEditIncomeId] = useState(null);
+  const [incomeYearFilter, setIncomeYearFilter] = useState(new Date().getFullYear());
+  const incomeFilterInitialized = useRef(false);
 
   // Link Students
   const [showLinkStudentModal, setShowLinkStudentModal] = useState(false);
@@ -281,6 +283,25 @@ function BeneficiaryProfileDetailContent() {
           const incomeData = await incomeRes.json();
           if (incomeData.success) {
             setIncomeRecords(incomeData.data);
+
+            if (!incomeFilterInitialized.current) {
+              const years = [
+                ...new Set(
+                  (incomeData.data || [])
+                    .map((record) => getIncomePeriod(record).year)
+                    .filter(Boolean)
+                ),
+              ];
+              const currentYear = new Date().getFullYear();
+              setIncomeYearFilter(
+                years.includes(currentYear)
+                  ? currentYear
+                  : years.length
+                    ? Math.max(...years)
+                    : currentYear
+              );
+              incomeFilterInitialized.current = true;
+            }
           }
         }
 
@@ -359,6 +380,10 @@ function BeneficiaryProfileDetailContent() {
       loadBeneficiaryDetail();
     }
   }, [id, token, isInitializing]);
+
+  useEffect(() => {
+    incomeFilterInitialized.current = false;
+  }, [id]);
 
   const handleCalculateResilience = async () => {
     if (resilienceScoreComputed === null) {
@@ -643,18 +668,25 @@ function BeneficiaryProfileDetailContent() {
   const handleOpenIncomeForm = (record = null) => {
     if (record) {
       setEditIncomeId(record.id);
-      const knownSources = ["Agriculture", "Livestock", "Daily Wage", "Small Business", "Remittance"];
-      const isCustomSource = record.source && !knownSources.includes(record.source);
+      const period = getIncomePeriod(record);
+      const isCustomSource =
+        Boolean(record.source) &&
+        record.source !== "Other" &&
+        !PRIMARY_INCOME_CATEGORIES.includes(record.source);
       setIncomeForm({
-        amount: record.amount || "",
-        incomeDate: record.incomeDate ? record.incomeDate.split("T")[0] : "",
+        amount: record.amount ?? "",
+        month: period.month || "",
+        year: period.year || "",
         source: isCustomSource ? "Other" : (record.source || ""),
         notes: record.notes || ""
       });
       setIncomeOtherSource(isCustomSource ? (record.source || "") : "");
     } else {
+      const now = new Date();
+      const defaultYear = incomeYearFilter || now.getFullYear();
+      const defaultMonth = defaultYear === now.getFullYear() ? now.getMonth() + 1 : 1;
       setEditIncomeId(null);
-      setIncomeForm({ amount: "", incomeDate: "", source: "", notes: "" });
+      setIncomeForm({ amount: "", month: defaultMonth, year: defaultYear, source: "", notes: "" });
       setIncomeOtherSource("");
     }
     setShowIncomeModal(true);
@@ -668,31 +700,59 @@ function BeneficiaryProfileDetailContent() {
 
   const handleIncomeSave = async (e) => {
     e.preventDefault();
-    if (!incomeForm.amount || !incomeForm.incomeDate) {
-      alert("Amount and Date are required.");
+
+    const amountValue = Number.parseFloat(incomeForm.amount);
+    if (!Number.isFinite(amountValue) || amountValue < 0) {
+      toast.error("Enter a valid income amount.");
       return;
     }
+    if (!incomeForm.month || !incomeForm.year) {
+      toast.error("Select the month and year for this income entry.");
+      return;
+    }
+
+    const month = Number(incomeForm.month);
+    const year = Number(incomeForm.year);
     const resolvedSource = incomeForm.source === "Other" ? (incomeOtherSource.trim() || "Other") : incomeForm.source;
+
+    const existingForPeriod = incomeRecords.find((record) => {
+      const period = getIncomePeriod(record);
+      return period.month === month && period.year === year;
+    });
+
+    if (editIncomeId && existingForPeriod && existingForPeriod.id !== editIncomeId) {
+      toast.error("An income entry already exists for that month. Edit that entry instead.");
+      return;
+    }
+
+    const targetId = editIncomeId || existingForPeriod?.id || null;
+
     try {
       const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
-      const url = `/api/beneficiaries/${id}/income`;
-      const method = "POST";
-
-      const res = await fetch(url, {
-        method,
+      const res = await fetch(`/api/beneficiaries/${id}/income`, {
+        method: targetId ? "PATCH" : "POST",
         headers,
-        body: JSON.stringify({ ...incomeForm, source: resolvedSource })
+        body: JSON.stringify({
+          ...(targetId ? { recordId: targetId } : {}),
+          amount: amountValue,
+          month,
+          year,
+          source: resolvedSource,
+          notes: incomeForm.notes
+        })
       });
       const json = await res.json();
       if (json.success) {
+        setIncomeYearFilter(year);
         handleCloseIncomeForm();
         loadBeneficiaryDetail();
-        toast.success("Income record saved successfully.");
+        toast.success(targetId ? "Income record updated successfully." : "Income record saved successfully.");
       } else {
-        alert(json.error || "Failed to save income record");
+        toast.error(json.error || "Failed to save income record");
       }
     } catch (err) {
       console.error("Income save error:", err);
+      toast.error("Failed to save income record.");
     }
   };
 
@@ -939,8 +999,50 @@ function BeneficiaryProfileDetailContent() {
       ? beneficiary.monthlyIncome * 12
       : beneficiary.annualIncome;
 
+  const currentYear = new Date().getFullYear();
+  const incomeYears = [
+    ...new Set(
+      incomeRecords
+        .map((record) => getIncomePeriod(record).year)
+        .filter(Boolean)
+    ),
+  ].sort((a, b) => b - a);
+  const incomeYearOptions = [...new Set([currentYear, incomeYearFilter, ...incomeYears])].sort((a, b) => b - a);
+  const incomeFormYearOptions = [
+    ...new Set([
+      ...incomeYears,
+      ...Array.from({ length: 11 }, (_, index) => currentYear - index),
+      Number(incomeForm.year) || currentYear,
+    ]),
+  ].sort((a, b) => b - a);
+
+  const incomeYearRecords = incomeRecords
+    .map((record) => ({ record, period: getIncomePeriod(record) }))
+    .filter(({ period }) => period.year === incomeYearFilter)
+    .sort((a, b) => b.period.month - a.period.month);
+
+  const annualTrackedIncome = incomeYearRecords.reduce(
+    (sum, { record }) => sum + (Number(record.amount) || 0),
+    0
+  );
+  const recordedMonths = new Set(incomeYearRecords.map(({ period }) => period.month)).size;
+  const monthlyAverageIncome = recordedMonths > 0 ? annualTrackedIncome / recordedMonths : 0;
+
+  const editingIncomeRecord = incomeRecords.find((record) => record.id === editIncomeId) || null;
+  const duplicateIncomeRecord =
+    incomeForm.month && incomeForm.year
+      ? incomeRecords.find((record) => {
+          const period = getIncomePeriod(record);
+          return (
+            period.month === Number(incomeForm.month) &&
+            period.year === Number(incomeForm.year) &&
+            record.id !== editIncomeId
+          );
+        }) || null
+      : null;
+
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full">
+    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back link */}
       <Link
         href="/beneficiaries"
@@ -1033,9 +1135,9 @@ function BeneficiaryProfileDetailContent() {
                 onChange={handlePhotoUpload}
               />
             </div>
-            <div className="flex-grow pt-2">
+            <div className="flex-grow pt-2 min-w-0">
               <div className="flex flex-col md:flex-row md:items-center gap-3 mb-1">
-                <h2 className="text-3xl font-bold text-on-surface tracking-tight capitalize font-headline">{beneficiary.name}</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-on-surface tracking-tight capitalize font-headline break-words">{beneficiary.name}</h2>
                 <span className="bg-primary-fixed text-on-primary-fixed text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full whitespace-nowrap w-fit">
                   Active Participant
                 </span>
@@ -1161,10 +1263,94 @@ function BeneficiaryProfileDetailContent() {
               <span className="text-xs font-bold uppercase tracking-wider">Not calculated yet</span>
             </div>
           )}
+
+          <div className="relative z-10 w-full mt-6 pt-5 border-t border-surface-container-high text-left font-sans">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <div>
+                <p className="text-sm font-semibold text-on-surface">Composite Score</p>
+                <p className="text-[10px] text-on-surface-variant">Average of 3 capacity scores</p>
+              </div>
+              <div className="text-right shrink-0">
+                <span className="text-2xl font-bold text-primary tracking-tight">{resilienceScoreComputed ?? "N/A"}</span>
+                <span className="text-xs text-on-surface-variant font-medium"> / 100</span>
+              </div>
+            </div>
+            <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mb-4">
+              {resilienceScoreComputed !== null && (
+                <div
+                  className="bg-primary h-full rounded-full"
+                  style={{ width: `${Math.min(100, Math.max(0, resilienceScoreComputed))}%` }}
+                />
+              )}
+            </div>
+
+            <div className="space-y-2 text-sm">
+              {[
+                { label: "Adaptive", key: 'adaptive', pct: adaptivePct, sel: adaptiveSelection, list: adaptiveSurveys },
+                { label: "Absorptive", key: 'absorptive', pct: absorptivePct, sel: absorptiveSelection, list: absorptiveSurveys },
+                { label: "Transformative", key: 'transformative', pct: transformativePct, sel: transformativeSelection, list: transformativeSurveys },
+              ].map((item) => (
+                <div key={item.key} className="p-2.5 bg-surface rounded-lg border border-outline-variant/10">
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-xs font-semibold text-on-surface">{item.label}</span>
+                    <span className={`text-xs font-bold ${item.pct !== null ? 'text-primary' : 'text-on-surface-variant'}`}>
+                      {item.pct !== null ? `${item.pct}%` : "N/A"}
+                    </span>
+                  </div>
+                  <select
+                    value={item.sel?.id || ""}
+                    onChange={(e) => setCalcSelection(prev => ({ ...prev, [item.key]: e.target.value || null }))}
+                    disabled={item.list.length === 0}
+                    className="w-full bg-surface-container border border-outline-variant/30 rounded px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {item.list.length === 0 && <option value="">No submissions</option>}
+                    {item.list.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {formatDate(s.surveyDate)} — {computeCapacityScore(item.key, s.responses)}%
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
+
+            {missingCapacityTypes.length > 0 && (
+              <div className="mt-3 p-2.5 bg-error-container/10 border border-error/20 rounded-lg text-[11px] text-on-surface-variant">
+                <p className="font-bold text-error mb-0.5">Missing submissions</p>
+                <p>{missingCapacityTypes.join(", ")}</p>
+              </div>
+            )}
+
+            <button
+              onClick={handleCalculateResilience}
+              disabled={resilienceScoreComputed === null || isCalculatingResilience}
+              className="mt-3 w-full gradient-primary bg-primary text-on-primary px-3 py-2 rounded-full text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="material-symbols-outlined text-[16px]">calculate</span>
+              {isCalculatingResilience ? "Calculating..." : "Calculate & Save Score"}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile tab selector */}
+        <div className="lg:col-span-12 lg:hidden mt-4 mb-2 font-sans">
+          <label htmlFor="beneficiary-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+            Profile section
+          </label>
+          <select
+            id="beneficiary-tab"
+            value={activeTab}
+            onChange={(e) => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(e.target.value)}`, { scroll: false })}
+            className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+          >
+            {BENEFICIARY_TABS.map(({ label: tab }) => (
+              <option key={tab} value={tab}>{tab}</option>
+            ))}
+          </select>
         </div>
 
         {/* Tabs Navigation */}
-        <div className="lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest flex overflow-x-auto no-scrollbar font-sans">
+        <div className="hidden lg:flex lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
           {BENEFICIARY_TABS.map(({ label: tab }) => {
             const isActive = activeTab === tab;
             const tabLabel = tab === "Family Directory" && beneficiary.familyMembers?.length
@@ -1178,7 +1364,7 @@ function BeneficiaryProfileDetailContent() {
               <button
                 key={tab}
                 onClick={() => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(tab)}`, { scroll: false })}
-                className={`px-5 py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
+                className={`px-3 sm:px-5 py-2.5 sm:py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
                   isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
                 }`}
               >
@@ -1189,7 +1375,7 @@ function BeneficiaryProfileDetailContent() {
         </div>
 
         {/* Dynamic Tab Contents */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-12 min-w-0">
           {activeTab === "Program History" && (
             <div className="space-y-6">
               <div className="bg-primary-container/10 border border-primary/20 rounded-xl p-4 text-xs font-sans text-on-surface-variant flex gap-3 items-start leading-relaxed">
@@ -1223,14 +1409,14 @@ function BeneficiaryProfileDetailContent() {
                         </p>
                         {beneficiary.livelihoodDetails.map((detail) => (
                           <div key={detail.id} className="bg-surface p-5 rounded-lg border border-surface-container-high">
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <h4 className="font-bold text-on-surface text-base">{detail.program?.name || "Unknown Program"}</h4>
+                            <div className="flex justify-between items-start gap-3 mb-3">
+                              <div className="min-w-0">
+                                <h4 className="font-bold text-on-surface text-base break-words">{detail.program?.name || "Unknown Program"}</h4>
                                 <p className="text-xs text-on-surface-variant mt-1">
                                   {detail.program?.category === "FARM" ? "Farm" : "Non-Farm"} · {detail.program?.type?.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()) || "N/A"}
                                 </p>
                               </div>
-                              <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">
+                              <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded shrink-0">
                                 Enrolled {formatDate(detail.enrolledAt)}
                               </span>
                             </div>
@@ -1352,7 +1538,7 @@ function BeneficiaryProfileDetailContent() {
                       </div>
                     ))
                   ) : (
-                    <p className="col-span-2 text-sm text-on-surface-variant italic">No livestock assets allocated to this beneficiary.</p>
+                    <p className="col-span-1 md:col-span-2 text-sm text-on-surface-variant italic">No livestock assets allocated to this beneficiary.</p>
                   )}
                 </div>
               </div>
@@ -1719,73 +1905,143 @@ function BeneficiaryProfileDetailContent() {
 
           {activeTab === "Income Tracking" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6 font-sans">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="min-w-0">
                   <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
                     <span className="material-symbols-outlined text-primary font-bold">payments</span>
                     Income Tracking
                   </h3>
                   <p className="text-sm text-on-surface-variant mt-1">
-                    Record monthly income entries for this household.
+                    One income entry per month. The submission date is saved automatically.
                   </p>
                 </div>
-                <button
-                  onClick={() => handleOpenIncomeForm()}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Add Income
-                </button>
+                <div className="flex items-center gap-3 flex-wrap ml-auto">
+                  <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                    Year
+                    <select
+                      value={incomeYearFilter}
+                      onChange={(event) => setIncomeYearFilter(Number(event.target.value))}
+                      className="px-3 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-sm font-semibold text-on-surface outline-none cursor-pointer"
+                    >
+                      {incomeYearOptions.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <button
+                    onClick={() => handleOpenIncomeForm()}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Add Income
+                  </button>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                {incomeRecords && incomeRecords.length > 0 ? (
-                  incomeRecords.map((record) => (
-                    <div key={record.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-sans">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <p className="font-bold text-on-surface text-lg">₹{Number(record.amount).toLocaleString()}</p>
-                          {record.source && (
-                            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-tertiary-container text-on-tertiary-container">
-                              {record.source}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-1 rounded-xl border border-primary/15 bg-primary-container/10 p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                    Annual Tracked Income
+                  </p>
+                  <p className="text-3xl font-bold text-on-surface mt-2">
+                    ₹{annualTrackedIncome.toLocaleString("en-IN")}
+                  </p>
+                  <p className="text-xs text-on-surface-variant mt-1">
+                    Total income recorded for {incomeYearFilter}
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-surface-container-highest bg-surface-container-low/20 p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    Months Recorded
+                  </p>
+                  <p className="text-2xl font-bold text-on-surface mt-2">
+                    {recordedMonths}
+                    <span className="text-sm font-medium text-on-surface-variant"> / 12</span>
+                  </p>
+                  <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mt-3">
+                    <div
+                      className="bg-primary h-full rounded-full transition-all"
+                      style={{ width: `${Math.min(100, (recordedMonths / 12) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-surface-container-highest bg-surface-container-low/20 p-5">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    Monthly Average
+                  </p>
+                  <p className="text-2xl font-bold text-on-surface mt-2">
+                    ₹{Math.round(monthlyAverageIncome).toLocaleString("en-IN")}
+                  </p>
+                  <p className="text-xs text-on-surface-variant mt-1">
+                    Across months with an entry
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <h4 className="text-sm font-bold text-on-surface uppercase tracking-wider">
+                    Monthly Entries — {incomeYearFilter}
+                  </h4>
+                  <span className="text-xs text-on-surface-variant">
+                    {incomeYearRecords.length} entr{incomeYearRecords.length === 1 ? "y" : "ies"}
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {incomeYearRecords.length > 0 ? (
+                    incomeYearRecords.map(({ record, period }) => (
+                      <div key={record.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-sans">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <p className="font-bold text-on-surface text-lg">₹{Number(record.amount).toLocaleString("en-IN")}</p>
+                            <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-primary-container/30 text-primary">
+                              {formatIncomePeriod(period.month, period.year)}
                             </span>
+                            {record.source && (
+                              <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-tertiary-container text-on-tertiary-container">
+                                {record.source}
+                              </span>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div>
+                              <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Income Period</p>
+                              <p className="text-on-surface font-medium">{formatIncomePeriod(period.month, period.year)}</p>
+                            </div>
+                            <div>
+                              <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Submitted On</p>
+                              <p className="text-on-surface font-medium">{formatDate(record.createdAt)}</p>
+                            </div>
+                          </div>
+                          {record.notes && (
+                            <p className="text-xs text-on-surface-variant mt-2 italic">&quot;{record.notes}&quot;</p>
                           )}
                         </div>
-                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 mt-2 text-xs">
-                          <div>
-                            <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Date</p>
-                            <p className="text-on-surface font-medium">{formatDate(record.incomeDate, "N/A")}</p>
-                          </div>
-                          <div>
-                            <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Recorded On</p>
-                            <p className="text-on-surface font-medium">{formatDate(record.createdAt)}</p>
-                          </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            onClick={() => handleOpenIncomeForm(record)}
+                            className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteIncome(record.id)}
+                            className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
                         </div>
-                        {record.notes && (
-                          <p className="text-xs text-on-surface-variant mt-2 italic">"{record.notes}"</p>
-                        )}
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <button
-                          onClick={() => handleOpenIncomeForm(record)}
-                          className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteIncome(record.id)}
-                          className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">delete</span>
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No income records found for this beneficiary.
-                  </p>
-                )}
+                    ))
+                  ) : (
+                    <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
+                      No income recorded for {incomeYearFilter}. Select another year or add an entry.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -1873,7 +2129,7 @@ function BeneficiaryProfileDetailContent() {
 
           {activeTab === "Family Directory" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
                   <span className="material-symbols-outlined text-primary">group</span>
                   Family Members &amp; Household Registry
@@ -2208,80 +2464,6 @@ function BeneficiaryProfileDetailContent() {
           )}
         </div>
 
-        {/* Secondary Info Sidepanel */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Resilience Score (KYR) - always visible */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="text-xs uppercase tracking-widest text-on-surface-variant mb-4 font-sans font-bold">
-              Resilience Score (KYR)
-            </h3>
-
-            <div className="flex items-center justify-between mb-3 font-sans">
-              <div>
-                <p className="text-sm font-semibold text-on-surface">Composite Score</p>
-                <p className="text-[10px] text-on-surface-variant">Average of 3 capacity scores</p>
-              </div>
-              <div className="text-right">
-                <span className="text-3xl font-bold text-primary tracking-tight">{resilienceScoreComputed ?? "N/A"}</span>
-                <span className="text-xs text-on-surface-variant font-medium"> / 100</span>
-              </div>
-            </div>
-            <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mb-5">
-              {resilienceScoreComputed !== null && (
-                <div
-                  className="bg-primary h-full rounded-full"
-                  style={{ width: `${Math.min(100, Math.max(0, resilienceScoreComputed))}%` }}
-                />
-              )}
-            </div>
-
-            <div className="space-y-3 text-sm font-sans">
-              {[
-                { label: "Adaptive", key: 'adaptive', pct: adaptivePct, sel: adaptiveSelection, list: adaptiveSurveys },
-                { label: "Absorptive", key: 'absorptive', pct: absorptivePct, sel: absorptiveSelection, list: absorptiveSurveys },
-                { label: "Transformative", key: 'transformative', pct: transformativePct, sel: transformativeSelection, list: transformativeSurveys },
-              ].map((item) => (
-                <div key={item.key} className="p-3 bg-surface rounded-lg border border-outline-variant/10">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-semibold text-on-surface">{item.label} Capacity</span>
-                    <span className={`font-bold ${item.pct !== null ? 'text-primary' : 'text-on-surface-variant'}`}>
-                      {item.pct !== null ? `${item.pct}%` : "N/A"}
-                    </span>
-                  </div>
-                  <select
-                    value={item.sel?.id || ""}
-                    onChange={(e) => setCalcSelection(prev => ({ ...prev, [item.key]: e.target.value || null }))}
-                    disabled={item.list.length === 0}
-                    className="w-full bg-surface-container border border-outline-variant/30 rounded px-2 py-1.5 text-xs outline-none focus:ring-1 focus:ring-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {item.list.length === 0 && <option value="">No submissions</option>}
-                    {item.list.map(s => (
-                      <option key={s.id} value={s.id}>
-                        {formatDate(s.surveyDate)} — {computeCapacityScore(item.key, s.responses)}%
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-            </div>
-
-            {missingCapacityTypes.length > 0 && (
-              <div className="mt-4 p-3 bg-error-container/10 border border-error/20 rounded-lg text-xs text-on-surface-variant font-sans">
-                <p className="font-bold text-error mb-1">Cannot calculate resilience score</p>
-                <p>Missing submissions: {missingCapacityTypes.join(", ")}. Take these surveys first.</p>
-              </div>
-            )}
-
-            <button
-              onClick={handleCalculateResilience}
-              disabled={resilienceScoreComputed === null || isCalculatingResilience}
-              className="mt-4 w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span className="material-symbols-outlined text-[18px]">calculate</span>
-              {isCalculatingResilience ? "Calculating..." : "Calculate & Save Resilience Score"}
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* master edit profile modal */}
@@ -2304,7 +2486,7 @@ function BeneficiaryProfileDetailContent() {
             </div>
 
             {/* Edit Sub-tabs */}
-            <div className="flex border-b border-surface-container-high mb-4 overflow-x-auto no-scrollbar font-sans text-xs">
+            <div className="flex border-b border-surface-container-high mb-4 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans text-xs">
               {[
                 { key: "Personal", label: "Personal & Income" },
                 { key: "IDBank", label: "IDs & Bank Details" },
@@ -2316,7 +2498,7 @@ function BeneficiaryProfileDetailContent() {
                   key={tab.key}
                   type="button"
                   onClick={() => setEditTab(tab.key)}
-                  className={`px-4 py-2 border-none bg-transparent cursor-pointer font-bold uppercase tracking-wider ${
+                  className={`px-4 py-2 border-none bg-transparent cursor-pointer font-bold uppercase tracking-wider whitespace-nowrap ${
                     editTab === tab.key ? "text-primary border-b-2 border-primary" : "text-slate-400 hover:text-slate-600"
                   }`}
                 >
@@ -2700,16 +2882,60 @@ function BeneficiaryProfileDetailContent() {
             </div>
 
             <form onSubmit={handleIncomeSave} className="flex-grow overflow-y-auto pr-2 space-y-4 text-xs">
-              <div className="flex flex-col gap-1">
-                <label className="font-semibold uppercase tracking-wider text-slate-400">Date</label>
-                <input
-                  type="date"
-                  required
-                  value={incomeForm.incomeDate}
-                  onChange={e => setIncomeForm({ ...incomeForm, incomeDate: e.target.value })}
-                  className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
-                />
+              <div className="rounded-lg border border-primary/15 bg-primary-container/10 p-3 flex items-start gap-2">
+                <span className="material-symbols-outlined text-primary text-[18px]">schedule</span>
+                <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                  Submitted on{" "}
+                  <span className="font-bold text-on-surface">
+                    {formatDate(editingIncomeRecord?.createdAt || new Date())}
+                  </span>
+                  . This date is saved automatically.
+                </p>
               </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="font-semibold uppercase tracking-wider text-slate-400">Month</label>
+                  <select
+                    required
+                    value={incomeForm.month}
+                    onChange={e => setIncomeForm({ ...incomeForm, month: e.target.value })}
+                    className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                  >
+                    <option value="">Select month</option>
+                    {MONTH_OPTIONS.map((month) => (
+                      <option key={month.value} value={month.value}>{month.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="font-semibold uppercase tracking-wider text-slate-400">Year</label>
+                  <select
+                    required
+                    value={incomeForm.year}
+                    onChange={e => setIncomeForm({ ...incomeForm, year: e.target.value })}
+                    className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                  >
+                    <option value="">Select year</option>
+                    {incomeFormYearOptions.map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {duplicateIncomeRecord && (
+                <div className={`p-3 rounded-lg border text-[11px] leading-relaxed ${
+                  editIncomeId
+                    ? "border-error/20 bg-error-container/10 text-on-error-container"
+                    : "border-primary/20 bg-primary-container/10 text-on-surface-variant"
+                }`}>
+                  {editIncomeId
+                    ? `An entry already exists for ${formatIncomePeriod(Number(incomeForm.month), Number(incomeForm.year))}. Please edit that entry instead of moving this one into the same month.`
+                    : `An entry already exists for ${formatIncomePeriod(Number(incomeForm.month), Number(incomeForm.year))}. Saving will update that existing entry.`}
+                </div>
+              )}
 
               <div className="flex flex-col gap-1">
                 <label className="font-semibold uppercase tracking-wider text-slate-400">Amount (₹)</label>
@@ -2733,12 +2959,9 @@ function BeneficiaryProfileDetailContent() {
                   className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
                 >
                   <option value="">Select source</option>
-                  <option value="Agriculture">Agriculture</option>
-                  <option value="Livestock">Livestock</option>
-                  <option value="Daily Wage">Daily Wage</option>
-                  <option value="Small Business">Small Business</option>
-                  <option value="Remittance">Remittance</option>
-                  <option value="Other">Other</option>
+                  {PRIMARY_INCOME_CATEGORIES.map((category) => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
                 </select>
               </div>
 
@@ -2781,7 +3004,7 @@ function BeneficiaryProfileDetailContent() {
                 onClick={handleIncomeSave}
                 className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
               >
-                {editIncomeId ? "Update Record" : "Save Record"}
+                {editIncomeId ? "Update Record" : duplicateIncomeRecord ? "Update Existing Entry" : "Save Record"}
               </button>
             </div>
           </div>

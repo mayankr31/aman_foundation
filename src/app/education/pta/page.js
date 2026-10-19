@@ -365,16 +365,16 @@ export default function PtaPrograms() {
                     href={`/education/pta/program/${p.id}`}
                     className="p-4 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
                   >
-                    <div className="flex justify-between items-start mb-2 font-sans">
-                      <h4 className="font-bold text-on-surface text-base group-hover:text-primary transition-colors">{p.title}</h4>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${p.statusClass || (p.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-secondary-container text-on-secondary-fixed")}`}>
+                    <div className="flex justify-between items-start gap-3 mb-2 font-sans">
+                      <h4 className="font-bold text-on-surface text-base group-hover:text-primary transition-colors break-words">{p.title}</h4>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider shrink-0 ${p.statusClass || (p.status === "Active" ? "bg-primary-fixed text-on-primary-fixed" : "bg-secondary-container text-on-secondary-fixed")}`}>
                         {p.status}
                       </span>
                     </div>
                     <p className="text-sm text-on-surface-variant leading-relaxed mb-4">{p.description}</p>
-                    <div className="flex justify-between text-xs text-slate-500 font-sans mt-2 pt-2 border-t border-surface-container">
-                      <span>Duration: {p.duration}</span>
-                      <span className="font-semibold text-primary">{p.participantsText || p.participants}</span>
+                    <div className="flex justify-between gap-3 text-xs text-slate-500 font-sans mt-2 pt-2 border-t border-surface-container">
+                      <span className="truncate">Duration: {p.duration}</span>
+                      <span className="font-semibold text-primary shrink-0">{p.participantsText || p.participants}</span>
                     </div>
                   </Link>
                 ))}
@@ -482,9 +482,9 @@ export default function PtaPrograms() {
                       href={`/education/pta/event/${e.id}`}
                       className="p-3 bg-surface rounded-lg border border-surface-container hover:bg-surface-container-low transition-colors block group cursor-pointer"
                     >
-                      <div className="flex justify-between items-start mb-1 font-sans">
-                        <h5 className="font-bold text-on-surface text-sm group-hover:text-primary transition-colors">{e.title}</h5>
-                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider ${e.statusClass}`}>
+                      <div className="flex justify-between items-start gap-3 mb-1 font-sans">
+                        <h5 className="font-bold text-on-surface text-sm group-hover:text-primary transition-colors break-words">{e.title}</h5>
+                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider shrink-0 ${e.statusClass}`}>
                           {e.status}
                         </span>
                       </div>
@@ -511,7 +511,7 @@ export default function PtaPrograms() {
       {/* Unified Add Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Launch New {modalType}</h3>
               <button
@@ -563,7 +563,7 @@ export default function PtaPrograms() {
                   />
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                       Event Date

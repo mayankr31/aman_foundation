@@ -243,6 +243,8 @@ export const SEARCH_ENTRIES = [
   { id: "leave-apply", label: "Leave Application", path: ["HR", "Leave Application"], keywords: ["leaves", "leave", "apply", "self service"], href: "/hr/leaves/apply", page: "leaves", group: "HR", icon: "event_note" },
   { id: "travel", label: "Travel", path: ["Travel"], keywords: ["travel", "requests", "trip"], href: "/travel", page: "travel", group: "General", icon: "flight" },
   { id: "travel-manage", label: "Travel Management", path: ["Travel Management"], keywords: ["travel", "manage", "approve", "trip"], href: "/travel/manage", page: "travel-management", group: "General", icon: "flight_takeoff" },
+  { id: "reimbursements", label: "Reimbursements", path: ["Reimbursements"], keywords: ["reimbursement", "expense", "claim", "receipt", "refund"], href: "/reimbursements", page: "reimbursements", group: "General", icon: "receipt_long" },
+  { id: "reimbursement-manage", label: "Reimbursement Management", path: ["Reimbursement Management"], keywords: ["reimbursement", "expense", "approve", "reimburse", "claim"], href: "/reimbursements/manage", page: "reimbursement-management", group: "General", icon: "approval" },
   { id: "admin", label: "Admin & Access", path: ["Admin & Access"], keywords: ["admin", "access", "users", "roles"], href: "/admin", page: "admin", group: "Admin", icon: "admin_panel_settings" },
 
   // ── Education ─────────────────────────────────────────────────────

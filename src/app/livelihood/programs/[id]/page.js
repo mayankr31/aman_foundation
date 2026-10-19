@@ -430,18 +430,18 @@ export default function ProgramDetail() {
 
       <div className="flex flex-col gap-8">
       {/* Header */}
-      <div className="flex justify-between items-end">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="min-w-0">
           <div className="flex items-center gap-3 mb-2">
             <span className={`px-2.5 py-0.5 rounded text-[9px] bg-${accentColor}-100 text-${accentColor}-700 uppercase tracking-wider font-bold`}>
               {config?.label || program.type}
             </span>
             <span className="text-xs text-on-surface-variant">{program.category === "FARM" ? "Farm" : "Non-Farm"}</span>
           </div>
-          <h2 className="page-title text-on-surface">{program.name}</h2>
+          <h2 className="page-title text-on-surface break-words">{program.name}</h2>
           <p className="page-description mt-2">{program.description || "No description"}</p>
         </div>
-        <div className="flex gap-3 shrink-0">
+        <div className="flex flex-wrap gap-3 shrink-0">
           <button
             onClick={() => setShowDeleteProgram(true)}
             className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-red-200 bg-transparent"
@@ -483,14 +483,14 @@ export default function ProgramDetail() {
       )}
 
       {/* Stats row */}
-      <div className="flex gap-6 text-xs font-semibold text-on-surface-variant">
+      <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-on-surface-variant">
         <span><strong className="text-on-surface">{assignments.length}</strong> Enrolled Families</span>
         {program.totalTarget && <span>Target: <strong className="text-on-surface">{program.totalTarget} {config?.programTargetUnit || "units"}</strong></span>}
       </div>
 
       {/* Assigned Staff */}
       <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">supervisor_account</span>
             Assigned Staff ({assignedManagers.length})
@@ -509,13 +509,13 @@ export default function ProgramDetail() {
         ) : (
           <div className="flex flex-wrap gap-3">
             {assignedManagers.map((pm) => (
-              <div key={pm.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20">
-                <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold">
+              <div key={pm.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20 max-w-full min-w-0">
+                <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xs font-bold shrink-0">
                   {pm.user?.name?.[0]?.toUpperCase() || "?"}
                 </div>
-                <div className="leading-tight">
-                  <p className="text-sm font-semibold text-on-surface">{pm.user?.name || "—"}</p>
-                  <p className="text-[11px] text-slate-400">{pm.user?.email || ""}</p>
+                <div className="leading-tight min-w-0">
+                  <p className="text-sm font-semibold text-on-surface truncate">{pm.user?.name || "—"}</p>
+                  <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{pm.user?.email || ""}</p>
                   {pm.user?.role?.name && (
                     <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-semibold uppercase tracking-wide">
                       {pm.user.role.name.replaceAll("_", " ")}
@@ -535,7 +535,7 @@ export default function ProgramDetail() {
 
       {/* Fellows */}
       <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <h3 className="text-lg font-bold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">school</span>
             Fellows ({assignedFellows.length})
@@ -554,13 +554,13 @@ export default function ProgramDetail() {
         ) : (
           <div className="flex flex-wrap gap-3">
             {assignedFellows.map((f) => (
-              <div key={f.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20">
-                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+              <div key={f.id} className="flex items-center gap-3 bg-surface-container-low rounded-full pl-1 pr-3 py-1 border border-outline-variant/20 max-w-full min-w-0">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold shrink-0">
                   {f.fellow?.name?.[0]?.toUpperCase() || "?"}
                 </div>
-                <div className="leading-tight">
-                  <p className="text-sm font-semibold text-on-surface">{f.fellow?.name || "—"}</p>
-                  <p className="text-[11px] text-slate-400">{f.fellow?.email || ""}</p>
+                <div className="leading-tight min-w-0">
+                  <p className="text-sm font-semibold text-on-surface truncate">{f.fellow?.name || "—"}</p>
+                  <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{f.fellow?.email || ""}</p>
                 </div>
                 {isAdmin && (
                   <button onClick={() => handleRemoveFellow(f.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
@@ -578,8 +578,8 @@ export default function ProgramDetail() {
         <div className="p-6 border-b border-outline-variant/10">
           <h3 className="text-lg font-bold text-on-surface">Enrolled Beneficiaries</h3>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] table-fixed text-sm font-sans">
+        <div className="max-h-[55vh] overflow-auto pr-1">
+          <table className="mobile-card-table w-full min-w-[760px] table-fixed text-sm font-sans">
             <thead className="bg-surface-container-low text-xs uppercase tracking-wider text-on-surface-variant text-left font-bold">
               <tr>
                 <th className="w-[5%] px-4 py-3">#</th>
@@ -605,8 +605,8 @@ export default function ProgramDetail() {
                   const isExpanded = expandedAssignId === assign.id;
                   return (
                     <><tr key={assign.id} className={`hover:bg-surface-container-low transition-colors ${idx % 2 === 0 ? "bg-white dark:bg-slate-900" : "bg-surface-container-lowest"}`}>
-                      <td className="px-4 py-3 font-mono text-xs text-slate-400">{rowNumber}</td>
-                      <td className="px-6 py-3">
+                      <td data-label="#" className="px-4 py-3 font-mono text-xs text-slate-400">{rowNumber}</td>
+                      <td data-label="" className="px-6 py-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-xs font-bold text-on-surface shrink-0">
                             {b.name?.[0]?.toUpperCase() || "?"}
@@ -626,12 +626,12 @@ export default function ProgramDetail() {
                           if (col.unit) display += ` ${col.unit}`;
                         } else if (col.type === "badge") {
                           const colors = { "Planting": "bg-blue-100 text-blue-700", "Growing": "bg-green-100 text-green-700", "Harvesting": "bg-amber-100 text-amber-700", "Preparation": "bg-slate-100 text-slate-700", "Post-Harvest": "bg-purple-100 text-purple-700", "Nursery": "bg-teal-100 text-teal-700", "Transplanting": "bg-lime-100 text-lime-700", "Tillering": "bg-cyan-100 text-cyan-700", "Flowering": "bg-pink-100 text-pink-700" };
-                          return <td key={col.key} className="px-6 py-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${colors[val] || "bg-slate-100 text-slate-700"}`}>{val || "—"}</span></td>;
+                          return <td key={col.key} data-label={col.label} className="px-6 py-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${colors[val] || "bg-slate-100 text-slate-700"}`}>{val || "—"}</span></td>;
                         }
-                        return <td key={col.key} className="px-4 py-3 text-sm break-words">{display}</td>;
+                        return <td key={col.key} data-label={col.label} className="px-4 py-3 text-sm break-words">{display}</td>;
                       })}
-                      <td className="px-4 py-3 text-xs text-slate-400">{formatDate(assign.enrolledAt)}</td>
-                      <td className="px-6 py-3 text-right">
+                      <td data-label="Enrolled" className="px-4 py-3 text-xs text-slate-400">{formatDate(assign.enrolledAt)}</td>
+                      <td data-label="Actions" className="px-6 py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
                           {config?.eventTypes?.length > 0 && (
                             <button onClick={() => openEventModal(assign.id)} className="p-1.5 rounded-full hover:bg-blue-100 text-slate-400 hover:text-blue-600 transition-colors cursor-pointer border-none bg-transparent" title="Log event">
@@ -794,7 +794,7 @@ export default function ProgramDetail() {
       {/* Delete Assignment Confirmation */}
       {deleteAssignId && (
         <div className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4" onClick={() => { setDeleteAssignId(null); setDeleteAssignName(""); }}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-4 sm:p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold">Remove Assignment</h3>
             <p className="text-sm text-on-surface-variant">Remove <strong>{deleteAssignName}</strong> from this program? Their events will also be deleted.</p>
             <div className="flex justify-end gap-3 pt-2">
@@ -808,7 +808,7 @@ export default function ProgramDetail() {
       {/* Delete Program Confirmation */}
       {showDeleteProgram && (
         <div className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4" onClick={() => setShowDeleteProgram(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-4 sm:p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold text-on-surface">Delete Program</h3>
             <p className="text-sm text-on-surface-variant">Delete <strong>{program.name}</strong> permanently? This removes all {assignments.length} assignments and their events.</p>
             <div className="flex justify-end gap-3 pt-2">
@@ -822,7 +822,7 @@ export default function ProgramDetail() {
       {/* Log Event Modal */}
       {showEventModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4" onClick={() => setShowEventModal(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold">Log Event</h3>
               <button onClick={() => setShowEventModal(false)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer border-none bg-transparent">
@@ -869,7 +869,7 @@ export default function ProgramDetail() {
       {/* Edit Event Modal */}
       {showEditEventModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4" onClick={() => setShowEditEventModal(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold">Edit Event</h3>
               <button onClick={() => setShowEditEventModal(false)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer border-none bg-transparent">

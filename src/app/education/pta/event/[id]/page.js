@@ -107,19 +107,19 @@ export default function PtaEventDetail() {
       </Link>
 
       {/* Hero */}
-      <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
+      <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="w-16 h-16 rounded-full bg-secondary-fixed text-on-secondary-container flex items-center justify-center text-3xl font-bold shrink-0">
             <span className="material-symbols-outlined text-3xl">diversity_3</span>
           </div>
-          <div className="pt-1">
+          <div className="pt-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="page-title text-on-surface capitalize">{event.title}</h2>
+              <h2 className="page-title text-on-surface capitalize break-words">{event.title}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${statusClass}`}>{event.status}</span>
             </div>
-            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">calendar_today</span>
+            <p className="text-on-surface-variant font-medium mb-3 flex items-center gap-2 break-words">
+              <span className="material-symbols-outlined text-sm text-primary shrink-0">calendar_today</span>
               {dateFormatted}{timeFormatted ? ` • ${timeFormatted}` : ""}
               {event.location ? ` at ${event.location}` : ""}
             </p>
@@ -187,21 +187,21 @@ export default function PtaEventDetail() {
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-4">Event Details</h3>
             <div className="space-y-3 font-sans text-sm">
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Date</span>
                 <span className="font-semibold text-on-surface">{dateFormatted}</span>
               </div>
               {timeFormatted && (
-                <div className="flex justify-between py-2 border-b border-surface-container">
+                <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant">Time</span>
                   <span className="font-semibold text-on-surface">{timeFormatted}</span>
                 </div>
               )}
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Location</span>
                 <span className="font-semibold text-on-surface">{event.location || "TBD"}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
+              <div className="flex justify-between gap-4 py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant">Status</span>
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${statusClass}`}>{event.status}</span>
               </div>
@@ -239,7 +239,7 @@ export default function PtaEventDetail() {
               <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows="4"
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Date</label>
                 <input type="date" value={editForm.date} onChange={e => setEditForm(f => ({ ...f, date: e.target.value }))}
@@ -251,7 +251,7 @@ export default function PtaEventDetail() {
                   className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Location</label>
                 <input value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))}

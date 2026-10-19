@@ -576,7 +576,7 @@ export default function SugarcaneCultivation() {
               </Link>
             ))}
             {programStats.length === 0 && (
-              <p className="col-span-3 text-center text-xs text-slate-400 py-4 italic">No sugarcane programs logged in the system.</p>
+              <p className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-xs text-slate-400 py-4 italic">No sugarcane programs logged in the system.</p>
             )}
           </div>
           <Pagination currentPage={currentPage} totalItems={programStats.length} itemsPerPage={9} onPageChange={setCurrentPage} />
@@ -586,7 +586,7 @@ export default function SugarcaneCultivation() {
       {/* Add Program Modal */}
       {showAddProgramModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add Sugarcane Program</h3>
               <button

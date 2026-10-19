@@ -368,7 +368,7 @@ export default function GoatRearing() {
         </span>
       </Link>
       <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h2 className="page-title text-on-surface">
             Goat Rearing Distribution &amp; Health
@@ -377,7 +377,7 @@ export default function GoatRearing() {
             Monitoring livelihood impact through livestock distribution metrics, health tracking, and return on investment for rural beneficiaries.
           </p>
         </div>
-        <div className="flex gap-3 shrink-0 font-sans">
+        <div className="flex flex-wrap gap-3 shrink-0 font-sans">
           <button className="bg-surface-container-highest text-on-surface px-4 py-2 rounded-full text-xs font-semibold hover:bg-surface-variant transition-colors flex items-center gap-2 border border-outline-variant/10 cursor-pointer">
             <span className="material-symbols-outlined text-sm">download</span>
             Export Data
@@ -485,9 +485,9 @@ export default function GoatRearing() {
             </div>
 
             {/* Simulated Chart Bars */}
-            <div className="w-full h-64 relative flex items-end justify-between px-4">
+            <div className="w-full h-64 relative flex items-end justify-between gap-2 sm:gap-4 px-0 sm:px-4">
               <div
-                className="w-12 bg-primary-container/20 rounded-t-sm relative group transition-all duration-500"
+                className="flex-1 max-w-12 bg-primary-container/20 rounded-t-sm relative group transition-all duration-500"
                 style={{ height: `${heights[0]}%` }}
               >
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-inverse-surface text-inverse-on-surface text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
@@ -495,19 +495,19 @@ export default function GoatRearing() {
                 </div>
               </div>
               <div
-                className="w-12 bg-primary-container/40 rounded-t-sm transition-all duration-500"
+                className="flex-1 max-w-12 bg-primary-container/40 rounded-t-sm transition-all duration-500"
                 style={{ height: `${heights[1]}%` }}
               ></div>
               <div
-                className="w-12 bg-primary-container/60 rounded-t-sm transition-all duration-500"
+                className="flex-1 max-w-12 bg-primary-container/60 rounded-t-sm transition-all duration-500"
                 style={{ height: `${heights[2]}%` }}
               ></div>
               <div
-                className="w-12 bg-primary-container/80 rounded-t-sm transition-all duration-500"
+                className="flex-1 max-w-12 bg-primary-container/80 rounded-t-sm transition-all duration-500"
                 style={{ height: `${heights[3]}%` }}
               ></div>
               <div
-                className="w-12 bg-primary rounded-t-sm transition-all duration-500"
+                className="flex-1 max-w-12 bg-primary rounded-t-sm transition-all duration-500"
                 style={{ height: `${heights[4]}%` }}
               ></div>
             </div>
@@ -552,7 +552,7 @@ export default function GoatRearing() {
               );
             })}
             {goatRearingPrograms.length === 0 && (
-              <p className="col-span-3 text-center text-xs text-slate-400 py-4 italic">No goat rearing programs logged in the system.</p>
+              <p className="col-span-1 md:col-span-2 lg:col-span-3 text-center text-xs text-slate-400 py-4 italic">No goat rearing programs logged in the system.</p>
             )}
           </div>
           <Pagination currentPage={currentPage} totalItems={goatRearingPrograms.length} itemsPerPage={9} onPageChange={setCurrentPage} />
@@ -562,7 +562,7 @@ export default function GoatRearing() {
       {/* Add Program Modal */}
       {showAddProgramModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-on-surface">Add Goat Rearing Program</h3>
               <button

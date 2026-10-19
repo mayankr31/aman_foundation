@@ -31,7 +31,7 @@ export default async function SurveyResponsePage({ params }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto w-full space-y-6">
       <Link href={`/beneficiaries/${id}`} className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
         Back to Profile

@@ -15,6 +15,7 @@ export default function GlobalSearch() {
 
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dynamicEntries, setDynamicEntries] = useState([]);
 
@@ -184,6 +185,7 @@ export default function GlobalSearch() {
     const handler = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setOpen(false);
+        setMobileOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -194,6 +196,7 @@ export default function GlobalSearch() {
     if (!entry) return;
     const href = getEntryHref(entry, user);
     setOpen(false);
+    setMobileOpen(false);
     setQuery("");
     router.push(href);
   };
@@ -210,53 +213,89 @@ export default function GlobalSearch() {
       go(flat[activeIndex]);
     } else if (e.key === "Escape") {
       setOpen(false);
+      setMobileOpen(false);
       setQuery("");
       inputRef.current?.blur();
     }
   };
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-xl mx-2 sm:mx-6 min-w-0">
-      <div className="relative">
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">
-          search
-        </span>
-        <input
-          ref={inputRef}
-          type="text"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setOpen(true);
-            setActiveIndex(0);
-          }}
-          onFocus={() => {
-            setOpen(true);
-            setActiveIndex(0);
-          }}
-          onKeyDown={onKeyDown}
-          placeholder="Search pages, tabs & forms..."
-          className="w-full h-10 pl-10 pr-16 rounded-full bg-slate-100 dark:bg-slate-800/70 border border-transparent focus:border-teal-500/40 focus:bg-white dark:focus:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 normal-case tracking-normal outline-none transition-colors"
-        />
-        {query ? (
-          <button
-            type="button"
-            onClick={() => {
-              setQuery("");
-              setActiveIndex(0);
-              inputRef.current?.focus();
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-            aria-label="Clear search"
-          >
-            <span className="material-symbols-outlined text-[18px]">close</span>
-          </button>
-        ) : (
-          <span className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center text-[10px] font-semibold text-slate-400 border border-slate-300 dark:border-slate-700 rounded px-1.5 py-0.5 normal-case tracking-normal">
-            Ctrl K
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          setMobileOpen(true);
+          setOpen(true);
+          setActiveIndex(0);
+          setTimeout(() => inputRef.current?.focus(), 0);
+        }}
+        className="md:hidden text-slate-500 hover:text-teal-600 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
+        aria-label="Open search"
+      >
+        <span className="material-symbols-outlined">search</span>
+      </button>
+
+      <div
+        ref={containerRef}
+        className={
+          mobileOpen
+            ? "fixed inset-x-0 top-0 z-[80] flex-1 bg-white dark:bg-slate-950 px-3 py-3 shadow-lg md:static md:z-auto md:bg-transparent md:p-0 md:shadow-none md:relative md:max-w-xl md:mx-6 md:min-w-0"
+            : "relative hidden md:block flex-1 max-w-xl mx-6 min-w-0"
+        }
+      >
+        <div className="relative">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">
+            search
           </span>
-        )}
-      </div>
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setOpen(true);
+              setActiveIndex(0);
+            }}
+            onFocus={() => {
+              setOpen(true);
+              setActiveIndex(0);
+            }}
+            onKeyDown={onKeyDown}
+            placeholder="Search pages, tabs & forms..."
+            className="w-full h-10 pl-10 pr-16 rounded-full bg-slate-100 dark:bg-slate-800/70 border border-transparent focus:border-teal-500/40 focus:bg-white dark:focus:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 normal-case tracking-normal outline-none transition-colors"
+          />
+          {mobileOpen ? (
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setOpen(false);
+                setQuery("");
+              }}
+              className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+              aria-label="Close search"
+            >
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          ) : query ? (
+            <button
+              type="button"
+              onClick={() => {
+                setQuery("");
+                setActiveIndex(0);
+                inputRef.current?.focus();
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              aria-label="Clear search"
+            >
+              <span className="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          ) : (
+            <span className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center text-[10px] font-semibold text-slate-400 border border-slate-300 dark:border-slate-700 rounded px-1.5 py-0.5 normal-case tracking-normal">
+              Ctrl K
+            </span>
+          )}
+        </div>
 
       {open && (
         <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-[70] normal-case tracking-normal max-h-[70vh] overflow-y-auto">
@@ -312,6 +351,7 @@ export default function GlobalSearch() {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

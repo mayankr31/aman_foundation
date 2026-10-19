@@ -31,6 +31,13 @@ enum TravelStatus {
   COMPLETED
 }
 
+enum ReimbursementStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REIMBURSED
+}
+
 enum Action {
   READ
   WRITE
@@ -94,18 +101,21 @@ model User {
   createdBy    User?            @relation("UserCreator", fields: [createdById], references: [id], onDelete: SetNull)
   createdUsers User[]           @relation("UserCreator")
 
-  fellow                  Fellow?
-  leaves                  Leave[]
-  verifiedTransactions    InventoryLedger[]
-  reliefDistributions     ReliefDistribution[]
-  attendanceLogs          AttendanceLog[]
-  taskComments            FellowTaskComment[]
-  travelRequests          TravelRequest[]
-  approvedTravel          TravelRequest[]      @relation("ApprovedByUser")
-  coachingRecords         CoachingRecord[]
-  pmReflections           PMReflection[]
-  individualFeedback      IndividualFeedback[]
-  performanceObservations FellowPerformance[]
+  fellow                   Fellow?
+  leaves                   Leave[]
+  verifiedTransactions     InventoryLedger[]
+  reliefDistributions      ReliefDistribution[]
+  attendanceLogs           AttendanceLog[]
+  taskComments             FellowTaskComment[]
+  travelRequests           TravelRequest[]
+  approvedTravel           TravelRequest[]      @relation("ApprovedByUser")
+  reimbursementRequests    Reimbursement[]      @relation("ReimbursementRequester")
+  reimbursementsApproved   Reimbursement[]      @relation("ReimbursementApprover")
+  reimbursementsReimbursed Reimbursement[]      @relation("ReimbursementPayer")
+  coachingRecords          CoachingRecord[]
+  pmReflections            PMReflection[]
+  individualFeedback       IndividualFeedback[]
+  performanceObservations  FellowPerformance[]
 
   managedSchools            ProgramManagerSchool[]
   managedCentres            ProgramManagerAfterSchoolCentre[]
@@ -454,12 +464,17 @@ model IncomeRecord {
   beneficiaryId String
   amount        Float
   incomeDate    DateTime
+  incomeMonth   Int?
+  incomeYear    Int?
   source        String?
   notes         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   beneficiary Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  @@unique([beneficiaryId, incomeYear, incomeMonth])
+  @@index([beneficiaryId, incomeYear])
 }
 
 model FellowSchool {
@@ -1226,6 +1241,57 @@ model TravelExpense {
   updatedAt       DateTime @updatedAt
 
   travelRequest TravelRequest @relation(fields: [travelRequestId], references: [id], onDelete: Cascade)
+}
+
+model Reimbursement {
+  id               String              @id @default(uuid())
+  userId           String
+  title            String
+  purpose          String?
+  notes            String?
+  totalClaimed     Float
+  totalApproved    Float?
+  totalReimbursed  Float?
+  status           ReimbursementStatus @default(PENDING)
+  bankName         String?
+  bankAccountNo    String?
+  bankIfsc         String?
+  rejectionReason  String?
+  approvedBy       String?
+  approvedAt       DateTime?
+  reimbursedBy     String?
+  reimbursedAt     DateTime?
+  paymentMode      String?
+  paymentReference String?
+  paymentNotes     String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  user       User                @relation("ReimbursementRequester", fields: [userId], references: [id], onDelete: Cascade)
+  approver   User?               @relation("ReimbursementApprover", fields: [approvedBy], references: [id], onDelete: SetNull)
+  reimburser User?               @relation("ReimbursementPayer", fields: [reimbursedBy], references: [id], onDelete: SetNull)
+  items      ReimbursementItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ReimbursementItem {
+  id              String   @id @default(uuid())
+  reimbursementId String
+  expenseDate     DateTime
+  category        String
+  description     String
+  amount          Float
+  approvedAmount  Float?
+  receiptFiles    Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  reimbursement Reimbursement @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  @@index([reimbursementId])
 }
 
 // ─── Assessment Templates (managed by ADMIN/PROGRAM_MANAGER) ───

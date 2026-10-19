@@ -12,6 +12,8 @@ export const PAGE_KEYS = [
   "leaves",
   "travel",
   "travel-management",
+  "reimbursements",
+  "reimbursement-management",
   "attendance",
   "admin",
 ];
@@ -26,6 +28,8 @@ export const ROUTE_PERMISSION_MAP = [
   ["/disaster-relief", "disaster-relief"],
   ["/travel/manage", "travel-management"],
   ["/travel", "travel"],
+  ["/reimbursements/manage", "reimbursement-management"],
+  ["/reimbursements", "reimbursements"],
   ["/hr/attendance", "attendance"],
   ["/attendance", "attendance"],
   ["/hr/leaves", "leaves"],

@@ -122,7 +122,23 @@ export default function LeaveWorkflow() {
         </div>
       </div>
 
-      <div className="flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+      <div className="md:hidden mb-6 font-sans">
+        <label htmlFor="hr-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+          HR section
+        </label>
+        <select
+          id="hr-tab"
+          value="/hr/leaves"
+          onChange={(e) => router.push(e.target.value)}
+          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+        >
+          <option value="/hr">Employees</option>
+          <option value="/hr/attendance">Attendance Logs</option>
+          <option value="/hr/leaves">Leave Requests</option>
+        </select>
+      </div>
+
+      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans">
         <Link href="/hr" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
           Employees
         </Link>
@@ -143,7 +159,7 @@ export default function LeaveWorkflow() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-[860px] table-fixed text-left border-collapse font-sans text-sm">
+          <table className="mobile-card-table w-full min-w-[860px] table-fixed text-left border-collapse font-sans text-sm">
             <thead>
               <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
                 <th className="w-[16%] py-3 px-4">Applicant</th>
@@ -158,12 +174,12 @@ export default function LeaveWorkflow() {
             <tbody>
               {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
-                  <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
-                  <td className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs break-words align-top">{formatStoredDates(leave.dates)}</td>
-                  <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
-                  <td className="py-4 px-4">
+                  <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
+                  <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
+                  <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.type}</td>
+                  <td data-label="Dates" className="py-4 px-4 font-mono text-xs break-words align-top">{formatStoredDates(leave.dates)}</td>
+                  <td data-label="Reason" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
+                  <td data-label="Status" className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">
                       <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                         leave.status === "APPROVED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" :
@@ -179,7 +195,7 @@ export default function LeaveWorkflow() {
                       )}
                     </div>
                   </td>
-                  <td className="py-4 px-4 flex gap-2">
+                  <td data-label="Actions" className="py-4 px-4 flex gap-2">
                     {leave.status === "PENDING" && leave.userId !== currentUser?.id && (
                       <>
                         <button
@@ -221,7 +237,7 @@ export default function LeaveWorkflow() {
 
       {rejectingLeaveId && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-surface-container-lowest rounded-[2rem] shadow-2xl w-full max-w-lg p-8 relative">
+          <div className="bg-surface-container-lowest rounded-2xl sm:rounded-[2rem] shadow-2xl w-full max-w-lg p-4 sm:p-8 relative max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6 border-b border-outline-variant/10 pb-4">
               <h3 className="text-xl font-headline font-bold text-on-surface">Provide Rejection Reason</h3>
               <button onClick={() => setRejectingLeaveId(null)} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">

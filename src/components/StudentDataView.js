@@ -413,24 +413,26 @@ export default function StudentDataView({
         <div className="bg-error/10 text-error text-xs font-semibold rounded-lg px-4 py-2">{error}</div>
       )}
       {/* Header / controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="space-y-3">
         <div>
-          <h3 className="font-headline font-bold text-xl text-on-surface">{heading}</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-headline font-bold text-xl text-on-surface">{heading}</h3>
+            {report.totalStudents > 0 && (
+              <span className="text-[10px] font-bold uppercase tracking-wide text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                {report.totalStudents} {report.totalStudents === 1 ? "student" : "students"}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-on-surface-variant mt-1">
             Aggregate academic assessment levels of the {populationLabel} under this {scopeLabel}
             {entityName ? ` (${entityName})` : ""}. Reading fluency level is assigned
             to the highest category the student qualifies in (≥70% marks).
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {report.totalStudents > 0 && (
-            <span className="text-xs font-semibold text-on-surface-variant">
-              {report.totalStudents} students
-            </span>
-          )}
-          <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-end">
+          <div className="flex flex-col gap-1 min-w-0 sm:w-auto">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">View</label>
-            <div className="flex rounded-lg border border-outline-variant overflow-hidden">
+            <div className="flex w-full sm:w-auto rounded-lg border border-outline-variant overflow-hidden">
               {[
                 { key: "levels", label: "Levels" },
                 { key: "growth", label: "Growth" },
@@ -439,7 +441,7 @@ export default function StudentDataView({
                   key={opt.key}
                   type="button"
                   onClick={() => setView(opt.key)}
-                  className={`px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`flex-1 px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
                     view === opt.key
                       ? "bg-primary text-white"
                       : "bg-surface text-on-surface-variant hover:bg-surface-container"
@@ -450,12 +452,12 @@ export default function StudentDataView({
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 min-w-0 sm:w-44 lg:w-52">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Academic Session</label>
             <select
               value={session || report.session || ""}
               onChange={(e) => setSession(e.target.value)}
-              className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
+              className="w-full min-w-0 px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
             >
               {sessions.length === 0 && <option value="">No sessions found</option>}
               {sessions.map((s) => (
@@ -465,30 +467,30 @@ export default function StudentDataView({
               ))}
             </select>
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Export</label>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handleExport}
-                disabled={exporting || report.totalStudents === 0}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Export the aggregate levels for the selected session to Excel"
-              >
-                <span className="material-symbols-outlined text-[16px]">download</span>
-                {exporting ? "Exporting..." : "Export Levels"}
-              </button>
-              <button
-                type="button"
-                onClick={handleExportAssessments}
-                disabled={exportingAssessments || report.totalStudents === 0}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs font-semibold hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Export every assessment form for the selected session to Excel"
-              >
-                <span className="material-symbols-outlined text-[16px]">download</span>
-                {exportingAssessments ? "Exporting..." : "Export Assessment Data"}
-              </button>
-            </div>
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">Export</label>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExport}
+              disabled={exporting || report.totalStudents === 0}
+              className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Export the aggregate levels for the selected session to Excel"
+            >
+              <span className="material-symbols-outlined text-[16px]">download</span>
+              {exporting ? "Exporting..." : "Export Levels"}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportAssessments}
+              disabled={exportingAssessments || report.totalStudents === 0}
+              className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-outline-variant bg-surface text-on-surface text-xs font-semibold hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Export every assessment form for the selected session to Excel"
+            >
+              <span className="material-symbols-outlined text-[16px]">download</span>
+              {exportingAssessments ? "Exporting..." : "Export Assessment Data"}
+            </button>
           </div>
         </div>
       </div>

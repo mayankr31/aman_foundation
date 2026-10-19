@@ -585,7 +585,7 @@ export default function StudentProfileDetail() {
       </Link>
 
       {/* Hero Section */}
-      <header className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
+      <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
@@ -601,9 +601,9 @@ export default function StudentProfileDetail() {
               <input type="file" accept="image/*" className="hidden" disabled={uploadingPhoto} onChange={handlePhotoUpload} />
             </label>
           </div>
-          <div className="pt-2">
+          <div className="pt-2 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h2 className="page-title text-on-surface capitalize">{student.name}</h2>
+              <h2 className="page-title text-on-surface capitalize break-words">{student.name}</h2>
               <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${getAcademicStatusClass(deriveAcademicStatus(student.attendance))}`}>
                 {deriveAcademicStatus(student.attendance)}
               </span>
@@ -613,8 +613,8 @@ export default function StudentProfileDetail() {
                 </span>
               )}
             </div>
-            <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm text-primary">school</span>
+            <p className="text-on-surface-variant font-medium mb-4 flex items-center gap-2 break-words">
+              <span className="material-symbols-outlined text-sm text-primary shrink-0">school</span>
               {student.school ? student.school.name : "Unassigned"} • {student.grade}
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-medium text-slate-500 font-sans">
@@ -653,35 +653,37 @@ export default function StudentProfileDetail() {
       </header>
 
       {/* Global Date Range Filter */}
-      <div className="flex flex-wrap items-end gap-3 mb-8 font-sans">
-        <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide flex items-center gap-1.5">
+      <div className="mb-8 rounded-xl border border-outline-variant/20 bg-surface-container-low/20 p-4 font-sans">
+        <div className="flex items-center gap-2 mb-3">
           <span className="material-symbols-outlined text-[18px] text-primary">date_range</span>
-          Filter by date
-        </span>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">From</label>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
-          />
+          <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wide">Filter by date</span>
         </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">To</label>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="px-3 py-1.5 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
-          />
+        <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
+          <div className="flex flex-col gap-1 min-w-0">
+            <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">From</label>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+            />
+          </div>
+          <div className="flex flex-col gap-1 min-w-0">
+            <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">To</label>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+            />
+          </div>
         </div>
         {hasDateRange && (
           <button
             onClick={() => { setDateFrom(""); setDateTo(""); }}
-            className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors text-xs font-semibold cursor-pointer"
+            className="mt-3 w-full sm:w-auto px-3 py-2 rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors text-xs font-semibold cursor-pointer"
           >
-            Clear
+            Clear dates
           </button>
         )}
       </div>
@@ -713,7 +715,7 @@ export default function StudentProfileDetail() {
               ].map(([label, val]) => (
                 <div key={label} className="border-b border-surface-container pb-3">
                   <p className="text-on-surface-variant mb-1 font-medium">{label}</p>
-                  <p className="font-semibold text-on-surface capitalize">{val}</p>
+                  <p className="font-semibold text-on-surface capitalize break-words">{val}</p>
                 </div>
               ))}
             </div>
@@ -799,7 +801,7 @@ export default function StudentProfileDetail() {
                             <span className="text-xs text-on-surface-variant">by {form.fellow.name}</span>
                           )}
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity items-center">
+                        <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity items-center">
                           <button
                             onClick={() => { loadTemplates().then(() => openEditAssessmentForm(form)); }}
                             className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
@@ -915,7 +917,7 @@ export default function StudentProfileDetail() {
 
           {/* School Transition History */}
           <div id="transition-history" className="scroll-mt-24 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
               <h3 className="section-title text-on-surface flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary">trending_up</span>
                 School Transition History
@@ -1195,7 +1197,7 @@ export default function StudentProfileDetail() {
         <Modal title={editingFormId ? "Edit Assessment Form" : "New Assessment Form"} onClose={() => { setModal(null); setEditingFormId(null); }}>
           <form onSubmit={handleAssessmentFormSave} className="space-y-4">
             {/* Tab navigation */}
-            <div className="flex gap-1 border-b border-outline-variant/20 pb-2 overflow-x-auto">
+            <div className="flex gap-1 border-b border-outline-variant/20 pb-2 overflow-x-auto tabs-mobile-wrap">
               {["basic", "enrollment", "subjects", "fln", "sel"].map(tab => (
                 <button
                   key={tab}

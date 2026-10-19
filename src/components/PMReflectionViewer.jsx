@@ -44,8 +44,8 @@ export default function PMReflectionViewer({ reflection, onClose }) {
         className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full p-6 shadow-2xl space-y-8 font-sans max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center sticky top-0 bg-white dark:bg-slate-900 pb-4 border-b border-outline-variant/20 z-10">
-          <div>
+        <div className="flex justify-between items-center gap-3 sticky top-0 bg-white dark:bg-slate-900 pb-4 border-b border-outline-variant/20 z-10">
+          <div className="min-w-0">
             <h3 className="text-lg font-bold text-on-surface">
               POST LDJC PM Reflection
             </h3>

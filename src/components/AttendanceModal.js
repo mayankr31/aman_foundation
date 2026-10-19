@@ -485,9 +485,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           <span className="material-symbols-outlined text-lg leading-none">close</span>
         </button>
 
-        <div className="mb-8">
+        <div className="mb-8 pr-10">
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 font-sans">{workspaceLabel}</p>
-          <h2 className="text-3xl font-headline font-semibold tracking-tight text-on-surface">Daily Attendance & Tasks</h2>
+          <h2 className="text-2xl sm:text-3xl font-headline font-semibold tracking-tight text-on-surface">Daily Attendance & Tasks</h2>
         </div>
 
         {isLoading ? (
@@ -517,20 +517,20 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               <div className="space-y-2 max-h-60 overflow-y-auto pr-2 no-scrollbar">
                 {tasks.map((task) => (
                   <div key={task.id} className="flex items-center justify-between p-3 bg-surface-container rounded-lg border border-slate-200">
-                    <div className="flex items-center gap-3 flex-1">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
                       <input
                         type="checkbox"
                         checked={task.status === "Completed"}
                         onChange={() => toggleTaskStatus(task.id, task.status)}
-                        className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer border-slate-300"
+                        className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer border-slate-300 shrink-0"
                       />
-                      <span className={`text-sm ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
+                      <span className={`text-sm break-words ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
                         {task.title}
                       </span>
                     </div>
                     <button
                       onClick={() => setSelectedTaskForComments(task)}
-                      className="text-primary hover:bg-primary/10 transition-colors cursor-pointer rounded-md px-2 py-1 flex items-center gap-1 text-xs font-semibold"
+                      className="text-primary hover:bg-primary/10 transition-colors cursor-pointer rounded-md px-2 py-1 flex items-center gap-1 text-xs font-semibold shrink-0"
                     >
                       <span className="material-symbols-outlined text-[16px]">chat_bubble</span>
                       Comments ({task.comments?.length || 0})
@@ -656,16 +656,16 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                               {task.status === "Completed" && <span className="material-symbols-outlined text-[12px]">check</span>}
                             </div>
                           )}
-                          <div>
-                            <span className={`text-sm ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
+                          <div className="min-w-0">
+                            <span className={`text-sm break-words ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
                               {task.title}
                             </span>
-                            {task.description && <p className="text-xs text-slate-500 mt-1">{task.description}</p>}
+                            {task.description && <p className="text-xs text-slate-500 mt-1 break-words">{task.description}</p>}
                           </div>
                         </div>
                         <button
                           onClick={() => setSelectedTaskForComments(task)}
-                          className="text-slate-400 hover:text-primary transition-colors cursor-pointer rounded-md p-1 flex items-center gap-1 opacity-0 group-hover:opacity-100"
+                          className="text-slate-400 hover:text-primary transition-colors cursor-pointer rounded-md p-1 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                           title="Comments"
                         >
                           <span className="material-symbols-outlined text-[18px]">chat_bubble</span>

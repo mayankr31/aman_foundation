@@ -359,6 +359,16 @@ export type TravelRequest = $Result.DefaultSelection<Prisma.$TravelRequestPayloa
  */
 export type TravelExpense = $Result.DefaultSelection<Prisma.$TravelExpensePayload>
 /**
+ * Model Reimbursement
+ * 
+ */
+export type Reimbursement = $Result.DefaultSelection<Prisma.$ReimbursementPayload>
+/**
+ * Model ReimbursementItem
+ * 
+ */
+export type ReimbursementItem = $Result.DefaultSelection<Prisma.$ReimbursementItemPayload>
+/**
  * Model FLNCategory
  * 
  */
@@ -508,6 +518,16 @@ export const TravelStatus: {
 export type TravelStatus = (typeof TravelStatus)[keyof typeof TravelStatus]
 
 
+export const ReimbursementStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  REIMBURSED: 'REIMBURSED'
+};
+
+export type ReimbursementStatus = (typeof ReimbursementStatus)[keyof typeof ReimbursementStatus]
+
+
 export const Action: {
   READ: 'READ',
   WRITE: 'WRITE'
@@ -544,6 +564,10 @@ export const LeaveStatus: typeof $Enums.LeaveStatus
 export type TravelStatus = $Enums.TravelStatus
 
 export const TravelStatus: typeof $Enums.TravelStatus
+
+export type ReimbursementStatus = $Enums.ReimbursementStatus
+
+export const ReimbursementStatus: typeof $Enums.ReimbursementStatus
 
 export type Action = $Enums.Action
 
@@ -1369,6 +1393,26 @@ export class PrismaClient<
   get travelExpense(): Prisma.TravelExpenseDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.reimbursement`: Exposes CRUD operations for the **Reimbursement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Reimbursements
+    * const reimbursements = await prisma.reimbursement.findMany()
+    * ```
+    */
+  get reimbursement(): Prisma.ReimbursementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reimbursementItem`: Exposes CRUD operations for the **ReimbursementItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReimbursementItems
+    * const reimbursementItems = await prisma.reimbursementItem.findMany()
+    * ```
+    */
+  get reimbursementItem(): Prisma.ReimbursementItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.fLNCategory`: Exposes CRUD operations for the **FLNCategory** model.
     * Example usage:
     * ```ts
@@ -2100,6 +2144,8 @@ export namespace Prisma {
     IndividualFeedback: 'IndividualFeedback',
     TravelRequest: 'TravelRequest',
     TravelExpense: 'TravelExpense',
+    Reimbursement: 'Reimbursement',
+    ReimbursementItem: 'ReimbursementItem',
     FLNCategory: 'FLNCategory',
     FLNQuestion: 'FLNQuestion',
     SELQuestion: 'SELQuestion',
@@ -2138,7 +2184,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7248,6 +7294,154 @@ export namespace Prisma {
           }
         }
       }
+      Reimbursement: {
+        payload: Prisma.$ReimbursementPayload<ExtArgs>
+        fields: Prisma.ReimbursementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReimbursementFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReimbursementFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          findFirst: {
+            args: Prisma.ReimbursementFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReimbursementFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          findMany: {
+            args: Prisma.ReimbursementFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+          }
+          create: {
+            args: Prisma.ReimbursementCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          createMany: {
+            args: Prisma.ReimbursementCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReimbursementCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+          }
+          delete: {
+            args: Prisma.ReimbursementDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          update: {
+            args: Prisma.ReimbursementUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReimbursementDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReimbursementUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReimbursementUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReimbursementUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementPayload>
+          }
+          aggregate: {
+            args: Prisma.ReimbursementAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReimbursement>
+          }
+          groupBy: {
+            args: Prisma.ReimbursementGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReimbursementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReimbursementCountArgs<ExtArgs>
+            result: $Utils.Optional<ReimbursementCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReimbursementItem: {
+        payload: Prisma.$ReimbursementItemPayload<ExtArgs>
+        fields: Prisma.ReimbursementItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReimbursementItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReimbursementItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          findFirst: {
+            args: Prisma.ReimbursementItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReimbursementItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          findMany: {
+            args: Prisma.ReimbursementItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>[]
+          }
+          create: {
+            args: Prisma.ReimbursementItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          createMany: {
+            args: Prisma.ReimbursementItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReimbursementItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>[]
+          }
+          delete: {
+            args: Prisma.ReimbursementItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          update: {
+            args: Prisma.ReimbursementItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReimbursementItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReimbursementItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReimbursementItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReimbursementItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReimbursementItemPayload>
+          }
+          aggregate: {
+            args: Prisma.ReimbursementItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReimbursementItem>
+          }
+          groupBy: {
+            args: Prisma.ReimbursementItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReimbursementItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReimbursementItemCountArgs<ExtArgs>
+            result: $Utils.Optional<ReimbursementItemCountAggregateOutputType> | number
+          }
+        }
+      }
       FLNCategory: {
         payload: Prisma.$FLNCategoryPayload<ExtArgs>
         fields: Prisma.FLNCategoryFieldRefs
@@ -9127,6 +9321,8 @@ export namespace Prisma {
     individualFeedback?: IndividualFeedbackOmit
     travelRequest?: TravelRequestOmit
     travelExpense?: TravelExpenseOmit
+    reimbursement?: ReimbursementOmit
+    reimbursementItem?: ReimbursementItemOmit
     fLNCategory?: FLNCategoryOmit
     fLNQuestion?: FLNQuestionOmit
     sELQuestion?: SELQuestionOmit
@@ -9279,6 +9475,9 @@ export namespace Prisma {
     taskComments: number
     travelRequests: number
     approvedTravel: number
+    reimbursementRequests: number
+    reimbursementsApproved: number
+    reimbursementsReimbursed: number
     coachingRecords: number
     pmReflections: number
     individualFeedback: number
@@ -9301,6 +9500,9 @@ export namespace Prisma {
     taskComments?: boolean | UserCountOutputTypeCountTaskCommentsArgs
     travelRequests?: boolean | UserCountOutputTypeCountTravelRequestsArgs
     approvedTravel?: boolean | UserCountOutputTypeCountApprovedTravelArgs
+    reimbursementRequests?: boolean | UserCountOutputTypeCountReimbursementRequestsArgs
+    reimbursementsApproved?: boolean | UserCountOutputTypeCountReimbursementsApprovedArgs
+    reimbursementsReimbursed?: boolean | UserCountOutputTypeCountReimbursementsReimbursedArgs
     coachingRecords?: boolean | UserCountOutputTypeCountCoachingRecordsArgs
     pmReflections?: boolean | UserCountOutputTypeCountPmReflectionsArgs
     individualFeedback?: boolean | UserCountOutputTypeCountIndividualFeedbackArgs
@@ -9385,6 +9587,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountApprovedTravelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TravelRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReimbursementRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReimbursementsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReimbursementsReimbursedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementWhereInput
   }
 
   /**
@@ -10547,6 +10770,37 @@ export namespace Prisma {
    */
   export type TravelRequestCountOutputTypeCountExpensesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TravelExpenseWhereInput
+  }
+
+
+  /**
+   * Count Type ReimbursementCountOutputType
+   */
+
+  export type ReimbursementCountOutputType = {
+    items: number
+  }
+
+  export type ReimbursementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | ReimbursementCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReimbursementCountOutputType without action
+   */
+  export type ReimbursementCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementCountOutputType
+     */
+    select?: ReimbursementCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReimbursementCountOutputType without action
+   */
+  export type ReimbursementCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementItemWhereInput
   }
 
 
@@ -12499,6 +12753,9 @@ export namespace Prisma {
     taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
+    reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
+    reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
+    reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
     pmReflections?: boolean | User$pmReflectionsArgs<ExtArgs>
     individualFeedback?: boolean | User$individualFeedbackArgs<ExtArgs>
@@ -12626,6 +12883,9 @@ export namespace Prisma {
     taskComments?: boolean | User$taskCommentsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
+    reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
+    reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
+    reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
     pmReflections?: boolean | User$pmReflectionsArgs<ExtArgs>
     individualFeedback?: boolean | User$individualFeedbackArgs<ExtArgs>
@@ -12662,6 +12922,9 @@ export namespace Prisma {
       taskComments: Prisma.$FellowTaskCommentPayload<ExtArgs>[]
       travelRequests: Prisma.$TravelRequestPayload<ExtArgs>[]
       approvedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
+      reimbursementRequests: Prisma.$ReimbursementPayload<ExtArgs>[]
+      reimbursementsApproved: Prisma.$ReimbursementPayload<ExtArgs>[]
+      reimbursementsReimbursed: Prisma.$ReimbursementPayload<ExtArgs>[]
       coachingRecords: Prisma.$CoachingRecordPayload<ExtArgs>[]
       pmReflections: Prisma.$PMReflectionPayload<ExtArgs>[]
       individualFeedback: Prisma.$IndividualFeedbackPayload<ExtArgs>[]
@@ -13109,6 +13372,9 @@ export namespace Prisma {
     taskComments<T extends User$taskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$taskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FellowTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     travelRequests<T extends User$travelRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$travelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedTravel<T extends User$approvedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reimbursementRequests<T extends User$reimbursementRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reimbursementsApproved<T extends User$reimbursementsApprovedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reimbursementsReimbursed<T extends User$reimbursementsReimbursedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsReimbursedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     coachingRecords<T extends User$coachingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$coachingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoachingRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmReflections<T extends User$pmReflectionsArgs<ExtArgs> = {}>(args?: Subset<T, User$pmReflectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PMReflectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     individualFeedback<T extends User$individualFeedbackArgs<ExtArgs> = {}>(args?: Subset<T, User$individualFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IndividualFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13829,6 +14095,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TravelRequestScalarFieldEnum | TravelRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.reimbursementRequests
+   */
+  export type User$reimbursementRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    where?: ReimbursementWhereInput
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    cursor?: ReimbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
+   * User.reimbursementsApproved
+   */
+  export type User$reimbursementsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    where?: ReimbursementWhereInput
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    cursor?: ReimbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
+   * User.reimbursementsReimbursed
+   */
+  export type User$reimbursementsReimbursedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    where?: ReimbursementWhereInput
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    cursor?: ReimbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
   }
 
   /**
@@ -35683,10 +36021,14 @@ export namespace Prisma {
 
   export type IncomeRecordAvgAggregateOutputType = {
     amount: number | null
+    incomeMonth: number | null
+    incomeYear: number | null
   }
 
   export type IncomeRecordSumAggregateOutputType = {
     amount: number | null
+    incomeMonth: number | null
+    incomeYear: number | null
   }
 
   export type IncomeRecordMinAggregateOutputType = {
@@ -35694,6 +36036,8 @@ export namespace Prisma {
     beneficiaryId: string | null
     amount: number | null
     incomeDate: Date | null
+    incomeMonth: number | null
+    incomeYear: number | null
     source: string | null
     notes: string | null
     createdAt: Date | null
@@ -35705,6 +36049,8 @@ export namespace Prisma {
     beneficiaryId: string | null
     amount: number | null
     incomeDate: Date | null
+    incomeMonth: number | null
+    incomeYear: number | null
     source: string | null
     notes: string | null
     createdAt: Date | null
@@ -35716,6 +36062,8 @@ export namespace Prisma {
     beneficiaryId: number
     amount: number
     incomeDate: number
+    incomeMonth: number
+    incomeYear: number
     source: number
     notes: number
     createdAt: number
@@ -35726,10 +36074,14 @@ export namespace Prisma {
 
   export type IncomeRecordAvgAggregateInputType = {
     amount?: true
+    incomeMonth?: true
+    incomeYear?: true
   }
 
   export type IncomeRecordSumAggregateInputType = {
     amount?: true
+    incomeMonth?: true
+    incomeYear?: true
   }
 
   export type IncomeRecordMinAggregateInputType = {
@@ -35737,6 +36089,8 @@ export namespace Prisma {
     beneficiaryId?: true
     amount?: true
     incomeDate?: true
+    incomeMonth?: true
+    incomeYear?: true
     source?: true
     notes?: true
     createdAt?: true
@@ -35748,6 +36102,8 @@ export namespace Prisma {
     beneficiaryId?: true
     amount?: true
     incomeDate?: true
+    incomeMonth?: true
+    incomeYear?: true
     source?: true
     notes?: true
     createdAt?: true
@@ -35759,6 +36115,8 @@ export namespace Prisma {
     beneficiaryId?: true
     amount?: true
     incomeDate?: true
+    incomeMonth?: true
+    incomeYear?: true
     source?: true
     notes?: true
     createdAt?: true
@@ -35857,6 +36215,8 @@ export namespace Prisma {
     beneficiaryId: string
     amount: number
     incomeDate: Date
+    incomeMonth: number | null
+    incomeYear: number | null
     source: string | null
     notes: string | null
     createdAt: Date
@@ -35887,6 +36247,8 @@ export namespace Prisma {
     beneficiaryId?: boolean
     amount?: boolean
     incomeDate?: boolean
+    incomeMonth?: boolean
+    incomeYear?: boolean
     source?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -35899,6 +36261,8 @@ export namespace Prisma {
     beneficiaryId?: boolean
     amount?: boolean
     incomeDate?: boolean
+    incomeMonth?: boolean
+    incomeYear?: boolean
     source?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -35911,6 +36275,8 @@ export namespace Prisma {
     beneficiaryId?: boolean
     amount?: boolean
     incomeDate?: boolean
+    incomeMonth?: boolean
+    incomeYear?: boolean
     source?: boolean
     notes?: boolean
     createdAt?: boolean
@@ -35923,13 +36289,15 @@ export namespace Prisma {
     beneficiaryId?: boolean
     amount?: boolean
     incomeDate?: boolean
+    incomeMonth?: boolean
+    incomeYear?: boolean
     source?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type IncomeRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "amount" | "incomeDate" | "source" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["incomeRecord"]>
+  export type IncomeRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "beneficiaryId" | "amount" | "incomeDate" | "incomeMonth" | "incomeYear" | "source" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["incomeRecord"]>
   export type IncomeRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     beneficiary?: boolean | BeneficiaryDefaultArgs<ExtArgs>
   }
@@ -35950,6 +36318,8 @@ export namespace Prisma {
       beneficiaryId: string
       amount: number
       incomeDate: Date
+      incomeMonth: number | null
+      incomeYear: number | null
       source: string | null
       notes: string | null
       createdAt: Date
@@ -36382,6 +36752,8 @@ export namespace Prisma {
     readonly beneficiaryId: FieldRef<"IncomeRecord", 'String'>
     readonly amount: FieldRef<"IncomeRecord", 'Float'>
     readonly incomeDate: FieldRef<"IncomeRecord", 'DateTime'>
+    readonly incomeMonth: FieldRef<"IncomeRecord", 'Int'>
+    readonly incomeYear: FieldRef<"IncomeRecord", 'Int'>
     readonly source: FieldRef<"IncomeRecord", 'String'>
     readonly notes: FieldRef<"IncomeRecord", 'String'>
     readonly createdAt: FieldRef<"IncomeRecord", 'DateTime'>
@@ -92320,6 +92692,2578 @@ export namespace Prisma {
 
 
   /**
+   * Model Reimbursement
+   */
+
+  export type AggregateReimbursement = {
+    _count: ReimbursementCountAggregateOutputType | null
+    _avg: ReimbursementAvgAggregateOutputType | null
+    _sum: ReimbursementSumAggregateOutputType | null
+    _min: ReimbursementMinAggregateOutputType | null
+    _max: ReimbursementMaxAggregateOutputType | null
+  }
+
+  export type ReimbursementAvgAggregateOutputType = {
+    totalClaimed: number | null
+    totalApproved: number | null
+    totalReimbursed: number | null
+  }
+
+  export type ReimbursementSumAggregateOutputType = {
+    totalClaimed: number | null
+    totalApproved: number | null
+    totalReimbursed: number | null
+  }
+
+  export type ReimbursementMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    purpose: string | null
+    notes: string | null
+    totalClaimed: number | null
+    totalApproved: number | null
+    totalReimbursed: number | null
+    status: $Enums.ReimbursementStatus | null
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    rejectionReason: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    reimbursedBy: string | null
+    reimbursedAt: Date | null
+    paymentMode: string | null
+    paymentReference: string | null
+    paymentNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReimbursementMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    title: string | null
+    purpose: string | null
+    notes: string | null
+    totalClaimed: number | null
+    totalApproved: number | null
+    totalReimbursed: number | null
+    status: $Enums.ReimbursementStatus | null
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    rejectionReason: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    reimbursedBy: string | null
+    reimbursedAt: Date | null
+    paymentMode: string | null
+    paymentReference: string | null
+    paymentNotes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReimbursementCountAggregateOutputType = {
+    id: number
+    userId: number
+    title: number
+    purpose: number
+    notes: number
+    totalClaimed: number
+    totalApproved: number
+    totalReimbursed: number
+    status: number
+    bankName: number
+    bankAccountNo: number
+    bankIfsc: number
+    rejectionReason: number
+    approvedBy: number
+    approvedAt: number
+    reimbursedBy: number
+    reimbursedAt: number
+    paymentMode: number
+    paymentReference: number
+    paymentNotes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReimbursementAvgAggregateInputType = {
+    totalClaimed?: true
+    totalApproved?: true
+    totalReimbursed?: true
+  }
+
+  export type ReimbursementSumAggregateInputType = {
+    totalClaimed?: true
+    totalApproved?: true
+    totalReimbursed?: true
+  }
+
+  export type ReimbursementMinAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    purpose?: true
+    notes?: true
+    totalClaimed?: true
+    totalApproved?: true
+    totalReimbursed?: true
+    status?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    rejectionReason?: true
+    approvedBy?: true
+    approvedAt?: true
+    reimbursedBy?: true
+    reimbursedAt?: true
+    paymentMode?: true
+    paymentReference?: true
+    paymentNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReimbursementMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    purpose?: true
+    notes?: true
+    totalClaimed?: true
+    totalApproved?: true
+    totalReimbursed?: true
+    status?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    rejectionReason?: true
+    approvedBy?: true
+    approvedAt?: true
+    reimbursedBy?: true
+    reimbursedAt?: true
+    paymentMode?: true
+    paymentReference?: true
+    paymentNotes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReimbursementCountAggregateInputType = {
+    id?: true
+    userId?: true
+    title?: true
+    purpose?: true
+    notes?: true
+    totalClaimed?: true
+    totalApproved?: true
+    totalReimbursed?: true
+    status?: true
+    bankName?: true
+    bankAccountNo?: true
+    bankIfsc?: true
+    rejectionReason?: true
+    approvedBy?: true
+    approvedAt?: true
+    reimbursedBy?: true
+    reimbursedAt?: true
+    paymentMode?: true
+    paymentReference?: true
+    paymentNotes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReimbursementAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reimbursement to aggregate.
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reimbursements to fetch.
+     */
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReimbursementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reimbursements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reimbursements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Reimbursements
+    **/
+    _count?: true | ReimbursementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReimbursementAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReimbursementSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReimbursementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReimbursementMaxAggregateInputType
+  }
+
+  export type GetReimbursementAggregateType<T extends ReimbursementAggregateArgs> = {
+        [P in keyof T & keyof AggregateReimbursement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReimbursement[P]>
+      : GetScalarType<T[P], AggregateReimbursement[P]>
+  }
+
+
+
+
+  export type ReimbursementGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementWhereInput
+    orderBy?: ReimbursementOrderByWithAggregationInput | ReimbursementOrderByWithAggregationInput[]
+    by: ReimbursementScalarFieldEnum[] | ReimbursementScalarFieldEnum
+    having?: ReimbursementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReimbursementCountAggregateInputType | true
+    _avg?: ReimbursementAvgAggregateInputType
+    _sum?: ReimbursementSumAggregateInputType
+    _min?: ReimbursementMinAggregateInputType
+    _max?: ReimbursementMaxAggregateInputType
+  }
+
+  export type ReimbursementGroupByOutputType = {
+    id: string
+    userId: string
+    title: string
+    purpose: string | null
+    notes: string | null
+    totalClaimed: number
+    totalApproved: number | null
+    totalReimbursed: number | null
+    status: $Enums.ReimbursementStatus
+    bankName: string | null
+    bankAccountNo: string | null
+    bankIfsc: string | null
+    rejectionReason: string | null
+    approvedBy: string | null
+    approvedAt: Date | null
+    reimbursedBy: string | null
+    reimbursedAt: Date | null
+    paymentMode: string | null
+    paymentReference: string | null
+    paymentNotes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ReimbursementCountAggregateOutputType | null
+    _avg: ReimbursementAvgAggregateOutputType | null
+    _sum: ReimbursementSumAggregateOutputType | null
+    _min: ReimbursementMinAggregateOutputType | null
+    _max: ReimbursementMaxAggregateOutputType | null
+  }
+
+  type GetReimbursementGroupByPayload<T extends ReimbursementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReimbursementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReimbursementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReimbursementGroupByOutputType[P]>
+            : GetScalarType<T[P], ReimbursementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReimbursementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    purpose?: boolean
+    notes?: boolean
+    totalClaimed?: boolean
+    totalApproved?: boolean
+    totalReimbursed?: boolean
+    status?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    rejectionReason?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    reimbursedBy?: boolean
+    reimbursedAt?: boolean
+    paymentMode?: boolean
+    paymentReference?: boolean
+    paymentNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+    items?: boolean | Reimbursement$itemsArgs<ExtArgs>
+    _count?: boolean | ReimbursementCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursement"]>
+
+  export type ReimbursementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    purpose?: boolean
+    notes?: boolean
+    totalClaimed?: boolean
+    totalApproved?: boolean
+    totalReimbursed?: boolean
+    status?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    rejectionReason?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    reimbursedBy?: boolean
+    reimbursedAt?: boolean
+    paymentMode?: boolean
+    paymentReference?: boolean
+    paymentNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursement"]>
+
+  export type ReimbursementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    purpose?: boolean
+    notes?: boolean
+    totalClaimed?: boolean
+    totalApproved?: boolean
+    totalReimbursed?: boolean
+    status?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    rejectionReason?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    reimbursedBy?: boolean
+    reimbursedAt?: boolean
+    paymentMode?: boolean
+    paymentReference?: boolean
+    paymentNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursement"]>
+
+  export type ReimbursementSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    title?: boolean
+    purpose?: boolean
+    notes?: boolean
+    totalClaimed?: boolean
+    totalApproved?: boolean
+    totalReimbursed?: boolean
+    status?: boolean
+    bankName?: boolean
+    bankAccountNo?: boolean
+    bankIfsc?: boolean
+    rejectionReason?: boolean
+    approvedBy?: boolean
+    approvedAt?: boolean
+    reimbursedBy?: boolean
+    reimbursedAt?: boolean
+    paymentMode?: boolean
+    paymentReference?: boolean
+    paymentNotes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReimbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "purpose" | "notes" | "totalClaimed" | "totalApproved" | "totalReimbursed" | "status" | "bankName" | "bankAccountNo" | "bankIfsc" | "rejectionReason" | "approvedBy" | "approvedAt" | "reimbursedBy" | "reimbursedAt" | "paymentMode" | "paymentReference" | "paymentNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["reimbursement"]>
+  export type ReimbursementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+    items?: boolean | Reimbursement$itemsArgs<ExtArgs>
+    _count?: boolean | ReimbursementCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ReimbursementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+  }
+  export type ReimbursementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    approver?: boolean | Reimbursement$approverArgs<ExtArgs>
+    reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
+  }
+
+  export type $ReimbursementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Reimbursement"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      approver: Prisma.$UserPayload<ExtArgs> | null
+      reimburser: Prisma.$UserPayload<ExtArgs> | null
+      items: Prisma.$ReimbursementItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      title: string
+      purpose: string | null
+      notes: string | null
+      totalClaimed: number
+      totalApproved: number | null
+      totalReimbursed: number | null
+      status: $Enums.ReimbursementStatus
+      bankName: string | null
+      bankAccountNo: string | null
+      bankIfsc: string | null
+      rejectionReason: string | null
+      approvedBy: string | null
+      approvedAt: Date | null
+      reimbursedBy: string | null
+      reimbursedAt: Date | null
+      paymentMode: string | null
+      paymentReference: string | null
+      paymentNotes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["reimbursement"]>
+    composites: {}
+  }
+
+  type ReimbursementGetPayload<S extends boolean | null | undefined | ReimbursementDefaultArgs> = $Result.GetResult<Prisma.$ReimbursementPayload, S>
+
+  type ReimbursementCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReimbursementFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReimbursementCountAggregateInputType | true
+    }
+
+  export interface ReimbursementDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Reimbursement'], meta: { name: 'Reimbursement' } }
+    /**
+     * Find zero or one Reimbursement that matches the filter.
+     * @param {ReimbursementFindUniqueArgs} args - Arguments to find a Reimbursement
+     * @example
+     * // Get one Reimbursement
+     * const reimbursement = await prisma.reimbursement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReimbursementFindUniqueArgs>(args: SelectSubset<T, ReimbursementFindUniqueArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Reimbursement that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReimbursementFindUniqueOrThrowArgs} args - Arguments to find a Reimbursement
+     * @example
+     * // Get one Reimbursement
+     * const reimbursement = await prisma.reimbursement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReimbursementFindUniqueOrThrowArgs>(args: SelectSubset<T, ReimbursementFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Reimbursement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementFindFirstArgs} args - Arguments to find a Reimbursement
+     * @example
+     * // Get one Reimbursement
+     * const reimbursement = await prisma.reimbursement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReimbursementFindFirstArgs>(args?: SelectSubset<T, ReimbursementFindFirstArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Reimbursement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementFindFirstOrThrowArgs} args - Arguments to find a Reimbursement
+     * @example
+     * // Get one Reimbursement
+     * const reimbursement = await prisma.reimbursement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReimbursementFindFirstOrThrowArgs>(args?: SelectSubset<T, ReimbursementFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Reimbursements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Reimbursements
+     * const reimbursements = await prisma.reimbursement.findMany()
+     * 
+     * // Get first 10 Reimbursements
+     * const reimbursements = await prisma.reimbursement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reimbursementWithIdOnly = await prisma.reimbursement.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReimbursementFindManyArgs>(args?: SelectSubset<T, ReimbursementFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Reimbursement.
+     * @param {ReimbursementCreateArgs} args - Arguments to create a Reimbursement.
+     * @example
+     * // Create one Reimbursement
+     * const Reimbursement = await prisma.reimbursement.create({
+     *   data: {
+     *     // ... data to create a Reimbursement
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReimbursementCreateArgs>(args: SelectSubset<T, ReimbursementCreateArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Reimbursements.
+     * @param {ReimbursementCreateManyArgs} args - Arguments to create many Reimbursements.
+     * @example
+     * // Create many Reimbursements
+     * const reimbursement = await prisma.reimbursement.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReimbursementCreateManyArgs>(args?: SelectSubset<T, ReimbursementCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Reimbursements and returns the data saved in the database.
+     * @param {ReimbursementCreateManyAndReturnArgs} args - Arguments to create many Reimbursements.
+     * @example
+     * // Create many Reimbursements
+     * const reimbursement = await prisma.reimbursement.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Reimbursements and only return the `id`
+     * const reimbursementWithIdOnly = await prisma.reimbursement.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReimbursementCreateManyAndReturnArgs>(args?: SelectSubset<T, ReimbursementCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Reimbursement.
+     * @param {ReimbursementDeleteArgs} args - Arguments to delete one Reimbursement.
+     * @example
+     * // Delete one Reimbursement
+     * const Reimbursement = await prisma.reimbursement.delete({
+     *   where: {
+     *     // ... filter to delete one Reimbursement
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReimbursementDeleteArgs>(args: SelectSubset<T, ReimbursementDeleteArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Reimbursement.
+     * @param {ReimbursementUpdateArgs} args - Arguments to update one Reimbursement.
+     * @example
+     * // Update one Reimbursement
+     * const reimbursement = await prisma.reimbursement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReimbursementUpdateArgs>(args: SelectSubset<T, ReimbursementUpdateArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Reimbursements.
+     * @param {ReimbursementDeleteManyArgs} args - Arguments to filter Reimbursements to delete.
+     * @example
+     * // Delete a few Reimbursements
+     * const { count } = await prisma.reimbursement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReimbursementDeleteManyArgs>(args?: SelectSubset<T, ReimbursementDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Reimbursements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Reimbursements
+     * const reimbursement = await prisma.reimbursement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReimbursementUpdateManyArgs>(args: SelectSubset<T, ReimbursementUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Reimbursements and returns the data updated in the database.
+     * @param {ReimbursementUpdateManyAndReturnArgs} args - Arguments to update many Reimbursements.
+     * @example
+     * // Update many Reimbursements
+     * const reimbursement = await prisma.reimbursement.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Reimbursements and only return the `id`
+     * const reimbursementWithIdOnly = await prisma.reimbursement.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReimbursementUpdateManyAndReturnArgs>(args: SelectSubset<T, ReimbursementUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Reimbursement.
+     * @param {ReimbursementUpsertArgs} args - Arguments to update or create a Reimbursement.
+     * @example
+     * // Update or create a Reimbursement
+     * const reimbursement = await prisma.reimbursement.upsert({
+     *   create: {
+     *     // ... data to create a Reimbursement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Reimbursement we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReimbursementUpsertArgs>(args: SelectSubset<T, ReimbursementUpsertArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Reimbursements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementCountArgs} args - Arguments to filter Reimbursements to count.
+     * @example
+     * // Count the number of Reimbursements
+     * const count = await prisma.reimbursement.count({
+     *   where: {
+     *     // ... the filter for the Reimbursements we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReimbursementCountArgs>(
+      args?: Subset<T, ReimbursementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReimbursementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Reimbursement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReimbursementAggregateArgs>(args: Subset<T, ReimbursementAggregateArgs>): Prisma.PrismaPromise<GetReimbursementAggregateType<T>>
+
+    /**
+     * Group by Reimbursement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReimbursementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReimbursementGroupByArgs['orderBy'] }
+        : { orderBy?: ReimbursementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReimbursementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReimbursementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Reimbursement model
+   */
+  readonly fields: ReimbursementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Reimbursement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReimbursementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    approver<T extends Reimbursement$approverArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$approverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reimburser<T extends Reimbursement$reimburserArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$reimburserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    items<T extends Reimbursement$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Reimbursement model
+   */
+  interface ReimbursementFieldRefs {
+    readonly id: FieldRef<"Reimbursement", 'String'>
+    readonly userId: FieldRef<"Reimbursement", 'String'>
+    readonly title: FieldRef<"Reimbursement", 'String'>
+    readonly purpose: FieldRef<"Reimbursement", 'String'>
+    readonly notes: FieldRef<"Reimbursement", 'String'>
+    readonly totalClaimed: FieldRef<"Reimbursement", 'Float'>
+    readonly totalApproved: FieldRef<"Reimbursement", 'Float'>
+    readonly totalReimbursed: FieldRef<"Reimbursement", 'Float'>
+    readonly status: FieldRef<"Reimbursement", 'ReimbursementStatus'>
+    readonly bankName: FieldRef<"Reimbursement", 'String'>
+    readonly bankAccountNo: FieldRef<"Reimbursement", 'String'>
+    readonly bankIfsc: FieldRef<"Reimbursement", 'String'>
+    readonly rejectionReason: FieldRef<"Reimbursement", 'String'>
+    readonly approvedBy: FieldRef<"Reimbursement", 'String'>
+    readonly approvedAt: FieldRef<"Reimbursement", 'DateTime'>
+    readonly reimbursedBy: FieldRef<"Reimbursement", 'String'>
+    readonly reimbursedAt: FieldRef<"Reimbursement", 'DateTime'>
+    readonly paymentMode: FieldRef<"Reimbursement", 'String'>
+    readonly paymentReference: FieldRef<"Reimbursement", 'String'>
+    readonly paymentNotes: FieldRef<"Reimbursement", 'String'>
+    readonly createdAt: FieldRef<"Reimbursement", 'DateTime'>
+    readonly updatedAt: FieldRef<"Reimbursement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Reimbursement findUnique
+   */
+  export type ReimbursementFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter, which Reimbursement to fetch.
+     */
+    where: ReimbursementWhereUniqueInput
+  }
+
+  /**
+   * Reimbursement findUniqueOrThrow
+   */
+  export type ReimbursementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter, which Reimbursement to fetch.
+     */
+    where: ReimbursementWhereUniqueInput
+  }
+
+  /**
+   * Reimbursement findFirst
+   */
+  export type ReimbursementFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter, which Reimbursement to fetch.
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reimbursements to fetch.
+     */
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reimbursements.
+     */
+    cursor?: ReimbursementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reimbursements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reimbursements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reimbursements.
+     */
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
+   * Reimbursement findFirstOrThrow
+   */
+  export type ReimbursementFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter, which Reimbursement to fetch.
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reimbursements to fetch.
+     */
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reimbursements.
+     */
+    cursor?: ReimbursementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reimbursements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reimbursements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reimbursements.
+     */
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
+   * Reimbursement findMany
+   */
+  export type ReimbursementFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter, which Reimbursements to fetch.
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reimbursements to fetch.
+     */
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Reimbursements.
+     */
+    cursor?: ReimbursementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reimbursements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reimbursements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reimbursements.
+     */
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
+   * Reimbursement create
+   */
+  export type ReimbursementCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Reimbursement.
+     */
+    data: XOR<ReimbursementCreateInput, ReimbursementUncheckedCreateInput>
+  }
+
+  /**
+   * Reimbursement createMany
+   */
+  export type ReimbursementCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Reimbursements.
+     */
+    data: ReimbursementCreateManyInput | ReimbursementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Reimbursement createManyAndReturn
+   */
+  export type ReimbursementCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * The data used to create many Reimbursements.
+     */
+    data: ReimbursementCreateManyInput | ReimbursementCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Reimbursement update
+   */
+  export type ReimbursementUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Reimbursement.
+     */
+    data: XOR<ReimbursementUpdateInput, ReimbursementUncheckedUpdateInput>
+    /**
+     * Choose, which Reimbursement to update.
+     */
+    where: ReimbursementWhereUniqueInput
+  }
+
+  /**
+   * Reimbursement updateMany
+   */
+  export type ReimbursementUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Reimbursements.
+     */
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyInput>
+    /**
+     * Filter which Reimbursements to update
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * Limit how many Reimbursements to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Reimbursement updateManyAndReturn
+   */
+  export type ReimbursementUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * The data used to update Reimbursements.
+     */
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyInput>
+    /**
+     * Filter which Reimbursements to update
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * Limit how many Reimbursements to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Reimbursement upsert
+   */
+  export type ReimbursementUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Reimbursement to update in case it exists.
+     */
+    where: ReimbursementWhereUniqueInput
+    /**
+     * In case the Reimbursement found by the `where` argument doesn't exist, create a new Reimbursement with this data.
+     */
+    create: XOR<ReimbursementCreateInput, ReimbursementUncheckedCreateInput>
+    /**
+     * In case the Reimbursement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReimbursementUpdateInput, ReimbursementUncheckedUpdateInput>
+  }
+
+  /**
+   * Reimbursement delete
+   */
+  export type ReimbursementDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    /**
+     * Filter which Reimbursement to delete.
+     */
+    where: ReimbursementWhereUniqueInput
+  }
+
+  /**
+   * Reimbursement deleteMany
+   */
+  export type ReimbursementDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reimbursements to delete
+     */
+    where?: ReimbursementWhereInput
+    /**
+     * Limit how many Reimbursements to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Reimbursement.approver
+   */
+  export type Reimbursement$approverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Reimbursement.reimburser
+   */
+  export type Reimbursement$reimburserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Reimbursement.items
+   */
+  export type Reimbursement$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    where?: ReimbursementItemWhereInput
+    orderBy?: ReimbursementItemOrderByWithRelationInput | ReimbursementItemOrderByWithRelationInput[]
+    cursor?: ReimbursementItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReimbursementItemScalarFieldEnum | ReimbursementItemScalarFieldEnum[]
+  }
+
+  /**
+   * Reimbursement without action
+   */
+  export type ReimbursementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReimbursementItem
+   */
+
+  export type AggregateReimbursementItem = {
+    _count: ReimbursementItemCountAggregateOutputType | null
+    _avg: ReimbursementItemAvgAggregateOutputType | null
+    _sum: ReimbursementItemSumAggregateOutputType | null
+    _min: ReimbursementItemMinAggregateOutputType | null
+    _max: ReimbursementItemMaxAggregateOutputType | null
+  }
+
+  export type ReimbursementItemAvgAggregateOutputType = {
+    amount: number | null
+    approvedAmount: number | null
+  }
+
+  export type ReimbursementItemSumAggregateOutputType = {
+    amount: number | null
+    approvedAmount: number | null
+  }
+
+  export type ReimbursementItemMinAggregateOutputType = {
+    id: string | null
+    reimbursementId: string | null
+    expenseDate: Date | null
+    category: string | null
+    description: string | null
+    amount: number | null
+    approvedAmount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReimbursementItemMaxAggregateOutputType = {
+    id: string | null
+    reimbursementId: string | null
+    expenseDate: Date | null
+    category: string | null
+    description: string | null
+    amount: number | null
+    approvedAmount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReimbursementItemCountAggregateOutputType = {
+    id: number
+    reimbursementId: number
+    expenseDate: number
+    category: number
+    description: number
+    amount: number
+    approvedAmount: number
+    receiptFiles: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReimbursementItemAvgAggregateInputType = {
+    amount?: true
+    approvedAmount?: true
+  }
+
+  export type ReimbursementItemSumAggregateInputType = {
+    amount?: true
+    approvedAmount?: true
+  }
+
+  export type ReimbursementItemMinAggregateInputType = {
+    id?: true
+    reimbursementId?: true
+    expenseDate?: true
+    category?: true
+    description?: true
+    amount?: true
+    approvedAmount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReimbursementItemMaxAggregateInputType = {
+    id?: true
+    reimbursementId?: true
+    expenseDate?: true
+    category?: true
+    description?: true
+    amount?: true
+    approvedAmount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReimbursementItemCountAggregateInputType = {
+    id?: true
+    reimbursementId?: true
+    expenseDate?: true
+    category?: true
+    description?: true
+    amount?: true
+    approvedAmount?: true
+    receiptFiles?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReimbursementItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReimbursementItem to aggregate.
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReimbursementItems to fetch.
+     */
+    orderBy?: ReimbursementItemOrderByWithRelationInput | ReimbursementItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReimbursementItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReimbursementItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReimbursementItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReimbursementItems
+    **/
+    _count?: true | ReimbursementItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReimbursementItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReimbursementItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReimbursementItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReimbursementItemMaxAggregateInputType
+  }
+
+  export type GetReimbursementItemAggregateType<T extends ReimbursementItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateReimbursementItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReimbursementItem[P]>
+      : GetScalarType<T[P], AggregateReimbursementItem[P]>
+  }
+
+
+
+
+  export type ReimbursementItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementItemWhereInput
+    orderBy?: ReimbursementItemOrderByWithAggregationInput | ReimbursementItemOrderByWithAggregationInput[]
+    by: ReimbursementItemScalarFieldEnum[] | ReimbursementItemScalarFieldEnum
+    having?: ReimbursementItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReimbursementItemCountAggregateInputType | true
+    _avg?: ReimbursementItemAvgAggregateInputType
+    _sum?: ReimbursementItemSumAggregateInputType
+    _min?: ReimbursementItemMinAggregateInputType
+    _max?: ReimbursementItemMaxAggregateInputType
+  }
+
+  export type ReimbursementItemGroupByOutputType = {
+    id: string
+    reimbursementId: string
+    expenseDate: Date
+    category: string
+    description: string
+    amount: number
+    approvedAmount: number | null
+    receiptFiles: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ReimbursementItemCountAggregateOutputType | null
+    _avg: ReimbursementItemAvgAggregateOutputType | null
+    _sum: ReimbursementItemSumAggregateOutputType | null
+    _min: ReimbursementItemMinAggregateOutputType | null
+    _max: ReimbursementItemMaxAggregateOutputType | null
+  }
+
+  type GetReimbursementItemGroupByPayload<T extends ReimbursementItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReimbursementItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReimbursementItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReimbursementItemGroupByOutputType[P]>
+            : GetScalarType<T[P], ReimbursementItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReimbursementItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reimbursementId?: boolean
+    expenseDate?: boolean
+    category?: boolean
+    description?: boolean
+    amount?: boolean
+    approvedAmount?: boolean
+    receiptFiles?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursementItem"]>
+
+  export type ReimbursementItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reimbursementId?: boolean
+    expenseDate?: boolean
+    category?: boolean
+    description?: boolean
+    amount?: boolean
+    approvedAmount?: boolean
+    receiptFiles?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursementItem"]>
+
+  export type ReimbursementItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reimbursementId?: boolean
+    expenseDate?: boolean
+    category?: boolean
+    description?: boolean
+    amount?: boolean
+    approvedAmount?: boolean
+    receiptFiles?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reimbursementItem"]>
+
+  export type ReimbursementItemSelectScalar = {
+    id?: boolean
+    reimbursementId?: boolean
+    expenseDate?: boolean
+    category?: boolean
+    description?: boolean
+    amount?: boolean
+    approvedAmount?: boolean
+    receiptFiles?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReimbursementItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reimbursementId" | "expenseDate" | "category" | "description" | "amount" | "approvedAmount" | "receiptFiles" | "createdAt" | "updatedAt", ExtArgs["result"]["reimbursementItem"]>
+  export type ReimbursementItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }
+  export type ReimbursementItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }
+  export type ReimbursementItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reimbursement?: boolean | ReimbursementDefaultArgs<ExtArgs>
+  }
+
+  export type $ReimbursementItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReimbursementItem"
+    objects: {
+      reimbursement: Prisma.$ReimbursementPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reimbursementId: string
+      expenseDate: Date
+      category: string
+      description: string
+      amount: number
+      approvedAmount: number | null
+      receiptFiles: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["reimbursementItem"]>
+    composites: {}
+  }
+
+  type ReimbursementItemGetPayload<S extends boolean | null | undefined | ReimbursementItemDefaultArgs> = $Result.GetResult<Prisma.$ReimbursementItemPayload, S>
+
+  type ReimbursementItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReimbursementItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReimbursementItemCountAggregateInputType | true
+    }
+
+  export interface ReimbursementItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReimbursementItem'], meta: { name: 'ReimbursementItem' } }
+    /**
+     * Find zero or one ReimbursementItem that matches the filter.
+     * @param {ReimbursementItemFindUniqueArgs} args - Arguments to find a ReimbursementItem
+     * @example
+     * // Get one ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReimbursementItemFindUniqueArgs>(args: SelectSubset<T, ReimbursementItemFindUniqueArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReimbursementItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReimbursementItemFindUniqueOrThrowArgs} args - Arguments to find a ReimbursementItem
+     * @example
+     * // Get one ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReimbursementItemFindUniqueOrThrowArgs>(args: SelectSubset<T, ReimbursementItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReimbursementItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemFindFirstArgs} args - Arguments to find a ReimbursementItem
+     * @example
+     * // Get one ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReimbursementItemFindFirstArgs>(args?: SelectSubset<T, ReimbursementItemFindFirstArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReimbursementItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemFindFirstOrThrowArgs} args - Arguments to find a ReimbursementItem
+     * @example
+     * // Get one ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReimbursementItemFindFirstOrThrowArgs>(args?: SelectSubset<T, ReimbursementItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReimbursementItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReimbursementItems
+     * const reimbursementItems = await prisma.reimbursementItem.findMany()
+     * 
+     * // Get first 10 ReimbursementItems
+     * const reimbursementItems = await prisma.reimbursementItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reimbursementItemWithIdOnly = await prisma.reimbursementItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReimbursementItemFindManyArgs>(args?: SelectSubset<T, ReimbursementItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReimbursementItem.
+     * @param {ReimbursementItemCreateArgs} args - Arguments to create a ReimbursementItem.
+     * @example
+     * // Create one ReimbursementItem
+     * const ReimbursementItem = await prisma.reimbursementItem.create({
+     *   data: {
+     *     // ... data to create a ReimbursementItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReimbursementItemCreateArgs>(args: SelectSubset<T, ReimbursementItemCreateArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReimbursementItems.
+     * @param {ReimbursementItemCreateManyArgs} args - Arguments to create many ReimbursementItems.
+     * @example
+     * // Create many ReimbursementItems
+     * const reimbursementItem = await prisma.reimbursementItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReimbursementItemCreateManyArgs>(args?: SelectSubset<T, ReimbursementItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReimbursementItems and returns the data saved in the database.
+     * @param {ReimbursementItemCreateManyAndReturnArgs} args - Arguments to create many ReimbursementItems.
+     * @example
+     * // Create many ReimbursementItems
+     * const reimbursementItem = await prisma.reimbursementItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReimbursementItems and only return the `id`
+     * const reimbursementItemWithIdOnly = await prisma.reimbursementItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReimbursementItemCreateManyAndReturnArgs>(args?: SelectSubset<T, ReimbursementItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReimbursementItem.
+     * @param {ReimbursementItemDeleteArgs} args - Arguments to delete one ReimbursementItem.
+     * @example
+     * // Delete one ReimbursementItem
+     * const ReimbursementItem = await prisma.reimbursementItem.delete({
+     *   where: {
+     *     // ... filter to delete one ReimbursementItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReimbursementItemDeleteArgs>(args: SelectSubset<T, ReimbursementItemDeleteArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReimbursementItem.
+     * @param {ReimbursementItemUpdateArgs} args - Arguments to update one ReimbursementItem.
+     * @example
+     * // Update one ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReimbursementItemUpdateArgs>(args: SelectSubset<T, ReimbursementItemUpdateArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReimbursementItems.
+     * @param {ReimbursementItemDeleteManyArgs} args - Arguments to filter ReimbursementItems to delete.
+     * @example
+     * // Delete a few ReimbursementItems
+     * const { count } = await prisma.reimbursementItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReimbursementItemDeleteManyArgs>(args?: SelectSubset<T, ReimbursementItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReimbursementItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReimbursementItems
+     * const reimbursementItem = await prisma.reimbursementItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReimbursementItemUpdateManyArgs>(args: SelectSubset<T, ReimbursementItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReimbursementItems and returns the data updated in the database.
+     * @param {ReimbursementItemUpdateManyAndReturnArgs} args - Arguments to update many ReimbursementItems.
+     * @example
+     * // Update many ReimbursementItems
+     * const reimbursementItem = await prisma.reimbursementItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReimbursementItems and only return the `id`
+     * const reimbursementItemWithIdOnly = await prisma.reimbursementItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReimbursementItemUpdateManyAndReturnArgs>(args: SelectSubset<T, ReimbursementItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReimbursementItem.
+     * @param {ReimbursementItemUpsertArgs} args - Arguments to update or create a ReimbursementItem.
+     * @example
+     * // Update or create a ReimbursementItem
+     * const reimbursementItem = await prisma.reimbursementItem.upsert({
+     *   create: {
+     *     // ... data to create a ReimbursementItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReimbursementItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReimbursementItemUpsertArgs>(args: SelectSubset<T, ReimbursementItemUpsertArgs<ExtArgs>>): Prisma__ReimbursementItemClient<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReimbursementItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemCountArgs} args - Arguments to filter ReimbursementItems to count.
+     * @example
+     * // Count the number of ReimbursementItems
+     * const count = await prisma.reimbursementItem.count({
+     *   where: {
+     *     // ... the filter for the ReimbursementItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReimbursementItemCountArgs>(
+      args?: Subset<T, ReimbursementItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReimbursementItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReimbursementItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReimbursementItemAggregateArgs>(args: Subset<T, ReimbursementItemAggregateArgs>): Prisma.PrismaPromise<GetReimbursementItemAggregateType<T>>
+
+    /**
+     * Group by ReimbursementItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReimbursementItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReimbursementItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReimbursementItemGroupByArgs['orderBy'] }
+        : { orderBy?: ReimbursementItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReimbursementItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReimbursementItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReimbursementItem model
+   */
+  readonly fields: ReimbursementItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReimbursementItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReimbursementItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    reimbursement<T extends ReimbursementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReimbursementDefaultArgs<ExtArgs>>): Prisma__ReimbursementClient<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReimbursementItem model
+   */
+  interface ReimbursementItemFieldRefs {
+    readonly id: FieldRef<"ReimbursementItem", 'String'>
+    readonly reimbursementId: FieldRef<"ReimbursementItem", 'String'>
+    readonly expenseDate: FieldRef<"ReimbursementItem", 'DateTime'>
+    readonly category: FieldRef<"ReimbursementItem", 'String'>
+    readonly description: FieldRef<"ReimbursementItem", 'String'>
+    readonly amount: FieldRef<"ReimbursementItem", 'Float'>
+    readonly approvedAmount: FieldRef<"ReimbursementItem", 'Float'>
+    readonly receiptFiles: FieldRef<"ReimbursementItem", 'Json'>
+    readonly createdAt: FieldRef<"ReimbursementItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReimbursementItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReimbursementItem findUnique
+   */
+  export type ReimbursementItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReimbursementItem to fetch.
+     */
+    where: ReimbursementItemWhereUniqueInput
+  }
+
+  /**
+   * ReimbursementItem findUniqueOrThrow
+   */
+  export type ReimbursementItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReimbursementItem to fetch.
+     */
+    where: ReimbursementItemWhereUniqueInput
+  }
+
+  /**
+   * ReimbursementItem findFirst
+   */
+  export type ReimbursementItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReimbursementItem to fetch.
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReimbursementItems to fetch.
+     */
+    orderBy?: ReimbursementItemOrderByWithRelationInput | ReimbursementItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReimbursementItems.
+     */
+    cursor?: ReimbursementItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReimbursementItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReimbursementItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReimbursementItems.
+     */
+    distinct?: ReimbursementItemScalarFieldEnum | ReimbursementItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReimbursementItem findFirstOrThrow
+   */
+  export type ReimbursementItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReimbursementItem to fetch.
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReimbursementItems to fetch.
+     */
+    orderBy?: ReimbursementItemOrderByWithRelationInput | ReimbursementItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReimbursementItems.
+     */
+    cursor?: ReimbursementItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReimbursementItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReimbursementItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReimbursementItems.
+     */
+    distinct?: ReimbursementItemScalarFieldEnum | ReimbursementItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReimbursementItem findMany
+   */
+  export type ReimbursementItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter, which ReimbursementItems to fetch.
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReimbursementItems to fetch.
+     */
+    orderBy?: ReimbursementItemOrderByWithRelationInput | ReimbursementItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReimbursementItems.
+     */
+    cursor?: ReimbursementItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReimbursementItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReimbursementItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReimbursementItems.
+     */
+    distinct?: ReimbursementItemScalarFieldEnum | ReimbursementItemScalarFieldEnum[]
+  }
+
+  /**
+   * ReimbursementItem create
+   */
+  export type ReimbursementItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReimbursementItem.
+     */
+    data: XOR<ReimbursementItemCreateInput, ReimbursementItemUncheckedCreateInput>
+  }
+
+  /**
+   * ReimbursementItem createMany
+   */
+  export type ReimbursementItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReimbursementItems.
+     */
+    data: ReimbursementItemCreateManyInput | ReimbursementItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReimbursementItem createManyAndReturn
+   */
+  export type ReimbursementItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReimbursementItems.
+     */
+    data: ReimbursementItemCreateManyInput | ReimbursementItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReimbursementItem update
+   */
+  export type ReimbursementItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReimbursementItem.
+     */
+    data: XOR<ReimbursementItemUpdateInput, ReimbursementItemUncheckedUpdateInput>
+    /**
+     * Choose, which ReimbursementItem to update.
+     */
+    where: ReimbursementItemWhereUniqueInput
+  }
+
+  /**
+   * ReimbursementItem updateMany
+   */
+  export type ReimbursementItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReimbursementItems.
+     */
+    data: XOR<ReimbursementItemUpdateManyMutationInput, ReimbursementItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ReimbursementItems to update
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * Limit how many ReimbursementItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReimbursementItem updateManyAndReturn
+   */
+  export type ReimbursementItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * The data used to update ReimbursementItems.
+     */
+    data: XOR<ReimbursementItemUpdateManyMutationInput, ReimbursementItemUncheckedUpdateManyInput>
+    /**
+     * Filter which ReimbursementItems to update
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * Limit how many ReimbursementItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReimbursementItem upsert
+   */
+  export type ReimbursementItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReimbursementItem to update in case it exists.
+     */
+    where: ReimbursementItemWhereUniqueInput
+    /**
+     * In case the ReimbursementItem found by the `where` argument doesn't exist, create a new ReimbursementItem with this data.
+     */
+    create: XOR<ReimbursementItemCreateInput, ReimbursementItemUncheckedCreateInput>
+    /**
+     * In case the ReimbursementItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReimbursementItemUpdateInput, ReimbursementItemUncheckedUpdateInput>
+  }
+
+  /**
+   * ReimbursementItem delete
+   */
+  export type ReimbursementItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+    /**
+     * Filter which ReimbursementItem to delete.
+     */
+    where: ReimbursementItemWhereUniqueInput
+  }
+
+  /**
+   * ReimbursementItem deleteMany
+   */
+  export type ReimbursementItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReimbursementItems to delete
+     */
+    where?: ReimbursementItemWhereInput
+    /**
+     * Limit how many ReimbursementItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReimbursementItem without action
+   */
+  export type ReimbursementItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReimbursementItem
+     */
+    select?: ReimbursementItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReimbursementItem
+     */
+    omit?: ReimbursementItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementItemInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model FLNCategory
    */
 
@@ -119066,6 +122010,8 @@ export namespace Prisma {
     beneficiaryId: 'beneficiaryId',
     amount: 'amount',
     incomeDate: 'incomeDate',
+    incomeMonth: 'incomeMonth',
+    incomeYear: 'incomeYear',
     source: 'source',
     notes: 'notes',
     createdAt: 'createdAt',
@@ -119794,6 +122740,50 @@ export namespace Prisma {
   export type TravelExpenseScalarFieldEnum = (typeof TravelExpenseScalarFieldEnum)[keyof typeof TravelExpenseScalarFieldEnum]
 
 
+  export const ReimbursementScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    title: 'title',
+    purpose: 'purpose',
+    notes: 'notes',
+    totalClaimed: 'totalClaimed',
+    totalApproved: 'totalApproved',
+    totalReimbursed: 'totalReimbursed',
+    status: 'status',
+    bankName: 'bankName',
+    bankAccountNo: 'bankAccountNo',
+    bankIfsc: 'bankIfsc',
+    rejectionReason: 'rejectionReason',
+    approvedBy: 'approvedBy',
+    approvedAt: 'approvedAt',
+    reimbursedBy: 'reimbursedBy',
+    reimbursedAt: 'reimbursedAt',
+    paymentMode: 'paymentMode',
+    paymentReference: 'paymentReference',
+    paymentNotes: 'paymentNotes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReimbursementScalarFieldEnum = (typeof ReimbursementScalarFieldEnum)[keyof typeof ReimbursementScalarFieldEnum]
+
+
+  export const ReimbursementItemScalarFieldEnum: {
+    id: 'id',
+    reimbursementId: 'reimbursementId',
+    expenseDate: 'expenseDate',
+    category: 'category',
+    description: 'description',
+    amount: 'amount',
+    approvedAmount: 'approvedAmount',
+    receiptFiles: 'receiptFiles',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReimbursementItemScalarFieldEnum = (typeof ReimbursementItemScalarFieldEnum)[keyof typeof ReimbursementItemScalarFieldEnum]
+
+
   export const FLNCategoryScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -120322,6 +123312,20 @@ export namespace Prisma {
    */
   export type ListEnumTravelStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TravelStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'ReimbursementStatus'
+   */
+  export type EnumReimbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReimbursementStatus[]'
+   */
+  export type ListEnumReimbursementStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReimbursementStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -120435,6 +123439,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
     approvedTravel?: TravelRequestListRelationFilter
+    reimbursementRequests?: ReimbursementListRelationFilter
+    reimbursementsApproved?: ReimbursementListRelationFilter
+    reimbursementsReimbursed?: ReimbursementListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
     individualFeedback?: IndividualFeedbackListRelationFilter
@@ -120489,6 +123496,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentOrderByRelationAggregateInput
     travelRequests?: TravelRequestOrderByRelationAggregateInput
     approvedTravel?: TravelRequestOrderByRelationAggregateInput
+    reimbursementRequests?: ReimbursementOrderByRelationAggregateInput
+    reimbursementsApproved?: ReimbursementOrderByRelationAggregateInput
+    reimbursementsReimbursed?: ReimbursementOrderByRelationAggregateInput
     coachingRecords?: CoachingRecordOrderByRelationAggregateInput
     pmReflections?: PMReflectionOrderByRelationAggregateInput
     individualFeedback?: IndividualFeedbackOrderByRelationAggregateInput
@@ -120546,6 +123556,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
     approvedTravel?: TravelRequestListRelationFilter
+    reimbursementRequests?: ReimbursementListRelationFilter
+    reimbursementsApproved?: ReimbursementListRelationFilter
+    reimbursementsReimbursed?: ReimbursementListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
     pmReflections?: PMReflectionListRelationFilter
     individualFeedback?: IndividualFeedbackListRelationFilter
@@ -122239,6 +125252,8 @@ export namespace Prisma {
     beneficiaryId?: StringFilter<"IncomeRecord"> | string
     amount?: FloatFilter<"IncomeRecord"> | number
     incomeDate?: DateTimeFilter<"IncomeRecord"> | Date | string
+    incomeMonth?: IntNullableFilter<"IncomeRecord"> | number | null
+    incomeYear?: IntNullableFilter<"IncomeRecord"> | number | null
     source?: StringNullableFilter<"IncomeRecord"> | string | null
     notes?: StringNullableFilter<"IncomeRecord"> | string | null
     createdAt?: DateTimeFilter<"IncomeRecord"> | Date | string
@@ -122251,6 +125266,8 @@ export namespace Prisma {
     beneficiaryId?: SortOrder
     amount?: SortOrder
     incomeDate?: SortOrder
+    incomeMonth?: SortOrderInput | SortOrder
+    incomeYear?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -122260,24 +125277,29 @@ export namespace Prisma {
 
   export type IncomeRecordWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    beneficiaryId_incomeYear_incomeMonth?: IncomeRecordBeneficiaryIdIncomeYearIncomeMonthCompoundUniqueInput
     AND?: IncomeRecordWhereInput | IncomeRecordWhereInput[]
     OR?: IncomeRecordWhereInput[]
     NOT?: IncomeRecordWhereInput | IncomeRecordWhereInput[]
     beneficiaryId?: StringFilter<"IncomeRecord"> | string
     amount?: FloatFilter<"IncomeRecord"> | number
     incomeDate?: DateTimeFilter<"IncomeRecord"> | Date | string
+    incomeMonth?: IntNullableFilter<"IncomeRecord"> | number | null
+    incomeYear?: IntNullableFilter<"IncomeRecord"> | number | null
     source?: StringNullableFilter<"IncomeRecord"> | string | null
     notes?: StringNullableFilter<"IncomeRecord"> | string | null
     createdAt?: DateTimeFilter<"IncomeRecord"> | Date | string
     updatedAt?: DateTimeFilter<"IncomeRecord"> | Date | string
     beneficiary?: XOR<BeneficiaryScalarRelationFilter, BeneficiaryWhereInput>
-  }, "id">
+  }, "id" | "beneficiaryId_incomeYear_incomeMonth">
 
   export type IncomeRecordOrderByWithAggregationInput = {
     id?: SortOrder
     beneficiaryId?: SortOrder
     amount?: SortOrder
     incomeDate?: SortOrder
+    incomeMonth?: SortOrderInput | SortOrder
+    incomeYear?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -122297,6 +125319,8 @@ export namespace Prisma {
     beneficiaryId?: StringWithAggregatesFilter<"IncomeRecord"> | string
     amount?: FloatWithAggregatesFilter<"IncomeRecord"> | number
     incomeDate?: DateTimeWithAggregatesFilter<"IncomeRecord"> | Date | string
+    incomeMonth?: IntNullableWithAggregatesFilter<"IncomeRecord"> | number | null
+    incomeYear?: IntNullableWithAggregatesFilter<"IncomeRecord"> | number | null
     source?: StringNullableWithAggregatesFilter<"IncomeRecord"> | string | null
     notes?: StringNullableWithAggregatesFilter<"IncomeRecord"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"IncomeRecord"> | Date | string
@@ -126099,6 +129123,239 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"TravelExpense"> | Date | string
   }
 
+  export type ReimbursementWhereInput = {
+    AND?: ReimbursementWhereInput | ReimbursementWhereInput[]
+    OR?: ReimbursementWhereInput[]
+    NOT?: ReimbursementWhereInput | ReimbursementWhereInput[]
+    id?: StringFilter<"Reimbursement"> | string
+    userId?: StringFilter<"Reimbursement"> | string
+    title?: StringFilter<"Reimbursement"> | string
+    purpose?: StringNullableFilter<"Reimbursement"> | string | null
+    notes?: StringNullableFilter<"Reimbursement"> | string | null
+    totalClaimed?: FloatFilter<"Reimbursement"> | number
+    totalApproved?: FloatNullableFilter<"Reimbursement"> | number | null
+    totalReimbursed?: FloatNullableFilter<"Reimbursement"> | number | null
+    status?: EnumReimbursementStatusFilter<"Reimbursement"> | $Enums.ReimbursementStatus
+    bankName?: StringNullableFilter<"Reimbursement"> | string | null
+    bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
+    bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
+    rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    reimbursedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    paymentMode?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentReference?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentNotes?: StringNullableFilter<"Reimbursement"> | string | null
+    createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reimburser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    items?: ReimbursementItemListRelationFilter
+  }
+
+  export type ReimbursementOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    purpose?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrderInput | SortOrder
+    totalReimbursed?: SortOrderInput | SortOrder
+    status?: SortOrder
+    bankName?: SortOrderInput | SortOrder
+    bankAccountNo?: SortOrderInput | SortOrder
+    bankIfsc?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    reimbursedBy?: SortOrderInput | SortOrder
+    reimbursedAt?: SortOrderInput | SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    paymentNotes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    approver?: UserOrderByWithRelationInput
+    reimburser?: UserOrderByWithRelationInput
+    items?: ReimbursementItemOrderByRelationAggregateInput
+  }
+
+  export type ReimbursementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReimbursementWhereInput | ReimbursementWhereInput[]
+    OR?: ReimbursementWhereInput[]
+    NOT?: ReimbursementWhereInput | ReimbursementWhereInput[]
+    userId?: StringFilter<"Reimbursement"> | string
+    title?: StringFilter<"Reimbursement"> | string
+    purpose?: StringNullableFilter<"Reimbursement"> | string | null
+    notes?: StringNullableFilter<"Reimbursement"> | string | null
+    totalClaimed?: FloatFilter<"Reimbursement"> | number
+    totalApproved?: FloatNullableFilter<"Reimbursement"> | number | null
+    totalReimbursed?: FloatNullableFilter<"Reimbursement"> | number | null
+    status?: EnumReimbursementStatusFilter<"Reimbursement"> | $Enums.ReimbursementStatus
+    bankName?: StringNullableFilter<"Reimbursement"> | string | null
+    bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
+    bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
+    rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    reimbursedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    paymentMode?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentReference?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentNotes?: StringNullableFilter<"Reimbursement"> | string | null
+    createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reimburser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    items?: ReimbursementItemListRelationFilter
+  }, "id">
+
+  export type ReimbursementOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    purpose?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrderInput | SortOrder
+    totalReimbursed?: SortOrderInput | SortOrder
+    status?: SortOrder
+    bankName?: SortOrderInput | SortOrder
+    bankAccountNo?: SortOrderInput | SortOrder
+    bankIfsc?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedAt?: SortOrderInput | SortOrder
+    reimbursedBy?: SortOrderInput | SortOrder
+    reimbursedAt?: SortOrderInput | SortOrder
+    paymentMode?: SortOrderInput | SortOrder
+    paymentReference?: SortOrderInput | SortOrder
+    paymentNotes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReimbursementCountOrderByAggregateInput
+    _avg?: ReimbursementAvgOrderByAggregateInput
+    _max?: ReimbursementMaxOrderByAggregateInput
+    _min?: ReimbursementMinOrderByAggregateInput
+    _sum?: ReimbursementSumOrderByAggregateInput
+  }
+
+  export type ReimbursementScalarWhereWithAggregatesInput = {
+    AND?: ReimbursementScalarWhereWithAggregatesInput | ReimbursementScalarWhereWithAggregatesInput[]
+    OR?: ReimbursementScalarWhereWithAggregatesInput[]
+    NOT?: ReimbursementScalarWhereWithAggregatesInput | ReimbursementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Reimbursement"> | string
+    userId?: StringWithAggregatesFilter<"Reimbursement"> | string
+    title?: StringWithAggregatesFilter<"Reimbursement"> | string
+    purpose?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    totalClaimed?: FloatWithAggregatesFilter<"Reimbursement"> | number
+    totalApproved?: FloatNullableWithAggregatesFilter<"Reimbursement"> | number | null
+    totalReimbursed?: FloatNullableWithAggregatesFilter<"Reimbursement"> | number | null
+    status?: EnumReimbursementStatusWithAggregatesFilter<"Reimbursement"> | $Enums.ReimbursementStatus
+    bankName?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    bankAccountNo?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    bankIfsc?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    approvedBy?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    approvedAt?: DateTimeNullableWithAggregatesFilter<"Reimbursement"> | Date | string | null
+    reimbursedBy?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    reimbursedAt?: DateTimeNullableWithAggregatesFilter<"Reimbursement"> | Date | string | null
+    paymentMode?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    paymentReference?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    paymentNotes?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Reimbursement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Reimbursement"> | Date | string
+  }
+
+  export type ReimbursementItemWhereInput = {
+    AND?: ReimbursementItemWhereInput | ReimbursementItemWhereInput[]
+    OR?: ReimbursementItemWhereInput[]
+    NOT?: ReimbursementItemWhereInput | ReimbursementItemWhereInput[]
+    id?: StringFilter<"ReimbursementItem"> | string
+    reimbursementId?: StringFilter<"ReimbursementItem"> | string
+    expenseDate?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    category?: StringFilter<"ReimbursementItem"> | string
+    description?: StringFilter<"ReimbursementItem"> | string
+    amount?: FloatFilter<"ReimbursementItem"> | number
+    approvedAmount?: FloatNullableFilter<"ReimbursementItem"> | number | null
+    receiptFiles?: JsonNullableFilter<"ReimbursementItem">
+    createdAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    reimbursement?: XOR<ReimbursementScalarRelationFilter, ReimbursementWhereInput>
+  }
+
+  export type ReimbursementItemOrderByWithRelationInput = {
+    id?: SortOrder
+    reimbursementId?: SortOrder
+    expenseDate?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    approvedAmount?: SortOrderInput | SortOrder
+    receiptFiles?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    reimbursement?: ReimbursementOrderByWithRelationInput
+  }
+
+  export type ReimbursementItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReimbursementItemWhereInput | ReimbursementItemWhereInput[]
+    OR?: ReimbursementItemWhereInput[]
+    NOT?: ReimbursementItemWhereInput | ReimbursementItemWhereInput[]
+    reimbursementId?: StringFilter<"ReimbursementItem"> | string
+    expenseDate?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    category?: StringFilter<"ReimbursementItem"> | string
+    description?: StringFilter<"ReimbursementItem"> | string
+    amount?: FloatFilter<"ReimbursementItem"> | number
+    approvedAmount?: FloatNullableFilter<"ReimbursementItem"> | number | null
+    receiptFiles?: JsonNullableFilter<"ReimbursementItem">
+    createdAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    reimbursement?: XOR<ReimbursementScalarRelationFilter, ReimbursementWhereInput>
+  }, "id">
+
+  export type ReimbursementItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    reimbursementId?: SortOrder
+    expenseDate?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    approvedAmount?: SortOrderInput | SortOrder
+    receiptFiles?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReimbursementItemCountOrderByAggregateInput
+    _avg?: ReimbursementItemAvgOrderByAggregateInput
+    _max?: ReimbursementItemMaxOrderByAggregateInput
+    _min?: ReimbursementItemMinOrderByAggregateInput
+    _sum?: ReimbursementItemSumOrderByAggregateInput
+  }
+
+  export type ReimbursementItemScalarWhereWithAggregatesInput = {
+    AND?: ReimbursementItemScalarWhereWithAggregatesInput | ReimbursementItemScalarWhereWithAggregatesInput[]
+    OR?: ReimbursementItemScalarWhereWithAggregatesInput[]
+    NOT?: ReimbursementItemScalarWhereWithAggregatesInput | ReimbursementItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReimbursementItem"> | string
+    reimbursementId?: StringWithAggregatesFilter<"ReimbursementItem"> | string
+    expenseDate?: DateTimeWithAggregatesFilter<"ReimbursementItem"> | Date | string
+    category?: StringWithAggregatesFilter<"ReimbursementItem"> | string
+    description?: StringWithAggregatesFilter<"ReimbursementItem"> | string
+    amount?: FloatWithAggregatesFilter<"ReimbursementItem"> | number
+    approvedAmount?: FloatNullableWithAggregatesFilter<"ReimbursementItem"> | number | null
+    receiptFiles?: JsonNullableWithAggregatesFilter<"ReimbursementItem">
+    createdAt?: DateTimeWithAggregatesFilter<"ReimbursementItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReimbursementItem"> | Date | string
+  }
+
   export type FLNCategoryWhereInput = {
     AND?: FLNCategoryWhereInput | FLNCategoryWhereInput[]
     OR?: FLNCategoryWhereInput[]
@@ -127922,6 +131179,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -127974,6 +131234,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -128026,6 +131289,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -128078,6 +131344,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -129973,6 +133242,8 @@ export namespace Prisma {
     id?: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -129985,6 +133256,8 @@ export namespace Prisma {
     beneficiaryId: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -129995,6 +133268,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130007,6 +133282,8 @@ export namespace Prisma {
     beneficiaryId?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130018,6 +133295,8 @@ export namespace Prisma {
     beneficiaryId: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -130028,6 +133307,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -130039,6 +133320,8 @@ export namespace Prisma {
     beneficiaryId?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -134163,6 +137446,272 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReimbursementCreateInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
+    reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
+    items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUncheckedCreateInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
+    reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
+    items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementCreateManyInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemCreateInput = {
+    id?: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reimbursement: ReimbursementCreateNestedOneWithoutItemsInput
+  }
+
+  export type ReimbursementItemUncheckedCreateInput = {
+    id?: string
+    reimbursementId: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reimbursement?: ReimbursementUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type ReimbursementItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reimbursementId?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemCreateManyInput = {
+    id?: string
+    reimbursementId: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reimbursementId?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FLNCategoryCreateInput = {
     id?: string
     name: string
@@ -136202,6 +139751,12 @@ export namespace Prisma {
     none?: TravelRequestWhereInput
   }
 
+  export type ReimbursementListRelationFilter = {
+    every?: ReimbursementWhereInput
+    some?: ReimbursementWhereInput
+    none?: ReimbursementWhereInput
+  }
+
   export type CoachingRecordListRelationFilter = {
     every?: CoachingRecordWhereInput
     some?: CoachingRecordWhereInput
@@ -136287,6 +139842,10 @@ export namespace Prisma {
   }
 
   export type TravelRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReimbursementOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -137737,11 +141296,19 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IncomeRecordBeneficiaryIdIncomeYearIncomeMonthCompoundUniqueInput = {
+    beneficiaryId: string
+    incomeYear: number
+    incomeMonth: number
+  }
+
   export type IncomeRecordCountOrderByAggregateInput = {
     id?: SortOrder
     beneficiaryId?: SortOrder
     amount?: SortOrder
     incomeDate?: SortOrder
+    incomeMonth?: SortOrder
+    incomeYear?: SortOrder
     source?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -137750,6 +141317,8 @@ export namespace Prisma {
 
   export type IncomeRecordAvgOrderByAggregateInput = {
     amount?: SortOrder
+    incomeMonth?: SortOrder
+    incomeYear?: SortOrder
   }
 
   export type IncomeRecordMaxOrderByAggregateInput = {
@@ -137757,6 +141326,8 @@ export namespace Prisma {
     beneficiaryId?: SortOrder
     amount?: SortOrder
     incomeDate?: SortOrder
+    incomeMonth?: SortOrder
+    incomeYear?: SortOrder
     source?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -137768,6 +141339,8 @@ export namespace Prisma {
     beneficiaryId?: SortOrder
     amount?: SortOrder
     incomeDate?: SortOrder
+    incomeMonth?: SortOrder
+    incomeYear?: SortOrder
     source?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
@@ -137776,6 +141349,8 @@ export namespace Prisma {
 
   export type IncomeRecordSumOrderByAggregateInput = {
     amount?: SortOrder
+    incomeMonth?: SortOrder
+    incomeYear?: SortOrder
   }
 
   export type FellowSchoolFellowIdSchoolIdCompoundUniqueInput = {
@@ -140118,6 +143693,172 @@ export namespace Prisma {
     actualExpense?: SortOrder
   }
 
+  export type EnumReimbursementStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReimbursementStatus | EnumReimbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReimbursementStatusFilter<$PrismaModel> | $Enums.ReimbursementStatus
+  }
+
+  export type ReimbursementItemListRelationFilter = {
+    every?: ReimbursementItemWhereInput
+    some?: ReimbursementItemWhereInput
+    none?: ReimbursementItemWhereInput
+  }
+
+  export type ReimbursementItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReimbursementCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    purpose?: SortOrder
+    notes?: SortOrder
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrder
+    totalReimbursed?: SortOrder
+    status?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    rejectionReason?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    reimbursedBy?: SortOrder
+    reimbursedAt?: SortOrder
+    paymentMode?: SortOrder
+    paymentReference?: SortOrder
+    paymentNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementAvgOrderByAggregateInput = {
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrder
+    totalReimbursed?: SortOrder
+  }
+
+  export type ReimbursementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    purpose?: SortOrder
+    notes?: SortOrder
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrder
+    totalReimbursed?: SortOrder
+    status?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    rejectionReason?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    reimbursedBy?: SortOrder
+    reimbursedAt?: SortOrder
+    paymentMode?: SortOrder
+    paymentReference?: SortOrder
+    paymentNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    title?: SortOrder
+    purpose?: SortOrder
+    notes?: SortOrder
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrder
+    totalReimbursed?: SortOrder
+    status?: SortOrder
+    bankName?: SortOrder
+    bankAccountNo?: SortOrder
+    bankIfsc?: SortOrder
+    rejectionReason?: SortOrder
+    approvedBy?: SortOrder
+    approvedAt?: SortOrder
+    reimbursedBy?: SortOrder
+    reimbursedAt?: SortOrder
+    paymentMode?: SortOrder
+    paymentReference?: SortOrder
+    paymentNotes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementSumOrderByAggregateInput = {
+    totalClaimed?: SortOrder
+    totalApproved?: SortOrder
+    totalReimbursed?: SortOrder
+  }
+
+  export type EnumReimbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReimbursementStatus | EnumReimbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReimbursementStatusFilter<$PrismaModel>
+    _max?: NestedEnumReimbursementStatusFilter<$PrismaModel>
+  }
+
+  export type ReimbursementScalarRelationFilter = {
+    is?: ReimbursementWhereInput
+    isNot?: ReimbursementWhereInput
+  }
+
+  export type ReimbursementItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    reimbursementId?: SortOrder
+    expenseDate?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    approvedAmount?: SortOrder
+    receiptFiles?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementItemAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    approvedAmount?: SortOrder
+  }
+
+  export type ReimbursementItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reimbursementId?: SortOrder
+    expenseDate?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    approvedAmount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    reimbursementId?: SortOrder
+    expenseDate?: SortOrder
+    category?: SortOrder
+    description?: SortOrder
+    amount?: SortOrder
+    approvedAmount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReimbursementItemSumOrderByAggregateInput = {
+    amount?: SortOrder
+    approvedAmount?: SortOrder
+  }
+
   export type FLNQuestionListRelationFilter = {
     every?: FLNQuestionWhereInput
     some?: FLNQuestionWhereInput
@@ -141359,6 +145100,27 @@ export namespace Prisma {
     connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
   }
 
+  export type ReimbursementCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
+    createMany?: ReimbursementCreateManyUserInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
+  export type ReimbursementCreateNestedManyWithoutApproverInput = {
+    create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
+    createMany?: ReimbursementCreateManyApproverInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
+  export type ReimbursementCreateNestedManyWithoutReimburserInput = {
+    create?: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput> | ReimbursementCreateWithoutReimburserInput[] | ReimbursementUncheckedCreateWithoutReimburserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutReimburserInput | ReimbursementCreateOrConnectWithoutReimburserInput[]
+    createMany?: ReimbursementCreateManyReimburserInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
   export type CoachingRecordCreateNestedManyWithoutAuthorInput = {
     create?: XOR<CoachingRecordCreateWithoutAuthorInput, CoachingRecordUncheckedCreateWithoutAuthorInput> | CoachingRecordCreateWithoutAuthorInput[] | CoachingRecordUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: CoachingRecordCreateOrConnectWithoutAuthorInput | CoachingRecordCreateOrConnectWithoutAuthorInput[]
@@ -141496,6 +145258,27 @@ export namespace Prisma {
     connectOrCreate?: TravelRequestCreateOrConnectWithoutApproverInput | TravelRequestCreateOrConnectWithoutApproverInput[]
     createMany?: TravelRequestCreateManyApproverInputEnvelope
     connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+  }
+
+  export type ReimbursementUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
+    createMany?: ReimbursementCreateManyUserInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
+  export type ReimbursementUncheckedCreateNestedManyWithoutApproverInput = {
+    create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
+    createMany?: ReimbursementCreateManyApproverInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
+  export type ReimbursementUncheckedCreateNestedManyWithoutReimburserInput = {
+    create?: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput> | ReimbursementCreateWithoutReimburserInput[] | ReimbursementUncheckedCreateWithoutReimburserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutReimburserInput | ReimbursementCreateOrConnectWithoutReimburserInput[]
+    createMany?: ReimbursementCreateManyReimburserInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
   }
 
   export type CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput = {
@@ -141736,6 +145519,48 @@ export namespace Prisma {
     update?: TravelRequestUpdateWithWhereUniqueWithoutApproverInput | TravelRequestUpdateWithWhereUniqueWithoutApproverInput[]
     updateMany?: TravelRequestUpdateManyWithWhereWithoutApproverInput | TravelRequestUpdateManyWithWhereWithoutApproverInput[]
     deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
+  }
+
+  export type ReimbursementUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutUserInput | ReimbursementUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReimbursementCreateManyUserInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutUserInput | ReimbursementUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutUserInput | ReimbursementUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
+  export type ReimbursementUpdateManyWithoutApproverNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutApproverInput | ReimbursementUpsertWithWhereUniqueWithoutApproverInput[]
+    createMany?: ReimbursementCreateManyApproverInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutApproverInput | ReimbursementUpdateWithWhereUniqueWithoutApproverInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutApproverInput | ReimbursementUpdateManyWithWhereWithoutApproverInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
+  export type ReimbursementUpdateManyWithoutReimburserNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput> | ReimbursementCreateWithoutReimburserInput[] | ReimbursementUncheckedCreateWithoutReimburserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutReimburserInput | ReimbursementCreateOrConnectWithoutReimburserInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutReimburserInput | ReimbursementUpsertWithWhereUniqueWithoutReimburserInput[]
+    createMany?: ReimbursementCreateManyReimburserInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutReimburserInput | ReimbursementUpdateWithWhereUniqueWithoutReimburserInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutReimburserInput | ReimbursementUpdateManyWithWhereWithoutReimburserInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
   }
 
   export type CoachingRecordUpdateManyWithoutAuthorNestedInput = {
@@ -142012,6 +145837,48 @@ export namespace Prisma {
     update?: TravelRequestUpdateWithWhereUniqueWithoutApproverInput | TravelRequestUpdateWithWhereUniqueWithoutApproverInput[]
     updateMany?: TravelRequestUpdateManyWithWhereWithoutApproverInput | TravelRequestUpdateManyWithWhereWithoutApproverInput[]
     deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutUserInput | ReimbursementUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReimbursementCreateManyUserInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutUserInput | ReimbursementUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutUserInput | ReimbursementUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutApproverNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutApproverInput | ReimbursementUpsertWithWhereUniqueWithoutApproverInput[]
+    createMany?: ReimbursementCreateManyApproverInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutApproverInput | ReimbursementUpdateWithWhereUniqueWithoutApproverInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutApproverInput | ReimbursementUpdateManyWithWhereWithoutApproverInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput> | ReimbursementCreateWithoutReimburserInput[] | ReimbursementUncheckedCreateWithoutReimburserInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutReimburserInput | ReimbursementCreateOrConnectWithoutReimburserInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutReimburserInput | ReimbursementUpsertWithWhereUniqueWithoutReimburserInput[]
+    createMany?: ReimbursementCreateManyReimburserInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutReimburserInput | ReimbursementUpdateWithWhereUniqueWithoutReimburserInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutReimburserInput | ReimbursementUpdateManyWithWhereWithoutReimburserInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
   }
 
   export type CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput = {
@@ -146326,6 +150193,112 @@ export namespace Prisma {
     update?: XOR<XOR<TravelRequestUpdateToOneWithWhereWithoutExpensesInput, TravelRequestUpdateWithoutExpensesInput>, TravelRequestUncheckedUpdateWithoutExpensesInput>
   }
 
+  export type UserCreateNestedOneWithoutReimbursementRequestsInput = {
+    create?: XOR<UserCreateWithoutReimbursementRequestsInput, UserUncheckedCreateWithoutReimbursementRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementRequestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReimbursementsApprovedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsApprovedInput, UserUncheckedCreateWithoutReimbursementsApprovedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsApprovedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReimbursementsReimbursedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsReimbursedInput, UserUncheckedCreateWithoutReimbursementsReimbursedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsReimbursedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReimbursementItemCreateNestedManyWithoutReimbursementInput = {
+    create?: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput> | ReimbursementItemCreateWithoutReimbursementInput[] | ReimbursementItemUncheckedCreateWithoutReimbursementInput[]
+    connectOrCreate?: ReimbursementItemCreateOrConnectWithoutReimbursementInput | ReimbursementItemCreateOrConnectWithoutReimbursementInput[]
+    createMany?: ReimbursementItemCreateManyReimbursementInputEnvelope
+    connect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+  }
+
+  export type ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput = {
+    create?: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput> | ReimbursementItemCreateWithoutReimbursementInput[] | ReimbursementItemUncheckedCreateWithoutReimbursementInput[]
+    connectOrCreate?: ReimbursementItemCreateOrConnectWithoutReimbursementInput | ReimbursementItemCreateOrConnectWithoutReimbursementInput[]
+    createMany?: ReimbursementItemCreateManyReimbursementInputEnvelope
+    connect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+  }
+
+  export type EnumReimbursementStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReimbursementStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput = {
+    create?: XOR<UserCreateWithoutReimbursementRequestsInput, UserUncheckedCreateWithoutReimbursementRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementRequestsInput
+    upsert?: UserUpsertWithoutReimbursementRequestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReimbursementRequestsInput, UserUpdateWithoutReimbursementRequestsInput>, UserUncheckedUpdateWithoutReimbursementRequestsInput>
+  }
+
+  export type UserUpdateOneWithoutReimbursementsApprovedNestedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsApprovedInput, UserUncheckedCreateWithoutReimbursementsApprovedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsApprovedInput
+    upsert?: UserUpsertWithoutReimbursementsApprovedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReimbursementsApprovedInput, UserUpdateWithoutReimbursementsApprovedInput>, UserUncheckedUpdateWithoutReimbursementsApprovedInput>
+  }
+
+  export type UserUpdateOneWithoutReimbursementsReimbursedNestedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsReimbursedInput, UserUncheckedCreateWithoutReimbursementsReimbursedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsReimbursedInput
+    upsert?: UserUpsertWithoutReimbursementsReimbursedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReimbursementsReimbursedInput, UserUpdateWithoutReimbursementsReimbursedInput>, UserUncheckedUpdateWithoutReimbursementsReimbursedInput>
+  }
+
+  export type ReimbursementItemUpdateManyWithoutReimbursementNestedInput = {
+    create?: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput> | ReimbursementItemCreateWithoutReimbursementInput[] | ReimbursementItemUncheckedCreateWithoutReimbursementInput[]
+    connectOrCreate?: ReimbursementItemCreateOrConnectWithoutReimbursementInput | ReimbursementItemCreateOrConnectWithoutReimbursementInput[]
+    upsert?: ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput | ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput[]
+    createMany?: ReimbursementItemCreateManyReimbursementInputEnvelope
+    set?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    disconnect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    delete?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    connect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    update?: ReimbursementItemUpdateWithWhereUniqueWithoutReimbursementInput | ReimbursementItemUpdateWithWhereUniqueWithoutReimbursementInput[]
+    updateMany?: ReimbursementItemUpdateManyWithWhereWithoutReimbursementInput | ReimbursementItemUpdateManyWithWhereWithoutReimbursementInput[]
+    deleteMany?: ReimbursementItemScalarWhereInput | ReimbursementItemScalarWhereInput[]
+  }
+
+  export type ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput = {
+    create?: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput> | ReimbursementItemCreateWithoutReimbursementInput[] | ReimbursementItemUncheckedCreateWithoutReimbursementInput[]
+    connectOrCreate?: ReimbursementItemCreateOrConnectWithoutReimbursementInput | ReimbursementItemCreateOrConnectWithoutReimbursementInput[]
+    upsert?: ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput | ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput[]
+    createMany?: ReimbursementItemCreateManyReimbursementInputEnvelope
+    set?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    disconnect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    delete?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    connect?: ReimbursementItemWhereUniqueInput | ReimbursementItemWhereUniqueInput[]
+    update?: ReimbursementItemUpdateWithWhereUniqueWithoutReimbursementInput | ReimbursementItemUpdateWithWhereUniqueWithoutReimbursementInput[]
+    updateMany?: ReimbursementItemUpdateManyWithWhereWithoutReimbursementInput | ReimbursementItemUpdateManyWithWhereWithoutReimbursementInput[]
+    deleteMany?: ReimbursementItemScalarWhereInput | ReimbursementItemScalarWhereInput[]
+  }
+
+  export type ReimbursementCreateNestedOneWithoutItemsInput = {
+    create?: XOR<ReimbursementCreateWithoutItemsInput, ReimbursementUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutItemsInput
+    connect?: ReimbursementWhereUniqueInput
+  }
+
+  export type ReimbursementUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutItemsInput, ReimbursementUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutItemsInput
+    upsert?: ReimbursementUpsertWithoutItemsInput
+    connect?: ReimbursementWhereUniqueInput
+    update?: XOR<XOR<ReimbursementUpdateToOneWithWhereWithoutItemsInput, ReimbursementUpdateWithoutItemsInput>, ReimbursementUncheckedUpdateWithoutItemsInput>
+  }
+
   export type FLNQuestionCreateNestedManyWithoutCategoryInput = {
     create?: XOR<FLNQuestionCreateWithoutCategoryInput, FLNQuestionUncheckedCreateWithoutCategoryInput> | FLNQuestionCreateWithoutCategoryInput[] | FLNQuestionUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: FLNQuestionCreateOrConnectWithoutCategoryInput | FLNQuestionCreateOrConnectWithoutCategoryInput[]
@@ -148221,6 +152194,23 @@ export namespace Prisma {
     _max?: NestedEnumTravelStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumReimbursementStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReimbursementStatus | EnumReimbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReimbursementStatusFilter<$PrismaModel> | $Enums.ReimbursementStatus
+  }
+
+  export type NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReimbursementStatus | EnumReimbursementStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReimbursementStatus[] | ListEnumReimbursementStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReimbursementStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReimbursementStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReimbursementStatusFilter<$PrismaModel>
+    _max?: NestedEnumReimbursementStatusFilter<$PrismaModel>
+  }
+
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -148273,6 +152263,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -148324,6 +152317,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -148538,6 +152534,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -148589,6 +152588,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -148645,6 +152647,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -148696,6 +152701,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -149048,6 +153056,186 @@ export namespace Prisma {
 
   export type TravelRequestCreateManyApproverInputEnvelope = {
     data: TravelRequestCreateManyApproverInput | TravelRequestCreateManyApproverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReimbursementCreateWithoutUserInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
+    reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
+    items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUncheckedCreateWithoutUserInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementCreateOrConnectWithoutUserInput = {
+    where: ReimbursementWhereUniqueInput
+    create: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReimbursementCreateManyUserInputEnvelope = {
+    data: ReimbursementCreateManyUserInput | ReimbursementCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReimbursementCreateWithoutApproverInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
+    items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUncheckedCreateWithoutApproverInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementCreateOrConnectWithoutApproverInput = {
+    where: ReimbursementWhereUniqueInput
+    create: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput>
+  }
+
+  export type ReimbursementCreateManyApproverInputEnvelope = {
+    data: ReimbursementCreateManyApproverInput | ReimbursementCreateManyApproverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReimbursementCreateWithoutReimburserInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
+    items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUncheckedCreateWithoutReimburserInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementCreateOrConnectWithoutReimburserInput = {
+    where: ReimbursementWhereUniqueInput
+    create: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput>
+  }
+
+  export type ReimbursementCreateManyReimburserInputEnvelope = {
+    data: ReimbursementCreateManyReimburserInput | ReimbursementCreateManyReimburserInput[]
     skipDuplicates?: boolean
   }
 
@@ -149486,6 +153674,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -149537,6 +153728,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -149853,6 +154047,82 @@ export namespace Prisma {
   export type TravelRequestUpdateManyWithWhereWithoutApproverInput = {
     where: TravelRequestScalarWhereInput
     data: XOR<TravelRequestUpdateManyMutationInput, TravelRequestUncheckedUpdateManyWithoutApproverInput>
+  }
+
+  export type ReimbursementUpsertWithWhereUniqueWithoutUserInput = {
+    where: ReimbursementWhereUniqueInput
+    update: XOR<ReimbursementUpdateWithoutUserInput, ReimbursementUncheckedUpdateWithoutUserInput>
+    create: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReimbursementUpdateWithWhereUniqueWithoutUserInput = {
+    where: ReimbursementWhereUniqueInput
+    data: XOR<ReimbursementUpdateWithoutUserInput, ReimbursementUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ReimbursementUpdateManyWithWhereWithoutUserInput = {
+    where: ReimbursementScalarWhereInput
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ReimbursementScalarWhereInput = {
+    AND?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+    OR?: ReimbursementScalarWhereInput[]
+    NOT?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+    id?: StringFilter<"Reimbursement"> | string
+    userId?: StringFilter<"Reimbursement"> | string
+    title?: StringFilter<"Reimbursement"> | string
+    purpose?: StringNullableFilter<"Reimbursement"> | string | null
+    notes?: StringNullableFilter<"Reimbursement"> | string | null
+    totalClaimed?: FloatFilter<"Reimbursement"> | number
+    totalApproved?: FloatNullableFilter<"Reimbursement"> | number | null
+    totalReimbursed?: FloatNullableFilter<"Reimbursement"> | number | null
+    status?: EnumReimbursementStatusFilter<"Reimbursement"> | $Enums.ReimbursementStatus
+    bankName?: StringNullableFilter<"Reimbursement"> | string | null
+    bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
+    bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
+    rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    reimbursedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    paymentMode?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentReference?: StringNullableFilter<"Reimbursement"> | string | null
+    paymentNotes?: StringNullableFilter<"Reimbursement"> | string | null
+    createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
+    updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
+  }
+
+  export type ReimbursementUpsertWithWhereUniqueWithoutApproverInput = {
+    where: ReimbursementWhereUniqueInput
+    update: XOR<ReimbursementUpdateWithoutApproverInput, ReimbursementUncheckedUpdateWithoutApproverInput>
+    create: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput>
+  }
+
+  export type ReimbursementUpdateWithWhereUniqueWithoutApproverInput = {
+    where: ReimbursementWhereUniqueInput
+    data: XOR<ReimbursementUpdateWithoutApproverInput, ReimbursementUncheckedUpdateWithoutApproverInput>
+  }
+
+  export type ReimbursementUpdateManyWithWhereWithoutApproverInput = {
+    where: ReimbursementScalarWhereInput
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyWithoutApproverInput>
+  }
+
+  export type ReimbursementUpsertWithWhereUniqueWithoutReimburserInput = {
+    where: ReimbursementWhereUniqueInput
+    update: XOR<ReimbursementUpdateWithoutReimburserInput, ReimbursementUncheckedUpdateWithoutReimburserInput>
+    create: XOR<ReimbursementCreateWithoutReimburserInput, ReimbursementUncheckedCreateWithoutReimburserInput>
+  }
+
+  export type ReimbursementUpdateWithWhereUniqueWithoutReimburserInput = {
+    where: ReimbursementWhereUniqueInput
+    data: XOR<ReimbursementUpdateWithoutReimburserInput, ReimbursementUncheckedUpdateWithoutReimburserInput>
+  }
+
+  export type ReimbursementUpdateManyWithWhereWithoutReimburserInput = {
+    where: ReimbursementScalarWhereInput
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyWithoutReimburserInput>
   }
 
   export type CoachingRecordUpsertWithWhereUniqueWithoutAuthorInput = {
@@ -150207,6 +154477,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -150258,6 +154531,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -150325,6 +154601,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -150376,6 +154655,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -150620,6 +154902,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -150671,6 +154956,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -150763,6 +155051,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -150814,6 +155105,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -151348,6 +155642,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -151399,6 +155696,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -152118,6 +156418,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -152169,6 +156472,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -152860,6 +157166,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
@@ -152911,6 +157220,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
@@ -153053,6 +157365,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
@@ -153104,6 +157419,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
@@ -153224,6 +157542,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -153275,6 +157596,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -153417,6 +157741,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -153468,6 +157795,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -156235,6 +160565,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -156286,6 +160619,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -156408,6 +160744,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -156459,6 +160798,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -156571,6 +160913,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -156622,6 +160967,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -156738,6 +161086,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -156789,6 +161140,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -156895,6 +161249,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -156946,6 +161303,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -157046,6 +161406,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -157097,6 +161460,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -157187,6 +161553,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -157238,6 +161607,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -157331,6 +161703,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -157382,6 +161757,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -157480,6 +161858,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -157531,6 +161912,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -157635,6 +162019,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -157686,6 +162073,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -158151,6 +162541,8 @@ export namespace Prisma {
     id?: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -158161,6 +162553,8 @@ export namespace Prisma {
     id?: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -158629,6 +163023,8 @@ export namespace Prisma {
     beneficiaryId?: StringFilter<"IncomeRecord"> | string
     amount?: FloatFilter<"IncomeRecord"> | number
     incomeDate?: DateTimeFilter<"IncomeRecord"> | Date | string
+    incomeMonth?: IntNullableFilter<"IncomeRecord"> | number | null
+    incomeYear?: IntNullableFilter<"IncomeRecord"> | number | null
     source?: StringNullableFilter<"IncomeRecord"> | string | null
     notes?: StringNullableFilter<"IncomeRecord"> | string | null
     createdAt?: DateTimeFilter<"IncomeRecord"> | Date | string
@@ -161688,6 +166084,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -161739,6 +166138,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -161872,6 +166274,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -161923,6 +166328,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -162011,6 +166419,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -162062,6 +166473,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -162129,6 +166543,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -162180,6 +166597,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -162231,6 +166651,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -162282,6 +166705,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -162349,6 +166775,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -162400,6 +166829,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -162724,6 +167156,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -162775,6 +167210,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -162915,6 +167353,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -162966,6 +167407,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -163454,6 +167898,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -163505,6 +167952,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -163609,6 +168059,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -163660,6 +168113,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -165077,6 +169533,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
@@ -165128,6 +169587,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
@@ -165270,6 +169732,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
@@ -165321,6 +169786,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
@@ -165729,6 +170197,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
@@ -165780,6 +170251,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
@@ -165922,6 +170396,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
@@ -165973,6 +170450,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
@@ -166023,6 +170503,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -166074,6 +170557,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -166130,6 +170616,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
@@ -166181,6 +170670,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
     taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
     individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
@@ -166280,6 +170772,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -166331,6 +170826,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -166393,6 +170891,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -166444,6 +170945,9 @@ export namespace Prisma {
     attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -166563,6 +171067,884 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutReimbursementRequestsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReimbursementRequestsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReimbursementRequestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReimbursementRequestsInput, UserUncheckedCreateWithoutReimbursementRequestsInput>
+  }
+
+  export type UserCreateWithoutReimbursementsApprovedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReimbursementsApprovedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReimbursementsApprovedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReimbursementsApprovedInput, UserUncheckedCreateWithoutReimbursementsApprovedInput>
+  }
+
+  export type UserCreateWithoutReimbursementsReimbursedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReimbursementsReimbursedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReimbursementsReimbursedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReimbursementsReimbursedInput, UserUncheckedCreateWithoutReimbursementsReimbursedInput>
+  }
+
+  export type ReimbursementItemCreateWithoutReimbursementInput = {
+    id?: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementItemUncheckedCreateWithoutReimbursementInput = {
+    id?: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementItemCreateOrConnectWithoutReimbursementInput = {
+    where: ReimbursementItemWhereUniqueInput
+    create: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput>
+  }
+
+  export type ReimbursementItemCreateManyReimbursementInputEnvelope = {
+    data: ReimbursementItemCreateManyReimbursementInput | ReimbursementItemCreateManyReimbursementInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutReimbursementRequestsInput = {
+    update: XOR<UserUpdateWithoutReimbursementRequestsInput, UserUncheckedUpdateWithoutReimbursementRequestsInput>
+    create: XOR<UserCreateWithoutReimbursementRequestsInput, UserUncheckedCreateWithoutReimbursementRequestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReimbursementRequestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReimbursementRequestsInput, UserUncheckedUpdateWithoutReimbursementRequestsInput>
+  }
+
+  export type UserUpdateWithoutReimbursementRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReimbursementRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutReimbursementsApprovedInput = {
+    update: XOR<UserUpdateWithoutReimbursementsApprovedInput, UserUncheckedUpdateWithoutReimbursementsApprovedInput>
+    create: XOR<UserCreateWithoutReimbursementsApprovedInput, UserUncheckedCreateWithoutReimbursementsApprovedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReimbursementsApprovedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReimbursementsApprovedInput, UserUncheckedUpdateWithoutReimbursementsApprovedInput>
+  }
+
+  export type UserUpdateWithoutReimbursementsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReimbursementsApprovedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutReimbursementsReimbursedInput = {
+    update: XOR<UserUpdateWithoutReimbursementsReimbursedInput, UserUncheckedUpdateWithoutReimbursementsReimbursedInput>
+    create: XOR<UserCreateWithoutReimbursementsReimbursedInput, UserUncheckedCreateWithoutReimbursementsReimbursedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReimbursementsReimbursedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReimbursementsReimbursedInput, UserUncheckedUpdateWithoutReimbursementsReimbursedInput>
+  }
+
+  export type UserUpdateWithoutReimbursementsReimbursedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReimbursementsReimbursedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput = {
+    where: ReimbursementItemWhereUniqueInput
+    update: XOR<ReimbursementItemUpdateWithoutReimbursementInput, ReimbursementItemUncheckedUpdateWithoutReimbursementInput>
+    create: XOR<ReimbursementItemCreateWithoutReimbursementInput, ReimbursementItemUncheckedCreateWithoutReimbursementInput>
+  }
+
+  export type ReimbursementItemUpdateWithWhereUniqueWithoutReimbursementInput = {
+    where: ReimbursementItemWhereUniqueInput
+    data: XOR<ReimbursementItemUpdateWithoutReimbursementInput, ReimbursementItemUncheckedUpdateWithoutReimbursementInput>
+  }
+
+  export type ReimbursementItemUpdateManyWithWhereWithoutReimbursementInput = {
+    where: ReimbursementItemScalarWhereInput
+    data: XOR<ReimbursementItemUpdateManyMutationInput, ReimbursementItemUncheckedUpdateManyWithoutReimbursementInput>
+  }
+
+  export type ReimbursementItemScalarWhereInput = {
+    AND?: ReimbursementItemScalarWhereInput | ReimbursementItemScalarWhereInput[]
+    OR?: ReimbursementItemScalarWhereInput[]
+    NOT?: ReimbursementItemScalarWhereInput | ReimbursementItemScalarWhereInput[]
+    id?: StringFilter<"ReimbursementItem"> | string
+    reimbursementId?: StringFilter<"ReimbursementItem"> | string
+    expenseDate?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    category?: StringFilter<"ReimbursementItem"> | string
+    description?: StringFilter<"ReimbursementItem"> | string
+    amount?: FloatFilter<"ReimbursementItem"> | number
+    approvedAmount?: FloatNullableFilter<"ReimbursementItem"> | number | null
+    receiptFiles?: JsonNullableFilter<"ReimbursementItem">
+    createdAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+    updatedAt?: DateTimeFilter<"ReimbursementItem"> | Date | string
+  }
+
+  export type ReimbursementCreateWithoutItemsInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
+    reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
+  }
+
+  export type ReimbursementUncheckedCreateWithoutItemsInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementCreateOrConnectWithoutItemsInput = {
+    where: ReimbursementWhereUniqueInput
+    create: XOR<ReimbursementCreateWithoutItemsInput, ReimbursementUncheckedCreateWithoutItemsInput>
+  }
+
+  export type ReimbursementUpsertWithoutItemsInput = {
+    update: XOR<ReimbursementUpdateWithoutItemsInput, ReimbursementUncheckedUpdateWithoutItemsInput>
+    create: XOR<ReimbursementCreateWithoutItemsInput, ReimbursementUncheckedCreateWithoutItemsInput>
+    where?: ReimbursementWhereInput
+  }
+
+  export type ReimbursementUpdateToOneWithWhereWithoutItemsInput = {
+    where?: ReimbursementWhereInput
+    data: XOR<ReimbursementUpdateWithoutItemsInput, ReimbursementUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type ReimbursementUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
+    reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -171221,6 +176603,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -171272,6 +176657,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -171469,6 +176857,78 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ReimbursementCreateManyUserInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementCreateManyApproverInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementCreateManyReimburserInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CoachingRecordCreateManyAuthorInput = {
     id?: string
     fellowId: string
@@ -171644,6 +177104,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
@@ -171695,6 +177158,9 @@ export namespace Prisma {
     taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
     individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
@@ -172022,6 +177488,228 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
+    reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
+    items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementUpdateWithoutApproverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
+    items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateWithoutApproverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutApproverInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementUpdateWithoutReimburserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
+    items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateWithoutReimburserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutReimburserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -174119,6 +179807,8 @@ export namespace Prisma {
     id?: string
     amount: number
     incomeDate: Date | string
+    incomeMonth?: number | null
+    incomeYear?: number | null
     source?: string | null
     notes?: string | null
     createdAt?: Date | string
@@ -174443,6 +180133,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -174453,6 +180145,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -174463,6 +180157,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     incomeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    incomeMonth?: NullableIntFieldUpdateOperationsInput | number | null
+    incomeYear?: NullableIntFieldUpdateOperationsInput | number | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175580,6 +181276,54 @@ export namespace Prisma {
     receiptFiles?: NullableJsonNullValueInput | InputJsonValue
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemCreateManyReimbursementInput = {
+    id?: string
+    expenseDate: Date | string
+    category: string
+    description: string
+    amount: number
+    approvedAmount?: number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementItemUpdateWithoutReimbursementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemUncheckedUpdateWithoutReimbursementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementItemUncheckedUpdateManyWithoutReimbursementInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    expenseDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    approvedAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    receiptFiles?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

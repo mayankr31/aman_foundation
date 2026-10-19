@@ -39,7 +39,7 @@ export function ToastProvider({ children }) {
       {children}
       
       {/* Portaled Toasts Container */}
-      <div className="fixed top-6 right-6 z-[200] flex flex-col gap-3 w-full max-w-sm pointer-events-none">
+      <div className="fixed top-20 sm:top-6 left-3 right-3 sm:left-auto sm:right-6 z-[200] flex flex-col gap-3 w-auto sm:w-full max-w-sm pointer-events-none">
         <AnimatePresence>
           {toasts.map(toast => {
             const isSuccess = toast.type === 'success';
