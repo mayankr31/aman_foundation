@@ -9,17 +9,9 @@ import FellowPerformanceForm from "@/components/FellowPerformanceForm";
 import RatingCategoriesModal from "@/components/RatingCategoriesModal";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-function formatDate(value) {
-  if (!value) return "—";
-  return new Date(value).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 export default function FellowPerformancePage() {
   const { token, user, isInitializing } = useAuth();

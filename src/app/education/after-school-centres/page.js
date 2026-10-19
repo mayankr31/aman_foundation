@@ -96,12 +96,19 @@ export default function AfterSchoolCentresModule() {
       });
       const json = await res.json();
       if (json.success) {
-        setCentres([json.data, ...centres]);
+        const loadRes = await fetch("/api/after-school-centres", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const loadJson = await loadRes.json();
+        if (loadJson.success) setCentres(loadJson.data);
         setAddForm(initialAddForm);
         setShowAddModal(false);
+      } else {
+        alert(json.error || "Failed to add centre");
       }
     } catch (err) {
       console.error("Failed to add centre:", err);
+      alert("Failed to add centre. Please try again.");
     }
   };
 
@@ -295,8 +302,12 @@ export default function AfterSchoolCentresModule() {
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0">
-                    <img alt={c.name} className="w-full h-full object-cover" src={c.img} />
+                  <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+                    {c.img ? (
+                      <img alt={c.name} className="w-full h-full object-cover" src={c.img} />
+                    ) : (
+                      <span className="material-symbols-outlined text-on-surface-variant">meeting_room</span>
+                    )}
                   </div>
                   <div>
                     <h4 className="font-headline text-lg text-on-surface leading-tight group-hover:text-primary transition-colors">

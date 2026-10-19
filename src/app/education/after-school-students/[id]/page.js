@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -621,7 +622,7 @@ export default function AfterSchoolStudentProfileDetail() {
                 ["Father's Mobile", student.fatherMobile || "—"],
                 ["Mother's Name", student.motherName || "—"],
                 ["Mother's Mobile", student.motherMobile || "—"],
-                ["Enrolment Date", student.enrolmentDate ? new Date(student.enrolmentDate).toLocaleDateString() : "—"],
+                ["Enrolment Date", formatDate(student.enrolmentDate)],
                 ["Primary Language", student.primaryLanguage || "—"],
                 ["Home Location", `${student.address || "—"}, ${student.district || "—"}`],
                 ["Email", student.email || "—"],
@@ -699,7 +700,7 @@ export default function AfterSchoolStudentProfileDetail() {
                             {form.assessmentType}
                           </span>
                           <span className="text-xs text-on-surface-variant">
-                            {form.date ? new Date(form.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : "—"}
+                            {formatDate(form.date)}
                           </span>
                           {form.fellow && (
                             <span className="text-xs text-on-surface-variant">by {form.fellow.name}</span>
@@ -738,7 +739,7 @@ export default function AfterSchoolStudentProfileDetail() {
                           </p>
                         </div>
                         <div className="bg-surface rounded p-2 text-center">
-                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">FLN Score</p>
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">RF Score</p>
                           <p className="text-sm font-semibold text-on-surface">
                             {scoredFLN}/{totalFLNMarks}
                           </p>
@@ -767,7 +768,7 @@ export default function AfterSchoolStudentProfileDetail() {
                   .map(assess => (
                   <div key={assess.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
                     <span className="text-on-surface-variant text-xs">
-                      {new Date(assess.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {formatDate(assess.date)}
                     </span>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${assess.canRead ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}`}>
                       {assess.canRead ? "Can Read" : "Cannot Read"}
@@ -801,7 +802,7 @@ export default function AfterSchoolStudentProfileDetail() {
                   return (
                     <div key={hw.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
                       <span className="text-on-surface-variant text-xs">
-                        {new Date(hw.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {formatDate(hw.date)}
                       </span>
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColors[hw.homeworkStatus] || 'bg-surface-container text-on-surface-variant'}`}>
                         {statusLabels[hw.homeworkStatus] || hw.homeworkStatus}
@@ -1091,7 +1092,7 @@ export default function AfterSchoolStudentProfileDetail() {
                     activeFormTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
                   }`}
                 >
-                  {tab === "basic" ? "Basic Info" : tab === "enrollment" ? "Enrollment" : tab === "subjects" ? "Subjects" : "FLN"}
+                  {tab === "basic" ? "Basic Info" : tab === "enrollment" ? "Enrollment" : tab === "subjects" ? "Subjects" : "RF"}
                 </button>
               ))}
             </div>
@@ -1201,11 +1202,11 @@ export default function AfterSchoolStudentProfileDetail() {
               </div>
             )}
 
-            {/* FLN Tab */}
+            {/* RF Tab */}
             {activeFormTab === "fln" && (
               <div className="space-y-6">
                 {templates.flnCategories.length === 0 ? (
-                  <p className="text-center py-4 text-on-surface-variant text-xs">No FLN categories configured.</p>
+                  <p className="text-center py-4 text-on-surface-variant text-xs">No RF categories configured.</p>
                 ) : (
                   templates.flnCategories.map(cat => {
                     const catScore = (cat.questions || []).reduce((sum, q) =>
@@ -1245,7 +1246,7 @@ export default function AfterSchoolStudentProfileDetail() {
                 {templates.flnCategories.length > 0 && (
                   <div className="text-right pt-2 border-t border-outline-variant/20">
                     <span className="text-sm font-bold text-on-surface">
-                      Total FLN: {
+                      Total RF: {
                         Object.entries(assessmentFormData.flnScores).reduce((sum, [, v]) => sum + (parseFloat(v) || 0), 0)
                       } / {
                         templates.flnCategories.reduce((sum, cat) =>

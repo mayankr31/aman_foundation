@@ -10,6 +10,7 @@ import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStat
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import StudentDataView from "@/components/StudentDataView";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -71,7 +72,6 @@ export default function SchoolProfileDetail() {
   const [attendanceSelection, setAttendanceSelection] = useState(new Set());
   const [isEditingAttendance, setIsEditingAttendance] = useState(false);
   const [attendanceReviewMode, setAttendanceReviewMode] = useState(false);
-  const [attendanceAction, setAttendanceAction] = useState(""); // "Present" or "Absent"
   const [viewOnlyMode, setViewOnlyMode] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -106,7 +106,6 @@ export default function SchoolProfileDetail() {
           location: s.location || "",
           status: s.status || "Active",
           mapUrl: s.mapUrl || "",
-          goal: s.goal || 80,
         });
       }
     } catch (err) { console.error("Failed to load school:", err); }
@@ -296,9 +295,8 @@ export default function SchoolProfileDetail() {
     await loadSchool();
   }
 
-  function handleReviewAttendance(e, statusAction) {
+  function handleReviewAttendance(e) {
     e.preventDefault();
-    setAttendanceAction(statusAction);
     setAttendanceReviewMode(true);
   }
 
@@ -307,7 +305,7 @@ export default function SchoolProfileDetail() {
     try {
       const studentStatuses = (school?.students || []).map(s => ({
         studentId: s.id,
-        status: attendanceSelection.has(s.id) ? attendanceAction : (attendanceAction === "Present" ? "Absent" : "Present")
+        status: attendanceSelection.has(s.id) ? "Present" : "Absent"
       }));
       const body = { date: attendanceDate, studentStatuses };
       if (includeLearningAssessment) {
@@ -565,7 +563,7 @@ export default function SchoolProfileDetail() {
                 return (
                   <button 
                     key={dateNum}
-                    onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceReviewMode(false); setSearchQ(""); setIncludeLearningAssessment(false); setIncludeHomework(false); setLearningAssessmentMap({}); setHomeworkMap({}); }}
+                    onClick={() => { setModal("attendance"); setAttendanceDate(dateStr); setAttendanceSelection(new Set(enrolledStudents.map(s => s.id))); setAttendanceReviewMode(false); setSearchQ(""); setIncludeLearningAssessment(false); setIncludeHomework(false); setLearningAssessmentMap({}); setHomeworkMap({}); }}
                     className={`aspect-square p-2 rounded-lg border flex flex-col items-center justify-center transition-colors cursor-pointer relative ${dayData ? 'border-primary/30 hover:border-primary/60 bg-surface-container-lowest' : 'border-outline-variant/30 hover:border-outline-variant bg-surface-container-low/20'} ${isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest font-bold !border-primary' : ''}`}
                   >
                     <span className={`text-sm font-semibold ${isToday ? 'text-primary' : 'text-on-surface'}`}>{dateNum}</span>
@@ -659,10 +657,6 @@ export default function SchoolProfileDetail() {
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Total Enrolled</span>
                 <span className="font-bold text-on-surface">{totalEnrolled} Students</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Enrollment Goal</span>
-                <span className="font-bold text-on-surface">{school.goal} Students</span>
               </div>
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Active Fellows</span>
@@ -804,6 +798,20 @@ export default function SchoolProfileDetail() {
         </div>
       </div>
 
+      {/* Student Data */}
+      <div
+        id="student-data"
+        className="scroll-mt-24 mt-8 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10"
+      >
+        <StudentDataView
+          schoolId={school.id}
+          schoolName={school.name}
+          token={token}
+          source="school"
+          canEditNotes={isAdmin || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
+        />
+      </div>
+
       {/* ─── MODALS ──────────────────────────────────────────────────────────────── */}
 
       {/* Mark Attendance Modal */}
@@ -875,15 +883,15 @@ export default function SchoolProfileDetail() {
               <div className="flex gap-4 items-center">
                 <InputField label="Attendance Date" name="date" type="date" value={attendanceDate} onChange={e => setAttendanceDate(e.target.value)} required />
               </div>
-              <p className="text-sm text-on-surface-variant mb-4">Select students below, then choose an action. Unselected students will be marked with the opposite status.</p>
+              <p className="text-sm text-on-surface-variant mb-4">All students are marked present by default. Uncheck the students who are absent.</p>
               <input type="text" placeholder="Search enrolled students..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
                 className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-2" />
               
               <div className="flex items-center gap-2 mb-2 text-sm">
-                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set(enrolledStudents.map(s => s.id)))}>Select All</button>
+                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set(enrolledStudents.map(s => s.id)))}>Mark All Present</button>
                 <span className="text-on-surface-variant">|</span>
-                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set())}>Clear All</button>
-                <span className="ml-auto font-bold text-on-surface">{attendanceSelection.size} selected</span>
+                <button type="button" className="text-primary font-medium hover:underline cursor-pointer" onClick={() => setAttendanceSelection(new Set())}>Mark All Absent</button>
+                <span className="ml-auto font-bold text-on-surface">{attendanceSelection.size} present / {enrolledStudents.length - attendanceSelection.size} absent</span>
               </div>
 
               <div className="space-y-2 max-h-60 overflow-y-auto mb-4 border border-outline-variant/30 rounded-lg p-2">
@@ -1002,14 +1010,9 @@ export default function SchoolProfileDetail() {
 
               <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-outline-variant/20">
                 <button type="button" onClick={() => { setModal(null); setAttendanceReviewMode(false); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-                <div className="flex gap-2">
-                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Absent")} className="px-4 py-2 rounded-full bg-error text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
-                    Review as Absent
-                  </button>
-                  <button type="button" disabled={!attendanceDate} onClick={(e) => handleReviewAttendance(e, "Present")} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
-                    Review as Present
-                  </button>
-                </div>
+                <button type="button" disabled={!attendanceDate} onClick={handleReviewAttendance} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
+                  Review Attendance
+                </button>
               </div>
             </div>
           ) : (
@@ -1017,17 +1020,17 @@ export default function SchoolProfileDetail() {
               <h4 className="font-bold text-lg text-on-surface mb-2">Review Attendance - {attendanceDate}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="border border-outline-variant/30 rounded-lg p-3">
-                  <h5 className="font-bold text-primary mb-2 border-b border-outline-variant/20 pb-2">Present ({attendanceAction === "Present" ? attendanceSelection.size : enrolledStudents.length - attendanceSelection.size})</h5>
+                  <h5 className="font-bold text-primary mb-2 border-b border-outline-variant/20 pb-2">Present ({attendanceSelection.size})</h5>
                   <ul className="text-sm space-y-1 max-h-48 overflow-y-auto pl-4 list-disc text-on-surface-variant">
-                    {enrolledStudents.filter(s => (attendanceAction === "Present" ? attendanceSelection.has(s.id) : !attendanceSelection.has(s.id))).map(s => (
+                    {enrolledStudents.filter(s => attendanceSelection.has(s.id)).map(s => (
                       <li key={s.id}>{s.name}</li>
                     ))}
                   </ul>
                 </div>
                 <div className="border border-outline-variant/30 rounded-lg p-3">
-                  <h5 className="font-bold text-error mb-2 border-b border-outline-variant/20 pb-2">Absent ({attendanceAction === "Absent" ? attendanceSelection.size : enrolledStudents.length - attendanceSelection.size})</h5>
+                  <h5 className="font-bold text-error mb-2 border-b border-outline-variant/20 pb-2">Absent ({enrolledStudents.length - attendanceSelection.size})</h5>
                   <ul className="text-sm space-y-1 max-h-48 overflow-y-auto pl-4 list-disc text-on-surface-variant">
-                    {enrolledStudents.filter(s => (attendanceAction === "Absent" ? attendanceSelection.has(s.id) : !attendanceSelection.has(s.id))).map(s => (
+                    {enrolledStudents.filter(s => !attendanceSelection.has(s.id)).map(s => (
                       <li key={s.id}>{s.name}</li>
                     ))}
                   </ul>
@@ -1078,7 +1081,6 @@ export default function SchoolProfileDetail() {
               <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
               <InputField label="Location/City" name="location" value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} />
               <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
-              <InputField label="Enrolment Goal" name="goal" type="number" value={editForm.goal} onChange={e => setEditForm(f => ({ ...f, goal: e.target.value }))} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

@@ -13,7 +13,7 @@ import EngagementSurveyForm from "@/components/EngagementSurveyForm";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
-import StudentDataView from "@/components/StudentDataView";
+import { formatDate } from "@/lib/date";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PhotoLightbox from "@/components/PhotoLightbox";
@@ -441,7 +441,7 @@ function ProfilePageContent() {
   const personalDob = profile.fellow?.dob || profile.dob;
   const personalGender = profile.fellow?.gender || profile.gender;
   const personalAddress = profile.fellow?.address || profile.address;
-  const memberSince = profile.createdAt ? new Date(profile.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long" }) : "—";
+  const memberSince = formatDate(profile.createdAt);
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -528,9 +528,7 @@ function ProfilePageContent() {
                     )}
                     <div>
                       <span className="font-bold text-on-surface">Date of Birth:</span>{" "}
-                      {personalDob
-                        ? new Date(personalDob).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
-                        : "—"}
+                      {formatDate(personalDob)}
                     </div>
                     <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
                     <div>
@@ -977,11 +975,7 @@ function ProfilePageContent() {
                             <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
                               Goal Sheet
                               <span className="text-xs font-normal text-on-surface-variant">
-                                {new Date(sheet.date).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })}
+                                {formatDate(sheet.date)}
                               </span>
                             </h3>
                             {sheet.portfolioLink && (
@@ -1015,14 +1009,6 @@ function ProfilePageContent() {
                 </div>
               )}
 
-              {activeTab === "Student Data" && (
-                <StudentDataView fellowId={profile.fellow.id} fellowName={profile.fellow.name} token={token} canEditNotes source="school" />
-              )}
-
-              {activeTab === "After School Student Data" && (
-                <StudentDataView fellowId={profile.fellow.id} fellowName={profile.fellow.name} token={token} canEditNotes source="afterSchool" />
-              )}
-
               {activeTab === "Coaching & Classroom Observation" && (
                 <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
                   <div className="flex justify-between items-center mb-6">
@@ -1040,7 +1026,7 @@ function ProfilePageContent() {
                             <div>
                               <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
                               <p className="text-xs text-on-surface-variant mt-1">
-                                {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                                {formatDate(record.date)}
                               </p>
                             </div>
                           </div>
@@ -1126,7 +1112,7 @@ function ProfilePageContent() {
                               <div>
                                 <p className="font-semibold text-on-surface text-sm">Engagement Survey</p>
                                 <p className="text-xs text-on-surface-variant mt-1">
-                                  {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                                  {formatDate(survey.surveyDate)}
                                 </p>
                               </div>
                               <div className="flex items-center gap-1">
@@ -1187,7 +1173,7 @@ function ProfilePageContent() {
                               <div>
                                 <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
                                 <p className="text-xs text-on-surface-variant mt-1">
-                                  {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                                  {formatDate(survey.surveyDate)}
                                 </p>
                               </div>
                               <div className="flex items-center gap-1">

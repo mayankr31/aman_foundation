@@ -31,6 +31,38 @@ export default function LayoutWrapper({ children }) {
     }
   }, [token, isInitializing, isAuthPage, pathname, isAllowed]);
 
+  // Any full-screen overlay (modal, drawer, lightbox, full-page form) uses
+  // `fixed inset-0`. While one exists, lock scrolling on the page behind it.
+  useEffect(() => {
+    let frame = null;
+
+    const syncScrollLock = () => {
+      frame = null;
+      const hasOverlay = Array.from(document.querySelectorAll(".fixed.inset-0")).some((element) => {
+        const style = window.getComputedStyle(element);
+        return style.display !== "none" && style.visibility !== "hidden";
+      });
+      document.body.classList.toggle("modal-open", hasOverlay);
+      document.documentElement.classList.toggle("modal-open", hasOverlay);
+    };
+
+    const scheduleSync = () => {
+      if (frame !== null) return;
+      frame = window.requestAnimationFrame(syncScrollLock);
+    };
+
+    const observer = new MutationObserver(scheduleSync);
+    observer.observe(document.body, { childList: true, subtree: true });
+    syncScrollLock();
+
+    return () => {
+      observer.disconnect();
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      document.body.classList.remove("modal-open");
+      document.documentElement.classList.remove("modal-open");
+    };
+  }, []);
+
   if (isInitializing) {
     return (
       <div className="flex items-center justify-center w-full min-h-screen bg-surface">

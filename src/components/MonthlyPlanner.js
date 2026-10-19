@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate } from "@/lib/date";
 
 export default function MonthlyPlanner({ fellowId }) {
   const { token } = useAuth();
@@ -150,12 +151,6 @@ export default function MonthlyPlanner({ fellowId }) {
     }
   };
 
-  const formatDate = (dateInput) => {
-    if (!dateInput) return "";
-    const d = new Date(dateInput);
-    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-  };
-
   const getIsSunday = (dateStr) => {
     if (!dateStr) return false;
     const [y, m, d] = dateStr.split('-').map(Number);
@@ -258,7 +253,7 @@ export default function MonthlyPlanner({ fellowId }) {
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Tasks for {new Date(selectedDate).toLocaleDateString()}</h3>
+              <h3 className="text-lg font-bold text-on-surface">Tasks for {formatDate(selectedDate)}</h3>
               <button onClick={() => setShowDayModal(false)} className="text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors cursor-pointer">
                 <span className="material-symbols-outlined text-[16px] leading-none">close</span>
               </button>

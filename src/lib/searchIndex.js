@@ -19,8 +19,6 @@ const FELLOW_TAB_KEYWORDS = {
   "personal-details": ["personal", "profile", "basic details", "contact", "address"],
   "monthly-planner": ["planner", "monthly plan", "schedule", "calendar"],
   goals: ["goal", "goal sheet", "goals sheet", "target", "targets", "objectives"],
-  "student-data": ["students", "student data", "learner", "assessment", "fln", "levels"],
-  "after-school-student-data": ["after school students", "after school data", "learner", "assessment"],
   "coaching-observation": ["coaching", "observation", "classroom", "classroom observation"],
   "engagement-survey": ["survey", "engagement", "student survey"],
   "look-beyond-survey": ["survey", "look beyond", "survey"],
@@ -104,6 +102,7 @@ const FACILITY_SECTIONS = [
   { label: "Daily Attendance", anchor: "daily-attendance", keywords: ["attendance", "daily attendance", "calendar", "present", "absent"], icon: "event_available" },
   { label: "Active Program Participation", anchor: "active-programs", keywords: ["program", "participation", "programs"], icon: "hub" },
   { label: "Enrolled Students", anchor: "enrolled-students", keywords: ["students", "enrolled", "enrolment"], icon: "groups" },
+  { label: "Student Data", anchor: "student-data", keywords: ["student data", "learner", "assessment", "fln", "levels", "growth", "export"], icon: "monitoring" },
   { label: "School Metrics", anchor: "metrics", keywords: ["metrics", "stats", "statistics"], icon: "insights" },
   { label: "Gender Ratio", anchor: "gender-ratio", keywords: ["gender", "ratio", "boys", "girls"], icon: "pie_chart" },
   { label: "Assigned Fellows", anchor: "assigned-fellows", keywords: ["fellows", "assigned", "staff"], icon: "person" },
@@ -153,7 +152,7 @@ const MODAL_ENTRIES = [
   // Student academic assessment form
   ...modalTabs({
     idPrefix: "student-assessment-form",
-    labels: ["Basic Info", "Enrollment", "Subjects", "FLN", "SEL"],
+    labels: ["Basic Info", "Enrollment", "Subjects", "RF", "SEL"],
     path: ["Education", "Students", "Student Profile", "Academic Assessments"],
     href: "/education/students",
     page: "education",
@@ -164,7 +163,7 @@ const MODAL_ENTRIES = [
   // Student assessment templates
   ...modalTabs({
     idPrefix: "student-assessment-template",
-    labels: ["FLN", "SEL", "Subjects"],
+    labels: ["RF", "SEL", "Subjects"],
     path: ["Education", "Students", "Student Profile", "Academic Assessments", "Assessment Templates"],
     href: "/education/students",
     page: "education",
@@ -175,7 +174,7 @@ const MODAL_ENTRIES = [
   // After-school academic assessment form
   ...modalTabs({
     idPrefix: "after-school-assessment-form",
-    labels: ["Basic Info", "Enrollment", "Subjects", "FLN"],
+    labels: ["Basic Info", "Enrollment", "Subjects", "RF"],
     path: ["Education", "After School Students", "Student Profile", "Academic Assessments"],
     href: "/education/after-school-students",
     page: "education",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate } from "@/lib/date";
 
 export default function FellowsModule() {
   const { token, user } = useAuth();
@@ -61,7 +62,7 @@ export default function FellowsModule() {
       "Goal Sheets": f.goalSheetCount ?? 0,
       "Progress (%)": f.progress ?? 0,
       "Evaluation Rating": f.evaluationRating ?? "",
-      "Joined Date": f.createdAt ? new Date(f.createdAt).toLocaleDateString() : "",
+      "Joined Date": formatDate(f.createdAt, ""),
     }));
 
     const imported = await import("xlsx");

@@ -20,9 +20,11 @@ export const LEVEL_ORDER = [
   "letter",
   "words",
   "paragraph (std 1 level text)",
+  "paragraph (std 2 level text)",
   "number recognition (1-9)",
   "number recognition (11-99)",
   "subtraction",
+  "division",
 ];
 
 const LAST_KEYS = new Set(["absent", "unknown", "n/a", "na"]);

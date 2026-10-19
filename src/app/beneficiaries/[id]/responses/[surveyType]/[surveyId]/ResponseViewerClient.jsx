@@ -5,6 +5,7 @@ import CapacityReadOnlyView from "./CapacityReadOnlyView";
 import VulnerabilityReadOnlyView from "./VulnerabilityReadOnlyView";
 import SolutionPlanReadOnlyView from "./SolutionPlanReadOnlyView";
 import { computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
+import { formatDate } from "@/lib/date";
 
 export default function ResponseViewerClient({ surveyType, surveyData, beneficiaryId }) {
   const getSurveyTitle = () => {
@@ -43,7 +44,7 @@ export default function ResponseViewerClient({ surveyType, surveyData, beneficia
             {getSurveyTitle()}
           </h2>
           <p className="text-sm text-on-surface-variant font-sans mt-1">
-            Submitted on {new Date(surveyData.surveyDate || surveyData.createdAt || Date.now()).toLocaleDateString()}
+            Submitted on {formatDate(surveyData.surveyDate || surveyData.createdAt || Date.now())}
           </p>
         </div>
         

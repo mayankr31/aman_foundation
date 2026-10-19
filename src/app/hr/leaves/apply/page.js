@@ -5,6 +5,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
+
+function formatStoredDates(value) {
+  return String(value || "").replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (match) => formatDate(match));
+}
 
 export default function LeaveApplication() {
   const { token, user: currentUser } = useAuth();
@@ -59,8 +64,8 @@ export default function LeaveApplication() {
 
   const handleApplyLeave = async () => {
     const dates = newLeave.isMultiple
-      ? `${newLeave.fromDate} to ${newLeave.toDate}`
-      : newLeave.singleDate;
+      ? `${formatDate(newLeave.fromDate)} to ${formatDate(newLeave.toDate)}`
+      : formatDate(newLeave.singleDate);
 
     if (!dates || (newLeave.isMultiple && (!newLeave.fromDate || !newLeave.toDate))) {
       triggerToast("Please select valid dates.");
@@ -156,7 +161,7 @@ export default function LeaveApplication() {
               {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
                   <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs text-on-surface-variant break-words align-top">{leave.dates}</td>
+                  <td className="py-4 px-4 font-mono text-xs text-on-surface-variant break-words align-top">{formatStoredDates(leave.dates)}</td>
                   <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">

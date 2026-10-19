@@ -35,6 +35,24 @@ const FELLOW_PERFORMANCE_LINK = {
   icon: "monitoring",
 };
 
+const DISASTER_LINKS = [
+  {
+    label: "Help Providers",
+    href: "/disaster-relief?tab=help-providers",
+    icon: "volunteer_activism",
+  },
+  {
+    label: "Resource Inventory",
+    href: "/disaster-relief?tab=resource-inventory",
+    icon: "inventory_2",
+  },
+  {
+    label: "Relief Distributions",
+    href: "/disaster-relief?tab=relief-distributions",
+    icon: "redeem",
+  },
+];
+
 const LIVELIHOOD_LINKS = [
   { label: "Farm Programs", href: "/livelihood/farm", kpiKey: "farmPrograms", icon: "agriculture" },
   {
@@ -52,7 +70,7 @@ const TEAM_LINKS = [
   { label: "Leave Requests", href: "/hr/leaves", icon: "event_note" },
 ];
 
-export function getDashboardSections(role) {
+export function getDashboardSections(role, can) {
   if (role === "FELLOW") {
     return [
       {
@@ -74,6 +92,15 @@ export function getDashboardSections(role) {
   }
 
   const canManage = role === "ADMIN" || PROGRAM_ROLES.includes(role);
+  const canViewDisaster = role === "ADMIN" || (typeof can === "function" && can("disaster-relief"));
+
+  const educationLinks = [...EDUCATION_LINKS, PTA_LINK];
+  if (canManage) {
+    educationLinks.push(FELLOWS_LINK);
+    if (role === "ADMIN") {
+      educationLinks.push(PM_REFLECTION_LINK, FELLOW_PERFORMANCE_LINK);
+    }
+  }
 
   return [
     {
@@ -81,22 +108,8 @@ export function getDashboardSections(role) {
       title: "Education",
       icon: "school",
       tone: "emerald",
-      links: [...EDUCATION_LINKS, PTA_LINK],
+      links: educationLinks,
     },
-    ...(canManage
-      ? [
-          {
-            id: "fellows",
-            title: role === "ADMIN" ? "Fellows & PM" : "Fellows",
-            icon: "rate_review",
-            tone: "sky",
-            links:
-              role === "ADMIN"
-                ? [FELLOWS_LINK, PM_REFLECTION_LINK, FELLOW_PERFORMANCE_LINK]
-                : [FELLOWS_LINK],
-          },
-        ]
-      : []),
     {
       id: "livelihood",
       title: "Livelihood",
@@ -104,6 +117,17 @@ export function getDashboardSections(role) {
       tone: "amber",
       links: LIVELIHOOD_LINKS,
     },
+    ...(canViewDisaster
+      ? [
+          {
+            id: "disaster",
+            title: "Disaster Management",
+            icon: "emergency",
+            tone: "rose",
+            links: DISASTER_LINKS,
+          },
+        ]
+      : []),
     ...(canManage
       ? [
           {

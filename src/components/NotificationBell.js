@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate } from "@/lib/date";
 
 function relativeTime(value) {
   if (!value) return "";
@@ -15,7 +16,7 @@ function relativeTime(value) {
   if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
   if (days < 7) return `${days}d ago`;
-  return new Date(value).toLocaleDateString();
+  return formatDate(value);
 }
 
 export default function NotificationBell() {

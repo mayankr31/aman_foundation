@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -629,7 +630,7 @@ export default function ProgramDetail() {
                         }
                         return <td key={col.key} className="px-4 py-3 text-sm break-words">{display}</td>;
                       })}
-                      <td className="px-4 py-3 text-xs text-slate-400">{new Date(assign.enrolledAt).toLocaleDateString("en-IN")}</td>
+                      <td className="px-4 py-3 text-xs text-slate-400">{formatDate(assign.enrolledAt)}</td>
                       <td className="px-6 py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
                           {config?.eventTypes?.length > 0 && (
@@ -671,7 +672,7 @@ export default function ProgramDetail() {
                                       ev.eventType === "Vaccination" || ev.eventType === "Health Check" ? "bg-blue-100 text-blue-700" :
                                       "bg-slate-100 text-slate-700"
                                     }`}>{ev.eventType}</span>
-                                    <span className="text-slate-400">{new Date(ev.eventDate).toLocaleDateString("en-IN")}</span>
+                                    <span className="text-slate-400">{formatDate(ev.eventDate)}</span>
                                     {ev.quantity != null && <span className="font-semibold">x{ev.quantity}</span>}
                                     {ev.notes && <span className="text-slate-500 truncate max-w-xs">{ev.notes}</span>}
                                     {ev.photoUrl && (

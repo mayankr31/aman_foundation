@@ -9,11 +9,11 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
-import StudentDataView from "@/components/StudentDataView";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
@@ -448,11 +448,7 @@ function FellowProfileDetailContent() {
                         <h3 className="section-title text-on-surface flex items-center gap-2">
                           Goal Sheet
                           <span className="text-xs font-normal text-on-surface-variant">
-                            {new Date(sheet.date).toLocaleDateString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            })}
+                            {formatDate(sheet.date)}
                           </span>
                         </h3>
                         {sheet.portfolioLink && (
@@ -500,26 +496,6 @@ function FellowProfileDetailContent() {
             </div>
           )}
 
-          {activeTab === "Student Data" && (
-            <StudentDataView
-              fellowId={fellow.id}
-              fellowName={fellow.name}
-              token={token}
-              source="school"
-              canEditNotes={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
-            />
-          )}
-
-          {activeTab === "After School Student Data" && (
-            <StudentDataView
-              fellowId={fellow.id}
-              fellowName={fellow.name}
-              token={token}
-              source="afterSchool"
-              canEditNotes={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
-            />
-          )}
-
           {activeTab === "Coaching & Classroom Observation" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex justify-between items-center mb-6">
@@ -546,7 +522,7 @@ function FellowProfileDetailContent() {
                         <div>
                           <h4 className="font-bold text-on-surface text-lg">{record.heading}</h4>
                           <p className="text-xs text-on-surface-variant mt-1">
-                            {new Date(record.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                            {formatDate(record.date)}
                           </p>
                         </div>
                         {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
@@ -624,7 +600,7 @@ function FellowProfileDetailContent() {
                       <div>
                         <p className="font-semibold text-on-surface text-sm">Engagement Survey</p>
                         <p className="text-xs text-on-surface-variant mt-1">
-                          {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                          {formatDate(survey.surveyDate)}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">
@@ -665,7 +641,7 @@ function FellowProfileDetailContent() {
                       <div>
                         <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
                         <p className="text-xs text-on-surface-variant mt-1">
-                          {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                          {formatDate(survey.surveyDate)}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">

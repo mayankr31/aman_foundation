@@ -183,17 +183,11 @@ export default function RegisterPage() {
         <div className="brand-panel">
           <div className="brand-panel__inner">
             <div className="brand-logo">
-              <div className="logo-icon">
-                <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="28" height="28" rx="8" fill="white" fillOpacity="0.15"/>
-                  <path d="M14 6L20 10.5V17.5L14 22L8 17.5V10.5L14 6Z" stroke="white" stroke-width="1.8" fill="none"/>
-                  <circle cx="14" cy="14" r="3" fill="white"/>
-                </svg>
-              </div>
-              <div>
-                <div className="brand-name">Aman Foundation</div>
-                <div className="brand-subtitle">Impact Portal</div>
-              </div>
+              <img
+                src="/logo.jpeg"
+                alt="Aman Foundation"
+                className="w-full h-auto rounded-xl shadow-lg"
+              />
             </div>
 
             <div className="brand-hero">

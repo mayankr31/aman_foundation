@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { deriveAcademicStatus, getAcademicStatusClass, PERFORMANCE_FILTERS } from "@/lib/academicStatus";
+import { formatDate } from "@/lib/date";
 
 const EMPTY_STUDENT_FORM = {
   name: "",
@@ -174,7 +175,7 @@ export default function AfterSchoolStudentsModule() {
       "Grade": s.grade || "",
       "Grade Group": s.gradeGroup || "",
       "Gender": s.gender || "",
-      "Date of Birth": s.dob ? new Date(s.dob).toLocaleDateString() : "",
+      "Date of Birth": formatDate(s.dob, ""),
       "District": s.district || "",
       "Primary Language": s.primaryLanguage || "",
       "Guardian Name": s.guardianName || "",
@@ -186,7 +187,7 @@ export default function AfterSchoolStudentsModule() {
       "Mother's Mobile": s.motherMobile || "",
       "Email": s.email || "",
       "Address": s.address || "",
-      "Enrolment Date": s.enrolmentDate ? new Date(s.enrolmentDate).toLocaleDateString() : "",
+      "Enrolment Date": formatDate(s.enrolmentDate, ""),
       "Attendance (%)": s.attendance ?? 0,
       "Academic Status": deriveAcademicStatus(s.attendance),
       "Fellow": s.fellow ? s.fellow.name : "",

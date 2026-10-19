@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/useAuth";
 import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -88,7 +89,7 @@ export default function PtaPrograms() {
             status: ev.status,
             statusClass: ev.status === "Completed" ? "bg-surface-container text-on-surface-variant" : "bg-primary-fixed text-on-primary-fixed",
             description: ev.description,
-            date: new Date(ev.date).toLocaleDateString() + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+            date: formatDate(ev.date) + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             location: ev.location,
             programId: ev.programId
           })));
@@ -243,7 +244,7 @@ export default function PtaPrograms() {
               status: ev.status,
               statusClass: ev.status === "Completed" ? "bg-surface-container text-on-surface-variant" : "bg-primary-fixed text-on-primary-fixed",
               description: ev.description,
-              date: new Date(ev.date).toLocaleDateString() + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+              date: formatDate(ev.date) + " • " + new Date(ev.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
               location: ev.location,
               programId: ev.programId
             })));

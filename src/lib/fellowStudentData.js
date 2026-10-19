@@ -8,10 +8,15 @@ export const FLN_PASS_RATIO = 0.7; // 70% category marks needed to qualify at th
 export const READING_FLUENCY_KEY = "READING_FLUENCY";
 export const READING_FLUENCY_TITLE = "Reading Fluency";
 export const SOURCES = ["school", "afterSchool"];
+export const INSTITUTION_SCOPES = ["school", "afterSchoolCentre"];
 const UNQUALIFIED_KEY = "__UNQUALIFIED";
 
 function emptyPhases() {
-  return { BASELINE: { counts: {}, assessed: 0 }, MIDLINE: { counts: {}, assessed: 0 }, ENDLINE: { counts: {}, assessed: 0 } };
+  return {
+    BASELINE: { counts: {}, assessed: 0, byFellow: {} },
+    MIDLINE: { counts: {}, assessed: 0, byFellow: {} },
+    ENDLINE: { counts: {}, assessed: 0, byFellow: {} },
+  };
 }
 
 function phaseMap(assessmentType) {
@@ -132,23 +137,91 @@ function emptyComparison(referenceLabel = null) {
   return { referenceLabel, compared: 0, improved: 0, declined: 0, same: 0, transitions: [] };
 }
 
-export async function getFellowStudentData(fellowId, session, source = "school") {
-  if (!SOURCES.includes(source)) source = "school";
+const STUDENT_SELECT = {
+  id: true,
+  name: true,
+  gender: true,
+  dob: true,
+  grade: true,
+  fellow: { select: { id: true, name: true } },
+};
+
+function fellowForStudent(student) {
+  if (student?.fellow?.id) {
+    return { id: student.fellow.id, name: student.fellow.name };
+  }
+  return { id: "__unassigned", name: "Unassigned" };
+}
+
+// Load the students belonging to a fellow, school, or after-school centre.
+async function loadScope(scopeType, scopeId, source) {
+  if (scopeType === "school") {
+    const school = await prisma.School.findUnique({
+      where: { id: scopeId },
+      select: { name: true, students: { select: STUDENT_SELECT } },
+    });
+    return school ? { name: school.name, students: school.students } : null;
+  }
+
+  if (scopeType === "afterSchoolCentre") {
+    const centre = await prisma.AfterSchoolCentre.findUnique({
+      where: { id: scopeId },
+      select: { name: true, students: { select: STUDENT_SELECT } },
+    });
+    return centre ? { name: centre.name, students: centre.students } : null;
+  }
 
   const fellow = await prisma.Fellow.findUnique({
-    where: { id: fellowId },
+    where: { id: scopeId },
     select: {
-      students: { select: { id: true } },
-      afterSchoolStudents: { select: { id: true } },
+      name: true,
+      students: { select: STUDENT_SELECT },
+      afterSchoolStudents: { select: STUDENT_SELECT },
     },
   });
 
   if (!fellow) return null;
 
+  return {
+    name: fellow.name,
+    students: source === "afterSchool" ? fellow.afterSchoolStudents : fellow.students,
+  };
+}
+
+async function loadNotes(scopeType, scopeId, session, source) {
+  if (scopeType === "fellow") {
+    return prisma.FellowStudentDataNote.findMany({
+      where: { fellowId: scopeId, session, source },
+      select: { phase: true, sectionKey: true, note: true },
+    });
+  }
+
+  return prisma.InstitutionStudentDataNote.findMany({
+    where: { scopeType, scopeId, session, source },
+    select: { phase: true, sectionKey: true, note: true },
+  });
+}
+
+// Increment the overall phase bucket and the matching fellow bucket.
+function bumpPhase(phaseData, fellow, levelKey) {
+  phaseData.assessed += 1;
+
+  if (!fellow) return;
+
+  if (!phaseData.byFellow[fellow.id]) {
+    phaseData.byFellow[fellow.id] = { counts: {}, assessed: 0 };
+  }
+  const bucket = phaseData.byFellow[fellow.id];
+  bucket.assessed += 1;
+
+  if (!levelKey) return;
+  phaseData.counts[levelKey] = (phaseData.counts[levelKey] || 0) + 1;
+  bucket.counts[levelKey] = (bucket.counts[levelKey] || 0) + 1;
+}
+
+async function buildStudentData({ scopeType, scopeId, scopeName, students, session, source }) {
   const isAfterSchool = source === "afterSchool";
-  const studentIds = isAfterSchool
-    ? (fellow.afterSchoolStudents || []).map((s) => s.id)
-    : (fellow.students || []).map((s) => s.id);
+  const studentIds = (students || []).map((s) => s.id);
 
   const [subjectTemplates, flnCategories] = await Promise.all([
     prisma.SubjectAssessmentTemplate.findMany({ orderBy: { order: "asc" } }),
@@ -194,10 +267,7 @@ export async function getFellowStudentData(fellowId, session, source = "school")
 
   if (!session) session = currentSession();
 
-  const notes = await prisma.FellowStudentDataNote.findMany({
-    where: { fellowId, session, source },
-    select: { phase: true, sectionKey: true, note: true },
-  });
+  const notes = await loadNotes(scopeType, scopeId, session, source);
 
   const relevant = dedupeForms(mapped.filter((f) => deriveSession(f.date) === session));
 
@@ -232,16 +302,28 @@ export async function getFellowStudentData(fellowId, session, source = "school")
     };
   };
 
+  const studentFellowMap = new Map(
+    (students || []).map((student) => [student.id, fellowForStudent(student)])
+  );
+
+  const fellowsById = new Map();
+  for (const student of students || []) {
+    const fellow = fellowForStudent(student);
+    if (!fellowsById.has(fellow.id)) {
+      fellowsById.set(fellow.id, { ...fellow, studentCount: 0 });
+    }
+    fellowsById.get(fellow.id).studentCount += 1;
+  }
+  const fellows = Array.from(fellowsById.values()).sort((a, b) => a.name.localeCompare(b.name));
+
   // ── Subject sections ──
   const sections = subjectTemplates.map((template) => {
     const phases = emptyPhases();
     for (const form of relevant) {
       const phase = phaseMap(form.assessmentType);
       if (!phase) continue;
-      phases[phase].assessed += 1;
       const resp = (form.subjectResponses || []).find((r) => r.subjectTemplateId === template.id);
-      if (!resp || !resp.selectedOption) continue;
-      phases[phase].counts[resp.selectedOption] = (phases[phase].counts[resp.selectedOption] || 0) + 1;
+      bumpPhase(phases[phase], studentFellowMap.get(form.studentId), resp?.selectedOption || null);
     }
     return {
       kind: "SUBJECT",
@@ -260,13 +342,8 @@ export async function getFellowStudentData(fellowId, session, source = "school")
     if (!phase) continue;
     const flnResponses = form.flnResponses || [];
     if (!flnResponses.length) continue; // not assessed for reading fluency in this round
-    fluencyPhases[phase].assessed += 1;
     const level = resolveFlnLevel(flnResponses, flnCategories);
-    if (level) {
-      fluencyPhases[phase].counts[level] = (fluencyPhases[phase].counts[level] || 0) + 1;
-    } else {
-      fluencyPhases[phase].counts[UNQUALIFIED_KEY] = (fluencyPhases[phase].counts[UNQUALIFIED_KEY] || 0) + 1;
-    }
+    bumpPhase(fluencyPhases[phase], studentFellowMap.get(form.studentId), level || UNQUALIFIED_KEY);
   }
   sections.push({
     kind: "READING_FLUENCY",
@@ -283,11 +360,15 @@ export async function getFellowStudentData(fellowId, session, source = "school")
   }
 
   return {
+    scopeType,
+    scopeId,
+    scopeName,
     session,
     source,
     sessions,
     previousSession,
     totalStudents: studentIds.length,
+    fellows,
     phases: PHASES,
     subjectTemplates: subjectTemplates.map((t) => ({ id: t.id, name: t.name, options: t.options || [], order: t.order })),
     flnCategories: flnCategories.map((c) => ({ id: c.id, name: c.name, order: c.order })),
@@ -296,26 +377,44 @@ export async function getFellowStudentData(fellowId, session, source = "school")
   };
 }
 
-// Raw per-form assessment rows for a fellow's students in one academic session.
-// Used by the "Export Assessment Data" bulk export on the Student Data tab.
-export async function getFellowAssessmentExport(fellowId, session, source = "school") {
+export async function getFellowStudentData(fellowId, session, source = "school") {
   if (!SOURCES.includes(source)) source = "school";
 
-  const fellow = await prisma.Fellow.findUnique({
-    where: { id: fellowId },
-    select: {
-      name: true,
-      students: { select: { id: true } },
-      afterSchoolStudents: { select: { id: true } },
-    },
+  const scope = await loadScope("fellow", fellowId, source);
+  if (!scope) return null;
+
+  return buildStudentData({
+    scopeType: "fellow",
+    scopeId: fellowId,
+    scopeName: scope.name,
+    students: scope.students,
+    session,
+    source,
   });
+}
 
-  if (!fellow) return null;
+export async function getInstitutionStudentData(scopeType, scopeId, session) {
+  if (!INSTITUTION_SCOPES.includes(scopeType)) return null;
 
+  const source = scopeType === "school" ? "school" : "afterSchool";
+  const scope = await loadScope(scopeType, scopeId, source);
+  if (!scope) return null;
+
+  return buildStudentData({
+    scopeType,
+    scopeId,
+    scopeName: scope.name,
+    students: scope.students,
+    session,
+    source,
+  });
+}
+
+// Raw per-form assessment rows for one academic session.
+// Used by the "Export Assessment Data" bulk export on the Student Data tab.
+async function buildAssessmentExport({ scopeType, scopeId, scopeName, students, session, source }) {
   const isAfterSchool = source === "afterSchool";
-  const studentIds = isAfterSchool
-    ? (fellow.afterSchoolStudents || []).map((s) => s.id)
-    : (fellow.students || []).map((s) => s.id);
+  const studentIds = (students || []).map((s) => s.id);
 
   const [subjectTemplates, flnCategories, selQuestions] = await Promise.all([
     prisma.SubjectAssessmentTemplate.findMany({ orderBy: { order: "asc" } }),
@@ -334,7 +433,7 @@ export async function getFellowAssessmentExport(fellowId, session, source = "sch
           where: { studentId: { in: studentIds } },
           orderBy: { date: "asc" },
           include: {
-            student: { select: { name: true, gender: true, dob: true, grade: true } },
+            student: { select: { name: true, gender: true, dob: true, grade: true, fellow: { select: { name: true } } } },
             fellow: { select: { name: true } },
             centre: { select: { name: true } },
             subjectResponses: {
@@ -349,7 +448,7 @@ export async function getFellowAssessmentExport(fellowId, session, source = "sch
           where: { studentId: { in: studentIds } },
           orderBy: { date: "asc" },
           include: {
-            student: { select: { name: true, gender: true, dob: true, grade: true } },
+            student: { select: { name: true, gender: true, dob: true, grade: true, fellow: { select: { name: true } } } },
             fellow: { select: { name: true } },
             school: { select: { name: true } },
             subjectResponses: {
@@ -370,7 +469,10 @@ export async function getFellowAssessmentExport(fellowId, session, source = "sch
     : forms;
 
   return {
-    fellowName: fellow.name,
+    scopeType,
+    scopeId,
+    scopeName,
+    fellowName: scopeType === "fellow" ? scopeName : "",
     session: session || null,
     source,
     subjectTemplates: subjectTemplates.map((t) => ({ id: t.id, name: t.name, order: t.order })),
@@ -394,7 +496,7 @@ export async function getFellowAssessmentExport(fellowId, session, source = "sch
       studentGender: f.student?.gender || "",
       studentDob: f.student?.dob || null,
       studentGrade: f.student?.grade || "",
-      fellowName: f.fellow?.name || fellow.name,
+      fellowName: f.fellow?.name || f.student?.fellow?.name || (scopeType === "fellow" ? scopeName : ""),
       schoolName: isAfterSchool ? f.centre?.name || "" : f.school?.name || "",
       subjectResponses: (f.subjectResponses || []).map((r) => ({
         subjectTemplateId: r.subjectTemplateId,
@@ -410,4 +512,37 @@ export async function getFellowAssessmentExport(fellowId, session, source = "sch
       })),
     })),
   };
+}
+
+export async function getFellowAssessmentExport(fellowId, session, source = "school") {
+  if (!SOURCES.includes(source)) source = "school";
+
+  const scope = await loadScope("fellow", fellowId, source);
+  if (!scope) return null;
+
+  return buildAssessmentExport({
+    scopeType: "fellow",
+    scopeId: fellowId,
+    scopeName: scope.name,
+    students: scope.students,
+    session,
+    source,
+  });
+}
+
+export async function getInstitutionAssessmentExport(scopeType, scopeId, session) {
+  if (!INSTITUTION_SCOPES.includes(scopeType)) return null;
+
+  const source = scopeType === "school" ? "school" : "afterSchool";
+  const scope = await loadScope(scopeType, scopeId, source);
+  if (!scope) return null;
+
+  return buildAssessmentExport({
+    scopeType,
+    scopeId,
+    scopeName: scope.name,
+    students: scope.students,
+    session,
+    source,
+  });
 }

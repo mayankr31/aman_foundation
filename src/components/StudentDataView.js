@@ -9,7 +9,10 @@ const LEVEL_FIXUPS = {
   beginner: "Beginner",
   "paragraph (std 1 level text)": "Std 1 Level Text",
   "paragraph (STD 1 level text)": "Std 1 Level Text",
+  "paragraph (std 2 level text)": "Std 2 Level Text",
+  "paragraph (STD 2 level text)": "Std 2 Level Text",
   subtraction: "Subtraction",
+  division: "Division",
   absent: "Absent",
 };
 
@@ -36,7 +39,47 @@ function authHeaders(token) {
   };
 }
 
-export default function StudentDataView({ fellowId, fellowName, token, canEditNotes, source = "school" }) {
+export default function StudentDataView({
+  fellowId,
+  fellowName,
+  schoolId,
+  schoolName,
+  centreId,
+  centreName,
+  token,
+  canEditNotes,
+  source = "school",
+}) {
+  const scope = schoolId
+    ? {
+        type: "school",
+        id: schoolId,
+        name: schoolName,
+        base: `/api/schools/${schoolId}`,
+        heading: "Student Data",
+        population: "students",
+        location: "school",
+      }
+    : centreId
+      ? {
+          type: "afterSchoolCentre",
+          id: centreId,
+          name: centreName,
+          base: `/api/after-school-centres/${centreId}`,
+          heading: "After-School Student Data",
+          population: "after-school students",
+          location: "after-school centre",
+        }
+      : {
+          type: "fellow",
+          id: fellowId,
+          name: fellowName,
+          base: `/api/fellows/${fellowId}`,
+          heading: source === "afterSchool" ? "After-School Student Data" : "Student Data",
+          population: source === "afterSchool" ? "after-school students" : "students",
+          location: "fellow",
+        };
+
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
   const [session, setSession] = useState("");
@@ -47,13 +90,13 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
   const [exportingAssessments, setExportingAssessments] = useState(false);
 
   useEffect(() => {
-    if (!fellowId || !token) return;
+    if (!scope.id || !token) return;
     let cancelled = false;
     (async () => {
       try {
         const params = new URLSearchParams({ source });
         if (session) params.set("session", session);
-        const res = await fetch(`/api/fellows/${fellowId}/student-data?${params.toString()}`, {
+        const res = await fetch(`${scope.base}/student-data?${params.toString()}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const json = await res.json();
@@ -71,7 +114,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
     return () => {
       cancelled = true;
     };
-  }, [fellowId, token, session, source]);
+  }, [scope.base, scope.id, token, session, source]);
 
   async function saveNote(phase, key) {
     if (!report || editingNote?.value === undefined) return;
@@ -79,7 +122,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
     setSavingKey(saveId);
     try {
       const value = (editingNote.value || "").trim();
-      const res = await fetch(`/api/fellows/${fellowId}/student-data-notes`, {
+      const res = await fetch(`${scope.base}/student-data-notes`, {
         method: "PUT",
         headers: authHeaders(token),
         body: JSON.stringify({ session: report.session, phase, sectionKey: key, source, note: value }),
@@ -139,27 +182,30 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
         return;
       }
 
-      const totalCols = groups.reduce(
+      const dataCols = groups.reduce(
         (sum, group) => sum + group.levels.length * PHASE_ORDER.length,
         0
       );
+      const totalCols = dataCols + 1;
 
       const titleRow = new Array(totalCols).fill("");
       const subjectRow = new Array(totalCols).fill("");
       const phaseRow = new Array(totalCols).fill("");
       const levelRow = new Array(totalCols).fill("");
-      const dataRow = new Array(totalCols).fill("");
 
-      const headingParts = ["Student Data"];
-      if (fellowName) headingParts.push(fellowName);
+      const scopeName = report.scopeName || scope.name || "";
+      const headingParts = [scope.heading];
+      if (scopeName) headingParts.push(scopeName);
       if (report.session) headingParts.push(report.session);
-      titleRow[0] = `${headingParts.join(" - ")}${
-        source === "afterSchool" ? " (After School)" : ""
-      }`;
+      titleRow[0] = headingParts.join(" - ");
 
-      const merges = [{ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } }];
+      subjectRow[0] = "Fellow Name";
+      const merges = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } },
+        { s: { r: 1, c: 0 }, e: { r: 3, c: 0 } },
+      ];
 
-      let col = 0;
+      let col = 1;
       groups.forEach((group) => {
         const width = group.levels.length * PHASE_ORDER.length;
         subjectRow[col] = group.title;
@@ -172,29 +218,50 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
             s: { r: 2, c: phaseStart },
             e: { r: 2, c: phaseStart + group.levels.length - 1 },
           });
-          const counts = group.section.phases?.[phase]?.counts || {};
           group.levels.forEach((level, l) => {
-            const c = phaseStart + l;
-            levelRow[c] = level.label;
-            dataRow[c] = counts[level.key] ?? 0;
+            levelRow[phaseStart + l] = level.label;
           });
         });
 
         col += width;
       });
 
-      const aoa = [titleRow, subjectRow, phaseRow, levelRow, dataRow];
+      const fellowRows = report.fellows?.length
+        ? report.fellows
+        : [{ id: "__all", name: scopeName || "All students", studentCount: report.totalStudents }];
+
+      const dataRows = fellowRows.map((fellow) => {
+        const row = new Array(totalCols).fill("");
+        row[0] = fellow.name || "Unassigned";
+        let c = 1;
+        groups.forEach((group) => {
+          PHASE_ORDER.forEach((phase) => {
+            const counts = group.section.phases?.[phase]?.byFellow?.[fellow.id]?.counts || {};
+            group.levels.forEach((level) => {
+              row[c] = counts[level.key] ?? 0;
+              c += 1;
+            });
+          });
+        });
+        return row;
+      });
+
+      const aoa = [titleRow, subjectRow, phaseRow, levelRow, ...dataRows];
 
       const imported = await import("xlsx");
       const XLSX = imported.default || imported;
       const worksheet = XLSX.utils.aoa_to_sheet(aoa);
       worksheet["!merges"] = merges;
-      worksheet["!cols"] = new Array(totalCols).fill({ wch: 12 });
+      worksheet["!cols"] = [{ wch: 24 }, ...new Array(dataCols).fill({ wch: 12 })];
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Student Data");
       const suffix = source === "afterSchool" ? "after_school_" : "";
+      const scopeSlug = (scopeName || "institution")
+        .replace(/[^a-z0-9]+/gi, "_")
+        .replace(/^_+|_+$/g, "")
+        .toLowerCase();
       const date = new Date().toISOString().split("T")[0];
-      XLSX.writeFile(workbook, `${suffix}student_data_${report.session || date}.xlsx`);
+      XLSX.writeFile(workbook, `${suffix}student_data_${scopeSlug}_${report.session || date}.xlsx`);
     } catch (err) {
       console.error("Failed to export student data:", err);
       alert("Failed to export student data. Please try again.");
@@ -209,7 +276,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
     try {
       const params = new URLSearchParams({ source });
       if (session) params.set("session", session);
-      const res = await fetch(`/api/fellows/${fellowId}/assessment-export?${params.toString()}`, {
+      const res = await fetch(`${scope.base}/assessment-export?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -239,7 +306,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
         "If no why?",
         ...subjectTemplates.map((t) => t.name),
         ...flnQuestions.map((q) => q.questionText),
-        "Total FLN Marks",
+        "Total RF Marks",
         ...(isAfter ? [] : selQuestions.map((q) => q.questionText)),
       ];
 
@@ -284,8 +351,12 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Assessments");
       const suffix = isAfter ? "after_school_" : "";
+      const scopeSlug = (data.scopeName || scope.name || "institution")
+        .replace(/[^a-z0-9]+/gi, "_")
+        .replace(/^_+|_+$/g, "")
+        .toLowerCase();
       const date = new Date().toISOString().split("T")[0];
-      XLSX.writeFile(workbook, `${suffix}student_assessments_${data.session || date}.xlsx`);
+      XLSX.writeFile(workbook, `${suffix}student_assessments_${scopeSlug}_${data.session || date}.xlsx`);
     } catch (err) {
       console.error("Failed to export assessment data:", err);
       alert("Failed to export assessment data. Please try again.");
@@ -308,8 +379,10 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
 
   const sessions = report.sessions?.length ? report.sessions : report.session ? [report.session] : [];
   const isAfterSchool = source === "afterSchool";
-  const heading = isAfterSchool ? "After-School Student Data" : "Student Data";
-  const populationLabel = isAfterSchool ? "after-school students" : "students";
+  const heading = scope.heading;
+  const populationLabel = scope.population;
+  const scopeLabel = scope.location;
+  const entityName = report.scopeName || scope.name || "";
 
   function levelLabel(section, key) {
     if (key === "__UNQUALIFIED") return "Below Emergent";
@@ -344,7 +417,8 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
         <div>
           <h3 className="font-headline font-bold text-xl text-on-surface">{heading}</h3>
           <p className="text-xs text-on-surface-variant mt-1">
-            Aggregate academic assessment levels of the {populationLabel} under this fellow. Reading fluency level is assigned
+            Aggregate academic assessment levels of the {populationLabel} under this {scopeLabel}
+            {entityName ? ` (${entityName})` : ""}. Reading fluency level is assigned
             to the highest category the student qualifies in (≥70% marks).
           </p>
         </div>
@@ -421,7 +495,7 @@ export default function StudentDataView({ fellowId, fellowName, token, canEditNo
 
       {report.totalStudents === 0 ? (
         <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant text-sm">
-          No {isAfterSchool ? "after-school " : ""}students are currently assigned to this fellow.
+          No {isAfterSchool ? "after-school " : ""}students are currently assigned to this {scopeLabel}.
         </div>
       ) : report.sections.every((s) => PHASE_ORDER.every((p) => !(s.phases?.[p]?.assessed))) ? (
         <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant text-sm">

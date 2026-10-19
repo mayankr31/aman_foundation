@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate, formatDateTime } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -55,7 +56,7 @@ function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }
               <div key={c.id} className="bg-white p-3 rounded shadow-sm border border-slate-200">
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-semibold text-xs text-slate-700">{c.author?.name || "User"}</span>
-                  <span className="text-[10px] text-slate-400">{new Date(c.createdAt).toLocaleString()}</span>
+                  <span className="text-[10px] text-slate-400">{formatDateTime(c.createdAt)}</span>
                 </div>
                 <p className="text-sm text-slate-600">{c.text}</p>
               </div>
@@ -80,7 +81,7 @@ function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }
   );
 }
 
-export default function AttendanceModal({ isOpen, onClose }) {
+export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const { token, user } = useAuth();
 
   const isProgramStaff = PROGRAM_ROLES.includes(user?.roleName);
@@ -221,6 +222,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
       const data = await res.json();
       if (res.ok) {
         setCurrentLog(data.data);
+        onStatusChange?.(data.data);
         triggerToast("Checked in successfully!");
       }
     } catch (e) {
@@ -300,6 +302,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
       if (res.ok) {
         setCurrentLog(data.data);
         setCheckoutMode(false);
+        onStatusChange?.(data.data);
         triggerToast("Checked out successfully!");
       }
     } catch (e) {
@@ -410,6 +413,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
         const createData = await createRes.json();
         if (createRes.ok) {
           setCurrentLog(createData.data);
+          onStatusChange?.(createData.data);
           logId = createData.data.id;
         } else {
           triggerToast("Failed to create log entry");
@@ -562,7 +566,7 @@ export default function AttendanceModal({ isOpen, onClose }) {
               <div className="space-y-4 mb-6 flex-grow">
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant font-medium text-sm">Date</span>
-                  <span className="font-semibold text-on-surface text-sm">{new Date().toLocaleDateString()}</span>
+                  <span className="font-semibold text-on-surface text-sm">{formatDate(new Date())}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant font-medium text-sm">Check-in Time</span>

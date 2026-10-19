@@ -5,9 +5,11 @@ import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
+import AssessmentTemplatesModal from "@/components/AssessmentTemplatesModal";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -96,9 +98,6 @@ export default function StudentProfileDetail() {
 
   // Assessment templates
   const [templates, setTemplates] = useState({ flnCategories: [], selQuestions: [], subjectTemplates: [] });
-  const [templateModalTab, setTemplateModalTab] = useState("fln");
-  const [templateEditor, setTemplateEditor] = useState(null);
-  const [templateDelete, setTemplateDelete] = useState(null);
   const [assessmentTypeFilter, setAssessmentTypeFilter] = useState("");
   const [assessmentSessionFilter, setAssessmentSessionFilter] = useState("");
 
@@ -308,136 +307,6 @@ export default function StudentProfileDetail() {
       headers: authHeaders()
     });
     await reloadAssessmentForms();
-  }
-
-  function normalizeTemplateOptions(options) {
-    return (options || []).map(opt => opt.trim()).filter(Boolean);
-  }
-
-  function openTemplateEditor(type, item = null, extra = {}) {
-    const defaultOptions = type === "sel-question"
-      ? ["Too Easy", "Easy", "Hard", "Too Hard", "Can with Teachers Help"]
-      : type === "subject"
-        ? ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"]
-        : [];
-
-    setTemplateEditor({
-      type,
-      id: item?.id || null,
-      name: item?.name || "",
-      questionText: item?.questionText || "",
-      marks: item?.marks ?? 1,
-      order: item?.order ?? extra.order ?? 0,
-      categoryId: item?.categoryId || extra.categoryId || "",
-      options: Array.isArray(item?.options) ? item.options : defaultOptions
-    });
-  }
-
-  function updateTemplateOption(index, value) {
-    setTemplateEditor(editor => ({
-      ...editor,
-      options: editor.options.map((option, i) => i === index ? value : option)
-    }));
-  }
-
-  function addTemplateOption() {
-    setTemplateEditor(editor => ({ ...editor, options: [...(editor.options || []), ""] }));
-  }
-
-  function removeTemplateOption(index) {
-    setTemplateEditor(editor => ({
-      ...editor,
-      options: editor.options.filter((_, i) => i !== index)
-    }));
-  }
-
-  async function handleTemplateSave(e) {
-    e.preventDefault();
-    if (!templateEditor) return;
-
-    setSaving(true);
-    try {
-      const { type, id: templateId } = templateEditor;
-      let endpoint = "";
-      let payload = {};
-
-      if (type === "fln-category") {
-        endpoint = templateId
-          ? `/api/assessment-templates/fln-categories/${templateId}`
-          : "/api/assessment-templates/fln-categories";
-        payload = {
-          name: templateEditor.name.trim(),
-          order: parseInt(templateEditor.order, 10) || 0
-        };
-      }
-
-      if (type === "fln-question") {
-        endpoint = templateId
-          ? `/api/assessment-templates/fln-questions/${templateId}`
-          : "/api/assessment-templates/fln-questions";
-        payload = {
-          categoryId: templateEditor.categoryId,
-          questionText: templateEditor.questionText.trim(),
-          marks: templateEditor.marks === "" ? 0 : Number(templateEditor.marks),
-          order: parseInt(templateEditor.order, 10) || 0
-        };
-      }
-
-      if (type === "sel-question") {
-        endpoint = templateId
-          ? `/api/assessment-templates/sel-questions/${templateId}`
-          : "/api/assessment-templates/sel-questions";
-        payload = {
-          questionText: templateEditor.questionText.trim(),
-          options: normalizeTemplateOptions(templateEditor.options),
-          order: parseInt(templateEditor.order, 10) || 0
-        };
-      }
-
-      if (type === "subject") {
-        endpoint = templateId
-          ? `/api/assessment-templates/subjects/${templateId}`
-          : "/api/assessment-templates/subjects";
-        payload = {
-          name: templateEditor.name.trim(),
-          options: normalizeTemplateOptions(templateEditor.options),
-          order: parseInt(templateEditor.order, 10) || 0
-        };
-      }
-
-      const res = await fetch(endpoint, {
-        method: templateId ? "PUT" : "POST",
-        headers: authHeaders(),
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      if (!json.success) {
-        alert(json.error || "Failed to save template");
-        return;
-      }
-      await loadTemplates();
-      setTemplateEditor(null);
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function handleTemplateDelete() {
-    if (!templateDelete) return;
-
-    const endpointMap = {
-      "fln-category": `/api/assessment-templates/fln-categories/${templateDelete.id}`,
-      "fln-question": `/api/assessment-templates/fln-questions/${templateDelete.id}`,
-      "sel-question": `/api/assessment-templates/sel-questions/${templateDelete.id}`,
-      subject: `/api/assessment-templates/subjects/${templateDelete.id}`
-    };
-
-    await fetch(endpointMap[templateDelete.type], {
-      method: "DELETE",
-      headers: authHeaders()
-    });
-    await loadTemplates();
-    setTemplateDelete(null);
   }
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
@@ -837,7 +706,7 @@ export default function StudentProfileDetail() {
                 ["Father's Mobile", student.fatherMobile || "—"],
                 ["Mother's Name", student.motherName || "—"],
                 ["Mother's Mobile", student.motherMobile || "—"],
-                ["Enrolment Date", student.enrolmentDate ? new Date(student.enrolmentDate).toLocaleDateString() : "—"],
+                ["Enrolment Date", formatDate(student.enrolmentDate)],
                 ["Primary Language", student.primaryLanguage || "—"],
                 ["Home Location", `${student.address || "—"}, ${student.district || "—"}`],
                 ["Email", student.email || "—"],
@@ -924,7 +793,7 @@ export default function StudentProfileDetail() {
                             {form.assessmentType}
                           </span>
                           <span className="text-xs text-on-surface-variant">
-                            {form.date ? new Date(form.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : "—"}
+                            {formatDate(form.date)}
                           </span>
                           {form.fellow && (
                             <span className="text-xs text-on-surface-variant">by {form.fellow.name}</span>
@@ -963,7 +832,7 @@ export default function StudentProfileDetail() {
                           </p>
                         </div>
                         <div className="bg-surface rounded p-2 text-center">
-                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">FLN Score</p>
+                          <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">RF Score</p>
                           <p className="text-sm font-semibold text-on-surface">
                             {scoredFLN}/{totalFLNMarks}
                           </p>
@@ -998,7 +867,7 @@ export default function StudentProfileDetail() {
                   .map(assess => (
                   <div key={assess.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
                     <span className="text-on-surface-variant text-xs">
-                      {new Date(assess.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {formatDate(assess.date)}
                     </span>
                     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${assess.canRead ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}`}>
                       {assess.canRead ? "Can Read" : "Cannot Read"}
@@ -1032,7 +901,7 @@ export default function StudentProfileDetail() {
                   return (
                     <div key={hw.id} className="flex items-center justify-between py-2 border-b border-surface-container last:border-none">
                       <span className="text-on-surface-variant text-xs">
-                        {new Date(hw.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {formatDate(hw.date)}
                       </span>
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColors[hw.homeworkStatus] || 'bg-surface-container text-on-surface-variant'}`}>
                         {statusLabels[hw.homeworkStatus] || hw.homeworkStatus}
@@ -1336,7 +1205,7 @@ export default function StudentProfileDetail() {
                     activeFormTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
                   }`}
                 >
-                  {tab === "basic" ? "Basic Info" : tab === "enrollment" ? "Enrollment" : tab === "subjects" ? "Subjects" : tab === "fln" ? "FLN" : "SEL"}
+                  {tab === "basic" ? "Basic Info" : tab === "enrollment" ? "Enrollment" : tab === "subjects" ? "Subjects" : tab === "fln" ? "RF" : "SEL"}
                 </button>
               ))}
             </div>
@@ -1446,11 +1315,11 @@ export default function StudentProfileDetail() {
               </div>
             )}
 
-            {/* FLN Tab */}
+            {/* RF Tab */}
             {activeFormTab === "fln" && (
               <div className="space-y-6">
                 {templates.flnCategories.length === 0 ? (
-                  <p className="text-center py-4 text-on-surface-variant text-xs">No FLN categories configured.</p>
+                  <p className="text-center py-4 text-on-surface-variant text-xs">No RF categories configured.</p>
                 ) : (
                   templates.flnCategories.map(cat => {
                     const catScore = (cat.questions || []).reduce((sum, q) =>
@@ -1490,7 +1359,7 @@ export default function StudentProfileDetail() {
                 {templates.flnCategories.length > 0 && (
                   <div className="text-right pt-2 border-t border-outline-variant/20">
                     <span className="text-sm font-bold text-on-surface">
-                      Total FLN: {
+                      Total RF: {
                         Object.entries(assessmentFormData.flnScores).reduce((sum, [, v]) => sum + (parseFloat(v) || 0), 0)
                       } / {
                         templates.flnCategories.reduce((sum, cat) =>
@@ -1544,251 +1413,11 @@ export default function StudentProfileDetail() {
       )}
 
       {modal === "assessment_templates" && (
-        <Modal title="Assessment Templates" onClose={() => { setModal(null); setTemplateEditor(null); }}>
-          <div className="space-y-5">
-            <div className="flex gap-1 border-b border-outline-variant/20 pb-2 overflow-x-auto">
-              {[
-                ["fln", "FLN"],
-                ["sel", "SEL"],
-                ["subjects", "Subjects"]
-              ].map(([tab, label]) => (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setTemplateModalTab(tab)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                    templateModalTab === tab ? "bg-primary text-white" : "bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {templateModalTab === "fln" && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-headline font-bold text-sm text-on-surface">FLN Categories</h4>
-                  <button
-                    type="button"
-                    onClick={() => openTemplateEditor("fln-category", null, { order: templates.flnCategories.length + 1 })}
-                    className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">add</span>
-                    Add Category
-                  </button>
-                </div>
-                {templates.flnCategories.length === 0 ? (
-                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No FLN categories configured.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {templates.flnCategories.map(cat => (
-                      <div key={cat.id} className="border border-outline-variant/20 rounded-lg">
-                        <div className="flex items-center justify-between gap-3 p-3 bg-surface-container-low border-b border-outline-variant/10">
-                          <div>
-                            <p className="font-semibold text-sm text-on-surface">{cat.name}</p>
-                            <p className="text-[10px] text-on-surface-variant uppercase tracking-wide">Order {cat.order}</p>
-                          </div>
-                          <div className="flex gap-1">
-                            <button type="button" onClick={() => openTemplateEditor("fln-category", cat)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
-                              <span className="material-symbols-outlined text-[15px]">edit</span>
-                            </button>
-                            <button type="button" onClick={() => setTemplateDelete({ type: "fln-category", id: cat.id, label: cat.name })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
-                              <span className="material-symbols-outlined text-[15px]">delete</span>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="p-3 space-y-2">
-                          {(cat.questions || []).map(q => (
-                            <div key={q.id} className="flex items-start justify-between gap-3 text-xs">
-                              <span className="text-on-surface-variant flex-1">Q{q.order}. {q.questionText} ({q.marks} mark{q.marks === 1 ? "" : "s"})</span>
-                              <div className="flex gap-1 shrink-0">
-                                <button type="button" onClick={() => openTemplateEditor("fln-question", q, { categoryId: cat.id })} className="p-0.5 hover:text-primary cursor-pointer text-on-surface-variant">
-                                  <span className="material-symbols-outlined text-[13px]">edit</span>
-                                </button>
-                                <button type="button" onClick={() => setTemplateDelete({ type: "fln-question", id: q.id, label: q.questionText })} className="p-0.5 hover:text-error cursor-pointer text-on-surface-variant">
-                                  <span className="material-symbols-outlined text-[13px]">delete</span>
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                          <button
-                            type="button"
-                            onClick={() => openTemplateEditor("fln-question", null, { categoryId: cat.id, order: (cat.questions || []).length + 1 })}
-                            className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1"
-                          >
-                            <span className="material-symbols-outlined text-[12px]">add</span>
-                            Add Question
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {templateModalTab === "sel" && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-headline font-bold text-sm text-on-surface">SEL Questions</h4>
-                  <button type="button" onClick={() => openTemplateEditor("sel-question", null, { order: templates.selQuestions.length + 1 })} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">add</span>
-                    Add Question
-                  </button>
-                </div>
-                {templates.selQuestions.length === 0 ? (
-                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No SEL questions configured.</p>
-                ) : (
-                  <div className="divide-y divide-outline-variant/10 border border-outline-variant/20 rounded-lg max-h-[55vh] overflow-y-auto">
-                    {templates.selQuestions.map(q => (
-                      <div key={q.id} className="flex items-start justify-between gap-3 p-3">
-                        <div className="flex-1">
-                          <p className="text-xs font-medium text-on-surface">Q{q.order}. {q.questionText}</p>
-                          <p className="text-[10px] text-on-surface-variant mt-1">{(q.options || []).join(", ")}</p>
-                        </div>
-                        <div className="flex gap-1 shrink-0">
-                          <button type="button" onClick={() => openTemplateEditor("sel-question", q)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
-                            <span className="material-symbols-outlined text-[14px]">edit</span>
-                          </button>
-                          <button type="button" onClick={() => setTemplateDelete({ type: "sel-question", id: q.id, label: q.questionText })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
-                            <span className="material-symbols-outlined text-[14px]">delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {templateModalTab === "subjects" && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-headline font-bold text-sm text-on-surface">Subject Templates</h4>
-                  <button type="button" onClick={() => openTemplateEditor("subject", null, { order: templates.subjectTemplates.length + 1 })} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">add</span>
-                    Add Subject
-                  </button>
-                </div>
-                {templates.subjectTemplates.length === 0 ? (
-                  <p className="text-xs text-on-surface-variant p-3 border border-outline-variant/20 rounded-lg">No subject templates configured.</p>
-                ) : (
-                  <div className="divide-y divide-outline-variant/10 border border-outline-variant/20 rounded-lg">
-                    {templates.subjectTemplates.map(st => (
-                      <div key={st.id} className="flex items-start justify-between gap-3 p-3">
-                        <div className="flex-1">
-                          <p className="text-xs font-medium text-on-surface">{st.name}</p>
-                          <p className="text-[10px] text-on-surface-variant mt-1">{(st.options || []).join(", ")}</p>
-                        </div>
-                        <div className="flex gap-1 shrink-0">
-                          <button type="button" onClick={() => openTemplateEditor("subject", st)} className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
-                            <span className="material-symbols-outlined text-[14px]">edit</span>
-                          </button>
-                          <button type="button" onClick={() => setTemplateDelete({ type: "subject", id: st.id, label: st.name })} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
-                            <span className="material-symbols-outlined text-[14px]">delete</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </Modal>
-      )}
-
-      {templateEditor && (
-        <Modal
-          title={`${templateEditor.id ? "Edit" : "Add"} ${
-            templateEditor.type === "fln-category" ? "FLN Category" :
-            templateEditor.type === "fln-question" ? "FLN Question" :
-            templateEditor.type === "sel-question" ? "SEL Question" : "Subject Template"
-          }`}
-          onClose={() => setTemplateEditor(null)}
-        >
-          <form onSubmit={handleTemplateSave} className="space-y-4">
-            {templateEditor.type === "fln-category" && (
-              <InputField label="Category Name" name="name" value={templateEditor.name} onChange={e => setTemplateEditor(f => ({ ...f, name: e.target.value }))} required />
-            )}
-
-            {templateEditor.type === "fln-question" && (
-              <>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Category</label>
-                  <select
-                    value={templateEditor.categoryId}
-                    onChange={e => setTemplateEditor(f => ({ ...f, categoryId: e.target.value }))}
-                    required
-                    className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
-                  >
-                    <option value="">Select category</option>
-                    {templates.flnCategories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Question Text</label>
-                  <textarea rows="3" value={templateEditor.questionText} onChange={e => setTemplateEditor(f => ({ ...f, questionText: e.target.value }))} required className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Marks</label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.5"
-                    value={templateEditor.marks}
-                    onChange={e => setTemplateEditor(f => ({ ...f, marks: e.target.value }))}
-                    required
-                    className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
-                  />
-                </div>
-              </>
-            )}
-
-            {templateEditor.type === "sel-question" && (
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Question Text</label>
-                <textarea rows="3" value={templateEditor.questionText} onChange={e => setTemplateEditor(f => ({ ...f, questionText: e.target.value }))} required className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary resize-none" />
-              </div>
-            )}
-
-            {templateEditor.type === "subject" && (
-              <InputField label="Subject Name" name="name" value={templateEditor.name} onChange={e => setTemplateEditor(f => ({ ...f, name: e.target.value }))} required />
-            )}
-
-            <InputField label="Order" name="order" type="number" value={templateEditor.order} onChange={e => setTemplateEditor(f => ({ ...f, order: e.target.value }))} />
-
-            {(templateEditor.type === "sel-question" || templateEditor.type === "subject") && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Dropdown Options</label>
-                  <button type="button" onClick={addTemplateOption} className="text-primary text-xs font-semibold hover:underline cursor-pointer flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[12px]">add</span>
-                    Add Option
-                  </button>
-                </div>
-                {(templateEditor.options || []).map((option, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <input value={option} onChange={e => updateTemplateOption(index, e.target.value)} className="flex-1 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
-                    <button type="button" onClick={() => removeTemplateOption(index)} className="p-2 hover:bg-error-container rounded-full cursor-pointer text-error">
-                      <span className="material-symbols-outlined text-[16px]">delete</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
-              <button type="button" onClick={() => setTemplateEditor(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>
-              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
-                {saving ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </form>
-        </Modal>
+        <AssessmentTemplatesModal
+          token={token}
+          onClose={() => setModal(null)}
+          onChanged={loadTemplates}
+        />
       )}
 
       {/* Transition Modal */}
@@ -1848,16 +1477,6 @@ export default function StudentProfileDetail() {
         message={student.isMigrated ? "Are you sure you want to unmark this student as migrated?" : "Are you sure you want to mark this student as migrated?"}
         confirmText={student.isMigrated ? "Unmark" : "Mark as Migrated"}
         variant="primary"
-      />
-
-      <ConfirmActionModal
-        isOpen={!!templateDelete}
-        onClose={() => setTemplateDelete(null)}
-        onConfirm={handleTemplateDelete}
-        title="Delete Template Item"
-        message={`Delete "${templateDelete?.label || "this item"}"? This cannot be undone.`}
-        confirmText="Delete"
-        variant="danger"
       />
 
       <PhotoLightbox src={lightboxPhoto} alt="Student photo" onClose={() => setLightboxPhoto(null)} />

@@ -1006,9 +1006,9 @@ async function main() {
 
   await prisma.SubjectAssessmentTemplate.createMany({
     data: [
-      { name: "English", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"], order: 1 },
-      { name: "Assamese", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "absent"], order: 2 },
-      { name: "Maths", options: ["Number Recognition (1-9)", "Beginner", "Number Recognition (11-99)", "Subtraction", "absent"], order: 3 }
+      { name: "English", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "paragraph (STD 2 level text)", "absent"], order: 1 },
+      { name: "Assamese", options: ["words", "letter", "beginner", "paragraph (STD 1 level text)", "paragraph (STD 2 level text)", "absent"], order: 2 },
+      { name: "Maths", options: ["Number Recognition (1-9)", "Beginner", "Number Recognition (11-99)", "Subtraction", "Division", "absent"], order: 3 }
     ]
   });
 

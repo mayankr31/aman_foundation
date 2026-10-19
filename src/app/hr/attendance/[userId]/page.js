@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useState, useEffect, useMemo, use } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -236,7 +237,7 @@ export default function UserAttendanceDetails({ params }) {
         const tasks = Array.isArray(data.taskDetails)
           ? data.taskDetails.map(t => {
               const statusStr = t.completed
-                ? `Completed${t.completionDate ? ` on ${new Date(t.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}`
+                ? `Completed${t.completionDate ? ` on ${formatDate(t.completionDate)}` : ''}`
                 : 'Pending';
               const descPart = t.description ? ` - ${t.description}` : '';
               return `${t.text}${descPart} (${statusStr})`;
@@ -301,7 +302,7 @@ export default function UserAttendanceDetails({ params }) {
             const tasks = Array.isArray(data.taskDetails) && data.taskDetails.length > 0
               ? data.taskDetails.map(t => {
                   const statusStr = t.completed
-                    ? `Completed${t.completionDate ? ` on ${new Date(t.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}` : ''}`
+                    ? `Completed${t.completionDate ? ` on ${formatDate(t.completionDate)}` : ''}`
                     : 'Pending';
                   const descPart = t.description ? ` - ${t.description}` : '';
                   return `• ${t.text}${descPart} (${statusStr})`;
@@ -520,7 +521,7 @@ export default function UserAttendanceDetails({ params }) {
           <div className="bg-white rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-6">
             <div className="flex justify-between items-center border-b border-gray-100 pb-4">
               <h3 className="text-lg font-bold text-gray-900">
-                Details for {selectedDate.logdate || new Date(selectedDate.createdAt).toLocaleDateString()}
+                Details for {formatDate(selectedDate.logdate || selectedDate.createdAt)}
               </h3>
               <button onClick={() => setSelectedDate(null)} className="text-gray-400 hover:text-gray-700 cursor-pointer">
                 <span className="material-symbols-outlined">close</span>
@@ -567,7 +568,7 @@ export default function UserAttendanceDetails({ params }) {
                         )}
                         {task.completed && task.completionDate && (
                           <span className="text-[10px] text-emerald-600 font-semibold mt-0.5">
-                            Completed on {new Date(task.completionDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            Completed on {formatDate(task.completionDate)}
                           </span>
                         )}
                       </div>

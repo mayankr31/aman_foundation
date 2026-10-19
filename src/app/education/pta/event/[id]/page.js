@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { formatDate } from "@/lib/date";
 
 function Modal({ title, onClose, children }) {
   return (
@@ -87,7 +88,7 @@ export default function PtaEventDetail() {
   if (!event) return <div className="p-8 text-center text-on-surface-variant font-medium">Meeting/Event not found</div>;
 
   const eventDate = event.date ? new Date(event.date) : null;
-  const dateFormatted = eventDate ? eventDate.toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "TBD";
+  const dateFormatted = eventDate ? formatDate(eventDate) : "TBD";
   const timeFormatted = eventDate ? eventDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "";
   const statusClass = event.status === "Completed"
     ? "bg-surface-container text-on-surface-variant"
@@ -218,7 +219,7 @@ export default function PtaEventDetail() {
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-2">Created</h3>
             <p className="text-sm text-on-surface-variant font-sans">
-              {event.createdAt ? new Date(event.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "—"}
+              {formatDate(event.createdAt)}
             </p>
           </div>
         </div>

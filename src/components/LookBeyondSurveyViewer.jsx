@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { formatDate } from "@/lib/date";
 
 const Q1_LABELS = {
   a: "I would like to study",
@@ -78,10 +79,8 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleEsc);
-    document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "";
     };
   }, [onClose]);
 
@@ -267,7 +266,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
           <div>
             <h3 className="text-lg font-bold text-on-surface">Look Beyond Survey Responses</h3>
             <p className="text-xs text-on-surface-variant mt-0.5">
-              Submitted on {new Date(survey.surveyDate).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+              Submitted on {formatDate(survey.surveyDate)}
             </p>
           </div>
           <button

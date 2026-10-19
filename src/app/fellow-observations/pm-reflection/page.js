@@ -10,6 +10,7 @@ import PMReflectionForm from "@/components/PMReflectionForm";
 import PMReflectionViewer from "@/components/PMReflectionViewer";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 import {
   COMPETENCY_CATEGORIES,
   CATEGORY_COUNT,
@@ -591,11 +592,7 @@ export default function FellowPmReflectionPage() {
                         className="text-left flex-1 cursor-pointer"
                       >
                         <p className="font-semibold text-on-surface text-sm">
-                          {new Date(reflection.date).toLocaleDateString(undefined, {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          {formatDate(reflection.date)}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           {MATRIX_HEADERS.map((header) => (

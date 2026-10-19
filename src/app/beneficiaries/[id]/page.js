@@ -10,6 +10,11 @@ import { useToast } from "@/context/ToastContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import { formatDate } from "@/lib/date";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
+import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory } from "@/lib/incomeCategories";
+import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
+import { computeBeneficiaryImpact, formatNumber } from "@/lib/beneficiaryImpact";
 
 const SHOW_TAKE_KYR_BUTTON = false;
 
@@ -27,12 +32,86 @@ export default function BeneficiaryProfileDetail() {
   );
 }
 
+function ImpactProgramCard({ program }) {
+  const isFarm = program.category === "FARM";
+  const hasMetrics = program.kpis.length > 0 || program.computed.length > 0;
+
+  return (
+    <div className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <h4 className="font-bold text-on-surface text-base">{program.name}</h4>
+            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+              isFarm
+                ? "bg-primary-fixed text-on-primary-fixed"
+                : "bg-secondary-container/20 text-secondary"
+            }`}>
+              {isFarm ? "Farm" : "Non-Farm"}
+            </span>
+          </div>
+          <p className="text-xs text-on-surface-variant mt-1">
+            {program.typeLabel} · Enrolled {formatDate(program.enrolledAt)}
+          </p>
+        </div>
+        <p className="text-xs text-on-surface-variant shrink-0">
+          {program.eventCount} event{program.eventCount === 1 ? "" : "s"}
+          {program.lastEventDate ? ` · Last ${formatDate(program.lastEventDate)}` : ""}
+        </p>
+      </div>
+
+      {program.kpis.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+          {program.kpis.map((kpi) => (
+            <div key={kpi.key} className="p-3 rounded-lg bg-surface-container-low border border-outline-variant/10">
+              <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">{kpi.label}</p>
+              <p className="text-sm font-bold text-on-surface mt-1 break-words">{kpi.formatted}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {program.computed.length > 0 && (
+        <div className="space-y-3 mt-4">
+          {program.computed.map((metric) => (
+            <div key={metric.key}>
+              <div className="flex justify-between text-xs font-bold mb-1">
+                <span>{metric.label}</span>
+                <span className="text-primary">{metric.formatted}</span>
+              </div>
+              <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+                <div
+                  className="bg-primary h-full rounded-full"
+                  style={{ width: `${metric.progress}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!hasMetrics && (
+        <p className="text-xs text-on-surface-variant italic mt-4">
+          Program assigned, but no impact values recorded yet. Edit this assignment to add its metrics.
+        </p>
+      )}
+
+      {program.notes && (
+        <p className="text-xs text-on-surface-variant mt-4 border-t border-surface-container-high pt-3">
+          {program.notes}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function BeneficiaryProfileDetailContent() {
   const { id } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const { token, isInitializing } = useAuth();
+  const { getTypeConfig } = useLivelihoodTypes(token);
   const toast = useToast();
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Program History";
   const [beneficiary, setBeneficiary] = useState(null);
@@ -54,6 +133,7 @@ function BeneficiaryProfileDetailContent() {
   const [caste, setCaste] = useState("");
   const [religion, setReligion] = useState("");
   const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
   const [stateName, setStateName] = useState("");
   const [district, setDistrict] = useState("");
   const [block, setBlock] = useState("");
@@ -61,13 +141,14 @@ function BeneficiaryProfileDetailContent() {
   const [village, setVillage] = useState("");
   const [householdSize, setHouseholdSize] = useState(4);
   const [primaryIncomeType, setPrimaryIncomeType] = useState("");
-  const [annualIncome, setAnnualIncome] = useState("");
+  const [primaryIncomeOther, setPrimaryIncomeOther] = useState("");
   const [monthlyIncome, setMonthlyIncome] = useState("");
   const [tier, setTier] = useState("Tier 2");
   
   // ID proofs
   const [aadhar, setAadhar] = useState("");
   const [panCard, setPanCard] = useState("");
+  const [voterId, setVoterId] = useState("");
   const [rationCard, setRationCard] = useState("");
 
   // Bank details
@@ -144,19 +225,27 @@ function BeneficiaryProfileDetailContent() {
         setCaste(b.caste || "");
         setReligion(b.religion || "");
         setAddress(b.address || "");
-        setStateName(b.state || "");
+        setLandmark(b.landmark || "");
+        setStateName(normalizeStateName(b.state || ""));
         setDistrict(b.district || "");
         setBlock(b.block || "");
         setWard(b.ward || "");
         setVillage(b.village || "");
         setHouseholdSize(b.householdSize || 4);
-        setPrimaryIncomeType(b.primaryIncomeType || "");
-        setAnnualIncome(b.annualIncome !== null ? b.annualIncome : "");
-        setMonthlyIncome(b.monthlyIncome !== null ? b.monthlyIncome : "");
+        const loadedIncomeType = b.primaryIncomeType || "";
+        if (loadedIncomeType && !isKnownIncomeCategory(loadedIncomeType)) {
+          setPrimaryIncomeType("Other");
+          setPrimaryIncomeOther(loadedIncomeType);
+        } else {
+          setPrimaryIncomeType(loadedIncomeType);
+          setPrimaryIncomeOther("");
+        }
+        setMonthlyIncome(b.monthlyIncome ?? "");
         setTier(b.tier || "Tier 2");
 
         setAadhar(b.aadhar || "");
         setPanCard(b.panCard || "");
+        setVoterId(b.voterId || "");
         setRationCard(b.rationCard || "");
 
         setBankName(b.bankName || "");
@@ -367,6 +456,12 @@ function BeneficiaryProfileDetailContent() {
         ...(token ? { Authorization: `Bearer ${token}` } : {})
       };
 
+      const resolvedIncomeType =
+        primaryIncomeType === "Other"
+          ? primaryIncomeOther.trim() || "Other"
+          : primaryIncomeType;
+      const monthlyIncomeValue = monthlyIncome !== "" ? parseFloat(monthlyIncome) : null;
+
       const payload = {
         name,
         dob: dob || null,
@@ -376,28 +471,30 @@ function BeneficiaryProfileDetailContent() {
         caste,
         religion,
         address:
-          [village, ward, block, district, stateName]
+          [village, landmark, ward, block, district, stateName]
             .map((s) => (s || "").trim())
             .filter(Boolean)
             .join(", ") || address,
+        landmark,
         state: stateName,
         district,
         block,
         ward,
         village,
         householdSize: parseInt(householdSize),
-        primaryIncomeType,
-        annualIncome: annualIncome !== "" ? parseFloat(annualIncome) : null,
-        monthlyIncome: monthlyIncome !== "" ? parseFloat(monthlyIncome) : null,
+        primaryIncomeType: resolvedIncomeType || null,
+        annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
+        monthlyIncome: monthlyIncomeValue,
         tier,
         aadhar,
         panCard,
+        voterId,
         rationCard,
         bankName,
         bankAccountNo,
         bankIfsc,
         familyMembers: familyMembers.filter(m => m.name.trim() !== ""),
-        livestock: livestock.filter(l => l.tagNumber.trim() !== ""),
+        livestock: livestock.filter(l => (l.animalType || "").trim() !== ""),
         // Detailed assignments are applied separately below
       };
 
@@ -775,14 +872,34 @@ function BeneficiaryProfileDetailContent() {
   };
   const kyrProfileFields = getProfileKyrFields();
 
-  const isGoatEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Goat Rearing");
-  const isCaneEnrolled = beneficiary.schemeEnrollments?.some(se => se.scheme.name === "Sugarcane");
-
-  const cumulativeReturnsAmount = beneficiary.goatRearingDetails?.reduce((sum, d) => sum + (d.returnsAmount || 0), 0) || 0;
-  const cumulativeReturns = cumulativeReturnsAmount > 0 ? `₹${cumulativeReturnsAmount.toLocaleString()}` : "N/A";
-
-  const landAllottedAmount = beneficiary.sugarcaneDetails?.reduce((sum, d) => sum + (d.hectaresAllotted || 0), 0) || 0;
-  const landAllottedText = landAllottedAmount > 0 ? `${landAllottedAmount} Hectares` : "N/A";
+  const impact = computeBeneficiaryImpact(beneficiary, getTypeConfig);
+  const recordedCapacityCount = 3 - missingCapacityTypes.length;
+  const farmImpactSummary = [
+    impact.farmSummary.totalLand !== null
+      ? `${formatNumber(impact.farmSummary.totalLand)} Ha total land`
+      : null,
+    impact.farmSummary.yieldEfficiency !== null
+      ? `${impact.farmSummary.yieldEfficiency}% yield efficiency`
+      : null,
+    impact.farmSummary.revenueAchievement !== null
+      ? `${impact.farmSummary.revenueAchievement}% revenue achievement`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const nonFarmImpactSummary = [
+    impact.nonFarmSummary.totalInvestment !== null
+      ? `₹${formatNumber(impact.nonFarmSummary.totalInvestment)} invested`
+      : null,
+    impact.nonFarmSummary.totalReturns !== null
+      ? `₹${formatNumber(impact.nonFarmSummary.totalReturns)} returns`
+      : null,
+    impact.nonFarmSummary.portfolioRoi !== null
+      ? `${impact.nonFarmSummary.portfolioRoi}% ROI`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   const calculateAge = (dateString) => {
     if (!dateString) return "N/A";
@@ -791,6 +908,36 @@ function BeneficiaryProfileDetailContent() {
     const ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970) + " Years";
   };
+
+  const editStateOptions = withCurrentOption(INDIA_STATES.map((state) => state.name), stateName);
+  const editDistrictOptions = withCurrentOption(getDistrictsForState(stateName), district);
+  const parsedMonthlyIncome = parseFloat(monthlyIncome);
+  const editAnnualIncome = Number.isFinite(parsedMonthlyIncome) ? parsedMonthlyIncome * 12 : "";
+
+  const programCount =
+    beneficiary.livelihoodDetails?.length || beneficiary.schemeEnrollments?.length || 0;
+  const profileAddress =
+    beneficiary.address ||
+    [beneficiary.village, beneficiary.block, beneficiary.district, normalizeStateName(beneficiary.state)]
+      .filter(Boolean)
+      .join(", ") ||
+    "Not provided";
+  const locationLabel =
+    beneficiary.village ||
+    beneficiary.block ||
+    beneficiary.district ||
+    beneficiary.state ||
+    beneficiary.address ||
+    "";
+  const locationSuffix = locationLabel ? ` from ${locationLabel}` : "";
+  const profileDescription =
+    programCount > 0
+      ? `Rural development and livelihood beneficiary${locationSuffix}. Enrolled in ${programCount} micro-development program${programCount === 1 ? "" : "s"}.`
+      : `Rural development and livelihood beneficiary${locationSuffix}, registered in the livelihood master registry.`;
+  const profileAnnualIncome =
+    beneficiary.monthlyIncome != null
+      ? beneficiary.monthlyIncome * 12
+      : beneficiary.annualIncome;
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full">
@@ -899,14 +1046,20 @@ function BeneficiaryProfileDetailContent() {
                 )}
               </div>
               <p className="text-on-surface-variant text-sm mb-6 max-w-md font-sans">
-                Assam rural development and livelihood beneficiary near Kalgachia circle. Enrolled in multiple micro-development programs.
+                {profileDescription}
               </p>
               
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-6 gap-x-4 font-sans text-sm">
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Location</p>
-                  <p className="text-on-surface font-bold">{beneficiary.address || "Kalgachia, Assam"}</p>
+                  <p className="text-on-surface font-bold">{profileAddress}</p>
                 </div>
+                {beneficiary.landmark && (
+                  <div>
+                    <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Nearby Landmark</p>
+                    <p className="text-on-surface font-bold">{beneficiary.landmark}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Mobile Number</p>
                   <p className="text-on-surface font-bold">{beneficiary.mobNumber || "N/A"}</p>
@@ -914,7 +1067,7 @@ function BeneficiaryProfileDetailContent() {
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">DOB / Age</p>
                   <p className="text-on-surface font-bold">
-                    {beneficiary.dob ? new Date(beneficiary.dob).toLocaleDateString() : "N/A"} ({calculateAge(beneficiary.dob)})
+                    {formatDate(beneficiary.dob, "N/A")} ({calculateAge(beneficiary.dob)})
                   </p>
                 </div>
                 <div>
@@ -938,8 +1091,12 @@ function BeneficiaryProfileDetailContent() {
                   <p className="font-bold text-on-surface">{beneficiary.emergencyContact || "N/A"}</p>
                 </div>
                 <div>
+                  <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Primary Income Category</p>
+                  <p className="text-on-surface font-bold">{beneficiary.primaryIncomeType || "N/A"}</p>
+                </div>
+                <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Annual Income</p>
-                  <p className="text-on-surface font-bold">{beneficiary.annualIncome ? `₹${beneficiary.annualIncome.toLocaleString()}` : "N/A"}</p>
+                  <p className="text-on-surface font-bold">{profileAnnualIncome ? `₹${profileAnnualIncome.toLocaleString()}` : "N/A"}</p>
                 </div>
                 <div>
                   <p className="text-xs text-on-surface-variant mb-1 uppercase font-bold tracking-wider">Monthly Income</p>
@@ -1074,7 +1231,7 @@ function BeneficiaryProfileDetailContent() {
                                 </p>
                               </div>
                               <span className="text-xs font-bold text-primary bg-primary-container/10 px-2 py-1 rounded">
-                                Enrolled {new Date(detail.enrolledAt).toLocaleDateString("en-IN")}
+                                Enrolled {formatDate(detail.enrolledAt)}
                               </span>
                             </div>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs p-3 bg-surface-container-lowest rounded-lg border border-outline-variant/10">
@@ -1110,7 +1267,7 @@ function BeneficiaryProfileDetailContent() {
                                   {detail.events.map((evt) => (
                                     <div key={evt.id} className="flex items-start gap-2 p-2 bg-surface-container-low rounded border border-outline-variant/10 text-xs">
                                       <span className="px-2 py-0.5 rounded font-semibold bg-slate-100 text-slate-700 shrink-0">{evt.eventType}</span>
-                                      <span className="text-on-surface-variant">{new Date(evt.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                                      <span className="text-on-surface-variant">{formatDate(evt.eventDate)}</span>
                                       {evt.quantity != null && <span className="text-on-surface-variant">Qty: {evt.quantity}</span>}
                                       {evt.notes && <span className="text-on-surface-variant truncate max-w-xs">{evt.notes}</span>}
                                       {evt.photoUrl && (
@@ -1232,7 +1389,7 @@ function BeneficiaryProfileDetailContent() {
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col gap-4 font-sans">
                       <div className="flex flex-col sm:flex-row justify-between gap-4">
                         <div>
-                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
                           <p className="text-xs text-on-surface-variant mt-1">
                             Overall Score: <span className="font-bold text-primary">{survey.overallScore}%</span>
                           </p>
@@ -1309,7 +1466,7 @@ function BeneficiaryProfileDetailContent() {
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
@@ -1361,7 +1518,7 @@ function BeneficiaryProfileDetailContent() {
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
@@ -1413,7 +1570,7 @@ function BeneficiaryProfileDetailContent() {
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
                         </div>
                         <div>
                           <p className="text-sm text-on-surface-variant">
@@ -1465,7 +1622,7 @@ function BeneficiaryProfileDetailContent() {
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col font-sans">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                          <p className="font-bold text-on-surface">Survey Date: {new Date(survey.surveyDate).toLocaleDateString()}</p>
+                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
                           <p className="text-xs text-on-surface-variant mt-1">Shocks, Hardships, and Severities Recorded</p>
                         </div>
                       </div>
@@ -1526,7 +1683,7 @@ function BeneficiaryProfileDetailContent() {
                           <div>
                             <p className="font-bold text-on-surface flex items-center gap-2">
                               <span className="material-symbols-outlined text-[16px] text-primary">calendar_today</span>
-                              Plan Date: {new Date(plan.createdAt).toLocaleDateString()}
+                              Plan Date: {formatDate(plan.createdAt)}
                             </p>
                             <p className="text-sm text-on-surface-variant mt-1">
                               Priorities targeted: <span className="font-semibold text-on-surface">{plan.planData?.numAreasPrioritized || 0}</span>
@@ -1597,11 +1754,11 @@ function BeneficiaryProfileDetailContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 mt-2 text-xs">
                           <div>
                             <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Date</p>
-                            <p className="text-on-surface font-medium">{record.incomeDate ? new Date(record.incomeDate).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "N/A"}</p>
+                            <p className="text-on-surface font-medium">{formatDate(record.incomeDate, "N/A")}</p>
                           </div>
                           <div>
                             <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Recorded On</p>
-                            <p className="text-on-surface font-medium">{new Date(record.createdAt).toLocaleDateString("en-IN")}</p>
+                            <p className="text-on-surface font-medium">{formatDate(record.createdAt)}</p>
                           </div>
                         </div>
                         {record.notes && (
@@ -1670,18 +1827,18 @@ function BeneficiaryProfileDetailContent() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2 text-xs">
                           <div>
                             <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Migration Date</p>
-                            <p className="text-on-surface font-medium">{record.migrationDate ? new Date(record.migrationDate).toLocaleDateString() : "N/A"}</p>
+                            <p className="text-on-surface font-medium">{formatDate(record.migrationDate, "N/A")}</p>
                           </div>
                           {record.expectedReturnDate && (
                             <div>
                               <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Expected Return</p>
-                              <p className="text-on-surface font-medium">{new Date(record.expectedReturnDate).toLocaleDateString()}</p>
+                              <p className="text-on-surface font-medium">{formatDate(record.expectedReturnDate)}</p>
                             </div>
                           )}
                           {record.actualReturnDate && (
                             <div>
                               <p className="text-slate-400 font-semibold uppercase tracking-wider text-[9px]">Actual Return</p>
-                              <p className="text-on-surface font-medium">{new Date(record.actualReturnDate).toLocaleDateString()}</p>
+                              <p className="text-on-surface font-medium">{formatDate(record.actualReturnDate)}</p>
                             </div>
                           )}
                         </div>
@@ -1744,7 +1901,7 @@ function BeneficiaryProfileDetailContent() {
                         <div>
                           <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Age / DOB</p>
                           <p className="text-on-surface font-semibold mt-0.5">
-                            {m.dob ? `${calculateAge(m.dob)} (${new Date(m.dob).toLocaleDateString()})` : "N/A"}
+                            {m.dob ? `${calculateAge(m.dob)} (${formatDate(m.dob)})` : "N/A"}
                           </p>
                         </div>
                         <div>
@@ -1827,7 +1984,7 @@ function BeneficiaryProfileDetailContent() {
                 <p className="text-xs text-on-surface-variant mt-1 font-sans">National ID cards and public relief system credentials.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
                   <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Aadhar Identity</p>
                   <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide">
@@ -1849,6 +2006,18 @@ function BeneficiaryProfileDetailContent() {
                     beneficiary.panCard ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
                   }`}>
                     {beneficiary.panCard ? "Verified" : "Missing"}
+                  </span>
+                </div>
+
+                <div className="p-4 border border-surface-container-highest rounded-lg font-sans bg-surface-container-low/10">
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Voter ID</p>
+                  <p className="font-bold text-sm text-on-surface mt-1 font-mono tracking-wide uppercase">
+                    {beneficiary.voterId ? beneficiary.voterId : "Not Provided"}
+                  </p>
+                  <span className={`inline-block mt-3 px-2 py-0.5 text-[8px] font-bold rounded uppercase ${
+                    beneficiary.voterId ? "bg-primary-fixed text-on-primary-fixed" : "bg-error-container text-on-error-container"
+                  }`}>
+                    {beneficiary.voterId ? "Verified" : "Missing"}
                   </span>
                 </div>
 
@@ -1889,93 +2058,158 @@ function BeneficiaryProfileDetailContent() {
           )}
 
           {activeTab === "Impact Summary" && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
-              <div className="bg-secondary-container/10 border border-secondary/20 rounded-xl p-4 text-xs font-sans text-on-surface-variant flex gap-3 items-start leading-relaxed">
-                <span className="material-symbols-outlined text-secondary shrink-0">insights</span>
-                <div>
-                  <p className="font-bold text-secondary mb-1">Where does the Impact Summary come from?</p>
-                  <p>Socio-economic metrics are generated automatically from active micro-project stats:
-                    1) <strong>Resilience Index</strong> is updated dynamically based on household surveys; 
-                    2) <strong>Goat Rearing ROI</strong> is calculated as returns vs initial investment; 
-                    3) <strong>Sugarcane Yield Efficiency</strong> measures actual harvested tonnage against the allotted land target.</p>
+            <div className="space-y-6">
+              <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 font-sans">
+                <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
+                  <span className="material-symbols-outlined text-primary font-bold">insights</span>
+                  Household Socio-Economic Impact Summary
+                </h3>
+                <p className="text-sm text-on-surface-variant leading-relaxed mt-2">
+                  Calculated from this beneficiary&apos;s active Farm and Non-Farm program assignments, recorded program values, and capacity surveys.
+                </p>
+
+                <div className="mt-4 bg-secondary-container/10 border border-secondary/20 rounded-xl p-4 text-xs text-on-surface-variant flex gap-3 items-start leading-relaxed">
+                  <span className="material-symbols-outlined text-secondary shrink-0">info</span>
+                  <div>
+                    <p className="font-bold text-secondary mb-1">How these metrics are calculated</p>
+                    <p>Farm metrics use land, yield, and revenue values. Non-Farm metrics use investment, returns, and ROI values. Resilience comes from the latest Adaptive, Absorptive, and Transformative surveys.</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-4 text-[10px] font-bold uppercase tracking-wider">
+                  <span className="px-2.5 py-1 rounded-full bg-primary-container/10 text-primary">
+                    {impact.programs.length} {impact.usingLegacy ? "legacy record" : "active program"}
+                    {impact.programs.length === 1 ? "" : "s"}
+                  </span>
+                  {impact.farmPrograms.length > 0 && (
+                    <span className="px-2.5 py-1 rounded-full bg-primary-fixed/40 text-on-primary-fixed">
+                      {impact.farmPrograms.length} Farm
+                    </span>
+                  )}
+                  {impact.nonFarmPrograms.length > 0 && (
+                    <span className="px-2.5 py-1 rounded-full bg-secondary-container/20 text-secondary">
+                      {impact.nonFarmPrograms.length} Non-Farm
+                    </span>
+                  )}
+                  {impact.totalEvents > 0 && (
+                    <span className="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant">
+                      {impact.totalEvents} event{impact.totalEvents === 1 ? "" : "s"}
+                    </span>
+                  )}
+                  {impact.lastEventDate && (
+                    <span className="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant">
+                      Last activity {formatDate(impact.lastEventDate)}
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">
-                <span className="material-symbols-outlined text-primary font-bold">insights</span>
-                Household Socio-Economic Impact Summary
-              </h3>
-              <p className="text-sm text-on-surface-variant leading-relaxed font-sans">
-                Aggregated impact parameters representing baseline improvements across financial reserve parameters since enrolling in the portal.
-              </p>
-              
-              <div className="space-y-6 font-sans text-xs">
-                <div>
-                  <div className="flex justify-between font-bold mb-1">
-                    <span>Resilience Index Rating</span>
-                    <span className="text-primary">{score}% score</span>
+              <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 font-sans">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
+                      <span className="material-symbols-outlined text-primary">monitor_heart</span>
+                      Resilience Index
+                    </h3>
+                    <p className="text-xs text-on-surface-variant mt-1">Composite of the latest capacity surveys.</p>
                   </div>
-                  <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary h-full rounded-full" style={{ width: `${score}%` }}></div>
+                  <div className="text-right">
+                    {score !== null ? (
+                      <>
+                        <span className="text-3xl font-bold text-primary tracking-tight">{score}</span>
+                        <span className="text-xs text-on-surface-variant font-medium"> / 100</span>
+                      </>
+                    ) : (
+                      <span className="text-xs font-bold text-on-surface-variant">Not calculated</span>
+                    )}
                   </div>
                 </div>
-                
-                {beneficiary.goatRearingDetails && beneficiary.goatRearingDetails.length > 0 && beneficiary.goatRearingDetails.map((detail, idx) => detail.roiPercentage !== null ? (
-                  <div key={`goat-roi-${idx}`}>
-                    <div className="flex justify-between font-bold mb-1">
-                      <span>Goat Rearing ROI ({detail.goatRearingProgram?.name || "Program"})</span>
-                      <span className="text-primary">{detail.roiPercentage}% ROI</span>
-                    </div>
-                    <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-                      <div className="bg-primary h-full rounded-full" style={{ width: `${Math.min(100, detail.roiPercentage)}%` }}></div>
-                    </div>
-                  </div>
-                ) : null)}
 
-                {beneficiary.sugarcaneDetails && beneficiary.sugarcaneDetails.length > 0 && beneficiary.sugarcaneDetails.map((detail, idx) => detail.actualYieldTons ? (
-                  <div key={`cane-yield-${idx}`}>
-                    <div className="flex justify-between font-bold mb-1">
-                      <span>Sugarcane Yield Efficiency ({detail.sugarcaneProgram?.name || "Program"})</span>
-                      <span className="text-primary">{Math.round((detail.actualYieldTons / detail.estimatedYieldTons) * 100)}%</span>
-                    </div>
-                    <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-                      <div className="bg-primary h-full rounded-full" style={{ width: `${Math.min(100, Math.round((detail.actualYieldTons / detail.estimatedYieldTons) * 100))}%` }}></div>
-                    </div>
-                  </div>
-                ) : null)}
+                <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mt-4">
+                  {score !== null && (
+                    <div
+                      className="bg-primary h-full rounded-full"
+                      style={{ width: `${Math.min(100, Math.max(0, score))}%` }}
+                    />
+                  )}
+                </div>
+
+                <p className="text-xs text-on-surface-variant mt-3 leading-relaxed">
+                  {score !== null
+                    ? "Based on the latest Adaptive, Absorptive, and Transformative surveys."
+                    : `Complete all three capacity surveys to calculate this score. ${recordedCapacityCount} of 3 recorded${missingCapacityTypes.length > 0 ? ` — missing ${missingCapacityTypes.join(", ")}` : ""}.`}
+                </p>
               </div>
+
+              {impact.usingLegacy && (
+                <div className="bg-surface-container-high/40 border border-outline-variant/20 rounded-xl p-4 text-xs text-on-surface-variant font-sans leading-relaxed">
+                  Showing legacy Goat Rearing/Sugarcane records. New assignments are tracked under Farm and Non-Farm programs.
+                </div>
+              )}
+
+              {impact.farmPrograms.length > 0 && (
+                <section className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                    <div>
+                      <h3 className="text-base font-bold text-on-surface flex items-center gap-2 font-headline">
+                        <span className="material-symbols-outlined text-primary">agriculture</span>
+                        Farm Programs
+                      </h3>
+                      <p className="text-xs text-on-surface-variant mt-1">
+                        {impact.farmPrograms.length} program{impact.farmPrograms.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    {farmImpactSummary && (
+                      <p className="text-xs font-semibold text-on-surface-variant">{farmImpactSummary}</p>
+                    )}
+                  </div>
+                  <div className="space-y-4">
+                    {impact.farmPrograms.map((program) => (
+                      <ImpactProgramCard key={program.id} program={program} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {impact.nonFarmPrograms.length > 0 && (
+                <section className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                    <div>
+                      <h3 className="text-base font-bold text-on-surface flex items-center gap-2 font-headline">
+                        <span className="material-symbols-outlined text-secondary">pets</span>
+                        Non-Farm Programs
+                      </h3>
+                      <p className="text-xs text-on-surface-variant mt-1">
+                        {impact.nonFarmPrograms.length} program{impact.nonFarmPrograms.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    {nonFarmImpactSummary && (
+                      <p className="text-xs font-semibold text-on-surface-variant">{nonFarmImpactSummary}</p>
+                    )}
+                  </div>
+                  <div className="space-y-4">
+                    {impact.nonFarmPrograms.map((program) => (
+                      <ImpactProgramCard key={program.id} program={program} />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {impact.programs.length === 0 && (
+                <div className="bg-surface-container-lowest rounded-xl p-8 shadow-ambient border border-dashed border-outline-variant/30 text-center font-sans">
+                  <span className="material-symbols-outlined text-3xl text-on-surface-variant">insights</span>
+                  <p className="font-bold text-on-surface mt-2">No livelihood programs assigned yet</p>
+                  <p className="text-xs text-on-surface-variant mt-1 max-w-md mx-auto">
+                    Enroll this beneficiary from a Farm or Non-Farm program page to start tracking real impact metrics.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>
 
         {/* Secondary Info Sidepanel */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-            <h3 className="text-xs uppercase tracking-widest text-on-surface-variant mb-4 font-sans font-bold">
-              Cumulative Impact
-            </h3>
-            <div className="space-y-4 text-sm font-sans">
-              <div className="flex justify-between items-center p-3 bg-surface rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-secondary-container/20 text-secondary flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[16px] font-bold">payments</span>
-                  </div>
-                  <span className="font-semibold text-on-surface">Goat Returns</span>
-                </div>
-                <span className="font-bold text-on-surface text-base">{cumulativeReturns}</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-surface rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary-container/20 text-primary flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[16px] font-bold">agriculture</span>
-                  </div>
-                  <span className="font-semibold text-on-surface">Allotted Land</span>
-                </div>
-                <span className="font-bold text-on-surface text-base">{landAllottedText}</span>
-              </div>
-            </div>
-          </div>
-
           {/* Resilience Score (KYR) - always visible */}
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="text-xs uppercase tracking-widest text-on-surface-variant mb-4 font-sans font-bold">
@@ -1993,7 +2227,12 @@ function BeneficiaryProfileDetailContent() {
               </div>
             </div>
             <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mb-5">
-              <div className="bg-primary h-full rounded-full" style={{ width: `${resilienceScoreComputed ?? 0}%` }}></div>
+              {resilienceScoreComputed !== null && (
+                <div
+                  className="bg-primary h-full rounded-full"
+                  style={{ width: `${Math.min(100, Math.max(0, resilienceScoreComputed))}%` }}
+                />
+              )}
             </div>
 
             <div className="space-y-3 text-sm font-sans">
@@ -2018,7 +2257,7 @@ function BeneficiaryProfileDetailContent() {
                     {item.list.length === 0 && <option value="">No submissions</option>}
                     {item.list.map(s => (
                       <option key={s.id} value={s.id}>
-                        {new Date(s.surveyDate).toLocaleDateString()} — {computeCapacityScore(item.key, s.responses)}%
+                        {formatDate(s.surveyDate)} — {computeCapacityScore(item.key, s.responses)}%
                       </option>
                     ))}
                   </select>
@@ -2127,15 +2366,26 @@ function BeneficiaryProfileDetailContent() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Primary Income Category</label>
-                    <input type="text" placeholder="e.g. Agriculture, Livestock" value={primaryIncomeType} onChange={e => setPrimaryIncomeType(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <select value={primaryIncomeType} onChange={e => setPrimaryIncomeType(e.target.value)} className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface">
+                      <option value="">— Select —</option>
+                      {PRIMARY_INCOME_CATEGORIES.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="font-semibold uppercase tracking-wider text-slate-400">Annual Income (₹)</label>
-                    <input type="number" value={annualIncome} onChange={e => setAnnualIncome(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                  </div>
+                  {primaryIncomeType === "Other" && (
+                    <div className="flex flex-col gap-1">
+                      <label className="font-semibold uppercase tracking-wider text-slate-400">Specify Income Category</label>
+                      <input type="text" placeholder="e.g. Fishing, Pension" value={primaryIncomeOther} onChange={e => setPrimaryIncomeOther(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    </div>
+                  )}
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Monthly Income (₹)</label>
                     <input type="number" value={monthlyIncome} onChange={e => setMonthlyIncome(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="font-semibold uppercase tracking-wider text-slate-400">Annual Income (₹) — Auto-calculated</label>
+                    <input type="number" readOnly tabIndex={-1} value={editAnnualIncome} placeholder="Calculated from monthly income" className="px-3 py-2 border rounded bg-surface-container/50 border-outline-variant text-on-surface cursor-not-allowed" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Household Size</label>
@@ -2151,12 +2401,35 @@ function BeneficiaryProfileDetailContent() {
                   </div>
                   <div className="col-span-1 md:col-span-3">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Address / Location</label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mt-1">
-                      <input type="text" placeholder="State" value={stateName} onChange={e => setStateName(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
-                      <input type="text" placeholder="District" value={district} onChange={e => setDistrict(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-1">
+                      <select
+                        value={stateName}
+                        onChange={e => {
+                          setStateName(e.target.value);
+                          setDistrict("");
+                        }}
+                        className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface"
+                      >
+                        <option value="">— Select State —</option>
+                        {editStateOptions.map((state) => (
+                          <option key={state} value={state}>{state}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={district}
+                        onChange={e => setDistrict(e.target.value)}
+                        disabled={!stateName}
+                        className="px-3 py-2 border rounded bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface disabled:opacity-60"
+                      >
+                        <option value="">{stateName ? "— Select District —" : "Select state first"}</option>
+                        {editDistrictOptions.map((districtName) => (
+                          <option key={districtName} value={districtName}>{districtName}</option>
+                        ))}
+                      </select>
                       <input type="text" placeholder="Block" value={block} onChange={e => setBlock(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                       <input type="text" placeholder="Ward / GP" value={ward} onChange={e => setWard(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                       <input type="text" placeholder="Village" value={village} onChange={e => setVillage(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" placeholder="Nearby Landmark" value={landmark} onChange={e => setLandmark(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                   </div>
                 </div>
@@ -2165,7 +2438,7 @@ function BeneficiaryProfileDetailContent() {
               {editTab === "IDBank" && (
                 <div className="space-y-4 text-xs">
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide">Identity Proofs</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Aadhar Number</label>
                       <input type="text" placeholder="1234 5678 9012" value={aadhar} onChange={e => setAadhar(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
@@ -2173,6 +2446,10 @@ function BeneficiaryProfileDetailContent() {
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">PAN Card</label>
                       <input type="text" placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label className="font-semibold uppercase tracking-wider text-slate-400">Voter ID</label>
+                      <input type="text" placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Ration Card (SFY)</label>
@@ -2262,9 +2539,11 @@ function BeneficiaryProfileDetailContent() {
                   <div className="space-y-3">
                     {livestock.map((l, idx) => (
                       <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-end p-3 border border-surface-container-high bg-surface-container-low/20 rounded-lg">
-                        <div className="w-44 flex flex-col gap-1">
-                          <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Tag / Animal ID</label>
-                          <input type="text" required value={l.tagNumber} onChange={e => updateLivestockRow(idx, "tagNumber", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
+                        <div className="w-48 flex flex-col gap-1">
+                          <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Animal ID (Auto-generated)</label>
+                          <div className="px-2 py-1.5 border rounded bg-surface-container/50 border-outline-variant text-on-surface text-xs font-mono flex items-center min-h-[34px]">
+                            {l.tagNumber || "Generated on save"}
+                          </div>
                         </div>
                         <div className="w-32 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Animal Type</label>
@@ -2380,7 +2659,7 @@ function BeneficiaryProfileDetailContent() {
               <div>
                 <h3 className="text-xl font-bold">Edit Submitted KYR Form</h3>
                 <p className="text-xs text-on-surface-variant mt-1">
-                  Update the responses submitted on {new Date(editingSurvey.surveyDate).toLocaleDateString()}.
+                  Update the responses submitted on {formatDate(editingSurvey.surveyDate)}.
                 </p>
               </div>
               <button

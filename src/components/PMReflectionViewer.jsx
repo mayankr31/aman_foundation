@@ -7,6 +7,7 @@ import {
   LEVELS,
   MATRIX_CELLS,
 } from "@/data/pmReflectionConstants";
+import { formatDate } from "@/lib/date";
 
 export default function PMReflectionViewer({ reflection, onClose }) {
   useEffect(() => {
@@ -14,10 +15,8 @@ export default function PMReflectionViewer({ reflection, onClose }) {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", handleEsc);
-    document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "";
     };
   }, [onClose]);
 
@@ -51,11 +50,7 @@ export default function PMReflectionViewer({ reflection, onClose }) {
               POST LDJC PM Reflection
             </h3>
             <p className="text-xs text-on-surface-variant mt-0.5">
-              {new Date(reflection.date).toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {formatDate(reflection.date)}
               {reflection.author?.name && (
                 <span> &bull; Reviewed by {reflection.author.name}</span>
               )}

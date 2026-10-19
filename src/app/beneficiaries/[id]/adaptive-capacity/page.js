@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
+import { formatDate } from "@/lib/date";
 
 const questions = [
   {
@@ -199,7 +200,7 @@ export default function AdaptiveCapacitySurveyPage() {
           </div>
           <div>
             <p className="text-sm text-on-surface-variant font-bold">Date</p>
-            <p className="text-on-surface font-medium">{new Date().toLocaleDateString()}</p>
+            <p className="text-on-surface font-medium">{formatDate(new Date())}</p>
           </div>
           <div>
             <p className="text-sm text-on-surface-variant font-bold">Facilitator</p>

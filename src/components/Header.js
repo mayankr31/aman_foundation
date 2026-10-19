@@ -22,6 +22,11 @@ export default function Header({ onMenuToggle }) {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
+        <img
+          src="/logo.jpeg"
+          alt="Aman Foundation"
+          className="h-9 w-auto max-w-[140px] object-contain sm:hidden"
+        />
         <span className="hidden sm:inline text-xl font-black text-slate-900 dark:text-white normal-case tracking-normal whitespace-nowrap">
           Impact Portal
         </span>

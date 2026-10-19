@@ -55,13 +55,32 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Incident not found" }, { status: 404 });
     }
 
+    const toInt = (value, fallback = undefined) => {
+      if (value === undefined || value === null || value === "") return fallback;
+      const parsed = parseInt(value, 10);
+      return Number.isNaN(parsed) ? fallback : parsed;
+    };
+
+    const toFloat = (value, fallback = undefined) => {
+      if (value === undefined || value === null || value === "") return fallback;
+      const parsed = parseFloat(value);
+      return Number.isNaN(parsed) ? fallback : parsed;
+    };
+
+    const has = (key) => Object.prototype.hasOwnProperty.call(body, key);
+
     const updatedIncident = await prisma.disasterIncident.update({
       where: { id },
       data: {
         name: body.name,
         location: body.location,
         type: body.type,
-        active: body.active !== undefined ? body.active : undefined
+        active: body.active !== undefined ? body.active : undefined,
+        expectedFamiliesAffected: has("expectedFamiliesAffected") ? toInt(body.expectedFamiliesAffected, 0) : undefined,
+        humanLossDied: has("humanLossDied") ? toInt(body.humanLossDied, 0) : undefined,
+        humanLossInjured: has("humanLossInjured") ? toInt(body.humanLossInjured, 0) : undefined,
+        humanLossMissing: has("humanLossMissing") ? toInt(body.humanLossMissing, 0) : undefined,
+        propertyLossEstimate: has("propertyLossEstimate") ? toFloat(body.propertyLossEstimate, 0) : undefined
       }
     });
 

@@ -140,8 +140,7 @@ export async function PATCH(req, context) {
         latitude: body.latitude,
         longitude: body.longitude,
         mapUrl: body.mapUrl,
-        img: body.img,
-        goal: body.goal !== undefined ? parseInt(body.goal) : undefined
+        img: body.img
       }
     });
 

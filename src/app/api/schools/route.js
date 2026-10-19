@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { getFellowIdByUserId } from "@/lib/scope";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -60,9 +61,18 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    // Limit to ADMIN roles
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    const isAdmin = user.role.name === "ADMIN";
+    const isFellow = user.role.name === "FELLOW";
+    if (!isAdmin && !isFellow) {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
+    }
+
+    let fellowProfileId = null;
+    if (isFellow) {
+      fellowProfileId = await getFellowIdByUserId(user.id);
+      if (!fellowProfileId) {
+        return NextResponse.json({ error: "Forbidden: Fellow profile not found" }, { status: 403 });
+      }
     }
 
     const body = await req.json();
@@ -78,34 +88,47 @@ export async function POST(req) {
       latitude,
       longitude,
       mapUrl,
-      img,
-      goal
+      img
     } = body;
 
     if (!name) {
       return NextResponse.json({ error: "School name is required" }, { status: 400 });
     }
 
-    const school = await prisma.school.create({
-      data: {
-        name,
-        principalName,
-        udiseCode,
-        email,
-        phone,
-        address,
-        location,
-        status: status || "Active",
-        latitude,
-        longitude,
-        mapUrl,
-        img,
-        goal: goal ? parseInt(goal) : 80
+    const school = await prisma.$transaction(async (tx) => {
+      const created = await tx.school.create({
+        data: {
+          name,
+          principalName,
+          udiseCode,
+          email,
+          phone,
+          address,
+          location,
+          status: status || "Active",
+          latitude,
+          longitude,
+          mapUrl,
+          img
+        }
+      });
+
+      // Fellows are scoped to their assigned schools, so link the creator
+      // immediately; otherwise the school would be invisible to them.
+      if (fellowProfileId) {
+        await tx.fellowSchool.create({
+          data: { fellowId: fellowProfileId, schoolId: created.id }
+        });
       }
+
+      return created;
     });
 
     return NextResponse.json({ success: true, data: school }, { status: 201 });
   } catch (error) {
+    if (error.code === "P2002") {
+      return NextResponse.json({ error: "A school with this name already exists" }, { status: 409 });
+    }
     console.error("Create school error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

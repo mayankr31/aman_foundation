@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -207,7 +208,7 @@ export default function TravelPage() {
                 </div>
                 <div className="text-right text-sm">
                   <p className="text-xs text-slate-500 uppercase font-semibold">
-                    {new Date(req.startDate).toLocaleDateString()} - {new Date(req.endDate).toLocaleDateString()}
+                    {formatDate(req.startDate)} - {formatDate(req.endDate)}
                   </p>
                   <p className="font-bold text-on-surface mt-1">
                     Estimated: {req.expectedExpenses?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) || "N/A"}
@@ -225,7 +226,7 @@ export default function TravelPage() {
               {req.status === "APPROVED" && (
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-emerald-600 font-semibold">
-                    Approved by {req.approver?.name || "Manager"} on {new Date(req.approvedAt).toLocaleDateString()}
+                    Approved by {req.approver?.name || "Manager"} on {formatDate(req.approvedAt)}
                   </span>
                   <button
                     onClick={() => setShowExpenseModal(req)}

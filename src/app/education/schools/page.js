@@ -55,7 +55,6 @@ export default function SchoolsModule() {
     location: "",
     status: "Active",
     mapUrl: "",
-    goal: 80,
   };
   const [addForm, setAddForm] = useState(initialAddForm);
 
@@ -90,19 +89,23 @@ export default function SchoolsModule() {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({
-          ...addForm,
-          goal: parseInt(addForm.goal)
-        })
+        body: JSON.stringify(addForm)
       });
       const json = await res.json();
       if (json.success) {
-        setSchools([json.data, ...schools]);
+        const loadRes = await fetch("/api/schools", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        const loadJson = await loadRes.json();
+        if (loadJson.success) setSchools(loadJson.data);
         setAddForm(initialAddForm);
         setShowAddModal(false);
+      } else {
+        alert(json.error || "Failed to add school");
       }
     } catch (err) {
       console.error("Failed to add school:", err);
+      alert("Failed to add school. Please try again.");
     }
   };
 
@@ -121,8 +124,7 @@ export default function SchoolsModule() {
       "Location": s.location || "",
       "Address": s.address || "",
       "Status": s.status || "",
-      "Enrollment Goal": s.goal ?? "",
-      "Enrolled": s.enrolled ?? 0,
+      "Total Students": s.enrolled ?? 0,
       "Programs": s.programs ?? 0,
       "Map URL": s.mapUrl || "",
     }));
@@ -297,8 +299,12 @@ export default function SchoolsModule() {
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0">
-                    <img alt={s.name} className="w-full h-full object-cover" src={s.img} />
+                  <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+                    {s.img ? (
+                      <img alt={s.name} className="w-full h-full object-cover" src={s.img} />
+                    ) : (
+                      <span className="material-symbols-outlined text-on-surface-variant">school</span>
+                    )}
                   </div>
                   <div>
                     <h4 className="font-headline text-lg text-on-surface leading-tight group-hover:text-primary transition-colors">
@@ -320,10 +326,10 @@ export default function SchoolsModule() {
                   {s.status}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-surface-variant">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-surface-variant">
                 <div>
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
-                    Enrolled
+                    Total Students
                   </p>
                   <p className="font-headline text-xl text-on-surface">{s.enrolled ?? 0}</p>
                 </div>
@@ -331,29 +337,8 @@ export default function SchoolsModule() {
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
                     Programs
                   </p>
-                  <p className="font-headline text-xl text-on-surface">{s.programs}</p>
+                  <p className="font-headline text-xl text-on-surface">{s.programs ?? 0}</p>
                 </div>
-              </div>
-              <div className="mt-auto">
-                {(() => {
-                  const enrolled = s.enrolled ?? 0;
-                  const goal = s.goal || 0;
-                  const progress = goal > 0 ? Math.min(100, Math.round((enrolled / goal) * 100)) : 0;
-                  const color = progress >= 80 ? "bg-primary shadow-[0_0_4px_rgba(0,104,87,0.4)]" : progress >= 40 ? "bg-secondary" : "bg-error";
-                  return (
-                    <>
-                      <div className="flex justify-between font-label text-xs uppercase tracking-widest text-on-surface-variant mb-2">
-                        <span>Enrollment Goal</span>
-                        <span className={progress >= 80 ? "text-primary" : progress >= 40 ? "text-secondary" : "text-error"}>
-                          {enrolled} / {goal}
-                        </span>
-                      </div>
-                      <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                        <div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }}></div>
-                      </div>
-                    </>
-                  );
-                })()}
               </div>
             </Link>
           ))}
@@ -429,7 +414,6 @@ export default function SchoolsModule() {
               <InputField label="Phone" name="phone" value={addForm.phone} onChange={e => setAddForm(f => ({ ...f, phone: e.target.value }))} />
               <InputField label="Location/City" name="location" value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))} required />
               <InputField label="Status" name="status" value={addForm.status} onChange={e => setAddForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
-              <InputField label="Enrolment Goal" name="goal" type="number" value={addForm.goal} onChange={e => setAddForm(f => ({ ...f, goal: e.target.value }))} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

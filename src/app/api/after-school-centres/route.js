@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { getFellowIdByUserId } from "@/lib/scope";
 
 export async function GET(req) {
   try {
@@ -54,8 +55,18 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    const isAdmin = user.role.name === "ADMIN";
+    const isFellow = user.role.name === "FELLOW";
+    if (!isAdmin && !isFellow) {
+      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
+    }
+
+    let fellowProfileId = null;
+    if (isFellow) {
+      fellowProfileId = await getFellowIdByUserId(user.id);
+      if (!fellowProfileId) {
+        return NextResponse.json({ error: "Forbidden: Fellow profile not found" }, { status: 403 });
+      }
     }
 
     const body = await req.json();
@@ -76,23 +87,38 @@ export async function POST(req) {
       return NextResponse.json({ error: "Centre name is required" }, { status: 400 });
     }
 
-    const centre = await prisma.afterSchoolCentre.create({
-      data: {
-        name,
-        coordinatorName,
-        email,
-        phone,
-        address,
-        location,
-        status: status || "Active",
-        mapUrl,
-        img,
-        goal: goal ? parseInt(goal) : 80
+    const centre = await prisma.$transaction(async (tx) => {
+      const created = await tx.afterSchoolCentre.create({
+        data: {
+          name,
+          coordinatorName,
+          email,
+          phone,
+          address,
+          location,
+          status: status || "Active",
+          mapUrl,
+          img,
+          goal: goal ? parseInt(goal) : 80
+        }
+      });
+
+      // Fellows are scoped to their assigned centres, so link the creator
+      // immediately; otherwise the centre would be invisible to them.
+      if (fellowProfileId) {
+        await tx.fellowAfterSchoolCentre.create({
+          data: { fellowId: fellowProfileId, centreId: created.id }
+        });
       }
+
+      return created;
     });
 
     return NextResponse.json({ success: true, data: centre }, { status: 201 });
   } catch (error) {
+    if (error.code === "P2002") {
+      return NextResponse.json({ error: "An after school centre with this name already exists" }, { status: 409 });
+    }
     console.error("Create after school centre error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

@@ -587,6 +587,7 @@ model Beneficiary {
   dob              DateTime?
   panCard          String?
   aadhar           String?
+  voterId          String?
   rationCard       String?
   mobNumber        String?
   emergencyContact String?
@@ -597,6 +598,7 @@ model Beneficiary {
   caste            String?
   religion         String?
   address          String?
+  landmark         String?
   state            String?
   district         String?
   block            String?
@@ -1567,4 +1569,23 @@ model FellowStudentDataNote {
   fellow     Fellow   @relation(fields: [fellowId], references: [id], onDelete: Cascade)
 
   @@unique([fellowId, session, phase, sectionKey, source])
+}
+
+// Notes shown on the institution-level Student Data views (school or
+// after-school centre). Kept separate from FellowStudentDataNote because an
+// institution has many fellows and is no longer tied to one fellow.
+model InstitutionStudentDataNote {
+  id         String   @id @default(uuid())
+  scopeType  String   // "school" | "afterSchoolCentre"
+  scopeId    String
+  session    String
+  phase      String   // BASELINE | MIDLINE | ENDLINE
+  sectionKey String   // SubjectAssessmentTemplate.id OR "READING_FLUENCY"
+  source     String   @default("school") // "school" | "afterSchool"
+  note       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([scopeType, scopeId, session, phase, sectionKey, source])
+  @@index([scopeType, scopeId])
 }

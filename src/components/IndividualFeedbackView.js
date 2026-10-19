@@ -4,15 +4,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/context/ToastContext";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import IndividualFeedbackForm from "@/components/IndividualFeedbackForm";
-
-function formatDate(value) {
-  if (!value) return "—";
-  return new Date(value).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/date";
 
 function Section({ label, value, tone }) {
   if (!value) return null;

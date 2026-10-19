@@ -1,6 +1,8 @@
 // Client-side PDF exporters for fellow surveys. Imported dynamically so the
 // jsPDF bundle is only loaded when the user actually exports.
 
+import { formatDate } from "./date";
+
 const SECTION_HEADER_STYLE = {
   fillColor: [226, 232, 240],
   textColor: [15, 23, 42],
@@ -14,14 +16,6 @@ async function loadPdf() {
     import("jspdf-autotable"),
   ]);
   return { JsPDF, autoTable: autoTableModule.default || autoTableModule };
-}
-
-function formatDate(value) {
-  return new Date(value).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 function safeFileName(value) {

@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 function Modal({ title, onClose, children }) {
   return (
@@ -312,7 +313,7 @@ export default function PtaProgramDetail() {
                     className="p-4 bg-surface-container-low rounded-lg flex justify-between items-start hover:bg-surface-container transition-colors block group">
                     <div>
                       <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors">{ev.title}</h4>
-                      <p className="text-xs text-on-surface-variant mt-1">{ev.location} • {new Date(ev.date).toLocaleDateString()}</p>
+                      <p className="text-xs text-on-surface-variant mt-1">{ev.location} • {formatDate(ev.date)}</p>
                     </div>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${ev.status === "Scheduled" ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container text-on-surface-variant"}`}>
                       {ev.status}
@@ -360,7 +361,7 @@ export default function PtaProgramDetail() {
           <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
             <h3 className="font-headline font-bold text-base text-on-surface mb-2">Created</h3>
             <p className="text-sm text-on-surface-variant font-sans">
-              {program.createdAt ? new Date(program.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "—"}
+              {formatDate(program.createdAt)}
             </p>
           </div>
         </div>

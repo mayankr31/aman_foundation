@@ -11,6 +11,7 @@ import {
   getDefaultResponses,
 } from "@/data/goalSheetConstants";
 import { useToast } from "@/context/ToastContext";
+import { formatDate } from "@/lib/date";
 
 export default function GoalSheetForm({
   fellowId,
@@ -179,11 +180,7 @@ export default function GoalSheetForm({
           </h2>
           {sheetData?.date && (
             <p className="text-sm text-on-surface-variant mt-0.5">
-              {new Date(sheetData.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+              {formatDate(sheetData.date)}
             </p>
           )}
           <span

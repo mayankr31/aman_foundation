@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate, formatDateTime } from "@/lib/date";
 
 const RELIEF_TAB_SLUGS = {
   "Help Providers": "help-providers",
@@ -62,9 +63,47 @@ function DisasterReliefContent() {
 
   // New Modals
   const [showCalamityModal, setShowCalamityModal] = useState(false);
-  const [calamityForm, setCalamityForm] = useState({
-    name: "", location: "", type: "", expectedFamiliesAffected: "", humanLossDied: "", humanLossInjured: "", humanLossMissing: "", propertyLossEstimate: ""
-  });
+  const [editingCalamityId, setEditingCalamityId] = useState(null);
+  const emptyCalamityForm = {
+    name: "",
+    location: "",
+    type: "",
+    expectedFamiliesAffected: "",
+    humanLossDied: "",
+    humanLossInjured: "",
+    humanLossMissing: "",
+    propertyLossEstimate: "",
+    active: true,
+  };
+  const [calamityForm, setCalamityForm] = useState(emptyCalamityForm);
+
+  const openAddCalamity = () => {
+    setEditingCalamityId(null);
+    setCalamityForm(emptyCalamityForm);
+    setShowCalamityModal(true);
+  };
+
+  const openEditCalamity = (incident) => {
+    setEditingCalamityId(incident.id);
+    setCalamityForm({
+      name: incident.name || "",
+      location: incident.location || "",
+      type: incident.type || "",
+      expectedFamiliesAffected: incident.expectedFamiliesAffected ?? "",
+      humanLossDied: incident.humanLossDied ?? "",
+      humanLossInjured: incident.humanLossInjured ?? "",
+      humanLossMissing: incident.humanLossMissing ?? "",
+      propertyLossEstimate: incident.propertyLossEstimate ?? "",
+      active: incident.active !== false,
+    });
+    setShowCalamityModal(true);
+  };
+
+  const closeCalamityModal = () => {
+    setShowCalamityModal(false);
+    setEditingCalamityId(null);
+    setCalamityForm(emptyCalamityForm);
+  };
 
   const [showResourceNeedModal, setShowResourceNeedModal] = useState(false);
   const [resourceNeedForm, setResourceNeedForm] = useState({
@@ -202,11 +241,15 @@ function DisasterReliefContent() {
     }
   };
 
-  const handleAddCalamity = async (e) => {
+  const handleSaveCalamity = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/disaster-relief/incidents", {
-        method: "POST",
+      const isEditing = Boolean(editingCalamityId);
+      const url = isEditing
+        ? `/api/disaster-relief/incidents/${editingCalamityId}`
+        : "/api/disaster-relief/incidents";
+      const res = await fetch(url, {
+        method: isEditing ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {})
@@ -215,15 +258,14 @@ function DisasterReliefContent() {
       });
       const json = await res.json();
       if (json.success) {
-        setShowCalamityModal(false);
-        setCalamityForm({ name: "", location: "", type: "", expectedFamiliesAffected: "", humanLossDied: "", humanLossInjured: "", humanLossMissing: "", propertyLossEstimate: "" });
+        closeCalamityModal();
         loadData();
       } else {
-        alert(json.error || "Failed to add calamity");
+        alert(json.error || (isEditing ? "Failed to update calamity" : "Failed to add calamity"));
       }
     } catch (err) {
       console.error(err);
-      alert("Error adding calamity");
+      alert(editingCalamityId ? "Error updating calamity" : "Error adding calamity");
     }
   };
 
@@ -384,7 +426,7 @@ function DisasterReliefContent() {
           </div>
           <div className="flex flex-wrap gap-3 font-sans shrink-0">
             <button
-              onClick={() => setShowCalamityModal(true)}
+              onClick={openAddCalamity}
               className="flex-1 md:flex-none bg-surface-container-low text-on-surface border border-outline-variant px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-lowest transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[18px]">emergency</span>
@@ -423,9 +465,18 @@ function DisasterReliefContent() {
                           Location: {incident.location} | Type: {incident.type}
                         </p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${incident.active ? 'bg-error-container text-on-error-container' : 'bg-surface-container text-on-surface-variant'}`}>
-                        {incident.active ? 'Active Calamity' : 'Resolved'}
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${incident.active ? 'bg-error-container text-on-error-container' : 'bg-surface-container text-on-surface-variant'}`}>
+                          {incident.active ? 'Active Calamity' : 'Resolved'}
+                        </span>
+                        <button
+                          onClick={() => openEditCalamity(incident)}
+                          className="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                          title="Edit calamity details"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans">
@@ -652,7 +703,7 @@ function DisasterReliefContent() {
                                 <td className="py-4 px-4 text-center">
                                   <span className="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-xs font-semibold">{d.items?.length || 0}</span>
                                 </td>
-                                <td className="py-4 px-4 text-right text-xs text-on-surface-variant">{new Date(d.distributedAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}</td>
+                                <td className="py-4 px-4 text-right text-xs text-on-surface-variant">{formatDate(d.distributedAt)}</td>
                               </tr>
                               {expandedDistribution === d.id && (
                                 <tr className="border-b border-surface-container bg-surface-container-low/30">
@@ -703,7 +754,7 @@ function DisasterReliefContent() {
                   <p className="text-xs text-on-surface-variant">No ledger transactions logged.</p>
                 ) : (
                   ledgerLogs.map((log) => {
-                    const dateStr = new Date(log.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + new Date(log.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' });
+                    const dateStr = formatDateTime(log.createdAt);
                     return (
                       <div key={log.id} className="relative pl-6">
                         <div className={`absolute -left-1.5 top-1.5 w-3 h-3 rounded-full ring-4 ring-surface-container-lowest ${
@@ -844,20 +895,22 @@ function DisasterReliefContent() {
         </div>
       )}
 
-      {/* Add Calamity Modal */}
+      {/* Add / Edit Calamity Modal */}
       {showCalamityModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-lg w-full p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add New Calamity</h3>
+              <h3 className="text-lg font-bold text-on-surface">
+                {editingCalamityId ? "Edit Calamity" : "Add New Calamity"}
+              </h3>
               <button
-                onClick={() => setShowCalamityModal(false)}
+                onClick={closeCalamityModal}
                 className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <form onSubmit={handleAddCalamity} className="space-y-4 text-sm">
+            <form onSubmit={handleSaveCalamity} className="space-y-4 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1 col-span-2">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Calamity Name <span className="text-error">*</span></label>
@@ -891,11 +944,20 @@ function DisasterReliefContent() {
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Property Loss (₹)</label>
                   <input type="number" step="any" placeholder="0.00" value={calamityForm.propertyLossEstimate} onChange={(e) => setCalamityForm({ ...calamityForm, propertyLossEstimate: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
+                <label className="flex items-center gap-2 rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface col-span-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={calamityForm.active !== false}
+                    onChange={(e) => setCalamityForm({ ...calamityForm, active: e.target.checked })}
+                    className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                  />
+                  Active calamity
+                </label>
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
-                  onClick={() => setShowCalamityModal(false)}
+                  onClick={closeCalamityModal}
                   className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer font-medium"
                 >
                   Cancel
@@ -904,7 +966,7 @@ function DisasterReliefContent() {
                   type="submit"
                   className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary/95 transition-colors cursor-pointer border-none"
                 >
-                  Add Calamity
+                  {editingCalamityId ? "Save Changes" : "Add Calamity"}
                 </button>
               </div>
             </form>

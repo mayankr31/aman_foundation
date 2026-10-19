@@ -99,19 +99,15 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
       >
         {/* Brand */}
         <div
-          className={`flex items-center gap-3 mb-2 px-2 shrink-0 ${
-            collapsed ? "md:justify-center md:px-0" : ""
+          className={`flex items-center mb-2 shrink-0 ${
+            collapsed ? "md:justify-center md:px-0" : "px-2"
           }`}
         >
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shrink-0 ambient-shadow">
-            <span className="material-symbols-outlined text-2xl icon-filled">local_library</span>
-          </div>
-          <div className={labelClass}>
-            <h1 className="text-lg font-bold tracking-tighter text-teal-900 dark:text-teal-100 leading-tight whitespace-nowrap">
-              Aman Foundation
-            </h1>
-            <p className="text-xs text-on-surface-variant whitespace-nowrap">Impact Portal</p>
-          </div>
+          <img
+            src="/logo.jpeg"
+            alt="Aman Foundation"
+            className="w-full h-auto object-contain"
+          />
         </div>
 
         {/* Collapse toggle (desktop only) */}

@@ -62,8 +62,9 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
+    const isFellow = user.role.name === "FELLOW";
+    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name) && !isFellow) {
+      return NextResponse.json({ error: "Forbidden: Admin, Program Manager or Fellow access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -71,6 +72,16 @@ export async function POST(req, context) {
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (isFellow) {
+      const isAssigned = await prisma.fellowSchool.findFirst({
+        where: { schoolId, fellow: { userId: user.id } },
+        select: { id: true }
+      });
+      if (!isAssigned) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
+      }
     }
 
     if (PROGRAM_ROLES.includes(user.role.name) && !(await isSchoolManaged(user.id, schoolId))) {
@@ -114,8 +125,9 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
+    const isFellow = user.role.name === "FELLOW";
+    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name) && !isFellow) {
+      return NextResponse.json({ error: "Forbidden: Admin, Program Manager or Fellow access only" }, { status: 403 });
     }
 
     const { id } = await context.params;
@@ -123,6 +135,16 @@ export async function DELETE(req, context) {
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (isFellow) {
+      const isAssigned = await prisma.fellowSchool.findFirst({
+        where: { schoolId, fellow: { userId: user.id } },
+        select: { id: true }
+      });
+      if (!isAssigned) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
+      }
     }
 
     if (PROGRAM_ROLES.includes(user.role.name) && !(await isSchoolManaged(user.id, schoolId))) {

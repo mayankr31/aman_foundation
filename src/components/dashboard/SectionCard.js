@@ -23,6 +23,11 @@ const TONES = {
     hover: "hover:border-violet-300 hover:bg-violet-50/60",
     arrow: "text-violet-600",
   },
+  rose: {
+    icon: "bg-rose-100 text-rose-700",
+    hover: "hover:border-rose-300 hover:bg-rose-50/60",
+    arrow: "text-rose-600",
+  },
 };
 
 export default function SectionCard({ section, kpis }) {

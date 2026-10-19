@@ -6,8 +6,13 @@ import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+function formatStoredDates(value) {
+  return String(value || "").replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (match) => formatDate(match));
+}
 
 export default function LeaveWorkflow() {
   const router = useRouter();
@@ -156,7 +161,7 @@ export default function LeaveWorkflow() {
                   <td className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
                   <td className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
                   <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.type}</td>
-                  <td className="py-4 px-4 font-mono text-xs break-words align-top">{leave.dates}</td>
+                  <td className="py-4 px-4 font-mono text-xs break-words align-top">{formatStoredDates(leave.dates)}</td>
                   <td className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col gap-1.5 items-start">

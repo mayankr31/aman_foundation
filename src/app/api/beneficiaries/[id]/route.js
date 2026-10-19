@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { createLivestockWithGeneratedTag } from "@/lib/livestockTag";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -156,16 +157,22 @@ export async function PATCH(req, { params }) {
           dob: body.dob ? new Date(body.dob) : null,
           panCard: body.panCard,
           aadhar: body.aadhar,
+          voterId: body.voterId,
           rationCard: body.rationCard,
           mobNumber: body.mobNumber,
           emergencyContact: body.emergencyContact,
           gender: body.gender,
           resilienceScore: body.resilienceScore !== undefined ? parseInt(body.resilienceScore) : undefined,
-          annualIncome: body.annualIncome !== undefined ? parseFloat(body.annualIncome) : null,
-          monthlyIncome: body.monthlyIncome !== undefined ? parseFloat(body.monthlyIncome) : null,
+          annualIncome: body.annualIncome !== undefined
+            ? (body.annualIncome !== null && body.annualIncome !== "" ? parseFloat(body.annualIncome) : null)
+            : undefined,
+          monthlyIncome: body.monthlyIncome !== undefined
+            ? (body.monthlyIncome !== null && body.monthlyIncome !== "" ? parseFloat(body.monthlyIncome) : null)
+            : undefined,
           caste: body.caste,
           religion: body.religion,
           address: body.address,
+          landmark: body.landmark,
           state: body.state,
           district: body.district,
           block: body.block,
@@ -229,16 +236,15 @@ export async function PATCH(req, { params }) {
       // 3. Nested Livestock Update
       if (body.livestock) {
         await tx.livestock.deleteMany({ where: { beneficiaryId } });
-        if (body.livestock.length > 0) {
-          await tx.livestock.createMany({
-            data: body.livestock.map(l => ({
-              beneficiaryId,
-              tagNumber: l.tagNumber,
-              animalType: l.animalType,
-              breed: l.breed || null,
-              ageMonths: l.ageMonths ? parseInt(l.ageMonths) : null,
-              healthStatus: l.healthStatus || "Healthy"
-            }))
+        for (const l of body.livestock) {
+          if (!l.animalType) continue;
+          await createLivestockWithGeneratedTag(tx, {
+            beneficiaryId,
+            tagNumber: l.tagNumber || null,
+            animalType: l.animalType,
+            breed: l.breed || null,
+            ageMonths: l.ageMonths ? parseInt(l.ageMonths) : null,
+            healthStatus: l.healthStatus || "Healthy",
           });
         }
       }

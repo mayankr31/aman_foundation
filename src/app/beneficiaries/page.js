@@ -7,6 +7,8 @@ import { useToast } from "@/context/ToastContext";
 import { useAuth } from "@/lib/useAuth";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import Pagination from "@/components/ui/Pagination";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
+import { PRIMARY_INCOME_CATEGORIES, DEFAULT_PRIMARY_INCOME } from "@/lib/incomeCategories";
 
 const emptyAddForm = {
   name: "",
@@ -20,14 +22,16 @@ const emptyAddForm = {
   block: "",
   ward: "",
   village: "",
-  primaryIncomeType: "Agriculture",
-  annualIncome: "",
+  landmark: "",
+  primaryIncomeType: DEFAULT_PRIMARY_INCOME,
+  primaryIncomeOther: "",
   monthlyIncome: "",
   householdSize: "4",
   emergencyContact: "",
   tier: "Tier 2",
   aadhar: "",
   panCard: "",
+  voterId: "",
   rationCard: "",
   bankName: "",
   bankAccountNo: "",
@@ -118,6 +122,11 @@ export default function BeneficiaryMasterDirectory() {
   const farmPrograms = livelihoodPrograms.filter((p) => p.category === "FARM");
   const nonFarmPrograms = livelihoodPrograms.filter((p) => p.category === "NON_FARM");
 
+  const addStateOptions = withCurrentOption(INDIA_STATES.map((state) => state.name), addForm.state);
+  const addDistrictOptions = withCurrentOption(getDistrictsForState(addForm.state), addForm.district);
+  const parsedMonthlyIncome = parseFloat(addForm.monthlyIncome);
+  const addAnnualIncome = Number.isFinite(parsedMonthlyIncome) ? parsedMonthlyIncome * 12 : "";
+
   const updateAddField = (key, value) => {
     setAddForm((prev) => ({ ...prev, [key]: value }));
   };
@@ -148,10 +157,17 @@ export default function BeneficiaryMasterDirectory() {
       const enrolmentId = `BEN-${randomNum}-${randomLetter}`;
 
       const composedAddress =
-        [addForm.village, addForm.ward, addForm.block, addForm.district, addForm.state]
+        [addForm.village, addForm.landmark, addForm.ward, addForm.block, addForm.district, addForm.state]
           .map((s) => (s || "").trim())
           .filter(Boolean)
           .join(", ") || null;
+
+      const resolvedIncomeType =
+        addForm.primaryIncomeType === "Other"
+          ? addForm.primaryIncomeOther.trim() || "Other"
+          : addForm.primaryIncomeType;
+      const monthlyIncomeValue =
+        addForm.monthlyIncome !== "" ? parseFloat(addForm.monthlyIncome) : null;
 
       const res = await fetch("/api/beneficiaries", {
         method: "POST",
@@ -169,18 +185,20 @@ export default function BeneficiaryMasterDirectory() {
           caste: addForm.caste || null,
           religion: addForm.religion || null,
           address: composedAddress,
+          landmark: addForm.landmark || null,
           state: addForm.state || null,
           district: addForm.district || null,
           block: addForm.block || null,
           ward: addForm.ward || null,
           village: addForm.village || null,
           householdSize: addForm.householdSize ? parseInt(addForm.householdSize) : 4,
-          primaryIncomeType: addForm.primaryIncomeType || null,
-          annualIncome: addForm.annualIncome !== "" ? parseFloat(addForm.annualIncome) : null,
-          monthlyIncome: addForm.monthlyIncome !== "" ? parseFloat(addForm.monthlyIncome) : null,
+          primaryIncomeType: resolvedIncomeType || null,
+          annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
+          monthlyIncome: monthlyIncomeValue,
           tier: addForm.tier,
           aadhar: addForm.aadhar || null,
           panCard: addForm.panCard || null,
+          voterId: addForm.voterId || null,
           rationCard: addForm.rationCard || null,
           bankName: addForm.bankName || null,
           bankAccountNo: addForm.bankAccountNo || null,
@@ -231,7 +249,7 @@ export default function BeneficiaryMasterDirectory() {
     "B.8": addForm.name,
     "B.9": addForm.gender,
     "B.10": addForm.householdSize,
-    "B.14": addForm.primaryIncomeType,
+    "B.14": addForm.primaryIncomeType === "Other" ? addForm.primaryIncomeOther : addForm.primaryIncomeType,
     "B.16_Min": addForm.monthlyIncome,
     "B.16_Max": addForm.monthlyIncome,
     "B.18": addForm.caste,
@@ -599,24 +617,33 @@ export default function BeneficiaryMasterDirectory() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>State</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Assam"
+                    <select
                       className={inputClass}
                       value={addForm.state}
-                      onChange={(e) => updateAddField("state", e.target.value)}
-                    />
+                      onChange={(e) =>
+                        setAddForm((prev) => ({ ...prev, state: e.target.value, district: "" }))
+                      }
+                    >
+                      <option value="">— Select State —</option>
+                      {addStateOptions.map((state) => (
+                        <option key={state} value={state}>{state}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>District</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Barpeta"
+                    <select
                       className={inputClass}
                       value={addForm.district}
+                      disabled={!addForm.state}
                       onChange={(e) => updateAddField("district", e.target.value)}
-                    />
+                    >
+                      <option value="">{addForm.state ? "— Select District —" : "Select state first"}</option>
+                      {addDistrictOptions.map((district) => (
+                        <option key={district} value={district}>{district}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -652,6 +679,17 @@ export default function BeneficiaryMasterDirectory() {
                     />
                   </div>
 
+                  <div className="flex flex-col gap-1.5 sm:col-span-2">
+                    <label className={labelClass}>Nearby Landmark</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Near Kalgachia College"
+                      className={inputClass}
+                      value={addForm.landmark}
+                      onChange={(e) => updateAddField("landmark", e.target.value)}
+                    />
+                  </div>
+
                   <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>Primary Income Category</label>
                     <select
@@ -659,14 +697,24 @@ export default function BeneficiaryMasterDirectory() {
                       value={addForm.primaryIncomeType}
                       onChange={(e) => updateAddField("primaryIncomeType", e.target.value)}
                     >
-                      <option value="Agriculture">Agriculture</option>
-                      <option value="Livestock">Livestock</option>
-                      <option value="Daily Wage">Daily Wage</option>
-                      <option value="Small Business">Small Business</option>
-                      <option value="Remittance">Remittance</option>
-                      <option value="Other">Other</option>
+                      {PRIMARY_INCOME_CATEGORIES.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
                     </select>
                   </div>
+
+                  {addForm.primaryIncomeType === "Other" && (
+                    <div className="flex flex-col gap-1.5">
+                      <label className={labelClass}>Specify Income Category</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Fishing, Pension"
+                        className={inputClass}
+                        value={addForm.primaryIncomeOther}
+                        onChange={(e) => updateAddField("primaryIncomeOther", e.target.value)}
+                      />
+                    </div>
+                  )}
 
                   <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>Socio-Economic Tier</label>
@@ -682,17 +730,6 @@ export default function BeneficiaryMasterDirectory() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className={labelClass}>Annual Income (₹)</label>
-                    <input
-                      type="number"
-                      placeholder="e.g. 45000"
-                      className={inputClass}
-                      value={addForm.annualIncome}
-                      onChange={(e) => updateAddField("annualIncome", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>Monthly Income (₹)</label>
                     <input
                       type="number"
@@ -700,6 +737,18 @@ export default function BeneficiaryMasterDirectory() {
                       className={inputClass}
                       value={addForm.monthlyIncome}
                       onChange={(e) => updateAddField("monthlyIncome", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className={labelClass}>Annual Income (₹) — Auto-calculated</label>
+                    <input
+                      type="number"
+                      readOnly
+                      tabIndex={-1}
+                      className={`${inputClass} bg-surface-container/50 cursor-not-allowed`}
+                      value={addAnnualIncome}
+                      placeholder="Calculated from monthly income"
                     />
                   </div>
 
@@ -720,7 +769,7 @@ export default function BeneficiaryMasterDirectory() {
                 {/* Identity proofs */}
                 <div className="pt-2">
                   <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Proofs</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>Aadhar Number</label>
                       <input
@@ -739,6 +788,16 @@ export default function BeneficiaryMasterDirectory() {
                         className={inputClass}
                         value={addForm.panCard}
                         onChange={(e) => updateAddField("panCard", e.target.value)}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className={labelClass}>Voter ID</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. ABC1234567"
+                        className={inputClass}
+                        value={addForm.voterId}
+                        onChange={(e) => updateAddField("voterId", e.target.value)}
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">

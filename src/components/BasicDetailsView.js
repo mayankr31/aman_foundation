@@ -1,10 +1,6 @@
 "use client";
 
-function formatDate(value) {
-  if (!value) return "—";
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString();
-}
+import { formatDate } from "@/lib/date";
 
 function Row({ label, value }) {
   return (

@@ -468,6 +468,11 @@ export type AfterSchoolFLNResponse = $Result.DefaultSelection<Prisma.$AfterSchoo
  * 
  */
 export type FellowStudentDataNote = $Result.DefaultSelection<Prisma.$FellowStudentDataNotePayload>
+/**
+ * Model InstitutionStudentDataNote
+ * 
+ */
+export type InstitutionStudentDataNote = $Result.DefaultSelection<Prisma.$InstitutionStudentDataNotePayload>
 
 /**
  * Enums
@@ -1582,6 +1587,16 @@ export class PrismaClient<
     * ```
     */
   get fellowStudentDataNote(): Prisma.FellowStudentDataNoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.institutionStudentDataNote`: Exposes CRUD operations for the **InstitutionStudentDataNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InstitutionStudentDataNotes
+    * const institutionStudentDataNotes = await prisma.institutionStudentDataNote.findMany()
+    * ```
+    */
+  get institutionStudentDataNote(): Prisma.InstitutionStudentDataNoteDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2106,7 +2121,8 @@ export namespace Prisma {
     AfterSchoolAssessmentForm: 'AfterSchoolAssessmentForm',
     AfterSchoolSubjectAssessmentResponse: 'AfterSchoolSubjectAssessmentResponse',
     AfterSchoolFLNResponse: 'AfterSchoolFLNResponse',
-    FellowStudentDataNote: 'FellowStudentDataNote'
+    FellowStudentDataNote: 'FellowStudentDataNote',
+    InstitutionStudentDataNote: 'InstitutionStudentDataNote'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2122,7 +2138,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote"
+      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8860,6 +8876,80 @@ export namespace Prisma {
           }
         }
       }
+      InstitutionStudentDataNote: {
+        payload: Prisma.$InstitutionStudentDataNotePayload<ExtArgs>
+        fields: Prisma.InstitutionStudentDataNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InstitutionStudentDataNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InstitutionStudentDataNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          findFirst: {
+            args: Prisma.InstitutionStudentDataNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InstitutionStudentDataNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          findMany: {
+            args: Prisma.InstitutionStudentDataNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>[]
+          }
+          create: {
+            args: Prisma.InstitutionStudentDataNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          createMany: {
+            args: Prisma.InstitutionStudentDataNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InstitutionStudentDataNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>[]
+          }
+          delete: {
+            args: Prisma.InstitutionStudentDataNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          update: {
+            args: Prisma.InstitutionStudentDataNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.InstitutionStudentDataNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InstitutionStudentDataNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.InstitutionStudentDataNoteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>[]
+          }
+          upsert: {
+            args: Prisma.InstitutionStudentDataNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstitutionStudentDataNotePayload>
+          }
+          aggregate: {
+            args: Prisma.InstitutionStudentDataNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInstitutionStudentDataNote>
+          }
+          groupBy: {
+            args: Prisma.InstitutionStudentDataNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InstitutionStudentDataNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InstitutionStudentDataNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<InstitutionStudentDataNoteCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -9059,6 +9149,7 @@ export namespace Prisma {
     afterSchoolSubjectAssessmentResponse?: AfterSchoolSubjectAssessmentResponseOmit
     afterSchoolFLNResponse?: AfterSchoolFLNResponseOmit
     fellowStudentDataNote?: FellowStudentDataNoteOmit
+    institutionStudentDataNote?: InstitutionStudentDataNoteOmit
   }
 
   /* Types for Logging */
@@ -46596,6 +46687,7 @@ export namespace Prisma {
     dob: Date | null
     panCard: string | null
     aadhar: string | null
+    voterId: string | null
     rationCard: string | null
     mobNumber: string | null
     emergencyContact: string | null
@@ -46606,6 +46698,7 @@ export namespace Prisma {
     caste: string | null
     religion: string | null
     address: string | null
+    landmark: string | null
     state: string | null
     district: string | null
     block: string | null
@@ -46630,6 +46723,7 @@ export namespace Prisma {
     dob: Date | null
     panCard: string | null
     aadhar: string | null
+    voterId: string | null
     rationCard: string | null
     mobNumber: string | null
     emergencyContact: string | null
@@ -46640,6 +46734,7 @@ export namespace Prisma {
     caste: string | null
     religion: string | null
     address: string | null
+    landmark: string | null
     state: string | null
     district: string | null
     block: string | null
@@ -46664,6 +46759,7 @@ export namespace Prisma {
     dob: number
     panCard: number
     aadhar: number
+    voterId: number
     rationCard: number
     mobNumber: number
     emergencyContact: number
@@ -46674,6 +46770,7 @@ export namespace Prisma {
     caste: number
     religion: number
     address: number
+    landmark: number
     state: number
     district: number
     block: number
@@ -46714,6 +46811,7 @@ export namespace Prisma {
     dob?: true
     panCard?: true
     aadhar?: true
+    voterId?: true
     rationCard?: true
     mobNumber?: true
     emergencyContact?: true
@@ -46724,6 +46822,7 @@ export namespace Prisma {
     caste?: true
     religion?: true
     address?: true
+    landmark?: true
     state?: true
     district?: true
     block?: true
@@ -46748,6 +46847,7 @@ export namespace Prisma {
     dob?: true
     panCard?: true
     aadhar?: true
+    voterId?: true
     rationCard?: true
     mobNumber?: true
     emergencyContact?: true
@@ -46758,6 +46858,7 @@ export namespace Prisma {
     caste?: true
     religion?: true
     address?: true
+    landmark?: true
     state?: true
     district?: true
     block?: true
@@ -46782,6 +46883,7 @@ export namespace Prisma {
     dob?: true
     panCard?: true
     aadhar?: true
+    voterId?: true
     rationCard?: true
     mobNumber?: true
     emergencyContact?: true
@@ -46792,6 +46894,7 @@ export namespace Prisma {
     caste?: true
     religion?: true
     address?: true
+    landmark?: true
     state?: true
     district?: true
     block?: true
@@ -46903,6 +47006,7 @@ export namespace Prisma {
     dob: Date | null
     panCard: string | null
     aadhar: string | null
+    voterId: string | null
     rationCard: string | null
     mobNumber: string | null
     emergencyContact: string | null
@@ -46913,6 +47017,7 @@ export namespace Prisma {
     caste: string | null
     religion: string | null
     address: string | null
+    landmark: string | null
     state: string | null
     district: string | null
     block: string | null
@@ -46956,6 +47061,7 @@ export namespace Prisma {
     dob?: boolean
     panCard?: boolean
     aadhar?: boolean
+    voterId?: boolean
     rationCard?: boolean
     mobNumber?: boolean
     emergencyContact?: boolean
@@ -46966,6 +47072,7 @@ export namespace Prisma {
     caste?: boolean
     religion?: boolean
     address?: boolean
+    landmark?: boolean
     state?: boolean
     district?: boolean
     block?: boolean
@@ -47006,6 +47113,7 @@ export namespace Prisma {
     dob?: boolean
     panCard?: boolean
     aadhar?: boolean
+    voterId?: boolean
     rationCard?: boolean
     mobNumber?: boolean
     emergencyContact?: boolean
@@ -47016,6 +47124,7 @@ export namespace Prisma {
     caste?: boolean
     religion?: boolean
     address?: boolean
+    landmark?: boolean
     state?: boolean
     district?: boolean
     block?: boolean
@@ -47040,6 +47149,7 @@ export namespace Prisma {
     dob?: boolean
     panCard?: boolean
     aadhar?: boolean
+    voterId?: boolean
     rationCard?: boolean
     mobNumber?: boolean
     emergencyContact?: boolean
@@ -47050,6 +47160,7 @@ export namespace Prisma {
     caste?: boolean
     religion?: boolean
     address?: boolean
+    landmark?: boolean
     state?: boolean
     district?: boolean
     block?: boolean
@@ -47074,6 +47185,7 @@ export namespace Prisma {
     dob?: boolean
     panCard?: boolean
     aadhar?: boolean
+    voterId?: boolean
     rationCard?: boolean
     mobNumber?: boolean
     emergencyContact?: boolean
@@ -47084,6 +47196,7 @@ export namespace Prisma {
     caste?: boolean
     religion?: boolean
     address?: boolean
+    landmark?: boolean
     state?: boolean
     district?: boolean
     block?: boolean
@@ -47101,7 +47214,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "rationCard" | "mobNumber" | "emergencyContact" | "gender" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "state" | "district" | "block" | "ward" | "village" | "photoUrl" | "householdSize" | "primaryIncomeType" | "tier" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
+  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolmentId" | "name" | "dob" | "panCard" | "aadhar" | "voterId" | "rationCard" | "mobNumber" | "emergencyContact" | "gender" | "resilienceScore" | "annualIncome" | "monthlyIncome" | "caste" | "religion" | "address" | "landmark" | "state" | "district" | "block" | "ward" | "village" | "photoUrl" | "householdSize" | "primaryIncomeType" | "tier" | "bankName" | "bankAccountNo" | "bankIfsc" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
   export type BeneficiaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     familyMembers?: boolean | Beneficiary$familyMembersArgs<ExtArgs>
     livestock?: boolean | Beneficiary$livestockArgs<ExtArgs>
@@ -47149,6 +47262,7 @@ export namespace Prisma {
       dob: Date | null
       panCard: string | null
       aadhar: string | null
+      voterId: string | null
       rationCard: string | null
       mobNumber: string | null
       emergencyContact: string | null
@@ -47159,6 +47273,7 @@ export namespace Prisma {
       caste: string | null
       religion: string | null
       address: string | null
+      landmark: string | null
       state: string | null
       district: string | null
       block: string | null
@@ -47618,6 +47733,7 @@ export namespace Prisma {
     readonly dob: FieldRef<"Beneficiary", 'DateTime'>
     readonly panCard: FieldRef<"Beneficiary", 'String'>
     readonly aadhar: FieldRef<"Beneficiary", 'String'>
+    readonly voterId: FieldRef<"Beneficiary", 'String'>
     readonly rationCard: FieldRef<"Beneficiary", 'String'>
     readonly mobNumber: FieldRef<"Beneficiary", 'String'>
     readonly emergencyContact: FieldRef<"Beneficiary", 'String'>
@@ -47628,6 +47744,7 @@ export namespace Prisma {
     readonly caste: FieldRef<"Beneficiary", 'String'>
     readonly religion: FieldRef<"Beneficiary", 'String'>
     readonly address: FieldRef<"Beneficiary", 'String'>
+    readonly landmark: FieldRef<"Beneficiary", 'String'>
     readonly state: FieldRef<"Beneficiary", 'String'>
     readonly district: FieldRef<"Beneficiary", 'String'>
     readonly block: FieldRef<"Beneficiary", 'String'>
@@ -117525,6 +117642,1071 @@ export namespace Prisma {
 
 
   /**
+   * Model InstitutionStudentDataNote
+   */
+
+  export type AggregateInstitutionStudentDataNote = {
+    _count: InstitutionStudentDataNoteCountAggregateOutputType | null
+    _min: InstitutionStudentDataNoteMinAggregateOutputType | null
+    _max: InstitutionStudentDataNoteMaxAggregateOutputType | null
+  }
+
+  export type InstitutionStudentDataNoteMinAggregateOutputType = {
+    id: string | null
+    scopeType: string | null
+    scopeId: string | null
+    session: string | null
+    phase: string | null
+    sectionKey: string | null
+    source: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InstitutionStudentDataNoteMaxAggregateOutputType = {
+    id: string | null
+    scopeType: string | null
+    scopeId: string | null
+    session: string | null
+    phase: string | null
+    sectionKey: string | null
+    source: string | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type InstitutionStudentDataNoteCountAggregateOutputType = {
+    id: number
+    scopeType: number
+    scopeId: number
+    session: number
+    phase: number
+    sectionKey: number
+    source: number
+    note: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type InstitutionStudentDataNoteMinAggregateInputType = {
+    id?: true
+    scopeType?: true
+    scopeId?: true
+    session?: true
+    phase?: true
+    sectionKey?: true
+    source?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InstitutionStudentDataNoteMaxAggregateInputType = {
+    id?: true
+    scopeType?: true
+    scopeId?: true
+    session?: true
+    phase?: true
+    sectionKey?: true
+    source?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type InstitutionStudentDataNoteCountAggregateInputType = {
+    id?: true
+    scopeType?: true
+    scopeId?: true
+    session?: true
+    phase?: true
+    sectionKey?: true
+    source?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type InstitutionStudentDataNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstitutionStudentDataNote to aggregate.
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstitutionStudentDataNotes to fetch.
+     */
+    orderBy?: InstitutionStudentDataNoteOrderByWithRelationInput | InstitutionStudentDataNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InstitutionStudentDataNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstitutionStudentDataNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstitutionStudentDataNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InstitutionStudentDataNotes
+    **/
+    _count?: true | InstitutionStudentDataNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InstitutionStudentDataNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InstitutionStudentDataNoteMaxAggregateInputType
+  }
+
+  export type GetInstitutionStudentDataNoteAggregateType<T extends InstitutionStudentDataNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateInstitutionStudentDataNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInstitutionStudentDataNote[P]>
+      : GetScalarType<T[P], AggregateInstitutionStudentDataNote[P]>
+  }
+
+
+
+
+  export type InstitutionStudentDataNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstitutionStudentDataNoteWhereInput
+    orderBy?: InstitutionStudentDataNoteOrderByWithAggregationInput | InstitutionStudentDataNoteOrderByWithAggregationInput[]
+    by: InstitutionStudentDataNoteScalarFieldEnum[] | InstitutionStudentDataNoteScalarFieldEnum
+    having?: InstitutionStudentDataNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InstitutionStudentDataNoteCountAggregateInputType | true
+    _min?: InstitutionStudentDataNoteMinAggregateInputType
+    _max?: InstitutionStudentDataNoteMaxAggregateInputType
+  }
+
+  export type InstitutionStudentDataNoteGroupByOutputType = {
+    id: string
+    scopeType: string
+    scopeId: string
+    session: string
+    phase: string
+    sectionKey: string
+    source: string
+    note: string
+    createdAt: Date
+    updatedAt: Date
+    _count: InstitutionStudentDataNoteCountAggregateOutputType | null
+    _min: InstitutionStudentDataNoteMinAggregateOutputType | null
+    _max: InstitutionStudentDataNoteMaxAggregateOutputType | null
+  }
+
+  type GetInstitutionStudentDataNoteGroupByPayload<T extends InstitutionStudentDataNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InstitutionStudentDataNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InstitutionStudentDataNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InstitutionStudentDataNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], InstitutionStudentDataNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InstitutionStudentDataNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scopeType?: boolean
+    scopeId?: boolean
+    session?: boolean
+    phase?: boolean
+    sectionKey?: boolean
+    source?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["institutionStudentDataNote"]>
+
+  export type InstitutionStudentDataNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scopeType?: boolean
+    scopeId?: boolean
+    session?: boolean
+    phase?: boolean
+    sectionKey?: boolean
+    source?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["institutionStudentDataNote"]>
+
+  export type InstitutionStudentDataNoteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    scopeType?: boolean
+    scopeId?: boolean
+    session?: boolean
+    phase?: boolean
+    sectionKey?: boolean
+    source?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["institutionStudentDataNote"]>
+
+  export type InstitutionStudentDataNoteSelectScalar = {
+    id?: boolean
+    scopeType?: boolean
+    scopeId?: boolean
+    session?: boolean
+    phase?: boolean
+    sectionKey?: boolean
+    source?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type InstitutionStudentDataNoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "scopeType" | "scopeId" | "session" | "phase" | "sectionKey" | "source" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["institutionStudentDataNote"]>
+
+  export type $InstitutionStudentDataNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InstitutionStudentDataNote"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      scopeType: string
+      scopeId: string
+      session: string
+      phase: string
+      sectionKey: string
+      source: string
+      note: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["institutionStudentDataNote"]>
+    composites: {}
+  }
+
+  type InstitutionStudentDataNoteGetPayload<S extends boolean | null | undefined | InstitutionStudentDataNoteDefaultArgs> = $Result.GetResult<Prisma.$InstitutionStudentDataNotePayload, S>
+
+  type InstitutionStudentDataNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InstitutionStudentDataNoteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InstitutionStudentDataNoteCountAggregateInputType | true
+    }
+
+  export interface InstitutionStudentDataNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InstitutionStudentDataNote'], meta: { name: 'InstitutionStudentDataNote' } }
+    /**
+     * Find zero or one InstitutionStudentDataNote that matches the filter.
+     * @param {InstitutionStudentDataNoteFindUniqueArgs} args - Arguments to find a InstitutionStudentDataNote
+     * @example
+     * // Get one InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InstitutionStudentDataNoteFindUniqueArgs>(args: SelectSubset<T, InstitutionStudentDataNoteFindUniqueArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one InstitutionStudentDataNote that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {InstitutionStudentDataNoteFindUniqueOrThrowArgs} args - Arguments to find a InstitutionStudentDataNote
+     * @example
+     * // Get one InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InstitutionStudentDataNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, InstitutionStudentDataNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first InstitutionStudentDataNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteFindFirstArgs} args - Arguments to find a InstitutionStudentDataNote
+     * @example
+     * // Get one InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InstitutionStudentDataNoteFindFirstArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteFindFirstArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first InstitutionStudentDataNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteFindFirstOrThrowArgs} args - Arguments to find a InstitutionStudentDataNote
+     * @example
+     * // Get one InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InstitutionStudentDataNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more InstitutionStudentDataNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InstitutionStudentDataNotes
+     * const institutionStudentDataNotes = await prisma.institutionStudentDataNote.findMany()
+     * 
+     * // Get first 10 InstitutionStudentDataNotes
+     * const institutionStudentDataNotes = await prisma.institutionStudentDataNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const institutionStudentDataNoteWithIdOnly = await prisma.institutionStudentDataNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InstitutionStudentDataNoteFindManyArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a InstitutionStudentDataNote.
+     * @param {InstitutionStudentDataNoteCreateArgs} args - Arguments to create a InstitutionStudentDataNote.
+     * @example
+     * // Create one InstitutionStudentDataNote
+     * const InstitutionStudentDataNote = await prisma.institutionStudentDataNote.create({
+     *   data: {
+     *     // ... data to create a InstitutionStudentDataNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends InstitutionStudentDataNoteCreateArgs>(args: SelectSubset<T, InstitutionStudentDataNoteCreateArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many InstitutionStudentDataNotes.
+     * @param {InstitutionStudentDataNoteCreateManyArgs} args - Arguments to create many InstitutionStudentDataNotes.
+     * @example
+     * // Create many InstitutionStudentDataNotes
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InstitutionStudentDataNoteCreateManyArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InstitutionStudentDataNotes and returns the data saved in the database.
+     * @param {InstitutionStudentDataNoteCreateManyAndReturnArgs} args - Arguments to create many InstitutionStudentDataNotes.
+     * @example
+     * // Create many InstitutionStudentDataNotes
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InstitutionStudentDataNotes and only return the `id`
+     * const institutionStudentDataNoteWithIdOnly = await prisma.institutionStudentDataNote.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InstitutionStudentDataNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a InstitutionStudentDataNote.
+     * @param {InstitutionStudentDataNoteDeleteArgs} args - Arguments to delete one InstitutionStudentDataNote.
+     * @example
+     * // Delete one InstitutionStudentDataNote
+     * const InstitutionStudentDataNote = await prisma.institutionStudentDataNote.delete({
+     *   where: {
+     *     // ... filter to delete one InstitutionStudentDataNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InstitutionStudentDataNoteDeleteArgs>(args: SelectSubset<T, InstitutionStudentDataNoteDeleteArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one InstitutionStudentDataNote.
+     * @param {InstitutionStudentDataNoteUpdateArgs} args - Arguments to update one InstitutionStudentDataNote.
+     * @example
+     * // Update one InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InstitutionStudentDataNoteUpdateArgs>(args: SelectSubset<T, InstitutionStudentDataNoteUpdateArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more InstitutionStudentDataNotes.
+     * @param {InstitutionStudentDataNoteDeleteManyArgs} args - Arguments to filter InstitutionStudentDataNotes to delete.
+     * @example
+     * // Delete a few InstitutionStudentDataNotes
+     * const { count } = await prisma.institutionStudentDataNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InstitutionStudentDataNoteDeleteManyArgs>(args?: SelectSubset<T, InstitutionStudentDataNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstitutionStudentDataNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InstitutionStudentDataNotes
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InstitutionStudentDataNoteUpdateManyArgs>(args: SelectSubset<T, InstitutionStudentDataNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstitutionStudentDataNotes and returns the data updated in the database.
+     * @param {InstitutionStudentDataNoteUpdateManyAndReturnArgs} args - Arguments to update many InstitutionStudentDataNotes.
+     * @example
+     * // Update many InstitutionStudentDataNotes
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more InstitutionStudentDataNotes and only return the `id`
+     * const institutionStudentDataNoteWithIdOnly = await prisma.institutionStudentDataNote.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InstitutionStudentDataNoteUpdateManyAndReturnArgs>(args: SelectSubset<T, InstitutionStudentDataNoteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one InstitutionStudentDataNote.
+     * @param {InstitutionStudentDataNoteUpsertArgs} args - Arguments to update or create a InstitutionStudentDataNote.
+     * @example
+     * // Update or create a InstitutionStudentDataNote
+     * const institutionStudentDataNote = await prisma.institutionStudentDataNote.upsert({
+     *   create: {
+     *     // ... data to create a InstitutionStudentDataNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InstitutionStudentDataNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InstitutionStudentDataNoteUpsertArgs>(args: SelectSubset<T, InstitutionStudentDataNoteUpsertArgs<ExtArgs>>): Prisma__InstitutionStudentDataNoteClient<$Result.GetResult<Prisma.$InstitutionStudentDataNotePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of InstitutionStudentDataNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteCountArgs} args - Arguments to filter InstitutionStudentDataNotes to count.
+     * @example
+     * // Count the number of InstitutionStudentDataNotes
+     * const count = await prisma.institutionStudentDataNote.count({
+     *   where: {
+     *     // ... the filter for the InstitutionStudentDataNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends InstitutionStudentDataNoteCountArgs>(
+      args?: Subset<T, InstitutionStudentDataNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InstitutionStudentDataNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InstitutionStudentDataNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InstitutionStudentDataNoteAggregateArgs>(args: Subset<T, InstitutionStudentDataNoteAggregateArgs>): Prisma.PrismaPromise<GetInstitutionStudentDataNoteAggregateType<T>>
+
+    /**
+     * Group by InstitutionStudentDataNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstitutionStudentDataNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InstitutionStudentDataNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InstitutionStudentDataNoteGroupByArgs['orderBy'] }
+        : { orderBy?: InstitutionStudentDataNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InstitutionStudentDataNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstitutionStudentDataNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InstitutionStudentDataNote model
+   */
+  readonly fields: InstitutionStudentDataNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InstitutionStudentDataNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InstitutionStudentDataNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InstitutionStudentDataNote model
+   */
+  interface InstitutionStudentDataNoteFieldRefs {
+    readonly id: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly scopeType: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly scopeId: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly session: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly phase: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly sectionKey: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly source: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly note: FieldRef<"InstitutionStudentDataNote", 'String'>
+    readonly createdAt: FieldRef<"InstitutionStudentDataNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"InstitutionStudentDataNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InstitutionStudentDataNote findUnique
+   */
+  export type InstitutionStudentDataNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter, which InstitutionStudentDataNote to fetch.
+     */
+    where: InstitutionStudentDataNoteWhereUniqueInput
+  }
+
+  /**
+   * InstitutionStudentDataNote findUniqueOrThrow
+   */
+  export type InstitutionStudentDataNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter, which InstitutionStudentDataNote to fetch.
+     */
+    where: InstitutionStudentDataNoteWhereUniqueInput
+  }
+
+  /**
+   * InstitutionStudentDataNote findFirst
+   */
+  export type InstitutionStudentDataNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter, which InstitutionStudentDataNote to fetch.
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstitutionStudentDataNotes to fetch.
+     */
+    orderBy?: InstitutionStudentDataNoteOrderByWithRelationInput | InstitutionStudentDataNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstitutionStudentDataNotes.
+     */
+    cursor?: InstitutionStudentDataNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstitutionStudentDataNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstitutionStudentDataNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstitutionStudentDataNotes.
+     */
+    distinct?: InstitutionStudentDataNoteScalarFieldEnum | InstitutionStudentDataNoteScalarFieldEnum[]
+  }
+
+  /**
+   * InstitutionStudentDataNote findFirstOrThrow
+   */
+  export type InstitutionStudentDataNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter, which InstitutionStudentDataNote to fetch.
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstitutionStudentDataNotes to fetch.
+     */
+    orderBy?: InstitutionStudentDataNoteOrderByWithRelationInput | InstitutionStudentDataNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstitutionStudentDataNotes.
+     */
+    cursor?: InstitutionStudentDataNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstitutionStudentDataNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstitutionStudentDataNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstitutionStudentDataNotes.
+     */
+    distinct?: InstitutionStudentDataNoteScalarFieldEnum | InstitutionStudentDataNoteScalarFieldEnum[]
+  }
+
+  /**
+   * InstitutionStudentDataNote findMany
+   */
+  export type InstitutionStudentDataNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter, which InstitutionStudentDataNotes to fetch.
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstitutionStudentDataNotes to fetch.
+     */
+    orderBy?: InstitutionStudentDataNoteOrderByWithRelationInput | InstitutionStudentDataNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InstitutionStudentDataNotes.
+     */
+    cursor?: InstitutionStudentDataNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstitutionStudentDataNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstitutionStudentDataNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstitutionStudentDataNotes.
+     */
+    distinct?: InstitutionStudentDataNoteScalarFieldEnum | InstitutionStudentDataNoteScalarFieldEnum[]
+  }
+
+  /**
+   * InstitutionStudentDataNote create
+   */
+  export type InstitutionStudentDataNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * The data needed to create a InstitutionStudentDataNote.
+     */
+    data: XOR<InstitutionStudentDataNoteCreateInput, InstitutionStudentDataNoteUncheckedCreateInput>
+  }
+
+  /**
+   * InstitutionStudentDataNote createMany
+   */
+  export type InstitutionStudentDataNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InstitutionStudentDataNotes.
+     */
+    data: InstitutionStudentDataNoteCreateManyInput | InstitutionStudentDataNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstitutionStudentDataNote createManyAndReturn
+   */
+  export type InstitutionStudentDataNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * The data used to create many InstitutionStudentDataNotes.
+     */
+    data: InstitutionStudentDataNoteCreateManyInput | InstitutionStudentDataNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstitutionStudentDataNote update
+   */
+  export type InstitutionStudentDataNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * The data needed to update a InstitutionStudentDataNote.
+     */
+    data: XOR<InstitutionStudentDataNoteUpdateInput, InstitutionStudentDataNoteUncheckedUpdateInput>
+    /**
+     * Choose, which InstitutionStudentDataNote to update.
+     */
+    where: InstitutionStudentDataNoteWhereUniqueInput
+  }
+
+  /**
+   * InstitutionStudentDataNote updateMany
+   */
+  export type InstitutionStudentDataNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InstitutionStudentDataNotes.
+     */
+    data: XOR<InstitutionStudentDataNoteUpdateManyMutationInput, InstitutionStudentDataNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which InstitutionStudentDataNotes to update
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * Limit how many InstitutionStudentDataNotes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstitutionStudentDataNote updateManyAndReturn
+   */
+  export type InstitutionStudentDataNoteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * The data used to update InstitutionStudentDataNotes.
+     */
+    data: XOR<InstitutionStudentDataNoteUpdateManyMutationInput, InstitutionStudentDataNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which InstitutionStudentDataNotes to update
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * Limit how many InstitutionStudentDataNotes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstitutionStudentDataNote upsert
+   */
+  export type InstitutionStudentDataNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * The filter to search for the InstitutionStudentDataNote to update in case it exists.
+     */
+    where: InstitutionStudentDataNoteWhereUniqueInput
+    /**
+     * In case the InstitutionStudentDataNote found by the `where` argument doesn't exist, create a new InstitutionStudentDataNote with this data.
+     */
+    create: XOR<InstitutionStudentDataNoteCreateInput, InstitutionStudentDataNoteUncheckedCreateInput>
+    /**
+     * In case the InstitutionStudentDataNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InstitutionStudentDataNoteUpdateInput, InstitutionStudentDataNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * InstitutionStudentDataNote delete
+   */
+  export type InstitutionStudentDataNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+    /**
+     * Filter which InstitutionStudentDataNote to delete.
+     */
+    where: InstitutionStudentDataNoteWhereUniqueInput
+  }
+
+  /**
+   * InstitutionStudentDataNote deleteMany
+   */
+  export type InstitutionStudentDataNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstitutionStudentDataNotes to delete
+     */
+    where?: InstitutionStudentDataNoteWhereInput
+    /**
+     * Limit how many InstitutionStudentDataNotes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstitutionStudentDataNote without action
+   */
+  export type InstitutionStudentDataNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionStudentDataNote
+     */
+    select?: InstitutionStudentDataNoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstitutionStudentDataNote
+     */
+    omit?: InstitutionStudentDataNoteOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -118008,6 +119190,7 @@ export namespace Prisma {
     dob: 'dob',
     panCard: 'panCard',
     aadhar: 'aadhar',
+    voterId: 'voterId',
     rationCard: 'rationCard',
     mobNumber: 'mobNumber',
     emergencyContact: 'emergencyContact',
@@ -118018,6 +119201,7 @@ export namespace Prisma {
     caste: 'caste',
     religion: 'religion',
     address: 'address',
+    landmark: 'landmark',
     state: 'state',
     district: 'district',
     block: 'block',
@@ -118908,6 +120092,22 @@ export namespace Prisma {
   };
 
   export type FellowStudentDataNoteScalarFieldEnum = (typeof FellowStudentDataNoteScalarFieldEnum)[keyof typeof FellowStudentDataNoteScalarFieldEnum]
+
+
+  export const InstitutionStudentDataNoteScalarFieldEnum: {
+    id: 'id',
+    scopeType: 'scopeType',
+    scopeId: 'scopeId',
+    session: 'session',
+    phase: 'phase',
+    sectionKey: 'sectionKey',
+    source: 'source',
+    note: 'note',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type InstitutionStudentDataNoteScalarFieldEnum = (typeof InstitutionStudentDataNoteScalarFieldEnum)[keyof typeof InstitutionStudentDataNoteScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -121685,6 +122885,7 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"Beneficiary"> | Date | string | null
     panCard?: StringNullableFilter<"Beneficiary"> | string | null
     aadhar?: StringNullableFilter<"Beneficiary"> | string | null
+    voterId?: StringNullableFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableFilter<"Beneficiary"> | string | null
     emergencyContact?: StringNullableFilter<"Beneficiary"> | string | null
@@ -121695,6 +122896,7 @@ export namespace Prisma {
     caste?: StringNullableFilter<"Beneficiary"> | string | null
     religion?: StringNullableFilter<"Beneficiary"> | string | null
     address?: StringNullableFilter<"Beneficiary"> | string | null
+    landmark?: StringNullableFilter<"Beneficiary"> | string | null
     state?: StringNullableFilter<"Beneficiary"> | string | null
     district?: StringNullableFilter<"Beneficiary"> | string | null
     block?: StringNullableFilter<"Beneficiary"> | string | null
@@ -121734,6 +122936,7 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     panCard?: SortOrderInput | SortOrder
     aadhar?: SortOrderInput | SortOrder
+    voterId?: SortOrderInput | SortOrder
     rationCard?: SortOrderInput | SortOrder
     mobNumber?: SortOrderInput | SortOrder
     emergencyContact?: SortOrderInput | SortOrder
@@ -121744,6 +122947,7 @@ export namespace Prisma {
     caste?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     district?: SortOrderInput | SortOrder
     block?: SortOrderInput | SortOrder
@@ -121786,6 +122990,7 @@ export namespace Prisma {
     dob?: DateTimeNullableFilter<"Beneficiary"> | Date | string | null
     panCard?: StringNullableFilter<"Beneficiary"> | string | null
     aadhar?: StringNullableFilter<"Beneficiary"> | string | null
+    voterId?: StringNullableFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableFilter<"Beneficiary"> | string | null
     emergencyContact?: StringNullableFilter<"Beneficiary"> | string | null
@@ -121796,6 +123001,7 @@ export namespace Prisma {
     caste?: StringNullableFilter<"Beneficiary"> | string | null
     religion?: StringNullableFilter<"Beneficiary"> | string | null
     address?: StringNullableFilter<"Beneficiary"> | string | null
+    landmark?: StringNullableFilter<"Beneficiary"> | string | null
     state?: StringNullableFilter<"Beneficiary"> | string | null
     district?: StringNullableFilter<"Beneficiary"> | string | null
     block?: StringNullableFilter<"Beneficiary"> | string | null
@@ -121835,6 +123041,7 @@ export namespace Prisma {
     dob?: SortOrderInput | SortOrder
     panCard?: SortOrderInput | SortOrder
     aadhar?: SortOrderInput | SortOrder
+    voterId?: SortOrderInput | SortOrder
     rationCard?: SortOrderInput | SortOrder
     mobNumber?: SortOrderInput | SortOrder
     emergencyContact?: SortOrderInput | SortOrder
@@ -121845,6 +123052,7 @@ export namespace Prisma {
     caste?: SortOrderInput | SortOrder
     religion?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
     state?: SortOrderInput | SortOrder
     district?: SortOrderInput | SortOrder
     block?: SortOrderInput | SortOrder
@@ -121877,6 +123085,7 @@ export namespace Prisma {
     dob?: DateTimeNullableWithAggregatesFilter<"Beneficiary"> | Date | string | null
     panCard?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     aadhar?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    voterId?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     rationCard?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     mobNumber?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     emergencyContact?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
@@ -121887,6 +123096,7 @@ export namespace Prisma {
     caste?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     religion?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     address?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    landmark?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     state?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     district?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
     block?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
@@ -126523,6 +127733,84 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"FellowStudentDataNote"> | Date | string
   }
 
+  export type InstitutionStudentDataNoteWhereInput = {
+    AND?: InstitutionStudentDataNoteWhereInput | InstitutionStudentDataNoteWhereInput[]
+    OR?: InstitutionStudentDataNoteWhereInput[]
+    NOT?: InstitutionStudentDataNoteWhereInput | InstitutionStudentDataNoteWhereInput[]
+    id?: StringFilter<"InstitutionStudentDataNote"> | string
+    scopeType?: StringFilter<"InstitutionStudentDataNote"> | string
+    scopeId?: StringFilter<"InstitutionStudentDataNote"> | string
+    session?: StringFilter<"InstitutionStudentDataNote"> | string
+    phase?: StringFilter<"InstitutionStudentDataNote"> | string
+    sectionKey?: StringFilter<"InstitutionStudentDataNote"> | string
+    source?: StringFilter<"InstitutionStudentDataNote"> | string
+    note?: StringFilter<"InstitutionStudentDataNote"> | string
+    createdAt?: DateTimeFilter<"InstitutionStudentDataNote"> | Date | string
+    updatedAt?: DateTimeFilter<"InstitutionStudentDataNote"> | Date | string
+  }
+
+  export type InstitutionStudentDataNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    scopeType?: SortOrder
+    scopeId?: SortOrder
+    session?: SortOrder
+    phase?: SortOrder
+    sectionKey?: SortOrder
+    source?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InstitutionStudentDataNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    scopeType_scopeId_session_phase_sectionKey_source?: InstitutionStudentDataNoteScopeTypeScopeIdSessionPhaseSectionKeySourceCompoundUniqueInput
+    AND?: InstitutionStudentDataNoteWhereInput | InstitutionStudentDataNoteWhereInput[]
+    OR?: InstitutionStudentDataNoteWhereInput[]
+    NOT?: InstitutionStudentDataNoteWhereInput | InstitutionStudentDataNoteWhereInput[]
+    scopeType?: StringFilter<"InstitutionStudentDataNote"> | string
+    scopeId?: StringFilter<"InstitutionStudentDataNote"> | string
+    session?: StringFilter<"InstitutionStudentDataNote"> | string
+    phase?: StringFilter<"InstitutionStudentDataNote"> | string
+    sectionKey?: StringFilter<"InstitutionStudentDataNote"> | string
+    source?: StringFilter<"InstitutionStudentDataNote"> | string
+    note?: StringFilter<"InstitutionStudentDataNote"> | string
+    createdAt?: DateTimeFilter<"InstitutionStudentDataNote"> | Date | string
+    updatedAt?: DateTimeFilter<"InstitutionStudentDataNote"> | Date | string
+  }, "id" | "scopeType_scopeId_session_phase_sectionKey_source">
+
+  export type InstitutionStudentDataNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    scopeType?: SortOrder
+    scopeId?: SortOrder
+    session?: SortOrder
+    phase?: SortOrder
+    sectionKey?: SortOrder
+    source?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: InstitutionStudentDataNoteCountOrderByAggregateInput
+    _max?: InstitutionStudentDataNoteMaxOrderByAggregateInput
+    _min?: InstitutionStudentDataNoteMinOrderByAggregateInput
+  }
+
+  export type InstitutionStudentDataNoteScalarWhereWithAggregatesInput = {
+    AND?: InstitutionStudentDataNoteScalarWhereWithAggregatesInput | InstitutionStudentDataNoteScalarWhereWithAggregatesInput[]
+    OR?: InstitutionStudentDataNoteScalarWhereWithAggregatesInput[]
+    NOT?: InstitutionStudentDataNoteScalarWhereWithAggregatesInput | InstitutionStudentDataNoteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    scopeType?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    scopeId?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    session?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    phase?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    sectionKey?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    source?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    note?: StringWithAggregatesFilter<"InstitutionStudentDataNote"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"InstitutionStudentDataNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"InstitutionStudentDataNote"> | Date | string
+  }
+
   export type RoleCreateInput = {
     id?: string
     name: string
@@ -129333,6 +130621,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -129343,6 +130632,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -129382,6 +130672,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -129392,6 +130683,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -129431,6 +130723,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129441,6 +130734,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129480,6 +130774,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129490,6 +130785,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129529,6 +130825,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -129539,6 +130836,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -129563,6 +130861,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129573,6 +130872,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129597,6 +130897,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129607,6 +130908,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -134567,6 +135869,97 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InstitutionStudentDataNoteCreateInput = {
+    id?: string
+    scopeType: string
+    scopeId: string
+    session: string
+    phase: string
+    sectionKey: string
+    source?: string
+    note: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InstitutionStudentDataNoteUncheckedCreateInput = {
+    id?: string
+    scopeType: string
+    scopeId: string
+    session: string
+    phase: string
+    sectionKey: string
+    source?: string
+    note: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InstitutionStudentDataNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scopeType?: StringFieldUpdateOperationsInput | string
+    scopeId?: StringFieldUpdateOperationsInput | string
+    session?: StringFieldUpdateOperationsInput | string
+    phase?: StringFieldUpdateOperationsInput | string
+    sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    note?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstitutionStudentDataNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scopeType?: StringFieldUpdateOperationsInput | string
+    scopeId?: StringFieldUpdateOperationsInput | string
+    session?: StringFieldUpdateOperationsInput | string
+    phase?: StringFieldUpdateOperationsInput | string
+    sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    note?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstitutionStudentDataNoteCreateManyInput = {
+    id?: string
+    scopeType: string
+    scopeId: string
+    session: string
+    phase: string
+    sectionKey: string
+    source?: string
+    note: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type InstitutionStudentDataNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scopeType?: StringFieldUpdateOperationsInput | string
+    scopeId?: StringFieldUpdateOperationsInput | string
+    session?: StringFieldUpdateOperationsInput | string
+    phase?: StringFieldUpdateOperationsInput | string
+    sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    note?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstitutionStudentDataNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scopeType?: StringFieldUpdateOperationsInput | string
+    scopeId?: StringFieldUpdateOperationsInput | string
+    session?: StringFieldUpdateOperationsInput | string
+    phase?: StringFieldUpdateOperationsInput | string
+    sectionKey?: StringFieldUpdateOperationsInput | string
+    source?: StringFieldUpdateOperationsInput | string
+    note?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -136845,6 +138238,7 @@ export namespace Prisma {
     dob?: SortOrder
     panCard?: SortOrder
     aadhar?: SortOrder
+    voterId?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
     emergencyContact?: SortOrder
@@ -136855,6 +138249,7 @@ export namespace Prisma {
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    landmark?: SortOrder
     state?: SortOrder
     district?: SortOrder
     block?: SortOrder
@@ -136886,6 +138281,7 @@ export namespace Prisma {
     dob?: SortOrder
     panCard?: SortOrder
     aadhar?: SortOrder
+    voterId?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
     emergencyContact?: SortOrder
@@ -136896,6 +138292,7 @@ export namespace Prisma {
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    landmark?: SortOrder
     state?: SortOrder
     district?: SortOrder
     block?: SortOrder
@@ -136920,6 +138317,7 @@ export namespace Prisma {
     dob?: SortOrder
     panCard?: SortOrder
     aadhar?: SortOrder
+    voterId?: SortOrder
     rationCard?: SortOrder
     mobNumber?: SortOrder
     emergencyContact?: SortOrder
@@ -136930,6 +138328,7 @@ export namespace Prisma {
     caste?: SortOrder
     religion?: SortOrder
     address?: SortOrder
+    landmark?: SortOrder
     state?: SortOrder
     district?: SortOrder
     block?: SortOrder
@@ -139722,6 +141121,54 @@ export namespace Prisma {
   export type FellowStudentDataNoteMinOrderByAggregateInput = {
     id?: SortOrder
     fellowId?: SortOrder
+    session?: SortOrder
+    phase?: SortOrder
+    sectionKey?: SortOrder
+    source?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InstitutionStudentDataNoteScopeTypeScopeIdSessionPhaseSectionKeySourceCompoundUniqueInput = {
+    scopeType: string
+    scopeId: string
+    session: string
+    phase: string
+    sectionKey: string
+    source: string
+  }
+
+  export type InstitutionStudentDataNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    scopeType?: SortOrder
+    scopeId?: SortOrder
+    session?: SortOrder
+    phase?: SortOrder
+    sectionKey?: SortOrder
+    source?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InstitutionStudentDataNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    scopeType?: SortOrder
+    scopeId?: SortOrder
+    session?: SortOrder
+    phase?: SortOrder
+    sectionKey?: SortOrder
+    source?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type InstitutionStudentDataNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    scopeType?: SortOrder
+    scopeId?: SortOrder
     session?: SortOrder
     phase?: SortOrder
     sectionKey?: SortOrder
@@ -152307,6 +153754,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -152317,6 +153765,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -152355,6 +153804,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -152365,6 +153815,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -152717,6 +154168,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152727,6 +154179,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152765,6 +154218,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152775,6 +154229,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -153911,6 +155366,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -153921,6 +155377,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -153959,6 +155416,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -153969,6 +155427,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -154023,6 +155482,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154033,6 +155493,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154071,6 +155532,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154081,6 +155543,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154119,6 +155582,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -154129,6 +155593,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -154167,6 +155632,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -154177,6 +155643,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -154231,6 +155698,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154241,6 +155709,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154279,6 +155748,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -154289,6 +155759,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157478,6 +158949,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -157488,6 +158960,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -157526,6 +158999,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -157536,6 +159010,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -157590,6 +159065,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157600,6 +159076,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157638,6 +159115,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157648,6 +159126,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157686,6 +159165,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -157696,6 +159176,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -157734,6 +159215,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -157744,6 +159226,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -157826,6 +159309,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157836,6 +159320,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157874,6 +159359,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157884,6 +159370,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158057,6 +159544,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158067,6 +159555,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158105,6 +159594,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158115,6 +159605,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158190,6 +159681,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158200,6 +159692,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158238,6 +159731,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158248,6 +159742,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158313,6 +159808,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158323,6 +159819,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158361,6 +159858,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158371,6 +159869,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158482,6 +159981,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158492,6 +159992,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158530,6 +160031,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158540,6 +160042,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158765,6 +160268,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158775,6 +160279,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158813,6 +160318,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -158823,6 +160329,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -158900,6 +160407,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158910,6 +160418,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158948,6 +160457,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158958,6 +160468,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159207,6 +160718,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -159217,6 +160729,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -159255,6 +160768,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -159265,6 +160779,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -159386,6 +160901,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159396,6 +160912,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159434,6 +160951,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -159444,6 +160962,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162160,6 +163679,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162170,6 +163690,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162208,6 +163729,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162218,6 +163740,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162272,6 +163795,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162282,6 +163806,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162320,6 +163845,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162330,6 +163856,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162368,6 +163895,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162378,6 +163906,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162416,6 +163945,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162426,6 +163956,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162480,6 +164011,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162490,6 +164022,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162528,6 +164061,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162538,6 +164072,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162576,6 +164111,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162586,6 +164122,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162624,6 +164161,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162634,6 +164172,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162688,6 +164227,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162698,6 +164238,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162736,6 +164277,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162746,6 +164288,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162784,6 +164327,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162794,6 +164338,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162832,6 +164377,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -162842,6 +164388,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -162896,6 +164443,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162906,6 +164454,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162944,6 +164493,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162954,6 +164504,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -162992,6 +164543,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -163002,6 +164554,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -163040,6 +164593,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -163050,6 +164604,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -163104,6 +164659,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163114,6 +164670,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163152,6 +164709,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163162,6 +164720,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163200,6 +164759,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -163210,6 +164770,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -163248,6 +164809,7 @@ export namespace Prisma {
     dob?: Date | string | null
     panCard?: string | null
     aadhar?: string | null
+    voterId?: string | null
     rationCard?: string | null
     mobNumber?: string | null
     emergencyContact?: string | null
@@ -163258,6 +164820,7 @@ export namespace Prisma {
     caste?: string | null
     religion?: string | null
     address?: string | null
+    landmark?: string | null
     state?: string | null
     district?: string | null
     block?: string | null
@@ -163312,6 +164875,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163322,6 +164886,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163360,6 +164925,7 @@ export namespace Prisma {
     dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
     aadhar?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
     rationCard?: NullableStringFieldUpdateOperationsInput | string | null
     mobNumber?: NullableStringFieldUpdateOperationsInput | string | null
     emergencyContact?: NullableStringFieldUpdateOperationsInput | string | null
@@ -163370,6 +164936,7 @@ export namespace Prisma {
     caste?: NullableStringFieldUpdateOperationsInput | string | null
     religion?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
     state?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
     block?: NullableStringFieldUpdateOperationsInput | string | null

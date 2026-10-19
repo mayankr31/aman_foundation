@@ -185,8 +185,8 @@ export default function GoatRearing() {
       });
       const detailJson = await detailRes.json();
       if (detailJson.success) {
-        // Create an individual livestock animal asset record for them
-        const randomTag = `GR-${Math.floor(1000 + Math.random() * 9000)}`;
+        // Create an individual livestock animal asset record for them.
+        // The API generates a unique animal ID.
         await fetch("/api/livestock", {
           method: "POST",
           headers: {
@@ -195,7 +195,6 @@ export default function GoatRearing() {
           },
           body: JSON.stringify({
             beneficiaryId: benId,
-            tagNumber: `Tag #${randomTag}`,
             animalType: "Goat",
             breed: "Black Bengal",
             ageMonths: 12,

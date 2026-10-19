@@ -1,18 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import PDFViewer from "@/components/PDFViewer";
 
 export default function PDFViewerModal({ isOpen, onClose }) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (

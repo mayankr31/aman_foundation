@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import { formatDate } from "@/lib/date";
 
 const DEPARTMENTS = ["Operations", "Logistics", "Education", "HR", "Finance"];
 
@@ -363,7 +364,7 @@ export default function HrEmployeeProfilePage() {
               {infoRow("Username", employee.username)}
               {infoRow("Employee ID", employee.employeeId)}
               {infoRow("Department", employee.department || "Unassigned")}
-              {infoRow("Date of Joining", employee.dateOfJoining ? new Date(employee.dateOfJoining).toLocaleDateString() : "—")}
+              {infoRow("Date of Joining", formatDate(employee.dateOfJoining))}
               {infoRow("Status", employee.status)}
               {infoRow("Role", employee.role?.name?.replaceAll("_", " "))}
             </div>
@@ -375,7 +376,7 @@ export default function HrEmployeeProfilePage() {
               {infoRow("Email", employee.email)}
               {infoRow("Mobile", employee.mobile)}
               {infoRow("Gender", employee.gender)}
-              {infoRow("Date of Birth", employee.dob ? new Date(employee.dob).toLocaleDateString() : "—")}
+              {infoRow("Date of Birth", formatDate(employee.dob))}
               {infoRow("Marital Status", employee.maritalStatus)}
               {infoRow("Blood Group", employee.bloodGroup)}
               <div className="col-span-2">

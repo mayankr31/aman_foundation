@@ -500,6 +500,7 @@ exports.Prisma.BeneficiaryScalarFieldEnum = {
   dob: 'dob',
   panCard: 'panCard',
   aadhar: 'aadhar',
+  voterId: 'voterId',
   rationCard: 'rationCard',
   mobNumber: 'mobNumber',
   emergencyContact: 'emergencyContact',
@@ -510,6 +511,7 @@ exports.Prisma.BeneficiaryScalarFieldEnum = {
   caste: 'caste',
   religion: 'religion',
   address: 'address',
+  landmark: 'landmark',
   state: 'state',
   district: 'district',
   block: 'block',
@@ -1219,6 +1221,19 @@ exports.Prisma.FellowStudentDataNoteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InstitutionStudentDataNoteScalarFieldEnum = {
+  id: 'id',
+  scopeType: 'scopeType',
+  scopeId: 'scopeId',
+  session: 'session',
+  phase: 'phase',
+  sectionKey: 'sectionKey',
+  source: 'source',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1375,7 +1390,8 @@ exports.Prisma.ModelName = {
   AfterSchoolAssessmentForm: 'AfterSchoolAssessmentForm',
   AfterSchoolSubjectAssessmentResponse: 'AfterSchoolSubjectAssessmentResponse',
   AfterSchoolFLNResponse: 'AfterSchoolFLNResponse',
-  FellowStudentDataNote: 'FellowStudentDataNote'
+  FellowStudentDataNote: 'FellowStudentDataNote',
+  InstitutionStudentDataNote: 'InstitutionStudentDataNote'
 };
 
 /**
