@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
@@ -23,12 +24,6 @@ export default function HrEmployeeManagement() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  useEffect(() => {
-    if (token) {
-      fetchData();
-    }
-  }, [token]);
-
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -45,6 +40,13 @@ export default function HrEmployeeManagement() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   // Employees Filter States
   const [directorySearch, setDirectorySearch] = useState("");
@@ -150,13 +152,14 @@ export default function HrEmployeeManagement() {
             </div>
 
             <div className="w-full overflow-x-auto">
-              <table className="mobile-card-table w-full min-w-[720px] table-fixed text-left border-collapse font-sans text-sm">
+              <table className="mobile-card-table w-full min-w-[860px] table-fixed text-left border-collapse font-sans text-sm">
                 <thead>
                   <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                    <th className="w-[26%] py-3 px-4">Name</th>
-                    <th className="w-[34%] py-3 px-4">Email</th>
-                    <th className="w-[20%] py-3 px-4">Department</th>
-                    <th className="w-[20%] py-3 px-4">Role</th>
+                    <th className="w-[24%] py-3 px-4">Name</th>
+                    <th className="w-[28%] py-3 px-4">Email</th>
+                    <th className="w-[16%] py-3 px-4">Department</th>
+                    <th className="w-[16%] py-3 px-4">Role</th>
+                    <th className="w-[16%] py-3 px-4">Reports To</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -180,12 +183,13 @@ export default function HrEmployeeManagement() {
                       <td data-label="Email" className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
                       <td data-label="Department" className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
                       <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{emp.role?.name?.replace("_", " ")}</td>
+                      <td data-label="Reports To" className="py-4 px-4 text-xs text-slate-500 break-words">{emp.manager?.name || "—"}</td>
                     </tr>
                     );
                   })}
                   {filteredEmployees.length === 0 && (
                     <tr>
-                      <td colSpan="4" className="py-8 text-center text-on-surface-variant">No employees found.</td>
+                      <td colSpan="5" className="py-8 text-center text-on-surface-variant">No employees found.</td>
                     </tr>
                   )}
                 </tbody>

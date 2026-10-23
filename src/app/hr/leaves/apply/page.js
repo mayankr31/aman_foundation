@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -6,24 +7,30 @@ import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import { validateDateOrder } from "@/lib/validation";
 
 function formatStoredDates(value) {
   return String(value || "").replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (match) => formatDate(match));
 }
 
 export default function LeaveApplication() {
-  const { token, user: currentUser } = useAuth();
+  const { token, user: currentUser, can } = useAuth();
+  const canWrite = can("leaves", "WRITE");
   const [leaves, setLeaves] = useState([]);
+  const [configs, setConfigs] = useState([]);
+  const [summary, setSummary] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isApplying, setIsApplying] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [newLeave, setNewLeave] = useState({
     type: "Sick Leave",
+    leaveTypeKey: "SICK",
     isMultiple: false,
     singleDate: "",
     fromDate: "",
     toDate: "",
+    compOffWorkedDate: "",
     reason: ""
   });
 
@@ -37,24 +44,33 @@ export default function LeaveApplication() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  useEffect(() => {
-    if (token) {
-      fetchLeaves();
-    }
-  }, [token]);
-
   const fetchLeaves = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/leaves", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const [res, configRes, summaryRes] = await Promise.all([
+        fetch("/api/leaves", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch("/api/leaves/config", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch("/api/leaves/summary", { headers: { Authorization: `Bearer ${token}` } }),
+      ]);
       const data = await res.json();
+      const configData = await configRes.json();
+      const summaryData = await summaryRes.json();
       if (res.ok) {
-        // filter for just this user's leaves to be safe
         const myLeaves = (data.data || []).filter(l => l.userId === currentUser?.id);
         setLeaves(myLeaves);
       }
+      if (configRes.ok) {
+        const activeConfigs = (configData.data || []).filter((c) => c.active);
+        setConfigs(activeConfigs);
+        if (activeConfigs.length && !activeConfigs.some((c) => c.key === newLeave.leaveTypeKey)) {
+          setNewLeave((prev) => ({
+            ...prev,
+            leaveTypeKey: activeConfigs[0].key,
+            type: activeConfigs[0].name,
+          }));
+        }
+      }
+      if (summaryRes.ok) setSummary(summaryData.data);
     } catch (err) {
       triggerToast("Error fetching leaves");
     } finally {
@@ -62,13 +78,31 @@ export default function LeaveApplication() {
     }
   };
 
-  const handleApplyLeave = async () => {
-    const dates = newLeave.isMultiple
-      ? `${formatDate(newLeave.fromDate)} to ${formatDate(newLeave.toDate)}`
-      : formatDate(newLeave.singleDate);
+  useEffect(() => {
+    if (token) {
+      fetchLeaves();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
-    if (!dates || (newLeave.isMultiple && (!newLeave.fromDate || !newLeave.toDate))) {
+  const handleApplyLeave = async () => {
+    if (!canWrite) return;
+    const startDate = newLeave.isMultiple ? newLeave.fromDate : newLeave.singleDate;
+    const endDate = newLeave.isMultiple ? newLeave.toDate : newLeave.singleDate;
+
+    if (!startDate || !endDate) {
       triggerToast("Please select valid dates.");
+      return;
+    }
+    if (newLeave.isMultiple) {
+      const dateError = validateDateOrder(startDate, endDate, { startLabel: "From date", endLabel: "To date" });
+      if (dateError) {
+        triggerToast(dateError);
+        return;
+      }
+    }
+    if (newLeave.leaveTypeKey === "COMP_OFF" && !newLeave.compOffWorkedDate) {
+      triggerToast("Select the date you worked on a non-working day.");
       return;
     }
 
@@ -79,17 +113,23 @@ export default function LeaveApplication() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           type: newLeave.type,
-          dates,
+          leaveTypeKey: newLeave.leaveTypeKey,
+          startDate,
+          endDate,
+          singleDate: newLeave.singleDate,
+          dates: newLeave.isMultiple ? `${formatDate(startDate)} to ${formatDate(endDate)}` : formatDate(startDate),
+          compOffWorkedDate: newLeave.compOffWorkedDate || null,
           reason: newLeave.reason,
         }),
       });
-      if (!res.ok) throw new Error("Failed to submit leave");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to submit leave");
       triggerToast("Leave request submitted successfully!");
       fetchLeaves();
       setIsApplying(false);
-      setNewLeave({ type: "Sick Leave", isMultiple: false, singleDate: "", fromDate: "", toDate: "", reason: "" });
+      setNewLeave({ type: "Sick Leave", leaveTypeKey: "SICK", isMultiple: false, singleDate: "", fromDate: "", toDate: "", compOffWorkedDate: "", reason: "" });
     } catch (err) {
-      triggerToast("Failed to submit leave request");
+      triggerToast(err.message || "Failed to submit leave request");
     } finally {
       setIsSubmitting(false);
     }
@@ -102,8 +142,13 @@ export default function LeaveApplication() {
   // Actually, we'll fetch full user details if needed, but let's just use the context or defaults.
   // The first leave's user object has the updated counts.
   const latestLeave = leaves[0];
-  const leavesTaken = latestLeave ? latestLeave.user.leavesTaken : (currentUser.leavesTaken || 0);
-  const leavesRemaining = latestLeave ? latestLeave.user.leavesRemaining : (currentUser.leavesRemaining ?? 15);
+  const leaveTypes = summary ? Object.values(summary.types).filter((t) => t.key !== "COMP_OFF") : [];
+  const leavesTaken = leaveTypes.length
+    ? leaveTypes.reduce((sum, type) => sum + type.used, 0)
+    : (latestLeave ? latestLeave.user.leavesTaken : (currentUser.leavesTaken || 0));
+  const leavesRemaining = leaveTypes.length
+    ? leaveTypes.reduce((sum, type) => sum + type.remaining, 0)
+    : (latestLeave ? latestLeave.user.leavesRemaining : (currentUser.leavesRemaining ?? 15));
 
   return (
     <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full relative">
@@ -112,16 +157,18 @@ export default function LeaveApplication() {
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Self Service</p>
           <h2 className="page-title text-on-surface">Leave Application</h2>
         </div>
-        <button 
-          onClick={() => setIsApplying(true)}
-          className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-sm">add</span>
-          Apply for Leave
-        </button>
+        {canWrite && (
+          <button 
+            onClick={() => setIsApplying(true)}
+            className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-sm">add</span>
+            Apply for Leave
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-surface-container-lowest border border-outline-variant/10 p-6 rounded-2xl shadow-ambient flex items-center justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Leaves Taken</p>
@@ -140,7 +187,57 @@ export default function LeaveApplication() {
             <span className="material-symbols-outlined text-3xl">event_busy</span>
           </div>
         </div>
+        <div className="bg-surface-container-lowest border border-outline-variant/10 p-6 rounded-2xl shadow-ambient flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Comp Off Available</p>
+            <h4 className="stat-value mt-2 text-on-surface">{summary?.compOff?.available ?? 0}</h4>
+            {summary?.compOff?.credits?.some((c) => c.status === "Available") && (
+              <p className="text-[10px] text-on-surface-variant mt-1">
+                Expires {formatDate(
+                  summary.compOff.credits
+                    .filter((c) => c.status === "Available")
+                    .sort((a, b) => new Date(a.expiresAt) - new Date(b.expiresAt))[0]?.expiresAt
+                )}
+              </p>
+            )}
+          </div>
+          <div className="p-4 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
+            <span className="material-symbols-outlined text-3xl">sync_alt</span>
+          </div>
+        </div>
       </div>
+
+      {summary && (
+        <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <h3 className="font-headline font-bold text-lg text-on-surface">Quarterly Leave Balance</h3>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{summary.fyLabel}</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {Object.values(summary.types).filter((type) => type.key !== "COMP_OFF").map((type) => (
+              <div key={type.key} className="border border-outline-variant/20 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-bold text-sm text-on-surface">{type.name}</p>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+                    {type.remaining} left
+                  </span>
+                </div>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {Object.values(type.quarters).map((q) => (
+                    <div key={q.quarter} className="rounded-lg bg-surface-container px-1.5 py-2 text-center">
+                      <p className="text-[9px] font-bold uppercase text-on-surface-variant">Q{q.quarter}</p>
+                      <p className={`text-xs font-bold ${q.remaining > 0 ? "text-emerald-700" : "text-rose-600"}`}>
+                        {q.remaining}/{q.entitlement}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-on-surface-variant mt-3">Quarterly quotas lapse at the end of each quarter.</p>
+        </div>
+      )}
 
       <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[300px]">
         <div className="flex justify-between items-center mb-6">
@@ -206,15 +303,48 @@ export default function LeaveApplication() {
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Leave Type</label>
                 <select 
-                  value={newLeave.type} 
-                  onChange={e => setNewLeave({...newLeave, type: e.target.value})} 
+                  value={newLeave.leaveTypeKey} 
+                  onChange={e => {
+                    const selected = configs.find((c) => c.key === e.target.value);
+                    setNewLeave({
+                      ...newLeave,
+                      leaveTypeKey: e.target.value,
+                      type: selected?.name || e.target.value,
+                    });
+                  }} 
                   className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface dark:bg-slate-900 cursor-pointer"
                 >
-                  <option value="Casual Leave">Casual Leave</option>
-                  <option value="Sick Leave">Sick Leave</option>
-                  <option value="Emergency Leave">Emergency Leave</option>
+                  {(configs.length
+                    ? configs
+                    : [
+                        { key: "SICK", name: "Sick Leave" },
+                        { key: "CASUAL", name: "Casual Leave" },
+                        { key: "EMERGENCY", name: "Emergency Leave" },
+                        { key: "COMP_OFF", name: "Comp Off Leave" },
+                      ]
+                  ).map((config) => (
+                    <option key={config.key} value={config.key}>{config.name}</option>
+                  ))}
                 </select>
               </div>
+
+              {newLeave.leaveTypeKey === "COMP_OFF" && (
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                    Worked On (Non-Working Day)
+                  </label>
+                  <input
+                    type="date"
+                    value={newLeave.compOffWorkedDate}
+                    max={newLeave.isMultiple ? newLeave.fromDate : newLeave.singleDate}
+                    onChange={e => setNewLeave({ ...newLeave, compOffWorkedDate: e.target.value })}
+                    className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+                  <p className="text-[10px] text-on-surface-variant">
+                    Comp off must be availed within 3 months of the worked date. Your approver will verify the non-working day.
+                  </p>
+                </div>
+              )}
 
               <label className="flex items-center gap-3 cursor-pointer group w-fit">
                 <input type="checkbox" className="w-5 h-5 accent-primary rounded border-outline-variant cursor-pointer" checked={newLeave.isMultiple} onChange={e => setNewLeave({...newLeave, isMultiple: e.target.checked})} />

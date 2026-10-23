@@ -2,6 +2,22 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getEffectivePermissions } from "@/lib/permissions";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateBankAccount,
+  validateIfsc,
+  firstError,
+  normalizeMobileForSave,
+  normalizeAadhaarForSave,
+  normalizePanForSave,
+  normalizeIfscForSave,
+  normalizeBankAccountForSave,
+  normalizeEmailForSave,
+} from "@/lib/validation";
 
 export async function GET(req) {
   try {
@@ -57,14 +73,28 @@ export async function PATCH(req) {
       aadharNumber, panCard, bankName, bankAccountNo, bankIfsc, dateOfJoining,
     } = body;
 
+    const validationMessage = firstError([
+      name !== undefined ? validatePersonName(name, { required: true }) : null,
+      email !== undefined ? validateEmail(email, { required: true }) : null,
+      validateMobile(mobile),
+      validateMobile(emergencyContactPhone),
+      validateAadhaar(aadharNumber),
+      validatePan(panCard),
+      validateBankAccount(bankAccountNo),
+      validateIfsc(bankIfsc),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     // Update user details
     const updatedUser = await prisma.$transaction(async (tx) => {
       const u = await tx.user.update({
         where: { id: user.id },
         data: {
-          name: name || undefined,
-          email: email || undefined,
-          mobile: mobile !== undefined ? mobile : undefined,
+          name: name ? name.trim() : undefined,
+          email: email ? normalizeEmailForSave(email) : undefined,
+          mobile: mobile !== undefined ? normalizeMobileForSave(mobile) : undefined,
           // Store personal details directly on the User record (used by
           // Program Managers and other non-fellow roles).
           address: address !== undefined ? address : undefined,
@@ -74,12 +104,12 @@ export async function PATCH(req) {
           maritalStatus: maritalStatus !== undefined ? maritalStatus : undefined,
           bloodGroup: bloodGroup !== undefined ? bloodGroup : undefined,
           emergencyContactName: emergencyContactName !== undefined ? emergencyContactName : undefined,
-          emergencyContactPhone: emergencyContactPhone !== undefined ? emergencyContactPhone : undefined,
-          aadharNumber: aadharNumber !== undefined ? aadharNumber : undefined,
-          panCard: panCard !== undefined ? panCard : undefined,
+          emergencyContactPhone: emergencyContactPhone !== undefined ? normalizeMobileForSave(emergencyContactPhone) : undefined,
+          aadharNumber: aadharNumber !== undefined ? normalizeAadhaarForSave(aadharNumber) : undefined,
+          panCard: panCard !== undefined ? normalizePanForSave(panCard) : undefined,
           bankName: bankName !== undefined ? bankName : undefined,
-          bankAccountNo: bankAccountNo !== undefined ? bankAccountNo : undefined,
-          bankIfsc: bankIfsc !== undefined ? bankIfsc : undefined,
+          bankAccountNo: bankAccountNo !== undefined ? normalizeBankAccountForSave(bankAccountNo) : undefined,
+          bankIfsc: bankIfsc !== undefined ? normalizeIfscForSave(bankIfsc) : undefined,
           dateOfJoining: dateOfJoining !== undefined ? (dateOfJoining ? new Date(dateOfJoining) : null) : undefined,
         },
         include: {
@@ -92,9 +122,9 @@ export async function PATCH(req) {
         await tx.fellow.update({
           where: { id: u.fellow.id },
           data: {
-            name: name || undefined,
-            email: email || undefined,
-            phone: mobile !== undefined ? mobile : undefined,
+            name: name ? name.trim() : undefined,
+            email: email ? normalizeEmailForSave(email) : undefined,
+            phone: mobile !== undefined ? normalizeMobileForSave(mobile) : undefined,
             address: address !== undefined ? address : undefined,
             gender: gender !== undefined ? gender : undefined,
             dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,

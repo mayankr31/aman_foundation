@@ -5,74 +5,68 @@ import { PAGE_KEYS, ROUTE_PERMISSION_MAP, getPageForPath } from "@/lib/routePerm
 
 export { PAGE_KEYS, ROUTE_PERMISSION_MAP, getPageForPath };
 
+function roleGrants(rolePerms, action) {
+  if (rolePerms.some((p) => p.action === action)) return true;
+  if (action === "READ" && rolePerms.some((p) => p.action === "WRITE")) return true;
+  return false;
+}
+
 /**
- * Checks if a user has permission to perform an action on a specific app and page.
- * Permissions are fetched directly from the database to ensure they are up to date.
- * WRITE permission automatically grants READ permission.
- *
- * User override permissions take priority over role permissions:
- * - If user has ANY UserPermission for the page, user permissions are the source of truth
- * - If user has DENY UserPermission, access is denied regardless of role
- * - If user has GRANT UserPermission, access is allowed based on the action
- * - If no UserPermission exists, fall back to RolePermission
- *
- * @param {Object} user - The user object containing id and roleId
- * @param {string} app - The application name
- * @param {string} page - The page name
- * @param {"READ" | "WRITE"} action - The requested action
- * @returns {Promise<boolean>}
+ * Resolves one action using per-action overrides:
+ *  - exact user override wins (GRANT allows, DENY blocks)
+ *  - a WRITE grant implies READ
+ *  - a READ deny also blocks WRITE
+ *  - otherwise the role permission is inherited
  */
-export async function checkPermission(user, app, page, action) {
-  if (!user || !user.id || !user.roleId) {
-    return false;
+function resolveAction(action, userOverrides, rolePerms) {
+  const readOverride = userOverrides.READ;
+  const writeOverride = userOverrides.WRITE;
+
+  // A denied READ makes the whole page action unreadable, including writing.
+  if (readOverride === "DENY") return false;
+
+  if (action === "READ") {
+    if (readOverride === "GRANT" || writeOverride === "GRANT") return true;
+    // A WRITE deny does not block READ; fall back to the role for READ.
+    return roleGrants(rolePerms, "READ");
   }
 
+  if (writeOverride === "DENY") return false;
+  if (writeOverride === "GRANT") return true;
+  // If the user can read but has no write override, inherit write from the role.
+  return roleGrants(rolePerms, "WRITE");
+}
+
+/**
+ * Checks if a user has permission to perform an action on a specific page.
+ * User overrides are resolved per action rather than per page, so denying one
+ * action no longer hides the whole page.
+ */
+export async function checkPermission(user, app, page, action) {
+  if (!user || !user.id || !user.roleId) return false;
+
+  // ADMIN is a true superadmin and bypasses all page/user overrides.
+  if (user.role?.name === "ADMIN") return true;
+
   try {
-    // 1. Fetch User Override Permissions first (they take priority)
-    const userPermissions = await prisma.userPermission.findMany({
-      where: {
-        userId: user.id,
-        permission: { app, page },
-      },
-      include: { permission: true },
-    });
+    const [userPermissions, rolePermissions] = await Promise.all([
+      prisma.userPermission.findMany({
+        where: { userId: user.id, permission: { app, page } },
+        include: { permission: true },
+      }),
+      prisma.rolePermission.findMany({
+        where: { roleId: user.roleId, permission: { app, page } },
+        include: { permission: true },
+      }),
+    ]);
 
-    // 2. If user has explicit user permissions, use them exclusively
-    if (userPermissions.length > 0) {
-      const hasDeny = userPermissions.some((up) => up.type === "DENY");
-      if (hasDeny) return false;
-
-      const hasExact = userPermissions.some((up) => up.permission.action === action);
-      if (hasExact) return true;
-
-      if (action === "READ") {
-        const hasWrite = userPermissions.some((up) => up.permission.action === "WRITE");
-        if (hasWrite) return true;
-      }
-
-      return false;
+    const userOverrides = {};
+    for (const up of userPermissions) {
+      userOverrides[up.permission.action] = up.type;
     }
-
-    // 3. No user permissions override → fall back to role permissions
-    const rolePermissions = await prisma.rolePermission.findMany({
-      where: {
-        roleId: user.roleId,
-        permission: { app, page },
-      },
-      include: { permission: true },
-    });
-
     const rolePerms = rolePermissions.map((rp) => rp.permission);
 
-    const hasExact = rolePerms.some((p) => p.action === action);
-    if (hasExact) return true;
-
-    if (action === "READ") {
-      const hasWrite = rolePerms.some((p) => p.action === "WRITE");
-      if (hasWrite) return true;
-    }
-
-    return false;
+    return resolveAction(action, userOverrides, rolePerms);
   } catch (error) {
     console.error("Permission check error:", error);
     return false;
@@ -88,6 +82,18 @@ export async function getEffectivePermissions(user) {
   if (!user || !user.id || !user.roleId) return result;
 
   try {
+    // Admin bypasses overrides and always has every known page permission.
+    if (user.role?.name === "ADMIN") {
+      const allPermissions = await prisma.permission.findMany({
+        select: { page: true },
+      });
+      const pages = new Set([...PAGE_KEYS, ...allPermissions.map((p) => p.page)]);
+      for (const page of pages) {
+        result[page] = { read: true, write: true };
+      }
+      return result;
+    }
+
     const [rolePerms, userPerms] = await Promise.all([
       prisma.rolePermission.findMany({
         where: { roleId: user.roleId },
@@ -99,29 +105,28 @@ export async function getEffectivePermissions(user) {
       }),
     ]);
 
-    const apply = (page, action) => {
-      if (!result[page]) result[page] = { read: false, write: false };
-      if (action === "WRITE") {
-        result[page].write = true;
-        result[page].read = true;
-      } else if (action === "READ") {
-        result[page].read = true;
-      }
-    };
+    const pages = new Set([
+      ...rolePerms.map((rp) => rp.permission.page),
+      ...userPerms.map((up) => up.permission.page),
+    ]);
 
-    for (const rp of rolePerms) {
-      apply(rp.permission.page, rp.permission.action);
-    }
-
-    // User overrides: any page with a user permission row is governed solely
-    // by those rows (DENY wins).
-    const pagesWithOverrides = new Set(userPerms.map((up) => up.permission.page));
-    for (const page of pagesWithOverrides) {
-      result[page] = { read: false, write: false };
-    }
+    const overridesByPage = {};
     for (const up of userPerms) {
-      if (up.type === "DENY") continue;
-      apply(up.permission.page, up.permission.action);
+      const page = up.permission.page;
+      if (!overridesByPage[page]) overridesByPage[page] = {};
+      overridesByPage[page][up.permission.action] = up.type;
+    }
+
+    for (const page of pages) {
+      const pageRolePerms = rolePerms
+        .filter((rp) => rp.permission.page === page)
+        .map((rp) => rp.permission);
+      const overrides = overridesByPage[page] || {};
+
+      result[page] = {
+        read: resolveAction("READ", overrides, pageRolePerms),
+        write: resolveAction("WRITE", overrides, pageRolePerms),
+      };
     }
 
     return result;

@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
 import { authenticateUser } from "../../../../lib/auth";
-import { getManagedTeamUserIds } from "../../../../lib/scope";
+import { canAccessUser } from "../../../../lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import {
+  ensureLeaveConfigs,
+  parseDateOnly,
+  parseLegacyLeaveRange,
+  typeKeyFromName,
+  validateLeaveQuota,
+} from "@/lib/leaves";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
-async function isPmTeamMember(pmUserId, targetUserId) {
-  if (pmUserId === targetUserId) return true;
-  const team = await getManagedTeamUserIds(pmUserId);
-  return team.includes(targetUserId);
+async function isPmTeamMember(managerUser, targetUserId) {
+  if (managerUser.id === targetUserId) return true;
+  return canAccessUser(managerUser, targetUserId, { allowSelf: false });
 }
 
 export async function GET(req, { params }) {
@@ -27,6 +33,7 @@ export async function GET(req, { params }) {
       where: { id },
       include: {
         user: { select: { id: true, name: true, email: true, username: true, mobile: true, role: { select: { name: true } }, leavesTaken: true, leavesRemaining: true } },
+        compOffCredit: true,
       },
     });
 
@@ -36,7 +43,7 @@ export async function GET(req, { params }) {
 
     const isFellowOrOther = user.role?.name !== "ADMIN" && user.role?.name !== "HR";
     if (PROGRAM_ROLES.includes(user.role?.name)) {
-      if (!(await isPmTeamMember(user.id, leave.userId))) {
+      if (!(await isPmTeamMember(user, leave.userId))) {
         return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
       }
     } else if (isFellowOrOther && leave.userId !== user.id) {
@@ -77,8 +84,7 @@ export async function PUT(req, { params }) {
     const isApprover = user.role?.name === "ADMIN" || user.role?.name === "HR";
     if (!isApprover) {
       if (PROGRAM_ROLES.includes(user.role?.name)) {
-        const team = await getManagedTeamUserIds(user.id);
-        if (existing.userId === user.id || !team.includes(existing.userId)) {
+        if (existing.userId === user.id || !(await isPmTeamMember(user, existing.userId))) {
           return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
         }
       } else {
@@ -86,38 +92,89 @@ export async function PUT(req, { params }) {
       }
     }
 
-    const leave = await prisma.leave.update({
-      where: { id },
-      data: {
-        ...(body.type !== undefined && { type: body.type }),
-        ...(body.dates !== undefined && { dates: body.dates }),
-        ...(body.reason !== undefined && { reason: body.reason }),
-        ...(body.rejectionReason !== undefined && { rejectionReason: body.rejectionReason }),
-        ...(body.status !== undefined && { status: body.status }),
-      },
-    });
+    const nextStatus = body.status !== undefined ? body.status : existing.status;
 
-    if (body.status === "APPROVED" && existing.status !== "APPROVED") {
-      if (existing.userId) {
-        await prisma.user.update({
-          where: { id: existing.userId },
-          data: {
-            leavesTaken: { increment: 1 },
-            leavesRemaining: { decrement: 1 },
-          },
-        });
-      }
-    } else if (existing.status === "APPROVED" && (body.status === "REJECTED" || body.status === "PENDING")) {
-      if (existing.userId) {
-        await prisma.user.update({
-          where: { id: existing.userId },
-          data: {
-            leavesTaken: { decrement: 1 },
-            leavesRemaining: { increment: 1 },
-          },
-        });
+    if (nextStatus === "APPROVED" && existing.status !== "APPROVED" && existing.compOffCreditId) {
+      const credit = await prisma.compOffCredit.findUnique({ where: { id: existing.compOffCreditId } });
+      if (!credit || new Date(credit.expiresAt) < new Date()) {
+        return NextResponse.json({ error: "This comp-off credit has expired and cannot be approved" }, { status: 400 });
       }
     }
+
+    if (nextStatus === "APPROVED" && existing.status !== "APPROVED" && existing.leaveTypeKey !== "COMP_OFF") {
+      const startDate = existing.startDate ? parseDateOnly(existing.startDate) : parseLegacyLeaveRange(existing.dates).startDate;
+      const endDate = existing.endDate ? parseDateOnly(existing.endDate) : parseLegacyLeaveRange(existing.dates).endDate;
+      const leaveTypeKey = existing.leaveTypeKey || typeKeyFromName(existing.type, await ensureLeaveConfigs());
+      if (leaveTypeKey && startDate && endDate) {
+        const validation = await validateLeaveQuota({
+          userId: existing.userId,
+          leaveTypeKey,
+          startDate,
+          endDate,
+        });
+        if (!validation.ok) {
+          return NextResponse.json({ error: validation.error }, { status: 400 });
+        }
+      }
+    }
+
+    const leave = await prisma.$transaction(async (tx) => {
+      const updated = await tx.leave.update({
+        where: { id },
+        data: {
+          ...(body.type !== undefined && { type: body.type }),
+          ...(body.dates !== undefined && { dates: body.dates }),
+          ...(body.reason !== undefined && { reason: body.reason }),
+          ...(body.rejectionReason !== undefined && { rejectionReason: body.rejectionReason }),
+          ...(body.status !== undefined && { status: body.status }),
+        },
+        include: { compOffCredit: true },
+      });
+
+      const dayCount = Math.max(1, Math.round(Number(existing.days) || 1));
+
+      if (body.status === "APPROVED" && existing.status !== "APPROVED") {
+        if (existing.compOffCreditId) {
+          await tx.compOffCredit.update({
+            where: { id: existing.compOffCreditId },
+            data: { status: "Used" },
+          });
+        }
+        await tx.user.update({
+          where: { id: existing.userId },
+          data: {
+            leavesTaken: { increment: dayCount },
+            leavesRemaining: { decrement: dayCount },
+          },
+        });
+      } else if (existing.status === "APPROVED" && (body.status === "REJECTED" || body.status === "PENDING")) {
+        if (existing.compOffCreditId) {
+          await tx.compOffCredit.update({
+            where: { id: existing.compOffCreditId },
+            data: { status: "Available" },
+          });
+        }
+        await tx.user.update({
+          where: { id: existing.userId },
+          data: {
+            leavesTaken: { decrement: dayCount },
+            leavesRemaining: { increment: dayCount },
+          },
+        });
+      } else if (
+        body.status === "REJECTED" &&
+        (existing.status === "PENDING" || existing.status === "REJECTED") &&
+        existing.compOffCreditId
+      ) {
+        // Release a reservation made when the request was submitted.
+        await tx.compOffCredit.updateMany({
+          where: { id: existing.compOffCreditId, status: "Reserved" },
+          data: { status: "Available" },
+        });
+      }
+
+      return updated;
+    });
 
     // Notify the request creator when their leave is approved or rejected.
     if (
@@ -164,24 +221,31 @@ export async function DELETE(req, { params }) {
     const isAdmin = user.role?.name === "ADMIN";
     let isPmTeam = false;
     if (PROGRAM_ROLES.includes(user.role?.name)) {
-      const team = await getManagedTeamUserIds(user.id);
-      isPmTeam = team.includes(existing.userId);
+      isPmTeam = await isPmTeamMember(user, existing.userId);
     }
     if (!isOwner && !isAdmin && !isPmTeam) {
       return NextResponse.json({ error: "Forbidden: You cannot delete this leave request" }, { status: 403 });
     }
 
-    if (existing.status === "APPROVED" && existing.userId) {
-      await prisma.user.update({
-        where: { id: existing.userId },
-        data: {
-          leavesTaken: { decrement: 1 },
-          leavesRemaining: { increment: 1 },
-        },
-      });
-    }
-
-    await prisma.leave.delete({ where: { id } });
+    await prisma.$transaction(async (tx) => {
+      if (existing.status === "APPROVED" && existing.userId) {
+        const dayCount = Math.max(1, Math.round(Number(existing.days) || 1));
+        await tx.user.update({
+          where: { id: existing.userId },
+          data: {
+            leavesTaken: { decrement: dayCount },
+            leavesRemaining: { increment: dayCount },
+          },
+        });
+      }
+      if (existing.compOffCreditId) {
+        await tx.compOffCredit.updateMany({
+          where: { id: existing.compOffCreditId, status: { in: ["Reserved", "Used"] } },
+          data: { status: "Available" },
+        });
+      }
+      await tx.leave.delete({ where: { id } });
+    });
 
     return NextResponse.json({ success: true, message: "Leave deleted successfully" });
   } catch (error) {

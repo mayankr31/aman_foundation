@@ -3,6 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedSchoolIds, getFellowIdByUserId } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validateDateNotFuture,
+  firstError,
+  normalizeMobileForSave,
+  normalizeEmailForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -106,6 +115,23 @@ export async function POST(req) {
       return NextResponse.json({ error: "Name, Student ID, Grade, and Grade Group are required" }, { status: 400 });
     }
 
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      dob ? validateDateNotFuture(dob, { label: "Date of birth" }) : null,
+      enrolmentDate ? validateDateNotFuture(enrolmentDate, { label: "Enrolment date" }) : null,
+      validateMobile(phone),
+      validateMobile(guardianPhone),
+      validateMobile(fatherMobile),
+      validateMobile(motherMobile),
+      validateEmail(email),
+      validatePersonName(guardianName),
+      validatePersonName(fatherName),
+      validatePersonName(motherName),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     let resolvedFellowId = fellowId;
 
     if (isPm) {
@@ -142,23 +168,23 @@ export async function POST(req) {
     const student = await prisma.student.create({
       data: {
         studentId,
-        name,
+        name: name.trim(),
         dob: dob ? new Date(dob) : null,
         gender,
-        email,
-        phone,
+        email: normalizeEmailForSave(email),
+        phone: normalizeMobileForSave(phone),
         address,
         grade,
         gradeGroup,
         district,
         attendance: attendance ? parseFloat(attendance) : 0.0,
         guardianName,
-        guardianPhone,
+        guardianPhone: normalizeMobileForSave(guardianPhone),
         guardianRelation,
         fatherName,
-        fatherMobile,
+        fatherMobile: normalizeMobileForSave(fatherMobile),
         motherName,
-        motherMobile,
+        motherMobile: normalizeMobileForSave(motherMobile),
         enrolmentDate: enrolmentDate ? new Date(enrolmentDate) : null,
         primaryLanguage,
         schoolId,

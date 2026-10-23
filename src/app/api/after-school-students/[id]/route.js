@@ -3,6 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedCentreIds, getFellowIdByUserId } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validateDateNotFuture,
+  firstError,
+  normalizeMobileForSave,
+  normalizeEmailForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -161,6 +170,20 @@ export async function PATCH(req, context) {
 
     const body = await req.json();
 
+    const validationMessage = firstError([
+      body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
+      body.dob ? validateDateNotFuture(body.dob, { label: "Date of birth" }) : null,
+      body.enrolmentDate ? validateDateNotFuture(body.enrolmentDate, { label: "Enrolment date" }) : null,
+      validateMobile(body.phone),
+      validateMobile(body.guardianPhone),
+      validateMobile(body.fatherMobile),
+      validateMobile(body.motherMobile),
+      validateEmail(body.email),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     if (PROGRAM_ROLES.includes(user.role.name) && body.centreId) {
       const managed = await getManagedCentreIds(user.id);
       if (!managed.includes(body.centreId)) {
@@ -185,23 +208,23 @@ export async function PATCH(req, context) {
       where: { id: studentId },
       data: {
         studentId: body.studentId,
-        name: body.name,
+        name: body.name !== undefined ? body.name.trim() : undefined,
         dob: body.dob ? new Date(body.dob) : undefined,
         gender: body.gender,
-        email: body.email,
-        phone: body.phone,
+        email: body.email !== undefined ? normalizeEmailForSave(body.email) : undefined,
+        phone: body.phone !== undefined ? normalizeMobileForSave(body.phone) : undefined,
         address: body.address,
         grade: body.grade,
         gradeGroup: body.gradeGroup,
         district: body.district,
         attendance: body.attendance !== undefined ? parseFloat(body.attendance) : undefined,
         guardianName: body.guardianName,
-        guardianPhone: body.guardianPhone,
+        guardianPhone: body.guardianPhone !== undefined ? normalizeMobileForSave(body.guardianPhone) : undefined,
         guardianRelation: body.guardianRelation,
         fatherName: body.fatherName,
-        fatherMobile: body.fatherMobile,
+        fatherMobile: body.fatherMobile !== undefined ? normalizeMobileForSave(body.fatherMobile) : undefined,
         motherName: body.motherName,
-        motherMobile: body.motherMobile,
+        motherMobile: body.motherMobile !== undefined ? normalizeMobileForSave(body.motherMobile) : undefined,
         enrolmentDate: body.enrolmentDate ? new Date(body.enrolmentDate) : undefined,
         primaryLanguage: body.primaryLanguage,
         centreId: body.centreId,

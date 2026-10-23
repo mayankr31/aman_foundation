@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
+import { validateInteger } from "@/lib/validation";
 
 function InputField({ label, name, value, onChange, type = "text", required = false }) {
   return (
@@ -134,6 +135,18 @@ export default function AssessmentTemplatesModal({
   async function handleSave(e) {
     e.preventDefault();
     if (!editor) return;
+
+    if (editor.type === "fln-question") {
+      if (!editor.questionText.trim()) {
+        alert("Question text is required.");
+        return;
+      }
+      const marksError = validateInteger(editor.marks, { required: true, min: 1, max: 1000 });
+      if (marksError) {
+        alert(marksError);
+        return;
+      }
+    }
 
     setSaving(true);
     try {
@@ -427,8 +440,8 @@ export default function AssessmentTemplatesModal({
                   <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Marks</label>
                   <input
                     type="number"
-                    min="0"
-                    step="0.5"
+                    min="1"
+                    step="1"
                     value={editor.marks}
                     onChange={(e) => setEditor((current) => ({ ...current, marks: e.target.value }))}
                     required

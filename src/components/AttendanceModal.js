@@ -1,10 +1,11 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate, formatDateTime } from "@/lib/date";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+import { getISTDateKey } from "@/lib/time";
+import AttendanceTimer from "@/components/AttendanceTimer";
 
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
   const [comments, setComments] = useState(task.comments || []);
@@ -82,15 +83,12 @@ function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }
 }
 
 export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
-  const { token, user } = useAuth();
+  const { token, user, can } = useAuth();
 
-  const isProgramStaff = PROGRAM_ROLES.includes(user?.roleName);
-  const tasksBase = isProgramStaff
-    ? `/api/program-managers/${user?.id}/tasks`
-    : user?.fellowId
-    ? `/api/fellows/${user.fellowId}/tasks`
-    : null;
-  const taskItemBase = isProgramStaff ? "/api/program-manager-tasks" : "/api/tasks";
+  const isFellow = user?.roleName === "FELLOW";
+  const canWrite = can("self-attendance", "WRITE");
+  const tasksBase = "/api/tasks";
+  const taskItemBase = "/api/tasks";
 
   const workspaceLabel = (() => {
     const roleName = user?.roleName;
@@ -122,6 +120,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const [lessonPlanFiles, setLessonPlanFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploadingLP, setIsUploadingLP] = useState(false);
+  const [isTeachingDay, setIsTeachingDay] = useState(true);
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -129,24 +128,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  useEffect(() => {
-    if (isOpen && token && user) {
-      fetchTodayLogAndTasks();
-      setCheckoutMode(false);
-    }
-  }, [isOpen, token, user]);
-
   const fetchTodayLogAndTasks = async () => {
     setIsLoading(true);
     try {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const dd = String(now.getDate()).padStart(2, '0');
-      const today = `${yyyy}-${mm}-${dd}`;
+      const today = getISTDateKey();
 
       // Fetch Attendance Log
-      const resLog = await fetch('/api/attendance', {
+      const resLog = await fetch('/api/attendance?includeDrafts=1', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const dataLog = await resLog.json();
@@ -156,21 +144,21 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         if (log) {
           setLessonPlanText(log.lessonPlanText || "");
           setLessonPlanFiles(Array.isArray(log.lessonPlanFiles) ? log.lessonPlanFiles : []);
+          setIsTeachingDay(log.isTeachingDay !== false);
         } else {
           setLessonPlanText("");
           setLessonPlanFiles([]);
+          setIsTeachingDay(true);
         }
       }
 
-      // Fetch Tasks
-      if (tasksBase) {
-        const resTasks = await fetch(`${tasksBase}?date=${today}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const dataTasks = await resTasks.json();
-        if (dataTasks.success) {
-          setTasks(dataTasks.data);
-        }
+      // Fetch Tasks (today's planned/assigned + carried forward).
+      const resTasks = await fetch(`${tasksBase}?daily=1&date=${today}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const dataTasks = await resTasks.json();
+      if (dataTasks.success) {
+        setTasks(dataTasks.data);
       }
     } catch (error) {
       triggerToast("Error fetching attendance data");
@@ -179,14 +167,23 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     }
   };
 
+  useEffect(() => {
+    if (isOpen && token && user) {
+      fetchTodayLogAndTasks();
+      setCheckoutMode(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, token, user]);
+
   const handleCheckIn = async () => {
+    if (isFellow && tasks.length === 0) {
+      triggerToast("Add at least one task for today before checking in.");
+      return;
+    }
     setIsCheckingIn(true);
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US');
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const dd = String(now.getDate()).padStart(2, '0');
-    const dateString = `${yyyy}-${mm}-${dd}`;
+    const dateString = getISTDateKey(now);
 
     let lat = null;
     let lng = null;
@@ -216,7 +213,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           workstatus: `Logged in at ${timeString}`,
           logininfo: navigator.userAgent,
           checkInLat: lat,
-          checkInLng: lng
+          checkInLng: lng,
+          isTeachingDay: isFellow ? isTeachingDay : null
         })
       });
       const data = await res.json();
@@ -236,36 +234,6 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     if (!currentLog) return;
     setIsCheckingOut(true);
     
-    const now = new Date();
-    const outTimeStr = now.toLocaleTimeString('en-US');
-    
-    let workhours = "0 hrs";
-    if (currentLog.intimelog) {
-      try {
-        const parts = currentLog.intimelog.split(" ");
-        let timePart = parts[0];
-        let modifier = parts[1] || "";
-        let [hours, minutes] = timePart.split(":");
-        hours = parseInt(hours || 0, 10);
-        minutes = parseInt(minutes || 0, 10);
-        
-        if (modifier.toUpperCase() === "PM" && hours < 12) hours += 12;
-        if (modifier.toUpperCase() === "AM" && hours === 12) hours = 0;
-        
-        const inDate = new Date();
-        inDate.setHours(hours, minutes, 0, 0);
-        
-        const diffMs = now - inDate;
-        if (diffMs > 0) {
-          const diffHrs = Math.floor(diffMs / 3600000);
-          const diffMins = Math.floor((diffMs % 3600000) / 60000);
-          workhours = `${diffHrs}h ${diffMins}m`;
-        }
-      } catch (err) {
-        console.error("Time parsing error", err);
-      }
-    }
-
     let lat = null;
     let lng = null;
 
@@ -290,8 +258,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         },
         body: JSON.stringify({
           id: currentLog.id,
-          outtimelog: outTimeStr,
-          workhours,
+          checkout: true,
           workstatus: "Checked out",
           logoutinfo: navigator.userAgent,
           checkOutLat: lat,
@@ -317,11 +284,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     if (!tasksBase) return;
 
     try {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const dd = String(now.getDate()).padStart(2, '0');
-      const today = `${yyyy}-${mm}-${dd}`;
+      const today = getISTDateKey();
 
       const res = await fetch(tasksBase, {
         method: "POST",
@@ -368,62 +331,38 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     }
   };
 
+  const handleTeachingDayChange = async (next) => {
+    if (!canWrite || next === isTeachingDay) return;
+    setIsTeachingDay(next);
+    if (!currentLog) return;
+    try {
+      const res = await fetch("/api/attendance", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id: currentLog.id, isTeachingDay: next }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setCurrentLog(data.data);
+        onStatusChange?.(data.data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleSaveLessonPlan = async () => {
-    if ((!currentLog) && (!lessonPlanText.trim() && selectedFiles.length === 0)) return;
+    if (!lessonPlanText.trim() && selectedFiles.length === 0) return;
     setIsUploadingLP(true);
     try {
-      let logId = currentLog?.id;
-
-      if (!logId) {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('en-US');
-        const yyyy = now.getFullYear();
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const dd = String(now.getDate()).padStart(2, '0');
-        const dateString = `${yyyy}-${mm}-${dd}`;
-
-        let lat = null;
-        let lng = null;
-        if (navigator.geolocation) {
-          try {
-            const pos = await new Promise((resolve, reject) => {
-              navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-            });
-            lat = pos.coords.latitude;
-            lng = pos.coords.longitude;
-          } catch (err) {}
-        }
-
-        const createRes = await fetch('/api/attendance', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            logdate: dateString,
-            intimelog: timeString,
-            workstatus: `Lesson plan logged at ${timeString}`,
-            logininfo: navigator.userAgent,
-            lessonPlanText,
-            checkInLat: lat,
-            checkInLng: lng
-          })
-        });
-        const createData = await createRes.json();
-        if (createRes.ok) {
-          setCurrentLog(createData.data);
-          onStatusChange?.(createData.data);
-          logId = createData.data.id;
-        } else {
-          triggerToast("Failed to create log entry");
-          return;
-        }
-      }
-
       const formData = new FormData();
-      formData.append("logId", logId);
+      if (currentLog?.id) formData.append("logId", currentLog.id);
+      formData.append("logdate", getISTDateKey());
       formData.append("lessonPlanText", lessonPlanText);
+      formData.append("isTeachingDay", String(isTeachingDay));
       selectedFiles.forEach((file, idx) => {
         formData.append(`file_${idx}`, file);
       });
@@ -467,13 +406,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
   if (!isOpen) return null;
 
-  const isCheckedIn = !!currentLog;
-  const isCheckedOut = currentLog && currentLog.outtimelog;
+  const isCheckedIn = !!currentLog?.intimelog;
+  const isCheckedOut = !!currentLog?.outtimelog;
   
   const completedTasks = tasks.filter(t => t.status === "Completed").length;
   const pendingTasks = tasks.length - completedTasks;
 
-  const todayStr = new Date().toDateString();
+  const todayKey = getISTDateKey();
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 overflow-y-auto">
@@ -513,7 +452,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             </div>
 
             <div>
-              <h4 className="font-bold mb-3">Today's Tasks Overview</h4>
+              <h4 className="font-bold mb-3">Today&apos;s Tasks Overview</h4>
               <div className="space-y-2 max-h-60 overflow-y-auto pr-2 no-scrollbar">
                 {tasks.map((task) => (
                   <div key={task.id} className="flex items-center justify-between p-3 bg-surface-container rounded-lg border border-slate-200">
@@ -576,21 +515,62 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <span className="text-on-surface-variant font-medium text-sm">Check-out Time</span>
                   <span className="font-semibold text-rose-600 text-sm">{currentLog?.outtimelog || "--:--"}</span>
                 </div>
+                {isFellow && (
+                  <div className="py-2 border-b border-surface-container">
+                    <span className="text-on-surface-variant font-medium text-sm">Day Type</span>
+                    <div className="grid grid-cols-2 gap-1 mt-2 rounded-xl bg-slate-100 dark:bg-slate-800 p-1">
+                      <button
+                        type="button"
+                        onClick={() => handleTeachingDayChange(true)}
+                        disabled={!canWrite}
+                        className={`rounded-lg px-2 py-2 text-xs font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          isTeachingDay
+                            ? "bg-emerald-600 text-white shadow-sm"
+                            : "text-slate-500 hover:text-slate-700 dark:text-slate-300"
+                        }`}
+                      >
+                        Teaching Day
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleTeachingDayChange(false)}
+                        disabled={!canWrite}
+                        className={`rounded-lg px-2 py-2 text-xs font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          !isTeachingDay
+                            ? "bg-slate-600 text-white shadow-sm"
+                            : "text-slate-500 hover:text-slate-700 dark:text-slate-300"
+                        }`}
+                      >
+                        Non-teaching
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
+              {currentLog && <div className="mb-4"><AttendanceTimer log={currentLog} /></div>}
+
               {!isCheckedIn ? (
-                <button
-                  onClick={handleCheckIn}
-                  disabled={isCheckingIn}
-                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-600/20 flex justify-center items-center gap-2"
-                >
-                  {isCheckingIn && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
-                  {isCheckingIn ? "Checking in..." : "Check In"}
-                </button>
+                <>
+                  {isFellow && canWrite && tasks.length === 0 && (
+                    <p className="mb-2 text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 text-center">
+                      Add at least one task for today to enable check-in.
+                    </p>
+                  )}
+                  <button
+                    onClick={handleCheckIn}
+                    disabled={!canWrite || isCheckingIn || (isFellow && tasks.length === 0)}
+                    className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-600/20 flex justify-center items-center gap-2"
+                  >
+                    {isCheckingIn && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
+                    {isCheckingIn ? "Checking in..." : "Check In"}
+                  </button>
+                </>
               ) : !isCheckedOut ? (
                 <button
                   onClick={() => setCheckoutMode(true)}
-                  className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20"
+                  disabled={!canWrite}
+                  className="w-full py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20"
                 >
                   Initiate Check Out
                 </button>
@@ -605,13 +585,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             <div className={`bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 flex flex-col`}>
               <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Tasks</h3>
               
-              {!isCheckedIn && (
+              {canWrite && (
                 <div className="flex gap-2 mb-4 shrink-0">
                   <input
                     type="text"
                     value={newTask}
                     onChange={(e) => setNewTask(e.target.value)}
-                    placeholder="Add an unplanned task..."
+                    placeholder="Add a task for today..."
                     className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-transparent text-sm text-on-surface"
                     onKeyPress={(e) => e.key === 'Enter' && addTask()}
                   />
@@ -623,12 +603,26 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
               <div className="space-y-3 flex-grow overflow-y-auto pr-2 no-scrollbar">
                 {tasks.map((task) => {
-                  const isCarriedForward = new Date(task.plannedDate).toDateString() !== todayStr;
+                  const taskDate = task.plannedDate || task.deadline;
+                  const taskDateKey = taskDate ? getISTDateKey(new Date(taskDate)) : null;
+                  const isCarriedForward = taskDateKey && taskDateKey < todayKey;
                   return (
                     <div key={task.id} className="flex flex-col p-3 bg-surface-container rounded-lg border border-slate-200 transition-colors group">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
                         {isCarriedForward && (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-orange-100 text-orange-800">Carried Forward</span>
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-orange-100 text-orange-800">
+                            {task.deadline && !task.assignedBy ? "Overdue" : "Carried Forward"}
+                          </span>
+                        )}
+                        {task.assignedBy && (
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Assigned</span>
+                        )}
+                        {task.priority && task.priority !== "Medium" && (
+                          <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                            task.priority === "Urgent" ? "bg-rose-100 text-rose-800" :
+                            task.priority === "High" ? "bg-amber-100 text-amber-800" :
+                            "bg-slate-100 text-slate-700"
+                          }`}>{task.priority}</span>
                         )}
                         {task.isPlanned ? (
                           <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">Planned</span>
@@ -644,7 +638,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                       
                       <div className="flex items-start justify-between">
                         <div className="flex items-start gap-3 flex-1">
-                          {isCheckedIn && !isCheckedOut ? (
+                          {canWrite && isCheckedIn && !isCheckedOut ? (
                             <input
                               type="checkbox"
                               checked={task.status === "Completed"}
@@ -661,6 +655,11 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                               {task.title}
                             </span>
                             {task.description && <p className="text-xs text-slate-500 mt-1 break-words">{task.description}</p>}
+                            {task.deadline && (
+                              <p className="text-[10px] text-slate-500 mt-1 font-semibold">
+                                Due {formatDate(task.deadline)}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <button
@@ -684,9 +683,12 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               </div>
             </div>
 
-            {!isProgramStaff && (
+            {isFellow && isTeachingDay && (
             <div className="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 mt-2">
-                <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Lesson Plan</h3>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h3 className="font-bold text-lg text-on-surface">Daily Lesson Plan</h3>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-full">Teaching Day</span>
+                </div>
                 
                 <div className="space-y-4">
                   <div>
@@ -696,13 +698,15 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                       onChange={(e) => setLessonPlanText(e.target.value)}
                       placeholder="Write your daily lesson plan here..."
                       rows={4}
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface resize-none"
+                      disabled={!canWrite}
+                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface resize-none disabled:opacity-60"
                     />
                   </div>
 
                   <div>
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">Upload Files</label>
                     <div className="flex items-center gap-3 flex-wrap">
+                      {canWrite && (
                       <label className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold cursor-pointer transition-colors shadow-md shadow-blue-600/20">
                         <span className="material-symbols-outlined text-[18px]">upload_file</span>
                         Choose Files
@@ -713,6 +717,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                           onChange={(e) => setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)])}
                         />
                       </label>
+                    )}
                     </div>
 
                     {selectedFiles.length > 0 && (
@@ -721,7 +726,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                           <div key={`new-${idx}`} className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg">
                             <span className="material-symbols-outlined text-[14px]">description</span>
                             <span className="flex-1 truncate">{file.name}</span>
-                            <button onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                            <button onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))} className={`text-red-500 hover:text-red-700 ${canWrite ? "" : "hidden"}`}>
                               <span className="material-symbols-outlined text-[14px]">close</span>
                             </button>
                           </div>
@@ -739,7 +744,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                               <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-blue-600 hover:underline">
                                 {fileUrl.split("/").pop()}
                               </a>
-                              <button onClick={() => handleRemoveFile(idx)} className="text-red-500 hover:text-red-700">
+                              <button onClick={() => handleRemoveFile(idx)} className={`text-red-500 hover:text-red-700 ${canWrite ? "" : "hidden"}`}>
                                 <span className="material-symbols-outlined text-[14px]">delete</span>
                               </button>
                             </div>
@@ -749,16 +754,18 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                     )}
                   </div>
 
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleSaveLessonPlan}
-                      disabled={isUploadingLP || (!lessonPlanText.trim() && selectedFiles.length === 0)}
-                      className="px-4 py-2 bg-primary hover:bg-primary-container text-white font-semibold rounded-lg transition-colors cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      {isUploadingLP && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
-                      {isUploadingLP ? "Saving..." : "Save Lesson Plan"}
-                    </button>
-                  </div>
+                  {canWrite && (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={handleSaveLessonPlan}
+                        disabled={isUploadingLP || (!lessonPlanText.trim() && selectedFiles.length === 0)}
+                        className="px-4 py-2 bg-primary hover:bg-primary-container text-white font-semibold rounded-lg transition-colors cursor-pointer shadow-md shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {isUploadingLP && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
+                        {isUploadingLP ? "Saving..." : "Save Lesson Plan"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validatePersonName,
+  validateAadhaar,
+  validateMobile,
+  validateInteger,
+  firstError,
+  normalizeAadhaarForSave,
+  normalizeMobileForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -68,6 +77,16 @@ export async function POST(req) {
       return NextResponse.json({ error: "At least one aid item is required" }, { status: 400 });
     }
 
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      validateAadhaar(aadhar),
+      validateMobile(mobNumber),
+      validateInteger(familySize, { min: 1 }),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     for (const item of items) {
       if (!item.resourceItemId || !item.itemName) {
         return NextResponse.json({ error: "Each aid item must reference a resource" }, { status: 400 });
@@ -113,9 +132,9 @@ export async function POST(req) {
       return tx.reliefDistribution.create({
         data: {
           incidentId,
-          name,
-          aadhar: aadhar || null,
-          mobNumber: mobNumber || null,
+          name: name.trim(),
+          aadhar: normalizeAadhaarForSave(aadhar),
+          mobNumber: normalizeMobileForSave(mobNumber),
           address: address || null,
           familySize: familySize ? parseInt(familySize) : 1,
           notes: notes || null,

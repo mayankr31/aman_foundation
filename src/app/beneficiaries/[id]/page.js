@@ -15,6 +15,28 @@ import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateNa
 import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory, MONTH_OPTIONS, getIncomePeriod, formatIncomePeriod } from "@/lib/incomeCategories";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import { computeBeneficiaryImpact, formatNumber } from "@/lib/beneficiaryImpact";
+import {
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateVoterId,
+  validateRationCard,
+  validateBankAccount,
+  validateIfsc,
+  validatePersonName,
+  validateDateNotFuture,
+  validateAmount,
+  validateInteger,
+  firstError,
+  toMobileInput,
+  toAadhaarInput,
+  toPanInput,
+  toVoterIdInput,
+  toRationCardInput,
+  toBankAccountInput,
+  toIfscInput,
+  toPersonNameInput,
+} from "@/lib/validation";
 
 const SHOW_TAKE_KYR_BUTTON = false;
 
@@ -221,8 +243,8 @@ function BeneficiaryProfileDetailContent() {
         // Populate forms
         setName(b.name || "");
         setDob(b.dob ? b.dob.split("T")[0] : "");
-        setMobNumber(b.mobNumber || "");
-        setEmergencyContact(b.emergencyContact || "");
+        setMobNumber(toMobileInput(b.mobNumber || ""));
+        setEmergencyContact(toMobileInput(b.emergencyContact || ""));
         setGender(b.gender || "");
         setCaste(b.caste || "");
         setReligion(b.religion || "");
@@ -245,14 +267,14 @@ function BeneficiaryProfileDetailContent() {
         setMonthlyIncome(b.monthlyIncome ?? "");
         setTier(b.tier || "Tier 2");
 
-        setAadhar(b.aadhar || "");
-        setPanCard(b.panCard || "");
-        setVoterId(b.voterId || "");
-        setRationCard(b.rationCard || "");
+        setAadhar(toAadhaarInput(b.aadhar || ""));
+        setPanCard(toPanInput(b.panCard || ""));
+        setVoterId(toVoterIdInput(b.voterId || ""));
+        setRationCard(toRationCardInput(b.rationCard || ""));
 
         setBankName(b.bankName || "");
-        setBankAccountNo(b.bankAccountNo || "");
-        setBankIfsc(b.bankIfsc || "");
+        setBankAccountNo(toBankAccountInput(b.bankAccountNo || ""));
+        setBankIfsc(toIfscInput(b.bankIfsc || ""));
 
         const assignments = {};
         (b.livelihoodDetails || []).forEach((d) => {
@@ -265,7 +287,7 @@ function BeneficiaryProfileDetailContent() {
           name: f.name || "",
           relation: f.relation || "",
           dob: f.dob ? f.dob.split("T")[0] : "",
-          contactInfo: f.contactInfo || ""
+          contactInfo: toMobileInput(f.contactInfo || "")
         })));
 
         setLivestock((b.livestock || []).map(l => ({
@@ -475,6 +497,27 @@ function BeneficiaryProfileDetailContent() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    const activeMembers = familyMembers.filter((m) => m.name.trim() !== "");
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      dob ? validateDateNotFuture(dob, { label: "Date of birth" }) : null,
+      validateMobile(mobNumber),
+      validateMobile(emergencyContact),
+      validateAadhaar(aadhar),
+      validatePan(panCard),
+      validateVoterId(voterId),
+      validateRationCard(rationCard),
+      validateBankAccount(bankAccountNo),
+      validateIfsc(bankIfsc),
+      validateAmount(monthlyIncome, { min: 0 }),
+      validateInteger(householdSize, { min: 1, max: 20 }),
+      ...activeMembers.map((m) => validatePersonName(m.name, { required: true })),
+      ...activeMembers.map((m) => validateMobile(m.contactInfo)),
+    ]);
+    if (validationMessage) {
+      toast.error(validationMessage);
+      return;
+    }
     try {
       const headers = {
         "Content-Type": "application/json",
@@ -2514,11 +2557,11 @@ function BeneficiaryProfileDetailContent() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Full Name</label>
-                    <input type="text" required value={name} onChange={e => setName(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="text" required maxLength={60} value={name} onChange={e => setName(toPersonNameInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">DOB</label>
-                    <input type="date" value={dob} onChange={e => setDob(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="date" max={new Date().toISOString().slice(0, 10)} value={dob} onChange={e => setDob(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Gender</label>
@@ -2532,11 +2575,11 @@ function BeneficiaryProfileDetailContent() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Mobile Number</label>
-                    <input type="text" value={mobNumber} onChange={e => setMobNumber(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="tel" inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." value={mobNumber} onChange={e => setMobNumber(toMobileInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Emergency Contact Number</label>
-                    <input type="text" value={emergencyContact} onChange={e => setEmergencyContact(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="tel" inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." value={emergencyContact} onChange={e => setEmergencyContact(toMobileInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Caste</label>
@@ -2563,7 +2606,7 @@ function BeneficiaryProfileDetailContent() {
                   )}
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Monthly Income (₹)</label>
-                    <input type="number" value={monthlyIncome} onChange={e => setMonthlyIncome(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="number" min="0" step="0.01" value={monthlyIncome} onChange={e => setMonthlyIncome(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Annual Income (₹) — Auto-calculated</label>
@@ -2571,7 +2614,7 @@ function BeneficiaryProfileDetailContent() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Household Size</label>
-                    <input type="number" value={householdSize} onChange={e => setHouseholdSize(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <input type="number" min="1" max="20" step="1" value={householdSize} onChange={e => setHouseholdSize(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Socio-Economic Tier</label>
@@ -2623,19 +2666,19 @@ function BeneficiaryProfileDetailContent() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Aadhar Number</label>
-                      <input type="text" placeholder="1234 5678 9012" value={aadhar} onChange={e => setAadhar(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Aadhaar must be exactly 12 digits." placeholder="123456789012" value={aadhar} onChange={e => setAadhar(toAadhaarInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">PAN Card</label>
-                      <input type="text" placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" maxLength={10} pattern="[A-Z]{5}[0-9]{4}[A-Z]" title="PAN must be in the format ABCDE1234F." placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(toPanInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Voter ID</label>
-                      <input type="text" placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" maxLength={10} pattern="[A-Z]{3}[0-9]{7}" title="Voter ID must be 3 letters followed by 7 digits." placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(toVoterIdInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Ration Card (SFY)</label>
-                      <input type="text" placeholder="RC-AS-XXXX" value={rationCard} onChange={e => setRationCard(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" maxLength={20} pattern="[A-Z0-9][A-Z0-9-]{5,19}" title="Ration card must be 6 to 20 letters, digits or hyphens." placeholder="RC-AS-XXXX" value={rationCard} onChange={e => setRationCard(toRationCardInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                   </div>
 
@@ -2647,11 +2690,11 @@ function BeneficiaryProfileDetailContent() {
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Account Number</label>
-                      <input type="text" value={bankAccountNo} onChange={e => setBankAccountNo(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" inputMode="numeric" maxLength={18} pattern="[0-9]{9,18}" title="Bank account number must be 9 to 18 digits." value={bankAccountNo} onChange={e => setBankAccountNo(toBankAccountInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">IFSC Code</label>
-                      <input type="text" placeholder="SBIN000XXXX" value={bankIfsc} onChange={e => setBankIfsc(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <input type="text" maxLength={11} pattern="[A-Z]{4}0[A-Z0-9]{6}" title="IFSC must be in the format SBIN0007421." placeholder="SBIN000XXXX" value={bankIfsc} onChange={e => setBankIfsc(toIfscInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                     </div>
                   </div>
                 </div>
@@ -2675,7 +2718,7 @@ function BeneficiaryProfileDetailContent() {
                       <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-end p-3 border border-surface-container-high bg-surface-container-low/20 rounded-lg">
                         <div className="flex-1 min-w-[150px] flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Full Name</label>
-                          <input type="text" required value={m.name} onChange={e => updateFamilyMemberRow(idx, "name", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
+                          <input type="text" required maxLength={60} value={m.name} onChange={e => updateFamilyMemberRow(idx, "name", toPersonNameInput(e.target.value))} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
                         </div>
                         <div className="w-32 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Relation</label>
@@ -2683,11 +2726,11 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                         <div className="w-40 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">DOB</label>
-                          <input type="date" value={m.dob} onChange={e => updateFamilyMemberRow(idx, "dob", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
+                          <input type="date" max={new Date().toISOString().slice(0, 10)} value={m.dob} onChange={e => updateFamilyMemberRow(idx, "dob", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
                         </div>
                         <div className="w-44 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Contact Mobile</label>
-                          <input type="text" value={m.contactInfo} onChange={e => updateFamilyMemberRow(idx, "contactInfo", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
+                          <input type="tel" inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." value={m.contactInfo} onChange={e => updateFamilyMemberRow(idx, "contactInfo", toMobileInput(e.target.value))} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
                         </div>
                         <button
                           type="button"

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import AttendanceModal from "@/components/AttendanceModal";
+import AttendanceTimer from "@/components/AttendanceTimer";
+import { getISTDateKey } from "@/lib/time";
 import KpiCard from "@/components/dashboard/KpiCard";
 import SectionCard from "@/components/dashboard/SectionCard";
 import { getDashboardKpiConfig, getDashboardSections } from "@/lib/dashboardSections";
@@ -27,10 +29,7 @@ export default function Dashboard() {
       if (!res.ok) return null;
 
       const json = await res.json();
-      const now = new Date();
-      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(
-        now.getDate()
-      ).padStart(2, "0")}`;
+      const today = getISTDateKey();
       return (
         (json.data || []).find(
           (entry) => entry.userId === user.id && entry.logdate === today
@@ -55,8 +54,16 @@ export default function Dashboard() {
       if (!cancelled) setTodayAttendance(log);
     });
 
+    // Refresh on the next IST day so yesterday's timer/log does not linger.
+    const interval = setInterval(() => {
+      fetchTodayAttendance().then((log) => {
+        if (!cancelled) setTodayAttendance(log);
+      });
+    }, 60000);
+
     return () => {
       cancelled = true;
+      clearInterval(interval);
     };
   }, [role, fetchTodayAttendance]);
 
@@ -118,8 +125,11 @@ export default function Dashboard() {
             {user?.name ? `Welcome back, ${user.name}` : "Overview of your programs and impact"}
           </p>
         </div>
-        <div className="flex gap-3">
-          {role && role !== "ADMIN" && (
+        <div className="flex items-center gap-3 flex-wrap">
+          {role && role !== "ADMIN" && todayAttendance?.intimelog && (
+            <AttendanceTimer log={todayAttendance} compact />
+          )}
+          {role && role !== "ADMIN" && can("self-attendance", "WRITE") && (
             <button
               onClick={() => setIsAttendanceModalOpen(true)}
               className="px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-[0_8px_24px_rgba(5,150,105,0.2)] hover:shadow-[0_4px_12px_rgba(5,150,105,0.3)] hover:bg-emerald-700 transition-all flex items-center gap-2 cursor-pointer"

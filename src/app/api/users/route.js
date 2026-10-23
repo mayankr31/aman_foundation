@@ -2,8 +2,17 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getManagedTeamUserIds } from "@/lib/scope";
+import { getHierarchyScopedUserIds } from "@/lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validatePassword,
+  firstError,
+  normalizeMobileForSave,
+  normalizeEmailForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -31,11 +40,12 @@ export async function GET(req) {
       ? rolesFilter.split(",").map((r) => r.trim()).filter(Boolean)
       : null;
 
-    // Program Managers only see their team (fellows of assigned schools/centres).
+    // Program staff only see themselves and users below them in the
+    // Reports To hierarchy (with the legacy assignment scope as a fallback).
     let scopeWhere;
     if (isPm) {
-      const team = await getManagedTeamUserIds(user.id);
-      scopeWhere = { id: { in: team } };
+      const team = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [];
+      scopeWhere = { id: { in: team.length ? team : [user.id] } };
     }
 
     const roleWhere = rolesList?.length
@@ -61,6 +71,9 @@ export async function GET(req) {
         department: true,
         avatar: true,
         createdById: true,
+        roleId: true,
+        managerId: true,
+        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
         role: {
           select: {
             id: true,
@@ -92,7 +105,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { name, email, password, roleId, mobile } = body;
+    const { name, email, password, roleId, mobile, managerId } = body;
 
     // Basic validation
     if (!name || !email || !password || !roleId) {
@@ -113,7 +126,17 @@ export async function POST(req) {
       );
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      validateEmail(email, { required: true }),
+      validateMobile(mobile),
+      validatePassword(password, { required: true }),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
+    const normalizedEmail = normalizeEmailForSave(email);
 
     // Check if email already exists
     const existingEmail = await prisma.user.findUnique({
@@ -144,6 +167,13 @@ export async function POST(req) {
       counter++;
     }
 
+    if (managerId) {
+      const manager = await prisma.user.findUnique({ where: { id: managerId }, select: { id: true } });
+      if (!manager) {
+        return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
+      }
+    }
+
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -154,8 +184,9 @@ export async function POST(req) {
         username,
         email: normalizedEmail,
         password: hashedPassword,
-        mobile: mobile || null,
+        mobile: normalizeMobileForSave(mobile),
         roleId,
+        managerId: managerId || null,
         status: "ACTIVE",
         createdById: user.id,
       },
@@ -170,6 +201,8 @@ export async function POST(req) {
         avatar: true,
         createdById: true,
         createdAt: true,
+        managerId: true,
+        manager: { select: { id: true, name: true } },
         role: { select: { id: true, name: true } },
       },
     });

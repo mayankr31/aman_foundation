@@ -95,11 +95,14 @@ model User {
   createdAt             DateTime   @default(now())
   updatedAt             DateTime   @updatedAt
   createdById           String?
+  managerId             String?
 
-  role         Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
-  permissions  UserPermission[]
-  createdBy    User?            @relation("UserCreator", fields: [createdById], references: [id], onDelete: SetNull)
-  createdUsers User[]           @relation("UserCreator")
+  role          Role             @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  permissions   UserPermission[]
+  createdBy     User?            @relation("UserCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers  User[]           @relation("UserCreator")
+  manager       User?            @relation("UserReports", fields: [managerId], references: [id], onDelete: SetNull)
+  directReports User[]           @relation("UserReports")
 
   fellow                   Fellow?
   leaves                   Leave[]
@@ -107,6 +110,11 @@ model User {
   reliefDistributions      ReliefDistribution[]
   attendanceLogs           AttendanceLog[]
   taskComments             FellowTaskComment[]
+  assignedTasks            Task[]               @relation("TaskAssignee")
+  createdTasks             Task[]               @relation("TaskAssigner")
+  taskCommentsNew          TaskComment[]
+  taskDocuments            TaskDocument[]
+  compOffCredits           CompOffCredit[]
   travelRequests           TravelRequest[]
   approvedTravel           TravelRequest[]      @relation("ApprovedByUser")
   reimbursementRequests    Reimbursement[]      @relation("ReimbursementRequester")
@@ -570,6 +578,64 @@ model ProgramManagerTaskComment {
   author User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
+// ─── Unified tasks (daily planning + manager assignments) ───
+
+model Task {
+  id             String    @id @default(uuid())
+  title          String
+  description    String?
+  assigneeId     String
+  assignedById   String?
+  plannedDate    DateTime?
+  deadline       DateTime?
+  status         String    @default("Pending")
+  priority       String    @default("Medium")
+  isPlanned      Boolean   @default(true)
+  completionDate DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  assignee   User           @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: Cascade)
+  assignedBy User?          @relation("TaskAssigner", fields: [assignedById], references: [id], onDelete: SetNull)
+  comments   TaskComment[]
+  documents  TaskDocument[]
+
+  @@index([assigneeId, status])
+  @@index([assignedById])
+  @@index([plannedDate])
+  @@index([deadline])
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  authorId  String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+}
+
+model TaskDocument {
+  id           String   @id @default(uuid())
+  taskId       String
+  name         String
+  url          String
+  mimeType     String?
+  size         Int?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  task       Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  uploadedBy User? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([taskId])
+}
+
 model SchoolProgram {
   id        String @id @default(uuid())
   schoolId  String
@@ -926,7 +992,7 @@ model InventoryLedger {
 }
 
 model AttendanceLog {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   userId          String
   email           String?
   logdate         String?
@@ -944,24 +1010,67 @@ model AttendanceLog {
   checkOutLng     Float?
   lessonPlanText  String?
   lessonPlanFiles Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  isTeachingDay   Boolean?
+  checkInAt       DateTime?
+  checkOutAt      DateTime?
+  workSeconds     Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Leave {
-  id              String      @id @default(uuid())
-  userId          String
-  type            String?
-  dates           String?
-  reason          String?
-  rejectionReason String?
-  status          LeaveStatus @default(PENDING)
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id                String      @id @default(uuid())
+  userId            String
+  type              String?
+  leaveTypeKey      String?
+  dates             String?
+  startDate         DateTime?
+  endDate           DateTime?
+  days              Float       @default(0)
+  compOffWorkedDate DateTime?
+  compOffCreditId   String?     @unique
+  reason            String?
+  rejectionReason   String?
+  status            LeaveStatus @default(PENDING)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  compOffCredit CompOffCredit? @relation(fields: [compOffCreditId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+}
+
+model LeaveTypeConfig {
+  id             String   @id @default(uuid())
+  key            String   @unique
+  name           String
+  annualQuota    Float    @default(0)
+  quarterlyQuota Float?
+  active         Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model CompOffCredit {
+  id         String   @id @default(uuid())
+  userId     String
+  workedDate DateTime
+  days       Float    @default(1)
+  expiresAt  DateTime
+  status     String   @default("Available") // Available, Reserved, Used, Expired
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leave Leave?
+
+  @@unique([userId, workedDate])
+  @@index([userId, status])
 }
 
 model IncidentResourceNeed {

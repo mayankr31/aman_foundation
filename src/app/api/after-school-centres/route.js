@@ -3,6 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { getFellowIdByUserId } from "@/lib/scope";
+import {
+  validateEmail,
+  validateMobile,
+  firstError,
+  normalizeEmailForSave,
+  normalizeMobileForSave,
+} from "@/lib/validation";
 
 export async function GET(req) {
   try {
@@ -87,13 +94,21 @@ export async function POST(req) {
       return NextResponse.json({ error: "Centre name is required" }, { status: 400 });
     }
 
+    const validationMessage = firstError([
+      validateEmail(email),
+      validateMobile(phone),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     const centre = await prisma.$transaction(async (tx) => {
       const created = await tx.afterSchoolCentre.create({
         data: {
           name,
           coordinatorName,
-          email,
-          phone,
+          email: normalizeEmailForSave(email),
+          phone: normalizeMobileForSave(phone),
           address,
           location,
           status: status || "Active",

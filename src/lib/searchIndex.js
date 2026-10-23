@@ -232,6 +232,8 @@ export const SEARCH_ENTRIES = [
   // ── Top-level / hubs ──────────────────────────────────────────────
   { id: "dashboard", label: "Dashboard", path: ["Dashboard"], keywords: ["home", "overview", "kpi"], href: "/", page: null, group: "General", icon: "dashboard" },
   { id: "my-profile", label: "My Profile", path: ["My Profile"], keywords: ["profile", "account", "settings", "me"], href: "/profile", page: null, group: "General", icon: "person" },
+  { id: "tasks", label: "Tasks", path: ["Tasks"], keywords: ["tasks", "task", "todo", "assigned", "deadline", "planner"], href: "/tasks", page: "tasks", group: "Tasks", icon: "checklist" },
+  { id: "task-analytics", label: "Task Analytics", path: ["Tasks", "Task Analytics"], keywords: ["task analytics", "tasks", "charts", "calendar", "reports"], href: "/tasks/analytics", page: "task-analytics", group: "Tasks", icon: "insights" },
   { id: "education-hub", label: "Education", path: ["Education"], keywords: ["school", "students", "education hub"], href: "/education", page: "education", group: "Education", icon: "school" },
   { id: "livelihood-hub", label: "Livelihood", path: ["Livelihood"], keywords: ["farm", "non-farm", "programs"], href: "/livelihood", page: "livelihood", group: "Livelihood", icon: "agriculture" },
   { id: "disaster-relief", label: "Disaster Relief", path: ["Disaster Relief"], keywords: ["relief", "calamity", "disaster"], href: "/disaster-relief", page: "disaster-relief", group: "General", icon: "emergency" },
@@ -303,6 +305,7 @@ export const SEARCH_ENTRIES = [
 // Preferred group order in the results dropdown.
 export const SEARCH_GROUPS = [
   "General",
+  "Tasks",
   "Education",
   "Fellow Profile",
   "Student Profile",

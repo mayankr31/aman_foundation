@@ -1,60 +1,83 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/auth";
+import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+import { notifyTaskEvent, NOTIFICATION_TYPES } from "@/lib/tasks";
 
-export async function GET(request, { params }) {
+async function loadTaskForUser(user, taskId) {
+  const task = await prisma.task.findUnique({ where: { id: taskId } });
+  if (!task) return { task: null, allowed: false };
+  const allowed =
+    user.role.name === "ADMIN" ||
+    task.assigneeId === user.id ||
+    task.assignedById === user.id;
+  return { task, allowed };
+}
+
+export async function GET(req, { params }) {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader) return NextResponse.json({ success: false, error: "No token" }, { status: 401 });
-    const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-    if (!decoded) return NextResponse.json({ success: false, error: "Invalid token" }, { status: 401 });
+    const { user, error } = await authenticateUser(req);
+    if (error) return error;
+    if (!(await checkPermission(user, "dashboard", "tasks", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for tasks" }, { status: 403 });
+    }
 
-    const { id: taskId } = await params;
+    const { id } = await params;
+    const { allowed } = await loadTaskForUser(user, id);
+    if (!allowed) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    const comments = await prisma.fellowTaskComment.findMany({
-      where: { taskId },
-      include: { author: { select: { id: true, name: true, role: true } } },
-      orderBy: { createdAt: 'asc' }
+    const comments = await prisma.taskComment.findMany({
+      where: { taskId: id },
+      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } } },
+      orderBy: { createdAt: "asc" },
     });
 
     return NextResponse.json({ success: true, data: comments });
   } catch (error) {
-    console.error("Error fetching comments:", error);
-    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
+    console.error("Fetch task comments error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-export async function POST(request, { params }) {
+export async function POST(req, { params }) {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader) return NextResponse.json({ success: false, error: "No token" }, { status: 401 });
-    const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-    if (!decoded) return NextResponse.json({ success: false, error: "Invalid token" }, { status: 401 });
-
-    const { id: taskId } = await params;
-    const body = await request.json();
-    const { text } = body;
-
-    if (!text) {
-      return NextResponse.json({ success: false, error: "Text is required" }, { status: 400 });
+    const { user, error } = await authenticateUser(req);
+    if (error) return error;
+    if (!(await checkPermission(user, "dashboard", "tasks", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for tasks" }, { status: 403 });
     }
 
-    const newComment = await prisma.fellowTaskComment.create({
-      data: {
-        taskId,
-        authorId: decoded.userId,
-        text
-      },
-      include: {
-        author: { select: { id: true, name: true, role: true } }
-      }
+    const { id } = await params;
+    const { task, allowed } = await loadTaskForUser(user, id);
+    if (!allowed) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+    const body = await req.json();
+    const text = String(body.text || "").trim();
+    if (!text) return NextResponse.json({ error: "Comment text is required" }, { status: 400 });
+
+    const comment = await prisma.taskComment.create({
+      data: { taskId: id, authorId: user.id, text },
+      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } } },
     });
 
-    return NextResponse.json({ success: true, data: newComment }, { status: 201 });
+    const recipients = [];
+    if (task.assigneeId !== user.id) recipients.push(task.assigneeId);
+    if (task.assignedById && task.assignedById !== user.id) recipients.push(task.assignedById);
+
+    if (recipients.length) {
+      await notifyTaskEvent(recipients, {
+        type: NOTIFICATION_TYPES.TASK_COMMENT,
+        title: "New task comment",
+        message: `${user.name || "A user"} commented on: ${task.title}`,
+        link: `/tasks?task=${task.id}`,
+        actorId: user.id,
+        metadata: { taskId: task.id },
+      });
+    }
+
+    return NextResponse.json({ success: true, data: comment }, { status: 201 });
   } catch (error) {
-    console.error("Error creating comment:", error);
-    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
+    console.error("Create task comment error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

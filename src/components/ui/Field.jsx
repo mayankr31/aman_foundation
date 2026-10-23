@@ -12,6 +12,7 @@ export default function Field({
   placeholder,
   options,
   error,
+  hint,
   rows,
   disabled = false,
   className = "",
@@ -40,6 +41,7 @@ export default function Field({
           onChange={onChange}
           required={required}
           disabled={disabled}
+          aria-invalid={Boolean(error)}
           className={inputClasses}
           {...rest}
         >
@@ -68,6 +70,7 @@ export default function Field({
           disabled={disabled}
           rows={rows}
           placeholder={placeholder}
+          aria-invalid={Boolean(error)}
           className={inputClasses}
           {...rest}
         />
@@ -81,11 +84,15 @@ export default function Field({
           required={required}
           disabled={disabled}
           placeholder={placeholder}
+          aria-invalid={Boolean(error)}
           className={inputClasses}
           {...rest}
         />
       )}
 
+      {hint && !error && (
+        <span className="text-[11px] text-on-surface-variant">{hint}</span>
+      )}
       {error && <span className="text-[11px] font-medium text-error">{error}</span>}
     </div>
   );

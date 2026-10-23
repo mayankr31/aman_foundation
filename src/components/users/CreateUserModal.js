@@ -1,9 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, UserPlus, Loader2, Save } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import {
+  validateMobile,
+  validateEmail,
+  validatePersonName,
+  validatePassword,
+  firstError,
+  toMobileInput,
+  toPersonNameInput,
+} from '@/lib/validation';
 
 export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, roles = [], onUserCreated }) {
   const [name, setName] = useState('');
@@ -11,10 +20,22 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [roleId, setRoleId] = useState('');
+  const [managerId, setManagerId] = useState('');
+  const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const assignableRoles = roles.filter((r) => r.name !== 'ADMIN');
+
+  useEffect(() => {
+    if (!isOpen || !token) return;
+    fetch('/api/users', { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) setManagers(json.data || []);
+      })
+      .catch(() => {});
+  }, [isOpen, token]);
 
   const reset = () => {
     setName('');
@@ -22,21 +43,24 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
     setMobile('');
     setPassword('');
     setRoleId('');
+    setManagerId('');
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
 
-    if (!name.trim() || !email.trim() || !password || !roleId) {
-      toast.error("Name, email, password, and role are required");
+    if (!roleId) {
+      toast.error("Role is required");
       return;
     }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-    if (password.length < 8) {
-      toast.error("Password must be at least 8 characters");
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      validateEmail(email, { required: true }),
+      validateMobile(mobile),
+      validatePassword(password, { required: true }),
+    ]);
+    if (validationMessage) {
+      toast.error(validationMessage);
       return;
     }
 
@@ -54,6 +78,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           mobile: mobile.trim() || undefined,
           password,
           roleId,
+          managerId: managerId || null,
         }),
       });
 
@@ -117,8 +142,9 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
             <input
               type="text"
               placeholder="e.g. Priya Sharma"
+              maxLength={60}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(toPersonNameInput(e.target.value))}
               className={inputClass}
             />
           </div>
@@ -128,6 +154,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
             <input
               type="email"
               placeholder="user@example.com"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={inputClass}
@@ -137,12 +164,17 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           <div className="flex flex-col gap-2">
             <label className={labelClass}>Mobile (Optional)</label>
             <input
-              type="text"
-              placeholder="+91 98765 43210"
+              type="tel"
+              inputMode="numeric"
+              maxLength={10}
+              pattern="[0-9]{10}"
+              title="Enter exactly 10 digits, without +91 or spaces."
+              placeholder="e.g. 9876543210"
               value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
+              onChange={(e) => setMobile(toMobileInput(e.target.value))}
               className={inputClass}
             />
+            <span className={`text-[10px] ${theme.textMuted}`}>10 digits, numbers only (no +91).</span>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -168,6 +200,22 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
               {assignableRoles.map((r) => (
                 <option key={r.id} value={r.id}>
                   {r.name.replaceAll('_', ' ')}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className={labelClass}>Reports To</label>
+            <select
+              value={managerId}
+              onChange={(e) => setManagerId(e.target.value)}
+              className={inputClass}
+            >
+              <option value="">No manager / top level</option>
+              {managers.map((manager) => (
+                <option key={manager.id} value={manager.id}>
+                  {manager.name} ({manager.role?.name?.replaceAll('_', ' ')})
                 </option>
               ))}
             </select>

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { notifyUsers, getAdminUserIds, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { validateAmount, validateDateOrder, firstError } from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -58,6 +59,14 @@ export async function POST(req) {
 
     if (!destination || !purpose || !startDate || !endDate) {
       return NextResponse.json({ error: "destination, purpose, startDate, and endDate are required" }, { status: 400 });
+    }
+
+    const validationMessage = firstError([
+      validateDateOrder(startDate, endDate),
+      validateAmount(expectedExpenses, { min: 0 }),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
     const request = await prisma.travelRequest.create({

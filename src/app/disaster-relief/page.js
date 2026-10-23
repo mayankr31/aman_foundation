@@ -7,6 +7,17 @@ import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate, formatDateTime } from "@/lib/date";
+import {
+  validateAadhaar,
+  validateMobile,
+  validateInteger,
+  validateAmount,
+  validatePersonName,
+  firstError,
+  toAadhaarInput,
+  toMobileInput,
+  toPersonNameInput,
+} from "@/lib/validation";
 
 const RELIEF_TAB_SLUGS = {
   "Help Providers": "help-providers",
@@ -204,7 +215,12 @@ function DisasterReliefContent() {
 
   const handleAddLedger = async (e) => {
     e.preventDefault();
-    if (!ledgerResourceNeedId || !ledgerQuantity) return;
+    if (!ledgerResourceNeedId) return;
+    const quantityError = validateAmount(ledgerQuantity, { required: true, min: 0.01 });
+    if (quantityError) {
+      alert(quantityError);
+      return;
+    }
     
     // Find the resourceItemId from the selected need
     const selectedNeed = resourceNeeds.find(n => n.id === ledgerResourceNeedId);
@@ -243,6 +259,17 @@ function DisasterReliefContent() {
 
   const handleSaveCalamity = async (e) => {
     e.preventDefault();
+    const validationMessage = firstError([
+      validateInteger(calamityForm.expectedFamiliesAffected, { min: 0 }),
+      validateInteger(calamityForm.humanLossDied, { min: 0 }),
+      validateInteger(calamityForm.humanLossInjured, { min: 0 }),
+      validateInteger(calamityForm.humanLossMissing, { min: 0 }),
+      validateAmount(calamityForm.propertyLossEstimate, { min: 0 }),
+    ]);
+    if (validationMessage) {
+      alert(validationMessage);
+      return;
+    }
     try {
       const isEditing = Boolean(editingCalamityId);
       const url = isEditing
@@ -271,6 +298,15 @@ function DisasterReliefContent() {
 
   const handleAddResourceNeed = async (e) => {
     e.preventDefault();
+    const validationMessage = firstError([
+      validateAmount(resourceNeedForm.quantityNeeded, { min: 0 }),
+      validateAmount(resourceNeedForm.quantityReceived, { min: 0 }),
+      validateInteger(resourceNeedForm.transactionsCount, { min: 0 }),
+    ]);
+    if (validationMessage) {
+      alert(validationMessage);
+      return;
+    }
     try {
       const res = await fetch("/api/disaster-relief/resource-needs", {
         method: "POST",
@@ -296,6 +332,10 @@ function DisasterReliefContent() {
 
   const handleAddProvider = async (e) => {
     e.preventDefault();
+    if (!providerForm.name?.trim()) {
+      alert("Responder / organization name is required.");
+      return;
+    }
     try {
       const res = await fetch("/api/disaster-relief/help-providers", {
         method: "POST",
@@ -342,6 +382,17 @@ function DisasterReliefContent() {
     const validItems = distributionForm.items.filter((it) => it.resourceNeedId && it.quantity);
     if (!distributionForm.incidentId || !distributionForm.name || validItems.length === 0) {
       alert("Please select a calamity, enter the recipient name and add at least one aid item.");
+      return;
+    }
+    const validationMessage = firstError([
+      validatePersonName(distributionForm.name, { required: true }),
+      validateAadhaar(distributionForm.aadhar),
+      validateMobile(distributionForm.mobNumber),
+      validateInteger(distributionForm.familySize, { min: 1 }),
+      ...validItems.map((item) => validateAmount(item.quantity, { required: true, min: 0.01 })),
+    ]);
+    if (validationMessage) {
+      alert(validationMessage);
       return;
     }
 
@@ -943,23 +994,23 @@ function DisasterReliefContent() {
                 </div>
                 <div className="flex flex-col gap-1 col-span-2">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Expected Families Affected</label>
-                  <input type="number" placeholder="0" value={calamityForm.expectedFamiliesAffected} onChange={(e) => setCalamityForm({ ...calamityForm, expectedFamiliesAffected: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="0" step="1" placeholder="0" value={calamityForm.expectedFamiliesAffected} onChange={(e) => setCalamityForm({ ...calamityForm, expectedFamiliesAffected: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-error uppercase tracking-wide">People Died</label>
-                  <input type="number" placeholder="0" value={calamityForm.humanLossDied} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossDied: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-error border-error/50 bg-error-container/10 text-on-surface" />
+                  <input type="number" min="0" step="1" placeholder="0" value={calamityForm.humanLossDied} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossDied: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-error border-error/50 bg-error-container/10 text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-secondary uppercase tracking-wide">People Injured</label>
-                  <input type="number" placeholder="0" value={calamityForm.humanLossInjured} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossInjured: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-secondary/50 bg-secondary-container/10 text-on-surface" />
+                  <input type="number" min="0" step="1" placeholder="0" value={calamityForm.humanLossInjured} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossInjured: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-secondary border-secondary/50 bg-secondary-container/10 text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">People Missing</label>
-                  <input type="number" placeholder="0" value={calamityForm.humanLossMissing} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossMissing: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="0" step="1" placeholder="0" value={calamityForm.humanLossMissing} onChange={(e) => setCalamityForm({ ...calamityForm, humanLossMissing: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Property Loss (₹)</label>
-                  <input type="number" step="any" placeholder="0.00" value={calamityForm.propertyLossEstimate} onChange={(e) => setCalamityForm({ ...calamityForm, propertyLossEstimate: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="0" placeholder="0.00" value={calamityForm.propertyLossEstimate} onChange={(e) => setCalamityForm({ ...calamityForm, propertyLossEstimate: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <label className="flex items-center gap-2 rounded-lg border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface col-span-2 cursor-pointer">
                   <input
@@ -1025,16 +1076,16 @@ function DisasterReliefContent() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-error uppercase tracking-wide">Quantity Needed</label>
-                  <input type="number" step="any" placeholder="0" value={resourceNeedForm.quantityNeeded} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, quantityNeeded: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="0" step="any" placeholder="0" value={resourceNeedForm.quantityNeeded} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, quantityNeeded: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-primary uppercase tracking-wide">Quantity Received</label>
-                  <input type="number" step="any" placeholder="0" value={resourceNeedForm.quantityReceived} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, quantityReceived: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="0" step="any" placeholder="0" value={resourceNeedForm.quantityReceived} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, quantityReceived: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Complete Transactions (Parts)</label>
-                <input type="number" placeholder="0" value={resourceNeedForm.transactionsCount} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, transactionsCount: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                <input type="number" min="0" step="1" placeholder="0" value={resourceNeedForm.transactionsCount} onChange={(e) => setResourceNeedForm({ ...resourceNeedForm, transactionsCount: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button
@@ -1134,19 +1185,19 @@ function DisasterReliefContent() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1 col-span-2">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Recipient Name <span className="text-error">*</span></label>
-                  <input required type="text" placeholder="e.g. Ramesh Das" value={distributionForm.name} onChange={(e) => setDistributionForm({ ...distributionForm, name: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input required type="text" maxLength={60} placeholder="e.g. Ramesh Das" value={distributionForm.name} onChange={(e) => setDistributionForm({ ...distributionForm, name: toPersonNameInput(e.target.value) })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aadhar Number</label>
-                  <input type="text" placeholder="XXXX XXXX XXXX" value={distributionForm.aadhar} onChange={(e) => setDistributionForm({ ...distributionForm, aadhar: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="text" inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Aadhaar must be exactly 12 digits." placeholder="123456789012" value={distributionForm.aadhar} onChange={(e) => setDistributionForm({ ...distributionForm, aadhar: toAadhaarInput(e.target.value) })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Mobile Number</label>
-                  <input type="text" placeholder="+91 XXXXX XXXXX" value={distributionForm.mobNumber} onChange={(e) => setDistributionForm({ ...distributionForm, mobNumber: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="tel" inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." placeholder="e.g. 9876543210" value={distributionForm.mobNumber} onChange={(e) => setDistributionForm({ ...distributionForm, mobNumber: toMobileInput(e.target.value) })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Family Size</label>
-                  <input type="number" min="1" placeholder="1" value={distributionForm.familySize} onChange={(e) => setDistributionForm({ ...distributionForm, familySize: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <input type="number" min="1" step="1" placeholder="1" value={distributionForm.familySize} onChange={(e) => setDistributionForm({ ...distributionForm, familySize: e.target.value })} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Address</label>

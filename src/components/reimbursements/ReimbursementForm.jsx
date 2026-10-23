@@ -288,9 +288,9 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
                   <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Amount (₹) *</label>
                   <input
                     type="number"
-                    required
-                    min="0"
+                    min="0.01"
                     step="0.01"
+                    required
                     value={item.amount}
                     onChange={(event) => updateItem(index, { amount: event.target.value })}
                     placeholder="0"

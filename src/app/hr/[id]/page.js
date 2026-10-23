@@ -7,6 +7,23 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { formatDate } from "@/lib/date";
+import {
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateIfsc,
+  validateBankAccount,
+  validateEmail,
+  validatePersonName,
+  validateDateNotFuture,
+  firstError,
+  toMobileInput,
+  toAadhaarInput,
+  toPanInput,
+  toIfscInput,
+  toBankAccountInput,
+  toPersonNameInput,
+} from "@/lib/validation";
 
 const DEPARTMENTS = ["Operations", "Logistics", "Education", "HR", "Finance"];
 
@@ -38,15 +55,18 @@ function toDateInput(value) {
 
 export default function HrEmployeeProfilePage() {
   const { id } = useParams();
-  const { token } = useAuth();
+  const { token, user: currentUser, can } = useAuth();
+  const canWrite = can("employees", "WRITE");
   const toast = useToast();
 
   const [employee, setEmployee] = useState(null);
+  const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   useEffect(() => {
@@ -54,6 +74,16 @@ export default function HrEmployeeProfilePage() {
       fetchEmployee();
     }
   }, [token, id]);
+
+  useEffect(() => {
+    if (!token || currentUser?.roleName !== "ADMIN") return;
+    fetch("/api/users", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) setManagers((json.data || []).filter((u) => u.id !== id));
+      })
+      .catch(() => {});
+  }, [token, currentUser, id]);
 
   const fetchEmployee = async () => {
     setLoading(true);
@@ -78,8 +108,15 @@ export default function HrEmployeeProfilePage() {
   const buildForm = (u) => {
     const next = {};
     for (const field of PERSONAL_FIELDS) next[field] = u[field] ?? "";
+    next.mobile = toMobileInput(u.mobile ?? "");
+    next.emergencyContactPhone = toMobileInput(u.emergencyContactPhone ?? "");
+    next.aadharNumber = toAadhaarInput(u.aadharNumber ?? "");
+    next.panCard = toPanInput(u.panCard ?? "");
+    next.bankAccountNo = toBankAccountInput(u.bankAccountNo ?? "");
+    next.bankIfsc = toIfscInput(u.bankIfsc ?? "");
     next.dob = toDateInput(u.dob);
     next.dateOfJoining = toDateInput(u.dateOfJoining);
+    next.managerId = u.managerId || "";
     return next;
   };
 
@@ -114,8 +151,24 @@ export default function HrEmployeeProfilePage() {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    if (!form.name?.trim() || !form.email?.trim()) {
-      toast.error?.("Name and email are required.");
+    const nextErrors = {};
+    const add = (field, message) => {
+      if (message) nextErrors[field] = message;
+    };
+    add("name", validatePersonName(form.name, { required: true }));
+    add("email", validateEmail(form.email, { required: true }));
+    add("mobile", validateMobile(form.mobile));
+    add("emergencyContactPhone", validateMobile(form.emergencyContactPhone));
+    add("aadharNumber", validateAadhaar(form.aadharNumber));
+    add("panCard", validatePan(form.panCard));
+    add("bankAccountNo", validateBankAccount(form.bankAccountNo));
+    add("bankIfsc", validateIfsc(form.bankIfsc));
+    add("dob", validateDateNotFuture(form.dob, { label: "Date of birth" }));
+    add("dateOfJoining", validateDateNotFuture(form.dateOfJoining, { label: "Date of joining" }));
+    setFieldErrors(nextErrors);
+    const firstMessage = firstError(Object.values(nextErrors));
+    if (firstMessage) {
+      toast.error?.(firstMessage);
       return;
     }
     setSaving(true);
@@ -132,6 +185,7 @@ export default function HrEmployeeProfilePage() {
       if (res.ok) {
         setEmployee((prev) => ({ ...prev, ...data.data }));
         setIsEditing(false);
+        setFieldErrors({});
         toast.success?.("Profile updated successfully");
       } else {
         toast.error?.(data.error || "Failed to update profile");
@@ -173,17 +227,25 @@ export default function HrEmployeeProfilePage() {
     </div>
   );
 
-  const input = (label, field, type = "text", required = false) => (
-    <div className="flex flex-col gap-1">
-      <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
-      <input
-        type={type}
-        value={form[field] ?? ""}
-        onChange={(e) => setField(field, e.target.value)}
-        className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
-      />
-    </div>
-  );
+  const input = (label, field, type = "text", required = false, inputProps = {}) => {
+    const { transform, hint, ...rest } = inputProps;
+    const fieldError = fieldErrors[field];
+    return (
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
+        <input
+          type={type}
+          value={form[field] ?? ""}
+          onChange={(e) => setField(field, transform ? transform(e.target.value) : e.target.value)}
+          aria-invalid={Boolean(fieldError)}
+          className={`px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
+          {...rest}
+        />
+        {hint && !fieldError && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
+        {fieldError && <span className="text-[11px] font-medium text-error">{fieldError}</span>}
+      </div>
+    );
+  };
 
   const select = (label, field, options) => (
     <div className="flex flex-col gap-1">
@@ -240,7 +302,7 @@ export default function HrEmployeeProfilePage() {
               </div>
             </div>
           </div>
-          {!isEditing && (
+          {!isEditing && canWrite && (
             <button
               onClick={() => {
                 setForm(buildForm(employee));
@@ -286,12 +348,29 @@ export default function HrEmployeeProfilePage() {
           <section>
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Employment</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {input("Full Name", "name", "text", true)}
-              {input("Email", "email", "email", true)}
-              {input("Mobile / Phone", "mobile")}
+              {input("Full Name", "name", "text", true, { transform: toPersonNameInput })}
+              {input("Email", "email", "email", true, { autoComplete: "email" })}
+              {input("Mobile / Phone", "mobile", "tel", false, { transform: toMobileInput, inputMode: "numeric", maxLength: 10, pattern: "[0-9]{10}", hint: "10 digits, numbers only (no +91)." })}
               {input("Employee ID", "employeeId")}
               {select("Department", "department", DEPARTMENTS)}
-              {input("Date of Joining", "dateOfJoining", "date")}
+              {input("Date of Joining", "dateOfJoining", "date", false, { max: new Date().toISOString().slice(0, 10) })}
+              {currentUser?.roleName === "ADMIN" && (
+                <div className="flex flex-col gap-1 md:col-span-2">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Reports To</label>
+                  <select
+                    value={form.managerId ?? ""}
+                    onChange={(e) => setField("managerId", e.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-sm"
+                  >
+                    <option value="">No manager / top level</option>
+                    {managers.map((manager) => (
+                      <option key={manager.id} value={manager.id}>
+                        {manager.name} ({manager.role?.name?.replaceAll("_", " ")})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           </section>
 
@@ -299,7 +378,7 @@ export default function HrEmployeeProfilePage() {
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Personal</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {select("Gender", "gender", ["Male", "Female", "Other"])}
-              {input("Date of Birth", "dob", "date")}
+              {input("Date of Birth", "dob", "date", false, { max: new Date().toISOString().slice(0, 10) })}
               {select("Marital Status", "maritalStatus", ["Single", "Married", "Divorced", "Widowed"])}
               {select("Blood Group", "bloodGroup", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])}
               <div className="flex flex-col gap-1 md:col-span-2">
@@ -317,16 +396,16 @@ export default function HrEmployeeProfilePage() {
           <section>
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Emergency Contact</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {input("Contact Name", "emergencyContactName")}
-              {input("Contact Phone", "emergencyContactPhone")}
+              {input("Contact Name", "emergencyContactName", "text", false, { transform: toPersonNameInput })}
+              {input("Contact Phone", "emergencyContactPhone", "tel", false, { transform: toMobileInput, inputMode: "numeric", maxLength: 10, pattern: "[0-9]{10}", hint: "10 digits, numbers only (no +91)." })}
             </div>
           </section>
 
           <section>
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Government IDs</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {input("Aadhaar Number", "aadharNumber")}
-              {input("PAN Card", "panCard")}
+              {input("Aadhaar Number", "aadharNumber", "text", false, { transform: toAadhaarInput, inputMode: "numeric", maxLength: 12, pattern: "[0-9]{12}", hint: "12 digits, numbers only." })}
+              {input("PAN Card", "panCard", "text", false, { transform: toPanInput, maxLength: 10, pattern: "[A-Z]{5}[0-9]{4}[A-Z]", hint: "Format: ABCDE1234F." })}
             </div>
           </section>
 
@@ -334,8 +413,8 @@ export default function HrEmployeeProfilePage() {
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Bank Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {input("Bank Name", "bankName")}
-              {input("Account Number", "bankAccountNo")}
-              {input("IFSC Code", "bankIfsc")}
+              {input("Account Number", "bankAccountNo", "text", false, { transform: toBankAccountInput, inputMode: "numeric", maxLength: 18, pattern: "[0-9]{9,18}", hint: "9 to 18 digits, numbers only." })}
+              {input("IFSC Code", "bankIfsc", "text", false, { transform: toIfscInput, maxLength: 11, pattern: "[A-Z]{4}0[A-Z0-9]{6}", hint: "Format: SBIN0007421." })}
             </div>
           </section>
 
@@ -367,6 +446,7 @@ export default function HrEmployeeProfilePage() {
               {infoRow("Date of Joining", formatDate(employee.dateOfJoining))}
               {infoRow("Status", employee.status)}
               {infoRow("Role", employee.role?.name?.replaceAll("_", " "))}
+              {infoRow("Reports To", employee.manager?.name || "—")}
             </div>
           </section>
 

@@ -158,7 +158,8 @@ exports.Prisma.UserScalarFieldEnum = {
   leavesRemaining: 'leavesRemaining',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  createdById: 'createdById'
+  createdById: 'createdById',
+  managerId: 'managerId'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -477,6 +478,42 @@ exports.Prisma.ProgramManagerTaskCommentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TaskScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  assigneeId: 'assigneeId',
+  assignedById: 'assignedById',
+  plannedDate: 'plannedDate',
+  deadline: 'deadline',
+  status: 'status',
+  priority: 'priority',
+  isPlanned: 'isPlanned',
+  completionDate: 'completionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskCommentScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  authorId: 'authorId',
+  text: 'text',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TaskDocumentScalarFieldEnum = {
+  id: 'id',
+  taskId: 'taskId',
+  name: 'name',
+  url: 'url',
+  mimeType: 'mimeType',
+  size: 'size',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SchoolProgramScalarFieldEnum = {
   id: 'id',
   schoolId: 'schoolId',
@@ -768,6 +805,10 @@ exports.Prisma.AttendanceLogScalarFieldEnum = {
   checkOutLng: 'checkOutLng',
   lessonPlanText: 'lessonPlanText',
   lessonPlanFiles: 'lessonPlanFiles',
+  isTeachingDay: 'isTeachingDay',
+  checkInAt: 'checkInAt',
+  checkOutAt: 'checkOutAt',
+  workSeconds: 'workSeconds',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -776,10 +817,40 @@ exports.Prisma.LeaveScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   type: 'type',
+  leaveTypeKey: 'leaveTypeKey',
   dates: 'dates',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  days: 'days',
+  compOffWorkedDate: 'compOffWorkedDate',
+  compOffCreditId: 'compOffCreditId',
   reason: 'reason',
   rejectionReason: 'rejectionReason',
   status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeaveTypeConfigScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  annualQuota: 'annualQuota',
+  quarterlyQuota: 'quarterlyQuota',
+  active: 'active',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CompOffCreditScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  workedDate: 'workedDate',
+  days: 'days',
+  expiresAt: 'expiresAt',
+  status: 'status',
+  note: 'note',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1375,6 +1446,9 @@ exports.Prisma.ModelName = {
   ProgramManagerLivelihoodProgram: 'ProgramManagerLivelihoodProgram',
   ProgramManagerTask: 'ProgramManagerTask',
   ProgramManagerTaskComment: 'ProgramManagerTaskComment',
+  Task: 'Task',
+  TaskComment: 'TaskComment',
+  TaskDocument: 'TaskDocument',
   SchoolProgram: 'SchoolProgram',
   ProgramEvent: 'ProgramEvent',
   Beneficiary: 'Beneficiary',
@@ -1399,6 +1473,8 @@ exports.Prisma.ModelName = {
   InventoryLedger: 'InventoryLedger',
   AttendanceLog: 'AttendanceLog',
   Leave: 'Leave',
+  LeaveTypeConfig: 'LeaveTypeConfig',
+  CompOffCredit: 'CompOffCredit',
   IncidentResourceNeed: 'IncidentResourceNeed',
   ReliefDistribution: 'ReliefDistribution',
   ReliefDistributionItem: 'ReliefDistributionItem',

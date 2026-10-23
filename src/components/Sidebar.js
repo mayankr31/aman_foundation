@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -136,6 +137,31 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             <span className="material-symbols-outlined">dashboard</span>
             <span className={labelClass}>Dashboard</span>
           </Link>
+
+          {/* Tasks */}
+          {can("tasks") && (
+            <Link
+              href="/tasks"
+              className={navItemClass(pathname === "/tasks")}
+              onClick={onClose}
+              title="Tasks"
+            >
+              <span className="material-symbols-outlined">checklist</span>
+              <span className={labelClass}>Tasks</span>
+            </Link>
+          )}
+
+          {can("task-analytics") && (
+            <Link
+              href="/tasks/analytics"
+              className={navItemClass(pathname === "/tasks/analytics")}
+              onClick={onClose}
+              title="Task Analytics"
+            >
+              <span className="material-symbols-outlined">insights</span>
+              <span className={labelClass}>Task Analytics</span>
+            </Link>
+          )}
 
           {/* My Profile Submenu (Fellow) */}
           {user?.roleName === "FELLOW" && (
@@ -388,7 +414,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Leaves */}
-          {user?.roleName !== "ADMIN" && (
+          {can("leaves") && user?.roleName !== "ADMIN" && (
             <Link
               href={user?.roleName === "HR" ? "/hr/leaves" : "/hr/leaves/apply"}
               className={navItemClass(pathname.includes("/leaves"))}
@@ -400,8 +426,8 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             </Link>
           )}
 
-          {/* Travel - Fellow & Program Manager */}
-          {(user?.roleName === "FELLOW" || PROGRAM_ROLES.includes(user?.roleName)) && can("travel") && (
+          {/* Travel */}
+          {can("travel") && user?.roleName !== "ADMIN" && (
             <Link
               href="/travel"
               className={navItemClass(pathname === "/travel")}
@@ -413,8 +439,8 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             </Link>
           )}
 
-          {/* Travel Management - Admin/Manager only */}
-          {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && can("travel-management") && (
+          {/* Travel Management */}
+          {can("travel-management") && (user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
             <Link
               href="/travel/manage"
               className={navItemClass(pathname === "/travel/manage")}
@@ -426,8 +452,8 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             </Link>
           )}
 
-          {/* Reimbursements - all non-admin staff */}
-          {user?.roleName !== "ADMIN" && can("reimbursements") && (
+          {/* Reimbursements */}
+          {can("reimbursements") && user?.roleName !== "ADMIN" && (
             <Link
               href="/reimbursements"
               className={navItemClass(pathname === "/reimbursements" || pathname === "/reimbursements/new")}
@@ -440,7 +466,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Reimbursement Management - Admin/PM */}
-          {can("reimbursement-management") && (
+          {can("reimbursement-management") && (user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
             <Link
               href="/reimbursements/manage"
               className={navItemClass(pathname === "/reimbursements/manage")}
@@ -453,7 +479,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* HR Management */}
-          {can("employees") && (
+          {can("employees") && user?.roleName !== "FELLOW" && (
             <Link
               href="/hr"
               className={navItemClass(pathname === "/hr")}
@@ -466,7 +492,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Admin & Access */}
-          {user?.roleName === 'ADMIN' && (
+          {can("admin") && (
             <Link
               href="/admin"
               className={navItemClass(pathname === "/admin")}

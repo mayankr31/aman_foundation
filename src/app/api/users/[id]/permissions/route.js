@@ -48,24 +48,21 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "type must be GRANT or DENY" }, { status: 400 });
     }
 
-    const updated = await prisma.userPermission.upsert({
-      where: {
-        userId_permissionId: {
-          userId: id,
-          permissionId: permissionId,
+    const updated = await prisma.$transaction(async (tx) => {
+      const row = await tx.userPermission.upsert({
+        where: {
+          userId_permissionId: {
+            userId: id,
+            permissionId: permissionId,
+          },
         },
-      },
-      update: {
-        type,
-      },
-      create: {
-        userId: id,
-        permissionId: permissionId,
-        type,
-      },
-      include: {
-        permission: true,
-      },
+        update: { type },
+        create: { userId: id, permissionId: permissionId, type },
+        include: { permission: true },
+      });
+      // Bump the version used by clients to detect permission changes.
+      await tx.user.update({ where: { id }, data: { updatedAt: new Date() } });
+      return row;
     });
 
     return NextResponse.json({ success: true, data: updated });
@@ -92,13 +89,16 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "permissionId is required" }, { status: 400 });
     }
 
-    await prisma.userPermission.delete({
-      where: {
-        userId_permissionId: {
-          userId: id,
-          permissionId: permissionId,
+    await prisma.$transaction(async (tx) => {
+      await tx.userPermission.delete({
+        where: {
+          userId_permissionId: {
+            userId: id,
+            permissionId: permissionId,
+          },
         },
-      },
+      });
+      await tx.user.update({ where: { id }, data: { updatedAt: new Date() } });
     });
 
     return NextResponse.json({ success: true, message: "Permission removed" });

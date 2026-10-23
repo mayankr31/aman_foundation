@@ -15,12 +15,17 @@ export const PAGE_KEYS = [
   "reimbursements",
   "reimbursement-management",
   "attendance",
+  "self-attendance",
+  "tasks",
+  "task-analytics",
   "admin",
 ];
 
 // Ordered [pathPrefix, pageKey]. More specific prefixes first.
 export const ROUTE_PERMISSION_MAP = [
   ["/admin", "admin"],
+  ["/tasks/analytics", "task-analytics"],
+  ["/tasks", "tasks"],
   ["/education", "education"],
   ["/fellow-observations", "fellow-observations"],
   ["/livelihood", "livelihood"],

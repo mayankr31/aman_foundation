@@ -1,9 +1,10 @@
 'use client';
+/* eslint-disable react-hooks/immutability */
 
 import React, { Suspense, useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound } from 'lucide-react';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
@@ -66,6 +67,8 @@ function AdminPageContent() {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [deleteUserModalOpen, setDeleteUserModalOpen] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
+  const [managerUser, setManagerUser] = useState(null);
+  const [managerValue, setManagerValue] = useState("");
 
   const { token, user: currentUser } = useAuth();
   const pendingApprovalsCount = useMemo(() => {
@@ -150,6 +153,36 @@ function AdminPageContent() {
       await fetchUsers(true);
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleManagerChange = async (userId, managerId) => {
+    try {
+      setActionLoading(userId);
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ managerId: managerId || null }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to update reporting line");
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === userId
+            ? { ...u, managerId: managerId || null, manager: managerId ? users.find((m) => m.id === managerId) : null }
+            : u
+        )
+      );
+      toast.success("Reporting line updated.");
+      return true;
+    } catch (err) {
+      toast.error(err.message);
+      return false;
     } finally {
       setActionLoading(null);
     }
@@ -410,16 +443,16 @@ function AdminPageContent() {
               ) : (
                 <div className="bg-white dark:bg-[#0d1320] border border-slate-200 dark:border-white/5 rounded-3xl overflow-hidden shadow-sm">
                   <div className="overflow-x-auto">
-                    <table className="mobile-card-table w-full min-w-[900px] table-fixed text-left border-collapse text-xs">
+                    <table className="mobile-card-table w-full min-w-[1050px] table-fixed text-left border-collapse text-xs">
                       <thead>
                         <tr className="bg-slate-50 dark:bg-white/[0.02] text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                          <th className="w-[18%] py-4 px-6 align-middle">Name</th>
-                          <th className="w-[14%] py-4 px-6 align-middle">Username</th>
-                          <th className="w-[22%] py-4 px-6 align-middle">Email Address</th>
-                          <th className="w-[12%] py-4 px-6 align-middle">Mobile</th>
-                          <th className="w-[12%] py-4 px-6 align-middle">Role</th>
-                          <th className="w-[10%] py-4 px-6 align-middle">Status</th>
-                          <th className="w-[12%] py-4 px-6 text-center align-middle whitespace-nowrap">Actions</th>
+                          <th className="w-[17%] py-4 px-3 align-middle">Name</th>
+                          <th className="w-[12%] py-4 px-3 align-middle">Username</th>
+                          <th className="w-[22%] py-4 px-3 align-middle">Email Address</th>
+                          <th className="w-[11%] py-4 px-3 align-middle">Mobile</th>
+                          <th className="w-[13%] py-4 px-3 align-middle">Role</th>
+                          <th className="w-[10%] py-4 px-3 align-middle">Status</th>
+                          <th className="w-[15%] py-4 px-3 text-center align-middle whitespace-nowrap">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -431,23 +464,23 @@ function AdminPageContent() {
                             transition={{ delay: idx * 0.02 }}
                             className="border-t border-slate-200 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.01] transition-colors"
                           >
-                            <td data-label="" className="py-4 px-6 align-middle font-bold dark:text-white text-slate-800">
-                              <div className="flex items-center gap-3 min-w-0">
+                            <td data-label="" className="py-4 px-3 align-middle font-bold dark:text-white text-slate-800 overflow-hidden">
+                              <div className="flex items-center gap-2 min-w-0">
                                 <div className="w-8 h-8 shrink-0 rounded-lg bg-primary/15 text-primary flex items-center justify-center font-bold">
                                   {item.name ? item.name.charAt(0).toUpperCase() : item.username.charAt(0).toUpperCase()}
                                 </div>
-                                <span className="break-words">{item.name || item.username}</span>
+                                <span className="min-w-0 break-words">{item.name || item.username}</span>
                               </div>
                             </td>
-                            <td data-label="Username" className="py-4 px-6 align-middle text-slate-500 break-words">@{item.username}</td>
-                            <td data-label="Email" className="py-4 px-6 align-middle text-slate-500 break-words">{item.email}</td>
-                            <td data-label="Mobile" className="py-4 px-6 align-middle text-slate-500">{item.mobile || '—'}</td>
-                            <td data-label="Role" className="py-4 px-6 align-middle font-semibold dark:text-gray-300 text-slate-700">
-                              <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] whitespace-nowrap align-middle">
+                            <td data-label="Username" className="py-4 px-3 align-middle text-slate-500 break-words overflow-hidden">@{item.username}</td>
+                            <td data-label="Email" className="py-4 px-3 align-middle text-slate-500 break-words overflow-hidden">{item.email}</td>
+                            <td data-label="Mobile" className="py-4 px-3 align-middle text-slate-500 overflow-hidden">{item.mobile || '—'}</td>
+                            <td data-label="Role" className="py-4 px-3 align-middle font-semibold dark:text-gray-300 text-slate-700 overflow-hidden">
+                              <span className="inline-block max-w-full px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] truncate align-middle">
                                 {item.role?.name?.replaceAll('_', ' ')}
                               </span>
                             </td>
-                            <td data-label="Status" className="py-4 px-6 align-middle">
+                            <td data-label="Status" className="py-4 px-3 align-middle overflow-hidden">
                               <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
                                 item.status === 'ACTIVE'
                                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
@@ -458,7 +491,7 @@ function AdminPageContent() {
                                 {item.status}
                               </span>
                             </td>
-                            <td data-label="Actions" className="py-4 px-6 align-middle">
+                            <td data-label="Actions" className="py-4 px-3 align-middle">
                               <div className="flex items-center justify-center gap-2 flex-wrap">
                                 {activeTab === 'approvals' ? (
                                   <>
@@ -535,6 +568,18 @@ function AdminPageContent() {
                                       >
                                         <KeyRound size={12} />
                                         Reset Password
+                                      </button>
+                                    )}
+                                    {item.id !== currentUser?.id && (
+                                      <button
+                                        onClick={() => {
+                                          setManagerUser(item);
+                                          setManagerValue(item.managerId || "");
+                                        }}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/20 transition-all hover:scale-105"
+                                      >
+                                        <GitBranch size={12} />
+                                        Reports To
                                       </button>
                                     )}
                                     <button
@@ -680,6 +725,63 @@ function AdminPageContent() {
         user={resetPasswordUser}
         onReset={() => {}}
       />
+
+      {managerUser && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="bg-white dark:bg-[#151e2d] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Reports To</h3>
+                <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                  Choose the manager for {managerUser.name || managerUser.username}.
+                </p>
+              </div>
+              <button
+                onClick={() => setManagerUser(null)}
+                className="p-2 rounded-full text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Manager</label>
+            <select
+              value={managerValue}
+              onChange={(e) => setManagerValue(e.target.value)}
+              className="mt-1 w-full py-2.5 px-3 rounded-xl text-sm bg-slate-50 dark:bg-[#0d1320] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-200 outline-none"
+            >
+              <option value="">No manager / top level</option>
+              {users
+                .filter((manager) => manager.id !== managerUser.id && manager.status === "ACTIVE")
+                .map((manager) => (
+                  <option key={manager.id} value={manager.id}>
+                    {manager.name} ({manager.role?.name?.replaceAll("_", " ")})
+                  </option>
+                ))}
+            </select>
+
+            <div className="flex justify-end gap-2 mt-6">
+              <button
+                onClick={() => setManagerUser(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-white/10"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  const ok = await handleManagerChange(managerUser.id, managerValue);
+                  if (ok) setManagerUser(null);
+                }}
+                disabled={actionLoading === managerUser.id}
+                className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold disabled:opacity-60 flex items-center gap-2"
+              >
+                {actionLoading === managerUser.id && <Loader2 size={14} className="animate-spin" />}
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <ConfirmDeleteModal
         isOpen={deleteModalOpen}

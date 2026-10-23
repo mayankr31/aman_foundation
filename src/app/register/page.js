@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { validateEmail, validatePersonName } from '@/lib/validation';
 import '../globals_auth.css';
 
 export default function RegisterPage() {
@@ -106,15 +107,21 @@ export default function RegisterPage() {
     if (!firstName.trim()) {
       setFirstNameError('First name is required');
       isValid = false;
+    } else if (validatePersonName(firstName)) {
+      setFirstNameError('Use letters only');
+      isValid = false;
     }
     if (!lastName.trim()) {
       setLastNameError('Last name is required');
+      isValid = false;
+    } else if (validatePersonName(lastName)) {
+      setLastNameError('Use letters only');
       isValid = false;
     }
     if (!email.trim()) {
       setEmailError('Email is required');
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (validateEmail(email)) {
       setEmailError('Please enter a valid email address');
       isValid = false;
     }
@@ -151,9 +158,9 @@ export default function RegisterPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          email: email.trim().toLowerCase(),
           password,
           roleId,
         })

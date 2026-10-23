@@ -3,9 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 
 async function canModify(user, taskId) {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+    select: { assigneeId: true, assignedById: true },
+  });
+  if (!task) return false;
   if (user.role.name === "ADMIN") return true;
-  const task = await prisma.programManagerTask.findUnique({ where: { id: taskId }, select: { userId: true } });
-  return !!task && task.userId === user.id;
+  return task.assigneeId === user.id || task.assignedById === user.id;
 }
 
 export async function PATCH(request, { params }) {
@@ -19,21 +23,25 @@ export async function PATCH(request, { params }) {
     }
 
     const body = await request.json();
-    const { status, title, description, plannedDate } = body;
-
     const dataToUpdate = {};
-    if (status !== undefined) {
-      dataToUpdate.status = status;
-      dataToUpdate.completionDate = status === "Completed" ? new Date() : null;
+    if (body.status !== undefined) {
+      dataToUpdate.status = body.status;
+      dataToUpdate.completionDate = body.status === "Completed" ? new Date() : null;
     }
-    if (title !== undefined) dataToUpdate.title = title;
-    if (description !== undefined) dataToUpdate.description = description;
-    if (plannedDate !== undefined) dataToUpdate.plannedDate = new Date(plannedDate);
+    if (body.title !== undefined) dataToUpdate.title = body.title;
+    if (body.description !== undefined) dataToUpdate.description = body.description;
+    if (body.plannedDate !== undefined) dataToUpdate.plannedDate = new Date(body.plannedDate);
+    if (body.deadline !== undefined) dataToUpdate.deadline = body.deadline ? new Date(body.deadline) : null;
+    if (body.priority !== undefined) dataToUpdate.priority = body.priority;
 
-    const updatedTask = await prisma.programManagerTask.update({
+    const updatedTask = await prisma.task.update({
       where: { id: taskId },
       data: dataToUpdate,
-      include: { comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } } },
+      include: {
+        assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+        comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } },
+        documents: true,
+      },
     });
 
     return NextResponse.json({ success: true, data: updatedTask });
@@ -53,7 +61,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
-    await prisma.programManagerTask.delete({ where: { id: taskId } });
+    await prisma.task.delete({ where: { id: taskId } });
 
     return NextResponse.json({ success: true });
   } catch (error) {

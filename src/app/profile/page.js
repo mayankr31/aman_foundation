@@ -18,6 +18,23 @@ import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
+import {
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateBankAccount,
+  validateIfsc,
+  validateEmail,
+  validatePersonName,
+  validateDateNotFuture,
+  firstError,
+  toMobileInput,
+  toAadhaarInput,
+  toPanInput,
+  toBankAccountInput,
+  toIfscInput,
+  toPersonNameInput,
+} from "@/lib/validation";
 import dynamic from "next/dynamic";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -102,7 +119,7 @@ function ProfilePageContent() {
           // Populate edit form states
           setEditName(userProfile.name || "");
           setEditEmail(userProfile.email || "");
-          setEditMobile(userProfile.mobile || "");
+          setEditMobile(toMobileInput(userProfile.mobile || ""));
           setEditAddress(userProfile.fellow ? (userProfile.fellow.address || "") : (userProfile.address || ""));
           setEditGender(userProfile.fellow ? (userProfile.fellow.gender || "") : (userProfile.gender || ""));
           setEditDob(
@@ -115,12 +132,12 @@ function ProfilePageContent() {
           setEditMaritalStatus(userProfile.maritalStatus || "");
           setEditBloodGroup(userProfile.bloodGroup || "");
           setEditEmergencyContactName(userProfile.emergencyContactName || "");
-          setEditEmergencyContactPhone(userProfile.emergencyContactPhone || "");
-          setEditAadharNumber(userProfile.aadharNumber || "");
-          setEditPanCard(userProfile.panCard || "");
+          setEditEmergencyContactPhone(toMobileInput(userProfile.emergencyContactPhone || ""));
+          setEditAadharNumber(toAadhaarInput(userProfile.aadharNumber || ""));
+          setEditPanCard(toPanInput(userProfile.panCard || ""));
           setEditBankName(userProfile.bankName || "");
-          setEditBankAccountNo(userProfile.bankAccountNo || "");
-          setEditBankIfsc(userProfile.bankIfsc || "");
+          setEditBankAccountNo(toBankAccountInput(userProfile.bankAccountNo || ""));
+          setEditBankIfsc(toIfscInput(userProfile.bankIfsc || ""));
 
           if (userProfile.fellow) {
             const fellowId = userProfile.fellow.id;
@@ -258,12 +275,20 @@ function ProfilePageContent() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    if (!editName?.trim() || !editEmail?.trim()) {
-      toast.error("Name and email are required.");
-      return;
-    }
-    if (!/^\S+@\S+\.\S+$/.test(editEmail)) {
-      toast.error("Please enter a valid email address.");
+    const validationMessage = firstError([
+      validatePersonName(editName, { required: true }),
+      validateEmail(editEmail, { required: true }),
+      validateMobile(editMobile),
+      editDob ? validateDateNotFuture(editDob, { label: "Date of birth" }) : null,
+      editDateOfJoining ? validateDateNotFuture(editDateOfJoining, { label: "Date of joining" }) : null,
+      validateMobile(editEmergencyContactPhone),
+      validateAadhaar(editAadharNumber),
+      validatePan(editPanCard),
+      validateBankAccount(editBankAccountNo),
+      validateIfsc(editBankIfsc),
+    ]);
+    if (validationMessage) {
+      toast.error(validationMessage);
       return;
     }
     try {
@@ -594,8 +619,9 @@ function ProfilePageContent() {
                 <input
                   type="text"
                   required
+                  maxLength={60}
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
+                  onChange={(e) => setEditName(toPersonNameInput(e.target.value))}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -612,9 +638,13 @@ function ProfilePageContent() {
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Mobile / Phone</label>
                 <input
-                  type="text"
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  title="Enter exactly 10 digits, without +91 or spaces."
                   value={editMobile}
-                  onChange={(e) => setEditMobile(e.target.value)}
+                  onChange={(e) => setEditMobile(toMobileInput(e.target.value))}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -622,6 +652,7 @@ function ProfilePageContent() {
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Joining</label>
                 <input
                   type="date"
+                  max={new Date().toISOString().slice(0, 10)}
                   value={editDateOfJoining}
                   onChange={(e) => setEditDateOfJoining(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
@@ -654,6 +685,7 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Birth</label>
                     <input
                       type="date"
+                      max={new Date().toISOString().slice(0, 10)}
                       value={editDob}
                       onChange={(e) => setEditDob(e.target.value)}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
@@ -690,17 +722,22 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Name</label>
                     <input
                       type="text"
+                      maxLength={60}
                       value={editEmergencyContactName}
-                      onChange={(e) => setEditEmergencyContactName(e.target.value)}
+                      onChange={(e) => setEditEmergencyContactName(toPersonNameInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Phone</label>
                     <input
-                      type="text"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
+                      pattern="[0-9]{10}"
+                      title="Enter exactly 10 digits, without +91 or spaces."
                       value={editEmergencyContactPhone}
-                      onChange={(e) => setEditEmergencyContactPhone(e.target.value)}
+                      onChange={(e) => setEditEmergencyContactPhone(toMobileInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
@@ -708,8 +745,12 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aadhaar Number</label>
                     <input
                       type="text"
+                      inputMode="numeric"
+                      maxLength={12}
+                      pattern="[0-9]{12}"
+                      title="Aadhaar must be exactly 12 digits."
                       value={editAadharNumber}
-                      onChange={(e) => setEditAadharNumber(e.target.value)}
+                      onChange={(e) => setEditAadharNumber(toAadhaarInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
@@ -717,8 +758,11 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">PAN Card</label>
                     <input
                       type="text"
+                      maxLength={10}
+                      pattern="[A-Z]{5}[0-9]{4}[A-Z]"
+                      title="PAN must be in the format ABCDE1234F."
                       value={editPanCard}
-                      onChange={(e) => setEditPanCard(e.target.value)}
+                      onChange={(e) => setEditPanCard(toPanInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
@@ -735,8 +779,12 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank Account Number</label>
                     <input
                       type="text"
+                      inputMode="numeric"
+                      maxLength={18}
+                      pattern="[0-9]{9,18}"
+                      title="Bank account number must be 9 to 18 digits."
                       value={editBankAccountNo}
-                      onChange={(e) => setEditBankAccountNo(e.target.value)}
+                      onChange={(e) => setEditBankAccountNo(toBankAccountInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>
@@ -744,8 +792,11 @@ function ProfilePageContent() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank IFSC</label>
                     <input
                       type="text"
+                      maxLength={11}
+                      pattern="[A-Z]{4}0[A-Z0-9]{6}"
+                      title="IFSC must be in the format SBIN0007421."
                       value={editBankIfsc}
-                      onChange={(e) => setEditBankIfsc(e.target.value)}
+                      onChange={(e) => setEditBankIfsc(toIfscInput(e.target.value))}
                       className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                     />
                   </div>

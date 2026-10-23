@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validatePassword,
+  firstError,
+  normalizeEmailForSave,
+  normalizeMobileForSave,
+} from "@/lib/validation";
 
 export async function POST(req) {
   try {
@@ -15,8 +24,21 @@ export async function POST(req) {
       );
     }
 
+    const validationMessage = firstError([
+      validatePersonName(firstName, { required: true }),
+      validatePersonName(lastName, { required: true }),
+      validateEmail(email, { required: true }),
+      validatePassword(password, { required: true }),
+      validateMobile(mobile),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
+    const normalizedEmail = normalizeEmailForSave(email);
+
     // Auto-generate username from email
-    const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const baseUsername = normalizedEmail.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
     let username = baseUsername;
     let counter = 1;
 
@@ -32,7 +54,7 @@ export async function POST(req) {
 
     // Check if email already exists
     const existingEmail = await prisma.user.findUnique({
-      where: { email }
+      where: { email: normalizedEmail }
     });
 
     if (existingEmail) {
@@ -51,9 +73,9 @@ export async function POST(req) {
       data: {
         name: `${firstName} ${lastName}`.trim(),
         username,
-        email,
+        email: normalizedEmail,
         password: hashedPassword,
-        mobile,
+        mobile: normalizeMobileForSave(mobile),
         roleId,
         status: "PENDING",
       },

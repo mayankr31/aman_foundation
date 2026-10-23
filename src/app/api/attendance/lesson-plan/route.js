@@ -5,6 +5,7 @@ import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
 import { checkPermission } from "@/lib/permissions";
+import { getISTDateKey } from "@/lib/time";
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "lesson-plans");
 
@@ -31,22 +32,44 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+    if (!(await checkPermission(user, "dashboard", "self-attendance", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
     }
 
     const formData = await req.formData();
     const logId = formData.get("logId");
+    const logdate = formData.get("logdate") || getISTDateKey();
     const lessonPlanText = formData.get("lessonPlanText") || null;
+    const teachingDayValue = formData.get("isTeachingDay");
 
-    if (!logId) {
-      return NextResponse.json({ error: "logId is required" }, { status: 400 });
+    let log = null;
+
+    if (logId) {
+      log = await prisma.attendanceLog.findUnique({ where: { id: logId } });
+      if (!log) {
+        return NextResponse.json({ error: "Attendance log not found" }, { status: 404 });
+      }
+    } else {
+      // Saving a lesson plan before check-in creates a lightweight draft row
+      // for today. It becomes the real attendance log when the user checks in.
+      log = await prisma.attendanceLog.findFirst({
+        where: { userId: user.id, logdate },
+      });
+      if (!log) {
+        log = await prisma.attendanceLog.create({
+          data: {
+            userId: user.id,
+            email: user.email,
+            logdate,
+            workstatus: "Draft lesson plan",
+            lessonPlanText,
+            isTeachingDay:
+              teachingDayValue === null ? null : String(teachingDayValue) === "true",
+          },
+        });
+      }
     }
 
-    const log = await prisma.attendanceLog.findUnique({ where: { id: logId } });
-    if (!log) {
-      return NextResponse.json({ error: "Attendance log not found" }, { status: 404 });
-    }
     if (log.userId !== user.id && user.role.name !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -68,10 +91,13 @@ export async function POST(req) {
     const allFiles = [...existingFiles, ...uploadedFiles];
 
     const updated = await prisma.attendanceLog.update({
-      where: { id: logId },
+      where: { id: log.id },
       data: {
-        lessonPlanText: lessonPlanText || log.lessonPlanText,
-        lessonPlanFiles: allFiles.length > 0 ? allFiles : log.lessonPlanFiles
+        lessonPlanText: lessonPlanText ?? log.lessonPlanText,
+        lessonPlanFiles: allFiles.length > 0 ? allFiles : log.lessonPlanFiles,
+        ...(teachingDayValue !== null && {
+          isTeachingDay: String(teachingDayValue) === "true",
+        }),
       }
     });
 
@@ -87,7 +113,7 @@ export async function DELETE(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "attendance", "WRITE"))) {
+    if (!(await checkPermission(user, "dashboard", "self-attendance", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
     }
 

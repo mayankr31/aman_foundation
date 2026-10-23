@@ -2,6 +2,23 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessUser } from "@/lib/hierarchy";
+import {
+  validatePersonName,
+  validateEmail,
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateBankAccount,
+  validateIfsc,
+  firstError,
+  normalizeMobileForSave,
+  normalizeAadhaarForSave,
+  normalizePanForSave,
+  normalizeIfscForSave,
+  normalizeBankAccountForSave,
+  normalizeEmailForSave,
+} from "@/lib/validation";
 
 const PERSONAL_FIELDS = [
   "name",
@@ -32,7 +49,8 @@ function parseDate(value) {
 
 async function ensureAccess(currentUser, id, action) {
   if (currentUser.id === id) return true;
-  return checkPermission(currentUser, "dashboard", "employees", action);
+  if (!(await checkPermission(currentUser, "dashboard", "employees", action))) return false;
+  return canAccessUser(currentUser, id, { allowSelf: true });
 }
 
 export async function GET(req, context) {
@@ -50,6 +68,8 @@ export async function GET(req, context) {
       where: { id },
       include: {
         role: true,
+        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+        directReports: { select: { id: true, name: true, role: { select: { name: true } } } },
         fellow: {
           select: {
             id: true,
@@ -155,12 +175,48 @@ export async function PATCH(req, context) {
 
     const body = await req.json();
 
+    const validationMessage = firstError([
+      body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
+      body.email !== undefined ? validateEmail(body.email, { required: true }) : null,
+      validateMobile(body.mobile),
+      validateMobile(body.emergencyContactPhone),
+      validateAadhaar(body.aadharNumber),
+      validatePan(body.panCard),
+      validateBankAccount(body.bankAccountNo),
+      validateIfsc(body.bankIfsc),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     const data = {};
     for (const field of PERSONAL_FIELDS) {
       if (body[field] !== undefined) data[field] = body[field];
     }
+    if (body.email !== undefined) data.email = normalizeEmailForSave(body.email);
+    if (body.mobile !== undefined) data.mobile = normalizeMobileForSave(body.mobile);
+    if (body.emergencyContactPhone !== undefined) data.emergencyContactPhone = normalizeMobileForSave(body.emergencyContactPhone);
+    if (body.aadharNumber !== undefined) data.aadharNumber = normalizeAadhaarForSave(body.aadharNumber);
+    if (body.panCard !== undefined) data.panCard = normalizePanForSave(body.panCard);
+    if (body.bankAccountNo !== undefined) data.bankAccountNo = normalizeBankAccountForSave(body.bankAccountNo);
+    if (body.bankIfsc !== undefined) data.bankIfsc = normalizeIfscForSave(body.bankIfsc);
     if (body.dob !== undefined) data.dob = parseDate(body.dob);
     if (body.dateOfJoining !== undefined) data.dateOfJoining = parseDate(body.dateOfJoining);
+
+    if (body.managerId !== undefined) {
+      if (currentUser.role.name !== "ADMIN") {
+        return NextResponse.json({ error: "Only admins can change reporting lines" }, { status: 403 });
+      }
+      const managerId = body.managerId || null;
+      if (managerId === id) {
+        return NextResponse.json({ error: "A user cannot report to themselves" }, { status: 400 });
+      }
+      if (managerId) {
+        const manager = await prisma.user.findUnique({ where: { id: managerId }, select: { id: true } });
+        if (!manager) return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
+      }
+      data.managerId = managerId;
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id },
@@ -188,6 +244,8 @@ export async function PATCH(req, context) {
         dateOfJoining: true,
         avatar: true,
         status: true,
+        managerId: true,
+        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
         role: { select: { name: true } }
       }
     });

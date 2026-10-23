@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
+import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
@@ -14,19 +15,24 @@ import StudentDataView from "@/components/StudentDataView";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
-function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
+function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
+  const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
+  const handleChange = (event) => {
+    if (!transform) return onChange(event);
+    onChange({ target: { name, value: transform(event.target.value) } });
+  };
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
-        <select name={name} value={value} onChange={onChange}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+        <select name={name} value={value} onChange={handleChange} aria-invalid={Boolean(error)} className={inputClasses} {...rest}>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : (
-        <input type={type} name={name} value={value} onChange={onChange} required={required}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+        <input type={type} name={name} value={value} onChange={handleChange} required={required} aria-invalid={Boolean(error)} className={inputClasses} {...rest} />
       )}
+      {hint && !error && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
+      {error && <span className="text-[11px] font-medium text-error">{error}</span>}
     </div>
   );
 }
@@ -101,7 +107,7 @@ export default function SchoolProfileDetail() {
           principalName: s.principalName || "",
           udiseCode: s.udiseCode || "",
           email: s.email || "",
-          phone: s.phone || "",
+          phone: toMobileInput(s.phone || ""),
           address: s.address || "",
           location: s.location || "",
           status: s.status || "Active",
@@ -1080,10 +1086,10 @@ export default function SchoolProfileDetail() {
           <form onSubmit={handleEditSave} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField label="School Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
-              <InputField label="Principal / Headmaster Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} />
-              <InputField label="UDISE Code" name="udiseCode" value={editForm.udiseCode} onChange={e => setEditForm(f => ({ ...f, udiseCode: e.target.value }))} />
-              <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
-              <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+              <InputField label="Principal / Headmaster Name" name="principalName" value={editForm.principalName} onChange={e => setEditForm(f => ({ ...f, principalName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
+              <InputField label="UDISE Code" name="udiseCode" value={editForm.udiseCode} onChange={e => setEditForm(f => ({ ...f, udiseCode: e.target.value }))} inputMode="numeric" maxLength={11} transform={digitsOnly} />
+              <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} autoComplete="email" />
+              <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Location/City" name="location" value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} />
               <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
             </div>

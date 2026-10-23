@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validateInteger,
+  validateAmount,
+  firstError,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -43,6 +48,17 @@ export async function POST(req) {
 
     if (!name || !location || !type) {
       return NextResponse.json({ error: "Name, Location, and Type are required" }, { status: 400 });
+    }
+
+    const validationMessage = firstError([
+      validateInteger(expectedFamiliesAffected, { min: 0 }),
+      validateInteger(humanLossDied, { min: 0 }),
+      validateInteger(humanLossInjured, { min: 0 }),
+      validateInteger(humanLossMissing, { min: 0 }),
+      validateAmount(propertyLossEstimate, { min: 0 }),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
     const incident = await prisma.disasterIncident.create({

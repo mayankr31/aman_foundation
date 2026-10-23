@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { deriveAcademicStatus, getAcademicStatusClass, PERFORMANCE_FILTERS } from "@/lib/academicStatus";
 import { formatDate } from "@/lib/date";
+import { toMobileInput, toPersonNameInput } from "@/lib/validation";
 
 const EMPTY_STUDENT_FORM = {
   name: "",
@@ -35,9 +36,9 @@ function normalizeGradeGroup(value) {
   return base === "High" ? "Secondary" : base;
 }
 
-function FormField({ label, name, value, onChange, type = "text", required = false, placeholder, options, disabled = false }) {
+function FormField({ label, name, value, onChange, type = "text", required = false, placeholder, options, disabled = false, error, hint, transform, ...rest }) {
   const inputClasses =
-    "px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface disabled:opacity-50";
+    `px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface disabled:opacity-50 ${error ? "border-error" : "border-outline-variant"}`;
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
@@ -54,13 +55,17 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
           type={type}
           name={name}
           value={value}
-          onChange={(e) => onChange(name, e.target.value)}
+          onChange={(e) => onChange(name, transform ? transform(e.target.value) : e.target.value)}
           required={required}
           disabled={disabled}
           placeholder={placeholder}
+          aria-invalid={Boolean(error)}
           className={inputClasses}
+          {...rest}
         />
       )}
+      {hint && !error && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
+      {error && <span className="text-[11px] font-medium text-error">{error}</span>}
     </div>
   );
 }
@@ -595,7 +600,7 @@ export default function AfterSchoolStudentsModule() {
                     </button>
                   )}
                 </div>
-                <FormField label="Full Name" name="name" value={newStudentForm.name} onChange={handleNewStudentChange} required placeholder="e.g. Aarav Kumar" />
+                <FormField label="Full Name" name="name" value={newStudentForm.name} onChange={handleNewStudentChange} required placeholder="e.g. Aarav Kumar" transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Student ID (Optional)" name="studentId" value={newStudentForm.studentId} onChange={handleNewStudentChange} placeholder="Leave blank to auto-generate" />
                 <div className="md:col-span-2">
                   <FormField
@@ -622,24 +627,24 @@ export default function AfterSchoolStudentsModule() {
                     />
                   </div>
                 )}
-                <FormField label="Date of Birth" name="dob" type="date" value={newStudentForm.dob} onChange={handleNewStudentChange} />
+                <FormField label="Date of Birth" name="dob" type="date" value={newStudentForm.dob} onChange={handleNewStudentChange} max={new Date().toISOString().slice(0, 10)} />
                 <FormField label="Gender" name="gender" value={newStudentForm.gender} onChange={handleNewStudentChange} options={["", "Male", "Female", "Other"]} />
                 <FormField label="Grade" name="grade" value={newStudentForm.grade} onChange={handleNewStudentChange} placeholder="e.g. Grade 6" />
                 <FormField label="Grade Group" name="gradeGroup" value={newStudentForm.gradeGroup} onChange={handleNewStudentChange} options={[{ value: "", label: "Not applicable" }, "Primary", "Middle", "Secondary", "Senior Secondary"]} />
                 <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} />
                 <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} />
-                <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} />
+                <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Guardian Relation" name="guardianRelation" value={newStudentForm.guardianRelation} onChange={handleNewStudentChange} placeholder="e.g. Father" />
-                <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} />
-                <FormField label="Email" name="email" type="email" value={newStudentForm.email} onChange={handleNewStudentChange} />
-                <FormField label="Father's Name" name="fatherName" value={newStudentForm.fatherName} onChange={handleNewStudentChange} />
-                <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} />
-                <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} />
-                <FormField label="Mother's Mobile" name="motherMobile" value={newStudentForm.motherMobile} onChange={handleNewStudentChange} />
+                <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+                <FormField label="Email" name="email" type="email" value={newStudentForm.email} onChange={handleNewStudentChange} autoComplete="email" />
+                <FormField label="Father's Name" name="fatherName" value={newStudentForm.fatherName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
+                <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+                <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
+                <FormField label="Mother's Mobile" name="motherMobile" value={newStudentForm.motherMobile} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
                 <div className="md:col-span-2">
                   <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} placeholder="Village / Town, Post Office" />
                 </div>
-                <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} />
+                <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} max={new Date().toISOString().slice(0, 10)} />
                 <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                   <button
                     type="button"

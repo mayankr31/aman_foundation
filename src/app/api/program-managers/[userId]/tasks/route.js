@@ -2,62 +2,70 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAssignTo } from "@/lib/tasks";
+import { istDayEnd, istDayStart } from "@/lib/time";
 
-function canAccess(user, userId) {
-  return user.role.name === "ADMIN" || user.role.name === "HR" || user.id === userId;
+function parseDateOnly(value) {
+  if (!value) return null;
+  const str = String(value);
+  const match = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (match) return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+  const parsed = new Date(str);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+function includeTask() {
+  return {
+    assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+    assignedBy: { select: { id: true, name: true } },
+    comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } },
+    documents: { orderBy: { createdAt: "asc" } },
+  };
+}
+
+// Compatibility endpoint backed by the unified Task model.
 export async function GET(request, { params }) {
   try {
     const { user, error } = await authenticateUser(request);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "employees", "READ"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    if (!(await checkPermission(user, "dashboard", "tasks", "READ"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for tasks" }, { status: 403 });
     }
 
     const { userId } = await params;
-    if (!canAccess(user, userId)) {
+    if (user.role.name !== "ADMIN" && user.id !== userId) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month"); // YYYY-MM
-    const dateStr = searchParams.get("date"); // YYYY-MM-DD
+    const month = searchParams.get("month");
+    const dateStr = searchParams.get("date");
+    const where = { assigneeId: userId };
 
-    let tasks = [];
-
-    if (month) {
-      const [year, m] = month.split("-");
-      const startDate = new Date(Date.UTC(year, m - 1, 1));
-      const endDate = new Date(Date.UTC(year, m, 0, 23, 59, 59, 999));
-      tasks = await prisma.programManagerTask.findMany({
-        where: { userId, plannedDate: { gte: startDate, lte: endDate } },
-        include: { comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } } },
-        orderBy: { plannedDate: "asc" },
-      });
-    } else if (dateStr) {
-      const [year, m, day] = dateStr.split("-");
-      const startOfDay = new Date(Date.UTC(year, m - 1, day));
-      const endOfDay = new Date(Date.UTC(year, m - 1, day, 23, 59, 59, 999));
-      tasks = await prisma.programManagerTask.findMany({
-        where: {
-          userId,
-          OR: [
-            { plannedDate: { gte: startOfDay, lte: endOfDay } },
-            { plannedDate: { lt: startOfDay }, status: "Pending" },
-          ],
-        },
-        include: { comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } } },
-        orderBy: { plannedDate: "asc" },
-      });
-    } else {
-      tasks = await prisma.programManagerTask.findMany({
-        where: { userId },
-        include: { comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } } },
-        orderBy: { plannedDate: "desc" },
-      });
+    if (month && /^\d{4}-\d{2}$/.test(month)) {
+      const [year, m] = month.split("-").map(Number);
+      const firstKey = `${year}-${String(m).padStart(2, "0")}-01`;
+      const lastDay = new Date(Date.UTC(year, m, 0)).getUTCDate();
+      const lastKey = `${year}-${String(m).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+      where.OR = [
+        { plannedDate: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
+        { deadline: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
+      ];
+    } else if (dateStr && /^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      where.OR = [
+        { plannedDate: { gte: istDayStart(dateStr), lte: istDayEnd(dateStr) } },
+        { deadline: { gte: istDayStart(dateStr), lte: istDayEnd(dateStr) } },
+        { plannedDate: { lt: istDayStart(dateStr) }, status: { notIn: ["Completed", "Cancelled"] } },
+        { deadline: { lt: istDayStart(dateStr) }, status: { notIn: ["Completed", "Cancelled"] } },
+      ];
     }
+
+    const tasks = await prisma.task.findMany({
+      where,
+      include: includeTask(),
+      orderBy: [{ plannedDate: "asc" }, { createdAt: "desc" }],
+    });
 
     return NextResponse.json({ success: true, data: tasks });
   } catch (error) {
@@ -71,37 +79,39 @@ export async function POST(request, { params }) {
     const { user, error } = await authenticateUser(request);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "employees", "WRITE"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for employees" }, { status: 403 });
+    if (!(await checkPermission(user, "dashboard", "tasks", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for tasks" }, { status: 403 });
     }
 
     const { userId } = await params;
-    if (!canAccess(user, userId)) {
+    if (!(await canAssignTo(user, userId))) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
     const body = await request.json();
-    const { title, description, plannedDate, isPlanned } = body;
-
-    if (!title || !plannedDate) {
+    const title = String(body.title || "").trim();
+    if (!title) {
       return NextResponse.json({ success: false, error: "Missing required fields" }, { status: 400 });
     }
 
-    const [year, m, day] = plannedDate.split("-");
-    const utcDate = new Date(Date.UTC(year, m - 1, day));
+    const plannedDate = parseDateOnly(body.plannedDate) || new Date();
+    const isSelf = user.id === userId;
 
-    const newTask = await prisma.programManagerTask.create({
+    const task = await prisma.task.create({
       data: {
-        userId,
         title,
-        description: description || null,
-        plannedDate: utcDate,
-        isPlanned: isPlanned !== undefined ? isPlanned : true,
+        description: body.description ? String(body.description).trim() : null,
+        assigneeId: userId,
+        assignedById: isSelf ? null : user.id,
+        plannedDate,
+        deadline: body.deadline ? parseDateOnly(body.deadline) : null,
+        priority: body.priority || "Medium",
+        isPlanned: body.isPlanned !== undefined ? !!body.isPlanned : true,
       },
-      include: { comments: true },
+      include: includeTask(),
     });
 
-    return NextResponse.json({ success: true, data: newTask }, { status: 201 });
+    return NextResponse.json({ success: true, data: task }, { status: 201 });
   } catch (error) {
     console.error("Error creating program manager task:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });

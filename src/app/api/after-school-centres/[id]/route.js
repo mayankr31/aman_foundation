@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import {
+  validateEmail,
+  validateMobile,
+  firstError,
+  normalizeEmailForSave,
+  normalizeMobileForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -129,13 +136,21 @@ export async function PATCH(req, context) {
 
     const body = await req.json();
 
+    const validationMessage = firstError([
+      validateEmail(body.email),
+      validateMobile(body.phone),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     const updatedCentre = await prisma.afterSchoolCentre.update({
       where: { id: centreId },
       data: {
         name: body.name,
         coordinatorName: body.coordinatorName,
-        email: body.email,
-        phone: body.phone,
+        email: body.email !== undefined ? normalizeEmailForSave(body.email) : undefined,
+        phone: body.phone !== undefined ? normalizeMobileForSave(body.phone) : undefined,
         address: body.address,
         location: body.location,
         status: body.status,

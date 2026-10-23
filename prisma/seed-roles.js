@@ -54,6 +54,9 @@ const ALL_PAGES = [
   "reimbursements",
   "reimbursement-management",
   "attendance",
+  "self-attendance",
+  "tasks",
+  "task-analytics",
   "admin",
 ];
 
@@ -62,7 +65,7 @@ const ACTIONS = ["READ", "WRITE"];
 // Per-role page grants.
 const ROLE_PAGES = {
   ADMIN: ALL_PAGES,
-  FELLOW: ["dashboard", "education", "livelihood", "leaves", "travel", "reimbursements", "attendance"],
+  FELLOW: ["dashboard", "education", "leaves", "travel", "reimbursements", "attendance", "self-attendance", "tasks"],
   HR: [
     "dashboard",
     "education",
@@ -72,6 +75,8 @@ const ROLE_PAGES = {
     "leaves",
     "reimbursements",
     "attendance",
+    "self-attendance",
+    "tasks",
   ],
 };
 
@@ -88,6 +93,8 @@ const PROGRAM_STAFF_PAGES = [
   "travel-management",
   "reimbursements",
   "attendance",
+  "self-attendance",
+  "tasks",
 ];
 
 async function main() {
@@ -150,6 +157,23 @@ async function main() {
       }
     }
     console.log(`Granted ${pages.length} pages to ${roleName}.`);
+  }
+
+  // Fellows no longer have a Livelihood section. Remove any existing grant so
+  // the sidebar, quick links and APIs all stay in sync.
+  const fellowRole = await prisma.role.findUnique({ where: { name: "FELLOW" } });
+  if (fellowRole) {
+    const livelihoodPermissions = await prisma.permission.findMany({
+      where: { page: "livelihood" },
+      select: { id: true },
+    });
+    await prisma.rolePermission.deleteMany({
+      where: {
+        roleId: fellowRole.id,
+        permissionId: { in: livelihoodPermissions.map((p) => p.id) },
+      },
+    });
+    console.log("Removed Livelihood permissions from FELLOW.");
   }
 
   // Reimbursement management is restricted to Admin and Program Managers by

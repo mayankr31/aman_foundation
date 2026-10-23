@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable react-hooks/immutability, react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -25,12 +26,6 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
     toggleOff: isDarkMode ? 'bg-white/10' : 'bg-gray-200',
   };
 
-  useEffect(() => {
-    if (isOpen && role && token) {
-      fetchData();
-    }
-  }, [isOpen, role, token]);
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -55,6 +50,13 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isOpen && role && token) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, role, token]);
 
   const initializeLocalState = (perms, rolePerms) => {
     const state = {};
@@ -238,6 +240,9 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
           </div>
         ) : (
           <>
+            <p className={`text-xs mb-3 ${theme.textMuted}`}>
+              READ controls page access. WRITE controls create, edit, delete, approve and upload actions. A WRITE grant automatically includes READ.
+            </p>
             <div className={`border-t ${theme.borderLight} my-4`} />
             <div className="max-h-[50vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
               <table className="mobile-card-table w-full min-w-[420px]">

@@ -61,6 +61,8 @@ export async function POST(req, context) {
           data: dataToInsert,
         });
       }
+      // Bump the version used by clients to detect role permission changes.
+      await tx.role.update({ where: { id: roleId }, data: { updatedAt: new Date() } });
     });
 
     return NextResponse.json({ success: true, message: "Permissions updated successfully" });

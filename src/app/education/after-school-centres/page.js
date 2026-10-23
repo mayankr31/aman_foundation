@@ -4,19 +4,25 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
-function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
+import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
+function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
+  const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
+  const handleChange = (event) => {
+    if (!transform) return onChange(event);
+    onChange({ target: { name, value: transform(event.target.value) } });
+  };
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
-        <select name={name} value={value} onChange={onChange}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary">
+        <select name={name} value={value} onChange={handleChange} aria-invalid={Boolean(error)} className={inputClasses} {...rest}>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
       ) : (
-        <input type={type} name={name} value={value} onChange={onChange} required={required}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
+        <input type={type} name={name} value={value} onChange={handleChange} required={required} aria-invalid={Boolean(error)} className={inputClasses} {...rest} />
       )}
+      {hint && !error && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
+      {error && <span className="text-[11px] font-medium text-error">{error}</span>}
     </div>
   );
 }
@@ -435,12 +441,12 @@ export default function AfterSchoolCentresModule() {
           <form onSubmit={handleAddCentre} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <InputField label="Centre Name" name="name" value={addForm.name} onChange={e => setAddForm(f => ({ ...f, name: e.target.value }))} required />
-              <InputField label="Coordinator Name" name="coordinatorName" value={addForm.coordinatorName} onChange={e => setAddForm(f => ({ ...f, coordinatorName: e.target.value }))} />
-              <InputField label="Email" name="email" type="email" value={addForm.email} onChange={e => setAddForm(f => ({ ...f, email: e.target.value }))} />
-              <InputField label="Phone" name="phone" value={addForm.phone} onChange={e => setAddForm(f => ({ ...f, phone: e.target.value }))} />
+              <InputField label="Coordinator Name" name="coordinatorName" value={addForm.coordinatorName} onChange={e => setAddForm(f => ({ ...f, coordinatorName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
+              <InputField label="Email" name="email" type="email" value={addForm.email} onChange={e => setAddForm(f => ({ ...f, email: e.target.value }))} autoComplete="email" />
+              <InputField label="Phone" name="phone" value={addForm.phone} onChange={e => setAddForm(f => ({ ...f, phone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Location/City" name="location" value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))} required />
               <InputField label="Status" name="status" value={addForm.status} onChange={e => setAddForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
-              <InputField label="Enrolment Goal" name="goal" type="number" value={addForm.goal} onChange={e => setAddForm(f => ({ ...f, goal: e.target.value }))} />
+              <InputField label="Enrolment Goal" name="goal" type="number" min="0" step="1" value={addForm.goal} onChange={e => setAddForm(f => ({ ...f, goal: digitsOnly(e.target.value) }))} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

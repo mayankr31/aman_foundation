@@ -3,8 +3,45 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isLivelihoodProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { computeCapacityScore } from "@/lib/capacityDictionaries";
+import {
+  validatePersonName,
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateVoterId,
+  validateRationCard,
+  validateBankAccount,
+  validateIfsc,
+  validateAmount,
+  validateInteger,
+  validateDateNotFuture,
+  firstError,
+  normalizeMobileForSave,
+  normalizeAadhaarForSave,
+  normalizePanForSave,
+  normalizeVoterIdForSave,
+  normalizeRationCardForSave,
+  normalizeBankAccountForSave,
+  normalizeIfscForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+// Resilience Index = average of the latest Adaptive, Absorptive and
+// Transformative capacity scores. Returns null until all three exist.
+function computeResilienceIndex(beneficiary) {
+  const adaptive = beneficiary.adaptiveCapacitySurveys?.[0]?.responses;
+  const absorptive = beneficiary.absorptiveCapacitySurveys?.[0]?.responses;
+  const transformative = beneficiary.transformativeSurveys?.[0]?.responses;
+
+  const adaptivePct = adaptive ? computeCapacityScore("adaptive", adaptive) : null;
+  const absorptivePct = absorptive ? computeCapacityScore("absorptive", absorptive) : null;
+  const transformativePct = transformative ? computeCapacityScore("transformative", transformative) : null;
+
+  if (adaptivePct === null || absorptivePct === null || transformativePct === null) return null;
+  return Math.round((adaptivePct + absorptivePct + transformativePct) / 3);
+}
 
 export async function GET(req) {
   try {
@@ -60,6 +97,21 @@ export async function GET(req) {
             program: true,
           }
         },
+        adaptiveCapacitySurveys: {
+          take: 1,
+          orderBy: { surveyDate: "desc" },
+          select: { responses: true },
+        },
+        absorptiveCapacitySurveys: {
+          take: 1,
+          orderBy: { surveyDate: "desc" },
+          select: { responses: true },
+        },
+        transformativeSurveys: {
+          take: 1,
+          orderBy: { surveyDate: "desc" },
+          select: { responses: true },
+        },
         _count: {
           select: { familyMembers: true, livestock: true }
         }
@@ -67,7 +119,15 @@ export async function GET(req) {
       orderBy: { createdAt: "desc" }
     });
 
-    return NextResponse.json({ success: true, data: beneficiaries });
+    const data = beneficiaries.map((beneficiary) => {
+      const payload = { ...beneficiary, resilienceIndex: computeResilienceIndex(beneficiary) };
+      delete payload.adaptiveCapacitySurveys;
+      delete payload.absorptiveCapacitySurveys;
+      delete payload.transformativeSurveys;
+      return payload;
+    });
+
+    return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error("Fetch beneficiaries error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -130,6 +190,24 @@ export async function POST(req) {
       return NextResponse.json({ error: "Name and Enrolment ID are required" }, { status: 400 });
     }
 
+    const validationMessage = firstError([
+      validatePersonName(name, { required: true }),
+      dob ? validateDateNotFuture(dob, { label: "Date of birth" }) : null,
+      validateMobile(mobNumber),
+      validateMobile(emergencyContact),
+      validateAadhaar(aadhar),
+      validatePan(panCard),
+      validateVoterId(voterId),
+      validateRationCard(rationCard),
+      validateBankAccount(bankAccountNo),
+      validateIfsc(bankIfsc),
+      validateAmount(monthlyIncome, { min: 0 }),
+      validateInteger(householdSize, { min: 1, max: 20 }),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     if (PROGRAM_ROLES.includes(user.role.name)) {
       if (programId && !(await isLivelihoodProgramManaged(user.id, programId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
@@ -141,12 +219,12 @@ export async function POST(req) {
         enrolmentId,
         name,
         dob: dob ? new Date(dob) : null,
-        panCard,
-        aadhar,
-        voterId,
-        rationCard,
-        mobNumber,
-        emergencyContact,
+        panCard: normalizePanForSave(panCard),
+        aadhar: normalizeAadhaarForSave(aadhar),
+        voterId: normalizeVoterIdForSave(voterId),
+        rationCard: normalizeRationCardForSave(rationCard),
+        mobNumber: normalizeMobileForSave(mobNumber),
+        emergencyContact: normalizeMobileForSave(emergencyContact),
         gender,
         resilienceScore: resilienceScore ? parseInt(resilienceScore) : 50,
         annualIncome: annualIncome ? parseFloat(annualIncome) : null,
@@ -164,8 +242,8 @@ export async function POST(req) {
         primaryIncomeType,
         tier: tier || "Tier 2",
         bankName,
-        bankAccountNo,
-        bankIfsc,
+        bankAccountNo: normalizeBankAccountForSave(bankAccountNo),
+        bankIfsc: normalizeIfscForSave(bankIfsc),
         schemeEnrollments: schemes && schemes.length > 0 ? {
           create: await Promise.all(schemes.map(async (nameOrId) => {
             const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(nameOrId);

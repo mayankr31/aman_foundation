@@ -12,7 +12,13 @@ import { formatDate } from "@/lib/date";
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 // ─── Small helpers ─────────────────────────────────────────────────────────────
-function InputField({ label, name, value, onChange, type = "text", required = false, options }) {
+import { toMobileInput, toPersonNameInput } from "@/lib/validation";
+function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
+  const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
+  const handleChange = (event) => {
+    if (!transform) return onChange(event);
+    onChange({ target: { name, value: transform(event.target.value) } });
+  };
   return (
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
@@ -20,8 +26,10 @@ function InputField({ label, name, value, onChange, type = "text", required = fa
         <select
           name={name}
           value={value}
-          onChange={onChange}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
+          onChange={handleChange}
+          aria-invalid={Boolean(error)}
+          className={inputClasses}
+          {...rest}
         >
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
@@ -30,11 +38,15 @@ function InputField({ label, name, value, onChange, type = "text", required = fa
           type={type}
           name={name}
           value={value}
-          onChange={onChange}
+          onChange={handleChange}
           required={required}
-          className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
+          aria-invalid={Boolean(error)}
+          className={inputClasses}
+          {...rest}
         />
       )}
+      {hint && !error && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
+      {error && <span className="text-[11px] font-medium text-error">{error}</span>}
     </div>
   );
 }
@@ -123,12 +135,12 @@ export default function AfterSchoolStudentProfileDetail() {
           gradeGroup: json.data.gradeGroup || "",
           district: json.data.district || "",
           guardianName: json.data.guardianName || "",
-          guardianPhone: json.data.guardianPhone || "",
+          guardianPhone: toMobileInput(json.data.guardianPhone || ""),
           guardianRelation: json.data.guardianRelation || "",
           fatherName: json.data.fatherName || "",
-          fatherMobile: json.data.fatherMobile || "",
+          fatherMobile: toMobileInput(json.data.fatherMobile || ""),
           motherName: json.data.motherName || "",
-          motherMobile: json.data.motherMobile || "",
+          motherMobile: toMobileInput(json.data.motherMobile || ""),
           enrolmentDate: json.data.enrolmentDate ? json.data.enrolmentDate.split("T")[0] : "",
           primaryLanguage: json.data.primaryLanguage || "",
         });
@@ -1022,24 +1034,24 @@ export default function AfterSchoolStudentProfileDetail() {
                   </button>
                 )}
               </div>
-              <InputField label="Full Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required />
+              <InputField label="Full Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required transform={toPersonNameInput} maxLength={60} />
               <InputField label="Student ID" name="studentId" value={editForm.studentId} onChange={e => setEditForm(f => ({ ...f, studentId: e.target.value }))} />
-              <InputField label="Date of Birth" name="dob" type="date" value={editForm.dob} onChange={e => setEditForm(f => ({ ...f, dob: e.target.value }))} />
+              <InputField label="Date of Birth" name="dob" type="date" value={editForm.dob} onChange={e => setEditForm(f => ({ ...f, dob: e.target.value }))} max={new Date().toISOString().slice(0, 10)} />
               <InputField label="Gender" name="gender" value={editForm.gender} onChange={e => setEditForm(f => ({ ...f, gender: e.target.value }))} options={["", "Male", "Female", "Other"]} />
               <InputField label="Grade" name="grade" value={editForm.grade} onChange={e => setEditForm(f => ({ ...f, grade: e.target.value }))} />
               <InputField label="Grade Group" name="gradeGroup" value={editForm.gradeGroup} onChange={e => setEditForm(f => ({ ...f, gradeGroup: e.target.value }))} options={["", "Primary", "Middle", "Secondary", "Senior Secondary"]} />
               <InputField label="District" name="district" value={editForm.district} onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))} />
               <InputField label="Primary Language" name="primaryLanguage" value={editForm.primaryLanguage} onChange={e => setEditForm(f => ({ ...f, primaryLanguage: e.target.value }))} />
-              <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
-              <InputField label="Guardian Name" name="guardianName" value={editForm.guardianName} onChange={e => setEditForm(f => ({ ...f, guardianName: e.target.value }))} />
+              <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} autoComplete="email" />
+              <InputField label="Guardian Name" name="guardianName" value={editForm.guardianName} onChange={e => setEditForm(f => ({ ...f, guardianName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
               <InputField label="Guardian Relation" name="guardianRelation" value={editForm.guardianRelation} onChange={e => setEditForm(f => ({ ...f, guardianRelation: e.target.value }))} />
-              <InputField label="Guardian Phone" name="guardianPhone" value={editForm.guardianPhone} onChange={e => setEditForm(f => ({ ...f, guardianPhone: e.target.value }))} />
-              <InputField label="Father's Name" name="fatherName" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} />
-              <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} />
-              <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} />
-              <InputField label="Mother's Mobile" name="motherMobile" value={editForm.motherMobile} onChange={e => setEditForm(f => ({ ...f, motherMobile: e.target.value }))} />
+              <InputField label="Guardian Phone" name="guardianPhone" value={editForm.guardianPhone} onChange={e => setEditForm(f => ({ ...f, guardianPhone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+              <InputField label="Father's Name" name="fatherName" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
+              <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+              <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
+              <InputField label="Mother's Mobile" name="motherMobile" value={editForm.motherMobile} onChange={e => setEditForm(f => ({ ...f, motherMobile: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} />
-              <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} />
+              <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} max={new Date().toISOString().slice(0, 10)} />
 
             </div>
             <div className="flex justify-end gap-3 pt-4">

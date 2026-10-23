@@ -3,6 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { getFellowIdByUserId } from "@/lib/scope";
+import {
+  validateEmail,
+  validateMobile,
+  firstError,
+  normalizeEmailForSave,
+  normalizeMobileForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -95,14 +102,22 @@ export async function POST(req) {
       return NextResponse.json({ error: "School name is required" }, { status: 400 });
     }
 
+    const validationMessage = firstError([
+      validateEmail(email),
+      validateMobile(phone),
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     const school = await prisma.$transaction(async (tx) => {
       const created = await tx.school.create({
         data: {
           name,
           principalName,
           udiseCode,
-          email,
-          phone,
+          email: normalizeEmailForSave(email),
+          phone: normalizeMobileForSave(phone),
           address,
           location,
           status: status || "Active",

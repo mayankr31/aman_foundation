@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { validateEmail } from '@/lib/validation';
 import '../globals_auth.css';
 
 export default function LoginPage() {
@@ -31,7 +32,7 @@ export default function LoginPage() {
     if (!email) {
       setEmailError('Email is required');
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (validateEmail(email)) {
       setEmailError('Please enter a valid email address');
       isValid = false;
     }

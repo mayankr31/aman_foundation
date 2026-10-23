@@ -1,16 +1,21 @@
 'use client';
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { X, Loader2, Save, ShieldAlert } from 'lucide-react';
+import { X, Loader2, Save, ShieldAlert, RotateCcw } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { useAuth } from '@/lib/useAuth';
 
 export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode, token }) {
   const toast = useToast();
+  const { user: currentUser, refreshPermissions } = useAuth();
   const [allPermissions, setAllPermissions] = useState([]);
+  const [rolePermissions, setRolePermissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [localState, setLocalState] = useState({});
+  const [initialState, setInitialState] = useState({});
 
   const theme = {
     bg: isDarkMode ? 'bg-[#151e2d]' : 'bg-white',
@@ -18,18 +23,11 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
     textWhite: isDarkMode ? 'text-white' : 'text-gray-900',
     textLight: isDarkMode ? 'text-gray-400' : 'text-gray-600',
     textMuted: isDarkMode ? 'text-gray-500' : 'text-gray-400',
-    iconBg: isDarkMode ? 'bg-white/5' : 'bg-gray-100',
-    iconHover: isDarkMode ? 'hover:bg-white/10' : 'hover:bg-gray-200',
     borderLight: isDarkMode ? 'border-white/5' : 'border-gray-100',
-    toggleOn: 'bg-[#1a7a5e]',
-    toggleOff: isDarkMode ? 'bg-white/10' : 'bg-gray-200',
+    select: isDarkMode
+      ? 'bg-[#0d1320] text-white border-white/10'
+      : 'bg-white text-gray-900 border-gray-200',
   };
-
-  useEffect(() => {
-    if (isOpen && user && token) {
-      fetchData();
-    }
-  }, [isOpen, user, token]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -37,7 +35,7 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
       const [permsRes, userPermsRes, rolePermsRes] = await Promise.all([
         fetch('/api/permissions', { headers: { Authorization: `Bearer ${token}` } }),
         fetch(`/api/users/${user.id}/permissions`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`/api/roles/${user.roleId}/permissions`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`/api/roles/${user.roleId || user.role?.id}/permissions`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
 
       const permsData = await permsRes.json();
@@ -48,9 +46,22 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
         throw new Error('Failed to fetch permissions');
       }
 
-      setAllPermissions(permsData.data || []);
-      const needsInit = !userPermsData.data || userPermsData.data.length === 0;
-      initializeLocalState(permsData.data || [], userPermsData.data || [], rolePermsData.data || [], needsInit);
+      const perms = permsData.data || [];
+      const rolePerms = rolePermsData.data || [];
+      setAllPermissions(perms);
+      setRolePermissions(rolePerms);
+
+      const userOverrideMap = {};
+      (userPermsData.data || []).forEach((up) => {
+        userOverrideMap[up.permissionId] = up.type === 'GRANT' ? 'allow' : 'deny';
+      });
+
+      const state = {};
+      perms.forEach((p) => {
+        state[p.id] = userOverrideMap[p.id] || 'inherit';
+      });
+      setLocalState(state);
+      setInitialState(state);
     } catch (err) {
       console.error('Error fetching permissions:', err);
       toast.error(err.message);
@@ -59,173 +70,125 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
     }
   };
 
-  const initializeLocalState = (perms, userPerms, rolePerms, needsInit) => {
-    const state = {};
-    const userPermsMap = {};
-    (userPerms || []).forEach(up => {
-      userPermsMap[up.permissionId] = up;
-    });
+  useEffect(() => {
+    if (isOpen && user && token) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, user, token]);
 
-    const rolePermsMap = {};
-    (rolePerms || []).forEach(rp => {
-      rolePermsMap[rp.id] = true;
-    });
-
-    perms.forEach(p => {
-      const userPerm = userPermsMap[p.id];
-      if (userPerm) {
-        state[p.id] = {
-          hasPermission: userPerm.type === 'GRANT',
-          changed: false,
-        };
-      } else if (needsInit) {
-        const hasRolePerm = rolePermsMap[p.id];
-        state[p.id] = {
-          hasPermission: !!hasRolePerm,
-          changed: false,
-        };
-      } else {
-        state[p.id] = {
-          hasPermission: false,
-          changed: false,
-        };
-      }
-    });
-
-    setLocalState(state);
-  };
+  const rolePermIds = useMemo(() => new Set((rolePermissions || []).map((p) => p.id)), [rolePermissions]);
 
   const pages = useMemo(() => {
     const pageMap = {};
-    allPermissions.forEach(p => {
-      if (!pageMap[p.page]) {
-        pageMap[p.page] = {};
-      }
+    allPermissions.forEach((p) => {
+      if (!pageMap[p.page]) pageMap[p.page] = {};
       pageMap[p.page][p.action] = p;
     });
-    return Object.keys(pageMap).sort().map(page => ({
+    return Object.keys(pageMap).sort().map((page) => ({
       name: page,
       permissions: pageMap[page],
     }));
   }, [allPermissions]);
 
-  const allReadEnabled = useMemo(() => {
-    const readPerms = allPermissions.filter(p => p.action === 'READ');
-    if (readPerms.length === 0) return false;
-    return readPerms.every(p => localState[p.id]?.hasPermission === true);
-  }, [allPermissions, localState]);
+  const handleChange = (permId, value) => {
+    const permission = allPermissions.find((p) => p.id === permId);
+    setLocalState((prev) => {
+      const next = { ...prev, [permId]: value };
 
-  const allWriteEnabled = useMemo(() => {
-    const writePerms = allPermissions.filter(p => p.action === 'WRITE');
-    if (writePerms.length === 0) return false;
-    return writePerms.every(p => localState[p.id]?.hasPermission === true);
-  }, [allPermissions, localState]);
-
-  const handleToggle = (permId, action, currentValue) => {
-    setLocalState(prev => {
-      const newState = { ...prev };
-      const perm = allPermissions.find(p => p.id === permId);
-      if (!perm) return prev;
-
-      if (action === 'READ') {
-        newState[permId] = {
-          hasPermission: !currentValue,
-          changed: true,
-        };
-        const writePerm = allPermissions.find(p => p.page === perm.page && p.action === 'WRITE');
-        if (writePerm && newState[writePerm.id]) {
-          if (!newState[permId].hasPermission) {
-            newState[writePerm.id] = {
-              ...newState[writePerm.id],
-              hasPermission: false,
-              changed: true,
-            };
-          }
-        }
-      } else if (action === 'WRITE') {
-        newState[permId] = {
-          hasPermission: !currentValue,
-          changed: true,
-        };
-        const readPerm = allPermissions.find(p => p.page === perm.page && p.action === 'READ');
-        if (readPerm && !newState[permId].hasPermission) {
-          newState[readPerm.id] = {
-            ...newState[readPerm.id],
-            hasPermission: false,
-            changed: true,
-          };
-        } else if (readPerm && newState[permId].hasPermission) {
-          newState[readPerm.id] = {
-            ...newState[readPerm.id],
-            hasPermission: true,
-            changed: true,
-          };
-        }
+      // Keep READ/WRITE relationships sensible when using the switches.
+      if (permission?.action === "READ" && value === "deny") {
+        const writePerm = allPermissions.find(
+          (p) => p.page === permission.page && p.action === "WRITE"
+        );
+        if (writePerm) next[writePerm.id] = "deny";
+      }
+      if (permission?.action === "WRITE" && value === "allow") {
+        const readPerm = allPermissions.find(
+          (p) => p.page === permission.page && p.action === "READ"
+        );
+        if (readPerm) next[readPerm.id] = "allow";
       }
 
-      return newState;
+      return next;
     });
   };
 
-  const handleToggleAllRead = () => {
-    const newValue = !allReadEnabled;
-    setLocalState(prev => {
-      const newState = { ...prev };
-      allPermissions.forEach(p => {
-        if (p.action === 'READ') {
-          newState[p.id] = { hasPermission: newValue, changed: true };
-        }
-        if (p.action === 'WRITE' && !newValue) {
-          newState[p.id] = { ...newState[p.id], hasPermission: false, changed: true };
-        }
+  const roleAllows = (permission) => {
+    if (!permission) return false;
+    if (rolePermIds.has(permission.id)) return true;
+    if (permission.action === "READ") {
+      const writePerm = allPermissions.find(
+        (p) => p.page === permission.page && p.action === "WRITE"
+      );
+      return !!writePerm && rolePermIds.has(writePerm.id);
+    }
+    return false;
+  };
+
+  const handleResetPage = (pagePermissions) => {
+    setLocalState((prev) => {
+      const next = { ...prev };
+      Object.values(pagePermissions).forEach((p) => {
+        next[p.id] = 'inherit';
       });
-      return newState;
+      return next;
     });
   };
 
-  const handleToggleAllWrite = () => {
-    const newValue = !allWriteEnabled;
-    setLocalState(prev => {
-      const newState = { ...prev };
-      allPermissions.forEach(p => {
-        if (p.action === 'WRITE') {
-          newState[p.id] = { hasPermission: newValue, changed: true };
-        }
-        if (p.action === 'READ' && newValue) {
-          newState[p.id] = { ...newState[p.id], hasPermission: true, changed: true };
-        }
-      });
-      return newState;
+  const handleResetAll = () => {
+    const next = {};
+    allPermissions.forEach((p) => {
+      next[p.id] = 'inherit';
     });
+    setLocalState(next);
   };
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      const changes = Object.entries(localState)
-        .filter(([_, state]) => state.changed)
-        .map(([permId, state]) => ({
-          permissionId: permId,
-          type: state.hasPermission ? 'GRANT' : 'DENY',
-        }));
+      const requests = [];
+      for (const permission of allPermissions) {
+        const next = localState[permission.id] || 'inherit';
+        const prev = initialState[permission.id] || 'inherit';
+        if (next === prev) continue;
 
-      const promises = changes.map(change =>
-        fetch(`/api/users/${user.id}/permissions`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(change),
-        })
-      );
+        if (next === 'inherit') {
+          requests.push(
+            fetch(`/api/users/${user.id}/permissions?permissionId=${permission.id}`, {
+              method: 'DELETE',
+              headers: { Authorization: `Bearer ${token}` },
+            })
+          );
+        } else {
+          requests.push(
+            fetch(`/api/users/${user.id}/permissions`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                permissionId: permission.id,
+                type: next === 'allow' ? 'GRANT' : 'DENY',
+              }),
+            })
+          );
+        }
+      }
 
-      await Promise.all(promises);
-      toast.success('Permissions override saved successfully!');
+      const results = await Promise.all(requests);
+      const failed = results.find((res) => !res.ok);
+      if (failed) throw new Error('Some permission changes could not be saved');
+
+      if (currentUser?.id === user.id) {
+        await refreshPermissions();
+      }
+      toast.success('Permission overrides saved successfully!');
       onClose();
     } catch (err) {
       console.error('Error saving overrides:', err);
-      toast.error('Failed to save permissions');
+      toast.error(err.message || 'Failed to save permissions');
     } finally {
       setSaving(false);
     }
@@ -234,11 +197,11 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 z-[110] flex items-start justify-center p-4 overflow-y-auto bg-black/60 backdrop-blur-md`}>
+    <div className="fixed inset-0 z-[110] flex items-start justify-center p-4 overflow-y-auto bg-black/60 backdrop-blur-md">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`${theme.bg} border ${theme.border} p-5 sm:p-8 rounded-[2rem] shadow-2xl w-full max-w-3xl relative my-8`}
+        className={`${theme.bg} border ${theme.border} p-5 sm:p-8 rounded-[2rem] shadow-2xl w-full max-w-4xl relative my-8`}
       >
         <div className="flex justify-between items-center gap-3 mb-6">
           <div className="flex items-center gap-3 min-w-0">
@@ -261,92 +224,82 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
           </div>
         ) : (
           <>
-            <div className={`border-t ${theme.borderLight} my-4`} />
-            <div className="max-h-[50vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
-              <table className="mobile-card-table w-full min-w-[420px]">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+              <p className={`text-xs ${theme.textMuted}`}>
+                Switches show the effective permission. Changing a switch creates an explicit override; <strong>Reset</strong> returns that permission to the role default. READ controls page access; WRITE controls create, edit, delete, approve and upload actions.
+              </p>
+              <button
+                onClick={handleResetAll}
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 border ${theme.border} ${theme.textLight} hover:bg-black/5 dark:hover:bg-white/5`}
+              >
+                <RotateCcw size={12} /> Reset all to role
+              </button>
+            </div>
+
+            <div className="max-h-[55vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
+              <table className="mobile-card-table w-full min-w-[620px]">
                 <thead className={`sticky top-0 ${theme.bg} z-10`}>
                   <tr className={`text-left text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>
                     <th className="py-3 pr-4">Page / Feature</th>
-                    <th className="py-3 px-4 text-center">
-                      <div className="flex flex-col items-center gap-1">
-                        <span>READ</span>
-                        <button
-                          onClick={handleToggleAllRead}
-                          className={`w-8 h-4 rounded-full relative transition-colors ${
-                            allReadEnabled ? theme.toggleOn : theme.toggleOff
-                          }`}
-                        >
-                          <div
-                            className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${
-                              allReadEnabled ? 'translate-x-4' : 'translate-x-0.5'
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    </th>
-                    <th className="py-3 pl-4 text-center">
-                      <div className="flex flex-col items-center gap-1">
-                        <span>WRITE</span>
-                        <button
-                          onClick={handleToggleAllWrite}
-                          className={`w-8 h-4 rounded-full relative transition-colors ${
-                            allWriteEnabled ? theme.toggleOn : theme.toggleOff
-                          }`}
-                        >
-                          <div
-                            className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${
-                              allWriteEnabled ? 'translate-x-4' : 'translate-x-0.5'
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    </th>
+                    <th className="py-3 px-4 text-center">READ</th>
+                    <th className="py-3 px-4 text-center">WRITE</th>
+                    <th className="py-3 pl-4 text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {pages.map(({ name, permissions }) => {
-                    const readPerm = permissions.READ;
-                    const writePerm = permissions.WRITE;
-                    const readState = readPerm ? localState[readPerm.id] : null;
-                    const writeState = writePerm ? localState[writePerm.id] : null;
+                    const renderCell = (perm) => {
+                      if (!perm) return null;
+                      const value = localState[perm.id] || 'inherit';
+                      const inheritedAllowed = roleAllows(perm);
+                      const isOn = value === 'allow' || (value === 'inherit' && inheritedAllowed);
+
+                      return (
+                        <div className="flex flex-col items-center gap-1.5">
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={isOn}
+                            onClick={() => handleChange(perm.id, isOn ? 'deny' : 'allow')}
+                            className={`w-11 h-6 p-0 rounded-full relative shrink-0 transition-colors ${
+                              isOn ? 'bg-[#1a7a5e]' : isDarkMode ? 'bg-white/15' : 'bg-gray-200'
+                            }`}
+                            title={isOn ? 'Allowed — click to deny' : 'Denied — click to allow'}
+                          >
+                            <span
+                              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                                isOn ? 'translate-x-5' : 'translate-x-0'
+                              }`}
+                            />
+                          </button>
+                          {value !== 'inherit' && (
+                            <button
+                              type="button"
+                              onClick={() => handleChange(perm.id, 'inherit')}
+                              className={`text-[9px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
+                              title="Reset to role permissions"
+                            >
+                              Reset
+                            </button>
+                          )}
+                        </div>
+                      );
+                    };
 
                     return (
                       <tr key={name} className={`border-t ${theme.borderLight}`}>
                         <td data-label="" className={`py-4 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
                           {name.replace(/_/g, ' ')}
                         </td>
-                        <td data-label="Read" className="py-4 px-4 text-center">
-                          {readPerm && (
-                            <button
-                              onClick={() => handleToggle(readPerm.id, 'READ', readState?.hasPermission)}
-                              className={`w-10 h-6 rounded-full relative transition-colors ${
-                                readState?.hasPermission ? theme.toggleOn : theme.toggleOff
-                              }`}
-                            >
-                              <div
-                                  className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                                    readState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
-                                  }`}
-                              />
-                            </button>
-                          )}
-                        </td>
-                        <td data-label="Write" className="py-4 pl-4 text-center">
-                          {writePerm && (
-                            <button
-                              onClick={() => handleToggle(writePerm.id, 'WRITE', writeState?.hasPermission)}
-                              disabled={readState?.hasPermission === false}
-                              className={`w-10 h-6 rounded-full relative transition-colors ${
-                                writeState?.hasPermission ? theme.toggleOn : theme.toggleOff
-                              } ${readState?.hasPermission === false ? 'opacity-30 cursor-not-allowed' : ''}`}
-                            >
-                              <div
-                                  className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                                    writeState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
-                                  }`}
-                              />
-                            </button>
-                          )}
+                        <td data-label="Read" className="py-4 px-4 text-center">{renderCell(permissions.READ)}</td>
+                        <td data-label="Write" className="py-4 px-4 text-center">{renderCell(permissions.WRITE)}</td>
+                        <td data-label="Actions" className="py-4 pl-4 text-center">
+                          <button
+                            onClick={() => handleResetPage(permissions)}
+                            className={`text-[10px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
+                          >
+                            Reset page
+                          </button>
                         </td>
                       </tr>
                     );
@@ -365,7 +318,7 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className={`px-5 py-2.5 rounded-2xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform shadow-xl`}
+                className="px-5 py-2.5 rounded-2xl text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 bg-[#1a7a5e] hover:scale-105 transition-transform shadow-xl disabled:opacity-60"
               >
                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                 Save Overrides

@@ -3,6 +3,27 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { createLivestockWithGeneratedTag } from "@/lib/livestockTag";
+import {
+  validatePersonName,
+  validateMobile,
+  validateAadhaar,
+  validatePan,
+  validateVoterId,
+  validateRationCard,
+  validateBankAccount,
+  validateIfsc,
+  validateAmount,
+  validateInteger,
+  validateDateNotFuture,
+  firstError,
+  normalizeMobileForSave,
+  normalizeAadhaarForSave,
+  normalizePanForSave,
+  normalizeVoterIdForSave,
+  normalizeRationCardForSave,
+  normalizeBankAccountForSave,
+  normalizeIfscForSave,
+} from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -147,20 +168,38 @@ export async function PATCH(req, { params }) {
 
     const body = await req.json();
 
+    const validationMessage = firstError([
+      body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
+      body.dob ? validateDateNotFuture(body.dob, { label: "Date of birth" }) : null,
+      validateMobile(body.mobNumber),
+      validateMobile(body.emergencyContact),
+      validateAadhaar(body.aadhar),
+      validatePan(body.panCard),
+      validateVoterId(body.voterId),
+      validateRationCard(body.rationCard),
+      validateBankAccount(body.bankAccountNo),
+      validateIfsc(body.bankIfsc),
+      validateAmount(body.monthlyIncome, { min: 0 }),
+      body.householdSize !== undefined ? validateInteger(body.householdSize, { min: 1, max: 20 }) : null,
+    ]);
+    if (validationMessage) {
+      return NextResponse.json({ error: validationMessage }, { status: 400 });
+    }
+
     const result = await prisma.$transaction(async (tx) => {
       // 1. Update main Beneficiary details
       const updated = await tx.beneficiary.update({
         where: { id: beneficiaryId },
         data: {
           enrolmentId: body.enrolmentId,
-          name: body.name,
-          dob: body.dob ? new Date(body.dob) : null,
-          panCard: body.panCard,
-          aadhar: body.aadhar,
-          voterId: body.voterId,
-          rationCard: body.rationCard,
-          mobNumber: body.mobNumber,
-          emergencyContact: body.emergencyContact,
+          name: body.name !== undefined ? body.name.trim() : undefined,
+          dob: body.dob !== undefined ? (body.dob ? new Date(body.dob) : null) : undefined,
+          panCard: body.panCard !== undefined ? normalizePanForSave(body.panCard) : undefined,
+          aadhar: body.aadhar !== undefined ? normalizeAadhaarForSave(body.aadhar) : undefined,
+          voterId: body.voterId !== undefined ? normalizeVoterIdForSave(body.voterId) : undefined,
+          rationCard: body.rationCard !== undefined ? normalizeRationCardForSave(body.rationCard) : undefined,
+          mobNumber: body.mobNumber !== undefined ? normalizeMobileForSave(body.mobNumber) : undefined,
+          emergencyContact: body.emergencyContact !== undefined ? normalizeMobileForSave(body.emergencyContact) : undefined,
           gender: body.gender,
           resilienceScore: body.resilienceScore !== undefined ? parseInt(body.resilienceScore) : undefined,
           annualIncome: body.annualIncome !== undefined
@@ -182,8 +221,8 @@ export async function PATCH(req, { params }) {
           primaryIncomeType: body.primaryIncomeType,
           tier: body.tier,
           bankName: body.bankName,
-          bankAccountNo: body.bankAccountNo,
-          bankIfsc: body.bankIfsc,
+          bankAccountNo: body.bankAccountNo !== undefined ? normalizeBankAccountForSave(body.bankAccountNo) : undefined,
+          bankIfsc: body.bankIfsc !== undefined ? normalizeIfscForSave(body.bankIfsc) : undefined,
           isMigrated: body.isMigrated !== undefined ? Boolean(body.isMigrated) : undefined
         }
       });

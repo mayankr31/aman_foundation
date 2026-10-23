@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -16,7 +17,8 @@ function formatStoredDates(value) {
 
 export default function LeaveWorkflow() {
   const router = useRouter();
-  const { token, user: currentUser } = useAuth();
+  const { token, user: currentUser, can } = useAuth();
+  const canWrite = can("leaves", "WRITE");
   const [leaves, setLeaves] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,6 +29,10 @@ export default function LeaveWorkflow() {
   const [rejectionReasonText, setRejectionReasonText] = useState("");
   const [isSubmittingRejection, setIsSubmittingRejection] = useState(false);
 
+  const [showPolicy, setShowPolicy] = useState(false);
+  const [policyConfigs, setPolicyConfigs] = useState([]);
+  const [savingPolicy, setSavingPolicy] = useState(false);
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setShowToast(true);
@@ -35,15 +41,6 @@ export default function LeaveWorkflow() {
 
   const canReview = ["ADMIN", "HR", ...PROGRAM_ROLES].includes(currentUser?.roleName);
   const { pageItems: pagedLeaves, currentPage, setCurrentPage } = usePagination(leaves, 10);
-
-  useEffect(() => {
-    if (currentUser && !canReview) {
-      router.push("/hr/leaves/apply");
-    } else if (token) {
-      fetchLeaves();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, currentUser, router]);
 
   const fetchLeaves = async () => {
     setIsLoading(true);
@@ -59,6 +56,69 @@ export default function LeaveWorkflow() {
       triggerToast("Error fetching leaves");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser && !canReview) {
+      router.push("/hr/leaves/apply");
+    } else if (token) {
+      fetchLeaves();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, currentUser, router]);
+
+  const fetchPolicy = async () => {
+    try {
+      const res = await fetch("/api/leaves/config", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok) setPolicyConfigs(data.data || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const openPolicy = () => {
+    fetchPolicy();
+    setShowPolicy(true);
+  };
+
+  const policyHasErrors = policyConfigs.some((config) => {
+    if (config.key === "COMP_OFF") return false;
+    const annual = Number(config.annualQuota);
+    const quarterly = Number(config.quarterlyQuota);
+    return (
+      config.annualQuota === "" ||
+      config.quarterlyQuota === "" ||
+      !Number.isInteger(annual) ||
+      annual % 4 !== 0 ||
+      !Number.isInteger(quarterly)
+    );
+  });
+
+  const savePolicy = async () => {
+    if (policyHasErrors) {
+      triggerToast("Annual quota must be a whole number divisible by 4.");
+      return;
+    }
+    setSavingPolicy(true);
+    try {
+      const res = await fetch("/api/leaves/config", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ configs: policyConfigs }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save policy");
+      setPolicyConfigs(data.data || []);
+      triggerToast("Leave policy updated");
+      setShowPolicy(false);
+    } catch (err) {
+      triggerToast(err.message || "Failed to save policy");
+    } finally {
+      setSavingPolicy(false);
     }
   };
 
@@ -151,11 +211,21 @@ export default function LeaveWorkflow() {
       </div>
 
       <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
           <h3 className="font-headline font-bold text-xl text-on-surface">Leave Requests</h3>
-          <span className="text-xs text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full font-semibold">
-            {leaves.length} Request{leaves.length !== 1 && "s"}
-          </span>
+          <div className="flex items-center gap-2">
+            {currentUser?.roleName === "ADMIN" && (
+              <button
+                onClick={openPolicy}
+                className="text-xs font-bold bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors"
+              >
+                Leave Policy
+              </button>
+            )}
+            <span className="text-xs text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full font-semibold">
+              {leaves.length} Request{leaves.length !== 1 && "s"}
+            </span>
+          </div>
         </div>
 
         <div className="w-full overflow-x-auto">
@@ -176,7 +246,14 @@ export default function LeaveWorkflow() {
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
                   <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
                   <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
-                  <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.type}</td>
+                  <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">
+                    <div>{leave.type}</div>
+                    {leave.compOffWorkedDate && (
+                      <div className="text-[10px] text-amber-700 font-semibold mt-1">
+                        Worked: {formatDate(leave.compOffWorkedDate)}
+                      </div>
+                    )}
+                  </td>
                   <td data-label="Dates" className="py-4 px-4 font-mono text-xs break-words align-top">{formatStoredDates(leave.dates)}</td>
                   <td data-label="Reason" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
                   <td data-label="Status" className="py-4 px-4">
@@ -196,7 +273,7 @@ export default function LeaveWorkflow() {
                     </div>
                   </td>
                   <td data-label="Actions" className="py-4 px-4 flex gap-2">
-                    {leave.status === "PENDING" && leave.userId !== currentUser?.id && (
+                    {canWrite && leave.status === "PENDING" && leave.userId !== currentUser?.id && (
                       <>
                         <button
                           onClick={() => handleUpdateStatus(leave.id, "APPROVED")}
@@ -227,6 +304,108 @@ export default function LeaveWorkflow() {
         </div>
         <Pagination currentPage={currentPage} totalItems={leaves.length} itemsPerPage={10} onPageChange={setCurrentPage} />
       </div>
+
+      {showPolicy && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-2xl p-4 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6 border-b border-outline-variant/10 pb-4">
+              <div>
+                <h3 className="text-xl font-headline font-bold text-on-surface">Leave Policy</h3>
+                <p className="text-xs text-on-surface-variant mt-1">Set either the annual or per-quarter value; the other is calculated automatically. Unused quarterly quota lapses.</p>
+              </div>
+              <button onClick={() => setShowPolicy(false)} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              {policyConfigs.map((config, index) => (
+                <div key={config.key} className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_1fr_auto] gap-3 items-end border border-outline-variant/20 rounded-xl p-3">
+                  <div>
+                    <p className="text-sm font-bold text-on-surface">{config.name}</p>
+                    <p className="text-[10px] uppercase tracking-widest text-on-surface-variant">{config.key}</p>
+                  </div>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    Annual
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={config.annualQuota}
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        const numeric = Number(raw);
+                        const valid = raw !== "" && Number.isInteger(numeric) && numeric % 4 === 0;
+                        const next = [...policyConfigs];
+                        next[index] = {
+                          ...config,
+                          annualQuota: raw,
+                          quarterlyQuota: raw === "" ? "" : valid ? numeric / 4 : "",
+                        };
+                        setPolicyConfigs(next);
+                      }}
+                      className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm font-normal normal-case tracking-normal text-on-surface"
+                    />
+                  </label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    Per Quarter
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={config.quarterlyQuota ?? ""}
+                      placeholder={String((Number(config.annualQuota) || 0) / 4)}
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        const numeric = Number(raw);
+                        const valid = raw !== "" && Number.isInteger(numeric);
+                        const next = [...policyConfigs];
+                        next[index] = {
+                          ...config,
+                          quarterlyQuota: raw,
+                          annualQuota: raw === "" ? "" : valid ? numeric * 4 : "",
+                        };
+                        setPolicyConfigs(next);
+                      }}
+                      className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm font-normal normal-case tracking-normal text-on-surface"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                    <input
+                      type="checkbox"
+                      checked={config.active !== false}
+                      onChange={(e) => {
+                        const next = [...policyConfigs];
+                        next[index] = { ...config, active: e.target.checked };
+                        setPolicyConfigs(next);
+                      }}
+                      className="accent-primary w-4 h-4"
+                    />
+                    Active
+                  </label>
+                  {config.key !== "COMP_OFF" &&
+                    (config.annualQuota === "" ||
+                      !Number.isInteger(Number(config.annualQuota)) ||
+                      Number(config.annualQuota) % 4 !== 0 ||
+                      config.quarterlyQuota === "" ||
+                      !Number.isInteger(Number(config.quarterlyQuota))) && (
+                      <p className="sm:col-span-4 text-[10px] font-semibold text-rose-600">
+                        Annual quota must be a whole number divisible by 4.
+                      </p>
+                    )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3 justify-end pt-4 border-t border-outline-variant/10">
+              <button onClick={() => setShowPolicy(false)} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
+              <button onClick={savePolicy} disabled={savingPolicy || policyHasErrors} className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer">
+                {savingPolicy ? "Saving..." : "Save Policy"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showToast && (
         <div className="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-2 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">

@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getManagedTeamUserIds } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { getHierarchyScopedUserIds } from "@/lib/hierarchy";
+import { getISTDateKey } from "@/lib/time";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+export const dynamic = "force-dynamic";
 
-export const dynamic = 'force-dynamic';
+function dateKeyOf(value) {
+  if (!value) return null;
+  return getISTDateKey(new Date(value));
+}
 
 export async function GET(req, context) {
   try {
@@ -19,93 +23,61 @@ export async function GET(req, context) {
 
     const { userId } = await context.params;
 
-    // ADMIN and HR can view any user's logs. PROGRAM_MANAGER can view their team (and self).
-    if (PROGRAM_ROLES.includes(user.role.name) && userId !== user.id) {
-      const team = await getManagedTeamUserIds(user.id);
-      if (!team.includes(userId)) {
+    if (user.role.name !== "ADMIN" && user.role.name !== "HR" && userId !== user.id) {
+      const scoped = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [user.id];
+      if (!scoped.includes(userId)) {
         return NextResponse.json({ error: "Forbidden: This user is not in your team" }, { status: 403 });
       }
-    } else if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "HR" &&
-      userId !== user.id
-    ) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
     }
 
     const targetUser = await prisma.user.findUnique({
       where: { id: userId },
-      select: { name: true, email: true, department: true, role: { select: { name: true } } }
+      select: { name: true, email: true, department: true, role: { select: { name: true } } },
     });
 
     if (!targetUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const logs = await prisma.attendanceLog.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' }
-    });
-
-    const fellow = await prisma.fellow.findUnique({
-      where: { userId }
-    });
-
-    let tasks = [];
-    if (fellow) {
-      tasks = await prisma.fellowTask.findMany({
-        where: { fellowId: fellow.id }
-      });
-    } else {
-      tasks = await prisma.programManagerTask.findMany({
-        where: { userId }
-      });
-    }
+    const [logs, tasks] = await Promise.all([
+      prisma.attendanceLog.findMany({
+        where: { userId, intimelog: { not: null } },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.task.findMany({
+        where: { assigneeId: userId },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          plannedDate: true,
+          deadline: true,
+          status: true,
+          completionDate: true,
+        },
+      }),
+    ]);
 
     const tasksByDate = {};
-    tasks.forEach(task => {
-      const d = new Date(task.plannedDate);
-      const yyyy = d.getUTCFullYear();
-      const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-      const dd = String(d.getUTCDate()).padStart(2, '0');
-      const dateString = `${yyyy}-${mm}-${dd}`;
-      if (!tasksByDate[dateString]) {
-        tasksByDate[dateString] = [];
+    for (const task of tasks) {
+      const keys = new Set([dateKeyOf(task.plannedDate), dateKeyOf(task.deadline)].filter(Boolean));
+      for (const key of keys) {
+        if (!tasksByDate[key]) tasksByDate[key] = [];
+        if (!tasksByDate[key].some((t) => t.id === task.id)) tasksByDate[key].push(task);
       }
-      tasksByDate[dateString].push(task);
-    });
+    }
 
-    const logsWithTasks = logs.map(log => {
-      const dateKey = log.logdate;
-      const dayTasks = dateKey ? (tasksByDate[dateKey] || []) : [];
-      
-      let taskDetails = [];
-      if (dayTasks.length > 0) {
-        taskDetails = dayTasks.map(t => ({
+    const logsWithTasks = logs.map((log) => {
+      const dayTasks = log.logdate ? tasksByDate[log.logdate] || [] : [];
+      return {
+        ...log,
+        taskDetails: dayTasks.map((t) => ({
           id: t.id,
           text: t.title,
           description: t.description,
           completed: t.status === "Completed",
-          completionDate: t.completionDate
-        }));
-      } else if (log.ef1) {
-        try {
-          const parsed = JSON.parse(log.ef1);
-          if (Array.isArray(parsed)) {
-            taskDetails = parsed;
-          } else if (parsed.checklistItems && Array.isArray(parsed.checklistItems)) {
-            taskDetails = parsed.checklistItems.map(t => ({
-              id: t.id,
-              text: t.text || t.title,
-              completed: t.completed || (parsed.checkoutData?.completedItems || []).includes(t.id)
-            }));
-          }
-        } catch (e) {}
-      }
-
-      return {
-        ...log,
-        taskDetails
+          completionDate: t.completionDate,
+        })),
       };
     });
 

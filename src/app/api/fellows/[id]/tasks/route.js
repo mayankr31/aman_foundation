@@ -1,91 +1,82 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/auth";
+import { authenticateUser } from "@/lib/auth";
+import { canAssignTo } from "@/lib/tasks";
+import { checkPermission } from "@/lib/permissions";
+import { canAccessUser } from "@/lib/hierarchy";
+import { isFellowManaged } from "@/lib/scope";
+import { istDayEnd, istDayStart } from "@/lib/time";
 
+function parseDateOnly(value) {
+  if (!value) return null;
+  const str = String(value);
+  const match = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (match) return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+  const parsed = new Date(str);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function includeTask() {
+  return {
+    assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+    assignedBy: { select: { id: true, name: true } },
+    comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } },
+    documents: { orderBy: { createdAt: "asc" } },
+  };
+}
+
+// Compatibility endpoint backed by the unified Task model.
 export async function GET(request, { params }) {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader) return NextResponse.json({ success: false, error: "No token" }, { status: 401 });
-    const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-    if (!decoded) return NextResponse.json({ success: false, error: "Invalid token" }, { status: 401 });
+    const { user, error } = await authenticateUser(request);
+    if (error) return error;
 
     const { id: fellowId } = await params;
-    const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month"); // Format: "YYYY-MM"
-    const dateStr = searchParams.get("date"); // Format: "YYYY-MM-DD"
-
-    let tasks = [];
-
-    if (month) {
-      // Fetch for the entire month
-      const [year, m] = month.split('-');
-      const startDate = new Date(Date.UTC(year, m - 1, 1));
-      const endDate = new Date(Date.UTC(year, m, 0, 23, 59, 59, 999));
-      
-      tasks = await prisma.fellowTask.findMany({
-        where: {
-          fellowId,
-          plannedDate: {
-            gte: startDate,
-            lte: endDate
-          }
-        },
-        include: {
-          comments: {
-            include: { author: true },
-            orderBy: { createdAt: 'asc' }
-          }
-        },
-        orderBy: { plannedDate: 'asc' }
-      });
-    } else if (dateStr) {
-      // Fetch for a specific date AND carry-forward tasks
-      const [year, m, day] = dateStr.split('-');
-      const startOfDay = new Date(Date.UTC(year, m - 1, day));
-      const endOfDay = new Date(Date.UTC(year, m - 1, day, 23, 59, 59, 999));
-
-      tasks = await prisma.fellowTask.findMany({
-        where: {
-          fellowId,
-          OR: [
-            {
-              // Tasks planned for today
-              plannedDate: {
-                gte: startOfDay,
-                lte: endOfDay
-              }
-            },
-            {
-              // Carry forward tasks
-              plannedDate: {
-                lt: startOfDay
-              },
-              status: "Pending"
-            }
-          ]
-        },
-        include: {
-          comments: {
-            include: { author: { select: { id: true, name: true, role: true } } },
-            orderBy: { createdAt: 'asc' }
-          }
-        },
-        orderBy: { plannedDate: 'asc' }
-      });
-    } else {
-      // Fetch all
-      tasks = await prisma.fellowTask.findMany({
-        where: { fellowId },
-        include: {
-          comments: {
-            include: { author: { select: { id: true, name: true, role: true } } },
-            orderBy: { createdAt: 'asc' }
-          }
-        },
-        orderBy: { plannedDate: 'desc' }
-      });
+    const fellow = await prisma.fellow.findUnique({ where: { id: fellowId }, select: { userId: true } });
+    if (!fellow?.userId) {
+      return NextResponse.json({ success: false, error: "Fellow not found" }, { status: 404 });
     }
+
+    if (!(await checkPermission(user, "dashboard", "tasks", "READ"))) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+    if (
+      user.id !== fellow.userId &&
+      !(await canAccessUser(user, fellow.userId, { allowSelf: false })) &&
+      !(await isFellowManaged(user.id, fellowId))
+    ) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const month = searchParams.get("month");
+    const dateStr = searchParams.get("date");
+
+    const where = { assigneeId: fellow.userId };
+
+    if (month && /^\d{4}-\d{2}$/.test(month)) {
+      const [year, m] = month.split("-").map(Number);
+      const firstKey = `${year}-${String(m).padStart(2, "0")}-01`;
+      const lastDay = new Date(Date.UTC(year, m, 0)).getUTCDate();
+      const lastKey = `${year}-${String(m).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+      where.OR = [
+        { plannedDate: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
+        { deadline: { gte: istDayStart(firstKey), lte: istDayEnd(lastKey) } },
+      ];
+    } else if (dateStr && /^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      where.OR = [
+        { plannedDate: { gte: istDayStart(dateStr), lte: istDayEnd(dateStr) } },
+        { deadline: { gte: istDayStart(dateStr), lte: istDayEnd(dateStr) } },
+        { plannedDate: { lt: istDayStart(dateStr) }, status: { notIn: ["Completed", "Cancelled"] } },
+        { deadline: { lt: istDayStart(dateStr) }, status: { notIn: ["Completed", "Cancelled"] } },
+      ];
+    }
+
+    const tasks = await prisma.task.findMany({
+      where,
+      include: includeTask(),
+      orderBy: [{ plannedDate: "asc" }, { createdAt: "desc" }],
+    });
 
     return NextResponse.json({ success: true, data: tasks });
   } catch (error) {
@@ -96,37 +87,43 @@ export async function GET(request, { params }) {
 
 export async function POST(request, { params }) {
   try {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader) return NextResponse.json({ success: false, error: "No token" }, { status: 401 });
-    const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-    if (!decoded) return NextResponse.json({ success: false, error: "Invalid token" }, { status: 401 });
+    const { user, error } = await authenticateUser(request);
+    if (error) return error;
 
     const { id: fellowId } = await params;
-    const body = await request.json();
-    const { title, description, plannedDate, isPlanned } = body;
+    const fellow = await prisma.fellow.findUnique({ where: { id: fellowId }, select: { userId: true, name: true } });
+    if (!fellow?.userId) {
+      return NextResponse.json({ success: false, error: "Fellow not found" }, { status: 404 });
+    }
 
-    if (!title || !plannedDate) {
+    if (!(await canAssignTo(user, fellow.userId))) {
+      return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const title = String(body.title || "").trim();
+    if (!title) {
       return NextResponse.json({ success: false, error: "Missing required fields" }, { status: 400 });
     }
 
-    const [year, m, day] = plannedDate.split('-');
-    const utcDate = new Date(Date.UTC(year, m - 1, day));
+    const plannedDate = parseDateOnly(body.plannedDate) || new Date();
+    const isSelf = user.id === fellow.userId;
 
-    const newTask = await prisma.fellowTask.create({
+    const task = await prisma.task.create({
       data: {
-        fellowId,
         title,
-        description: description || null,
-        plannedDate: utcDate,
-        isPlanned: isPlanned !== undefined ? isPlanned : true,
+        description: body.description ? String(body.description).trim() : null,
+        assigneeId: fellow.userId,
+        assignedById: isSelf ? null : user.id,
+        plannedDate,
+        deadline: body.deadline ? parseDateOnly(body.deadline) : null,
+        priority: body.priority || "Medium",
+        isPlanned: body.isPlanned !== undefined ? !!body.isPlanned : true,
       },
-      include: {
-        comments: true
-      }
+      include: includeTask(),
     });
 
-    return NextResponse.json({ success: true, data: newTask }, { status: 201 });
+    return NextResponse.json({ success: true, data: task }, { status: 201 });
   } catch (error) {
     console.error("Error creating task:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
