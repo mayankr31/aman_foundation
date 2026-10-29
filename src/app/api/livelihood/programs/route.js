@@ -81,7 +81,8 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { category, type, name, description, totalTarget } = body;
+    const { category, name, description, totalTarget } = body;
+    const type = String(body.type || "").trim();
 
     if (!name || !category || !type) {
       return NextResponse.json(
@@ -97,10 +98,29 @@ export async function POST(req) {
       );
     }
 
+    const programType = await prisma.livelihoodType.findFirst({
+      where: {
+        category,
+        active: true,
+        OR: [
+          { key: type },
+          { label: { equals: type, mode: "insensitive" } },
+        ],
+      },
+      select: { key: true },
+    });
+
+    if (!programType) {
+      return NextResponse.json(
+        { error: "Invalid program type for the selected category" },
+        { status: 400 }
+      );
+    }
+
     const program = await prisma.livelihoodProgram.create({
       data: {
         category,
-        type,
+        type: programType.key,
         name,
         description: description || null,
         totalTarget: totalTarget ? parseFloat(totalTarget) : null,

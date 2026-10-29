@@ -204,7 +204,7 @@ export default function FarmPrograms() {
                 <select value={newType} onChange={(e) => setNewType(e.target.value)} required className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans">
                   <option value="">Select type...</option>
                   {farmTypes.map((t) => (
-                    <option key={t.type} value={t.type}>{t.label} {t.icon}</option>
+                    <option key={t.key} value={t.key}>{t.label} {t.icon}</option>
                   ))}
                 </select>
               </div>

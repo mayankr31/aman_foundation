@@ -199,7 +199,7 @@ export default function NonFarmPrograms() {
                 <select value={newType} onChange={(e) => setNewType(e.target.value)} required className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans">
                   <option value="">Select type...</option>
                   {nonFarmTypes.map((t) => (
-                    <option key={t.type} value={t.type}>{t.label}</option>
+                    <option key={t.key} value={t.key}>{t.label}</option>
                   ))}
                 </select>
               </div>
