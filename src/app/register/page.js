@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { validateEmail, validatePersonName } from '@/lib/validation';
+import { formatRoleLabel } from '@/lib/roles';
 import '../globals_auth.css';
 
 export default function RegisterPage() {
@@ -345,7 +346,7 @@ export default function RegisterPage() {
                     <option value="" disabled>Select your role</option>
                     {roles.map(r => (
                       <option key={r.id} value={r.id}>
-                        {r.name.replaceAll('_', ' ')}
+                        {formatRoleLabel(r.name)}
                       </option>
                     ))}
                   </select>

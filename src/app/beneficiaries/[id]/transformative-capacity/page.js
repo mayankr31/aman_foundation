@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/lib/useAuth";
+import { useBeneficiaryWriteGuard } from "@/lib/useBeneficiaryWriteGuard";
 import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
 
@@ -143,6 +144,7 @@ export default function TransformativeCapacitySurveyPage() {
   const { id } = useParams();
   const router = useRouter();
   const { token, user } = useAuth();
+  const { canEdit, permissionsReady } = useBeneficiaryWriteGuard(id, "transformative-capacity");
   const toast = useToast();
   
   const [responses, setResponses] = useState({});
@@ -205,6 +207,14 @@ export default function TransformativeCapacitySurveyPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (permissionsReady && !canEdit) {
+    return (
+      <div className="p-8 text-center text-sm font-semibold text-rose-600">
+        You do not have permission to take this survey.
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full">

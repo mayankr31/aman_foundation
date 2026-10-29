@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
-import { getPageForPath } from "@/lib/routePermissions";
+import { getPageForPath, isBeneficiaryProfilePath } from "@/lib/routePermissions";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Loader2 } from "lucide-react";
@@ -17,7 +17,12 @@ export default function LayoutWrapper({ children }) {
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
   const requiredPage = getPageForPath(pathname);
-  const isAllowed = !requiredPage || can(requiredPage);
+  // A fellow linking a student to a beneficiary must be able to open that
+  // beneficiary profile even without Livelihood page access. The API enforces
+  // that the beneficiary is actually linked to one of their students.
+  const canViewLinkedBeneficiary =
+    isBeneficiaryProfilePath(pathname) && can("education");
+  const isAllowed = !requiredPage || can(requiredPage) || canViewLinkedBeneficiary;
 
   useEffect(() => {
     if (isInitializing) return;

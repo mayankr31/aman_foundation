@@ -4,7 +4,18 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate, formatDateTime } from "@/lib/date";
-import { getISTDateKey } from "@/lib/time";
+import { formatISTTime, getISTDateKey } from "@/lib/time";
+import {
+  SHIFT_LABEL,
+  computeAttendanceMetrics,
+} from "@/lib/attendanceMetrics";
+import {
+  TASK_TIME_SLOTS,
+  TASK_TIME_SLOT_CLASSES,
+  TASK_TIME_SLOT_LABELS,
+  defaultTaskTimeSlot,
+  normalizeTaskTimeSlot,
+} from "@/lib/taskSlots";
 import AttendanceTimer from "@/components/AttendanceTimer";
 
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
@@ -46,6 +57,9 @@ function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }
           </span>
           <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${task.isPlanned ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"}`}>
             {task.isPlanned ? "Planned" : "Unplanned"}
+          </span>
+          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(task.timeSlot)]}`}>
+            {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(task.timeSlot)]}
           </span>
         </div>
         
@@ -107,6 +121,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [newTaskSlot, setNewTaskSlot] = useState(() => defaultTaskTimeSlot());
   
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -171,6 +186,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     if (isOpen && token && user) {
       fetchTodayLogAndTasks();
       setCheckoutMode(false);
+      setNewTaskSlot(defaultTaskTimeSlot());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, token, user]);
@@ -182,7 +198,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     }
     setIsCheckingIn(true);
     const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US');
+    const timeString = formatISTTime(now);
     const dateString = getISTDateKey(now);
 
     let lat = null;
@@ -295,6 +311,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         body: JSON.stringify({
           title: newTask,
           plannedDate: today,
+          timeSlot: newTaskSlot,
           isPlanned: false // Unplanned task added on the day
         })
       });
@@ -302,6 +319,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       if (data.success) {
         setTasks([...tasks, data.data]);
         setNewTask("");
+        setNewTaskSlot(defaultTaskTimeSlot());
       }
     } catch (e) {
       console.error(e);
@@ -411,12 +429,17 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   
   const completedTasks = tasks.filter(t => t.status === "Completed").length;
   const pendingTasks = tasks.length - completedTasks;
+  const extraMetrics = computeAttendanceMetrics(currentLog);
+  const taskGroups = TASK_TIME_SLOTS.map((slot) => ({
+    slot,
+    tasks: tasks.filter((task) => normalizeTaskTimeSlot(task.timeSlot) === slot),
+  }));
 
   const todayKey = getISTDateKey();
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-10 relative mt-10 md:mt-0 font-sans max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-10 relative mt-10 md:mt-0 font-sans max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors"
@@ -463,6 +486,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                         onChange={() => toggleTaskStatus(task.id, task.status)}
                         className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer border-slate-300 shrink-0"
                       />
+                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded shrink-0 ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(task.timeSlot)]}`}>
+                        {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(task.timeSlot)]}
+                      </span>
                       <span className={`text-sm break-words ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
                         {task.title}
                       </span>
@@ -489,7 +515,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               <button
                 onClick={handleConfirmCheckOut}
                 disabled={isCheckingOut}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20 flex justify-center items-center gap-2"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20 flex justify-center items-center gap-2"
               >
                 {isCheckingOut && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
                 {isCheckingOut ? "Checking out..." : "Confirm Check Out"}
@@ -497,15 +523,19 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans min-w-0">
             {/* Status Card */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 flex flex-col">
+            <div className="min-w-0 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 flex flex-col">
               <h3 className="font-bold text-lg mb-4 text-on-surface">Current Status</h3>
               
               <div className="space-y-4 mb-6 flex-grow">
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant font-medium text-sm">Date</span>
                   <span className="font-semibold text-on-surface text-sm">{formatDate(new Date())}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-surface-container gap-3">
+                  <span className="text-on-surface-variant font-medium text-sm">Standard Shift</span>
+                  <span className="font-semibold text-on-surface text-xs text-right">{SHIFT_LABEL}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant font-medium text-sm">Check-in Time</span>
@@ -550,6 +580,25 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
               {currentLog && <div className="mb-4"><AttendanceTimer log={currentLog} /></div>}
 
+              {isCheckedIn && extraMetrics && (
+                <div className="mb-4 grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-lg bg-amber-50 border border-amber-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700">Early In</p>
+                    <p className="text-xs font-bold text-amber-800 tabular-nums">{extraMetrics.earlyHours}</p>
+                  </div>
+                  <div className="rounded-lg bg-indigo-50 border border-indigo-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-indigo-700">Late Out</p>
+                    <p className="text-xs font-bold text-indigo-800 tabular-nums">{extraMetrics.lateHours}</p>
+                  </div>
+                  <div className="rounded-lg bg-emerald-50 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-700">Extra</p>
+                    <p className="text-xs font-bold text-emerald-800 tabular-nums">
+                      {extraMetrics.autoClosed ? "—" : extraMetrics.extraHours}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {!isCheckedIn ? (
                 <>
                   {isFellow && canWrite && tasks.length === 0 && (
@@ -570,7 +619,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 <button
                   onClick={() => setCheckoutMode(true)}
                   disabled={!canWrite}
-                  className="w-full py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-rose-600/20"
+                  className="w-full py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20"
                 >
                   Initiate Check Out
                 </button>
@@ -582,98 +631,127 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             </div>
 
             {/* Tasks Card */}
-            <div className={`bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 flex flex-col`}>
+            <div className={`min-w-0 bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 flex flex-col`}>
               <h3 className="font-bold text-lg mb-4 text-on-surface">Daily Tasks</h3>
               
               {canWrite && (
-                <div className="flex gap-2 mb-4 shrink-0">
+                <div className="flex flex-col gap-2 mb-4 shrink-0 w-full min-w-0">
                   <input
                     type="text"
                     value={newTask}
                     onChange={(e) => setNewTask(e.target.value)}
                     placeholder="Add a task for today..."
-                    className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-transparent text-sm text-on-surface"
+                    className="w-full min-w-0 px-4 py-2 border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-transparent text-sm text-on-surface"
                     onKeyPress={(e) => e.key === 'Enter' && addTask()}
                   />
-                  <button onClick={addTask} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer text-sm font-bold shadow-md shadow-blue-600/20 transition-colors">
-                    Add
-                  </button>
+                  <div className="flex gap-2 w-full min-w-0">
+                    <select
+                      value={newTaskSlot}
+                      onChange={(e) => setNewTaskSlot(e.target.value)}
+                      className="flex-1 min-w-0 px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-xs font-semibold text-on-surface focus:outline-none focus:border-primary"
+                      aria-label="Task half"
+                    >
+                      {TASK_TIME_SLOTS.map((slot) => (
+                        <option key={slot} value={slot}>{TASK_TIME_SLOT_LABELS[slot]}</option>
+                      ))}
+                    </select>
+                    <button onClick={addTask} className="shrink-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer text-sm font-bold shadow-md shadow-blue-600/20 transition-colors">
+                      Add
+                    </button>
+                  </div>
                 </div>
               )}
 
-              <div className="space-y-3 flex-grow overflow-y-auto pr-2 no-scrollbar">
-                {tasks.map((task) => {
-                  const taskDate = task.plannedDate || task.deadline;
-                  const taskDateKey = taskDate ? getISTDateKey(new Date(taskDate)) : null;
-                  const isCarriedForward = taskDateKey && taskDateKey < todayKey;
-                  return (
-                    <div key={task.id} className="flex flex-col p-3 bg-surface-container rounded-lg border border-slate-200 transition-colors group">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        {isCarriedForward && (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-orange-100 text-orange-800">
-                            {task.deadline && !task.assignedBy ? "Overdue" : "Carried Forward"}
-                          </span>
-                        )}
-                        {task.assignedBy && (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Assigned</span>
-                        )}
-                        {task.priority && task.priority !== "Medium" && (
-                          <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
-                            task.priority === "Urgent" ? "bg-rose-100 text-rose-800" :
-                            task.priority === "High" ? "bg-amber-100 text-amber-800" :
-                            "bg-slate-100 text-slate-700"
-                          }`}>{task.priority}</span>
-                        )}
-                        {task.isPlanned ? (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">Planned</span>
-                        ) : (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Unplanned</span>
-                        )}
-                        {task.status === "Completed" ? (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 ml-auto">Completed</span>
-                        ) : (
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-800 ml-auto">Pending</span>
-                        )}
+              <div className="space-y-4 flex-grow overflow-y-auto pr-2 no-scrollbar min-w-0">
+                {taskGroups.map((group) => (
+                  group.tasks.length > 0 ? (
+                    <div key={group.slot} className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          {TASK_TIME_SLOT_LABELS[group.slot]}
+                        </h4>
+                        <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${TASK_TIME_SLOT_CLASSES[group.slot]}`}>
+                          {group.tasks.length} {group.tasks.length === 1 ? "task" : "tasks"}
+                        </span>
                       </div>
-                      
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-3 flex-1">
-                          {canWrite && isCheckedIn && !isCheckedOut ? (
-                            <input
-                              type="checkbox"
-                              checked={task.status === "Completed"}
-                              onChange={() => toggleTaskStatus(task.id, task.status)}
-                              className="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary cursor-pointer border-slate-300 shrink-0"
-                            />
-                          ) : (
-                            <div className={`w-4 h-4 mt-0.5 rounded border flex items-center justify-center shrink-0 ${task.status === "Completed" ? "bg-primary border-primary text-white" : "border-slate-300"}`}>
-                              {task.status === "Completed" && <span className="material-symbols-outlined text-[12px]">check</span>}
+                      {group.tasks.map((task) => {
+                        const taskDate = task.plannedDate || task.deadline;
+                        const taskDateKey = taskDate ? getISTDateKey(new Date(taskDate)) : null;
+                        const isCarriedForward = taskDateKey && taskDateKey < todayKey;
+                        return (
+                          <div key={task.id} className="min-w-0 flex flex-col p-3 bg-surface-container rounded-lg border border-slate-200 transition-colors group">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${TASK_TIME_SLOT_CLASSES[group.slot]}`}>
+                                {TASK_TIME_SLOT_LABELS[group.slot]}
+                              </span>
+                              {isCarriedForward && (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-orange-100 text-orange-800">
+                                  {task.deadline && !task.assignedBy ? "Overdue" : "Carried Forward"}
+                                </span>
+                              )}
+                              {task.assignedBy && (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Assigned</span>
+                              )}
+                              {task.priority && task.priority !== "Medium" && (
+                                <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                                  task.priority === "Urgent" ? "bg-rose-100 text-rose-800" :
+                                  task.priority === "High" ? "bg-amber-100 text-amber-800" :
+                                  "bg-slate-100 text-slate-700"
+                                }`}>{task.priority}</span>
+                              )}
+                              {task.isPlanned ? (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">Planned</span>
+                              ) : (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Unplanned</span>
+                              )}
+                              {task.status === "Completed" ? (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 ml-auto">Completed</span>
+                              ) : (
+                                <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-800 ml-auto">Pending</span>
+                              )}
                             </div>
-                          )}
-                          <div className="min-w-0">
-                            <span className={`text-sm break-words ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
-                              {task.title}
-                            </span>
-                            {task.description && <p className="text-xs text-slate-500 mt-1 break-words">{task.description}</p>}
-                            {task.deadline && (
-                              <p className="text-[10px] text-slate-500 mt-1 font-semibold">
-                                Due {formatDate(task.deadline)}
-                              </p>
-                            )}
+
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start gap-3 flex-1">
+                                {canWrite && isCheckedIn && !isCheckedOut ? (
+                                  <input
+                                    type="checkbox"
+                                    checked={task.status === "Completed"}
+                                    onChange={() => toggleTaskStatus(task.id, task.status)}
+                                    className="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary cursor-pointer border-slate-300 shrink-0"
+                                  />
+                                ) : (
+                                  <div className={`w-4 h-4 mt-0.5 rounded border flex items-center justify-center shrink-0 ${task.status === "Completed" ? "bg-primary border-primary text-white" : "border-slate-300"}`}>
+                                    {task.status === "Completed" && <span className="material-symbols-outlined text-[12px]">check</span>}
+                                  </div>
+                                )}
+                                <div className="min-w-0">
+                                  <span className={`text-sm break-words ${task.status === "Completed" ? 'line-through text-slate-400' : 'text-on-surface font-medium'}`}>
+                                    {task.title}
+                                  </span>
+                                  {task.description && <p className="text-xs text-slate-500 mt-1 break-words">{task.description}</p>}
+                                  {task.deadline && (
+                                    <p className="text-[10px] text-slate-500 mt-1 font-semibold">
+                                      Due {formatDate(task.deadline)}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => setSelectedTaskForComments(task)}
+                                className="text-slate-400 hover:text-primary transition-colors cursor-pointer rounded-md p-1 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                                title="Comments"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
+                                <span className="text-xs">{task.comments?.length || 0}</span>
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                        <button
-                          onClick={() => setSelectedTaskForComments(task)}
-                          className="text-slate-400 hover:text-primary transition-colors cursor-pointer rounded-md p-1 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
-                          title="Comments"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">chat_bubble</span>
-                          <span className="text-xs">{task.comments?.length || 0}</span>
-                        </button>
-                      </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  ) : null
+                ))}
                 {tasks.length === 0 && (
                   <div className="flex flex-col items-center justify-center h-full text-center space-y-2 py-8">
                     <span className="material-symbols-outlined text-4xl text-slate-200">checklist</span>

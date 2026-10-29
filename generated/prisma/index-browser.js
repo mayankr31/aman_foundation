@@ -149,10 +149,16 @@ exports.Prisma.UserScalarFieldEnum = {
   emergencyContactPhone: 'emergencyContactPhone',
   aadharNumber: 'aadharNumber',
   panCard: 'panCard',
+  voterId: 'voterId',
+  highestQualification: 'highestQualification',
+  highestQualificationDetail: 'highestQualificationDetail',
   bankName: 'bankName',
   bankAccountNo: 'bankAccountNo',
   bankIfsc: 'bankIfsc',
   dateOfJoining: 'dateOfJoining',
+  dateOfLeaving: 'dateOfLeaving',
+  resignationReason: 'resignationReason',
+  inactiveSince: 'inactiveSince',
   avatar: 'avatar',
   leavesTaken: 'leavesTaken',
   leavesRemaining: 'leavesRemaining',
@@ -160,6 +166,17 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt',
   createdById: 'createdById',
   managerId: 'managerId'
+};
+
+exports.Prisma.DashboardConfigScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  userId: 'userId',
+  kpiKeys: 'kpiKeys',
+  linkKeys: 'linkKeys',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -172,6 +189,7 @@ exports.Prisma.NotificationScalarFieldEnum = {
   read: 'read',
   actorId: 'actorId',
   metadata: 'metadata',
+  dedupeKey: 'dedupeKey',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -488,6 +506,7 @@ exports.Prisma.TaskScalarFieldEnum = {
   deadline: 'deadline',
   status: 'status',
   priority: 'priority',
+  timeSlot: 'timeSlot',
   isPlanned: 'isPlanned',
   completionDate: 'completionDate',
   createdAt: 'createdAt',
@@ -512,6 +531,34 @@ exports.Prisma.TaskDocumentScalarFieldEnum = {
   size: 'size',
   uploadedById: 'uploadedById',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.AssetScalarFieldEnum = {
+  id: 'id',
+  assetCode: 'assetCode',
+  name: 'name',
+  category: 'category',
+  serialNumber: 'serialNumber',
+  description: 'description',
+  condition: 'condition',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssetAssignmentScalarFieldEnum = {
+  id: 'id',
+  assetId: 'assetId',
+  userId: 'userId',
+  assignedById: 'assignedById',
+  assignedAt: 'assignedAt',
+  returnedAt: 'returnedAt',
+  returnCondition: 'returnCondition',
+  returnNotes: 'returnNotes',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SchoolProgramScalarFieldEnum = {
@@ -1044,6 +1091,11 @@ exports.Prisma.TravelRequestScalarFieldEnum = {
   rejectionReason: 'rejectionReason',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
+  revertReason: 'revertReason',
+  revertedBy: 'revertedBy',
+  revertedAt: 'revertedAt',
+  resubmittedAt: 'resubmittedAt',
+  revertCount: 'revertCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1407,6 +1459,7 @@ exports.TravelStatus = exports.$Enums.TravelStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
+  REVERTED: 'REVERTED',
   COMPLETED: 'COMPLETED'
 };
 
@@ -1420,6 +1473,7 @@ exports.ReimbursementStatus = exports.$Enums.ReimbursementStatus = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
+  DashboardConfig: 'DashboardConfig',
   Notification: 'Notification',
   Permission: 'Permission',
   RolePermission: 'RolePermission',
@@ -1449,6 +1503,8 @@ exports.Prisma.ModelName = {
   Task: 'Task',
   TaskComment: 'TaskComment',
   TaskDocument: 'TaskDocument',
+  Asset: 'Asset',
+  AssetAssignment: 'AssetAssignment',
   SchoolProgram: 'SchoolProgram',
   ProgramEvent: 'ProgramEvent',
   Beneficiary: 'Beneficiary',

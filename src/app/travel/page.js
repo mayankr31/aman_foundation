@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
@@ -8,10 +8,8 @@ import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { validateAmount, validateDateOrder, firstError } from "@/lib/validation";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export default function TravelPage() {
-  const { token, user, isInitializing } = useAuth();
+  const { token, user, isInitializing, can } = useAuth();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
   const { pageItems: pagedRequests, currentPage, setCurrentPage } = usePagination(requests, 10);
@@ -32,43 +30,50 @@ export default function TravelPage() {
   const [expenseFiles, setExpenseFiles] = useState([]);
   const [submittingExpense, setSubmittingExpense] = useState(false);
 
+  const [resubmitRequest, setResubmitRequest] = useState(null);
+  const [resubmitForm, setResubmitForm] = useState({
+    destination: "",
+    purpose: "",
+    startDate: "",
+    endDate: "",
+    expectedExpenses: "",
+  });
+  const [resubmitting, setResubmitting] = useState(false);
+
   const triggerToast = (msg) => {
     setToast({ show: true, message: msg });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  const isAllowed = user?.roleName === "FELLOW" || PROGRAM_ROLES.includes(user?.roleName);
+  const isAllowed = user?.roleName !== "ADMIN" && can("travel");
 
-  useEffect(() => {
-    if (!isInitializing && !isAllowed) {
-      router.replace("/");
-      return;
-    }
-    if (token && isAllowed) {
-      fetchRequests();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, user, isInitializing]);
-
-  const fetchRequests = async () => {
-    setLoading(true);
+  const fetchRequests = useCallback(async () => {
     try {
-      const res = await fetch("/api/travel-requests", {
+      const res = await fetch("/api/travel-requests?scope=mine", {
         headers: { Authorization: `Bearer ${token}` }
       });
       const json = await res.json();
       if (json.success) {
-        const mine = PROGRAM_ROLES.includes(user?.roleName)
-          ? json.data.filter((r) => r.userId === user.id)
-          : json.data;
-        setRequests(mine);
+        setRequests(json.data);
       }
     } catch (e) {
       console.error(e);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (!isInitializing && !isAllowed) {
+      router.replace("/");
+      return;
+    }
+    if (!token || !isAllowed) return;
+
+    // Defer so the effect itself stays free of synchronous state updates.
+    const timer = setTimeout(fetchRequests, 0);
+    return () => clearTimeout(timer);
+  }, [token, user, isInitializing, isAllowed, fetchRequests, router]);
 
   const handleCreateRequest = async (e) => {
     e.preventDefault();
@@ -171,11 +176,59 @@ export default function TravelPage() {
     }
   };
 
+  const openResubmit = (req) => {
+    setResubmitRequest(req);
+    setResubmitForm({
+      destination: req.destination || "",
+      purpose: req.purpose || "",
+      startDate: req.startDate ? String(req.startDate).slice(0, 10) : "",
+      endDate: req.endDate ? String(req.endDate).slice(0, 10) : "",
+      expectedExpenses: req.expectedExpenses ?? "",
+    });
+  };
+
+  const handleResubmit = async (e) => {
+    e.preventDefault();
+    if (!resubmitRequest) return;
+    const validationMessage = firstError([
+      validateDateOrder(resubmitForm.startDate, resubmitForm.endDate),
+      validateAmount(resubmitForm.expectedExpenses, { min: 0 }),
+    ]);
+    if (validationMessage) {
+      alert(validationMessage);
+      return;
+    }
+    setResubmitting(true);
+    try {
+      const res = await fetch(`/api/travel-requests/${resubmitRequest.id}/resubmit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(resubmitForm),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setResubmitRequest(null);
+        triggerToast("Request resubmitted for approval");
+        fetchRequests();
+      } else {
+        triggerToast(json.error || "Failed to resubmit request");
+      }
+    } catch {
+      triggerToast("An error occurred");
+    } finally {
+      setResubmitting(false);
+    }
+  };
+
   const statusBadge = (status) => {
     const colors = {
       PENDING: "bg-yellow-100 text-yellow-800",
       APPROVED: "bg-emerald-100 text-emerald-800",
       REJECTED: "bg-rose-100 text-rose-800",
+      REVERTED: "bg-amber-100 text-amber-800",
       COMPLETED: "bg-blue-100 text-blue-800"
     };
     return (
@@ -236,6 +289,28 @@ export default function TravelPage() {
                   </p>
                 </div>
               </div>
+
+              {req.status === "REVERTED" && req.revertReason && (
+                <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg space-y-2">
+                  <div>
+                    <p className="text-xs font-bold text-amber-700 uppercase mb-1">Changes Requested</p>
+                    <p className="text-sm text-amber-900">{req.revertReason}</p>
+                    {req.reverter && (
+                      <p className="text-xs text-amber-700 mt-1">
+                        Requested by {req.reverter.name}
+                        {req.revertedAt ? ` on ${formatDate(req.revertedAt)}` : ""}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openResubmit(req)}
+                    className="px-4 py-2 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer"
+                  >
+                    Fix & Resubmit
+                  </button>
+                </div>
+              )}
 
               {req.status === "REJECTED" && req.rejectionReason && (
                 <div className="bg-rose-50 border border-rose-200 p-3 rounded-lg">
@@ -341,6 +416,75 @@ export default function TravelPage() {
                 <button type="submit" disabled={submitting}
                   className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
                   {submitting ? "Submitting..." : "Submit Request"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Resubmit Travel Request Modal */}
+      {resubmitRequest && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Fix & Resubmit Request</h3>
+              <button onClick={() => setResubmitRequest(null)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer">
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            {resubmitRequest.revertReason && (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
+                <span className="font-bold uppercase tracking-wider text-[10px] block mb-1">Requested changes</span>
+                {resubmitRequest.revertReason}
+              </div>
+            )}
+            <form onSubmit={handleResubmit} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase">Destination</label>
+                <input type="text" required
+                  value={resubmitForm.destination}
+                  onChange={e => setResubmitForm({ ...resubmitForm, destination: e.target.value })}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase">Purpose</label>
+                <input type="text" required
+                  value={resubmitForm.purpose}
+                  onChange={e => setResubmitForm({ ...resubmitForm, purpose: e.target.value })}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase">Start Date</label>
+                  <input type="date" required
+                    value={resubmitForm.startDate}
+                    onChange={e => setResubmitForm({ ...resubmitForm, startDate: e.target.value })}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-slate-500 uppercase">End Date</label>
+                  <input type="date" required min={resubmitForm.startDate || undefined}
+                    value={resubmitForm.endDate}
+                    onChange={e => setResubmitForm({ ...resubmitForm, endDate: e.target.value })}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase">Expected Expenses (INR)</label>
+                <input type="number" min="0" step="0.01"
+                  value={resubmitForm.expectedExpenses}
+                  onChange={e => setResubmitForm({ ...resubmitForm, expectedExpenses: e.target.value })}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+              </div>
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+                <button type="button" onClick={() => setResubmitRequest(null)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer">
+                  Cancel
+                </button>
+                <button type="submit" disabled={resubmitting}
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-50">
+                  {resubmitting ? "Resubmitting..." : "Resubmit Request"}
                 </button>
               </div>
             </form>

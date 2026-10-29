@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { getISTDateKey, istDayEnd, istDayStart } from "@/lib/time";
+import { getISTDateKey } from "@/lib/time";
+import { buildTaskAnalyticsWhere } from "@/lib/taskScope";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export async function GET(req) {
       user.role.name === "ADMIN" ||
       (await checkPermission(user, "dashboard", "task-analytics", "READ"));
     if (!allowed) {
-      return NextResponse.json({ error: "Forbidden: Task analytics is admin-only" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: Task analytics access required" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
@@ -28,13 +29,11 @@ export async function GET(req) {
     const to = searchParams.get("to");
     const assigneeId = searchParams.get("assigneeId");
 
-    const where = {};
-    if (assigneeId) where.assigneeId = assigneeId;
-    if (from || to) {
-      where.createdAt = {};
-      if (from) where.createdAt.gte = istDayStart(from);
-      if (to) where.createdAt.lte = istDayEnd(to);
+    const scoped = await buildTaskAnalyticsWhere(user, { from, to, assigneeId });
+    if (scoped.forbidden) {
+      return NextResponse.json({ error: "Forbidden: Outside your team" }, { status: 403 });
     }
+    const where = scoped.where;
 
     const tasks = await prisma.task.findMany({
       where,
@@ -134,6 +133,10 @@ export async function GET(req) {
         trend,
         calendar: dueByDay,
         assignees,
+        scope: {
+          isAdmin: user.role.name === "ADMIN",
+          teamSize: Array.isArray(scoped.teamIds) ? scoped.teamIds.length : null,
+        },
         generatedAt: new Date().toISOString(),
       },
     });

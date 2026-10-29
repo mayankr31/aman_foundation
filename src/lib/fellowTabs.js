@@ -1,6 +1,7 @@
 export const FELLOW_TABS = [
   { label: "Personal Details", slug: "personal-details", icon: "badge" },
   { label: "Monthly Planner", slug: "monthly-planner", icon: "calendar_month" },
+  { label: "Assignments", slug: "assignments", icon: "assignment_ind" },
   { label: "Goals", slug: "goals", icon: "flag" },
   {
     label: "Coaching & Classroom Observation",
@@ -16,7 +17,7 @@ export const FELLOW_TABS = [
   },
 ];
 
-export const DEFAULT_TAB_SLUG = "monthly-planner";
+export const DEFAULT_TAB_SLUG = "personal-details";
 
 export function labelFromSlug(slug) {
   if (!slug) return null;

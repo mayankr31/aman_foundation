@@ -7,10 +7,12 @@ import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import { DEPARTMENTS } from "@/lib/organization";
+import { formatRoleLabel } from "@/lib/roles";
 
 export default function HrEmployeeManagement() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, can } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,27 +53,45 @@ export default function HrEmployeeManagement() {
   // Employees Filter States
   const [directorySearch, setDirectorySearch] = useState("");
   const [directoryDept, setDirectoryDept] = useState("All");
+  const [directoryStatus, setDirectoryStatus] = useState("ACTIVE");
+
+  const departmentOptions = useMemo(() => {
+    const fromUsers = users.map((u) => u.department).filter(Boolean);
+    return [...new Set([...DEPARTMENTS, ...fromUsers])].sort((a, b) => a.localeCompare(b));
+  }, [users]);
 
   const filteredEmployees = useMemo(() => {
     return users.filter((u) => {
-      // Only approved users (ACTIVE) and non-admin
-      if (u.status !== 'ACTIVE' || u.role?.name === 'ADMIN') return false;
-      
+      // Admin accounts are managed from Admin & Access, not the HR directory.
+      if (u.role?.name === 'ADMIN') return false;
+
+      const matchesStatus =
+        directoryStatus === "All"
+          ? u.status === "ACTIVE" || u.status === "INACTIVE"
+          : u.status === directoryStatus;
+
+      const search = directorySearch.toLowerCase();
       const matchesSearch =
-        u.name?.toLowerCase().includes(directorySearch.toLowerCase()) ||
-        u.email?.toLowerCase().includes(directorySearch.toLowerCase()) ||
-        u.role?.name?.toLowerCase().includes(directorySearch.toLowerCase());
+        u.name?.toLowerCase().includes(search) ||
+        u.email?.toLowerCase().includes(search) ||
+        u.employeeId?.toLowerCase().includes(search) ||
+        u.role?.name?.toLowerCase().includes(search) ||
+        formatRoleLabel(u.role?.name).toLowerCase().includes(search);
       
       const dept = u.department || 'Unassigned';
       const matchesDept = directoryDept === "All" || dept === directoryDept;
       
-      return matchesSearch && matchesDept;
+      return matchesStatus && matchesSearch && matchesDept;
     });
-  }, [users, directorySearch, directoryDept]);
+  }, [users, directorySearch, directoryDept, directoryStatus]);
 
   const { pageItems: pagedEmployees, currentPage, setCurrentPage } = usePagination(filteredEmployees, 10);
 
   const handleRowClick = (user) => {
+    if (user.fellow?.id && can("education")) {
+      router.push(`/education/fellows/${user.fellow.id}`);
+      return;
+    }
     router.push(`/hr/${user.id}`);
   };
 
@@ -128,10 +148,10 @@ export default function HrEmployeeManagement() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-surface rounded-xl p-4 border border-outline-variant/5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 bg-surface rounded-xl p-4 border border-outline-variant/5">
               <input
                 type="text"
-                placeholder="Search name, role, email..."
+                placeholder="Search name, role, email, ID..."
                 value={directorySearch}
                 onChange={(e) => setDirectorySearch(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
@@ -142,12 +162,19 @@ export default function HrEmployeeManagement() {
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface dark:bg-slate-900"
               >
                 <option value="All">All Departments</option>
-                <option value="Operations">Operations</option>
-                <option value="Logistics">Logistics</option>
-                <option value="Education">Education</option>
-                <option value="HR">HR</option>
-                <option value="Finance">Finance</option>
+                {departmentOptions.map((dept) => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
                 <option value="Unassigned">Unassigned</option>
+              </select>
+              <select
+                value={directoryStatus}
+                onChange={(e) => setDirectoryStatus(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface dark:bg-slate-900"
+              >
+                <option value="ACTIVE">Active employees</option>
+                <option value="INACTIVE">Inactive / former</option>
+                <option value="All">All statuses</option>
               </select>
             </div>
 
@@ -177,12 +204,24 @@ export default function HrEmployeeManagement() {
                               initials
                             )}
                           </div>
-                          <span className="break-words">{name}</span>
+                          <div className="min-w-0">
+                            <span className="break-words">{name}</span>
+                            <span className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] font-semibold tracking-wide">
+                              {emp.employeeId && (
+                                <span className="text-slate-400 normal-case">{emp.employeeId}</span>
+                              )}
+                              {emp.status === "INACTIVE" && (
+                                <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                                  Inactive
+                                </span>
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </td>
                       <td data-label="Email" className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
                       <td data-label="Department" className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
-                      <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{emp.role?.name?.replace("_", " ")}</td>
+                      <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{formatRoleLabel(emp.role?.name)}</td>
                       <td data-label="Reports To" className="py-4 px-4 text-xs text-slate-500 break-words">{emp.manager?.name || "—"}</td>
                     </tr>
                     );

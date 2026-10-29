@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
+import { useBeneficiaryWriteGuard } from "@/lib/useBeneficiaryWriteGuard";
 import { useToast } from "@/context/ToastContext";
 
 export default function SolutionPlanPage() {
@@ -11,6 +12,7 @@ export default function SolutionPlanPage() {
   const id = params?.id;
   const router = useRouter();
   const { token } = useAuth();
+  const { canEdit, permissionsReady } = useBeneficiaryWriteGuard(id, "solution-board-planning");
   const toast = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -176,6 +178,14 @@ export default function SolutionPlanPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (permissionsReady && !canEdit) {
+    return (
+      <div className="p-8 text-center text-sm font-semibold text-rose-600">
+        You do not have permission to edit this plan.
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full font-sans">

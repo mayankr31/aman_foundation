@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { hasLivelihoodRead, isLinkedBeneficiaryViewer } from "@/lib/beneficiaryAccess";
 import { createLivestockWithGeneratedTag } from "@/lib/livestockTag";
 import {
   validatePersonName,
@@ -81,6 +82,14 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
     }
 
+    const fullAccess = await hasLivelihoodRead(user);
+    if (!fullAccess && !(await isLinkedBeneficiaryViewer(user, beneficiaryId))) {
+      return NextResponse.json(
+        { error: "Forbidden: This beneficiary is not linked to one of your students" },
+        { status: 403 }
+      );
+    }
+
     const beneficiary = await prisma.beneficiary.findUnique({
       where: { id: beneficiaryId },
       include: {
@@ -127,6 +136,24 @@ export async function GET(req, { params }) {
         }
       }
     });
+
+    if (!fullAccess) {
+      // Linked-student viewers get the household profile without identity or bank documents.
+      return NextResponse.json({
+        success: true,
+        data: {
+          ...beneficiary,
+          aadhar: null,
+          panCard: null,
+          voterId: null,
+          rationCard: null,
+          bankName: null,
+          bankAccountNo: null,
+          bankIfsc: null,
+        },
+        access: { restricted: true },
+      });
+    }
 
     return NextResponse.json({ success: true, data: beneficiary });
   } catch (error) {

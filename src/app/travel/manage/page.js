@@ -1,16 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export default function TravelManagePage() {
-  const { token, user, isInitializing } = useAuth();
+  const { token, user, isInitializing, can } = useAuth();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +16,8 @@ export default function TravelManagePage() {
 
   const [showRejectModal, setShowRejectModal] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [showRevertModal, setShowRevertModal] = useState(null);
+  const [revertReason, setRevertReason] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [staffFilter, setStaffFilter] = useState("All");
 
@@ -44,20 +44,11 @@ export default function TravelManagePage() {
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  useEffect(() => {
-    if (!isInitializing && user && user.roleName !== "ADMIN" && !PROGRAM_ROLES.includes(user.roleName)) {
-      router.replace("/");
-      return;
-    }
-    if (token && user) {
-      fetchRequests();
-    }
-  }, [token, user, isInitializing]);
+  const isAllowed = user?.roleName === "ADMIN" || can("travel-management");
 
-  const fetchRequests = async () => {
-    setLoading(true);
+  const fetchRequests = useCallback(async () => {
     try {
-      const res = await fetch("/api/travel-requests", {
+      const res = await fetch("/api/travel-requests?scope=manage", {
         headers: { Authorization: `Bearer ${token}` }
       });
       const json = await res.json();
@@ -69,7 +60,19 @@ export default function TravelManagePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (!isInitializing && user && !isAllowed) {
+      router.replace("/");
+      return;
+    }
+    if (!token || !user || !isAllowed) return;
+
+    // Defer so the effect itself stays free of synchronous state updates.
+    const timer = setTimeout(fetchRequests, 0);
+    return () => clearTimeout(timer);
+  }, [token, user, isInitializing, isAllowed, fetchRequests, router]);
 
   const handleApprove = async (id) => {
     try {
@@ -119,6 +122,32 @@ export default function TravelManagePage() {
     }
   };
 
+  const handleRevert = async (e) => {
+    e.preventDefault();
+    if (!showRevertModal || !revertReason.trim()) return;
+    try {
+      const res = await fetch(`/api/travel-requests/${showRevertModal}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: "REVERTED", revertReason })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setRequests(prev => prev.map(r => r.id === showRevertModal ? json.data : r));
+        triggerToast("Request sent back for changes");
+        setShowRevertModal(null);
+        setRevertReason("");
+      } else {
+        triggerToast(json.error || "Failed to send request back");
+      }
+    } catch (e) {
+      triggerToast("An error occurred");
+    }
+  };
+
   const handleMarkCompleted = async (id) => {
     try {
       const res = await fetch(`/api/travel-requests/${id}`, {
@@ -146,6 +175,7 @@ export default function TravelManagePage() {
       PENDING: "bg-yellow-100 text-yellow-800",
       APPROVED: "bg-emerald-100 text-emerald-800",
       REJECTED: "bg-rose-100 text-rose-800",
+      REVERTED: "bg-amber-100 text-amber-800",
       COMPLETED: "bg-blue-100 text-blue-800"
     };
     return (
@@ -170,7 +200,11 @@ export default function TravelManagePage() {
       <div className="mb-8">
         <h2 className="page-title text-on-surface mb-2">Travel Management</h2>
         <div className="flex items-center gap-4">
-          <p className="text-sm text-on-surface-variant">Review and approve travel requests.</p>
+          <p className="text-sm text-on-surface-variant">
+            {user?.roleName === "ADMIN"
+              ? "Review and approve travel requests across the organisation."
+              : "Review travel requests from your reporting team."}
+          </p>
           {pendingCount > 0 && (
             <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1 rounded-full">
               {pendingCount} Pending
@@ -220,7 +254,11 @@ export default function TravelManagePage() {
         {filteredRequests.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-xl p-12 text-center border border-outline-variant/10">
             <span className="material-symbols-outlined text-5xl text-slate-300 mb-4 block">flight</span>
-            <p className="text-on-surface-variant font-medium">No travel requests found.</p>
+            <p className="text-on-surface-variant font-medium">
+              {user?.roleName === "ADMIN"
+                ? "No travel requests found."
+                : "No travel requests from your team yet."}
+            </p>
           </div>
         ) : (
           pagedRequests.map(req => (
@@ -248,7 +286,13 @@ export default function TravelManagePage() {
               </div>
 
               {req.status === "PENDING" && (
-                <div className="flex justify-end gap-3">
+                <div className="flex flex-wrap justify-end gap-3">
+                  <button
+                    onClick={() => { setShowRevertModal(req.id); setRevertReason(""); }}
+                    className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+                  >
+                    Revert for Changes
+                  </button>
                   <button
                     onClick={() => { setShowRejectModal(req.id); setRejectionReason(""); }}
                     className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
@@ -261,6 +305,18 @@ export default function TravelManagePage() {
                   >
                     Approve
                   </button>
+                </div>
+              )}
+
+              {req.status === "REVERTED" && req.revertReason && (
+                <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                  <p className="text-xs font-bold text-amber-700 uppercase mb-1">Sent Back for Changes</p>
+                  <p className="text-sm text-amber-900">{req.revertReason}</p>
+                  {req.reverter && (
+                    <p className="text-xs text-amber-700 mt-1">
+                      By {req.reverter.name} on {formatDate(req.revertedAt)}
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -277,16 +333,24 @@ export default function TravelManagePage() {
               )}
 
               {req.status === "APPROVED" && (
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                   <span className="text-xs text-emerald-600 font-semibold">
                     Approved by {req.approver?.name || "Manager"} on {formatDate(req.approvedAt)}
                   </span>
-                  <button
-                    onClick={() => handleMarkCompleted(req.id)}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
-                  >
-                    Mark as Completed
-                  </button>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => { setShowRevertModal(req.id); setRevertReason(""); }}
+                      className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+                    >
+                      Revert for Changes
+                    </button>
+                    <button
+                      onClick={() => handleMarkCompleted(req.id)}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
+                    >
+                      Mark as Completed
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -368,6 +432,46 @@ export default function TravelManagePage() {
                 <button type="submit"
                   className="px-4 py-2 rounded-full bg-rose-600 text-white font-semibold hover:bg-rose-700 transition-colors cursor-pointer">
                   Confirm Rejection
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Revert for Changes Modal */}
+      {showRevertModal && (
+        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-on-surface">Send Back for Changes</h3>
+              <button onClick={() => setShowRevertModal(null)} className="p-1 hover:bg-slate-100 rounded-full cursor-pointer">
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-500">
+              The requester can edit these details and resubmit for approval.
+            </p>
+            <form onSubmit={handleRevert} className="space-y-4 text-sm">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-slate-500 uppercase">What needs to change?</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="e.g. Please reduce the expected expenses and attach the invitation letter."
+                  value={revertReason}
+                  onChange={e => setRevertReason(e.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
+                />
+              </div>
+              <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+                <button type="button" onClick={() => setShowRevertModal(null)}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer">
+                  Cancel
+                </button>
+                <button type="submit"
+                  className="px-4 py-2 rounded-full bg-amber-600 text-white font-semibold hover:bg-amber-700 transition-colors cursor-pointer">
+                  Send Back
                 </button>
               </div>
             </form>

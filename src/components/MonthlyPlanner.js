@@ -4,7 +4,12 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
 
-export default function MonthlyPlanner({ fellowId }) {
+export default function MonthlyPlanner({
+  fellowId = null,
+  userId = null,
+  title = "Monthly Planner",
+  canEdit = true,
+}) {
   const { token } = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
@@ -16,12 +21,22 @@ export default function MonthlyPlanner({ fellowId }) {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDesc, setNewTaskDesc] = useState("");
 
+  const taskEndpoint = fellowId
+    ? `/api/fellows/${fellowId}/tasks`
+    : userId
+      ? `/api/program-managers/${userId}/tasks`
+      : null;
+
   const fetchTasks = async () => {
+    if (!taskEndpoint) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const res = await fetch(`/api/fellows/${fellowId}/tasks?month=${year}-${month}`, {
+      const res = await fetch(`${taskEndpoint}?month=${year}-${month}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -36,10 +51,11 @@ export default function MonthlyPlanner({ fellowId }) {
   };
 
   useEffect(() => {
-    if (fellowId && token) {
+    if (taskEndpoint && token) {
       fetchTasks();
     }
-  }, [fellowId, currentDate, token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [taskEndpoint, currentDate, token]);
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -82,8 +98,9 @@ export default function MonthlyPlanner({ fellowId }) {
 
   const handleAddTask = async (e) => {
     e.preventDefault();
+    if (!taskEndpoint || !canEdit) return;
     try {
-      const res = await fetch(`/api/fellows/${fellowId}/tasks`, {
+      const res = await fetch(taskEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +178,7 @@ export default function MonthlyPlanner({ fellowId }) {
   return (
     <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10 font-sans">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <h3 className="font-headline font-bold text-xl text-on-surface">Monthly Planner</h3>
+        <h3 className="font-headline font-bold text-xl text-on-surface">{title}</h3>
         <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4">
           <button onClick={handlePrevMonth} className="p-2 hover:bg-slate-100 rounded-full transition-colors cursor-pointer">
             <span className="material-symbols-outlined text-[20px]">chevron_left</span>
@@ -209,7 +226,7 @@ export default function MonthlyPlanner({ fellowId }) {
                   }`}>
                     {date.getDate()}
                   </span>
-                  {!isSunday && (
+                  {canEdit && !isSunday && (
                     <button className="hidden sm:flex opacity-0 group-hover:opacity-100 text-primary hover:bg-primary/10 rounded-full w-6 h-6 items-center justify-center transition-all">
                       <span className="material-symbols-outlined text-[16px]">add</span>
                     </button>
@@ -279,7 +296,8 @@ export default function MonthlyPlanner({ fellowId }) {
                       type="checkbox"
                       checked={task.status === "Completed"}
                       onChange={() => toggleTaskStatus(task.id, task.status)}
-                      className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer border-slate-300"
+                      disabled={!canEdit}
+                      className="w-4 h-4 rounded text-primary focus:ring-primary cursor-pointer border-slate-300 disabled:cursor-not-allowed"
                     />
                     <div>
                       <div className={`text-sm font-semibold ${task.status === "Completed" ? 'line-through text-slate-400 font-normal' : 'text-on-surface font-semibold'}`}>{task.title}</div>
@@ -291,13 +309,15 @@ export default function MonthlyPlanner({ fellowId }) {
                       {task.description && <div className="text-xs text-slate-500 mt-1">{task.description}</div>}
                     </div>
                   </div>
-                  <button 
-                    onClick={(e) => handleDeleteTask(task.id, e)}
-                    className="text-red-400 hover:text-red-600 p-1 opacity-100 sm:opacity-0 sm:group-hover/taskitem:opacity-100 transition-opacity cursor-pointer flex shrink-0"
-                    title="Delete Task"
-                  >
-                    <span className="material-symbols-outlined text-[18px] leading-none">delete</span>
-                  </button>
+                  {canEdit && (
+                    <button
+                      onClick={(e) => handleDeleteTask(task.id, e)}
+                      className="text-red-400 hover:text-red-600 p-1 opacity-100 sm:opacity-0 sm:group-hover/taskitem:opacity-100 transition-opacity cursor-pointer flex shrink-0"
+                      title="Delete Task"
+                    >
+                      <span className="material-symbols-outlined text-[18px] leading-none">delete</span>
+                    </button>
+                  )}
                 </div>
               ))}
               {tasks.filter(t => {
@@ -309,7 +329,11 @@ export default function MonthlyPlanner({ fellowId }) {
               )}
             </div>
 
-            {getIsSunday(selectedDate) ? (
+            {!canEdit ? (
+              <div className="bg-slate-50 border border-slate-200 text-slate-500 rounded-lg p-4 text-center text-sm font-semibold">
+                You can view this planner but cannot change its tasks.
+              </div>
+            ) : getIsSunday(selectedDate) ? (
               <div className="bg-slate-50 border border-slate-200 text-slate-500 rounded-lg p-4 text-center text-sm font-semibold">
                 Task addition is disabled on Sunday (Weekend/Holiday).
               </div>

@@ -8,12 +8,16 @@ import {
   validateMobile,
   validateAadhaar,
   validatePan,
+  validateVoterId,
   validateBankAccount,
   validateIfsc,
+  validateRequired,
+  validateDateNotFuture,
   firstError,
   normalizeMobileForSave,
   normalizeAadhaarForSave,
   normalizePanForSave,
+  normalizeVoterIdForSave,
   normalizeIfscForSave,
   normalizeBankAccountForSave,
   normalizeEmailForSave,
@@ -28,6 +32,10 @@ export async function GET(req) {
       where: { id: user.id },
       include: {
         role: true,
+        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+        directReports: {
+          select: { id: true, name: true, status: true, role: { select: { name: true } } },
+        },
         fellow: {
           include: {
             schools: {
@@ -38,6 +46,11 @@ export async function GET(req) {
             afterSchoolCentres: {
               include: {
                 centre: true
+              }
+            },
+            livelihoodPrograms: {
+              include: {
+                program: true
               }
             }
           }
@@ -70,18 +83,38 @@ export async function PATCH(req) {
     const {
       name, email, mobile, address, gender, dob, avatar,
       maritalStatus, bloodGroup, emergencyContactName, emergencyContactPhone,
-      aadharNumber, panCard, bankName, bankAccountNo, bankIfsc, dateOfJoining,
+      aadharNumber, panCard, voterId, highestQualification, highestQualificationDetail,
+      bankName, bankAccountNo, bankIfsc, dateOfJoining,
     } = body;
 
     const validationMessage = firstError([
       name !== undefined ? validatePersonName(name, { required: true }) : null,
       email !== undefined ? validateEmail(email, { required: true }) : null,
-      validateMobile(mobile),
-      validateMobile(emergencyContactPhone),
-      validateAadhaar(aadharNumber),
-      validatePan(panCard),
-      validateBankAccount(bankAccountNo),
-      validateIfsc(bankIfsc),
+      mobile !== undefined ? validateMobile(mobile, { required: true }) : null,
+      address !== undefined ? validateRequired(address, "Address") : null,
+      gender !== undefined ? validateRequired(gender, "Gender") : null,
+      dob !== undefined ? validateDateNotFuture(dob, { required: true, label: "Date of birth" }) : null,
+      maritalStatus !== undefined ? validateRequired(maritalStatus, "Marital status") : null,
+      bloodGroup !== undefined ? validateRequired(bloodGroup, "Blood group") : null,
+      emergencyContactName !== undefined
+        ? validatePersonName(emergencyContactName, { required: true })
+        : null,
+      emergencyContactPhone !== undefined
+        ? validateMobile(emergencyContactPhone, { required: true })
+        : null,
+      aadharNumber !== undefined ? validateAadhaar(aadharNumber, { required: true }) : null,
+      panCard !== undefined ? validatePan(panCard, { required: true }) : null,
+      voterId !== undefined ? validateVoterId(voterId, { required: true }) : null,
+      highestQualification !== undefined
+        ? validateRequired(highestQualification, "Highest qualification")
+        : null,
+      highestQualification === "Other"
+        ? validateRequired(highestQualificationDetail, "Specify qualification")
+        : null,
+      bankName !== undefined ? validateRequired(bankName, "Bank name") : null,
+      bankAccountNo !== undefined ? validateBankAccount(bankAccountNo, { required: true }) : null,
+      bankIfsc !== undefined ? validateIfsc(bankIfsc, { required: true }) : null,
+      dateOfJoining ? validateDateNotFuture(dateOfJoining, { label: "Date of joining" }) : null,
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -107,6 +140,14 @@ export async function PATCH(req) {
           emergencyContactPhone: emergencyContactPhone !== undefined ? normalizeMobileForSave(emergencyContactPhone) : undefined,
           aadharNumber: aadharNumber !== undefined ? normalizeAadhaarForSave(aadharNumber) : undefined,
           panCard: panCard !== undefined ? normalizePanForSave(panCard) : undefined,
+          voterId: voterId !== undefined ? normalizeVoterIdForSave(voterId) : undefined,
+          highestQualification: highestQualification !== undefined ? highestQualification : undefined,
+          highestQualificationDetail:
+            highestQualification !== undefined
+              ? highestQualification === "Other"
+                ? String(highestQualificationDetail || "").trim()
+                : null
+              : undefined,
           bankName: bankName !== undefined ? bankName : undefined,
           bankAccountNo: bankAccountNo !== undefined ? normalizeBankAccountForSave(bankAccountNo) : undefined,
           bankIfsc: bankIfsc !== undefined ? normalizeIfscForSave(bankIfsc) : undefined,
@@ -138,6 +179,10 @@ export async function PATCH(req) {
         where: { id: user.id },
         include: {
           role: true,
+          manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+          directReports: {
+            select: { id: true, name: true, status: true, role: { select: { name: true } } },
+          },
           fellow: {
             include: {
               schools: {
@@ -148,6 +193,11 @@ export async function PATCH(req) {
               afterSchoolCentres: {
                 include: {
                   centre: true
+                }
+              },
+              livelihoodPrograms: {
+                include: {
+                  program: true
                 }
               }
             }

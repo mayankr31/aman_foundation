@@ -1,3 +1,5 @@
+import { formatRoleLabel as formatSharedRoleLabel } from "@/lib/roles";
+
 export const REIMBURSEMENT_CATEGORIES = [
   "Travel",
   "Food & Meals",
@@ -37,9 +39,5 @@ export function formatStatusLabel(status) {
 }
 
 export function formatRoleLabel(role) {
-  if (!role) return "—";
-  return role
-    .split("_")
-    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
-    .join(" ");
+  return formatSharedRoleLabel(role);
 }

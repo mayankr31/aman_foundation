@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { TASK_PRIORITIES, TASK_STATUSES, notifyTaskEvent, NOTIFICATION_TYPES } from "@/lib/tasks";
+import { canViewTask } from "@/lib/taskScope";
+import { TASK_TIME_SLOTS } from "@/lib/taskSlots";
 
 function parseDateValue(value) {
   if (value === null || value === "") return null;
@@ -30,11 +32,7 @@ async function loadTask(id) {
 }
 
 function canView(user, task) {
-  return (
-    user.role.name === "ADMIN" ||
-    task.assigneeId === user.id ||
-    task.assignedById === user.id
-  );
+  return canViewTask(user, task);
 }
 
 export async function GET(req, { params }) {
@@ -48,7 +46,7 @@ export async function GET(req, { params }) {
     const { id } = await params;
     const task = await loadTask(id);
     if (!task) return NextResponse.json({ error: "Task not found" }, { status: 404 });
-    if (!canView(user, task)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!(await canView(user, task))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     return NextResponse.json({ success: true, data: task });
   } catch (error) {
     console.error("Fetch task error:", error);
@@ -67,7 +65,7 @@ export async function PATCH(req, { params }) {
     const { id } = await params;
     const existing = await prisma.task.findUnique({ where: { id } });
     if (!existing) return NextResponse.json({ error: "Task not found" }, { status: 404 });
-    if (!canView(user, existing)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!(await canView(user, existing))) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await req.json();
     const data = {};
@@ -90,6 +88,13 @@ export async function PATCH(req, { params }) {
         return NextResponse.json({ error: "Invalid task priority" }, { status: 400 });
       }
       data.priority = body.priority;
+    }
+    if (body.timeSlot !== undefined) {
+      const timeSlot = String(body.timeSlot || "").trim().toUpperCase();
+      if (!TASK_TIME_SLOTS.includes(timeSlot)) {
+        return NextResponse.json({ error: "Invalid task time slot" }, { status: 400 });
+      }
+      data.timeSlot = timeSlot;
     }
     if (body.plannedDate !== undefined) data.plannedDate = parseDateValue(body.plannedDate);
     if (body.deadline !== undefined) data.deadline = parseDateValue(body.deadline);

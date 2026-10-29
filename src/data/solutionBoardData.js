@@ -1,265 +1,174 @@
 export const solutionBoardData = [
   {
-    category: "Cash Savings",
+    category: "A. Financial resilience and savings",
     options: [
-      "Open a Jan Dhan Yojana savings account in a bank or post office.",
-      "Start savings in RD, FD....etc",
-      "Develop Family Financial Plan",
-      "Reduce unnecessary expenses and track household spending.",
-      "Engage in financial literacy workshops",
-      "Participate in Self-Help Groups (SHGs) for collective savings and microloans.",
-      "Participate in cooperative bank savings schemes.",
-      "Invest in small businesses like dairy farming, Petty business, tailoring, or handicrafts.",
-      "Use mobile banking (UPI, Paytm, BHIM) for easy transactions and savings.",
-      "Investing in Gold"
+      "Prepare a simple household budget and record income, debt, essential spending, and seasonal costs.",
+      "Start a small emergency fund where feasible; use a bank or post-office savings account.",
+      "Join or strengthen a Self-Help Group (SHG) and use savings and credit responsibly.",
+      "Ask a bank about suitable savings accounts, recurring deposits, Kisan Credit Card (for eligible farmers), or other formal credit.",
+      "Avoid high-cost informal borrowing where safer options are available; seek help to understand repayment terms."
     ],
     support: [
-      "Contact local Gram Panchayat office.",
-      "Visit Karnataka State Cooperative Apex Bank: www.karnatakaapex.com",
-      "Contact Janadhanya field team",
-      "Visit www.kvgbank.com"
+      "SHG leaders",
+      "Assam State Rural Livelihoods Mission (ASRLM) community cadres",
+      "Bank/post-office",
+      "AMAN field team."
     ]
   },
   {
-    category: "Food Security/ Nutritional Diversity",
+    category: "B. Food security, nutrition, and household gardens",
     options: [
-      "Grow kitchen gardens (Poshan Vatika) with local vegetables, fruits, and medicinal plants.",
-      "Improve food storage and preservation techniques",
-      "Utilize Pradhan Mantri Garib Kalyan Anna Yojana (PMGKAY) for subsidized food grains.",
-      "Access Mid-Day Meal Scheme for school children",
-      "Avail Supplementary Nutrition distributed at Anganwadis - Pregnant & lactating women & 0 - 6 years children",
-      "Participate in the Village Health & Nutrition Day (VHND/MCHN)",
-      "Rear desi poultry, for eggs & meat",
-      "Goats for milk and meat",
-      "Cows for Milk and milk Products",
-      "Learn and apply organic farming techniques to improve soil health and yield.",
-      "Join Farmer Producer Organizations (FPOs) to get better prices for crops.",
-      "Improve food storage using solar dryers and community grain banks"
+      "Establish a small kitchen/nutri-garden with locally suitable seasonal vegetables, pulses, herbs, and fruit where land and water allow.",
+      "Store food, seeds, and animal feed safely above likely floodwater levels; protect drinking water from contamination.",
+      "Check ration-card and Public Distribution System (PDS) access and resolve entitlement problems through the appropriate local office.",
+      "Use Anganwadi supplementary nutrition and school meal services where eligible; discuss child, adolescent, maternal, and infant nutrition with frontline workers.",
+      "Diversify food and income sources instead of relying on a single crop or asset."
     ],
     support: [
-      "Contact Janadhanya field team",
-      "Contact local horticulture officer.",
-      "Contact Sarojini Education and Voluntary Action Trust: www.sarojinitrust.org",
-      "VHND is organized once a month, preferably on Thursdays, at the Anganwadi center in each village."
+      "Anganwadi worker",
+      "ASHA/ANM",
+      "Fair Price Shop",
+      "Gaon Panchayat",
+      "Agriculture/horticulture extension staff",
+      "AMAN nutrition-garden or livelihood activities where available."
     ]
   },
   {
-    category: "Health Status",
+    category: "C. Climate-resilient livelihoods and farming",
     options: [
-      "Use Ayushman Bharat (PM-JAY) scheme for affordable healthcare.",
-      "Get regular vaccinations and health check-ups at Primary Health Centers (PHCs).",
-      "Keep the contact details of ANM, ASHA & Anganwadi workers and Immunization Schedule",
-      "Get immunizations and maternal care from Anganwadi Centers",
-      "Improve sanitation through Swachh Bharat Mission",
-      "Access free medicines from Jan Aushadhi Kendras",
-      "Learn basic first aid and hygiene practices.",
-      "Learn and practice Ayurveda, Yoga, and Home Remedies for preventive healthcare.",
-      "Join community health programs and awareness sessions.",
-      "Keep an emergency health fund.",
-      "Participate in health awareness camps at local PHCs.",
-      "Use traditional and local health remedies responsibly",
-      "Keep the contact details of Secondary and tertiary service centers"
+      "Discuss flood-tolerant or short-duration crop options and locally appropriate planting calendars with agriculture extension staff.",
+      "Diversify crops and income sources; consider homestead gardening, poultry, ducks, goats, or other livestock only where suitable and affordable.",
+      "Raise seed, feed, tools, and critical supplies above expected flood levels and plan safe animal shelter and evacuation.",
+      "Explore farmer groups, producer collectives, local markets, and collective purchase or sale where active.",
+      "Ask about current eligibility and availability for agriculture inputs, Kisan Credit Card, crop insurance, and relevant government support."
     ],
     support: [
-      "Visit nearest Primary Health Center (PHC), Sub Center, Anganwadi Center",
-      "arogya.karnataka.gov.in",
-      "karunadu.karnataka.gov.in",
-      "Avail Swachh Bharat toilets.",
-      "Contact Janadhanya field team",
-      "Visit www.sochara.org"
+      "Local Agriculture Office",
+      "Krishi Vigyan Kendra (KVK)",
+      "Veterinary services",
+      "ASRLM/SHGs",
+      "Farmer groups",
+      "AMAN livelihoods programme, if active in the area."
     ]
   },
   {
-    category: "Insurance Status",
+    category: "D. Livestock and poultry resilience",
     options: [
-      "Get health insurance under Ayushman Bharat",
-      "Enroll in Pradhan Mantri Fasal Bima Yojana (PMFBY) for crop insurance",
-      "Join Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY) for life insurance",
-      "Use livestock insurance for cattle and poultry",
-      "Register for pension schemes like Atal Pension Yojana (APY)",
-      "Explore microinsurance options for crops, livestock, and household assets.",
-      "Understand policy coverage and claims process.",
-      "Enroll in Yashasvini Cooperative Farmers Health Care Scheme",
-      "Participate in awareness programs on insurance benefits by local NGOs.",
-      "Avail crop insurance under Karnataka Raitha Suraksha Pradhan Mantri Fasal Bima Yojana (PMFBY)",
-      "Enroll in government or community-based health insurance schemes."
+      "Maintain a vaccination, deworming, feeding, and veterinary-care plan for poultry, ducks, goats, and cattle.",
+      "Prepare a flood-time plan for animal shelter, safe transport, feed, clean water, and disease prevention.",
+      "Keep basic records of animal purchases, mortality, treatment, and sales.",
+      "Start small and match animal numbers to household capacity, available feed, housing, and market access.",
+      "Check whether livestock insurance or veterinary support is available and suitable before enrolling."
     ],
     support: [
-      "raitamitra.karnataka.gov.in",
-      "yeshasvini.kar.nic.in",
-      "Contact local agriculture office.",
-      "Visit yeshasvini.kar.nic.in",
-      "Contact Karthavya Foundation: karthavya.1ngo.in",
-      "Contact Janadhanya field team"
+      "Veterinary dispensary/field staff",
+      "Local livestock department",
+      "SHG",
+      "AMAN livelihood team where relevant."
     ]
   },
   {
-    category: "Skill Development",
+    category: "E. Health, WASH, and care",
     options: [
-      "Attend vocational training programs (tailoring, carpentry, etc.)",
-      "Learn digital skills for online opportunities",
-      "Participate in agriculture and livestock training programs",
-      "Seek mentorship and coaching from local experts",
-      "Enroll in Karnataka Skill Development Corporation (KSDC) programs",
-      "Participate in entrepreneurship development programs by CEDOK",
-      "Join Suryamitra Skill Development Program at MGIRDA",
-      "Participate in entrepreneurship development programs by local institutions.",
-      "Join skill development programs by local NGOs.",
-      "Enroll in PM Kaushal Vikas Yojana (PMKVY) for vocational training",
-      "Join agriculture extension programs (Krishi Vigyan Kendra)",
-      "Improve financial literacy via RBI's Financial Literacy Initiatives"
+      "Keep contact details for the nearest Health and Wellness Centre/PHC, ASHA, ANM, and ambulance service.",
+      "Maintain routine immunisation, antenatal care, child growth monitoring, and regular check-ups as advised by health workers.",
+      "Store safe drinking water; use locally recommended treatment and safe storage, especially after floods.",
+      "Keep toilets and handwashing arrangements usable and safe during waterlogging where possible.",
+      "Prepare a household health plan: essential medicines as prescribed, emergency contacts, transport options, and a small health reserve if feasible.",
+      "Ask the health facility or relevant office to verify current eligibility for public health coverage and assistance."
     ],
     support: [
-      "Visit www.ksdc.karnataka.gov.in",
-      "Contact local Industrial Training Institutes (ITIs).",
-      "Contact Sarojini Education and Voluntary Action Trust: www.sarojinitrust.org",
-      "Contact Janadhanya field team"
+      "ASHA/ANM",
+      "Anganwadi",
+      "Health and Wellness Centre/PHC",
+      "Local public health and water/sanitation functionaries."
     ]
   },
   {
-    category: "Livelihood Diversification",
+    category: "F. Flood, erosion, and disaster preparedness",
     options: [
-      "Explore non-farm income sources (handicrafts, tailoring,Food products, Silk Products.. etc.)",
-      "Start small-scale businesses (Petty Shop, Local Vending shops)",
-      "Utilize government grants for new income activities",
-      "Partner with local businesses for employment opportunities",
-      "Practice mixed farming (horticulture, dairy, and poultry) for sustainable income.",
-      "Join the local Khadi & Village Industries Board for training in handicrafts.",
-      "Adopt climate-resilient farming techniques",
-      "Apply for loans under Karnataka Minorities Development Corporation (KMDC)",
-      "Participate in training programs by Institute for Rural Development (IRD)",
-      "Engage in agro-processing units supported by Karnataka State Agricultural Produce Processing and Export Corporation Limited (KAPPEC)",
-      "Participate in training programs by local rural development organizations.",
-      "Engage in agro-processing units supported by local agricultural bodies.",
-      "Rear desi poultry, Goats and Cows",
-      "Learn and apply organic farming techniques to improve soil health and yield.",
-      "Join Farmer Producer Organizations (FPOs) to get better prices for crops.",
-      "Adopt organic farming and natural farming techniques",
-      "Learn alternative skills like handicrafts, dairy, and beekeeping",
-      "Access Mudra Yojana loans for small businesses",
-      "Start agro-processing or food packaging units",
-      "Explore agro-tourism initiatives supported by Karnataka Tourism Department.",
-      "Use MGNREGA employment opportunities for income support"
+      "Make a family emergency plan, including safe routes, a meeting point, and arrangements for children, older people, and persons with disabilities.",
+      "Prepare a go-bag with essential medicines, drinking water, dry food, torch, power bank, basic first aid, clothes, and copies of key documents.",
+      "Keep documents in waterproof packaging and save digital copies where safe.",
+      "Identify safe shelters and follow official flood and weather advisories; do not cross fast-flowing water.",
+      "Plan for evacuation of livestock, protection of seeds and tools, and safe storage of drinking water.",
+      "Participate in community disaster preparedness, local response committees, and post-flood hygiene activities."
     ],
     support: [
-      "kmdc.karnataka.gov.in",
-      "irdvijayapur.1ngo.in",
-      "kappec.karnataka.gov.in",
-      "Contact Karthavya Foundation: karthavya.1ngo.in",
-      "Contact local Krishi Vigyan Kendra (KVK).",
-      "Contact Janadhanya field team"
+      "Gaon Panchayat",
+      "Circle Office and district administration",
+      "Assam State Disaster Management Authority (ASDMA) alerts and guidance",
+      "Local disaster committees",
+      "AMAN community resilience activities."
     ]
   },
   {
-    category: "Financial Services",
+    category: "G. Education and child wellbeing",
     options: [
-      "Access microfinance and self-help group loans",
-      "Avail G1 Services",
-      "Participate in cooperative banking systems",
-      "Use digital financial services for transactions",
-      "Seek guidance on investment opportunities",
-      "Improve financial literacy through training programs",
-      "Access credit facilities through Karnataka State Finance Corporation (KSFC)",
-      "Utilize services of Karnataka State Cooperative Apex Bank",
-      "Access low-interest loans from Cooperative Banks and Regional Rural Banks (RRBs)",
-      "Enroll in Kisan Credit Card (KCC) for farm financing",
-      "Participate in microfinance and SHG bank linkage programs"
+      "Ensure children's enrolment, attendance, and transition between grades; identify barriers such as floods, transport, documentation, or household work.",
+      "Make a learning-continuity plan for flood closures, including safe study materials, community learning support, and contact with teachers.",
+      "Connect children needing foundational learning support with school teachers or available community learning programmes.",
+      "Ensure children are safe from child labour, trafficking, child marriage, and other protection risks; seek help from appropriate services if a concern arises.",
+      "Keep school documents and learning materials protected from water damage."
     ],
     support: [
-      "Visit ksfc.karnataka.gov.in",
-      "Visit www.karnatakaapex.com",
-      "Contact nearest bank branch.",
-      "Contact Janadhanya field team"
+      "Government school and School Management Committee",
+      "Teachers",
+      "Anganwadi",
+      "Childline/appropriate child-protection services",
+      "AMAN education programmes where available."
     ]
   },
   {
-    category: "Accessing Social Protection Schemes",
+    category: "H. Skills, employment, and enterprise",
     options: [
-      "Seek awareness on eligibility criteria and benefits",
-      "Get all necessary documents (Aadhaar, Voter ID, Ration Card) via CSC centers",
-      "Get help from local NGOs or community leaders for application processes (- Aadhar Enrollment, - Voter Id - Resiential Certificates - PDS Cards - Mamta Card - Birth Certificate - SEBC Certificate - Pensions - Widow, Old age...etc)",
-      "Enroll children in Sarva Shiksha Abhiyan for free education",
-      "Access free legal aid through Nyaya Mitra Scheme",
-      "Avail water, sanitation, and waste management services through local panchayats",
-      "Apply for Sandhya Suraksha Yojana.",
-      "Enroll in social welfare schemes through Seva Sindhu portal.",
-      "Register for Anna Bhagya scheme under Public Distribution System (PDS)",
-      "Ensure children are enrolled in educational support programs",
-      "Access emergency assistance funds when needed"
+      "Identify skills and interests of household members and choose training linked to realistic local demand.",
+      "Explore agriculture, livestock, food processing, tailoring, repair services, digital services, crafts, small retail, or other locally viable work.",
+      "Prepare a basic enterprise plan covering start-up cost, working capital, customers, transport, pricing, and risks during flood season.",
+      "Ask about current training, wage employment, entrepreneurship, and SHG-linked opportunities through government or credible local providers.",
+      "Use digital payments safely and maintain simple records of sales, expenses, and debt."
     ],
     support: [
-      "ahara.kar.nic.in",
-      "ssp.karnataka.gov.in",
-      "sevasindhu.karnataka.gov.in",
-      "Contact local AW & ASHA",
-      "Contact nearest Social Welfare department .",
-      "Contact Janadhanya field team"
+      "ASRLM/SHGs",
+      "Local skill-development and employment offices",
+      "ITI/KVK",
+      "Banks",
+      "Market associations",
+      "AMAN livelihood support where available."
     ]
   },
   {
-    category: "Access to Common Resources",
+    category: "I. Social protection, documents, and access to entitlements",
     options: [
-      "Utilize common grazing lands managed by the community.",
-      "Access community water sources through Jal Jeevan Mission",
-      "Improve grazing lands via MNREGA-supported projects",
-      "Participate in Joint Forest Management Committees",
-      "Form Farmer Producer Organizations (FPOs) for shared resource use",
-      "Establish seed banks and fodder storage units"
+      "Check whether all household members have necessary identity, residence, bank, ration, birth, disability, pension, and other relevant documents.",
+      "Make a list of benefits the household may be eligible for and verify current rules with the responsible office.",
+      "Seek support through a Common Service Centre (CSC), Gaon Panchayat, or relevant department for applications and corrections.",
+      "Record application dates, acknowledgement numbers, follow-up dates, and the name of the office contacted.",
+      "Do not pay unofficial fees or share OTPs, PINs, or banking passwords with anyone."
     ],
     support: [
-      "Contact local Gram Panchayat office."
+      "Common Service Centre",
+      "Gaon Panchayat",
+      "Bank",
+      "Social Welfare, Food and Civil Supplies, or other relevant department",
+      "Trusted community organisation."
     ]
   },
   {
-    category: "Access to Market",
+    category: "J. Community support, markets, and shared resources",
     options: [
-      "Register with Raitha Santhe (farmers' market) in Kanakapura.",
-      "Sell produce through HOPCOMS for better price realization.",
-      "Participate in eNAM (National Agricultural Market) platform.",
-      "Participate in rural and district-level fairs and haats",
-      "Get cold storage and logistics support under Rural Infrastructure Development Fund",
-      "Use cooperative societies and local mandis for fair pricing"
+      "Join a local SHG, farmer group, youth group, or community committee that is active and inclusive.",
+      "Participate in Gram Sabha meetings and raise priorities such as safe drinking water, drainage, roads, school access, embankments, and flood preparedness.",
+      "Explore collective storage, seed/planting-material preservation, shared transport, and group marketing where feasible.",
+      "Identify trusted neighbours or community volunteers for emergency check-ins and support to households at greater risk.",
+      "Document community issues and refer them to the relevant authority; follow up collectively and safely."
     ],
     support: [
-      "Contact local Agricultural Produce Market Committee (APMC).",
-      "Visit hopcoms.karnataka.gov.in",
-      "Visit enam.gov.in",
-      "Contact Janadhanya field team"
-    ]
-  },
-  {
-    category: "Community Connect",
-    options: [
-      "Join local Self-Help Groups (SHGs) for social and financial support",
-      "Participate in Gram Sabha meetings to voice community needs",
-      "Strengthen village-level committees for disaster preparedness",
-      "Establish community funds for emergencies",
-      "Encourage collective farming and shared infrastructure"
-    ],
-    support: [
-      "Contact Janadhanya field team",
-      "Contact local Grama Panchayat",
-      "Contact local NGOs"
+      "Gaon Panchayat/Gram Sabha",
+      "SHGs and farmer groups",
+      "Community disaster committees",
+      "Local civil-society organisations",
+      "AMAN Foundation."
     ]
   }
-];
-
-export const gramPanchayatContacts = [
-  { panchayat: "Kolagondanahalli", pdo: "Mr. Ramesh", number: "9980123456" },
-  { panchayat: "Doddamaralawadi", pdo: "Ms. Rekha", number: "9845123456" },
-  { panchayat: "Hosadurga", pdo: "Mr. Mahesh", number: "9900456789" },
-  { panchayat: "I Gollahalli", pdo: "Mr. Basavaraj", number: "9745123456" },
-  { panchayat: "Bannimukkodlu", pdo: "Ms. Supriya", number: "9845678901" },
-  { panchayat: "Yelachawadi", pdo: "Mr. Shankar", number: "9876543210" },
-  { panchayat: "Hunasanahalli", pdo: "Mr. Manjunath", number: "9730123456" },
-];
-
-export const ngoContacts = [
-  { name: "Sarojini Education & Voluntary Action Trust", focus: "areas.", number: "9845098765", website: "sarojinitrust.org" },
-  { name: "Karthavya Foundation", focus: "digital literacy.", number: "9745098765", website: "karthavya.1ngo.in" },
-  { name: "Samarthya Foundation", focus: "groups and small enterprise support.", number: "", website: "samarthya.org" },
-  { name: "Kanakapura Development Trust (KDT)", focus: "development.", number: "9977886655", website: "kdt.org" },
-  { name: "Halli Vikasa Samiti", focus: "sustainable development.", number: "9745023456", website: "hvs.org" },
-  { name: "(KSRLM)", focus: "development projects.", number: "", website: "rdpr.karnataka.gov.in" },
-  { name: "Krishi Vigyan Kendra (KVK)", focus: "Agricultural knowledge and training hub.", number: "080-23222245", website: "kvk.icar.gov.in" },
 ];

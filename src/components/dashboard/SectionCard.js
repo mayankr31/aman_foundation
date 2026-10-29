@@ -45,7 +45,7 @@ export default function SectionCard({ section, kpis }) {
       <div className="flex flex-col gap-2">
         {section.links.map((link) => (
           <Link
-            key={`${link.href}-${link.label}`}
+            key={link.key || `${link.href}-${link.label}`}
             href={link.href}
             className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg border border-outline-variant/20 transition-all group ${tone.hover}`}
           >

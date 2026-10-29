@@ -42,12 +42,13 @@ export function resolveTypeConfig(typeKey, types) {
   return LIVELIHOOD_TYPES[typeKey] || null;
 }
 
-export function useLivelihoodTypes(token) {
+export function useLivelihoodTypes(token, { enabled = true } = {}) {
   const [types, setTypes] = useState(cache || []);
   const [loading, setLoading] = useState(!cache);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!enabled) return;
     if (!token || cache) return;
     let cancelled = false;
     (async () => {
@@ -66,7 +67,7 @@ export function useLivelihoodTypes(token) {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, enabled]);
 
   const refresh = useCallback(async () => {
     if (!token) return;
@@ -93,5 +94,12 @@ export function useLivelihoodTypes(token) {
     [types]
   );
 
-  return { types, loading, error, refresh, getTypeConfig, getTypesByCategory };
+  return {
+    types,
+    loading: enabled ? loading : false,
+    error: enabled ? error : null,
+    refresh,
+    getTypeConfig,
+    getTypesByCategory,
+  };
 }

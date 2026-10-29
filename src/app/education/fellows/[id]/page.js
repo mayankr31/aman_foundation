@@ -16,6 +16,10 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import BasicDetailsView from "@/components/BasicDetailsView";
+import PersonalDetailsForm from "@/components/PersonalDetailsForm";
+import AssignmentsSection from "@/components/AssignmentsSection";
+import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import dynamic from "next/dynamic";
 
@@ -39,12 +43,13 @@ export default function FellowProfileDetail() {
 
 function FellowProfileDetailContent() {
   const { id } = useParams();
-  const { token, user, isInitializing } = useAuth();
+  const { token, user, isInitializing, can } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [goalSheets, setGoalSheets] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
@@ -54,7 +59,11 @@ function FellowProfileDetailContent() {
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
   const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
-  const activeTab = labelFromSlug(searchParams.get("tab")) || "Monthly Planner";
+  const activeTab = labelFromSlug(searchParams.get("tab")) || "Personal Details";
+  const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
+    activeTab,
+    !isInitializing && !loading && Boolean(fellow)
+  );
   const [showPDFModal, setShowPDFModal] = useState(false);
 
   // Goal Sheet states
@@ -262,6 +271,30 @@ function FellowProfileDetailContent() {
     setDeleteItemType("");
   };
 
+  const handlePersonalDetailsSaved = async (payload) => {
+    try {
+      const res = await fetch(`/api/fellows/${fellow.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        toast.error(json.error || "Failed to update personal details");
+        throw new Error(json.error || "Failed to update personal details");
+      }
+      setFellow(json.data);
+      setShowPersonalDetailsForm(false);
+      toast.success("Personal details updated successfully");
+    } catch (err) {
+      console.error("Update personal details error:", err);
+      throw err;
+    }
+  };
+
   if (isInitializing || loading) {
     return (
       <div className="p-8 flex justify-center items-center h-96">
@@ -276,6 +309,25 @@ function FellowProfileDetailContent() {
 
   const assignedSchool = fellow.schools && fellow.schools.length > 0 ? fellow.schools[0].school : null;
   const fellowLocation = fellow.address || (assignedSchool ? assignedSchool.location : "Kalgachia");
+  const fellowUser = fellow.user || {};
+  const personDetails = {
+    ...fellowUser,
+    name: fellow.name || fellowUser.name,
+    email: fellowUser.email || fellow.email,
+    mobile: fellowUser.mobile || fellow.phone,
+    phone: fellowUser.mobile || fellow.phone,
+    dob: fellowUser.dob || fellow.dob,
+    gender: fellowUser.gender || fellow.gender,
+    address: fellowUser.address || fellow.address,
+    avatar: fellowUser.avatar || fellow.avatar,
+    dateOfJoining: fellowUser.dateOfJoining,
+  };
+  const canEditPersonalDetails =
+    user?.roleName === "ADMIN" ||
+    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
+  const canEditAssignments =
+    user?.roleName === "ADMIN" ||
+    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -401,12 +453,13 @@ function FellowProfileDetailContent() {
       </div>
 
       {/* Tabs */}
-      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+      <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
         {FELLOW_TABS.map((tab) => {
           const isActive = activeTab === tab.label;
           return (
             <button
               key={tab.slug}
+              ref={isActive ? setActiveTabRef : null}
               onClick={() =>
                 router.replace(`/education/fellows/${id}?tab=${tab.slug}`, { scroll: false })
               }
@@ -424,6 +477,36 @@ function FellowProfileDetailContent() {
 
       {/* Tab Contents */}
       <div>
+          {activeTab === "Personal Details" && (
+            <div className="space-y-4">
+              {canEditPersonalDetails && (
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowPersonalDetailsForm(true)}
+                    className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">edit</span>
+                    Edit Personal Details
+                  </button>
+                </div>
+              )}
+              <BasicDetailsView person={personDetails} />
+            </div>
+          )}
+          {activeTab === "Assignments" && (
+            <AssignmentsSection
+              title="Assignments"
+              isFellow
+              fellowId={fellow.id}
+              userId={fellow.userId}
+              schools={(fellow.schools || []).map((item) => item.school)}
+              centres={(fellow.afterSchoolCentres || []).map((item) => item.centre)}
+              programs={(fellow.livelihoodPrograms || []).map((item) => item.program)}
+              canEdit={canEditAssignments}
+              canEditLivelihoodPrograms={user?.roleName === "ADMIN"}
+            />
+          )}
           {activeTab === "Monthly Planner" && (
             <MonthlyPlanner fellowId={fellow.id} />
           )}
@@ -798,6 +881,40 @@ function FellowProfileDetailContent() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showPersonalDetailsForm && canEditPersonalDetails && (
+        <div className="fixed inset-0 bg-black/50 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-surface-container-lowest rounded-t-2xl sm:rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 z-10 bg-surface-container-lowest flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-surface-container">
+              <div className="min-w-0">
+                <h3 className="text-lg font-bold text-on-surface">Edit Personal Details</h3>
+                <p className="text-xs text-on-surface-variant mt-1 truncate">
+                  {fellow.name}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPersonalDetailsForm(false)}
+                className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                aria-label="Close personal details editor"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <div className="p-4 sm:p-6">
+              <PersonalDetailsForm
+                person={personDetails}
+                avatarUploadUrl={fellow.userId ? `/api/users/${fellow.userId}/avatar` : null}
+                onSubmit={handlePersonalDetailsSaved}
+                onCancel={() => setShowPersonalDetailsForm(false)}
+                onAvatarUpdated={(url) => {
+                  setFellow((prev) => (prev ? { ...prev, avatar: url } : prev));
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

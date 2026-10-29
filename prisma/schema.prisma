@@ -28,6 +28,7 @@ enum TravelStatus {
   PENDING
   APPROVED
   REJECTED
+  REVERTED
   COMPLETED
 }
 
@@ -63,6 +64,7 @@ model Role {
 
   users             User[]
   permissions       RolePermission[]
+  dashboardConfig   DashboardConfig?
 }
 
 model User {
@@ -85,10 +87,16 @@ model User {
   emergencyContactPhone String?
   aadharNumber String?
   panCard      String?
+  voterId      String?
+  highestQualification String?
+  highestQualificationDetail String?
   bankName     String?
   bankAccountNo String?
   bankIfsc     String?
   dateOfJoining DateTime?
+  dateOfLeaving DateTime?
+  resignationReason String?
+  inactiveSince DateTime?
   avatar      String?
   leavesTaken Int              @default(0)
   leavesRemaining Int          @default(15)
@@ -117,6 +125,7 @@ model User {
   compOffCredits     CompOffCredit[]
   travelRequests     TravelRequest[]
   approvedTravel     TravelRequest[]      @relation("ApprovedByUser")
+  revertedTravel     TravelRequest[]      @relation("RevertedByUser")
   reimbursementRequests   Reimbursement[] @relation("ReimbursementRequester")
   reimbursementsApproved  Reimbursement[] @relation("ReimbursementApprover")
   reimbursementsReimbursed Reimbursement[] @relation("ReimbursementPayer")
@@ -132,6 +141,26 @@ model User {
   pmTaskComments           ProgramManagerTaskComment[]
 
   notifications Notification[]
+  dashboardConfig DashboardConfig?
+  assetAssignments AssetAssignment[] @relation("AssetAssignee")
+  assetAssignmentsMade AssetAssignment[] @relation("AssetAssigner")
+  createdAssets Asset[] @relation("AssetCreator")
+}
+
+/// Per-role or per-user dashboard selection for KPIs and quick links.
+/// Exactly one of roleId / userId is set. No row = use role defaults.
+model DashboardConfig {
+  id          String   @id @default(uuid())
+  roleId      String?  @unique
+  userId      String?  @unique
+  kpiKeys     String[] @default([])
+  linkKeys    String[] @default([])
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  role        Role?    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Notification {
@@ -144,6 +173,7 @@ model Notification {
   read      Boolean  @default(false)
   actorId   String?
   metadata  Json?
+  dedupeKey String?  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -590,6 +620,7 @@ model Task {
   deadline       DateTime?
   status         String    @default("Pending")
   priority       String    @default("Medium")
+  timeSlot       String    @default("FIRST_HALF")
   isPlanned      Boolean   @default(true)
   completionDate DateTime?
   createdAt      DateTime  @default(now())
@@ -634,6 +665,48 @@ model TaskDocument {
   uploadedBy   User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
 
   @@index([taskId])
+}
+
+// ─── Company assets ───
+
+model Asset {
+  id            String   @id @default(uuid())
+  assetCode     String   @unique
+  name          String
+  category      String?
+  serialNumber  String?
+  description   String?
+  condition     String?
+  notes         String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  createdBy     User?    @relation("AssetCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  assignments   AssetAssignment[]
+
+  @@index([createdById])
+}
+
+model AssetAssignment {
+  id              String    @id @default(uuid())
+  assetId         String
+  userId          String
+  assignedById    String?
+  assignedAt      DateTime  @default(now())
+  returnedAt      DateTime?
+  returnCondition String?
+  returnNotes     String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  asset           Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  user            User      @relation("AssetAssignee", fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy      User?     @relation("AssetAssigner", fields: [assignedById], references: [id], onDelete: SetNull)
+
+  @@index([assetId, returnedAt])
+  @@index([userId, returnedAt])
 }
 
 model SchoolProgram {
@@ -1330,12 +1403,20 @@ model TravelRequest {
   rejectionReason  String?
   approvedBy       String?
   approvedAt       DateTime?
+  revertReason     String?
+  revertedBy       String?
+  revertedAt       DateTime?
+  resubmittedAt    DateTime?
+  revertCount      Int          @default(0)
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
 
   user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   approver         User?        @relation("ApprovedByUser", fields: [approvedBy], references: [id])
+  reverter         User?        @relation("RevertedByUser", fields: [revertedBy], references: [id])
   expenses         TravelExpense[]
+
+  @@index([userId, status])
 }
 
 model TravelExpense {

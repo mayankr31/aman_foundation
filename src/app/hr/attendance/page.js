@@ -6,10 +6,20 @@ import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
+import OnLeaveToday from "@/components/OnLeaveToday";
+import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
+import {
+  TASK_TIME_SLOT_CLASSES,
+  TASK_TIME_SLOT_LABELS,
+  normalizeTaskTimeSlot,
+} from "@/lib/taskSlots";
+
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function HrAttendanceLogs() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const canReview = ["ADMIN", "HR", ...PROGRAM_ROLES].includes(user?.roleName);
   
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -170,13 +180,18 @@ export default function HrAttendanceLogs() {
         </Link>
       </div>
 
+      {canReview && <OnLeaveToday className="mb-6" />}
+
       <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
         {isLoading ? (
           <div className="p-10 text-center text-slate-500">Loading attendance data...</div>
         ) : (
           <div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-              <h3 className="font-headline font-bold text-xl text-on-surface">Daily Attendance Ledger</h3>
+              <div>
+                <h3 className="font-headline font-bold text-xl text-on-surface">Daily Attendance Ledger</h3>
+                <p className="text-[11px] text-on-surface-variant mt-1">Standard shift: {SHIFT_LABEL}</p>
+              </div>
               <input
                 type="text"
                 placeholder="Search employee..."
@@ -202,6 +217,7 @@ export default function HrAttendanceLogs() {
                   {pagedAttendance.map((log) => {
                     const name = log.user?.name || log.email || "Unknown";
                     const initial = name.charAt(0).toUpperCase();
+                    const metrics = computeAttendanceMetrics(log);
                     
                     return (
                       <tr key={log.id} onClick={() => router.push(`/hr/attendance/${log.userId}`)} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors cursor-pointer">
@@ -217,7 +233,19 @@ export default function HrAttendanceLogs() {
                           </div>
                         </td>
                         <td data-label="Status" className="py-4 px-4">{renderStatusPill(log.workstatus)}</td>
-                        <td data-label="Work Hours" className="py-4 px-4 text-on-surface font-medium text-xs">{log.workhours || "N/A"}</td>
+                        <td data-label="Work Hours" className="py-4 px-4 text-on-surface font-medium text-xs">
+                          <div className="flex flex-col gap-0.5">
+                            <span>{metrics?.autoClosed ? "—" : log.workhours || metrics?.workHours || "N/A"}</span>
+                            {metrics?.extraSeconds > 0 && (
+                              <span className="text-[10px] font-bold text-emerald-600">
+                                +{metrics.extraHours} extra
+                              </span>
+                            )}
+                            {metrics?.autoClosed && (
+                              <span className="text-[9px] font-semibold text-amber-600">Auto checkout</span>
+                            )}
+                          </div>
+                        </td>
                         <td data-label="Login Time" className="py-4 px-4 text-on-surface text-xs font-semibold">{log.intimelog || "N/A"}</td>
                         <td data-label="Daily Tasks" className="py-4 px-4">
                           <div className="flex items-center gap-1.5 text-xs font-medium">
@@ -301,6 +329,9 @@ export default function HrAttendanceLogs() {
                                   {isCompleted ? 'check_circle' : 'radio_button_unchecked'}
                                 </span>
                                 <div className="flex flex-col">
+                                  <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded w-fit mb-1 ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(item.timeSlot)]}`}>
+                                    {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(item.timeSlot)]}
+                                  </span>
                                   <span className={isCompleted ? 'text-gray-600 line-through' : 'text-gray-700'}>
                                     {item.text}
                                   </span>

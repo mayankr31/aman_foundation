@@ -4,6 +4,8 @@ import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { getISTDateKey, istDayEnd, istDayStart } from "@/lib/time";
 import { TASK_PRIORITIES, TASK_STATUSES, canAssignTo, dailyTaskWhere, notifyTaskEvent, NOTIFICATION_TYPES } from "@/lib/tasks";
+import { getTaskTeamUserIds, isTaskTeamMember } from "@/lib/taskScope";
+import { normalizeTaskTimeSlot } from "@/lib/taskSlots";
 
 export const dynamic = "force-dynamic";
 
@@ -55,14 +57,23 @@ export async function GET(req) {
       }
     } else if (view === "assigned-by-me") {
       where.assignedById = user.id;
+    } else if (view === "team") {
+      const teamIds = await getTaskTeamUserIds(user, { includeSelf: true });
+      if (Array.isArray(teamIds)) {
+        where.assigneeId = { in: teamIds };
+      }
     } else {
       where.assigneeId = user.id;
     }
 
     if (assigneeId) {
-      if (view === "all" && user.role.name === "ADMIN") {
+      if (user.role.name === "ADMIN") {
         where.assigneeId = assigneeId;
-      } else if (assigneeId !== user.id) {
+      } else if (assigneeId === user.id) {
+        where.assigneeId = assigneeId;
+      } else if (await isTaskTeamMember(user, assigneeId)) {
+        where.assigneeId = assigneeId;
+      } else {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
     }
@@ -124,6 +135,7 @@ export async function POST(req) {
 
     const priority = TASK_PRIORITIES.includes(body.priority) ? body.priority : "Medium";
     const status = TASK_STATUSES.includes(body.status) ? body.status : "Pending";
+    const timeSlot = normalizeTaskTimeSlot(body.timeSlot);
     const plannedDate = parseDateOnly(body.plannedDate) || parseDateOnly(body.deadline) || new Date();
     const deadline = parseDateOnly(body.deadline) || null;
     const isAssigned = assigneeId !== user.id;
@@ -138,6 +150,7 @@ export async function POST(req) {
         deadline,
         priority,
         status,
+        timeSlot,
         isPlanned: body.isPlanned !== undefined ? !!body.isPlanned : true,
         completionDate: status === "Completed" ? new Date() : null,
       },

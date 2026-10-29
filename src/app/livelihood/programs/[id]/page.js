@@ -8,6 +8,7 @@ import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import { formatRoleLabel } from "@/lib/roles";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -518,7 +519,7 @@ export default function ProgramDetail() {
                   <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{pm.user?.email || ""}</p>
                   {pm.user?.role?.name && (
                     <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-semibold uppercase tracking-wide">
-                      {pm.user.role.name.replaceAll("_", " ")}
+                      {formatRoleLabel(pm.user.role.name)}
                     </span>
                   )}
                 </div>
@@ -933,7 +934,7 @@ export default function ProgramDetail() {
                         <p className="text-xs text-on-surface-variant">{m.email}</p>
                         {m.role?.name && (
                           <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
-                            {m.role.name.replaceAll("_", " ")}
+                            {formatRoleLabel(m.role.name)}
                           </span>
                         )}
                       </div>

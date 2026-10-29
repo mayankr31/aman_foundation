@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canViewTask } from "@/lib/taskScope";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
@@ -20,10 +21,7 @@ async function ensureUploadDir() {
 async function loadTaskForUser(user, taskId) {
   const task = await prisma.task.findUnique({ where: { id: taskId } });
   if (!task) return { task: null, allowed: false };
-  const allowed =
-    user.role.name === "ADMIN" ||
-    task.assigneeId === user.id ||
-    task.assignedById === user.id;
+  const allowed = await canViewTask(user, task);
   return { task, allowed };
 }
 

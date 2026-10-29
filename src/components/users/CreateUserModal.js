@@ -4,11 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, UserPlus, Loader2, Save } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { DEPARTMENTS, getDefaultDepartment, getSuggestedDepartments } from '@/lib/organization';
+import { formatRoleLabel } from '@/lib/roles';
+import { getManagerCandidates } from '@/lib/roleHierarchy';
 import {
   validateMobile,
   validateEmail,
   validatePersonName,
   validatePassword,
+  validateRequired,
   firstError,
   toMobileInput,
   toPersonNameInput,
@@ -20,12 +24,23 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [roleId, setRoleId] = useState('');
+  const [department, setDepartment] = useState('');
   const [managerId, setManagerId] = useState('');
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const assignableRoles = roles.filter((r) => r.name !== 'ADMIN');
+  const selectedRole = roles.find((r) => r.id === roleId);
+  const suggestedDepartments = getSuggestedDepartments(selectedRole?.name);
+  const managerChoices = getManagerCandidates(managers, selectedRole?.name);
+
+  const handleRoleChange = (nextRoleId) => {
+    const nextRole = roles.find((r) => r.id === nextRoleId);
+    setRoleId(nextRoleId);
+    setDepartment(getDefaultDepartment(nextRole?.name));
+    setManagerId('');
+  };
 
   useEffect(() => {
     if (!isOpen || !token) return;
@@ -43,6 +58,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
     setMobile('');
     setPassword('');
     setRoleId('');
+    setDepartment('');
     setManagerId('');
   };
 
@@ -56,8 +72,9 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
     const validationMessage = firstError([
       validatePersonName(name, { required: true }),
       validateEmail(email, { required: true }),
-      validateMobile(mobile),
+      validateMobile(mobile, { required: true }),
       validatePassword(password, { required: true }),
+      validateRequired(department, "Department"),
     ]);
     if (validationMessage) {
       toast.error(validationMessage);
@@ -78,6 +95,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           mobile: mobile.trim() || undefined,
           password,
           roleId,
+          department,
           managerId: managerId || null,
         }),
       });
@@ -162,7 +180,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className={labelClass}>Mobile (Optional)</label>
+            <label className={labelClass}>Mobile<span className="text-error ml-0.5">*</span></label>
             <input
               type="tel"
               inputMode="numeric"
@@ -193,15 +211,39 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
             <label className={labelClass}>Role<span className="text-error ml-0.5">*</span></label>
             <select
               value={roleId}
-              onChange={(e) => setRoleId(e.target.value)}
+              onChange={(e) => handleRoleChange(e.target.value)}
               className={inputClass}
             >
               <option value="" disabled>Select a role</option>
               {assignableRoles.map((r) => (
                 <option key={r.id} value={r.id}>
-                  {r.name.replaceAll('_', ' ')}
+                  {formatRoleLabel(r.name)}
                 </option>
               ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className={labelClass}>Department<span className="text-error ml-0.5">*</span></label>
+            <select
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              className={inputClass}
+              disabled={!roleId}
+            >
+              <option value="" disabled>Select a department</option>
+              {suggestedDepartments.length > 0 && (
+                <optgroup label="Suggested for this role">
+                  {suggestedDepartments.map((dept) => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </optgroup>
+              )}
+              <optgroup label="All departments">
+                {DEPARTMENTS.filter((dept) => !suggestedDepartments.includes(dept)).map((dept) => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
+              </optgroup>
             </select>
           </div>
 
@@ -211,14 +253,18 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
               value={managerId}
               onChange={(e) => setManagerId(e.target.value)}
               className={inputClass}
+              disabled={!roleId}
             >
               <option value="">No manager / top level</option>
-              {managers.map((manager) => (
+              {managerChoices.map((manager) => (
                 <option key={manager.id} value={manager.id}>
-                  {manager.name} ({manager.role?.name?.replaceAll('_', ' ')})
+                  {manager.name} ({formatRoleLabel(manager.role?.name)})
                 </option>
               ))}
             </select>
+            <span className={`text-[10px] ${theme.textMuted}`}>
+              Only roles senior to the selected role are listed.
+            </span>
           </div>
 
           <div className="flex gap-3 justify-end pt-4">

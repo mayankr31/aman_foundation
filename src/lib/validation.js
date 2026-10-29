@@ -65,6 +65,10 @@ export const toAmountInput = (value) => {
 // --------------------------------------------------------------- validators
 // All validators return an error string or null. Optional fields pass when blank.
 
+export function validateRequired(value, label = "This field") {
+  return isBlank(value) ? `${label} is required.` : null;
+}
+
 export function validateMobile(value, { required = false } = {}) {
   if (isBlank(value)) return required ? "Mobile number is required." : null;
   if (!MOBILE_REGEX.test(toTenDigit(value))) {

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
+import { useBeneficiaryWriteGuard } from "@/lib/useBeneficiaryWriteGuard";
 import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 
@@ -11,6 +12,7 @@ export default function KYRSurveyPage() {
   const { id } = useParams();
   const router = useRouter();
   const { token, isInitializing } = useAuth();
+  const { canEdit, permissionsReady } = useBeneficiaryWriteGuard(id, "kyr-form");
   const toast = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -84,7 +86,7 @@ export default function KYRSurveyPage() {
       const data = await res.json();
       if (data.success) {
         toast.success("Survey submitted successfully!");
-        router.push(`/beneficiaries/${id}`);
+        router.push(`/beneficiaries/${id}?tab=kyr-form`);
       } else {
         toast.error("Error submitting survey: " + data.error);
       }
@@ -93,6 +95,14 @@ export default function KYRSurveyPage() {
       toast.error("Submission failed. Please try again.");
     }
   };
+
+  if (permissionsReady && !canEdit) {
+    return (
+      <div className="p-8 text-center text-sm font-semibold text-rose-600">
+        You do not have permission to fill this form.
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto w-full">

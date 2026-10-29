@@ -21,7 +21,6 @@ import {
   validateDateNotFuture,
   validateAmount,
   validateInteger,
-  firstError,
   toMobileInput,
   toAadhaarInput,
   toPanInput,
@@ -76,6 +75,7 @@ export default function BeneficiaryMasterDirectory() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [addStep, setAddStep] = useState("details");
   const [addForm, setAddForm] = useState(emptyAddForm);
+  const [addErrors, setAddErrors] = useState({});
 
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
@@ -154,53 +154,88 @@ export default function BeneficiaryMasterDirectory() {
 
   const updateAddField = (key, value) => {
     setAddForm((prev) => ({ ...prev, [key]: value }));
+    setAddErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
   };
 
   const closeAddModal = () => {
     setShowAddModal(false);
     setAddStep("details");
     setAddForm(emptyAddForm);
+    setAddErrors({});
+  };
+
+  const validateAddForm = () => {
+    const errors = {};
+
+    if (!addForm.name.trim()) {
+      errors.name = "Full name is required.";
+    } else {
+      const nameError = validatePersonName(addForm.name, { required: true });
+      if (nameError) errors.name = nameError;
+    }
+
+    if (addForm.dob) {
+      const dobError = validateDateNotFuture(addForm.dob, { label: "Date of birth" });
+      if (dobError) errors.dob = dobError;
+    }
+
+    const validators = [
+      ["mobNumber", validateMobile(addForm.mobNumber)],
+      ["emergencyContact", validateMobile(addForm.emergencyContact)],
+      ["aadhar", validateAadhaar(addForm.aadhar)],
+      ["panCard", validatePan(addForm.panCard)],
+      ["voterId", validateVoterId(addForm.voterId)],
+      ["rationCard", validateRationCard(addForm.rationCard)],
+      ["bankAccountNo", validateBankAccount(addForm.bankAccountNo)],
+      ["bankIfsc", validateIfsc(addForm.bankIfsc)],
+      ["monthlyIncome", validateAmount(addForm.monthlyIncome, { min: 0 })],
+      ["householdSize", validateInteger(addForm.householdSize, { min: 1, max: 20 })],
+    ];
+
+    for (const [key, message] of validators) {
+      if (message) errors[key] = message;
+    }
+
+    if (!addForm.programId) {
+      errors.programId = "Please select a livelihood program.";
+    }
+
+    return errors;
+  };
+
+  const showAddErrors = (errors) => {
+    setAddErrors(errors);
+    requestAnimationFrame(() => {
+      document
+        .querySelector("[data-add-error]")
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
   };
 
   const handleAddNext = (e) => {
     e.preventDefault();
-    const validationMessage = validateAddDetails();
-    if (validationMessage) {
-      toast.error(validationMessage);
+    const errors = validateAddForm();
+    if (Object.keys(errors).length) {
+      showAddErrors(errors);
       return;
     }
-    if (!addForm.programId) {
-      toast.error("Please select a livelihood program.");
-      return;
-    }
+    setAddErrors({});
     setAddStep("kyr");
   };
 
-  const validateAddDetails = () => {
-    if (!addForm.name.trim()) return "Full name is required.";
-    return firstError([
-      validatePersonName(addForm.name, { required: true }),
-      addForm.dob ? validateDateNotFuture(addForm.dob, { label: "Date of birth" }) : null,
-      validateMobile(addForm.mobNumber),
-      validateMobile(addForm.emergencyContact),
-      validateAadhaar(addForm.aadhar),
-      validatePan(addForm.panCard),
-      validateVoterId(addForm.voterId),
-      validateRationCard(addForm.rationCard),
-      validateBankAccount(addForm.bankAccountNo),
-      validateIfsc(addForm.bankIfsc),
-      validateAmount(addForm.monthlyIncome, { min: 0 }),
-      validateInteger(addForm.householdSize, { min: 1, max: 20 }),
-    ]);
-  };
-
-  const handleCreateBeneficiary = async ({ responses, scores }) => {
-    const validationMessage = validateAddDetails();
-    if (validationMessage) {
-      toast.error(validationMessage);
+  const createBeneficiary = async (surveyPayload) => {
+    const errors = validateAddForm();
+    if (Object.keys(errors).length) {
+      showAddErrors(errors);
       setAddStep("details");
       return;
     }
+    setAddErrors({});
     try {
       const randomNum = Math.floor(100 + Math.random() * 900);
       const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
@@ -265,21 +300,27 @@ export default function BeneficiaryMasterDirectory() {
 
       const newId = json.data.id;
 
-      // Save the KYR survey for the newly created beneficiary
-      const surveyRes = await fetch(`/api/beneficiaries/${newId}/resilience-surveys`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ responses, scores }),
-      });
-      const surveyJson = await surveyRes.json();
+      if (surveyPayload) {
+        // Save the KYR survey for the newly created beneficiary
+        const surveyRes = await fetch(`/api/beneficiaries/${newId}/resilience-surveys`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(surveyPayload),
+        });
+        const surveyJson = await surveyRes.json();
 
-      if (surveyJson.success) {
-        toast.success(`Registered new beneficiary: ${addForm.name.trim()}`);
+        if (surveyJson.success) {
+          toast.success(`Registered new beneficiary: ${addForm.name.trim()}`);
+        } else {
+          toast.error("Beneficiary created, but KYR form could not be saved.");
+        }
       } else {
-        toast.error("Beneficiary created, but KYR form could not be saved.");
+        toast.success(
+          `${addForm.name.trim()} saved. You can fill the KYR form later from their profile.`
+        );
       }
 
       await refreshBeneficiaries();
@@ -288,6 +329,17 @@ export default function BeneficiaryMasterDirectory() {
       console.error("Failed to add beneficiary:", err);
       toast.error("Failed to add beneficiary. Please try again.");
     }
+  };
+
+  const handleCreateBeneficiary = (payload) => createBeneficiary(payload);
+  const handleCreateWithoutKyr = () => {
+    const errors = validateAddForm();
+    if (Object.keys(errors).length) {
+      showAddErrors(errors);
+      return;
+    }
+    setAddErrors({});
+    createBeneficiary(null);
   };
 
   const kyrPrefill = {
@@ -339,6 +391,8 @@ export default function BeneficiaryMasterDirectory() {
 
   const inputClass =
     "px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-xs";
+  const fieldClass = (key) =>
+    `${inputClass}${addErrors[key] ? " ring-1 ring-error" : ""}`;
   const labelClass =
     "text-xs font-semibold text-on-surface-variant uppercase tracking-wider";
 
@@ -602,7 +656,7 @@ export default function BeneficiaryMasterDirectory() {
             </div>
 
             {addStep === "details" && (
-              <form onSubmit={handleAddNext} className="space-y-4 text-sm">
+              <form onSubmit={handleAddNext} noValidate className="space-y-4 text-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className={labelClass}>Full Name</label>
@@ -611,10 +665,13 @@ export default function BeneficiaryMasterDirectory() {
                       required
                       placeholder="e.g. Joynal Abedin"
                       maxLength={60}
-                      className={inputClass}
+                      className={fieldClass("name")}
                       value={addForm.name}
                       onChange={(e) => updateAddField("name", toPersonNameInput(e.target.value))}
                     />
+                    {addErrors.name && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.name}</p>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -622,10 +679,13 @@ export default function BeneficiaryMasterDirectory() {
                     <input
                       type="date"
                       max={new Date().toISOString().slice(0, 10)}
-                      className={inputClass}
+                      className={fieldClass("dob")}
                       value={addForm.dob}
                       onChange={(e) => updateAddField("dob", e.target.value)}
                     />
+                    {addErrors.dob && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.dob}</p>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -652,10 +712,13 @@ export default function BeneficiaryMasterDirectory() {
                       pattern="[0-9]{10}"
                       title="Enter exactly 10 digits, without +91 or spaces."
                       placeholder="e.g. 9988771122"
-                      className={inputClass}
+                      className={fieldClass("mobNumber")}
                       value={addForm.mobNumber}
                       onChange={(e) => updateAddField("mobNumber", toMobileInput(e.target.value))}
                     />
+                    {addErrors.mobNumber && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.mobNumber}</p>
+                    )}
                     <span className="text-[10px] text-on-surface-variant">
                       10 digits, numbers only (no +91).
                     </span>
@@ -670,10 +733,13 @@ export default function BeneficiaryMasterDirectory() {
                       pattern="[0-9]{10}"
                       title="Enter exactly 10 digits, without +91 or spaces."
                       placeholder="e.g. 9988771100"
-                      className={inputClass}
+                      className={fieldClass("emergencyContact")}
                       value={addForm.emergencyContact}
                       onChange={(e) => updateAddField("emergencyContact", toMobileInput(e.target.value))}
                     />
+                    {addErrors.emergencyContact && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.emergencyContact}</p>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -819,10 +885,13 @@ export default function BeneficiaryMasterDirectory() {
                       min="0"
                       step="0.01"
                       placeholder="e.g. 3750"
-                      className={inputClass}
+                      className={fieldClass("monthlyIncome")}
                       value={addForm.monthlyIncome}
                       onChange={(e) => updateAddField("monthlyIncome", e.target.value)}
                     />
+                    {addErrors.monthlyIncome && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.monthlyIncome}</p>
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-1.5">
@@ -845,10 +914,13 @@ export default function BeneficiaryMasterDirectory() {
                       max="20"
                       step="1"
                       required
-                      className={inputClass}
+                      className={fieldClass("householdSize")}
                       value={addForm.householdSize}
                       onChange={(e) => updateAddField("householdSize", e.target.value)}
                     />
+                    {addErrors.householdSize && (
+                      <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.householdSize}</p>
+                    )}
                   </div>
                 </div>
 
@@ -865,10 +937,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[0-9]{12}"
                         title="Aadhaar must be exactly 12 digits."
                         placeholder="e.g. 123456789012"
-                        className={inputClass}
+                        className={fieldClass("aadhar")}
                         value={addForm.aadhar}
                         onChange={(e) => updateAddField("aadhar", toAadhaarInput(e.target.value))}
                       />
+                      {addErrors.aadhar && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.aadhar}</p>
+                      )}
                       <span className="text-[10px] text-on-surface-variant">12 digits, numbers only.</span>
                     </div>
                     <div className="flex flex-col gap-1.5">
@@ -879,10 +954,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[A-Z]{5}[0-9]{4}[A-Z]"
                         title="PAN must be in the format ABCDE1234F."
                         placeholder="e.g. ABCDE1234F"
-                        className={inputClass}
+                        className={fieldClass("panCard")}
                         value={addForm.panCard}
                         onChange={(e) => updateAddField("panCard", toPanInput(e.target.value))}
                       />
+                      {addErrors.panCard && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.panCard}</p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>Voter ID</label>
@@ -892,10 +970,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[A-Z]{3}[0-9]{7}"
                         title="Voter ID must be 3 letters followed by 7 digits."
                         placeholder="e.g. ABC1234567"
-                        className={inputClass}
+                        className={fieldClass("voterId")}
                         value={addForm.voterId}
                         onChange={(e) => updateAddField("voterId", toVoterIdInput(e.target.value))}
                       />
+                      {addErrors.voterId && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.voterId}</p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>Ration Card</label>
@@ -905,10 +986,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[A-Z0-9][A-Z0-9-]{5,19}"
                         title="Ration card must be 6 to 20 letters, digits or hyphens."
                         placeholder="e.g. SFY-AS-4029"
-                        className={inputClass}
+                        className={fieldClass("rationCard")}
                         value={addForm.rationCard}
                         onChange={(e) => updateAddField("rationCard", toRationCardInput(e.target.value))}
                       />
+                      {addErrors.rationCard && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.rationCard}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -936,10 +1020,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[0-9]{9,18}"
                         title="Bank account number must be 9 to 18 digits."
                         placeholder="e.g. 30928409184"
-                        className={inputClass}
+                        className={fieldClass("bankAccountNo")}
                         value={addForm.bankAccountNo}
                         onChange={(e) => updateAddField("bankAccountNo", toBankAccountInput(e.target.value))}
                       />
+                      {addErrors.bankAccountNo && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.bankAccountNo}</p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className={labelClass}>IFSC Code</label>
@@ -949,10 +1036,13 @@ export default function BeneficiaryMasterDirectory() {
                         pattern="[A-Z]{4}0[A-Z0-9]{6}"
                         title="IFSC must be in the format SBIN0007421."
                         placeholder="e.g. SBIN0007421"
-                        className={inputClass}
+                        className={fieldClass("bankIfsc")}
                         value={addForm.bankIfsc}
                         onChange={(e) => updateAddField("bankIfsc", toIfscInput(e.target.value))}
                       />
+                      {addErrors.bankIfsc && (
+                        <p data-add-error className="text-[11px] font-semibold text-error">{addErrors.bankIfsc}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -962,7 +1052,7 @@ export default function BeneficiaryMasterDirectory() {
                   <label className={labelClass}>Livelihood Program *</label>
                   <select
                     required
-                    className={`${inputClass} w-full mt-1.5`}
+                    className={`${fieldClass("programId")} w-full mt-1.5`}
                     value={addForm.programId}
                     onChange={(e) => updateAddField("programId", e.target.value)}
                   >
@@ -982,12 +1072,15 @@ export default function BeneficiaryMasterDirectory() {
                       </optgroup>
                     )}
                   </select>
+                  {addErrors.programId && (
+                    <p data-add-error className="text-[11px] font-semibold text-error mt-1">{addErrors.programId}</p>
+                  )}
                   <p className="text-xs text-on-surface-variant italic mt-2">
                     The beneficiary will be assigned to this program.
                   </p>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-surface-container mt-6">
+                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-surface-container mt-6">
                   <button
                     type="button"
                     onClick={closeAddModal}
@@ -996,8 +1089,15 @@ export default function BeneficiaryMasterDirectory() {
                     Cancel
                   </button>
                   <button
+                    type="button"
+                    onClick={handleCreateWithoutKyr}
+                    className="px-4 py-2 rounded-full border border-primary/30 text-primary hover:bg-primary/10 transition-colors font-semibold cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    Save & Fill KYR Later
+                  </button>
+                  <button
                     type="submit"
-                    className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 shadow-glow transition-all font-semibold cursor-pointer flex items-center gap-2"
+                    className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 shadow-glow transition-all font-semibold cursor-pointer flex items-center justify-center gap-2"
                   >
                     Next: KYR Form
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>

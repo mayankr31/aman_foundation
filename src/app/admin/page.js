@@ -4,7 +4,7 @@
 import React, { Suspense, useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X } from 'lucide-react';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
@@ -12,8 +12,12 @@ import RolePermissionsModal from '@/components/users/RolePermissionsModal';
 import AddRoleModal from '@/components/users/AddRoleModal';
 import CreateUserModal from '@/components/users/CreateUserModal';
 import ResetPasswordModal from '@/components/users/ResetPasswordModal';
+import DashboardConfigModal from '@/components/users/DashboardConfigModal';
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import Pagination from '@/components/ui/Pagination';
+import { DEPARTMENTS, getDefaultDepartment, getSuggestedDepartments } from '@/lib/organization';
+import { formatRoleLabel } from '@/lib/roles';
+import { getManagerCandidates } from '@/lib/roleHierarchy';
 
 const ADMIN_TABS = ['users', 'deactivated', 'approvals', 'roles'];
 
@@ -56,10 +60,17 @@ function AdminPageContent() {
   const handleDepartmentChange = (userId, value) => {
     setSelectedDepartments(prev => ({ ...prev, [userId]: value }));
   };
+
+  // Suggested departments for a role are listed first, then the rest.
+  const getDepartmentChoices = (roleName) => {
+    const suggested = getSuggestedDepartments(roleName);
+    return [...suggested, ...DEPARTMENTS.filter((dept) => !suggested.includes(dept))];
+  };
   
   // Modals state
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [dashboardTarget, setDashboardTarget] = useState(null);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [resetPasswordUser, setResetPasswordUser] = useState(null);
@@ -122,8 +133,13 @@ function AdminPageContent() {
     try {
       setActionLoading(userId);
       const body = { status: newStatus };
-      if (newStatus === 'ACTIVE' && selectedDepartments[userId]) {
-        body.department = selectedDepartments[userId];
+      if (newStatus === 'ACTIVE') {
+        const targetUser = users.find((u) => u.id === userId);
+        const department =
+          selectedDepartments[userId] ||
+          targetUser?.department ||
+          getDefaultDepartment(targetUser?.role?.name);
+        if (department) body.department = department;
       }
       
       const res = await fetch(`/api/users/${userId}/status`, {
@@ -288,6 +304,15 @@ function AdminPageContent() {
       </div>
     );
   }
+
+  const managerChoices = managerUser
+    ? getManagerCandidates(users, managerUser.role?.name, { excludeUserId: managerUser.id })
+    : [];
+  const currentManagerUser = managerUser?.managerId
+    ? users.find((u) => u.id === managerUser.managerId)
+    : null;
+  const currentManagerMissing =
+    currentManagerUser && !managerChoices.some((manager) => manager.id === currentManagerUser.id);
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-8 font-sans">
@@ -477,7 +502,7 @@ function AdminPageContent() {
                             <td data-label="Mobile" className="py-4 px-3 align-middle text-slate-500 overflow-hidden">{item.mobile || '—'}</td>
                             <td data-label="Role" className="py-4 px-3 align-middle font-semibold dark:text-gray-300 text-slate-700 overflow-hidden">
                               <span className="inline-block max-w-full px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] truncate align-middle">
-                                {item.role?.name?.replaceAll('_', ' ')}
+                                {formatRoleLabel(item.role?.name)}
                               </span>
                             </td>
                             <td data-label="Status" className="py-4 px-3 align-middle overflow-hidden">
@@ -496,20 +521,18 @@ function AdminPageContent() {
                                 {activeTab === 'approvals' ? (
                                   <>
                                     <select
-                                      value={selectedDepartments[item.id] || ''}
+                                      value={selectedDepartments[item.id] || getDefaultDepartment(item.role?.name)}
                                       onChange={(e) => handleDepartmentChange(item.id, e.target.value)}
                                       className="py-1.5 px-2 rounded-lg text-[10px] font-bold tracking-wider bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 outline-none"
                                     >
                                       <option value="" disabled>Select Dept</option>
-                                      <option value="Operations">Operations</option>
-                                      <option value="Logistics">Logistics</option>
-                                      <option value="Education">Education</option>
-                                      <option value="HR">HR</option>
-                                      <option value="Finance">Finance</option>
+                                      {getDepartmentChoices(item.role?.name).map((dept) => (
+                                        <option key={dept} value={dept}>{dept}</option>
+                                      ))}
                                     </select>
                                     <button
                                       onClick={() => {
-                                        if (!selectedDepartments[item.id]) {
+                                        if (!selectedDepartments[item.id] && !getDefaultDepartment(item.role?.name)) {
                                           toast.error("Please select a department before approving.");
                                           return;
                                         }
@@ -589,6 +612,13 @@ function AdminPageContent() {
                                       <ShieldAlert size={12} />
                                       Edit Permissions
                                     </button>
+                                    <button
+                                      onClick={() => setDashboardTarget({ scope: 'user', entity: item })}
+                                      className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 transition-all hover:scale-105"
+                                    >
+                                      <LayoutDashboard size={12} />
+                                      Dashboard
+                                    </button>
                                     {item.id !== currentUser?.id && activeTab === 'deactivated' && (
                                       <button
                                         onClick={() => handleDeleteUser(item.id)}
@@ -650,30 +680,39 @@ function AdminPageContent() {
                         </span>
                       </div>
                       <h3 className="text-base font-extrabold dark:text-white text-slate-800">
-                        {roleItem.name.replaceAll('_', ' ')}
+                        {formatRoleLabel(roleItem.name)}
                       </h3>
                       <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
                         {roleItem.description || 'Provides default capability profile inside system apps.'}
                       </p>
                     </div>
 
-                    {!isAdmin && (
-                      <div className="flex gap-2 mt-6">
-                        <button
-                          onClick={() => setSelectedRole(roleItem)}
-                          className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-primary/15 text-primary hover:bg-primary/25 border border-primary/10 transition-colors"
-                        >
-                          <ShieldAlert size={12} />
-                          Permissions
-                        </button>
-                        <button
-                          onClick={() => handleDeleteRole(roleItem.id)}
-                          className="py-2 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/10 transition-colors"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-2 mt-6">
+                      <button
+                        onClick={() => setDashboardTarget({ scope: 'role', entity: roleItem })}
+                        className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/10 transition-colors"
+                      >
+                        <LayoutDashboard size={12} />
+                        Dashboard
+                      </button>
+                      {!isAdmin && (
+                        <>
+                          <button
+                            onClick={() => setSelectedRole(roleItem)}
+                            className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-primary/15 text-primary hover:bg-primary/25 border border-primary/10 transition-colors"
+                          >
+                            <ShieldAlert size={12} />
+                            Permissions
+                          </button>
+                          <button
+                            onClick={() => handleDeleteRole(roleItem.id)}
+                            className="py-2 px-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/10 transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </motion.div>
                 );
               })}
@@ -726,6 +765,14 @@ function AdminPageContent() {
         onReset={() => {}}
       />
 
+      <DashboardConfigModal
+        isOpen={!!dashboardTarget}
+        onClose={() => setDashboardTarget(null)}
+        scope={dashboardTarget?.scope}
+        entity={dashboardTarget?.entity}
+        token={token}
+      />
+
       {managerUser && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
           <div className="bg-white dark:bg-[#151e2d] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl w-full max-w-md p-5 sm:p-6">
@@ -751,14 +798,20 @@ function AdminPageContent() {
               className="mt-1 w-full py-2.5 px-3 rounded-xl text-sm bg-slate-50 dark:bg-[#0d1320] border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-200 outline-none"
             >
               <option value="">No manager / top level</option>
-              {users
-                .filter((manager) => manager.id !== managerUser.id && manager.status === "ACTIVE")
-                .map((manager) => (
-                  <option key={manager.id} value={manager.id}>
-                    {manager.name} ({manager.role?.name?.replaceAll("_", " ")})
-                  </option>
-                ))}
+              {currentManagerMissing && currentManagerUser && (
+                <option value={currentManagerUser.id}>
+                  {currentManagerUser.name} ({formatRoleLabel(currentManagerUser.role?.name)}) — current
+                </option>
+              )}
+              {managerChoices.map((manager) => (
+                <option key={manager.id} value={manager.id}>
+                  {manager.name} ({formatRoleLabel(manager.role?.name)})
+                </option>
+              ))}
             </select>
+            <p className="mt-2 text-[11px] text-slate-400">
+              Only roles senior to {formatRoleLabel(managerUser.role?.name)} are listed.
+            </p>
 
             <div className="flex justify-end gap-2 mt-6">
               <button

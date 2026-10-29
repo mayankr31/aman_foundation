@@ -295,16 +295,22 @@ export default function TaskAnalyticsPage() {
   if (!can("task-analytics") && user?.roleName !== "ADMIN") {
     return (
       <div className="p-10 text-center">
-        <p className="text-sm font-bold text-rose-600">Task analytics is available to administrators only.</p>
+        <p className="text-sm font-bold text-rose-600">You do not have access to task analytics.</p>
       </div>
     );
   }
+
+  const isAdmin = user?.roleName === "ADMIN";
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-6">
       <div>
         <h1 className="page-title text-on-surface">Task Analytics</h1>
-        <p className="text-sm text-on-surface-variant mt-2">Organisation-wide task volume, completion and deadline trends.</p>
+        <p className="text-sm text-on-surface-variant mt-2">
+          {isAdmin
+            ? "Organisation-wide task volume, completion and deadline trends."
+            : "Your tasks, your team's tasks and tasks you assigned."}
+        </p>
       </div>
 
       {loading ? (

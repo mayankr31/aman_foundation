@@ -69,10 +69,10 @@ async function main() {
   console.log("Seeding roles and permissions...");
   const adminRole = await prisma.role.upsert({
     where: { name: "ADMIN" },
-    update: {},
+    update: { description: "Executive Director with complete platform control" },
     create: {
       name: "ADMIN",
-      description: "Super Administrator with complete platform control",
+      description: "Executive Director with complete platform control",
       displayInRegister: false,
     },
   });
@@ -162,9 +162,9 @@ async function main() {
   const hashedPassword = await bcrypt.hash("Admin@123", 10);
   const defaultAdmin = await prisma.user.upsert({
     where: { email: "admin@amanfoundation.org" },
-    update: {},
+    update: { name: "Executive Director" },
     create: {
-      name: "Super Administrator",
+      name: "Executive Director",
       username: "admin",
       email: "admin@amanfoundation.org",
       password: hashedPassword,
@@ -1011,6 +1011,30 @@ async function main() {
       { name: "Maths", options: ["Number Recognition (1-9)", "Beginner", "Number Recognition (11-99)", "Subtraction", "Division", "absent"], order: 3 }
     ]
   });
+
+  // Assign human-readable employee IDs to seeded accounts.
+  const seededUsers = await prisma.user.findMany({
+    select: { id: true, employeeId: true, createdAt: true },
+    orderBy: { createdAt: "asc" },
+  });
+  const highestByYear = new Map();
+  for (const user of seededUsers) {
+    if (!user.employeeId) continue;
+    const match = user.employeeId.match(/^AF-EMP-(\d{4})-(\d+)$/);
+    if (!match) continue;
+    const year = Number(match[1]);
+    highestByYear.set(year, Math.max(highestByYear.get(year) || 0, Number(match[2])));
+  }
+  for (const user of seededUsers) {
+    if (user.employeeId) continue;
+    const year = new Date(user.createdAt).getFullYear();
+    const next = (highestByYear.get(year) || 0) + 1;
+    highestByYear.set(year, next);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { employeeId: `AF-EMP-${year}-${String(next).padStart(4, "0")}` },
+    });
+  }
 
   console.log("Comprehensive seeding successfully completed!");
 }

@@ -54,6 +54,7 @@ export async function GET(req, context) {
           deadline: true,
           status: true,
           completionDate: true,
+          timeSlot: true,
         },
       }),
     ]);
@@ -77,6 +78,7 @@ export async function GET(req, context) {
           description: t.description,
           completed: t.status === "Completed",
           completionDate: t.completionDate,
+          timeSlot: t.timeSlot,
         })),
       };
     });

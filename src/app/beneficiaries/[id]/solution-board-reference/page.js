@@ -2,14 +2,14 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { solutionBoardData, gramPanchayatContacts, ngoContacts } from "@/data/solutionBoardData";
+import { solutionBoardData } from "@/data/solutionBoardData";
 
 const renderSupportText = (text) => {
   const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9.-]+\.gov\.in|[a-zA-Z0-9.-]+\.nic\.in|[a-zA-Z0-9.-]+\.org|[a-zA-Z0-9.-]+\.1ngo\.in)/g;
   const parts = text.split(urlRegex);
   return parts.map((part, index) => {
     if (part.match(urlRegex)) {
-      const href = part.startsWith('http') ? part : `https://${part}`;
+      const href = part.startsWith("http") ? part : `https://${part}`;
       return (
         <a key={index} href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
           {part}
@@ -19,6 +19,89 @@ const renderSupportText = (text) => {
     return part;
   });
 };
+
+const howToUseSteps = [
+  {
+    title: "Identify the challenge",
+    description:
+      "What is affecting the household most? Consider the root causes and how flood seasons, erosion, health, education, income, or social barriers affect the family."
+  },
+  {
+    title: "Choose a priority",
+    description:
+      "Select one or two urgent and achievable priorities first. Use the household's Resilience Index or discussion to identify gaps."
+  },
+  {
+    title: "Choose practical actions",
+    description:
+      "Agree on actions that fit the family's capacities, preferences, safety, and available resources. Do not assume every household needs the same solution."
+  },
+  {
+    title: "Identify support",
+    description:
+      "List who can help: family members, neighbours, SHGs, Gaon Panchayat, ASHA/ANM, Anganwadi, school, bank, agriculture or veterinary staff, ASRLM, local administration, or AMAN Foundation."
+  },
+  {
+    title: "Set a timeline and review",
+    description:
+      "Agree on who will do what and by when. Review progress during follow-up visits and update the plan when circumstances change."
+  }
+];
+
+const actionPlanFields = [
+  "Priority gap",
+  "Root cause / risk",
+  "Action chosen",
+  "Who will help?",
+  "By when?",
+  "Progress / follow-up"
+];
+
+const exampleTimeline = [
+  {
+    when: "Within one week",
+    detail:
+      "Identify a safer storage point for documents, seeds, feed, medicines, and school materials; list emergency contacts and a safe route."
+  },
+  {
+    when: "Within one month",
+    detail:
+      "Speak with agriculture and veterinary staff about locally suitable crops, animal care, and flood-season preparation; check eligibility for relevant support."
+  },
+  {
+    when: "Within two months",
+    detail:
+      "Explore a small kitchen garden or suitable secondary income activity based on land, labour, market access, and household preference."
+  },
+  {
+    when: "At each follow-up",
+    detail:
+      "Review what was completed, barriers faced, changes in flood risk, and whether the plan should be revised."
+  }
+];
+
+const facilitatorChecklist = [
+  "Explain that the household owns the plan and can decline any proposed action.",
+  "Ask permission before recording personal information or taking photographs; keep household data confidential.",
+  "Prioritise immediate safety, food, shelter, health, child protection, and urgent documentation needs.",
+  "Use locally understandable language and visual prompts; adapt for literacy, disability, gender, and age.",
+  "Verify scheme details, eligibility, deadlines, and service availability before making a referral.",
+  "Record referrals and follow-up dates; do not promise approval, funds, or services.",
+  "Review progress after floods or other major shocks and revise the plan with the household."
+];
+
+function SectionHeading({ number, title }) {
+  return (
+    <div className="flex items-start gap-3 mb-4">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+        {number}
+      </span>
+      <h2 className="text-xl md:text-2xl font-bold font-headline text-on-surface leading-tight pt-0.5 min-w-0 break-words">
+        {title}
+      </h2>
+    </div>
+  );
+}
 
 export default function SolutionBoardReferencePage() {
   const params = useParams();
@@ -32,162 +115,89 @@ export default function SolutionBoardReferencePage() {
       </Link>
 
       <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden mb-8">
-        <div className="bg-surface-container-low p-6 border-b border-outline-variant/10">
-          <h1 className="text-3xl font-bold font-headline text-on-surface">Resilience- Solution Board</h1>
-        </div>
+        <header className="bg-surface-container-low p-5 md:p-8 border-b border-outline-variant/10">
+          <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.22em] text-primary mb-2">
+            AMAN Foundation
+          </p>
+          <h1 className="text-2xl md:text-3xl font-bold font-headline text-on-surface">
+            Household Resilience Solution Board
+          </h1>
+          <p className="mt-2 text-sm md:text-base font-semibold text-on-surface break-words">
+            Assam-Centric Adaptation <span className="text-on-surface-variant font-normal">|</span> Barpeta District, Assam
+          </p>
+          <p className="mt-1 text-sm italic text-on-surface-variant">Sustainable Livelihood with Dignity</p>
+        </header>
 
-        <div className="p-6 md:p-8 space-y-8 text-on-surface leading-relaxed">
-          
+        <div className="p-5 md:p-8 space-y-10 text-on-surface leading-relaxed">
           <section>
-            <h2 className="text-xl font-bold font-headline mb-4">Background:</h2>
-            <p className="mb-4">
-              Resilience is the ability of individuals and households to cope with shock, adapt, and recover without
-              sacrificing their long-term well-being. The Resilience Index helps households understand their ability to
-              manage shocks, based on their response to previous shocks, by assessing their <strong>absorptive, adaptive, and
-              transformative</strong> capacities. Through this process, households generate a Resilience Score that highlights
-              their strengths and areas needing improvement. For many vulnerable households financial instability,
-              limited access to healthcare and education, food insecurity, and unexpected crises—can make it hard to
-              build their resilience. While the Resilience Score helps households identify their gaps, knowing the gaps
-              is not enough. Households must prioritize key areas and create a solution plan to strengthen their
-              resilience.
-            </p>
-            <p className="mb-4">
-              Despite the importance of resilience-building, both households and facilitators face challenges when
-              trying to create a solution plan:
-            </p>
-            <ul className="list-disc pl-6 mb-4 space-y-2">
-              <li>Many households are not aware about what solutions are available or where to seek help.</li>
-              <li>Some households lack training in financial planning, health management, and livelihood improvement.</li>
-              <li>Without guidance, households struggle to decide which resilience gaps to address first.</li>
-              <li>Some households are unaware of community programs that could help them.</li>
-              <li>Many households feel discouraged by multiple challenges and don't know where to start.</li>
-            </ul>
-            <p>
-              To address these issues, we are planning to develop the Solution Board as a structured, user-friendly tool
-              that helps households step by step identify problems, explore solutions, and create a practical action plan.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold font-headline mb-4">What is the Solution Board?</h2>
-            <p>
-              The Solution Board is an indicative planning tool that helps households strengthen their resilience by
-              addressing the identified gaps. It provides a list of 'solutions' that households can choose to work
-              on/engage with based on their current capacities and needs. Instead of a one-size-fits-all approach, the
-              Solution Board allows households to select the steps that work best for their situation. In short, the
-              Solution Board is not just a tool—it's a bridge between knowledge and action.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold font-headline mb-4">How Does It Work?</h2>
-            <p className="mb-4">
-              The Solution Board follows the principles of the Resilience Index, which measures how well a household
-              can absorb shocks, adapt to change, and transform their situation.
-            </p>
-            <p className="mb-4">
-              To create a solution plan, households answer four key questions for each priority area:
-            </p>
-            
-            <div className="space-y-4 mb-6">
-              <div className="bg-surface-container p-4 rounded-lg">
-                <h3 className="font-bold mb-2">1. Why don't I have this indicator in green?</h3>
-                <ul className="list-disc pl-6 text-sm space-y-1">
-                  <li>Helps households think about the root causes of their challenges—whether financial, social, behavioral, or structural.</li>
-                  <li>Encourages self-awareness by identifying habits or external factors affecting their resilience.</li>
-                </ul>
-              </div>
-
-              <div className="bg-surface-container p-4 rounded-lg">
-                <h3 className="font-bold mb-2">2. What can I do to move this indicator to green?</h3>
-                <ul className="list-disc pl-6 text-sm space-y-1">
-                  <li>Households explore realistic and achievable actions based on their abilities and available resources.</li>
-                  <li>The Solution Board provides a menu of possible actions, allowing households to choose what fits their situation best.</li>
-                </ul>
-              </div>
-
-              <div className="bg-surface-container p-4 rounded-lg">
-                <h3 className="font-bold mb-2">3. Who can support me to achieve this?</h3>
-                <ul className="list-disc pl-6 text-sm space-y-1">
-                  <li>Resilience is not built alone—households need support from community members, NGOs, local governments, and service providers.</li>
-                  <li>The Solution Board helps households connect with these resources and teaches them how to seek help effectively.</li>
-                </ul>
-              </div>
-
-              <div className="bg-surface-container p-4 rounded-lg">
-                <h3 className="font-bold mb-2">4. How much time will I need to get there?</h3>
-                <ul className="list-disc pl-6 text-sm space-y-1">
-                  <li>Establishes a clear and realistic timeline for achieving goals.</li>
-                  <li>Helps households to track progress, stay committed, and stay motivated.</li>
-                </ul>
-              </div>
+            <SectionHeading number="1" title="Purpose and local context" />
+            <div className="space-y-4 max-w-4xl text-[15px] md:text-base">
+              <p>
+                The AMAN Foundation Household Resilience Solution Board is a practical, community-led planning tool for
+                households in Barpeta district, including flood-prone riverine Char-Chapori communities along the
+                Brahmaputra and Beki river systems. It helps families identify priority risks, select realistic actions,
+                connect with available services, and track progress. The tool should be adapted to each household&apos;s
+                situation, language, resources, disability and care needs, and seasonal livelihood calendar.
+              </p>
+              <p>
+                Resilience means being able to prepare for, withstand, adapt to, and recover from shocks without
+                sacrificing long-term wellbeing. In this context, shocks may include floods, riverbank erosion, loss of
+                crops or livestock, illness, school disruption, unemployment, rising costs, and damage to homes or
+                essential documents. The Solution Board builds on three capacities: <strong>absorptive</strong> (cope with
+                immediate shocks), <strong>adaptive</strong> (adjust livelihoods and practices), and{" "}
+                <strong>transformative</strong> (access systems, services, rights, and opportunities that enable
+                longer-term change).
+              </p>
             </div>
-
-            <p className="mb-4 italic text-on-surface-variant">
-              For example, if a household prioritizes Financial Resilience, they might recognize that they lack budgeting
-              skills. The Solution Board would provide practical steps like creating a financial plan, tracking expenses,
-              or joining a local savings group.
-            </p>
-            <p className="italic text-on-surface-variant">
-              Similarly, if a household wants to improve Health Resilience, the Solution Board might suggest better
-              nutrition, accessing healthcare services, health insurance, practicing prevention, while also connecting
-              them to local clinics and health workers.
-            </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold font-headline mb-4">Why is the Solution Board Important?</h2>
-            <p className="mb-4">
-              The Solution Board is an essential tool because it transforms knowledge into action. It helps vulnerable
-              households identify their challenges, explore practical solutions, and create a realistic plan to improve
-              their resilience. Here's why it matters:
-            </p>
-            <ul className="list-disc pl-6 mb-6 space-y-2">
-              <li>Empowers households to take charge of their resilience journey.</li>
-              <li>Provides clear and practical guidance tailored to each household's situation.</li>
-              <li>Strengthens community collaboration by encouraging connections with local networks.</li>
-              <li>Encourages long-term commitment by helping households set achievable and realistic goals.</li>
-            </ul>
-            <p className="font-semibold">
-              By using the Solution Board, vulnerable households can systematically improve their resilience without
-              compromising their well-being, supporting the vision of the Resilience Movement.
-            </p>
+            <SectionHeading number="2" title="How to use the Solution Board" />
+            <div className="space-y-3">
+              {howToUseSteps.map((step, index) => (
+                <div key={step.title} className="flex items-start gap-3 md:gap-4 rounded-lg border border-outline-variant/15 bg-surface-container-low/50 p-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-on-primary">
+                    {index + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-on-surface">{step.title}</h3>
+                    <p className="mt-1 text-sm text-on-surface-variant">{step.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
 
-          <hr className="border-surface-container-highest my-8" />
-
           <section>
-            <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Solution Board Reference Options</h2>
-            <p className="mb-6 text-sm text-on-surface-variant">
-              Use the table below to explore potential options and sources of support for various resilience indicators.
-            </p>
-            
+            <SectionHeading number="3" title="Assam-centric solution menu" />
+
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[800px]">
+              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[900px]">
+                <caption className="sr-only">Assam-centric solution menu</caption>
                 <thead>
                   <tr className="bg-primary/10">
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[20%]">Category</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[50%]">Options</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Source of Support</th>
+                    <th scope="col" className="border border-surface-container-highest p-4 font-bold text-on-surface w-[22%]">Priority area</th>
+                    <th scope="col" className="border border-surface-container-highest p-4 font-bold text-on-surface w-[48%]">Possible household actions</th>
+                    <th scope="col" className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Potential support / referral</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {solutionBoardData.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td data-label="" className="border border-surface-container-highest p-4 font-bold text-primary align-top">
+                  {solutionBoardData.map((row) => (
+                    <tr key={row.category} className="hover:bg-surface-container-low/50 transition-colors">
+                      <td data-label="" className="border border-surface-container-highest p-4 font-bold text-primary align-top max-md:col-span-2">
                         {row.category}
                       </td>
-                      <td data-label="Options" className="border border-surface-container-highest p-4 align-top">
+                      <td data-label="Possible household actions" className="border border-surface-container-highest p-4 align-top max-md:col-span-2">
                         <ul className="list-disc pl-5 space-y-2 text-sm text-on-surface">
-                          {row.options.map((opt, i) => (
-                            <li key={i}>{opt}</li>
+                          {row.options.map((option, index) => (
+                            <li key={index}>{option}</li>
                           ))}
                         </ul>
                       </td>
-                      <td data-label="Source of Support" className="border border-surface-container-highest p-4 align-top">
+                      <td data-label="Potential support / referral" className="border border-surface-container-highest p-4 align-top max-md:col-span-2">
                         <ul className="list-disc pl-5 space-y-2 text-sm text-on-surface">
-                          {row.support.map((sup, i) => (
-                            <li key={i}>{renderSupportText(sup)}</li>
+                          {row.support.map((support, index) => (
+                            <li key={index}>{renderSupportText(support)}</li>
                           ))}
                         </ul>
                       </td>
@@ -198,65 +208,84 @@ export default function SolutionBoardReferencePage() {
             </div>
           </section>
 
-          <hr className="border-surface-container-highest my-8" />
-
           <section>
-            <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Gram Panchayat Contact Details</h2>
+            <SectionHeading number="4" title="Household action plan" />
+            <p className="max-w-4xl mb-5 text-[15px] md:text-base">
+              Complete this with the household in the language they are most comfortable using. Agree on priorities
+              together; do not impose actions or promise benefits.
+            </p>
+
             <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[600px]">
+              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[900px]">
+                <caption className="sr-only">Household action plan template</caption>
                 <thead>
                   <tr className="bg-primary/10">
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Gram Panchayat</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[40%]">Panchayat Development Officer (PDO)</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Contact Number</th>
+                    {actionPlanFields.map((field) => (
+                      <th key={field} scope="col" className="border border-surface-container-highest p-3 font-bold text-on-surface text-sm">
+                        {field}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {gramPanchayatContacts.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td data-label="" className="border border-surface-container-highest p-4 text-on-surface">{row.panchayat}</td>
-                      <td data-label="Panchayat Development Officer (PDO)" className="border border-surface-container-highest p-4 text-on-surface">{row.pdo}</td>
-                      <td data-label="Contact Number" className="border border-surface-container-highest p-4 text-primary font-semibold">{row.number}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <hr className="border-surface-container-highest my-8" />
-
-          <section>
-            <h2 className="text-2xl font-bold font-headline mb-6 text-primary">Additional NGOs/Training Centers for Kanakapura</h2>
-            <div className="w-full overflow-x-auto border border-surface-container-highest rounded-xl bg-surface-container-lowest">
-              <table className="mobile-card-table w-full table-fixed text-left border-collapse min-w-[800px]">
-                <thead>
-                  <tr className="bg-primary/10">
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Organization Name</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[30%]">Focus Area</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[20%]">Contact Number</th>
-                    <th className="border border-surface-container-highest p-4 font-bold text-on-surface w-[20%]">Website</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ngoContacts.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-surface-container-low/50 transition-colors">
-                      <td data-label="" className="border border-surface-container-highest p-4 text-on-surface font-semibold">{row.name}</td>
-                      <td data-label="Focus Area" className="border border-surface-container-highest p-4 text-on-surface">{row.focus}</td>
-                      <td data-label="Contact Number" className="border border-surface-container-highest p-4 text-on-surface">{row.number || "-"}</td>
-                      <td data-label="Website" className="border border-surface-container-highest p-4 text-primary">
-                        <a href={`https://${row.website}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                          {row.website}
-                        </a>
+                  <tr>
+                    {actionPlanFields.map((field) => (
+                      <td key={field} data-label={field} className="border border-surface-container-highest p-3 align-top max-md:col-span-2">
+                        <div className="h-12 rounded-md border border-dashed border-outline-variant/30 bg-surface-container-low/30" />
                       </td>
-                    </tr>
-                  ))}
+                    ))}
+                  </tr>
                 </tbody>
               </table>
             </div>
+            <p className="mt-4 text-sm text-on-surface-variant">
+              Use one row per priority gap. To complete and save this plan for the household, use the{" "}
+              <Link href={`/beneficiaries/${id}/solution-plan`} className="text-primary font-semibold hover:underline">
+                Create Solution Plan
+              </Link>{" "}
+              page.
+            </p>
           </section>
 
+          <section>
+            <SectionHeading number="5" title="Example: a flood-affected household in Barpeta" />
+            <div className="rounded-xl border border-primary/15 bg-primary/5 p-5">
+              <p className="max-w-4xl text-sm md:text-[15px]">
+                <span className="font-bold text-on-surface">Situation:</span> A household in a low-lying village reports
+                repeated flood damage to vegetable crops, poultry losses, interruptions to children&apos;s schooling, and
+                borrowing for emergency expenses. The family chooses two first priorities: protect essential assets during
+                floods and reduce dependence on one source of income.
+              </p>
+              <div className="mt-4 space-y-3">
+                {exampleTimeline.map((item) => (
+                  <div key={item.when} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                    <p className="text-sm text-on-surface">
+                      <span className="font-bold">{item.when}:</span> {item.detail}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <SectionHeading number="6" title="AMAN Foundation facilitator checklist" />
+            <ul className="grid gap-3 md:grid-cols-2">
+              {facilitatorChecklist.map((item) => (
+                <li key={item} className="flex items-start gap-3 rounded-lg border border-outline-variant/15 bg-surface-container-low/50 p-3 text-sm">
+                  <span className="material-symbols-outlined shrink-0 text-primary text-[20px]">check_circle</span>
+                  <span className="min-w-0 break-words">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
+
+        <footer className="border-t border-surface-container-highest px-5 md:px-8 py-4 text-xs leading-relaxed text-on-surface-variant">
+          AMAN Foundation <span className="px-1">|</span> Household Resilience Solution Board{" "}
+          <span className="px-1">|</span> Barpeta, Assam
+        </footer>
       </div>
     </div>
   );

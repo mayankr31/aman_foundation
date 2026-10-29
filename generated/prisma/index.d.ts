@@ -24,6 +24,12 @@ export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model DashboardConfig
+ * Per-role or per-user dashboard selection for KPIs and quick links.
+ * Exactly one of roleId / userId is set. No row = use role defaults.
+ */
+export type DashboardConfig = $Result.DefaultSelection<Prisma.$DashboardConfigPayload>
+/**
  * Model Notification
  * 
  */
@@ -168,6 +174,16 @@ export type TaskComment = $Result.DefaultSelection<Prisma.$TaskCommentPayload>
  * 
  */
 export type TaskDocument = $Result.DefaultSelection<Prisma.$TaskDocumentPayload>
+/**
+ * Model Asset
+ * 
+ */
+export type Asset = $Result.DefaultSelection<Prisma.$AssetPayload>
+/**
+ * Model AssetAssignment
+ * 
+ */
+export type AssetAssignment = $Result.DefaultSelection<Prisma.$AssetAssignmentPayload>
 /**
  * Model SchoolProgram
  * 
@@ -537,6 +553,7 @@ export const TravelStatus: {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
+  REVERTED: 'REVERTED',
   COMPLETED: 'COMPLETED'
 };
 
@@ -746,6 +763,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dashboardConfig`: Exposes CRUD operations for the **DashboardConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DashboardConfigs
+    * const dashboardConfigs = await prisma.dashboardConfig.findMany()
+    * ```
+    */
+  get dashboardConfig(): Prisma.DashboardConfigDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
@@ -1036,6 +1063,26 @@ export class PrismaClient<
     * ```
     */
   get taskDocument(): Prisma.TaskDocumentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.asset`: Exposes CRUD operations for the **Asset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Assets
+    * const assets = await prisma.asset.findMany()
+    * ```
+    */
+  get asset(): Prisma.AssetDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.assetAssignment`: Exposes CRUD operations for the **AssetAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AssetAssignments
+    * const assetAssignments = await prisma.assetAssignment.findMany()
+    * ```
+    */
+  get assetAssignment(): Prisma.AssetAssignmentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.schoolProgram`: Exposes CRUD operations for the **SchoolProgram** model.
@@ -2152,6 +2199,7 @@ export namespace Prisma {
   export const ModelName: {
     Role: 'Role',
     User: 'User',
+    DashboardConfig: 'DashboardConfig',
     Notification: 'Notification',
     Permission: 'Permission',
     RolePermission: 'RolePermission',
@@ -2181,6 +2229,8 @@ export namespace Prisma {
     Task: 'Task',
     TaskComment: 'TaskComment',
     TaskDocument: 'TaskDocument',
+    Asset: 'Asset',
+    AssetAssignment: 'AssetAssignment',
     SchoolProgram: 'SchoolProgram',
     ProgramEvent: 'ProgramEvent',
     Beneficiary: 'Beneficiary',
@@ -2264,7 +2314,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2413,6 +2463,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      DashboardConfig: {
+        payload: Prisma.$DashboardConfigPayload<ExtArgs>
+        fields: Prisma.DashboardConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DashboardConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DashboardConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.DashboardConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DashboardConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          findMany: {
+            args: Prisma.DashboardConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>[]
+          }
+          create: {
+            args: Prisma.DashboardConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          createMany: {
+            args: Prisma.DashboardConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DashboardConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.DashboardConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          update: {
+            args: Prisma.DashboardConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.DashboardConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DashboardConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DashboardConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.DashboardConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.DashboardConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDashboardConfig>
+          }
+          groupBy: {
+            args: Prisma.DashboardConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DashboardConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DashboardConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<DashboardConfigCountAggregateOutputType> | number
           }
         }
       }
@@ -4559,6 +4683,154 @@ export namespace Prisma {
           count: {
             args: Prisma.TaskDocumentCountArgs<ExtArgs>
             result: $Utils.Optional<TaskDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      Asset: {
+        payload: Prisma.$AssetPayload<ExtArgs>
+        fields: Prisma.AssetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findFirst: {
+            args: Prisma.AssetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          findMany: {
+            args: Prisma.AssetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          create: {
+            args: Prisma.AssetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          createMany: {
+            args: Prisma.AssetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AssetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          delete: {
+            args: Prisma.AssetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          update: {
+            args: Prisma.AssetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AssetUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>[]
+          }
+          upsert: {
+            args: Prisma.AssetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetPayload>
+          }
+          aggregate: {
+            args: Prisma.AssetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsset>
+          }
+          groupBy: {
+            args: Prisma.AssetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssetCountArgs<ExtArgs>
+            result: $Utils.Optional<AssetCountAggregateOutputType> | number
+          }
+        }
+      }
+      AssetAssignment: {
+        payload: Prisma.$AssetAssignmentPayload<ExtArgs>
+        fields: Prisma.AssetAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AssetAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AssetAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.AssetAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AssetAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.AssetAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.AssetAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.AssetAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AssetAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.AssetAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          update: {
+            args: Prisma.AssetAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.AssetAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AssetAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AssetAssignmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.AssetAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AssetAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.AssetAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAssetAssignment>
+          }
+          groupBy: {
+            args: Prisma.AssetAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AssetAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AssetAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<AssetAssignmentCountAggregateOutputType> | number
           }
         }
       }
@@ -9704,6 +9976,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     role?: RoleOmit
     user?: UserOmit
+    dashboardConfig?: DashboardConfigOmit
     notification?: NotificationOmit
     permission?: PermissionOmit
     rolePermission?: RolePermissionOmit
@@ -9733,6 +10006,8 @@ export namespace Prisma {
     task?: TaskOmit
     taskComment?: TaskCommentOmit
     taskDocument?: TaskDocumentOmit
+    asset?: AssetOmit
+    assetAssignment?: AssetAssignmentOmit
     schoolProgram?: SchoolProgramOmit
     programEvent?: ProgramEventOmit
     beneficiary?: BeneficiaryOmit
@@ -9936,6 +10211,7 @@ export namespace Prisma {
     compOffCredits: number
     travelRequests: number
     approvedTravel: number
+    revertedTravel: number
     reimbursementRequests: number
     reimbursementsApproved: number
     reimbursementsReimbursed: number
@@ -9949,6 +10225,9 @@ export namespace Prisma {
     pmTasks: number
     pmTaskComments: number
     notifications: number
+    assetAssignments: number
+    assetAssignmentsMade: number
+    createdAssets: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9967,6 +10246,7 @@ export namespace Prisma {
     compOffCredits?: boolean | UserCountOutputTypeCountCompOffCreditsArgs
     travelRequests?: boolean | UserCountOutputTypeCountTravelRequestsArgs
     approvedTravel?: boolean | UserCountOutputTypeCountApprovedTravelArgs
+    revertedTravel?: boolean | UserCountOutputTypeCountRevertedTravelArgs
     reimbursementRequests?: boolean | UserCountOutputTypeCountReimbursementRequestsArgs
     reimbursementsApproved?: boolean | UserCountOutputTypeCountReimbursementsApprovedArgs
     reimbursementsReimbursed?: boolean | UserCountOutputTypeCountReimbursementsReimbursedArgs
@@ -9980,6 +10260,9 @@ export namespace Prisma {
     pmTasks?: boolean | UserCountOutputTypeCountPmTasksArgs
     pmTaskComments?: boolean | UserCountOutputTypeCountPmTaskCommentsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    assetAssignments?: boolean | UserCountOutputTypeCountAssetAssignmentsArgs
+    assetAssignmentsMade?: boolean | UserCountOutputTypeCountAssetAssignmentsMadeArgs
+    createdAssets?: boolean | UserCountOutputTypeCountCreatedAssetsArgs
   }
 
   // Custom InputTypes
@@ -10101,6 +10384,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountRevertedTravelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TravelRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountReimbursementRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReimbursementWhereInput
   }
@@ -10187,6 +10477,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssetAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssetAssignmentsMadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetWhereInput
   }
 
 
@@ -10705,6 +11016,37 @@ export namespace Prisma {
    */
   export type TaskCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskDocumentWhereInput
+  }
+
+
+  /**
+   * Count Type AssetCountOutputType
+   */
+
+  export type AssetCountOutputType = {
+    assignments: number
+  }
+
+  export type AssetCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | AssetCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AssetCountOutputType without action
+   */
+  export type AssetCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetCountOutputType
+     */
+    select?: AssetCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AssetCountOutputType without action
+   */
+  export type AssetCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
   }
 
 
@@ -11954,6 +12296,7 @@ export namespace Prisma {
     updatedAt?: boolean
     users?: boolean | Role$usersArgs<ExtArgs>
     permissions?: boolean | Role$permissionsArgs<ExtArgs>
+    dashboardConfig?: boolean | Role$dashboardConfigArgs<ExtArgs>
     _count?: boolean | RoleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["role"]>
 
@@ -11988,6 +12331,7 @@ export namespace Prisma {
   export type RoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Role$usersArgs<ExtArgs>
     permissions?: boolean | Role$permissionsArgs<ExtArgs>
+    dashboardConfig?: boolean | Role$dashboardConfigArgs<ExtArgs>
     _count?: boolean | RoleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11998,6 +12342,7 @@ export namespace Prisma {
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[]
       permissions: Prisma.$RolePermissionPayload<ExtArgs>[]
+      dashboardConfig: Prisma.$DashboardConfigPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12402,6 +12747,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends Role$usersArgs<ExtArgs> = {}>(args?: Subset<T, Role$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     permissions<T extends Role$permissionsArgs<ExtArgs> = {}>(args?: Subset<T, Role$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RolePermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dashboardConfig<T extends Role$dashboardConfigArgs<ExtArgs> = {}>(args?: Subset<T, Role$dashboardConfigArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12878,6 +13224,25 @@ export namespace Prisma {
   }
 
   /**
+   * Role.dashboardConfig
+   */
+  export type Role$dashboardConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    where?: DashboardConfigWhereInput
+  }
+
+  /**
    * Role without action
    */
   export type RoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12938,10 +13303,16 @@ export namespace Prisma {
     emergencyContactPhone: string | null
     aadharNumber: string | null
     panCard: string | null
+    voterId: string | null
+    highestQualification: string | null
+    highestQualificationDetail: string | null
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
     dateOfJoining: Date | null
+    dateOfLeaving: Date | null
+    resignationReason: string | null
+    inactiveSince: Date | null
     avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
@@ -12971,10 +13342,16 @@ export namespace Prisma {
     emergencyContactPhone: string | null
     aadharNumber: string | null
     panCard: string | null
+    voterId: string | null
+    highestQualification: string | null
+    highestQualificationDetail: string | null
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
     dateOfJoining: Date | null
+    dateOfLeaving: Date | null
+    resignationReason: string | null
+    inactiveSince: Date | null
     avatar: string | null
     leavesTaken: number | null
     leavesRemaining: number | null
@@ -13004,10 +13381,16 @@ export namespace Prisma {
     emergencyContactPhone: number
     aadharNumber: number
     panCard: number
+    voterId: number
+    highestQualification: number
+    highestQualificationDetail: number
     bankName: number
     bankAccountNo: number
     bankIfsc: number
     dateOfJoining: number
+    dateOfLeaving: number
+    resignationReason: number
+    inactiveSince: number
     avatar: number
     leavesTaken: number
     leavesRemaining: number
@@ -13049,10 +13432,16 @@ export namespace Prisma {
     emergencyContactPhone?: true
     aadharNumber?: true
     panCard?: true
+    voterId?: true
+    highestQualification?: true
+    highestQualificationDetail?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
     dateOfJoining?: true
+    dateOfLeaving?: true
+    resignationReason?: true
+    inactiveSince?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -13082,10 +13471,16 @@ export namespace Prisma {
     emergencyContactPhone?: true
     aadharNumber?: true
     panCard?: true
+    voterId?: true
+    highestQualification?: true
+    highestQualificationDetail?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
     dateOfJoining?: true
+    dateOfLeaving?: true
+    resignationReason?: true
+    inactiveSince?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -13115,10 +13510,16 @@ export namespace Prisma {
     emergencyContactPhone?: true
     aadharNumber?: true
     panCard?: true
+    voterId?: true
+    highestQualification?: true
+    highestQualificationDetail?: true
     bankName?: true
     bankAccountNo?: true
     bankIfsc?: true
     dateOfJoining?: true
+    dateOfLeaving?: true
+    resignationReason?: true
+    inactiveSince?: true
     avatar?: true
     leavesTaken?: true
     leavesRemaining?: true
@@ -13235,10 +13636,16 @@ export namespace Prisma {
     emergencyContactPhone: string | null
     aadharNumber: string | null
     panCard: string | null
+    voterId: string | null
+    highestQualification: string | null
+    highestQualificationDetail: string | null
     bankName: string | null
     bankAccountNo: string | null
     bankIfsc: string | null
     dateOfJoining: Date | null
+    dateOfLeaving: Date | null
+    resignationReason: string | null
+    inactiveSince: Date | null
     avatar: string | null
     leavesTaken: number
     leavesRemaining: number
@@ -13287,10 +13694,16 @@ export namespace Prisma {
     emergencyContactPhone?: boolean
     aadharNumber?: boolean
     panCard?: boolean
+    voterId?: boolean
+    highestQualification?: boolean
+    highestQualificationDetail?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
     dateOfJoining?: boolean
+    dateOfLeaving?: boolean
+    resignationReason?: boolean
+    inactiveSince?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -13317,6 +13730,7 @@ export namespace Prisma {
     compOffCredits?: boolean | User$compOffCreditsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
+    revertedTravel?: boolean | User$revertedTravelArgs<ExtArgs>
     reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
     reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
     reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
@@ -13330,6 +13744,10 @@ export namespace Prisma {
     pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
     pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    dashboardConfig?: boolean | User$dashboardConfigArgs<ExtArgs>
+    assetAssignments?: boolean | User$assetAssignmentsArgs<ExtArgs>
+    assetAssignmentsMade?: boolean | User$assetAssignmentsMadeArgs<ExtArgs>
+    createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -13353,10 +13771,16 @@ export namespace Prisma {
     emergencyContactPhone?: boolean
     aadharNumber?: boolean
     panCard?: boolean
+    voterId?: boolean
+    highestQualification?: boolean
+    highestQualificationDetail?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
     dateOfJoining?: boolean
+    dateOfLeaving?: boolean
+    resignationReason?: boolean
+    inactiveSince?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -13389,10 +13813,16 @@ export namespace Prisma {
     emergencyContactPhone?: boolean
     aadharNumber?: boolean
     panCard?: boolean
+    voterId?: boolean
+    highestQualification?: boolean
+    highestQualificationDetail?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
     dateOfJoining?: boolean
+    dateOfLeaving?: boolean
+    resignationReason?: boolean
+    inactiveSince?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -13425,10 +13855,16 @@ export namespace Prisma {
     emergencyContactPhone?: boolean
     aadharNumber?: boolean
     panCard?: boolean
+    voterId?: boolean
+    highestQualification?: boolean
+    highestQualificationDetail?: boolean
     bankName?: boolean
     bankAccountNo?: boolean
     bankIfsc?: boolean
     dateOfJoining?: boolean
+    dateOfLeaving?: boolean
+    resignationReason?: boolean
+    inactiveSince?: boolean
     avatar?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
@@ -13438,7 +13874,7 @@ export namespace Prisma {
     managerId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt" | "createdById" | "managerId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "voterId" | "highestQualification" | "highestQualificationDetail" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "dateOfLeaving" | "resignationReason" | "inactiveSince" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt" | "createdById" | "managerId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
@@ -13459,6 +13895,7 @@ export namespace Prisma {
     compOffCredits?: boolean | User$compOffCreditsArgs<ExtArgs>
     travelRequests?: boolean | User$travelRequestsArgs<ExtArgs>
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
+    revertedTravel?: boolean | User$revertedTravelArgs<ExtArgs>
     reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
     reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
     reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
@@ -13472,6 +13909,10 @@ export namespace Prisma {
     pmTasks?: boolean | User$pmTasksArgs<ExtArgs>
     pmTaskComments?: boolean | User$pmTaskCommentsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
+    dashboardConfig?: boolean | User$dashboardConfigArgs<ExtArgs>
+    assetAssignments?: boolean | User$assetAssignmentsArgs<ExtArgs>
+    assetAssignmentsMade?: boolean | User$assetAssignmentsMadeArgs<ExtArgs>
+    createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13507,6 +13948,7 @@ export namespace Prisma {
       compOffCredits: Prisma.$CompOffCreditPayload<ExtArgs>[]
       travelRequests: Prisma.$TravelRequestPayload<ExtArgs>[]
       approvedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
+      revertedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
       reimbursementRequests: Prisma.$ReimbursementPayload<ExtArgs>[]
       reimbursementsApproved: Prisma.$ReimbursementPayload<ExtArgs>[]
       reimbursementsReimbursed: Prisma.$ReimbursementPayload<ExtArgs>[]
@@ -13520,6 +13962,10 @@ export namespace Prisma {
       pmTasks: Prisma.$ProgramManagerTaskPayload<ExtArgs>[]
       pmTaskComments: Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      dashboardConfig: Prisma.$DashboardConfigPayload<ExtArgs> | null
+      assetAssignments: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+      assetAssignmentsMade: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+      createdAssets: Prisma.$AssetPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13541,10 +13987,16 @@ export namespace Prisma {
       emergencyContactPhone: string | null
       aadharNumber: string | null
       panCard: string | null
+      voterId: string | null
+      highestQualification: string | null
+      highestQualificationDetail: string | null
       bankName: string | null
       bankAccountNo: string | null
       bankIfsc: string | null
       dateOfJoining: Date | null
+      dateOfLeaving: Date | null
+      resignationReason: string | null
+      inactiveSince: Date | null
       avatar: string | null
       leavesTaken: number
       leavesRemaining: number
@@ -13965,6 +14417,7 @@ export namespace Prisma {
     compOffCredits<T extends User$compOffCreditsArgs<ExtArgs> = {}>(args?: Subset<T, User$compOffCreditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CompOffCreditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     travelRequests<T extends User$travelRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$travelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvedTravel<T extends User$approvedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    revertedTravel<T extends User$revertedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$revertedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementRequests<T extends User$reimbursementRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementsApproved<T extends User$reimbursementsApprovedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementsReimbursed<T extends User$reimbursementsReimbursedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsReimbursedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13978,6 +14431,10 @@ export namespace Prisma {
     pmTasks<T extends User$pmTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pmTaskComments<T extends User$pmTaskCommentsArgs<ExtArgs> = {}>(args?: Subset<T, User$pmTaskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgramManagerTaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dashboardConfig<T extends User$dashboardConfigArgs<ExtArgs> = {}>(args?: Subset<T, User$dashboardConfigArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assetAssignments<T extends User$assetAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assetAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assetAssignmentsMade<T extends User$assetAssignmentsMadeArgs<ExtArgs> = {}>(args?: Subset<T, User$assetAssignmentsMadeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdAssets<T extends User$createdAssetsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14026,10 +14483,16 @@ export namespace Prisma {
     readonly emergencyContactPhone: FieldRef<"User", 'String'>
     readonly aadharNumber: FieldRef<"User", 'String'>
     readonly panCard: FieldRef<"User", 'String'>
+    readonly voterId: FieldRef<"User", 'String'>
+    readonly highestQualification: FieldRef<"User", 'String'>
+    readonly highestQualificationDetail: FieldRef<"User", 'String'>
     readonly bankName: FieldRef<"User", 'String'>
     readonly bankAccountNo: FieldRef<"User", 'String'>
     readonly bankIfsc: FieldRef<"User", 'String'>
     readonly dateOfJoining: FieldRef<"User", 'DateTime'>
+    readonly dateOfLeaving: FieldRef<"User", 'DateTime'>
+    readonly resignationReason: FieldRef<"User", 'String'>
+    readonly inactiveSince: FieldRef<"User", 'DateTime'>
     readonly avatar: FieldRef<"User", 'String'>
     readonly leavesTaken: FieldRef<"User", 'Int'>
     readonly leavesRemaining: FieldRef<"User", 'Int'>
@@ -14855,6 +15318,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.revertedTravel
+   */
+  export type User$revertedTravelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TravelRequest
+     */
+    select?: TravelRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TravelRequest
+     */
+    omit?: TravelRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TravelRequestInclude<ExtArgs> | null
+    where?: TravelRequestWhereInput
+    orderBy?: TravelRequestOrderByWithRelationInput | TravelRequestOrderByWithRelationInput[]
+    cursor?: TravelRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TravelRequestScalarFieldEnum | TravelRequestScalarFieldEnum[]
+  }
+
+  /**
    * User.reimbursementRequests
    */
   export type User$reimbursementRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15167,6 +15654,97 @@ export namespace Prisma {
   }
 
   /**
+   * User.dashboardConfig
+   */
+  export type User$dashboardConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    where?: DashboardConfigWhereInput
+  }
+
+  /**
+   * User.assetAssignments
+   */
+  export type User$assetAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.assetAssignmentsMade
+   */
+  export type User$assetAssignmentsMadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdAssets
+   */
+  export type User$createdAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    where?: AssetWhereInput
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    cursor?: AssetWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15182,6 +15760,1146 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DashboardConfig
+   */
+
+  export type AggregateDashboardConfig = {
+    _count: DashboardConfigCountAggregateOutputType | null
+    _min: DashboardConfigMinAggregateOutputType | null
+    _max: DashboardConfigMaxAggregateOutputType | null
+  }
+
+  export type DashboardConfigMinAggregateOutputType = {
+    id: string | null
+    roleId: string | null
+    userId: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DashboardConfigMaxAggregateOutputType = {
+    id: string | null
+    roleId: string | null
+    userId: string | null
+    updatedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DashboardConfigCountAggregateOutputType = {
+    id: number
+    roleId: number
+    userId: number
+    kpiKeys: number
+    linkKeys: number
+    updatedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DashboardConfigMinAggregateInputType = {
+    id?: true
+    roleId?: true
+    userId?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DashboardConfigMaxAggregateInputType = {
+    id?: true
+    roleId?: true
+    userId?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DashboardConfigCountAggregateInputType = {
+    id?: true
+    roleId?: true
+    userId?: true
+    kpiKeys?: true
+    linkKeys?: true
+    updatedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DashboardConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DashboardConfig to aggregate.
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardConfigs to fetch.
+     */
+    orderBy?: DashboardConfigOrderByWithRelationInput | DashboardConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DashboardConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DashboardConfigs
+    **/
+    _count?: true | DashboardConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DashboardConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DashboardConfigMaxAggregateInputType
+  }
+
+  export type GetDashboardConfigAggregateType<T extends DashboardConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateDashboardConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDashboardConfig[P]>
+      : GetScalarType<T[P], AggregateDashboardConfig[P]>
+  }
+
+
+
+
+  export type DashboardConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DashboardConfigWhereInput
+    orderBy?: DashboardConfigOrderByWithAggregationInput | DashboardConfigOrderByWithAggregationInput[]
+    by: DashboardConfigScalarFieldEnum[] | DashboardConfigScalarFieldEnum
+    having?: DashboardConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DashboardConfigCountAggregateInputType | true
+    _min?: DashboardConfigMinAggregateInputType
+    _max?: DashboardConfigMaxAggregateInputType
+  }
+
+  export type DashboardConfigGroupByOutputType = {
+    id: string
+    roleId: string | null
+    userId: string | null
+    kpiKeys: string[]
+    linkKeys: string[]
+    updatedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: DashboardConfigCountAggregateOutputType | null
+    _min: DashboardConfigMinAggregateOutputType | null
+    _max: DashboardConfigMaxAggregateOutputType | null
+  }
+
+  type GetDashboardConfigGroupByPayload<T extends DashboardConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DashboardConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DashboardConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DashboardConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], DashboardConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DashboardConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    userId?: boolean
+    kpiKeys?: boolean
+    linkKeys?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }, ExtArgs["result"]["dashboardConfig"]>
+
+  export type DashboardConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    userId?: boolean
+    kpiKeys?: boolean
+    linkKeys?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }, ExtArgs["result"]["dashboardConfig"]>
+
+  export type DashboardConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    roleId?: boolean
+    userId?: boolean
+    kpiKeys?: boolean
+    linkKeys?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }, ExtArgs["result"]["dashboardConfig"]>
+
+  export type DashboardConfigSelectScalar = {
+    id?: boolean
+    roleId?: boolean
+    userId?: boolean
+    kpiKeys?: boolean
+    linkKeys?: boolean
+    updatedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DashboardConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roleId" | "userId" | "kpiKeys" | "linkKeys" | "updatedById" | "createdAt" | "updatedAt", ExtArgs["result"]["dashboardConfig"]>
+  export type DashboardConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }
+  export type DashboardConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }
+  export type DashboardConfigIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    role?: boolean | DashboardConfig$roleArgs<ExtArgs>
+    user?: boolean | DashboardConfig$userArgs<ExtArgs>
+  }
+
+  export type $DashboardConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DashboardConfig"
+    objects: {
+      role: Prisma.$RolePayload<ExtArgs> | null
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      roleId: string | null
+      userId: string | null
+      kpiKeys: string[]
+      linkKeys: string[]
+      updatedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dashboardConfig"]>
+    composites: {}
+  }
+
+  type DashboardConfigGetPayload<S extends boolean | null | undefined | DashboardConfigDefaultArgs> = $Result.GetResult<Prisma.$DashboardConfigPayload, S>
+
+  type DashboardConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DashboardConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DashboardConfigCountAggregateInputType | true
+    }
+
+  export interface DashboardConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DashboardConfig'], meta: { name: 'DashboardConfig' } }
+    /**
+     * Find zero or one DashboardConfig that matches the filter.
+     * @param {DashboardConfigFindUniqueArgs} args - Arguments to find a DashboardConfig
+     * @example
+     * // Get one DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DashboardConfigFindUniqueArgs>(args: SelectSubset<T, DashboardConfigFindUniqueArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DashboardConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DashboardConfigFindUniqueOrThrowArgs} args - Arguments to find a DashboardConfig
+     * @example
+     * // Get one DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DashboardConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, DashboardConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DashboardConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigFindFirstArgs} args - Arguments to find a DashboardConfig
+     * @example
+     * // Get one DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DashboardConfigFindFirstArgs>(args?: SelectSubset<T, DashboardConfigFindFirstArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DashboardConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigFindFirstOrThrowArgs} args - Arguments to find a DashboardConfig
+     * @example
+     * // Get one DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DashboardConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, DashboardConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DashboardConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DashboardConfigs
+     * const dashboardConfigs = await prisma.dashboardConfig.findMany()
+     * 
+     * // Get first 10 DashboardConfigs
+     * const dashboardConfigs = await prisma.dashboardConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dashboardConfigWithIdOnly = await prisma.dashboardConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DashboardConfigFindManyArgs>(args?: SelectSubset<T, DashboardConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DashboardConfig.
+     * @param {DashboardConfigCreateArgs} args - Arguments to create a DashboardConfig.
+     * @example
+     * // Create one DashboardConfig
+     * const DashboardConfig = await prisma.dashboardConfig.create({
+     *   data: {
+     *     // ... data to create a DashboardConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends DashboardConfigCreateArgs>(args: SelectSubset<T, DashboardConfigCreateArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DashboardConfigs.
+     * @param {DashboardConfigCreateManyArgs} args - Arguments to create many DashboardConfigs.
+     * @example
+     * // Create many DashboardConfigs
+     * const dashboardConfig = await prisma.dashboardConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DashboardConfigCreateManyArgs>(args?: SelectSubset<T, DashboardConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DashboardConfigs and returns the data saved in the database.
+     * @param {DashboardConfigCreateManyAndReturnArgs} args - Arguments to create many DashboardConfigs.
+     * @example
+     * // Create many DashboardConfigs
+     * const dashboardConfig = await prisma.dashboardConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DashboardConfigs and only return the `id`
+     * const dashboardConfigWithIdOnly = await prisma.dashboardConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DashboardConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, DashboardConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DashboardConfig.
+     * @param {DashboardConfigDeleteArgs} args - Arguments to delete one DashboardConfig.
+     * @example
+     * // Delete one DashboardConfig
+     * const DashboardConfig = await prisma.dashboardConfig.delete({
+     *   where: {
+     *     // ... filter to delete one DashboardConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DashboardConfigDeleteArgs>(args: SelectSubset<T, DashboardConfigDeleteArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DashboardConfig.
+     * @param {DashboardConfigUpdateArgs} args - Arguments to update one DashboardConfig.
+     * @example
+     * // Update one DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DashboardConfigUpdateArgs>(args: SelectSubset<T, DashboardConfigUpdateArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DashboardConfigs.
+     * @param {DashboardConfigDeleteManyArgs} args - Arguments to filter DashboardConfigs to delete.
+     * @example
+     * // Delete a few DashboardConfigs
+     * const { count } = await prisma.dashboardConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DashboardConfigDeleteManyArgs>(args?: SelectSubset<T, DashboardConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DashboardConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DashboardConfigs
+     * const dashboardConfig = await prisma.dashboardConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DashboardConfigUpdateManyArgs>(args: SelectSubset<T, DashboardConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DashboardConfigs and returns the data updated in the database.
+     * @param {DashboardConfigUpdateManyAndReturnArgs} args - Arguments to update many DashboardConfigs.
+     * @example
+     * // Update many DashboardConfigs
+     * const dashboardConfig = await prisma.dashboardConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DashboardConfigs and only return the `id`
+     * const dashboardConfigWithIdOnly = await prisma.dashboardConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DashboardConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, DashboardConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DashboardConfig.
+     * @param {DashboardConfigUpsertArgs} args - Arguments to update or create a DashboardConfig.
+     * @example
+     * // Update or create a DashboardConfig
+     * const dashboardConfig = await prisma.dashboardConfig.upsert({
+     *   create: {
+     *     // ... data to create a DashboardConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DashboardConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DashboardConfigUpsertArgs>(args: SelectSubset<T, DashboardConfigUpsertArgs<ExtArgs>>): Prisma__DashboardConfigClient<$Result.GetResult<Prisma.$DashboardConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DashboardConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigCountArgs} args - Arguments to filter DashboardConfigs to count.
+     * @example
+     * // Count the number of DashboardConfigs
+     * const count = await prisma.dashboardConfig.count({
+     *   where: {
+     *     // ... the filter for the DashboardConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends DashboardConfigCountArgs>(
+      args?: Subset<T, DashboardConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DashboardConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DashboardConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DashboardConfigAggregateArgs>(args: Subset<T, DashboardConfigAggregateArgs>): Prisma.PrismaPromise<GetDashboardConfigAggregateType<T>>
+
+    /**
+     * Group by DashboardConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DashboardConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DashboardConfigGroupByArgs['orderBy'] }
+        : { orderBy?: DashboardConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DashboardConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDashboardConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DashboardConfig model
+   */
+  readonly fields: DashboardConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DashboardConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DashboardConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    role<T extends DashboardConfig$roleArgs<ExtArgs> = {}>(args?: Subset<T, DashboardConfig$roleArgs<ExtArgs>>): Prisma__RoleClient<$Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    user<T extends DashboardConfig$userArgs<ExtArgs> = {}>(args?: Subset<T, DashboardConfig$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DashboardConfig model
+   */
+  interface DashboardConfigFieldRefs {
+    readonly id: FieldRef<"DashboardConfig", 'String'>
+    readonly roleId: FieldRef<"DashboardConfig", 'String'>
+    readonly userId: FieldRef<"DashboardConfig", 'String'>
+    readonly kpiKeys: FieldRef<"DashboardConfig", 'String[]'>
+    readonly linkKeys: FieldRef<"DashboardConfig", 'String[]'>
+    readonly updatedById: FieldRef<"DashboardConfig", 'String'>
+    readonly createdAt: FieldRef<"DashboardConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"DashboardConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DashboardConfig findUnique
+   */
+  export type DashboardConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which DashboardConfig to fetch.
+     */
+    where: DashboardConfigWhereUniqueInput
+  }
+
+  /**
+   * DashboardConfig findUniqueOrThrow
+   */
+  export type DashboardConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which DashboardConfig to fetch.
+     */
+    where: DashboardConfigWhereUniqueInput
+  }
+
+  /**
+   * DashboardConfig findFirst
+   */
+  export type DashboardConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which DashboardConfig to fetch.
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardConfigs to fetch.
+     */
+    orderBy?: DashboardConfigOrderByWithRelationInput | DashboardConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DashboardConfigs.
+     */
+    cursor?: DashboardConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardConfigs.
+     */
+    distinct?: DashboardConfigScalarFieldEnum | DashboardConfigScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardConfig findFirstOrThrow
+   */
+  export type DashboardConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which DashboardConfig to fetch.
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardConfigs to fetch.
+     */
+    orderBy?: DashboardConfigOrderByWithRelationInput | DashboardConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DashboardConfigs.
+     */
+    cursor?: DashboardConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardConfigs.
+     */
+    distinct?: DashboardConfigScalarFieldEnum | DashboardConfigScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardConfig findMany
+   */
+  export type DashboardConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which DashboardConfigs to fetch.
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardConfigs to fetch.
+     */
+    orderBy?: DashboardConfigOrderByWithRelationInput | DashboardConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DashboardConfigs.
+     */
+    cursor?: DashboardConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardConfigs.
+     */
+    distinct?: DashboardConfigScalarFieldEnum | DashboardConfigScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardConfig create
+   */
+  export type DashboardConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DashboardConfig.
+     */
+    data: XOR<DashboardConfigCreateInput, DashboardConfigUncheckedCreateInput>
+  }
+
+  /**
+   * DashboardConfig createMany
+   */
+  export type DashboardConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DashboardConfigs.
+     */
+    data: DashboardConfigCreateManyInput | DashboardConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DashboardConfig createManyAndReturn
+   */
+  export type DashboardConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many DashboardConfigs.
+     */
+    data: DashboardConfigCreateManyInput | DashboardConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DashboardConfig update
+   */
+  export type DashboardConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DashboardConfig.
+     */
+    data: XOR<DashboardConfigUpdateInput, DashboardConfigUncheckedUpdateInput>
+    /**
+     * Choose, which DashboardConfig to update.
+     */
+    where: DashboardConfigWhereUniqueInput
+  }
+
+  /**
+   * DashboardConfig updateMany
+   */
+  export type DashboardConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DashboardConfigs.
+     */
+    data: XOR<DashboardConfigUpdateManyMutationInput, DashboardConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which DashboardConfigs to update
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * Limit how many DashboardConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DashboardConfig updateManyAndReturn
+   */
+  export type DashboardConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update DashboardConfigs.
+     */
+    data: XOR<DashboardConfigUpdateManyMutationInput, DashboardConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which DashboardConfigs to update
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * Limit how many DashboardConfigs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DashboardConfig upsert
+   */
+  export type DashboardConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DashboardConfig to update in case it exists.
+     */
+    where: DashboardConfigWhereUniqueInput
+    /**
+     * In case the DashboardConfig found by the `where` argument doesn't exist, create a new DashboardConfig with this data.
+     */
+    create: XOR<DashboardConfigCreateInput, DashboardConfigUncheckedCreateInput>
+    /**
+     * In case the DashboardConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DashboardConfigUpdateInput, DashboardConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * DashboardConfig delete
+   */
+  export type DashboardConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
+    /**
+     * Filter which DashboardConfig to delete.
+     */
+    where: DashboardConfigWhereUniqueInput
+  }
+
+  /**
+   * DashboardConfig deleteMany
+   */
+  export type DashboardConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DashboardConfigs to delete
+     */
+    where?: DashboardConfigWhereInput
+    /**
+     * Limit how many DashboardConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DashboardConfig.role
+   */
+  export type DashboardConfig$roleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Role
+     */
+    select?: RoleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Role
+     */
+    omit?: RoleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoleInclude<ExtArgs> | null
+    where?: RoleWhereInput
+  }
+
+  /**
+   * DashboardConfig.user
+   */
+  export type DashboardConfig$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * DashboardConfig without action
+   */
+  export type DashboardConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardConfig
+     */
+    select?: DashboardConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardConfig
+     */
+    omit?: DashboardConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DashboardConfigInclude<ExtArgs> | null
   }
 
 
@@ -15204,6 +16922,7 @@ export namespace Prisma {
     link: string | null
     read: boolean | null
     actorId: string | null
+    dedupeKey: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15217,6 +16936,7 @@ export namespace Prisma {
     link: string | null
     read: boolean | null
     actorId: string | null
+    dedupeKey: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15231,6 +16951,7 @@ export namespace Prisma {
     read: number
     actorId: number
     metadata: number
+    dedupeKey: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -15246,6 +16967,7 @@ export namespace Prisma {
     link?: true
     read?: true
     actorId?: true
+    dedupeKey?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15259,6 +16981,7 @@ export namespace Prisma {
     link?: true
     read?: true
     actorId?: true
+    dedupeKey?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15273,6 +16996,7 @@ export namespace Prisma {
     read?: true
     actorId?: true
     metadata?: true
+    dedupeKey?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15360,6 +17084,7 @@ export namespace Prisma {
     read: boolean
     actorId: string | null
     metadata: JsonValue | null
+    dedupeKey: string | null
     createdAt: Date
     updatedAt: Date
     _count: NotificationCountAggregateOutputType | null
@@ -15391,6 +17116,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: boolean
     metadata?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -15406,6 +17132,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: boolean
     metadata?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -15421,6 +17148,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: boolean
     metadata?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -15436,11 +17164,12 @@ export namespace Prisma {
     read?: boolean
     actorId?: boolean
     metadata?: boolean
+    dedupeKey?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "title" | "message" | "link" | "read" | "actorId" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "title" | "message" | "link" | "read" | "actorId" | "metadata" | "dedupeKey" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -15466,6 +17195,7 @@ export namespace Prisma {
       read: boolean
       actorId: string | null
       metadata: Prisma.JsonValue | null
+      dedupeKey: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["notification"]>
@@ -15901,6 +17631,7 @@ export namespace Prisma {
     readonly read: FieldRef<"Notification", 'Boolean'>
     readonly actorId: FieldRef<"Notification", 'String'>
     readonly metadata: FieldRef<"Notification", 'Json'>
+    readonly dedupeKey: FieldRef<"Notification", 'String'>
     readonly createdAt: FieldRef<"Notification", 'DateTime'>
     readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
@@ -45624,6 +47355,7 @@ export namespace Prisma {
     deadline: Date | null
     status: string | null
     priority: string | null
+    timeSlot: string | null
     isPlanned: boolean | null
     completionDate: Date | null
     createdAt: Date | null
@@ -45640,6 +47372,7 @@ export namespace Prisma {
     deadline: Date | null
     status: string | null
     priority: string | null
+    timeSlot: string | null
     isPlanned: boolean | null
     completionDate: Date | null
     createdAt: Date | null
@@ -45656,6 +47389,7 @@ export namespace Prisma {
     deadline: number
     status: number
     priority: number
+    timeSlot: number
     isPlanned: number
     completionDate: number
     createdAt: number
@@ -45674,6 +47408,7 @@ export namespace Prisma {
     deadline?: true
     status?: true
     priority?: true
+    timeSlot?: true
     isPlanned?: true
     completionDate?: true
     createdAt?: true
@@ -45690,6 +47425,7 @@ export namespace Prisma {
     deadline?: true
     status?: true
     priority?: true
+    timeSlot?: true
     isPlanned?: true
     completionDate?: true
     createdAt?: true
@@ -45706,6 +47442,7 @@ export namespace Prisma {
     deadline?: true
     status?: true
     priority?: true
+    timeSlot?: true
     isPlanned?: true
     completionDate?: true
     createdAt?: true
@@ -45795,6 +47532,7 @@ export namespace Prisma {
     deadline: Date | null
     status: string
     priority: string
+    timeSlot: string
     isPlanned: boolean
     completionDate: Date | null
     createdAt: Date
@@ -45828,6 +47566,7 @@ export namespace Prisma {
     deadline?: boolean
     status?: boolean
     priority?: boolean
+    timeSlot?: boolean
     isPlanned?: boolean
     completionDate?: boolean
     createdAt?: boolean
@@ -45849,6 +47588,7 @@ export namespace Prisma {
     deadline?: boolean
     status?: boolean
     priority?: boolean
+    timeSlot?: boolean
     isPlanned?: boolean
     completionDate?: boolean
     createdAt?: boolean
@@ -45867,6 +47607,7 @@ export namespace Prisma {
     deadline?: boolean
     status?: boolean
     priority?: boolean
+    timeSlot?: boolean
     isPlanned?: boolean
     completionDate?: boolean
     createdAt?: boolean
@@ -45885,13 +47626,14 @@ export namespace Prisma {
     deadline?: boolean
     status?: boolean
     priority?: boolean
+    timeSlot?: boolean
     isPlanned?: boolean
     completionDate?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "assigneeId" | "assignedById" | "plannedDate" | "deadline" | "status" | "priority" | "isPlanned" | "completionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "assigneeId" | "assignedById" | "plannedDate" | "deadline" | "status" | "priority" | "timeSlot" | "isPlanned" | "completionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     assignee?: boolean | UserDefaultArgs<ExtArgs>
     assignedBy?: boolean | Task$assignedByArgs<ExtArgs>
@@ -45926,6 +47668,7 @@ export namespace Prisma {
       deadline: Date | null
       status: string
       priority: string
+      timeSlot: string
       isPlanned: boolean
       completionDate: Date | null
       createdAt: Date
@@ -46366,6 +48109,7 @@ export namespace Prisma {
     readonly deadline: FieldRef<"Task", 'DateTime'>
     readonly status: FieldRef<"Task", 'String'>
     readonly priority: FieldRef<"Task", 'String'>
+    readonly timeSlot: FieldRef<"Task", 'String'>
     readonly isPlanned: FieldRef<"Task", 'Boolean'>
     readonly completionDate: FieldRef<"Task", 'DateTime'>
     readonly createdAt: FieldRef<"Task", 'DateTime'>
@@ -49100,6 +50844,2372 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TaskDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Asset
+   */
+
+  export type AggregateAsset = {
+    _count: AssetCountAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  export type AssetMinAggregateOutputType = {
+    id: string | null
+    assetCode: string | null
+    name: string | null
+    category: string | null
+    serialNumber: string | null
+    description: string | null
+    condition: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetMaxAggregateOutputType = {
+    id: string | null
+    assetCode: string | null
+    name: string | null
+    category: string | null
+    serialNumber: string | null
+    description: string | null
+    condition: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetCountAggregateOutputType = {
+    id: number
+    assetCode: number
+    name: number
+    category: number
+    serialNumber: number
+    description: number
+    condition: number
+    notes: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AssetMinAggregateInputType = {
+    id?: true
+    assetCode?: true
+    name?: true
+    category?: true
+    serialNumber?: true
+    description?: true
+    condition?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetMaxAggregateInputType = {
+    id?: true
+    assetCode?: true
+    name?: true
+    category?: true
+    serialNumber?: true
+    description?: true
+    condition?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetCountAggregateInputType = {
+    id?: true
+    assetCode?: true
+    name?: true
+    category?: true
+    serialNumber?: true
+    description?: true
+    condition?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AssetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Asset to aggregate.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Assets
+    **/
+    _count?: true | AssetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type GetAssetAggregateType<T extends AssetAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsset]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsset[P]>
+      : GetScalarType<T[P], AggregateAsset[P]>
+  }
+
+
+
+
+  export type AssetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetWhereInput
+    orderBy?: AssetOrderByWithAggregationInput | AssetOrderByWithAggregationInput[]
+    by: AssetScalarFieldEnum[] | AssetScalarFieldEnum
+    having?: AssetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssetCountAggregateInputType | true
+    _min?: AssetMinAggregateInputType
+    _max?: AssetMaxAggregateInputType
+  }
+
+  export type AssetGroupByOutputType = {
+    id: string
+    assetCode: string
+    name: string
+    category: string | null
+    serialNumber: string | null
+    description: string | null
+    condition: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AssetCountAggregateOutputType | null
+    _min: AssetMinAggregateOutputType | null
+    _max: AssetMaxAggregateOutputType | null
+  }
+
+  type GetAssetGroupByPayload<T extends AssetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssetGroupByOutputType[P]>
+            : GetScalarType<T[P], AssetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetCode?: boolean
+    name?: boolean
+    category?: boolean
+    serialNumber?: boolean
+    description?: boolean
+    condition?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+    assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
+    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetCode?: boolean
+    name?: boolean
+    category?: boolean
+    serialNumber?: boolean
+    description?: boolean
+    condition?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetCode?: boolean
+    name?: boolean
+    category?: boolean
+    serialNumber?: boolean
+    description?: boolean
+    condition?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["asset"]>
+
+  export type AssetSelectScalar = {
+    id?: boolean
+    assetCode?: boolean
+    name?: boolean
+    category?: boolean
+    serialNumber?: boolean
+    description?: boolean
+    condition?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assetCode" | "name" | "category" | "serialNumber" | "description" | "condition" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+  export type AssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+    assignments?: boolean | Asset$assignmentsArgs<ExtArgs>
+    _count?: boolean | AssetCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type AssetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+  }
+  export type AssetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Asset$createdByArgs<ExtArgs>
+  }
+
+  export type $AssetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Asset"
+    objects: {
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      assignments: Prisma.$AssetAssignmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      assetCode: string
+      name: string
+      category: string | null
+      serialNumber: string | null
+      description: string | null
+      condition: string | null
+      notes: string | null
+      createdById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["asset"]>
+    composites: {}
+  }
+
+  type AssetGetPayload<S extends boolean | null | undefined | AssetDefaultArgs> = $Result.GetResult<Prisma.$AssetPayload, S>
+
+  type AssetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssetCountAggregateInputType | true
+    }
+
+  export interface AssetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Asset'], meta: { name: 'Asset' } }
+    /**
+     * Find zero or one Asset that matches the filter.
+     * @param {AssetFindUniqueArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssetFindUniqueArgs>(args: SelectSubset<T, AssetFindUniqueArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Asset that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssetFindUniqueOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssetFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssetFindFirstArgs>(args?: SelectSubset<T, AssetFindFirstArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Asset that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindFirstOrThrowArgs} args - Arguments to find a Asset
+     * @example
+     * // Get one Asset
+     * const asset = await prisma.asset.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssetFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Assets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Assets
+     * const assets = await prisma.asset.findMany()
+     * 
+     * // Get first 10 Assets
+     * const assets = await prisma.asset.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assetWithIdOnly = await prisma.asset.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssetFindManyArgs>(args?: SelectSubset<T, AssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Asset.
+     * @param {AssetCreateArgs} args - Arguments to create a Asset.
+     * @example
+     * // Create one Asset
+     * const Asset = await prisma.asset.create({
+     *   data: {
+     *     // ... data to create a Asset
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssetCreateArgs>(args: SelectSubset<T, AssetCreateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Assets.
+     * @param {AssetCreateManyArgs} args - Arguments to create many Assets.
+     * @example
+     * // Create many Assets
+     * const asset = await prisma.asset.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssetCreateManyArgs>(args?: SelectSubset<T, AssetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Assets and returns the data saved in the database.
+     * @param {AssetCreateManyAndReturnArgs} args - Arguments to create many Assets.
+     * @example
+     * // Create many Assets
+     * const asset = await prisma.asset.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Assets and only return the `id`
+     * const assetWithIdOnly = await prisma.asset.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AssetCreateManyAndReturnArgs>(args?: SelectSubset<T, AssetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Asset.
+     * @param {AssetDeleteArgs} args - Arguments to delete one Asset.
+     * @example
+     * // Delete one Asset
+     * const Asset = await prisma.asset.delete({
+     *   where: {
+     *     // ... filter to delete one Asset
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssetDeleteArgs>(args: SelectSubset<T, AssetDeleteArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Asset.
+     * @param {AssetUpdateArgs} args - Arguments to update one Asset.
+     * @example
+     * // Update one Asset
+     * const asset = await prisma.asset.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssetUpdateArgs>(args: SelectSubset<T, AssetUpdateArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Assets.
+     * @param {AssetDeleteManyArgs} args - Arguments to filter Assets to delete.
+     * @example
+     * // Delete a few Assets
+     * const { count } = await prisma.asset.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssetDeleteManyArgs>(args?: SelectSubset<T, AssetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Assets
+     * const asset = await prisma.asset.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssetUpdateManyArgs>(args: SelectSubset<T, AssetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Assets and returns the data updated in the database.
+     * @param {AssetUpdateManyAndReturnArgs} args - Arguments to update many Assets.
+     * @example
+     * // Update many Assets
+     * const asset = await prisma.asset.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Assets and only return the `id`
+     * const assetWithIdOnly = await prisma.asset.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AssetUpdateManyAndReturnArgs>(args: SelectSubset<T, AssetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Asset.
+     * @param {AssetUpsertArgs} args - Arguments to update or create a Asset.
+     * @example
+     * // Update or create a Asset
+     * const asset = await prisma.asset.upsert({
+     *   create: {
+     *     // ... data to create a Asset
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Asset we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssetUpsertArgs>(args: SelectSubset<T, AssetUpsertArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Assets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetCountArgs} args - Arguments to filter Assets to count.
+     * @example
+     * // Count the number of Assets
+     * const count = await prisma.asset.count({
+     *   where: {
+     *     // ... the filter for the Assets we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssetCountArgs>(
+      args?: Subset<T, AssetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssetAggregateArgs>(args: Subset<T, AssetAggregateArgs>): Prisma.PrismaPromise<GetAssetAggregateType<T>>
+
+    /**
+     * Group by Asset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssetGroupByArgs['orderBy'] }
+        : { orderBy?: AssetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Asset model
+   */
+  readonly fields: AssetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Asset.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends Asset$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Asset$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignments<T extends Asset$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Asset$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Asset model
+   */
+  interface AssetFieldRefs {
+    readonly id: FieldRef<"Asset", 'String'>
+    readonly assetCode: FieldRef<"Asset", 'String'>
+    readonly name: FieldRef<"Asset", 'String'>
+    readonly category: FieldRef<"Asset", 'String'>
+    readonly serialNumber: FieldRef<"Asset", 'String'>
+    readonly description: FieldRef<"Asset", 'String'>
+    readonly condition: FieldRef<"Asset", 'String'>
+    readonly notes: FieldRef<"Asset", 'String'>
+    readonly createdById: FieldRef<"Asset", 'String'>
+    readonly createdAt: FieldRef<"Asset", 'DateTime'>
+    readonly updatedAt: FieldRef<"Asset", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Asset findUnique
+   */
+  export type AssetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findUniqueOrThrow
+   */
+  export type AssetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset findFirst
+   */
+  export type AssetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findFirstOrThrow
+   */
+  export type AssetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Asset to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset findMany
+   */
+  export type AssetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter, which Assets to fetch.
+     */
+    where?: AssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Assets to fetch.
+     */
+    orderBy?: AssetOrderByWithRelationInput | AssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Assets.
+     */
+    cursor?: AssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Assets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Assets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Assets.
+     */
+    distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * Asset create
+   */
+  export type AssetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Asset.
+     */
+    data: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+  }
+
+  /**
+   * Asset createMany
+   */
+  export type AssetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Assets.
+     */
+    data: AssetCreateManyInput | AssetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Asset createManyAndReturn
+   */
+  export type AssetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * The data used to create many Assets.
+     */
+    data: AssetCreateManyInput | AssetCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Asset update
+   */
+  export type AssetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Asset.
+     */
+    data: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+    /**
+     * Choose, which Asset to update.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset updateMany
+   */
+  export type AssetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Assets.
+     */
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    /**
+     * Filter which Assets to update
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset updateManyAndReturn
+   */
+  export type AssetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * The data used to update Assets.
+     */
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyInput>
+    /**
+     * Filter which Assets to update
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Asset upsert
+   */
+  export type AssetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Asset to update in case it exists.
+     */
+    where: AssetWhereUniqueInput
+    /**
+     * In case the Asset found by the `where` argument doesn't exist, create a new Asset with this data.
+     */
+    create: XOR<AssetCreateInput, AssetUncheckedCreateInput>
+    /**
+     * In case the Asset was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssetUpdateInput, AssetUncheckedUpdateInput>
+  }
+
+  /**
+   * Asset delete
+   */
+  export type AssetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+    /**
+     * Filter which Asset to delete.
+     */
+    where: AssetWhereUniqueInput
+  }
+
+  /**
+   * Asset deleteMany
+   */
+  export type AssetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Assets to delete
+     */
+    where?: AssetWhereInput
+    /**
+     * Limit how many Assets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Asset.createdBy
+   */
+  export type Asset$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Asset.assignments
+   */
+  export type Asset$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    cursor?: AssetAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Asset without action
+   */
+  export type AssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Asset
+     */
+    select?: AssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Asset
+     */
+    omit?: AssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AssetAssignment
+   */
+
+  export type AggregateAssetAssignment = {
+    _count: AssetAssignmentCountAggregateOutputType | null
+    _min: AssetAssignmentMinAggregateOutputType | null
+    _max: AssetAssignmentMaxAggregateOutputType | null
+  }
+
+  export type AssetAssignmentMinAggregateOutputType = {
+    id: string | null
+    assetId: string | null
+    userId: string | null
+    assignedById: string | null
+    assignedAt: Date | null
+    returnedAt: Date | null
+    returnCondition: string | null
+    returnNotes: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetAssignmentMaxAggregateOutputType = {
+    id: string | null
+    assetId: string | null
+    userId: string | null
+    assignedById: string | null
+    assignedAt: Date | null
+    returnedAt: Date | null
+    returnCondition: string | null
+    returnNotes: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AssetAssignmentCountAggregateOutputType = {
+    id: number
+    assetId: number
+    userId: number
+    assignedById: number
+    assignedAt: number
+    returnedAt: number
+    returnCondition: number
+    returnNotes: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AssetAssignmentMinAggregateInputType = {
+    id?: true
+    assetId?: true
+    userId?: true
+    assignedById?: true
+    assignedAt?: true
+    returnedAt?: true
+    returnCondition?: true
+    returnNotes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetAssignmentMaxAggregateInputType = {
+    id?: true
+    assetId?: true
+    userId?: true
+    assignedById?: true
+    assignedAt?: true
+    returnedAt?: true
+    returnCondition?: true
+    returnNotes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AssetAssignmentCountAggregateInputType = {
+    id?: true
+    assetId?: true
+    userId?: true
+    assignedById?: true
+    assignedAt?: true
+    returnedAt?: true
+    returnCondition?: true
+    returnNotes?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AssetAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssetAssignment to aggregate.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AssetAssignments
+    **/
+    _count?: true | AssetAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AssetAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AssetAssignmentMaxAggregateInputType
+  }
+
+  export type GetAssetAssignmentAggregateType<T extends AssetAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateAssetAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAssetAssignment[P]>
+      : GetScalarType<T[P], AggregateAssetAssignment[P]>
+  }
+
+
+
+
+  export type AssetAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssetAssignmentWhereInput
+    orderBy?: AssetAssignmentOrderByWithAggregationInput | AssetAssignmentOrderByWithAggregationInput[]
+    by: AssetAssignmentScalarFieldEnum[] | AssetAssignmentScalarFieldEnum
+    having?: AssetAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AssetAssignmentCountAggregateInputType | true
+    _min?: AssetAssignmentMinAggregateInputType
+    _max?: AssetAssignmentMaxAggregateInputType
+  }
+
+  export type AssetAssignmentGroupByOutputType = {
+    id: string
+    assetId: string
+    userId: string
+    assignedById: string | null
+    assignedAt: Date
+    returnedAt: Date | null
+    returnCondition: string | null
+    returnNotes: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AssetAssignmentCountAggregateOutputType | null
+    _min: AssetAssignmentMinAggregateOutputType | null
+    _max: AssetAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetAssetAssignmentGroupByPayload<T extends AssetAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AssetAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AssetAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AssetAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], AssetAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AssetAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetId?: boolean
+    userId?: boolean
+    assignedById?: boolean
+    assignedAt?: boolean
+    returnedAt?: boolean
+    returnCondition?: boolean
+    returnNotes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }, ExtArgs["result"]["assetAssignment"]>
+
+  export type AssetAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetId?: boolean
+    userId?: boolean
+    assignedById?: boolean
+    assignedAt?: boolean
+    returnedAt?: boolean
+    returnCondition?: boolean
+    returnNotes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }, ExtArgs["result"]["assetAssignment"]>
+
+  export type AssetAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    assetId?: boolean
+    userId?: boolean
+    assignedById?: boolean
+    assignedAt?: boolean
+    returnedAt?: boolean
+    returnCondition?: boolean
+    returnNotes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }, ExtArgs["result"]["assetAssignment"]>
+
+  export type AssetAssignmentSelectScalar = {
+    id?: boolean
+    assetId?: boolean
+    userId?: boolean
+    assignedById?: boolean
+    assignedAt?: boolean
+    returnedAt?: boolean
+    returnCondition?: boolean
+    returnNotes?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AssetAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "assetId" | "userId" | "assignedById" | "assignedAt" | "returnedAt" | "returnCondition" | "returnNotes" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["assetAssignment"]>
+  export type AssetAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }
+  export type AssetAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }
+  export type AssetAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asset?: boolean | AssetDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedBy?: boolean | AssetAssignment$assignedByArgs<ExtArgs>
+  }
+
+  export type $AssetAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AssetAssignment"
+    objects: {
+      asset: Prisma.$AssetPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+      assignedBy: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      assetId: string
+      userId: string
+      assignedById: string | null
+      assignedAt: Date
+      returnedAt: Date | null
+      returnCondition: string | null
+      returnNotes: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["assetAssignment"]>
+    composites: {}
+  }
+
+  type AssetAssignmentGetPayload<S extends boolean | null | undefined | AssetAssignmentDefaultArgs> = $Result.GetResult<Prisma.$AssetAssignmentPayload, S>
+
+  type AssetAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AssetAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AssetAssignmentCountAggregateInputType | true
+    }
+
+  export interface AssetAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AssetAssignment'], meta: { name: 'AssetAssignment' } }
+    /**
+     * Find zero or one AssetAssignment that matches the filter.
+     * @param {AssetAssignmentFindUniqueArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AssetAssignmentFindUniqueArgs>(args: SelectSubset<T, AssetAssignmentFindUniqueArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AssetAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AssetAssignmentFindUniqueOrThrowArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AssetAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, AssetAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssetAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindFirstArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AssetAssignmentFindFirstArgs>(args?: SelectSubset<T, AssetAssignmentFindFirstArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AssetAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindFirstOrThrowArgs} args - Arguments to find a AssetAssignment
+     * @example
+     * // Get one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AssetAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, AssetAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AssetAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AssetAssignments
+     * const assetAssignments = await prisma.assetAssignment.findMany()
+     * 
+     * // Get first 10 AssetAssignments
+     * const assetAssignments = await prisma.assetAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const assetAssignmentWithIdOnly = await prisma.assetAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AssetAssignmentFindManyArgs>(args?: SelectSubset<T, AssetAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AssetAssignment.
+     * @param {AssetAssignmentCreateArgs} args - Arguments to create a AssetAssignment.
+     * @example
+     * // Create one AssetAssignment
+     * const AssetAssignment = await prisma.assetAssignment.create({
+     *   data: {
+     *     // ... data to create a AssetAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends AssetAssignmentCreateArgs>(args: SelectSubset<T, AssetAssignmentCreateArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AssetAssignments.
+     * @param {AssetAssignmentCreateManyArgs} args - Arguments to create many AssetAssignments.
+     * @example
+     * // Create many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AssetAssignmentCreateManyArgs>(args?: SelectSubset<T, AssetAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AssetAssignments and returns the data saved in the database.
+     * @param {AssetAssignmentCreateManyAndReturnArgs} args - Arguments to create many AssetAssignments.
+     * @example
+     * // Create many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AssetAssignments and only return the `id`
+     * const assetAssignmentWithIdOnly = await prisma.assetAssignment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AssetAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, AssetAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AssetAssignment.
+     * @param {AssetAssignmentDeleteArgs} args - Arguments to delete one AssetAssignment.
+     * @example
+     * // Delete one AssetAssignment
+     * const AssetAssignment = await prisma.assetAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one AssetAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AssetAssignmentDeleteArgs>(args: SelectSubset<T, AssetAssignmentDeleteArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AssetAssignment.
+     * @param {AssetAssignmentUpdateArgs} args - Arguments to update one AssetAssignment.
+     * @example
+     * // Update one AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AssetAssignmentUpdateArgs>(args: SelectSubset<T, AssetAssignmentUpdateArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AssetAssignments.
+     * @param {AssetAssignmentDeleteManyArgs} args - Arguments to filter AssetAssignments to delete.
+     * @example
+     * // Delete a few AssetAssignments
+     * const { count } = await prisma.assetAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AssetAssignmentDeleteManyArgs>(args?: SelectSubset<T, AssetAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AssetAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AssetAssignmentUpdateManyArgs>(args: SelectSubset<T, AssetAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AssetAssignments and returns the data updated in the database.
+     * @param {AssetAssignmentUpdateManyAndReturnArgs} args - Arguments to update many AssetAssignments.
+     * @example
+     * // Update many AssetAssignments
+     * const assetAssignment = await prisma.assetAssignment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AssetAssignments and only return the `id`
+     * const assetAssignmentWithIdOnly = await prisma.assetAssignment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AssetAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, AssetAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AssetAssignment.
+     * @param {AssetAssignmentUpsertArgs} args - Arguments to update or create a AssetAssignment.
+     * @example
+     * // Update or create a AssetAssignment
+     * const assetAssignment = await prisma.assetAssignment.upsert({
+     *   create: {
+     *     // ... data to create a AssetAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AssetAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AssetAssignmentUpsertArgs>(args: SelectSubset<T, AssetAssignmentUpsertArgs<ExtArgs>>): Prisma__AssetAssignmentClient<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AssetAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentCountArgs} args - Arguments to filter AssetAssignments to count.
+     * @example
+     * // Count the number of AssetAssignments
+     * const count = await prisma.assetAssignment.count({
+     *   where: {
+     *     // ... the filter for the AssetAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AssetAssignmentCountArgs>(
+      args?: Subset<T, AssetAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AssetAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AssetAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AssetAssignmentAggregateArgs>(args: Subset<T, AssetAssignmentAggregateArgs>): Prisma.PrismaPromise<GetAssetAssignmentAggregateType<T>>
+
+    /**
+     * Group by AssetAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AssetAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AssetAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AssetAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: AssetAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AssetAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAssetAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AssetAssignment model
+   */
+  readonly fields: AssetAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AssetAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AssetAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    asset<T extends AssetDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AssetDefaultArgs<ExtArgs>>): Prisma__AssetClient<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assignedBy<T extends AssetAssignment$assignedByArgs<ExtArgs> = {}>(args?: Subset<T, AssetAssignment$assignedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AssetAssignment model
+   */
+  interface AssetAssignmentFieldRefs {
+    readonly id: FieldRef<"AssetAssignment", 'String'>
+    readonly assetId: FieldRef<"AssetAssignment", 'String'>
+    readonly userId: FieldRef<"AssetAssignment", 'String'>
+    readonly assignedById: FieldRef<"AssetAssignment", 'String'>
+    readonly assignedAt: FieldRef<"AssetAssignment", 'DateTime'>
+    readonly returnedAt: FieldRef<"AssetAssignment", 'DateTime'>
+    readonly returnCondition: FieldRef<"AssetAssignment", 'String'>
+    readonly returnNotes: FieldRef<"AssetAssignment", 'String'>
+    readonly notes: FieldRef<"AssetAssignment", 'String'>
+    readonly createdAt: FieldRef<"AssetAssignment", 'DateTime'>
+    readonly updatedAt: FieldRef<"AssetAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AssetAssignment findUnique
+   */
+  export type AssetAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment findUniqueOrThrow
+   */
+  export type AssetAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment findFirst
+   */
+  export type AssetAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssetAssignments.
+     */
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment findFirstOrThrow
+   */
+  export type AssetAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignment to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssetAssignments.
+     */
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment findMany
+   */
+  export type AssetAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which AssetAssignments to fetch.
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AssetAssignments to fetch.
+     */
+    orderBy?: AssetAssignmentOrderByWithRelationInput | AssetAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AssetAssignments.
+     */
+    cursor?: AssetAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AssetAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AssetAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AssetAssignments.
+     */
+    distinct?: AssetAssignmentScalarFieldEnum | AssetAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * AssetAssignment create
+   */
+  export type AssetAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AssetAssignment.
+     */
+    data: XOR<AssetAssignmentCreateInput, AssetAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * AssetAssignment createMany
+   */
+  export type AssetAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AssetAssignments.
+     */
+    data: AssetAssignmentCreateManyInput | AssetAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AssetAssignment createManyAndReturn
+   */
+  export type AssetAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many AssetAssignments.
+     */
+    data: AssetAssignmentCreateManyInput | AssetAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AssetAssignment update
+   */
+  export type AssetAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AssetAssignment.
+     */
+    data: XOR<AssetAssignmentUpdateInput, AssetAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which AssetAssignment to update.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment updateMany
+   */
+  export type AssetAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AssetAssignments.
+     */
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which AssetAssignments to update
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * Limit how many AssetAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssetAssignment updateManyAndReturn
+   */
+  export type AssetAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to update AssetAssignments.
+     */
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which AssetAssignments to update
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * Limit how many AssetAssignments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AssetAssignment upsert
+   */
+  export type AssetAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AssetAssignment to update in case it exists.
+     */
+    where: AssetAssignmentWhereUniqueInput
+    /**
+     * In case the AssetAssignment found by the `where` argument doesn't exist, create a new AssetAssignment with this data.
+     */
+    create: XOR<AssetAssignmentCreateInput, AssetAssignmentUncheckedCreateInput>
+    /**
+     * In case the AssetAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AssetAssignmentUpdateInput, AssetAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * AssetAssignment delete
+   */
+  export type AssetAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which AssetAssignment to delete.
+     */
+    where: AssetAssignmentWhereUniqueInput
+  }
+
+  /**
+   * AssetAssignment deleteMany
+   */
+  export type AssetAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AssetAssignments to delete
+     */
+    where?: AssetAssignmentWhereInput
+    /**
+     * Limit how many AssetAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AssetAssignment.assignedBy
+   */
+  export type AssetAssignment$assignedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * AssetAssignment without action
+   */
+  export type AssetAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AssetAssignment
+     */
+    select?: AssetAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AssetAssignment
+     */
+    omit?: AssetAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssetAssignmentInclude<ExtArgs> | null
   }
 
 
@@ -97023,10 +101133,12 @@ export namespace Prisma {
 
   export type TravelRequestAvgAggregateOutputType = {
     expectedExpenses: number | null
+    revertCount: number | null
   }
 
   export type TravelRequestSumAggregateOutputType = {
     expectedExpenses: number | null
+    revertCount: number | null
   }
 
   export type TravelRequestMinAggregateOutputType = {
@@ -97041,6 +101153,11 @@ export namespace Prisma {
     rejectionReason: string | null
     approvedBy: string | null
     approvedAt: Date | null
+    revertReason: string | null
+    revertedBy: string | null
+    revertedAt: Date | null
+    resubmittedAt: Date | null
+    revertCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -97057,6 +101174,11 @@ export namespace Prisma {
     rejectionReason: string | null
     approvedBy: string | null
     approvedAt: Date | null
+    revertReason: string | null
+    revertedBy: string | null
+    revertedAt: Date | null
+    resubmittedAt: Date | null
+    revertCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -97073,6 +101195,11 @@ export namespace Prisma {
     rejectionReason: number
     approvedBy: number
     approvedAt: number
+    revertReason: number
+    revertedBy: number
+    revertedAt: number
+    resubmittedAt: number
+    revertCount: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -97081,10 +101208,12 @@ export namespace Prisma {
 
   export type TravelRequestAvgAggregateInputType = {
     expectedExpenses?: true
+    revertCount?: true
   }
 
   export type TravelRequestSumAggregateInputType = {
     expectedExpenses?: true
+    revertCount?: true
   }
 
   export type TravelRequestMinAggregateInputType = {
@@ -97099,6 +101228,11 @@ export namespace Prisma {
     rejectionReason?: true
     approvedBy?: true
     approvedAt?: true
+    revertReason?: true
+    revertedBy?: true
+    revertedAt?: true
+    resubmittedAt?: true
+    revertCount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -97115,6 +101249,11 @@ export namespace Prisma {
     rejectionReason?: true
     approvedBy?: true
     approvedAt?: true
+    revertReason?: true
+    revertedBy?: true
+    revertedAt?: true
+    resubmittedAt?: true
+    revertCount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -97131,6 +101270,11 @@ export namespace Prisma {
     rejectionReason?: true
     approvedBy?: true
     approvedAt?: true
+    revertReason?: true
+    revertedBy?: true
+    revertedAt?: true
+    resubmittedAt?: true
+    revertCount?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -97234,6 +101378,11 @@ export namespace Prisma {
     rejectionReason: string | null
     approvedBy: string | null
     approvedAt: Date | null
+    revertReason: string | null
+    revertedBy: string | null
+    revertedAt: Date | null
+    resubmittedAt: Date | null
+    revertCount: number
     createdAt: Date
     updatedAt: Date
     _count: TravelRequestCountAggregateOutputType | null
@@ -97269,10 +101418,16 @@ export namespace Prisma {
     rejectionReason?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
+    revertReason?: boolean
+    revertedBy?: boolean
+    revertedAt?: boolean
+    resubmittedAt?: boolean
+    revertCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
     expenses?: boolean | TravelRequest$expensesArgs<ExtArgs>
     _count?: boolean | TravelRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["travelRequest"]>
@@ -97289,10 +101444,16 @@ export namespace Prisma {
     rejectionReason?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
+    revertReason?: boolean
+    revertedBy?: boolean
+    revertedAt?: boolean
+    resubmittedAt?: boolean
+    revertCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
   }, ExtArgs["result"]["travelRequest"]>
 
   export type TravelRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -97307,10 +101468,16 @@ export namespace Prisma {
     rejectionReason?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
+    revertReason?: boolean
+    revertedBy?: boolean
+    revertedAt?: boolean
+    resubmittedAt?: boolean
+    revertCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
   }, ExtArgs["result"]["travelRequest"]>
 
   export type TravelRequestSelectScalar = {
@@ -97325,24 +101492,32 @@ export namespace Prisma {
     rejectionReason?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
+    revertReason?: boolean
+    revertedBy?: boolean
+    revertedAt?: boolean
+    resubmittedAt?: boolean
+    revertCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TravelRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destination" | "purpose" | "startDate" | "endDate" | "expectedExpenses" | "status" | "rejectionReason" | "approvedBy" | "approvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["travelRequest"]>
+  export type TravelRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "destination" | "purpose" | "startDate" | "endDate" | "expectedExpenses" | "status" | "rejectionReason" | "approvedBy" | "approvedAt" | "revertReason" | "revertedBy" | "revertedAt" | "resubmittedAt" | "revertCount" | "createdAt" | "updatedAt", ExtArgs["result"]["travelRequest"]>
   export type TravelRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
     expenses?: boolean | TravelRequest$expensesArgs<ExtArgs>
     _count?: boolean | TravelRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TravelRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
   }
   export type TravelRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     approver?: boolean | TravelRequest$approverArgs<ExtArgs>
+    reverter?: boolean | TravelRequest$reverterArgs<ExtArgs>
   }
 
   export type $TravelRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -97350,6 +101525,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       approver: Prisma.$UserPayload<ExtArgs> | null
+      reverter: Prisma.$UserPayload<ExtArgs> | null
       expenses: Prisma.$TravelExpensePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -97364,6 +101540,11 @@ export namespace Prisma {
       rejectionReason: string | null
       approvedBy: string | null
       approvedAt: Date | null
+      revertReason: string | null
+      revertedBy: string | null
+      revertedAt: Date | null
+      resubmittedAt: Date | null
+      revertCount: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["travelRequest"]>
@@ -97762,6 +101943,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approver<T extends TravelRequest$approverArgs<ExtArgs> = {}>(args?: Subset<T, TravelRequest$approverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reverter<T extends TravelRequest$reverterArgs<ExtArgs> = {}>(args?: Subset<T, TravelRequest$reverterArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     expenses<T extends TravelRequest$expensesArgs<ExtArgs> = {}>(args?: Subset<T, TravelRequest$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -97803,6 +101985,11 @@ export namespace Prisma {
     readonly rejectionReason: FieldRef<"TravelRequest", 'String'>
     readonly approvedBy: FieldRef<"TravelRequest", 'String'>
     readonly approvedAt: FieldRef<"TravelRequest", 'DateTime'>
+    readonly revertReason: FieldRef<"TravelRequest", 'String'>
+    readonly revertedBy: FieldRef<"TravelRequest", 'String'>
+    readonly revertedAt: FieldRef<"TravelRequest", 'DateTime'>
+    readonly resubmittedAt: FieldRef<"TravelRequest", 'DateTime'>
+    readonly revertCount: FieldRef<"TravelRequest", 'Int'>
     readonly createdAt: FieldRef<"TravelRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"TravelRequest", 'DateTime'>
   }
@@ -98209,6 +102396,25 @@ export namespace Prisma {
    * TravelRequest.approver
    */
   export type TravelRequest$approverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * TravelRequest.reverter
+   */
+  export type TravelRequest$reverterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -128413,10 +132619,16 @@ export namespace Prisma {
     emergencyContactPhone: 'emergencyContactPhone',
     aadharNumber: 'aadharNumber',
     panCard: 'panCard',
+    voterId: 'voterId',
+    highestQualification: 'highestQualification',
+    highestQualificationDetail: 'highestQualificationDetail',
     bankName: 'bankName',
     bankAccountNo: 'bankAccountNo',
     bankIfsc: 'bankIfsc',
     dateOfJoining: 'dateOfJoining',
+    dateOfLeaving: 'dateOfLeaving',
+    resignationReason: 'resignationReason',
+    inactiveSince: 'inactiveSince',
     avatar: 'avatar',
     leavesTaken: 'leavesTaken',
     leavesRemaining: 'leavesRemaining',
@@ -128429,6 +132641,20 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const DashboardConfigScalarFieldEnum: {
+    id: 'id',
+    roleId: 'roleId',
+    userId: 'userId',
+    kpiKeys: 'kpiKeys',
+    linkKeys: 'linkKeys',
+    updatedById: 'updatedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DashboardConfigScalarFieldEnum = (typeof DashboardConfigScalarFieldEnum)[keyof typeof DashboardConfigScalarFieldEnum]
+
+
   export const NotificationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -128439,6 +132665,7 @@ export namespace Prisma {
     read: 'read',
     actorId: 'actorId',
     metadata: 'metadata',
+    dedupeKey: 'dedupeKey',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -128833,6 +133060,7 @@ export namespace Prisma {
     deadline: 'deadline',
     status: 'status',
     priority: 'priority',
+    timeSlot: 'timeSlot',
     isPlanned: 'isPlanned',
     completionDate: 'completionDate',
     createdAt: 'createdAt',
@@ -128866,6 +133094,40 @@ export namespace Prisma {
   };
 
   export type TaskDocumentScalarFieldEnum = (typeof TaskDocumentScalarFieldEnum)[keyof typeof TaskDocumentScalarFieldEnum]
+
+
+  export const AssetScalarFieldEnum: {
+    id: 'id',
+    assetCode: 'assetCode',
+    name: 'name',
+    category: 'category',
+    serialNumber: 'serialNumber',
+    description: 'description',
+    condition: 'condition',
+    notes: 'notes',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
+
+
+  export const AssetAssignmentScalarFieldEnum: {
+    id: 'id',
+    assetId: 'assetId',
+    userId: 'userId',
+    assignedById: 'assignedById',
+    assignedAt: 'assignedAt',
+    returnedAt: 'returnedAt',
+    returnCondition: 'returnCondition',
+    returnNotes: 'returnNotes',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AssetAssignmentScalarFieldEnum = (typeof AssetAssignmentScalarFieldEnum)[keyof typeof AssetAssignmentScalarFieldEnum]
 
 
   export const SchoolProgramScalarFieldEnum: {
@@ -129521,6 +133783,11 @@ export namespace Prisma {
     rejectionReason: 'rejectionReason',
     approvedBy: 'approvedBy',
     approvedAt: 'approvedAt',
+    revertReason: 'revertReason',
+    revertedBy: 'revertedBy',
+    revertedAt: 'revertedAt',
+    resubmittedAt: 'resubmittedAt',
+    revertCount: 'revertCount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -130146,6 +134413,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Role"> | Date | string
     users?: UserListRelationFilter
     permissions?: RolePermissionListRelationFilter
+    dashboardConfig?: XOR<DashboardConfigNullableScalarRelationFilter, DashboardConfigWhereInput> | null
   }
 
   export type RoleOrderByWithRelationInput = {
@@ -130157,6 +134425,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
     permissions?: RolePermissionOrderByRelationAggregateInput
+    dashboardConfig?: DashboardConfigOrderByWithRelationInput
   }
 
   export type RoleWhereUniqueInput = Prisma.AtLeast<{
@@ -130171,6 +134440,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Role"> | Date | string
     users?: UserListRelationFilter
     permissions?: RolePermissionListRelationFilter
+    dashboardConfig?: XOR<DashboardConfigNullableScalarRelationFilter, DashboardConfigWhereInput> | null
   }, "id" | "name">
 
   export type RoleOrderByWithAggregationInput = {
@@ -130220,10 +134490,16 @@ export namespace Prisma {
     emergencyContactPhone?: StringNullableFilter<"User"> | string | null
     aadharNumber?: StringNullableFilter<"User"> | string | null
     panCard?: StringNullableFilter<"User"> | string | null
+    voterId?: StringNullableFilter<"User"> | string | null
+    highestQualification?: StringNullableFilter<"User"> | string | null
+    highestQualificationDetail?: StringNullableFilter<"User"> | string | null
     bankName?: StringNullableFilter<"User"> | string | null
     bankAccountNo?: StringNullableFilter<"User"> | string | null
     bankIfsc?: StringNullableFilter<"User"> | string | null
     dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
+    dateOfLeaving?: DateTimeNullableFilter<"User"> | Date | string | null
+    resignationReason?: StringNullableFilter<"User"> | string | null
+    inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -130250,6 +134526,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
     approvedTravel?: TravelRequestListRelationFilter
+    revertedTravel?: TravelRequestListRelationFilter
     reimbursementRequests?: ReimbursementListRelationFilter
     reimbursementsApproved?: ReimbursementListRelationFilter
     reimbursementsReimbursed?: ReimbursementListRelationFilter
@@ -130263,6 +134540,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskListRelationFilter
     pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
     notifications?: NotificationListRelationFilter
+    dashboardConfig?: XOR<DashboardConfigNullableScalarRelationFilter, DashboardConfigWhereInput> | null
+    assetAssignments?: AssetAssignmentListRelationFilter
+    assetAssignmentsMade?: AssetAssignmentListRelationFilter
+    createdAssets?: AssetListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -130285,10 +134566,16 @@ export namespace Prisma {
     emergencyContactPhone?: SortOrderInput | SortOrder
     aadharNumber?: SortOrderInput | SortOrder
     panCard?: SortOrderInput | SortOrder
+    voterId?: SortOrderInput | SortOrder
+    highestQualification?: SortOrderInput | SortOrder
+    highestQualificationDetail?: SortOrderInput | SortOrder
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
     dateOfJoining?: SortOrderInput | SortOrder
+    dateOfLeaving?: SortOrderInput | SortOrder
+    resignationReason?: SortOrderInput | SortOrder
+    inactiveSince?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -130315,6 +134602,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditOrderByRelationAggregateInput
     travelRequests?: TravelRequestOrderByRelationAggregateInput
     approvedTravel?: TravelRequestOrderByRelationAggregateInput
+    revertedTravel?: TravelRequestOrderByRelationAggregateInput
     reimbursementRequests?: ReimbursementOrderByRelationAggregateInput
     reimbursementsApproved?: ReimbursementOrderByRelationAggregateInput
     reimbursementsReimbursed?: ReimbursementOrderByRelationAggregateInput
@@ -130328,6 +134616,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskOrderByRelationAggregateInput
     pmTaskComments?: ProgramManagerTaskCommentOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    dashboardConfig?: DashboardConfigOrderByWithRelationInput
+    assetAssignments?: AssetAssignmentOrderByRelationAggregateInput
+    assetAssignmentsMade?: AssetAssignmentOrderByRelationAggregateInput
+    createdAssets?: AssetOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -130353,10 +134645,16 @@ export namespace Prisma {
     emergencyContactPhone?: StringNullableFilter<"User"> | string | null
     aadharNumber?: StringNullableFilter<"User"> | string | null
     panCard?: StringNullableFilter<"User"> | string | null
+    voterId?: StringNullableFilter<"User"> | string | null
+    highestQualification?: StringNullableFilter<"User"> | string | null
+    highestQualificationDetail?: StringNullableFilter<"User"> | string | null
     bankName?: StringNullableFilter<"User"> | string | null
     bankAccountNo?: StringNullableFilter<"User"> | string | null
     bankIfsc?: StringNullableFilter<"User"> | string | null
     dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
+    dateOfLeaving?: DateTimeNullableFilter<"User"> | Date | string | null
+    resignationReason?: StringNullableFilter<"User"> | string | null
+    inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -130383,6 +134681,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditListRelationFilter
     travelRequests?: TravelRequestListRelationFilter
     approvedTravel?: TravelRequestListRelationFilter
+    revertedTravel?: TravelRequestListRelationFilter
     reimbursementRequests?: ReimbursementListRelationFilter
     reimbursementsApproved?: ReimbursementListRelationFilter
     reimbursementsReimbursed?: ReimbursementListRelationFilter
@@ -130396,6 +134695,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskListRelationFilter
     pmTaskComments?: ProgramManagerTaskCommentListRelationFilter
     notifications?: NotificationListRelationFilter
+    dashboardConfig?: XOR<DashboardConfigNullableScalarRelationFilter, DashboardConfigWhereInput> | null
+    assetAssignments?: AssetAssignmentListRelationFilter
+    assetAssignmentsMade?: AssetAssignmentListRelationFilter
+    createdAssets?: AssetListRelationFilter
   }, "id" | "username" | "email" | "employeeId">
 
   export type UserOrderByWithAggregationInput = {
@@ -130418,10 +134721,16 @@ export namespace Prisma {
     emergencyContactPhone?: SortOrderInput | SortOrder
     aadharNumber?: SortOrderInput | SortOrder
     panCard?: SortOrderInput | SortOrder
+    voterId?: SortOrderInput | SortOrder
+    highestQualification?: SortOrderInput | SortOrder
+    highestQualificationDetail?: SortOrderInput | SortOrder
     bankName?: SortOrderInput | SortOrder
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
     dateOfJoining?: SortOrderInput | SortOrder
+    dateOfLeaving?: SortOrderInput | SortOrder
+    resignationReason?: SortOrderInput | SortOrder
+    inactiveSince?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -130459,10 +134768,16 @@ export namespace Prisma {
     emergencyContactPhone?: StringNullableWithAggregatesFilter<"User"> | string | null
     aadharNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
     panCard?: StringNullableWithAggregatesFilter<"User"> | string | null
+    voterId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    highestQualification?: StringNullableWithAggregatesFilter<"User"> | string | null
+    highestQualificationDetail?: StringNullableWithAggregatesFilter<"User"> | string | null
     bankName?: StringNullableWithAggregatesFilter<"User"> | string | null
     bankAccountNo?: StringNullableWithAggregatesFilter<"User"> | string | null
     bankIfsc?: StringNullableWithAggregatesFilter<"User"> | string | null
     dateOfJoining?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    dateOfLeaving?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    resignationReason?: StringNullableWithAggregatesFilter<"User"> | string | null
+    inactiveSince?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     leavesTaken?: IntWithAggregatesFilter<"User"> | number
     leavesRemaining?: IntWithAggregatesFilter<"User"> | number
@@ -130470,6 +134785,79 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     createdById?: StringNullableWithAggregatesFilter<"User"> | string | null
     managerId?: StringNullableWithAggregatesFilter<"User"> | string | null
+  }
+
+  export type DashboardConfigWhereInput = {
+    AND?: DashboardConfigWhereInput | DashboardConfigWhereInput[]
+    OR?: DashboardConfigWhereInput[]
+    NOT?: DashboardConfigWhereInput | DashboardConfigWhereInput[]
+    id?: StringFilter<"DashboardConfig"> | string
+    roleId?: StringNullableFilter<"DashboardConfig"> | string | null
+    userId?: StringNullableFilter<"DashboardConfig"> | string | null
+    kpiKeys?: StringNullableListFilter<"DashboardConfig">
+    linkKeys?: StringNullableListFilter<"DashboardConfig">
+    updatedById?: StringNullableFilter<"DashboardConfig"> | string | null
+    createdAt?: DateTimeFilter<"DashboardConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"DashboardConfig"> | Date | string
+    role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type DashboardConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    roleId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
+    kpiKeys?: SortOrder
+    linkKeys?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    role?: RoleOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type DashboardConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    roleId?: string
+    userId?: string
+    AND?: DashboardConfigWhereInput | DashboardConfigWhereInput[]
+    OR?: DashboardConfigWhereInput[]
+    NOT?: DashboardConfigWhereInput | DashboardConfigWhereInput[]
+    kpiKeys?: StringNullableListFilter<"DashboardConfig">
+    linkKeys?: StringNullableListFilter<"DashboardConfig">
+    updatedById?: StringNullableFilter<"DashboardConfig"> | string | null
+    createdAt?: DateTimeFilter<"DashboardConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"DashboardConfig"> | Date | string
+    role?: XOR<RoleNullableScalarRelationFilter, RoleWhereInput> | null
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id" | "roleId" | "userId">
+
+  export type DashboardConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    roleId?: SortOrderInput | SortOrder
+    userId?: SortOrderInput | SortOrder
+    kpiKeys?: SortOrder
+    linkKeys?: SortOrder
+    updatedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DashboardConfigCountOrderByAggregateInput
+    _max?: DashboardConfigMaxOrderByAggregateInput
+    _min?: DashboardConfigMinOrderByAggregateInput
+  }
+
+  export type DashboardConfigScalarWhereWithAggregatesInput = {
+    AND?: DashboardConfigScalarWhereWithAggregatesInput | DashboardConfigScalarWhereWithAggregatesInput[]
+    OR?: DashboardConfigScalarWhereWithAggregatesInput[]
+    NOT?: DashboardConfigScalarWhereWithAggregatesInput | DashboardConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DashboardConfig"> | string
+    roleId?: StringNullableWithAggregatesFilter<"DashboardConfig"> | string | null
+    userId?: StringNullableWithAggregatesFilter<"DashboardConfig"> | string | null
+    kpiKeys?: StringNullableListFilter<"DashboardConfig">
+    linkKeys?: StringNullableListFilter<"DashboardConfig">
+    updatedById?: StringNullableWithAggregatesFilter<"DashboardConfig"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DashboardConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DashboardConfig"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -130485,6 +134873,7 @@ export namespace Prisma {
     read?: BoolFilter<"Notification"> | boolean
     actorId?: StringNullableFilter<"Notification"> | string | null
     metadata?: JsonNullableFilter<"Notification">
+    dedupeKey?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -130500,6 +134889,7 @@ export namespace Prisma {
     read?: SortOrder
     actorId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    dedupeKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -130507,6 +134897,7 @@ export namespace Prisma {
 
   export type NotificationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    dedupeKey?: string
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
@@ -130521,7 +134912,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "dedupeKey">
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -130533,6 +134924,7 @@ export namespace Prisma {
     read?: SortOrder
     actorId?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    dedupeKey?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
@@ -130553,6 +134945,7 @@ export namespace Prisma {
     read?: BoolWithAggregatesFilter<"Notification"> | boolean
     actorId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"Notification">
+    dedupeKey?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
@@ -132617,6 +137010,7 @@ export namespace Prisma {
     deadline?: DateTimeNullableFilter<"Task"> | Date | string | null
     status?: StringFilter<"Task"> | string
     priority?: StringFilter<"Task"> | string
+    timeSlot?: StringFilter<"Task"> | string
     isPlanned?: BoolFilter<"Task"> | boolean
     completionDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
@@ -132637,6 +137031,7 @@ export namespace Prisma {
     deadline?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
+    timeSlot?: SortOrder
     isPlanned?: SortOrder
     completionDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -132660,6 +137055,7 @@ export namespace Prisma {
     deadline?: DateTimeNullableFilter<"Task"> | Date | string | null
     status?: StringFilter<"Task"> | string
     priority?: StringFilter<"Task"> | string
+    timeSlot?: StringFilter<"Task"> | string
     isPlanned?: BoolFilter<"Task"> | boolean
     completionDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
@@ -132680,6 +137076,7 @@ export namespace Prisma {
     deadline?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
+    timeSlot?: SortOrder
     isPlanned?: SortOrder
     completionDate?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -132702,6 +137099,7 @@ export namespace Prisma {
     deadline?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     status?: StringWithAggregatesFilter<"Task"> | string
     priority?: StringWithAggregatesFilter<"Task"> | string
+    timeSlot?: StringWithAggregatesFilter<"Task"> | string
     isPlanned?: BoolWithAggregatesFilter<"Task"> | boolean
     completionDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
@@ -132844,6 +137242,185 @@ export namespace Prisma {
     size?: IntNullableWithAggregatesFilter<"TaskDocument"> | number | null
     uploadedById?: StringNullableWithAggregatesFilter<"TaskDocument"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"TaskDocument"> | Date | string
+  }
+
+  export type AssetWhereInput = {
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    id?: StringFilter<"Asset"> | string
+    assetCode?: StringFilter<"Asset"> | string
+    name?: StringFilter<"Asset"> | string
+    category?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    description?: StringNullableFilter<"Asset"> | string | null
+    condition?: StringNullableFilter<"Asset"> | string | null
+    notes?: StringNullableFilter<"Asset"> | string | null
+    createdById?: StringNullableFilter<"Asset"> | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignments?: AssetAssignmentListRelationFilter
+  }
+
+  export type AssetOrderByWithRelationInput = {
+    id?: SortOrder
+    assetCode?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    condition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    createdBy?: UserOrderByWithRelationInput
+    assignments?: AssetAssignmentOrderByRelationAggregateInput
+  }
+
+  export type AssetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    assetCode?: string
+    AND?: AssetWhereInput | AssetWhereInput[]
+    OR?: AssetWhereInput[]
+    NOT?: AssetWhereInput | AssetWhereInput[]
+    name?: StringFilter<"Asset"> | string
+    category?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    description?: StringNullableFilter<"Asset"> | string | null
+    condition?: StringNullableFilter<"Asset"> | string | null
+    notes?: StringNullableFilter<"Asset"> | string | null
+    createdById?: StringNullableFilter<"Asset"> | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignments?: AssetAssignmentListRelationFilter
+  }, "id" | "assetCode">
+
+  export type AssetOrderByWithAggregationInput = {
+    id?: SortOrder
+    assetCode?: SortOrder
+    name?: SortOrder
+    category?: SortOrderInput | SortOrder
+    serialNumber?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    condition?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AssetCountOrderByAggregateInput
+    _max?: AssetMaxOrderByAggregateInput
+    _min?: AssetMinOrderByAggregateInput
+  }
+
+  export type AssetScalarWhereWithAggregatesInput = {
+    AND?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    OR?: AssetScalarWhereWithAggregatesInput[]
+    NOT?: AssetScalarWhereWithAggregatesInput | AssetScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Asset"> | string
+    assetCode?: StringWithAggregatesFilter<"Asset"> | string
+    name?: StringWithAggregatesFilter<"Asset"> | string
+    category?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    serialNumber?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    condition?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"Asset"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Asset"> | Date | string
+  }
+
+  export type AssetAssignmentWhereInput = {
+    AND?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    OR?: AssetAssignmentWhereInput[]
+    NOT?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    id?: StringFilter<"AssetAssignment"> | string
+    assetId?: StringFilter<"AssetAssignment"> | string
+    userId?: StringFilter<"AssetAssignment"> | string
+    assignedById?: StringNullableFilter<"AssetAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    returnedAt?: DateTimeNullableFilter<"AssetAssignment"> | Date | string | null
+    returnCondition?: StringNullableFilter<"AssetAssignment"> | string | null
+    returnNotes?: StringNullableFilter<"AssetAssignment"> | string | null
+    notes?: StringNullableFilter<"AssetAssignment"> | string | null
+    createdAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type AssetAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    userId?: SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    assignedAt?: SortOrder
+    returnedAt?: SortOrderInput | SortOrder
+    returnCondition?: SortOrderInput | SortOrder
+    returnNotes?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    asset?: AssetOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+    assignedBy?: UserOrderByWithRelationInput
+  }
+
+  export type AssetAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    OR?: AssetAssignmentWhereInput[]
+    NOT?: AssetAssignmentWhereInput | AssetAssignmentWhereInput[]
+    assetId?: StringFilter<"AssetAssignment"> | string
+    userId?: StringFilter<"AssetAssignment"> | string
+    assignedById?: StringNullableFilter<"AssetAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    returnedAt?: DateTimeNullableFilter<"AssetAssignment"> | Date | string | null
+    returnCondition?: StringNullableFilter<"AssetAssignment"> | string | null
+    returnNotes?: StringNullableFilter<"AssetAssignment"> | string | null
+    notes?: StringNullableFilter<"AssetAssignment"> | string | null
+    createdAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    asset?: XOR<AssetScalarRelationFilter, AssetWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type AssetAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    userId?: SortOrder
+    assignedById?: SortOrderInput | SortOrder
+    assignedAt?: SortOrder
+    returnedAt?: SortOrderInput | SortOrder
+    returnCondition?: SortOrderInput | SortOrder
+    returnNotes?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AssetAssignmentCountOrderByAggregateInput
+    _max?: AssetAssignmentMaxOrderByAggregateInput
+    _min?: AssetAssignmentMinOrderByAggregateInput
+  }
+
+  export type AssetAssignmentScalarWhereWithAggregatesInput = {
+    AND?: AssetAssignmentScalarWhereWithAggregatesInput | AssetAssignmentScalarWhereWithAggregatesInput[]
+    OR?: AssetAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: AssetAssignmentScalarWhereWithAggregatesInput | AssetAssignmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AssetAssignment"> | string
+    assetId?: StringWithAggregatesFilter<"AssetAssignment"> | string
+    userId?: StringWithAggregatesFilter<"AssetAssignment"> | string
+    assignedById?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
+    assignedAt?: DateTimeWithAggregatesFilter<"AssetAssignment"> | Date | string
+    returnedAt?: DateTimeNullableWithAggregatesFilter<"AssetAssignment"> | Date | string | null
+    returnCondition?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
+    returnNotes?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"AssetAssignment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AssetAssignment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AssetAssignment"> | Date | string
   }
 
   export type SchoolProgramWhereInput = {
@@ -136239,10 +140816,16 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"TravelRequest"> | string | null
     approvedBy?: StringNullableFilter<"TravelRequest"> | string | null
     approvedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertReason?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedBy?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    resubmittedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertCount?: IntFilter<"TravelRequest"> | number
     createdAt?: DateTimeFilter<"TravelRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TravelRequest"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reverter?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     expenses?: TravelExpenseListRelationFilter
   }
 
@@ -136258,10 +140841,16 @@ export namespace Prisma {
     rejectionReason?: SortOrderInput | SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
+    revertReason?: SortOrderInput | SortOrder
+    revertedBy?: SortOrderInput | SortOrder
+    revertedAt?: SortOrderInput | SortOrder
+    resubmittedAt?: SortOrderInput | SortOrder
+    revertCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     approver?: UserOrderByWithRelationInput
+    reverter?: UserOrderByWithRelationInput
     expenses?: TravelExpenseOrderByRelationAggregateInput
   }
 
@@ -136280,10 +140869,16 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"TravelRequest"> | string | null
     approvedBy?: StringNullableFilter<"TravelRequest"> | string | null
     approvedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertReason?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedBy?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    resubmittedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertCount?: IntFilter<"TravelRequest"> | number
     createdAt?: DateTimeFilter<"TravelRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TravelRequest"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    reverter?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     expenses?: TravelExpenseListRelationFilter
   }, "id">
 
@@ -136299,6 +140894,11 @@ export namespace Prisma {
     rejectionReason?: SortOrderInput | SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
+    revertReason?: SortOrderInput | SortOrder
+    revertedBy?: SortOrderInput | SortOrder
+    revertedAt?: SortOrderInput | SortOrder
+    resubmittedAt?: SortOrderInput | SortOrder
+    revertCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TravelRequestCountOrderByAggregateInput
@@ -136323,6 +140923,11 @@ export namespace Prisma {
     rejectionReason?: StringNullableWithAggregatesFilter<"TravelRequest"> | string | null
     approvedBy?: StringNullableWithAggregatesFilter<"TravelRequest"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"TravelRequest"> | Date | string | null
+    revertReason?: StringNullableWithAggregatesFilter<"TravelRequest"> | string | null
+    revertedBy?: StringNullableWithAggregatesFilter<"TravelRequest"> | string | null
+    revertedAt?: DateTimeNullableWithAggregatesFilter<"TravelRequest"> | Date | string | null
+    resubmittedAt?: DateTimeNullableWithAggregatesFilter<"TravelRequest"> | Date | string | null
+    revertCount?: IntWithAggregatesFilter<"TravelRequest"> | number
     createdAt?: DateTimeWithAggregatesFilter<"TravelRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TravelRequest"> | Date | string
   }
@@ -138358,6 +142963,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutRoleInput
     permissions?: RolePermissionCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutRoleInput
   }
 
   export type RoleUncheckedCreateInput = {
@@ -138369,6 +142975,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutRoleInput
     permissions?: RolePermissionUncheckedCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutRoleInput
   }
 
   export type RoleUpdateInput = {
@@ -138380,6 +142987,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutRoleNestedInput
     permissions?: RolePermissionUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutRoleNestedInput
   }
 
   export type RoleUncheckedUpdateInput = {
@@ -138391,6 +142999,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutRoleNestedInput
     permissions?: RolePermissionUncheckedUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutRoleNestedInput
   }
 
   export type RoleCreateManyInput = {
@@ -138439,10 +143048,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -138467,6 +143082,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -138480,6 +143096,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -138502,10 +143122,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -138529,6 +143155,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -138542,6 +143169,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUpdateInput = {
@@ -138563,10 +143194,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -138591,6 +143228,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -138604,6 +143242,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -138626,10 +143268,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -138653,6 +143301,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -138666,6 +143315,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -138688,10 +143341,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -138720,10 +143379,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -138751,10 +143416,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -138762,6 +143433,81 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     managerId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DashboardConfigCreateInput = {
+    id?: string
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutDashboardConfigInput
+    user?: UserCreateNestedOneWithoutDashboardConfigInput
+  }
+
+  export type DashboardConfigUncheckedCreateInput = {
+    id?: string
+    roleId?: string | null
+    userId?: string | null
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneWithoutDashboardConfigNestedInput
+    user?: UserUpdateOneWithoutDashboardConfigNestedInput
+  }
+
+  export type DashboardConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardConfigCreateManyInput = {
+    id?: string
+    roleId?: string | null
+    userId?: string | null
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateInput = {
@@ -138773,6 +143519,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutNotificationsInput
@@ -138788,6 +143535,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -138801,6 +143549,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
@@ -138816,6 +143565,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138830,6 +143580,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -138843,6 +143594,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138857,6 +143609,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -141093,6 +145846,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -141113,6 +145867,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -141129,6 +145884,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141149,6 +145905,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141167,6 +145924,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -141181,6 +145939,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141197,6 +145956,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -141337,6 +146097,202 @@ export namespace Prisma {
     size?: NullableIntFieldUpdateOperationsInput | number | null
     uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetCreateInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutCreatedAssetsInput
+    assignments?: AssetAssignmentCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUncheckedCreateInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutCreatedAssetsNestedInput
+    assignments?: AssetAssignmentUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetCreateManyInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentCreateInput = {
+    id?: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    user: UserCreateNestedOneWithoutAssetAssignmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssetAssignmentsMadeInput
+  }
+
+  export type AssetAssignmentUncheckedCreateInput = {
+    id?: string
+    assetId: string
+    userId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    user?: UserUpdateOneRequiredWithoutAssetAssignmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssetAssignmentsMadeNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentCreateManyInput = {
+    id?: string
+    assetId: string
+    userId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SchoolProgramCreateInput = {
@@ -145064,10 +150020,15 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTravelRequestsInput
     approver?: UserCreateNestedOneWithoutApprovedTravelInput
+    reverter?: UserCreateNestedOneWithoutRevertedTravelInput
     expenses?: TravelExpenseCreateNestedManyWithoutTravelRequestInput
   }
 
@@ -145083,6 +150044,11 @@ export namespace Prisma {
     rejectionReason?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: TravelExpenseUncheckedCreateNestedManyWithoutTravelRequestInput
@@ -145098,10 +150064,15 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTravelRequestsNestedInput
     approver?: UserUpdateOneWithoutApprovedTravelNestedInput
+    reverter?: UserUpdateOneWithoutRevertedTravelNestedInput
     expenses?: TravelExpenseUpdateManyWithoutTravelRequestNestedInput
   }
 
@@ -145117,6 +150088,11 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: TravelExpenseUncheckedUpdateManyWithoutTravelRequestNestedInput
@@ -145134,6 +150110,11 @@ export namespace Prisma {
     rejectionReason?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -145148,6 +150129,10 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -145164,6 +150149,11 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -147372,6 +152362,11 @@ export namespace Prisma {
     none?: RolePermissionWhereInput
   }
 
+  export type DashboardConfigNullableScalarRelationFilter = {
+    is?: DashboardConfigWhereInput | null
+    isNot?: DashboardConfigWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -147646,6 +152641,18 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type AssetAssignmentListRelationFilter = {
+    every?: AssetAssignmentWhereInput
+    some?: AssetAssignmentWhereInput
+    none?: AssetAssignmentWhereInput
+  }
+
+  export type AssetListRelationFilter = {
+    every?: AssetWhereInput
+    some?: AssetWhereInput
+    none?: AssetWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -147734,6 +152741,14 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type AssetAssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AssetOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -147754,10 +152769,16 @@ export namespace Prisma {
     emergencyContactPhone?: SortOrder
     aadharNumber?: SortOrder
     panCard?: SortOrder
+    voterId?: SortOrder
+    highestQualification?: SortOrder
+    highestQualificationDetail?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     dateOfJoining?: SortOrder
+    dateOfLeaving?: SortOrder
+    resignationReason?: SortOrder
+    inactiveSince?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -147792,10 +152813,16 @@ export namespace Prisma {
     emergencyContactPhone?: SortOrder
     aadharNumber?: SortOrder
     panCard?: SortOrder
+    voterId?: SortOrder
+    highestQualification?: SortOrder
+    highestQualificationDetail?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     dateOfJoining?: SortOrder
+    dateOfLeaving?: SortOrder
+    resignationReason?: SortOrder
+    inactiveSince?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -147825,10 +152852,16 @@ export namespace Prisma {
     emergencyContactPhone?: SortOrder
     aadharNumber?: SortOrder
     panCard?: SortOrder
+    voterId?: SortOrder
+    highestQualification?: SortOrder
+    highestQualificationDetail?: SortOrder
     bankName?: SortOrder
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     dateOfJoining?: SortOrder
+    dateOfLeaving?: SortOrder
+    resignationReason?: SortOrder
+    inactiveSince?: SortOrder
     avatar?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
@@ -147882,6 +152915,48 @@ export namespace Prisma {
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
   }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type RoleNullableScalarRelationFilter = {
+    is?: RoleWhereInput | null
+    isNot?: RoleWhereInput | null
+  }
+
+  export type DashboardConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    userId?: SortOrder
+    kpiKeys?: SortOrder
+    linkKeys?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    userId?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    roleId?: SortOrder
+    userId?: SortOrder
+    updatedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -147921,6 +152996,7 @@ export namespace Prisma {
     read?: SortOrder
     actorId?: SortOrder
     metadata?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -147934,6 +153010,7 @@ export namespace Prisma {
     link?: SortOrder
     read?: SortOrder
     actorId?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -147947,6 +153024,7 @@ export namespace Prisma {
     link?: SortOrder
     read?: SortOrder
     actorId?: SortOrder
+    dedupeKey?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -149455,6 +154533,7 @@ export namespace Prisma {
     deadline?: SortOrder
     status?: SortOrder
     priority?: SortOrder
+    timeSlot?: SortOrder
     isPlanned?: SortOrder
     completionDate?: SortOrder
     createdAt?: SortOrder
@@ -149471,6 +154550,7 @@ export namespace Prisma {
     deadline?: SortOrder
     status?: SortOrder
     priority?: SortOrder
+    timeSlot?: SortOrder
     isPlanned?: SortOrder
     completionDate?: SortOrder
     createdAt?: SortOrder
@@ -149487,6 +154567,7 @@ export namespace Prisma {
     deadline?: SortOrder
     status?: SortOrder
     priority?: SortOrder
+    timeSlot?: SortOrder
     isPlanned?: SortOrder
     completionDate?: SortOrder
     createdAt?: SortOrder
@@ -149564,6 +154645,95 @@ export namespace Prisma {
 
   export type TaskDocumentSumOrderByAggregateInput = {
     size?: SortOrder
+  }
+
+  export type AssetCountOrderByAggregateInput = {
+    id?: SortOrder
+    assetCode?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    serialNumber?: SortOrder
+    description?: SortOrder
+    condition?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    assetCode?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    serialNumber?: SortOrder
+    description?: SortOrder
+    condition?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetMinOrderByAggregateInput = {
+    id?: SortOrder
+    assetCode?: SortOrder
+    name?: SortOrder
+    category?: SortOrder
+    serialNumber?: SortOrder
+    description?: SortOrder
+    condition?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetScalarRelationFilter = {
+    is?: AssetWhereInput
+    isNot?: AssetWhereInput
+  }
+
+  export type AssetAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    userId?: SortOrder
+    assignedById?: SortOrder
+    assignedAt?: SortOrder
+    returnedAt?: SortOrder
+    returnCondition?: SortOrder
+    returnNotes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    userId?: SortOrder
+    assignedById?: SortOrder
+    assignedAt?: SortOrder
+    returnedAt?: SortOrder
+    returnCondition?: SortOrder
+    returnNotes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AssetAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    assetId?: SortOrder
+    userId?: SortOrder
+    assignedById?: SortOrder
+    assignedAt?: SortOrder
+    returnedAt?: SortOrder
+    returnCondition?: SortOrder
+    returnNotes?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProgramScalarRelationFilter = {
@@ -151723,12 +156893,18 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
+    revertReason?: SortOrder
+    revertedBy?: SortOrder
+    revertedAt?: SortOrder
+    resubmittedAt?: SortOrder
+    revertCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type TravelRequestAvgOrderByAggregateInput = {
     expectedExpenses?: SortOrder
+    revertCount?: SortOrder
   }
 
   export type TravelRequestMaxOrderByAggregateInput = {
@@ -151743,6 +156919,11 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
+    revertReason?: SortOrder
+    revertedBy?: SortOrder
+    revertedAt?: SortOrder
+    resubmittedAt?: SortOrder
+    revertCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -151759,12 +156940,18 @@ export namespace Prisma {
     rejectionReason?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
+    revertReason?: SortOrder
+    revertedBy?: SortOrder
+    revertedAt?: SortOrder
+    resubmittedAt?: SortOrder
+    revertCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type TravelRequestSumOrderByAggregateInput = {
     expectedExpenses?: SortOrder
+    revertCount?: SortOrder
   }
 
   export type EnumTravelStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -153049,6 +158236,12 @@ export namespace Prisma {
     connect?: RolePermissionWhereUniqueInput | RolePermissionWhereUniqueInput[]
   }
 
+  export type DashboardConfigCreateNestedOneWithoutRoleInput = {
+    create?: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutRoleInput
+    connect?: DashboardConfigWhereUniqueInput
+  }
+
   export type UserUncheckedCreateNestedManyWithoutRoleInput = {
     create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
@@ -153061,6 +158254,12 @@ export namespace Prisma {
     connectOrCreate?: RolePermissionCreateOrConnectWithoutRoleInput | RolePermissionCreateOrConnectWithoutRoleInput[]
     createMany?: RolePermissionCreateManyRoleInputEnvelope
     connect?: RolePermissionWhereUniqueInput | RolePermissionWhereUniqueInput[]
+  }
+
+  export type DashboardConfigUncheckedCreateNestedOneWithoutRoleInput = {
+    create?: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutRoleInput
+    connect?: DashboardConfigWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -153107,6 +158306,16 @@ export namespace Prisma {
     deleteMany?: RolePermissionScalarWhereInput | RolePermissionScalarWhereInput[]
   }
 
+  export type DashboardConfigUpdateOneWithoutRoleNestedInput = {
+    create?: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutRoleInput
+    upsert?: DashboardConfigUpsertWithoutRoleInput
+    disconnect?: DashboardConfigWhereInput | boolean
+    delete?: DashboardConfigWhereInput | boolean
+    connect?: DashboardConfigWhereUniqueInput
+    update?: XOR<XOR<DashboardConfigUpdateToOneWithWhereWithoutRoleInput, DashboardConfigUpdateWithoutRoleInput>, DashboardConfigUncheckedUpdateWithoutRoleInput>
+  }
+
   export type UserUncheckedUpdateManyWithoutRoleNestedInput = {
     create?: XOR<UserCreateWithoutRoleInput, UserUncheckedCreateWithoutRoleInput> | UserCreateWithoutRoleInput[] | UserUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: UserCreateOrConnectWithoutRoleInput | UserCreateOrConnectWithoutRoleInput[]
@@ -153133,6 +158342,16 @@ export namespace Prisma {
     update?: RolePermissionUpdateWithWhereUniqueWithoutRoleInput | RolePermissionUpdateWithWhereUniqueWithoutRoleInput[]
     updateMany?: RolePermissionUpdateManyWithWhereWithoutRoleInput | RolePermissionUpdateManyWithWhereWithoutRoleInput[]
     deleteMany?: RolePermissionScalarWhereInput | RolePermissionScalarWhereInput[]
+  }
+
+  export type DashboardConfigUncheckedUpdateOneWithoutRoleNestedInput = {
+    create?: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutRoleInput
+    upsert?: DashboardConfigUpsertWithoutRoleInput
+    disconnect?: DashboardConfigWhereInput | boolean
+    delete?: DashboardConfigWhereInput | boolean
+    connect?: DashboardConfigWhereUniqueInput
+    update?: XOR<XOR<DashboardConfigUpdateToOneWithWhereWithoutRoleInput, DashboardConfigUpdateWithoutRoleInput>, DashboardConfigUncheckedUpdateWithoutRoleInput>
   }
 
   export type RoleCreateNestedOneWithoutUsersInput = {
@@ -153264,6 +158483,13 @@ export namespace Prisma {
     connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
   }
 
+  export type TravelRequestCreateNestedManyWithoutReverterInput = {
+    create?: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput> | TravelRequestCreateWithoutReverterInput[] | TravelRequestUncheckedCreateWithoutReverterInput[]
+    connectOrCreate?: TravelRequestCreateOrConnectWithoutReverterInput | TravelRequestCreateOrConnectWithoutReverterInput[]
+    createMany?: TravelRequestCreateManyReverterInputEnvelope
+    connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+  }
+
   export type ReimbursementCreateNestedManyWithoutUserInput = {
     create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
@@ -153353,6 +158579,33 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type DashboardConfigCreateNestedOneWithoutUserInput = {
+    create?: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutUserInput
+    connect?: DashboardConfigWhereUniqueInput
+  }
+
+  export type AssetAssignmentCreateNestedManyWithoutUserInput = {
+    create?: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput> | AssetAssignmentCreateWithoutUserInput[] | AssetAssignmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutUserInput | AssetAssignmentCreateOrConnectWithoutUserInput[]
+    createMany?: AssetAssignmentCreateManyUserInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput> | AssetAssignmentCreateWithoutAssignedByInput[] | AssetAssignmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssignedByInput | AssetAssignmentCreateOrConnectWithoutAssignedByInput[]
+    createMany?: AssetAssignmentCreateManyAssignedByInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput> | AssetCreateWithoutCreatedByInput[] | AssetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
+    createMany?: AssetCreateManyCreatedByInputEnvelope
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
   }
 
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
@@ -153466,6 +158719,13 @@ export namespace Prisma {
     connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
   }
 
+  export type TravelRequestUncheckedCreateNestedManyWithoutReverterInput = {
+    create?: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput> | TravelRequestCreateWithoutReverterInput[] | TravelRequestUncheckedCreateWithoutReverterInput[]
+    connectOrCreate?: TravelRequestCreateOrConnectWithoutReverterInput | TravelRequestCreateOrConnectWithoutReverterInput[]
+    createMany?: TravelRequestCreateManyReverterInputEnvelope
+    connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+  }
+
   export type ReimbursementUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
@@ -153555,6 +158815,33 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
     createMany?: NotificationCreateManyUserInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type DashboardConfigUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutUserInput
+    connect?: DashboardConfigWhereUniqueInput
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput> | AssetAssignmentCreateWithoutUserInput[] | AssetAssignmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutUserInput | AssetAssignmentCreateOrConnectWithoutUserInput[]
+    createMany?: AssetAssignmentCreateManyUserInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput> | AssetAssignmentCreateWithoutAssignedByInput[] | AssetAssignmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssignedByInput | AssetAssignmentCreateOrConnectWithoutAssignedByInput[]
+    createMany?: AssetAssignmentCreateManyAssignedByInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput> | AssetCreateWithoutCreatedByInput[] | AssetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
+    createMany?: AssetCreateManyCreatedByInputEnvelope
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
   }
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -153821,6 +159108,20 @@ export namespace Prisma {
     deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
   }
 
+  export type TravelRequestUpdateManyWithoutReverterNestedInput = {
+    create?: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput> | TravelRequestCreateWithoutReverterInput[] | TravelRequestUncheckedCreateWithoutReverterInput[]
+    connectOrCreate?: TravelRequestCreateOrConnectWithoutReverterInput | TravelRequestCreateOrConnectWithoutReverterInput[]
+    upsert?: TravelRequestUpsertWithWhereUniqueWithoutReverterInput | TravelRequestUpsertWithWhereUniqueWithoutReverterInput[]
+    createMany?: TravelRequestCreateManyReverterInputEnvelope
+    set?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    disconnect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    delete?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    update?: TravelRequestUpdateWithWhereUniqueWithoutReverterInput | TravelRequestUpdateWithWhereUniqueWithoutReverterInput[]
+    updateMany?: TravelRequestUpdateManyWithWhereWithoutReverterInput | TravelRequestUpdateManyWithWhereWithoutReverterInput[]
+    deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
+  }
+
   export type ReimbursementUpdateManyWithoutUserNestedInput = {
     create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
@@ -154001,6 +159302,58 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type DashboardConfigUpdateOneWithoutUserNestedInput = {
+    create?: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutUserInput
+    upsert?: DashboardConfigUpsertWithoutUserInput
+    disconnect?: DashboardConfigWhereInput | boolean
+    delete?: DashboardConfigWhereInput | boolean
+    connect?: DashboardConfigWhereUniqueInput
+    update?: XOR<XOR<DashboardConfigUpdateToOneWithWhereWithoutUserInput, DashboardConfigUpdateWithoutUserInput>, DashboardConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput> | AssetAssignmentCreateWithoutUserInput[] | AssetAssignmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutUserInput | AssetAssignmentCreateOrConnectWithoutUserInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutUserInput | AssetAssignmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AssetAssignmentCreateManyUserInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutUserInput | AssetAssignmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutUserInput | AssetAssignmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput> | AssetAssignmentCreateWithoutAssignedByInput[] | AssetAssignmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssignedByInput | AssetAssignmentCreateOrConnectWithoutAssignedByInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssignedByInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: AssetAssignmentCreateManyAssignedByInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssignedByInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssignedByInput | AssetAssignmentUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput> | AssetCreateWithoutCreatedByInput[] | AssetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
+    upsert?: AssetUpsertWithWhereUniqueWithoutCreatedByInput | AssetUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: AssetCreateManyCreatedByInputEnvelope
+    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    update?: AssetUpdateWithWhereUniqueWithoutCreatedByInput | AssetUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: AssetUpdateManyWithWhereWithoutCreatedByInput | AssetUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
   }
 
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -154223,6 +159576,20 @@ export namespace Prisma {
     deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
   }
 
+  export type TravelRequestUncheckedUpdateManyWithoutReverterNestedInput = {
+    create?: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput> | TravelRequestCreateWithoutReverterInput[] | TravelRequestUncheckedCreateWithoutReverterInput[]
+    connectOrCreate?: TravelRequestCreateOrConnectWithoutReverterInput | TravelRequestCreateOrConnectWithoutReverterInput[]
+    upsert?: TravelRequestUpsertWithWhereUniqueWithoutReverterInput | TravelRequestUpsertWithWhereUniqueWithoutReverterInput[]
+    createMany?: TravelRequestCreateManyReverterInputEnvelope
+    set?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    disconnect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    delete?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    connect?: TravelRequestWhereUniqueInput | TravelRequestWhereUniqueInput[]
+    update?: TravelRequestUpdateWithWhereUniqueWithoutReverterInput | TravelRequestUpdateWithWhereUniqueWithoutReverterInput[]
+    updateMany?: TravelRequestUpdateManyWithWhereWithoutReverterInput | TravelRequestUpdateManyWithWhereWithoutReverterInput[]
+    deleteMany?: TravelRequestScalarWhereInput | TravelRequestScalarWhereInput[]
+  }
+
   export type ReimbursementUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ReimbursementCreateWithoutUserInput, ReimbursementUncheckedCreateWithoutUserInput> | ReimbursementCreateWithoutUserInput[] | ReimbursementUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutUserInput | ReimbursementCreateOrConnectWithoutUserInput[]
@@ -154403,6 +159770,108 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type DashboardConfigUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: DashboardConfigCreateOrConnectWithoutUserInput
+    upsert?: DashboardConfigUpsertWithoutUserInput
+    disconnect?: DashboardConfigWhereInput | boolean
+    delete?: DashboardConfigWhereInput | boolean
+    connect?: DashboardConfigWhereUniqueInput
+    update?: XOR<XOR<DashboardConfigUpdateToOneWithWhereWithoutUserInput, DashboardConfigUpdateWithoutUserInput>, DashboardConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput> | AssetAssignmentCreateWithoutUserInput[] | AssetAssignmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutUserInput | AssetAssignmentCreateOrConnectWithoutUserInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutUserInput | AssetAssignmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AssetAssignmentCreateManyUserInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutUserInput | AssetAssignmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutUserInput | AssetAssignmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput> | AssetAssignmentCreateWithoutAssignedByInput[] | AssetAssignmentUncheckedCreateWithoutAssignedByInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssignedByInput | AssetAssignmentCreateOrConnectWithoutAssignedByInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssignedByInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssignedByInput[]
+    createMany?: AssetAssignmentCreateManyAssignedByInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssignedByInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssignedByInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssignedByInput | AssetAssignmentUpdateManyWithWhereWithoutAssignedByInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput> | AssetCreateWithoutCreatedByInput[] | AssetUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
+    upsert?: AssetUpsertWithWhereUniqueWithoutCreatedByInput | AssetUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: AssetCreateManyCreatedByInputEnvelope
+    set?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    disconnect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    delete?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+    update?: AssetUpdateWithWhereUniqueWithoutCreatedByInput | AssetUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: AssetUpdateManyWithWhereWithoutCreatedByInput | AssetUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  }
+
+  export type DashboardConfigCreatekpiKeysInput = {
+    set: string[]
+  }
+
+  export type DashboardConfigCreatelinkKeysInput = {
+    set: string[]
+  }
+
+  export type RoleCreateNestedOneWithoutDashboardConfigInput = {
+    create?: XOR<RoleCreateWithoutDashboardConfigInput, RoleUncheckedCreateWithoutDashboardConfigInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutDashboardConfigInput
+    connect?: RoleWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutDashboardConfigInput = {
+    create?: XOR<UserCreateWithoutDashboardConfigInput, UserUncheckedCreateWithoutDashboardConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDashboardConfigInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DashboardConfigUpdatekpiKeysInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type DashboardConfigUpdatelinkKeysInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type RoleUpdateOneWithoutDashboardConfigNestedInput = {
+    create?: XOR<RoleCreateWithoutDashboardConfigInput, RoleUncheckedCreateWithoutDashboardConfigInput>
+    connectOrCreate?: RoleCreateOrConnectWithoutDashboardConfigInput
+    upsert?: RoleUpsertWithoutDashboardConfigInput
+    disconnect?: RoleWhereInput | boolean
+    delete?: RoleWhereInput | boolean
+    connect?: RoleWhereUniqueInput
+    update?: XOR<XOR<RoleUpdateToOneWithWhereWithoutDashboardConfigInput, RoleUpdateWithoutDashboardConfigInput>, RoleUncheckedUpdateWithoutDashboardConfigInput>
+  }
+
+  export type UserUpdateOneWithoutDashboardConfigNestedInput = {
+    create?: XOR<UserCreateWithoutDashboardConfigInput, UserUncheckedCreateWithoutDashboardConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDashboardConfigInput
+    upsert?: UserUpsertWithoutDashboardConfigInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDashboardConfigInput, UserUpdateWithoutDashboardConfigInput>, UserUncheckedUpdateWithoutDashboardConfigInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -156619,6 +162088,108 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTaskDocumentsInput, UserUpdateWithoutTaskDocumentsInput>, UserUncheckedUpdateWithoutTaskDocumentsInput>
   }
 
+  export type UserCreateNestedOneWithoutCreatedAssetsInput = {
+    create?: XOR<UserCreateWithoutCreatedAssetsInput, UserUncheckedCreateWithoutCreatedAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedAssetsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AssetAssignmentCreateNestedManyWithoutAssetInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneWithoutCreatedAssetsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedAssetsInput, UserUncheckedCreateWithoutCreatedAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedAssetsInput
+    upsert?: UserUpsertWithoutCreatedAssetsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedAssetsInput, UserUpdateWithoutCreatedAssetsInput>, UserUncheckedUpdateWithoutCreatedAssetsInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssetInput | AssetAssignmentUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput> | AssetAssignmentCreateWithoutAssetInput[] | AssetAssignmentUncheckedCreateWithoutAssetInput[]
+    connectOrCreate?: AssetAssignmentCreateOrConnectWithoutAssetInput | AssetAssignmentCreateOrConnectWithoutAssetInput[]
+    upsert?: AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput | AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput[]
+    createMany?: AssetAssignmentCreateManyAssetInputEnvelope
+    set?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    disconnect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    delete?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    connect?: AssetAssignmentWhereUniqueInput | AssetAssignmentWhereUniqueInput[]
+    update?: AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput | AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput[]
+    updateMany?: AssetAssignmentUpdateManyWithWhereWithoutAssetInput | AssetAssignmentUpdateManyWithWhereWithoutAssetInput[]
+    deleteMany?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+  }
+
+  export type AssetCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutAssignmentsInput
+    connect?: AssetWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssetAssignmentsInput = {
+    create?: XOR<UserCreateWithoutAssetAssignmentsInput, UserUncheckedCreateWithoutAssetAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetAssignmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssetAssignmentsMadeInput = {
+    create?: XOR<UserCreateWithoutAssetAssignmentsMadeInput, UserUncheckedCreateWithoutAssetAssignmentsMadeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetAssignmentsMadeInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AssetUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: AssetCreateOrConnectWithoutAssignmentsInput
+    upsert?: AssetUpsertWithoutAssignmentsInput
+    connect?: AssetWhereUniqueInput
+    update?: XOR<XOR<AssetUpdateToOneWithWhereWithoutAssignmentsInput, AssetUpdateWithoutAssignmentsInput>, AssetUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAssetAssignmentsNestedInput = {
+    create?: XOR<UserCreateWithoutAssetAssignmentsInput, UserUncheckedCreateWithoutAssetAssignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetAssignmentsInput
+    upsert?: UserUpsertWithoutAssetAssignmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssetAssignmentsInput, UserUpdateWithoutAssetAssignmentsInput>, UserUncheckedUpdateWithoutAssetAssignmentsInput>
+  }
+
+  export type UserUpdateOneWithoutAssetAssignmentsMadeNestedInput = {
+    create?: XOR<UserCreateWithoutAssetAssignmentsMadeInput, UserUncheckedCreateWithoutAssetAssignmentsMadeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssetAssignmentsMadeInput
+    upsert?: UserUpsertWithoutAssetAssignmentsMadeInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssetAssignmentsMadeInput, UserUpdateWithoutAssetAssignmentsMadeInput>, UserUncheckedUpdateWithoutAssetAssignmentsMadeInput>
+  }
+
   export type SchoolCreateNestedOneWithoutProgramsInput = {
     create?: XOR<SchoolCreateWithoutProgramsInput, SchoolUncheckedCreateWithoutProgramsInput>
     connectOrCreate?: SchoolCreateOrConnectWithoutProgramsInput
@@ -158737,6 +164308,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutRevertedTravelInput = {
+    create?: XOR<UserCreateWithoutRevertedTravelInput, UserUncheckedCreateWithoutRevertedTravelInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRevertedTravelInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type TravelExpenseCreateNestedManyWithoutTravelRequestInput = {
     create?: XOR<TravelExpenseCreateWithoutTravelRequestInput, TravelExpenseUncheckedCreateWithoutTravelRequestInput> | TravelExpenseCreateWithoutTravelRequestInput[] | TravelExpenseUncheckedCreateWithoutTravelRequestInput[]
     connectOrCreate?: TravelExpenseCreateOrConnectWithoutTravelRequestInput | TravelExpenseCreateOrConnectWithoutTravelRequestInput[]
@@ -158771,6 +164348,16 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApprovedTravelInput, UserUpdateWithoutApprovedTravelInput>, UserUncheckedUpdateWithoutApprovedTravelInput>
+  }
+
+  export type UserUpdateOneWithoutRevertedTravelNestedInput = {
+    create?: XOR<UserCreateWithoutRevertedTravelInput, UserUncheckedCreateWithoutRevertedTravelInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRevertedTravelInput
+    upsert?: UserUpsertWithoutRevertedTravelInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRevertedTravelInput, UserUpdateWithoutRevertedTravelInput>, UserUncheckedUpdateWithoutRevertedTravelInput>
   }
 
   export type TravelExpenseUpdateManyWithoutTravelRequestNestedInput = {
@@ -160861,10 +166448,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -160888,6 +166481,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -160901,6 +166495,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -160922,10 +166520,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -160949,6 +166553,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -160962,6 +166567,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -160996,6 +166605,31 @@ export namespace Prisma {
   export type RolePermissionCreateManyRoleInputEnvelope = {
     data: RolePermissionCreateManyRoleInput | RolePermissionCreateManyRoleInput[]
     skipDuplicates?: boolean
+  }
+
+  export type DashboardConfigCreateWithoutRoleInput = {
+    id?: string
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutDashboardConfigInput
+  }
+
+  export type DashboardConfigUncheckedCreateWithoutRoleInput = {
+    id?: string
+    userId?: string | null
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardConfigCreateOrConnectWithoutRoleInput = {
+    where: DashboardConfigWhereUniqueInput
+    create: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
   }
 
   export type UserUpsertWithWhereUniqueWithoutRoleInput = {
@@ -161037,10 +166671,16 @@ export namespace Prisma {
     emergencyContactPhone?: StringNullableFilter<"User"> | string | null
     aadharNumber?: StringNullableFilter<"User"> | string | null
     panCard?: StringNullableFilter<"User"> | string | null
+    voterId?: StringNullableFilter<"User"> | string | null
+    highestQualification?: StringNullableFilter<"User"> | string | null
+    highestQualificationDetail?: StringNullableFilter<"User"> | string | null
     bankName?: StringNullableFilter<"User"> | string | null
     bankAccountNo?: StringNullableFilter<"User"> | string | null
     bankIfsc?: StringNullableFilter<"User"> | string | null
     dateOfJoining?: DateTimeNullableFilter<"User"> | Date | string | null
+    dateOfLeaving?: DateTimeNullableFilter<"User"> | Date | string | null
+    resignationReason?: StringNullableFilter<"User"> | string | null
+    inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
@@ -161077,6 +166717,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RolePermission"> | Date | string
   }
 
+  export type DashboardConfigUpsertWithoutRoleInput = {
+    update: XOR<DashboardConfigUpdateWithoutRoleInput, DashboardConfigUncheckedUpdateWithoutRoleInput>
+    create: XOR<DashboardConfigCreateWithoutRoleInput, DashboardConfigUncheckedCreateWithoutRoleInput>
+    where?: DashboardConfigWhereInput
+  }
+
+  export type DashboardConfigUpdateToOneWithWhereWithoutRoleInput = {
+    where?: DashboardConfigWhereInput
+    data: XOR<DashboardConfigUpdateWithoutRoleInput, DashboardConfigUncheckedUpdateWithoutRoleInput>
+  }
+
+  export type DashboardConfigUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutDashboardConfigNestedInput
+  }
+
+  export type DashboardConfigUncheckedUpdateWithoutRoleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RoleCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -161085,6 +166756,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: RolePermissionCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutRoleInput
   }
 
   export type RoleUncheckedCreateWithoutUsersInput = {
@@ -161095,6 +166767,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     permissions?: RolePermissionUncheckedCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutRoleInput
   }
 
   export type RoleCreateOrConnectWithoutUsersInput = {
@@ -161147,10 +166820,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161174,6 +166853,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -161187,6 +166867,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedUsersInput = {
@@ -161209,10 +166893,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161235,6 +166925,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -161248,6 +166939,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedUsersInput = {
@@ -161274,10 +166969,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161301,6 +167002,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -161314,6 +167016,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedByInput = {
@@ -161336,10 +167042,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161362,6 +167074,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -161375,6 +167088,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedByInput = {
@@ -161406,10 +167123,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161433,6 +167156,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -161446,6 +167170,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutDirectReportsInput = {
@@ -161468,10 +167196,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161494,6 +167228,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -161507,6 +167242,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutDirectReportsInput = {
@@ -161533,10 +167272,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161560,6 +167305,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -161573,6 +167319,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -161595,10 +167345,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -161621,6 +167377,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -161634,6 +167391,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -161923,6 +167684,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -161941,6 +167703,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -161967,6 +167730,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -161985,6 +167749,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -162103,9 +167868,14 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     approver?: UserCreateNestedOneWithoutApprovedTravelInput
+    reverter?: UserCreateNestedOneWithoutRevertedTravelInput
     expenses?: TravelExpenseCreateNestedManyWithoutTravelRequestInput
   }
 
@@ -162120,6 +167890,11 @@ export namespace Prisma {
     rejectionReason?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: TravelExpenseUncheckedCreateNestedManyWithoutTravelRequestInput
@@ -162145,9 +167920,14 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTravelRequestsInput
+    reverter?: UserCreateNestedOneWithoutRevertedTravelInput
     expenses?: TravelExpenseCreateNestedManyWithoutTravelRequestInput
   }
 
@@ -162162,6 +167942,11 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     expenses?: TravelExpenseUncheckedCreateNestedManyWithoutTravelRequestInput
@@ -162174,6 +167959,58 @@ export namespace Prisma {
 
   export type TravelRequestCreateManyApproverInputEnvelope = {
     data: TravelRequestCreateManyApproverInput | TravelRequestCreateManyApproverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TravelRequestCreateWithoutReverterInput = {
+    id?: string
+    destination: string
+    purpose: string
+    startDate: Date | string
+    endDate: Date | string
+    expectedExpenses: number
+    status?: $Enums.TravelStatus
+    rejectionReason?: string | null
+    approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTravelRequestsInput
+    approver?: UserCreateNestedOneWithoutApprovedTravelInput
+    expenses?: TravelExpenseCreateNestedManyWithoutTravelRequestInput
+  }
+
+  export type TravelRequestUncheckedCreateWithoutReverterInput = {
+    id?: string
+    userId: string
+    destination: string
+    purpose: string
+    startDate: Date | string
+    endDate: Date | string
+    expectedExpenses: number
+    status?: $Enums.TravelStatus
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    expenses?: TravelExpenseUncheckedCreateNestedManyWithoutTravelRequestInput
+  }
+
+  export type TravelRequestCreateOrConnectWithoutReverterInput = {
+    where: TravelRequestWhereUniqueInput
+    create: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput>
+  }
+
+  export type TravelRequestCreateManyReverterInputEnvelope = {
+    data: TravelRequestCreateManyReverterInput | TravelRequestCreateManyReverterInput[]
     skipDuplicates?: boolean
   }
 
@@ -162656,6 +168493,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -162669,6 +168507,7 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -162680,6 +168519,141 @@ export namespace Prisma {
 
   export type NotificationCreateManyUserInputEnvelope = {
     data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DashboardConfigCreateWithoutUserInput = {
+    id?: string
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: RoleCreateNestedOneWithoutDashboardConfigInput
+  }
+
+  export type DashboardConfigUncheckedCreateWithoutUserInput = {
+    id?: string
+    roleId?: string | null
+    kpiKeys?: DashboardConfigCreatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigCreatelinkKeysInput | string[]
+    updatedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardConfigCreateOrConnectWithoutUserInput = {
+    where: DashboardConfigWhereUniqueInput
+    create: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+  }
+
+  export type AssetAssignmentCreateWithoutUserInput = {
+    id?: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssetAssignmentsMadeInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutUserInput = {
+    id?: string
+    assetId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutUserInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type AssetAssignmentCreateManyUserInputEnvelope = {
+    data: AssetAssignmentCreateManyUserInput | AssetAssignmentCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssetAssignmentCreateWithoutAssignedByInput = {
+    id?: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    asset: AssetCreateNestedOneWithoutAssignmentsInput
+    user: UserCreateNestedOneWithoutAssetAssignmentsInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutAssignedByInput = {
+    id?: string
+    assetId: string
+    userId: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutAssignedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type AssetAssignmentCreateManyAssignedByInputEnvelope = {
+    data: AssetAssignmentCreateManyAssignedByInput | AssetAssignmentCreateManyAssignedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AssetCreateWithoutCreatedByInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssetAssignmentCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssetAssignmentUncheckedCreateNestedManyWithoutAssetInput
+  }
+
+  export type AssetCreateOrConnectWithoutCreatedByInput = {
+    where: AssetWhereUniqueInput
+    create: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type AssetCreateManyCreatedByInputEnvelope = {
+    data: AssetCreateManyCreatedByInput | AssetCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -162702,6 +168676,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: RolePermissionUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutRoleNestedInput
   }
 
   export type RoleUncheckedUpdateWithoutUsersInput = {
@@ -162712,6 +168687,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     permissions?: RolePermissionUncheckedUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutRoleNestedInput
   }
 
   export type UserPermissionUpsertWithWhereUniqueWithoutUserInput = {
@@ -162772,10 +168748,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -162799,6 +168781,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -162812,6 +168795,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedUsersInput = {
@@ -162834,10 +168821,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -162860,6 +168853,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -162873,6 +168867,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -162921,10 +168919,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -162948,6 +168952,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -162961,6 +168966,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDirectReportsInput = {
@@ -162983,10 +168992,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -163009,6 +169024,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -163022,6 +169038,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -163318,6 +169338,7 @@ export namespace Prisma {
     deadline?: DateTimeNullableFilter<"Task"> | Date | string | null
     status?: StringFilter<"Task"> | string
     priority?: StringFilter<"Task"> | string
+    timeSlot?: StringFilter<"Task"> | string
     isPlanned?: BoolFilter<"Task"> | boolean
     completionDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
@@ -163460,6 +169481,11 @@ export namespace Prisma {
     rejectionReason?: StringNullableFilter<"TravelRequest"> | string | null
     approvedBy?: StringNullableFilter<"TravelRequest"> | string | null
     approvedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertReason?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedBy?: StringNullableFilter<"TravelRequest"> | string | null
+    revertedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    resubmittedAt?: DateTimeNullableFilter<"TravelRequest"> | Date | string | null
+    revertCount?: IntFilter<"TravelRequest"> | number
     createdAt?: DateTimeFilter<"TravelRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TravelRequest"> | Date | string
   }
@@ -163478,6 +169504,22 @@ export namespace Prisma {
   export type TravelRequestUpdateManyWithWhereWithoutApproverInput = {
     where: TravelRequestScalarWhereInput
     data: XOR<TravelRequestUpdateManyMutationInput, TravelRequestUncheckedUpdateManyWithoutApproverInput>
+  }
+
+  export type TravelRequestUpsertWithWhereUniqueWithoutReverterInput = {
+    where: TravelRequestWhereUniqueInput
+    update: XOR<TravelRequestUpdateWithoutReverterInput, TravelRequestUncheckedUpdateWithoutReverterInput>
+    create: XOR<TravelRequestCreateWithoutReverterInput, TravelRequestUncheckedCreateWithoutReverterInput>
+  }
+
+  export type TravelRequestUpdateWithWhereUniqueWithoutReverterInput = {
+    where: TravelRequestWhereUniqueInput
+    data: XOR<TravelRequestUpdateWithoutReverterInput, TravelRequestUncheckedUpdateWithoutReverterInput>
+  }
+
+  export type TravelRequestUpdateManyWithWhereWithoutReverterInput = {
+    where: TravelRequestScalarWhereInput
+    data: XOR<TravelRequestUpdateManyMutationInput, TravelRequestUncheckedUpdateManyWithoutReverterInput>
   }
 
   export type ReimbursementUpsertWithWhereUniqueWithoutUserInput = {
@@ -163864,11 +169906,152 @@ export namespace Prisma {
     read?: BoolFilter<"Notification"> | boolean
     actorId?: StringNullableFilter<"Notification"> | string | null
     metadata?: JsonNullableFilter<"Notification">
+    dedupeKey?: StringNullableFilter<"Notification"> | string | null
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
-  export type UserCreateWithoutNotificationsInput = {
+  export type DashboardConfigUpsertWithoutUserInput = {
+    update: XOR<DashboardConfigUpdateWithoutUserInput, DashboardConfigUncheckedUpdateWithoutUserInput>
+    create: XOR<DashboardConfigCreateWithoutUserInput, DashboardConfigUncheckedCreateWithoutUserInput>
+    where?: DashboardConfigWhereInput
+  }
+
+  export type DashboardConfigUpdateToOneWithWhereWithoutUserInput = {
+    where?: DashboardConfigWhereInput
+    data: XOR<DashboardConfigUpdateWithoutUserInput, DashboardConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type DashboardConfigUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneWithoutDashboardConfigNestedInput
+  }
+
+  export type DashboardConfigUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    kpiKeys?: DashboardConfigUpdatekpiKeysInput | string[]
+    linkKeys?: DashboardConfigUpdatelinkKeysInput | string[]
+    updatedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutUserInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutUserInput, AssetAssignmentUncheckedUpdateWithoutUserInput>
+    create: XOR<AssetAssignmentCreateWithoutUserInput, AssetAssignmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutUserInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutUserInput, AssetAssignmentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutUserInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AssetAssignmentScalarWhereInput = {
+    AND?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+    OR?: AssetAssignmentScalarWhereInput[]
+    NOT?: AssetAssignmentScalarWhereInput | AssetAssignmentScalarWhereInput[]
+    id?: StringFilter<"AssetAssignment"> | string
+    assetId?: StringFilter<"AssetAssignment"> | string
+    userId?: StringFilter<"AssetAssignment"> | string
+    assignedById?: StringNullableFilter<"AssetAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    returnedAt?: DateTimeNullableFilter<"AssetAssignment"> | Date | string | null
+    returnCondition?: StringNullableFilter<"AssetAssignment"> | string | null
+    returnNotes?: StringNullableFilter<"AssetAssignment"> | string | null
+    notes?: StringNullableFilter<"AssetAssignment"> | string | null
+    createdAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"AssetAssignment"> | Date | string
+  }
+
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutAssignedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutAssignedByInput, AssetAssignmentUncheckedUpdateWithoutAssignedByInput>
+    create: XOR<AssetAssignmentCreateWithoutAssignedByInput, AssetAssignmentUncheckedCreateWithoutAssignedByInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutAssignedByInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutAssignedByInput, AssetAssignmentUncheckedUpdateWithoutAssignedByInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutAssignedByInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutAssignedByInput>
+  }
+
+  export type AssetUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: AssetWhereUniqueInput
+    update: XOR<AssetUpdateWithoutCreatedByInput, AssetUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<AssetCreateWithoutCreatedByInput, AssetUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type AssetUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: AssetWhereUniqueInput
+    data: XOR<AssetUpdateWithoutCreatedByInput, AssetUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type AssetUpdateManyWithWhereWithoutCreatedByInput = {
+    where: AssetScalarWhereInput
+    data: XOR<AssetUpdateManyMutationInput, AssetUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type AssetScalarWhereInput = {
+    AND?: AssetScalarWhereInput | AssetScalarWhereInput[]
+    OR?: AssetScalarWhereInput[]
+    NOT?: AssetScalarWhereInput | AssetScalarWhereInput[]
+    id?: StringFilter<"Asset"> | string
+    assetCode?: StringFilter<"Asset"> | string
+    name?: StringFilter<"Asset"> | string
+    category?: StringNullableFilter<"Asset"> | string | null
+    serialNumber?: StringNullableFilter<"Asset"> | string | null
+    description?: StringNullableFilter<"Asset"> | string | null
+    condition?: StringNullableFilter<"Asset"> | string | null
+    notes?: StringNullableFilter<"Asset"> | string | null
+    createdById?: StringNullableFilter<"Asset"> | string | null
+    createdAt?: DateTimeFilter<"Asset"> | Date | string
+    updatedAt?: DateTimeFilter<"Asset"> | Date | string
+  }
+
+  export type RoleCreateWithoutDashboardConfigInput = {
+    id?: string
+    name: string
+    description?: string | null
+    displayInRegister?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutRoleInput
+    permissions?: RolePermissionCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleUncheckedCreateWithoutDashboardConfigInput = {
+    id?: string
+    name: string
+    description?: string | null
+    displayInRegister?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutRoleInput
+    permissions?: RolePermissionUncheckedCreateNestedManyWithoutRoleInput
+  }
+
+  export type RoleCreateOrConnectWithoutDashboardConfigInput = {
+    where: RoleWhereUniqueInput
+    create: XOR<RoleCreateWithoutDashboardConfigInput, RoleUncheckedCreateWithoutDashboardConfigInput>
+  }
+
+  export type UserCreateWithoutDashboardConfigInput = {
     id?: string
     name: string
     username: string
@@ -163887,10 +170070,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -163915,6 +170104,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -163927,9 +170117,13 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
-  export type UserUncheckedCreateWithoutNotificationsInput = {
+  export type UserUncheckedCreateWithoutDashboardConfigInput = {
     id?: string
     name: string
     username: string
@@ -163949,10 +170143,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -163976,6 +170176,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -163988,6 +170189,347 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutDashboardConfigInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDashboardConfigInput, UserUncheckedCreateWithoutDashboardConfigInput>
+  }
+
+  export type RoleUpsertWithoutDashboardConfigInput = {
+    update: XOR<RoleUpdateWithoutDashboardConfigInput, RoleUncheckedUpdateWithoutDashboardConfigInput>
+    create: XOR<RoleCreateWithoutDashboardConfigInput, RoleUncheckedCreateWithoutDashboardConfigInput>
+    where?: RoleWhereInput
+  }
+
+  export type RoleUpdateToOneWithWhereWithoutDashboardConfigInput = {
+    where?: RoleWhereInput
+    data: XOR<RoleUpdateWithoutDashboardConfigInput, RoleUncheckedUpdateWithoutDashboardConfigInput>
+  }
+
+  export type RoleUpdateWithoutDashboardConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    displayInRegister?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutRoleNestedInput
+    permissions?: RolePermissionUpdateManyWithoutRoleNestedInput
+  }
+
+  export type RoleUncheckedUpdateWithoutDashboardConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    displayInRegister?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutRoleNestedInput
+    permissions?: RolePermissionUncheckedUpdateManyWithoutRoleNestedInput
+  }
+
+  export type UserUpsertWithoutDashboardConfigInput = {
+    update: XOR<UserUpdateWithoutDashboardConfigInput, UserUncheckedUpdateWithoutDashboardConfigInput>
+    create: XOR<UserCreateWithoutDashboardConfigInput, UserUncheckedCreateWithoutDashboardConfigInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDashboardConfigInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDashboardConfigInput, UserUncheckedUpdateWithoutDashboardConfigInput>
+  }
+
+  export type UserUpdateWithoutDashboardConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDashboardConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -164025,10 +170567,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -164053,6 +170601,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -164065,6 +170614,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -164087,10 +170640,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -164114,6 +170673,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -164126,6 +170686,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -164218,6 +170782,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutRoleInput
   }
 
   export type RoleUncheckedCreateWithoutPermissionsInput = {
@@ -164228,6 +170793,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutRoleInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutRoleInput
   }
 
   export type RoleCreateOrConnectWithoutPermissionsInput = {
@@ -164279,6 +170845,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutRoleNestedInput
   }
 
   export type RoleUncheckedUpdateWithoutPermissionsInput = {
@@ -164289,6 +170856,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutRoleNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutRoleNestedInput
   }
 
   export type PermissionUpsertWithoutRolesInput = {
@@ -164341,10 +170909,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -164368,6 +170942,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -164381,6 +170956,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -164403,10 +170982,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -164429,6 +171014,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -164442,6 +171028,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -164504,10 +171094,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -164531,6 +171127,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -164544,6 +171141,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -164566,10 +171167,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -164592,6 +171199,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -164605,6 +171213,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -165109,10 +171721,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -165136,6 +171754,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -165149,6 +171768,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -165171,10 +171794,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -165197,6 +171826,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -165210,6 +171840,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -165899,10 +172533,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -165926,6 +172566,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -165939,6 +172580,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -165961,10 +172606,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -165987,6 +172638,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -166000,6 +172652,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -166660,10 +173316,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -166688,6 +173350,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -166700,6 +173363,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -166722,10 +173389,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -166749,6 +173422,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -166761,6 +173435,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -166873,10 +173551,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -166901,6 +173585,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -166913,6 +173598,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -166935,10 +173624,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -166962,6 +173657,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -166974,6 +173670,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FellowCreateWithoutPerformanceObservationsInput = {
@@ -167064,10 +173764,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -167092,6 +173798,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -167104,6 +173811,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -167126,10 +173837,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -167153,6 +173870,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -167165,6 +173883,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -167277,10 +173999,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -167305,6 +174033,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -167317,6 +174046,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -167339,10 +174072,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -167366,6 +174105,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -167378,6 +174118,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -170115,10 +176859,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170143,6 +176893,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -170155,6 +176906,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedSchoolsInput = {
@@ -170177,10 +176932,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170204,6 +176965,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -170216,6 +176978,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedSchoolsInput = {
@@ -170308,10 +177074,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -170336,6 +177108,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -170348,6 +177121,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
@@ -170370,10 +177147,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -170397,6 +177180,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -170409,6 +177193,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SchoolUpsertWithoutProgramManagersInput = {
@@ -170491,10 +177279,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170519,6 +177313,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -170531,6 +177326,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedCentresInput = {
@@ -170553,10 +177352,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170580,6 +177385,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -170592,6 +177398,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedCentresInput = {
@@ -170678,10 +177488,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -170706,6 +177522,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -170718,6 +177535,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedCentresInput = {
@@ -170740,10 +177561,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -170767,6 +177594,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -170779,6 +177607,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
@@ -170855,10 +177687,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170883,6 +177721,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -170895,6 +177734,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
@@ -170917,10 +177760,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -170944,6 +177793,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -170956,6 +177806,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
@@ -171026,10 +177880,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171054,6 +177914,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -171066,6 +177927,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
@@ -171088,10 +177953,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171115,6 +177986,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -171127,6 +177999,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
@@ -171187,10 +178063,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171215,6 +178097,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -171227,6 +178110,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPmTasksInput = {
@@ -171249,10 +178136,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171276,6 +178169,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -171288,6 +178182,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPmTasksInput = {
@@ -171351,10 +178249,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171379,6 +178283,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -171391,6 +178296,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTasksInput = {
@@ -171413,10 +178322,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171440,6 +178355,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -171452,6 +178368,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -171520,10 +178440,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171548,6 +178474,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -171560,6 +178487,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
@@ -171582,10 +178513,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171609,6 +178546,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -171621,6 +178559,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
@@ -171695,10 +178637,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171723,6 +178671,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -171735,6 +178684,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
@@ -171757,10 +178710,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -171784,6 +178743,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -171796,6 +178756,10 @@ export namespace Prisma {
     managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutAssignedTasksInput = {
@@ -171817,10 +178781,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171844,6 +178814,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -171857,6 +178828,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -171879,10 +178854,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171905,6 +178886,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -171918,6 +178900,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -171944,10 +178930,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -171971,6 +178963,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -171984,6 +178977,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -172006,10 +179003,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -172032,6 +179035,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -172045,6 +179049,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -172138,10 +179146,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172165,6 +179179,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -172178,6 +179193,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -172200,10 +179219,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172226,6 +179251,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -172239,6 +179265,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -172271,10 +179301,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172298,6 +179334,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -172311,6 +179348,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -172333,10 +179374,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172359,6 +179406,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -172372,6 +179420,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -172414,6 +179466,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -172433,6 +179486,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -172464,10 +179518,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -172491,6 +179551,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -172504,6 +179565,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsNewInput = {
@@ -172526,10 +179591,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -172552,6 +179623,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -172565,6 +179637,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsNewInput = {
@@ -172591,6 +179667,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -172610,6 +179687,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -172647,10 +179725,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172674,6 +179758,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -172687,6 +179772,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsNewInput = {
@@ -172709,10 +179798,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -172735,6 +179830,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -172748,6 +179844,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TaskCreateWithoutDocumentsInput = {
@@ -172758,6 +179858,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -172777,6 +179878,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -172808,10 +179910,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -172835,6 +179943,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -172848,6 +179957,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskDocumentsInput = {
@@ -172870,10 +179983,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -172896,6 +180015,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -172909,6 +180029,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskDocumentsInput = {
@@ -172935,6 +180059,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -172954,6 +180079,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -172991,10 +180117,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -173018,6 +180150,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -173031,6 +180164,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskDocumentsInput = {
@@ -173053,10 +180190,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -173079,6 +180222,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -173092,6 +180236,1046 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserCreateWithoutCreatedAssetsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedAssetsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedAssetsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedAssetsInput, UserUncheckedCreateWithoutCreatedAssetsInput>
+  }
+
+  export type AssetAssignmentCreateWithoutAssetInput = {
+    id?: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutAssetAssignmentsInput
+    assignedBy?: UserCreateNestedOneWithoutAssetAssignmentsMadeInput
+  }
+
+  export type AssetAssignmentUncheckedCreateWithoutAssetInput = {
+    id?: string
+    userId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentCreateOrConnectWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    create: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentCreateManyAssetInputEnvelope = {
+    data: AssetAssignmentCreateManyAssetInput | AssetAssignmentCreateManyAssetInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutCreatedAssetsInput = {
+    update: XOR<UserUpdateWithoutCreatedAssetsInput, UserUncheckedUpdateWithoutCreatedAssetsInput>
+    create: XOR<UserCreateWithoutCreatedAssetsInput, UserUncheckedCreateWithoutCreatedAssetsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedAssetsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedAssetsInput, UserUncheckedUpdateWithoutCreatedAssetsInput>
+  }
+
+  export type UserUpdateWithoutCreatedAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+  }
+
+  export type AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    update: XOR<AssetAssignmentUpdateWithoutAssetInput, AssetAssignmentUncheckedUpdateWithoutAssetInput>
+    create: XOR<AssetAssignmentCreateWithoutAssetInput, AssetAssignmentUncheckedCreateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentUpdateWithWhereUniqueWithoutAssetInput = {
+    where: AssetAssignmentWhereUniqueInput
+    data: XOR<AssetAssignmentUpdateWithoutAssetInput, AssetAssignmentUncheckedUpdateWithoutAssetInput>
+  }
+
+  export type AssetAssignmentUpdateManyWithWhereWithoutAssetInput = {
+    where: AssetAssignmentScalarWhereInput
+    data: XOR<AssetAssignmentUpdateManyMutationInput, AssetAssignmentUncheckedUpdateManyWithoutAssetInput>
+  }
+
+  export type AssetCreateWithoutAssignmentsInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy?: UserCreateNestedOneWithoutCreatedAssetsInput
+  }
+
+  export type AssetUncheckedCreateWithoutAssignmentsInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetCreateOrConnectWithoutAssignmentsInput = {
+    where: AssetWhereUniqueInput
+    create: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type UserCreateWithoutAssetAssignmentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssetAssignmentsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssetAssignmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssetAssignmentsInput, UserUncheckedCreateWithoutAssetAssignmentsInput>
+  }
+
+  export type UserCreateWithoutAssetAssignmentsMadeInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutAssetAssignmentsMadeInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutAssetAssignmentsMadeInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssetAssignmentsMadeInput, UserUncheckedCreateWithoutAssetAssignmentsMadeInput>
+  }
+
+  export type AssetUpsertWithoutAssignmentsInput = {
+    update: XOR<AssetUpdateWithoutAssignmentsInput, AssetUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<AssetCreateWithoutAssignmentsInput, AssetUncheckedCreateWithoutAssignmentsInput>
+    where?: AssetWhereInput
+  }
+
+  export type AssetUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: AssetWhereInput
+    data: XOR<AssetUpdateWithoutAssignmentsInput, AssetUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type AssetUpdateWithoutAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: UserUpdateOneWithoutCreatedAssetsNestedInput
+  }
+
+  export type AssetUncheckedUpdateWithoutAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutAssetAssignmentsInput = {
+    update: XOR<UserUpdateWithoutAssetAssignmentsInput, UserUncheckedUpdateWithoutAssetAssignmentsInput>
+    create: XOR<UserCreateWithoutAssetAssignmentsInput, UserUncheckedCreateWithoutAssetAssignmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssetAssignmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssetAssignmentsInput, UserUncheckedUpdateWithoutAssetAssignmentsInput>
+  }
+
+  export type UserUpdateWithoutAssetAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssetAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutAssetAssignmentsMadeInput = {
+    update: XOR<UserUpdateWithoutAssetAssignmentsMadeInput, UserUncheckedUpdateWithoutAssetAssignmentsMadeInput>
+    create: XOR<UserCreateWithoutAssetAssignmentsMadeInput, UserUncheckedCreateWithoutAssetAssignmentsMadeInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssetAssignmentsMadeInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssetAssignmentsMadeInput, UserUncheckedUpdateWithoutAssetAssignmentsMadeInput>
+  }
+
+  export type UserUpdateWithoutAssetAssignmentsMadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssetAssignmentsMadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type SchoolCreateWithoutProgramsInput = {
@@ -177071,10 +185255,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177098,6 +185288,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -177111,6 +185302,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -177133,10 +185328,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177159,6 +185360,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -177172,6 +185374,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -177275,10 +185481,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177302,6 +185514,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -177315,6 +185528,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -177337,10 +185554,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177363,6 +185586,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -177376,6 +185600,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -177434,10 +185662,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177461,6 +185695,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -177474,6 +185709,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -177496,10 +185735,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177522,6 +185767,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -177535,6 +185781,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -177572,10 +185822,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177599,6 +185855,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -177612,6 +185869,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -177634,10 +185895,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177660,6 +185927,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -177673,6 +185941,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -177694,10 +185966,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177721,6 +185999,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -177734,6 +186013,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -177756,10 +186039,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -177782,6 +186071,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -177795,6 +186085,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -177861,10 +186155,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177888,6 +186188,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -177901,6 +186202,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -177923,10 +186228,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -177949,6 +186260,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -177962,6 +186274,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type CompOffCreditUpsertWithoutLeaveInput = {
@@ -178018,10 +186334,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -178045,6 +186367,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -178058,6 +186381,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCompOffCreditsInput = {
@@ -178080,10 +186407,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -178106,6 +186439,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -178119,6 +186453,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCompOffCreditsInput = {
@@ -178195,10 +186533,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -178222,6 +186566,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -178235,6 +186580,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompOffCreditsInput = {
@@ -178257,10 +186606,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -178283,6 +186638,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -178296,6 +186652,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type LeaveUpsertWithoutCompOffCreditInput = {
@@ -178635,10 +186995,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -178662,6 +187028,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -178675,6 +187042,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReliefDistributionsInput = {
@@ -178697,10 +187068,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -178723,6 +187100,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -178736,6 +187114,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReliefDistributionsInput = {
@@ -178846,10 +187228,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -178873,6 +187261,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -178886,6 +187275,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReliefDistributionsInput = {
@@ -178908,10 +187301,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -178934,6 +187333,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -178947,6 +187347,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput = {
@@ -179405,10 +187809,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -179432,6 +187842,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -179445,6 +187856,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -179467,10 +187882,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -179493,6 +187914,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -179506,6 +187928,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -179580,10 +188006,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -179607,6 +188039,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -179620,6 +188053,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -179642,10 +188079,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -179668,6 +188111,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -179681,6 +188125,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -181067,10 +189515,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -181095,6 +189549,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -181107,6 +189562,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -181129,10 +189588,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -181156,6 +189621,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -181168,6 +189634,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -181280,10 +189750,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -181308,6 +189784,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -181320,6 +189797,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -181342,10 +189823,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -181369,6 +189856,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -181381,6 +189869,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -181759,10 +190251,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -181787,6 +190285,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -181799,6 +190298,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -181821,10 +190324,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -181848,6 +190357,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -181860,6 +190370,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -181972,10 +190486,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182000,6 +190520,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -182012,6 +190533,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -182034,10 +190559,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182061,6 +190592,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -182073,6 +190605,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -182094,10 +190630,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182121,6 +190663,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -182134,6 +190677,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -182156,10 +190703,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182182,6 +190735,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -182195,6 +190749,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -182221,10 +190779,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182248,6 +190812,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
@@ -182261,6 +190826,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -182283,10 +190852,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182309,6 +190884,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
@@ -182322,11 +190898,164 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutApprovedTravelInput, UserUncheckedCreateWithoutApprovedTravelInput>
+  }
+
+  export type UserCreateWithoutRevertedTravelInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutRevertedTravelInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutRevertedTravelInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRevertedTravelInput, UserUncheckedCreateWithoutRevertedTravelInput>
   }
 
   export type TravelExpenseCreateWithoutTravelRequestInput = {
@@ -182391,10 +191120,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182418,6 +191153,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -182431,6 +191167,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -182453,10 +191193,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182479,6 +191225,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -182492,6 +191239,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -182524,10 +191275,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182551,6 +191308,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -182564,6 +191322,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -182586,10 +191348,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -182612,6 +191380,7 @@ export namespace Prisma {
     taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -182625,6 +191394,165 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutRevertedTravelInput = {
+    update: XOR<UserUpdateWithoutRevertedTravelInput, UserUncheckedUpdateWithoutRevertedTravelInput>
+    create: XOR<UserCreateWithoutRevertedTravelInput, UserUncheckedCreateWithoutRevertedTravelInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRevertedTravelInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRevertedTravelInput, UserUncheckedUpdateWithoutRevertedTravelInput>
+  }
+
+  export type UserUpdateWithoutRevertedTravelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRevertedTravelInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -182668,10 +191596,15 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTravelRequestsInput
     approver?: UserCreateNestedOneWithoutApprovedTravelInput
+    reverter?: UserCreateNestedOneWithoutRevertedTravelInput
   }
 
   export type TravelRequestUncheckedCreateWithoutExpensesInput = {
@@ -182686,6 +191619,11 @@ export namespace Prisma {
     rejectionReason?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -182716,10 +191654,15 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTravelRequestsNestedInput
     approver?: UserUpdateOneWithoutApprovedTravelNestedInput
+    reverter?: UserUpdateOneWithoutRevertedTravelNestedInput
   }
 
   export type TravelRequestUncheckedUpdateWithoutExpensesInput = {
@@ -182734,6 +191677,11 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -182757,10 +191705,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182785,6 +191739,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -182797,6 +191752,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementRequestsInput = {
@@ -182819,10 +191778,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182846,6 +191811,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -182858,6 +191824,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementRequestsInput = {
@@ -182884,10 +191854,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182912,6 +191888,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -182924,6 +191901,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsApprovedInput = {
@@ -182946,10 +191927,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -182973,6 +191960,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -182985,6 +191973,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsApprovedInput = {
@@ -183011,10 +192003,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -183039,6 +192037,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -183051,6 +192050,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsReimbursedInput = {
@@ -183073,10 +192076,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -183100,6 +192109,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -183112,6 +192122,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsReimbursedInput = {
@@ -183183,10 +192197,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183211,6 +192231,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -183223,6 +192244,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementRequestsInput = {
@@ -183245,10 +192270,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183272,6 +192303,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -183284,6 +192316,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsApprovedInput = {
@@ -183316,10 +192352,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183344,6 +192386,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -183356,6 +192399,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsApprovedInput = {
@@ -183378,10 +192425,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183405,6 +192458,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -183417,6 +192471,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsReimbursedInput = {
@@ -183449,10 +192507,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183477,6 +192541,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -183489,6 +192554,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsReimbursedInput = {
@@ -183511,10 +192580,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -183538,6 +192613,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -183550,6 +192626,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput = {
@@ -188296,10 +197376,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -188335,10 +197421,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -188362,6 +197454,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -188375,6 +197468,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -188396,10 +197493,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -188423,6 +197526,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -188436,6 +197540,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -188457,10 +197565,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -188519,10 +197633,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -188551,10 +197671,16 @@ export namespace Prisma {
     emergencyContactPhone?: string | null
     aadharNumber?: string | null
     panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
     bankName?: string | null
     bankAccountNo?: string | null
     bankIfsc?: string | null
     dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
     avatar?: string | null
     leavesTaken?: number
     leavesRemaining?: number
@@ -188646,6 +197772,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -188661,6 +197788,7 @@ export namespace Prisma {
     deadline?: Date | string | null
     status?: string
     priority?: string
+    timeSlot?: string
     isPlanned?: boolean
     completionDate?: Date | string | null
     createdAt?: Date | string
@@ -188707,6 +197835,11 @@ export namespace Prisma {
     rejectionReason?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -188722,6 +197855,31 @@ export namespace Prisma {
     status?: $Enums.TravelStatus
     rejectionReason?: string | null
     approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedBy?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TravelRequestCreateManyReverterInput = {
+    id?: string
+    userId: string
+    destination: string
+    purpose: string
+    startDate: Date | string
+    endDate: Date | string
+    expectedExpenses: number
+    status?: $Enums.TravelStatus
+    rejectionReason?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    revertReason?: string | null
+    revertedAt?: Date | string | null
+    resubmittedAt?: Date | string | null
+    revertCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -188906,6 +198064,46 @@ export namespace Prisma {
     read?: boolean
     actorId?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentCreateManyUserInput = {
+    id?: string
+    assetId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentCreateManyAssignedByInput = {
+    id?: string
+    assetId: string
+    userId: string
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetCreateManyCreatedByInput = {
+    id?: string
+    assetCode: string
+    name: string
+    category?: string | null
+    serialNumber?: string | null
+    description?: string | null
+    condition?: string | null
+    notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -188953,10 +198151,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -188980,6 +198184,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -188993,6 +198198,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedByInput = {
@@ -189015,10 +198224,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -189041,6 +198256,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -189054,6 +198270,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCreatedByInput = {
@@ -189076,10 +198296,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -189107,10 +198333,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -189134,6 +198366,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
@@ -189147,6 +198380,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -189169,10 +198406,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -189195,6 +198438,7 @@ export namespace Prisma {
     compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
@@ -189208,6 +198452,10 @@ export namespace Prisma {
     pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
     pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -189230,10 +198478,16 @@ export namespace Prisma {
     emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
     aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
     bankName?: NullableStringFieldUpdateOperationsInput | string | null
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
@@ -189474,6 +198728,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189492,6 +198747,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189509,6 +198765,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189523,6 +198780,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189541,6 +198799,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189558,6 +198817,7 @@ export namespace Prisma {
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: StringFieldUpdateOperationsInput | string
+    timeSlot?: StringFieldUpdateOperationsInput | string
     isPlanned?: BoolFieldUpdateOperationsInput | boolean
     completionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -189663,9 +198923,14 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approver?: UserUpdateOneWithoutApprovedTravelNestedInput
+    reverter?: UserUpdateOneWithoutRevertedTravelNestedInput
     expenses?: TravelExpenseUpdateManyWithoutTravelRequestNestedInput
   }
 
@@ -189680,6 +198945,11 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: TravelExpenseUncheckedUpdateManyWithoutTravelRequestNestedInput
@@ -189696,6 +198966,11 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -189710,9 +198985,14 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTravelRequestsNestedInput
+    reverter?: UserUpdateOneWithoutRevertedTravelNestedInput
     expenses?: TravelExpenseUpdateManyWithoutTravelRequestNestedInput
   }
 
@@ -189727,6 +199007,11 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     expenses?: TravelExpenseUncheckedUpdateManyWithoutTravelRequestNestedInput
@@ -189743,6 +199028,73 @@ export namespace Prisma {
     status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TravelRequestUpdateWithoutReverterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedExpenses?: FloatFieldUpdateOperationsInput | number
+    status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTravelRequestsNestedInput
+    approver?: UserUpdateOneWithoutApprovedTravelNestedInput
+    expenses?: TravelExpenseUpdateManyWithoutTravelRequestNestedInput
+  }
+
+  export type TravelRequestUncheckedUpdateWithoutReverterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedExpenses?: FloatFieldUpdateOperationsInput | number
+    status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expenses?: TravelExpenseUncheckedUpdateManyWithoutTravelRequestNestedInput
+  }
+
+  export type TravelRequestUncheckedUpdateManyWithoutReverterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    destination?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedExpenses?: FloatFieldUpdateOperationsInput | number
+    status?: EnumTravelStatusFieldUpdateOperationsInput | $Enums.TravelStatus
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertReason?: NullableStringFieldUpdateOperationsInput | string | null
+    revertedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resubmittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    revertCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -190277,6 +199629,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -190290,6 +199643,7 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -190303,6 +199657,126 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     actorId?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    dedupeKey?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssetAssignmentsMadeNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUpdateWithoutAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    asset?: AssetUpdateOneRequiredWithoutAssignmentsNestedInput
+    user?: UserUpdateOneRequiredWithoutAssetAssignmentsNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssignedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssetAssignmentUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssetAssignmentUncheckedUpdateManyWithoutAssetNestedInput
+  }
+
+  export type AssetUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assetCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    serialNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    condition?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -192063,6 +201537,58 @@ export namespace Prisma {
     size?: NullableIntFieldUpdateOperationsInput | number | null
     uploadedById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentCreateManyAssetInput = {
+    id?: string
+    userId: string
+    assignedById?: string | null
+    assignedAt?: Date | string
+    returnedAt?: Date | string | null
+    returnCondition?: string | null
+    returnNotes?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssetAssignmentUpdateWithoutAssetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutAssetAssignmentsNestedInput
+    assignedBy?: UserUpdateOneWithoutAssetAssignmentsMadeNestedInput
+  }
+
+  export type AssetAssignmentUncheckedUpdateWithoutAssetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssetAssignmentUncheckedUpdateManyWithoutAssetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedById?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    returnedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    returnCondition?: NullableStringFieldUpdateOperationsInput | string | null
+    returnNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FamilyMemberCreateManyBeneficiaryInput = {

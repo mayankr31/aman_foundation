@@ -7,11 +7,13 @@ import AttendanceTimer from "@/components/AttendanceTimer";
 import { getISTDateKey } from "@/lib/time";
 import KpiCard from "@/components/dashboard/KpiCard";
 import SectionCard from "@/components/dashboard/SectionCard";
+import TeamToday from "@/components/dashboard/TeamToday";
 import { getDashboardKpiConfig, getDashboardSections } from "@/lib/dashboardSections";
 
 export default function Dashboard() {
   const { user, token, can } = useAuth();
   const [kpis, setKpis] = useState(null);
+  const [dashboardConfig, setDashboardConfig] = useState({ source: "default", kpiKeys: null, linkKeys: null });
   const [error, setError] = useState(null);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
   const [todayAttendance, setTodayAttendance] = useState(null);
@@ -78,6 +80,12 @@ export default function Dashboard() {
       ? "logout"
       : "check_circle";
 
+  const attendanceButtonClass = !todayAttendance?.intimelog
+    ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20 hover:shadow-emerald-700/30"
+    : !todayAttendance?.outtimelog
+      ? "bg-red-600 hover:bg-red-700 shadow-red-600/20 hover:shadow-red-700/30"
+      : "bg-slate-600 hover:bg-slate-700 shadow-slate-600/20 hover:shadow-slate-700/30";
+
   const closeAttendanceModal = () => {
     setIsAttendanceModalOpen(false);
     loadTodayAttendance();
@@ -105,13 +113,24 @@ export default function Dashboard() {
         setError("Failed to load dashboard data");
       });
 
+    fetch("/api/dashboard/config", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.json())
+      .then((json) => {
+        if (cancelled || !json.success) return;
+        setDashboardConfig(json.data);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("Dashboard config load error:", err);
+      });
+
     return () => {
       cancelled = true;
     };
   }, [token, role]);
 
-  const kpiConfig = role ? getDashboardKpiConfig(role) : [];
-  const sections = role ? getDashboardSections(role, can) : [];
+  const kpiConfig = role ? getDashboardKpiConfig(role, dashboardConfig.kpiKeys) : [];
+  const sections = role ? getDashboardSections(role, can, dashboardConfig.linkKeys) : [];
 
   return (
     <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-8">
@@ -132,7 +151,7 @@ export default function Dashboard() {
           {role && role !== "ADMIN" && can("self-attendance", "WRITE") && (
             <button
               onClick={() => setIsAttendanceModalOpen(true)}
-              className="px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-[0_8px_24px_rgba(5,150,105,0.2)] hover:shadow-[0_4px_12px_rgba(5,150,105,0.3)] hover:bg-emerald-700 transition-all flex items-center gap-2 cursor-pointer"
+              className={`px-4 py-2 rounded-full text-white text-sm font-semibold shadow-[0_8px_24px_rgba(15,23,42,0.12)] transition-all flex items-center gap-2 cursor-pointer ${attendanceButtonClass}`}
             >
               <span className="material-symbols-outlined text-lg">{attendanceIcon}</span>
               {attendanceLabel}
@@ -156,7 +175,7 @@ export default function Dashboard() {
           <span className="material-symbols-outlined text-error">error</span>
           {error}
         </div>
-      ) : (
+      ) : kpiConfig.length === 0 ? null : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {kpiConfig.map((kpi) => (
             <KpiCard
@@ -169,6 +188,8 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      <TeamToday />
 
       {/* Quick Links */}
       {!error && sections.length > 0 && (

@@ -18,12 +18,14 @@ export const PAGE_KEYS = [
   "self-attendance",
   "tasks",
   "task-analytics",
+  "assets",
   "admin",
 ];
 
 // Ordered [pathPrefix, pageKey]. More specific prefixes first.
 export const ROUTE_PERMISSION_MAP = [
   ["/admin", "admin"],
+  ["/assets", "assets"],
   ["/tasks/analytics", "task-analytics"],
   ["/tasks", "tasks"],
   ["/education", "education"],
@@ -43,6 +45,13 @@ export const ROUTE_PERMISSION_MAP = [
 
 // Routes that are always accessible to any authenticated user.
 const OPEN_PATHS = ["/", "/profile"];
+
+/** `/beneficiaries/<id>` (and its sub-pages) can also be opened by education users. */
+export function isBeneficiaryProfilePath(pathname) {
+  if (!pathname) return false;
+  if (pathname === "/beneficiaries" || pathname === "/beneficiaries/") return false;
+  return pathname.startsWith("/beneficiaries/");
+}
 
 export function getPageForPath(pathname) {
   if (!pathname) return null;

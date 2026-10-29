@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import { formatRoleLabel } from "@/lib/roles";
+import OnLeaveToday from "@/components/OnLeaveToday";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -210,6 +212,8 @@ export default function LeaveWorkflow() {
         </div>
       </div>
 
+      <OnLeaveToday className="mb-6" />
+
       <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
         <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
           <h3 className="font-headline font-bold text-xl text-on-surface">Leave Requests</h3>
@@ -245,7 +249,7 @@ export default function LeaveWorkflow() {
               {pagedLeaves.map((leave) => (
                 <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
                   <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
-                  <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{leave.user?.role?.name?.replace("_", " ")}</td>
+                  <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{formatRoleLabel(leave.user?.role?.name)}</td>
                   <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">
                     <div>{leave.type}</div>
                     {leave.compOffWorkedDate && (

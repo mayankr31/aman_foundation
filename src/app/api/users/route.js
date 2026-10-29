@@ -4,11 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getHierarchyScopedUserIds } from "@/lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
+import { generateEmployeeId } from "@/lib/employeeId";
+import { isManagerRoleAllowed } from "@/lib/roleHierarchy";
 import {
   validatePersonName,
   validateEmail,
   validateMobile,
   validatePassword,
+  validateRequired,
   firstError,
   normalizeMobileForSave,
   normalizeEmailForSave,
@@ -69,6 +72,9 @@ export async function GET(req) {
         mobile: true,
         status: true,
         department: true,
+        employeeId: true,
+        inactiveSince: true,
+        dateOfLeaving: true,
         avatar: true,
         createdById: true,
         roleId: true,
@@ -80,6 +86,7 @@ export async function GET(req) {
             name: true,
           }
         },
+        fellow: { select: { id: true } },
         createdAt: true,
       },
       orderBy: {
@@ -105,7 +112,7 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { name, email, password, roleId, mobile, managerId } = body;
+    const { name, email, password, roleId, mobile, managerId, department } = body;
 
     // Basic validation
     if (!name || !email || !password || !roleId) {
@@ -129,8 +136,9 @@ export async function POST(req) {
     const validationMessage = firstError([
       validatePersonName(name, { required: true }),
       validateEmail(email, { required: true }),
-      validateMobile(mobile),
+      validateMobile(mobile, { required: true }),
       validatePassword(password, { required: true }),
+      validateRequired(department, "Department"),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -168,15 +176,29 @@ export async function POST(req) {
     }
 
     if (managerId) {
-      const manager = await prisma.user.findUnique({ where: { id: managerId }, select: { id: true } });
+      const manager = await prisma.user.findUnique({
+        where: { id: managerId },
+        select: { id: true, status: true, role: { select: { name: true } } },
+      });
       if (!manager) {
         return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
+      }
+      if (manager.status !== "ACTIVE") {
+        return NextResponse.json({ error: "Selected manager is not active" }, { status: 400 });
+      }
+      if (!isManagerRoleAllowed(role.name, manager.role?.name)) {
+        return NextResponse.json(
+          { error: "Selected manager must be senior to this employee" },
+          { status: 400 }
+        );
       }
     }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    const employeeId = await generateEmployeeId();
 
     const newUser = await prisma.user.create({
       data: {
@@ -186,6 +208,8 @@ export async function POST(req) {
         password: hashedPassword,
         mobile: normalizeMobileForSave(mobile),
         roleId,
+        department: String(department).trim(),
+        employeeId,
         managerId: managerId || null,
         status: "ACTIVE",
         createdById: user.id,
@@ -198,6 +222,7 @@ export async function POST(req) {
         mobile: true,
         status: true,
         department: true,
+        employeeId: true,
         avatar: true,
         createdById: true,
         createdAt: true,

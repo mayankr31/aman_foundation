@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/lib/useAuth";
+import { useBeneficiaryWriteGuard } from "@/lib/useBeneficiaryWriteGuard";
 import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
 
@@ -15,9 +16,9 @@ const questions = [
     options: [
       { value: 1, label: "Landless laborer", score: 0.2, img: "/images/capacity-tools/adaptive_q1_1.jpg" },
       { value: 2, label: "Tenant (rights to cultivate)", score: 0.4, img: "/images/capacity-tools/adaptive_q1_2.jpg" },
-      { value: 3, label: "Owning up to 2 acres of land", score: 0.6, img: "/images/capacity-tools/adaptive_q1_3.jpg" },
-      { value: 4, label: "Owning up to 5 acres of land", score: 0.8, img: "/images/capacity-tools/adaptive_q1_4.webp" },
-      { value: 5, label: "Owning more than 5 acres", score: 1, img: "/images/capacity-tools/adaptive_q1_5.jpg" },
+      { value: 3, label: "Owning up to 1 bigha of land", score: 0.6, img: "/images/capacity-tools/adaptive_q1_3.jpg" },
+      { value: 4, label: "Owning up to 3 bigha of land", score: 0.8, img: "/images/capacity-tools/adaptive_q1_4.webp" },
+      { value: 5, label: "Owning more than 3 bigha of land", score: 1, img: "/images/capacity-tools/adaptive_q1_5.jpg" },
     ]
   },
   {
@@ -114,6 +115,7 @@ export default function AdaptiveCapacitySurveyPage() {
   const { id } = useParams();
   const router = useRouter();
   const { token, user } = useAuth();
+  const { canEdit, permissionsReady } = useBeneficiaryWriteGuard(id, "adaptive-capacity");
   const toast = useToast();
   
   const [responses, setResponses] = useState({});
@@ -176,6 +178,14 @@ export default function AdaptiveCapacitySurveyPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (permissionsReady && !canEdit) {
+    return (
+      <div className="p-8 text-center text-sm font-semibold text-rose-600">
+        You do not have permission to take this survey.
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full">

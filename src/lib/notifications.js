@@ -11,6 +11,7 @@ export const NOTIFICATION_TYPES = {
   TRAVEL_REQUESTED: "TRAVEL_REQUESTED",
   TRAVEL_APPROVED: "TRAVEL_APPROVED",
   TRAVEL_REJECTED: "TRAVEL_REJECTED",
+  TRAVEL_REVERTED: "TRAVEL_REVERTED",
   TRAVEL_COMPLETED: "TRAVEL_COMPLETED",
   TRAVEL_EXPENSE_SUBMITTED: "TRAVEL_EXPENSE_SUBMITTED",
   REIMBURSEMENT_REQUESTED: "REIMBURSEMENT_REQUESTED",
@@ -23,6 +24,9 @@ export const NOTIFICATION_TYPES = {
   TASK_ASSIGNED: "TASK_ASSIGNED",
   TASK_UPDATED: "TASK_UPDATED",
   TASK_COMMENT: "TASK_COMMENT",
+  EMPLOYEE_BIRTHDAY: "EMPLOYEE_BIRTHDAY",
+  ASSET_ASSIGNED: "ASSET_ASSIGNED",
+  ASSET_RETURNED: "ASSET_RETURNED",
 };
 
 /** All ACTIVE users whose role is ADMIN. Admins are global (not school scoped). */
@@ -116,7 +120,7 @@ export async function getFellowUserId(fellowId) {
  */
 export async function notifyUsers(
   userIds,
-  { type, title, message, link = null, actorId = null, metadata = null }
+  { type, title, message, link = null, actorId = null, metadata = null, dedupeKey = null }
 ) {
   const recipients = [...new Set((userIds || []).filter(Boolean))].filter((id) => id !== actorId);
   if (!recipients.length) return;
@@ -130,6 +134,8 @@ export async function notifyUsers(
       link,
       actorId,
       metadata: metadata ?? undefined,
+      dedupeKey: dedupeKey ? `${dedupeKey}:${userId}` : null,
     })),
+    skipDuplicates: true,
   });
 }

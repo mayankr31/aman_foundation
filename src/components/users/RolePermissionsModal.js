@@ -5,6 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { X, Loader2, Save, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
+import { formatRoleLabel } from '@/lib/roles';
 
 export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode, token }) {
   const toast = useToast();
@@ -225,7 +226,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
               <ShieldCheck size={20} />
             </div>
             <div className="min-w-0">
-              <h3 className={`text-xl font-bold tracking-tight truncate ${theme.textWhite}`}>{role?.name?.replaceAll('_', ' ')}</h3>
+              <h3 className={`text-xl font-bold tracking-tight truncate ${theme.textWhite}`}>{formatRoleLabel(role?.name)}</h3>
               <p className={`text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>Edit Role Permissions</p>
             </div>
           </div>

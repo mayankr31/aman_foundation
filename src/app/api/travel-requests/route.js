@@ -2,23 +2,39 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { notifyUsers, getAdminUserIds, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { getSubordinateUserIds } from "@/lib/hierarchy";
+import { getTravelReviewerUserIds } from "@/lib/travelApprovers";
 import { validateAmount, validateDateOrder, firstError } from "@/lib/validation";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "travel", "READ"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+    const { searchParams } = new URL(req.url);
+    const scope = searchParams.get("scope") || "mine";
+
+    let where = {};
+    if (scope === "manage") {
+      const canManage =
+        user.role.name === "ADMIN" ||
+        (await checkPermission(user, "dashboard", "travel-management", "READ"));
+      if (!canManage) {
+        return NextResponse.json({ error: "Forbidden: Travel management access required" }, { status: 403 });
+      }
+
+      if (user.role.name !== "ADMIN") {
+        // A reviewer sees their reporting subtree only, never their own request.
+        const reportIds = await getSubordinateUserIds(user.id);
+        where = { userId: { in: reportIds } };
+      }
+    } else {
+      if (!(await checkPermission(user, "dashboard", "travel", "READ"))) {
+        return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
+      }
+      where = { userId: user.id };
     }
-
-    const isAdminOrManager = user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
-
-    const where = isAdminOrManager ? {} : { userId: user.id };
 
     const requests = await prisma.travelRequest.findMany({
       where,
@@ -28,6 +44,9 @@ export async function GET(req) {
           select: { id: true, name: true, email: true, department: true }
         },
         approver: {
+          select: { id: true, name: true }
+        },
+        reverter: {
           select: { id: true, name: true }
         },
         expenses: true
@@ -50,8 +69,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for travel" }, { status: 403 });
     }
 
-    if (user.role.name !== "FELLOW" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Only fellows and program managers can create travel requests" }, { status: 403 });
+    if (user.role.name === "ADMIN") {
+      return NextResponse.json({ error: "Admins do not submit travel requests" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -86,8 +105,8 @@ export async function POST(req) {
       }
     });
 
-    const admins = await getAdminUserIds();
-    await notifyUsers(admins, {
+    const reviewers = await getTravelReviewerUserIds(user.id);
+    await notifyUsers(reviewers, {
       type: NOTIFICATION_TYPES.TRAVEL_REQUESTED,
       title: "New Travel Request",
       message: `${user.name || request.user.name || "A staff member"} submitted a travel request to ${destination} for approval.`,

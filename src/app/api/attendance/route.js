@@ -9,29 +9,14 @@ import {
   formatWorkHours,
   getISTDateKey,
   istDayEnd,
-  istDayStart,
 } from "@/lib/time";
+import { parseLegacyTime } from "@/lib/attendanceMetrics";
 
 export const dynamic = "force-dynamic";
 
 function dateKeyOf(value) {
   if (!value) return null;
   return getISTDateKey(new Date(value));
-}
-
-function parseLegacyTime(timeStr, dateKey) {
-  if (!timeStr || !dateKey) return null;
-  const parts = String(timeStr).trim().split(/\s+/);
-  const timePart = parts[0];
-  const modifier = (parts[1] || "").toUpperCase();
-  const [h, m, s] = timePart.split(":").map((v) => parseInt(v, 10));
-  if (Number.isNaN(h) || Number.isNaN(m)) return null;
-  let hours = h;
-  if (modifier === "PM" && hours < 12) hours += 12;
-  if (modifier === "AM" && hours === 12) hours = 0;
-  const dayStart = istDayStart(dateKey);
-  if (!dayStart) return null;
-  return new Date(dayStart.getTime() + hours * 3600000 + m * 60000 + (s || 0) * 1000);
 }
 
 async function closeStaleShifts(userIds = null) {
@@ -128,6 +113,7 @@ export async function GET(req) {
             deadline: true,
             status: true,
             completionDate: true,
+            timeSlot: true,
           },
         })
       : [];
@@ -155,6 +141,7 @@ export async function GET(req) {
           description: t.description,
           completed: t.status === "Completed",
           completionDate: t.completionDate,
+          timeSlot: t.timeSlot,
         })),
       };
     });

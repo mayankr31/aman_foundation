@@ -61,10 +61,41 @@ export async function getAncestorUserIds(userId) {
 }
 
 /** True if `targetUserId` is somewhere below `managerId`. */
-export async function isSubordinate(managerId, targetUserId) {
+export async function isSubordinate(
+  managerId,
+  targetUserId,
+  { activeOnly = true } = {}
+) {
   if (!managerId || !targetUserId || managerId === targetUserId) return false;
-  const ids = await getSubordinateUserIds(managerId);
+  const ids = await getSubordinateUserIds(managerId, { activeOnly });
   return ids.includes(targetUserId);
+}
+
+/**
+ * Scope used by team-wide widgets (birthdays, on-leave-today, assets).
+ * ADMIN/HR get `null` (unrestricted). Any user with reports gets their whole
+ * reporting tree, even outside the standard program roles. Program roles with
+ * no configured reports keep the legacy managed-team fallback.
+ */
+export async function getReportingScopeUserIds(
+  user,
+  { includeSelf = false, activeOnly = true } = {}
+) {
+  if (!user?.id) return includeSelf ? [user.id] : [];
+  if (user.role?.name === "ADMIN" || user.role?.name === "HR") return null;
+
+  const ids = await getSubordinateUserIds(user.id, {
+    includeSelf,
+    activeOnly,
+  });
+  if (ids.length > (includeSelf ? 1 : 0)) return ids;
+
+  if (PROGRAM_ROLES.includes(user.role?.name)) {
+    const team = await getManagedTeamUserIds(user.id);
+    return [...new Set([...(includeSelf ? [user.id] : []), ...team])];
+  }
+
+  return ids;
 }
 
 /**

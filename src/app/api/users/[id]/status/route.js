@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { generateEmployeeId } from "@/lib/employeeId";
 
 export async function PATCH(req, context) {
   try {
@@ -25,10 +26,24 @@ export async function PATCH(req, context) {
     if (department !== undefined) {
       dataToUpdate.department = department;
     }
+    if (status === "INACTIVE") {
+      dataToUpdate.inactiveSince = new Date();
+    } else if (status === "ACTIVE") {
+      dataToUpdate.inactiveSince = null;
+      dataToUpdate.dateOfLeaving = null;
+      dataToUpdate.resignationReason = null;
+    }
 
     const targetUser = await prisma.user.findUnique({
       where: { id },
-      select: { id: true, name: true, email: true, fellow: { select: { id: true } }, role: { select: { name: true } } },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        employeeId: true,
+        fellow: { select: { id: true } },
+        role: { select: { name: true } }
+      },
     });
 
     if (!targetUser) {
@@ -36,6 +51,10 @@ export async function PATCH(req, context) {
     }
 
     const updatedUser = await prisma.$transaction(async (tx) => {
+      if (status === "ACTIVE" && !targetUser.employeeId) {
+        dataToUpdate.employeeId = await generateEmployeeId(tx);
+      }
+
       const updated = await tx.user.update({
         where: { id },
         data: dataToUpdate,
@@ -43,6 +62,8 @@ export async function PATCH(req, context) {
           id: true,
           username: true,
           status: true,
+          employeeId: true,
+          inactiveSince: true,
           role: { select: { name: true } }
         }
       });

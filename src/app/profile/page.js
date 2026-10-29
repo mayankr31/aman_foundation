@@ -5,10 +5,14 @@ import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
+import { STAFF_PROFILE_TABS } from "@/lib/profileTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
+import AssignmentsSection from "@/components/AssignmentsSection";
+import PersonalDetailsForm from "@/components/PersonalDetailsForm";
+import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import EngagementSurveyForm from "@/components/EngagementSurveyForm";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
@@ -18,23 +22,7 @@ import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
-import {
-  validateMobile,
-  validateAadhaar,
-  validatePan,
-  validateBankAccount,
-  validateIfsc,
-  validateEmail,
-  validatePersonName,
-  validateDateNotFuture,
-  firstError,
-  toMobileInput,
-  toAadhaarInput,
-  toPanInput,
-  toBankAccountInput,
-  toIfscInput,
-  toPersonNameInput,
-} from "@/lib/validation";
+import { formatRoleLabel } from "@/lib/roles";
 import dynamic from "next/dynamic";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -56,41 +44,31 @@ export default function ProfilePage() {
 }
 
 function ProfilePageContent() {
-  const { token, isInitializing } = useAuth();
+  const { token, isInitializing, user: currentUser, can } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-
-  // Edit fields state
-  const [editName, setEditName] = useState("");
-  const [editEmail, setEditEmail] = useState("");
-  const [editMobile, setEditMobile] = useState("");
-  const [editAddress, setEditAddress] = useState("");
-  const [editGender, setEditGender] = useState("");
-  const [editDob, setEditDob] = useState("");
-  const [editAvatar, setEditAvatar] = useState("");
-  const [editDateOfJoining, setEditDateOfJoining] = useState("");
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
-  const [editMaritalStatus, setEditMaritalStatus] = useState("");
-  const [editBloodGroup, setEditBloodGroup] = useState("");
-  const [editEmergencyContactName, setEditEmergencyContactName] = useState("");
-  const [editEmergencyContactPhone, setEditEmergencyContactPhone] = useState("");
-  const [editAadharNumber, setEditAadharNumber] = useState("");
-  const [editPanCard, setEditPanCard] = useState("");
-  const [editBankName, setEditBankName] = useState("");
-  const [editBankAccountNo, setEditBankAccountNo] = useState("");
-  const [editBankIfsc, setEditBankIfsc] = useState("");
 
   // Fellow specific dashboard states
   const [goalSheets, setGoalSheets] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
-  const activeTab = labelFromSlug(searchParams.get("tab")) || "Monthly Planner";
+  const isFellow = Boolean(profile?.fellow);
+  const requestedTabSlug = searchParams.get("tab");
+  const staffActiveTab =
+    STAFF_PROFILE_TABS.find((tab) => tab.slug === requestedTabSlug)?.label || "Personal Details";
+  const activeTab = isFellow
+    ? labelFromSlug(requestedTabSlug) || "Personal Details"
+    : staffActiveTab;
+  const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
+    activeTab,
+    !isInitializing && !loading && Boolean(profile)
+  );
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [showEngagementForm, setShowEngagementForm] = useState(false);
   const [showLookBeyondForm, setShowLookBeyondForm] = useState(false);
@@ -115,29 +93,6 @@ function ProfilePageContent() {
         if (json.success) {
           const userProfile = json.data;
           setProfile(userProfile);
-          
-          // Populate edit form states
-          setEditName(userProfile.name || "");
-          setEditEmail(userProfile.email || "");
-          setEditMobile(toMobileInput(userProfile.mobile || ""));
-          setEditAddress(userProfile.fellow ? (userProfile.fellow.address || "") : (userProfile.address || ""));
-          setEditGender(userProfile.fellow ? (userProfile.fellow.gender || "") : (userProfile.gender || ""));
-          setEditDob(
-            userProfile.fellow
-              ? (userProfile.fellow.dob ? userProfile.fellow.dob.split("T")[0] : "")
-              : (userProfile.dob ? userProfile.dob.split("T")[0] : "")
-          );
-          setEditAvatar(userProfile.fellow ? (userProfile.fellow.avatar || "") : (userProfile.avatar || ""));
-          setEditDateOfJoining(userProfile.dateOfJoining ? userProfile.dateOfJoining.split("T")[0] : "");
-          setEditMaritalStatus(userProfile.maritalStatus || "");
-          setEditBloodGroup(userProfile.bloodGroup || "");
-          setEditEmergencyContactName(userProfile.emergencyContactName || "");
-          setEditEmergencyContactPhone(toMobileInput(userProfile.emergencyContactPhone || ""));
-          setEditAadharNumber(toAadhaarInput(userProfile.aadharNumber || ""));
-          setEditPanCard(toPanInput(userProfile.panCard || ""));
-          setEditBankName(userProfile.bankName || "");
-          setEditBankAccountNo(toBankAccountInput(userProfile.bankAccountNo || ""));
-          setEditBankIfsc(toIfscInput(userProfile.bankIfsc || ""));
 
           if (userProfile.fellow) {
             const fellowId = userProfile.fellow.id;
@@ -273,121 +228,47 @@ function ProfilePageContent() {
     }
   };
 
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-    const validationMessage = firstError([
-      validatePersonName(editName, { required: true }),
-      validateEmail(editEmail, { required: true }),
-      validateMobile(editMobile),
-      editDob ? validateDateNotFuture(editDob, { label: "Date of birth" }) : null,
-      editDateOfJoining ? validateDateNotFuture(editDateOfJoining, { label: "Date of joining" }) : null,
-      validateMobile(editEmergencyContactPhone),
-      validateAadhaar(editAadharNumber),
-      validatePan(editPanCard),
-      validateBankAccount(editBankAccountNo),
-      validateIfsc(editBankIfsc),
-    ]);
-    if (validationMessage) {
-      toast.error(validationMessage);
-      return;
-    }
+  const handleSavePersonalDetails = async (payload) => {
     try {
       const res = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: editName,
-          email: editEmail,
-          mobile: editMobile,
-          address: editAddress,
-          gender: editGender,
-          dob: editDob,
-          avatar: editAvatar,
-          dateOfJoining: editDateOfJoining,
-          maritalStatus: editMaritalStatus,
-          bloodGroup: editBloodGroup,
-          emergencyContactName: editEmergencyContactName,
-          emergencyContactPhone: editEmergencyContactPhone,
-          aadharNumber: editAadharNumber,
-          panCard: editPanCard,
-          bankName: editBankName,
-          bankAccountNo: editBankAccountNo,
-          bankIfsc: editBankIfsc
-        })
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
-      if (json.success) {
-        setProfile(json.data);
-        setIsEditing(false);
-        // Sync local storage user cache
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          try {
-            const cached = JSON.parse(decodeURIComponent(atob(storedUser)));
-            cached.name = json.data.name;
-            cached.email = json.data.email;
-            if (json.data.fellow) {
-              cached.fellowName = json.data.fellow.name;
-            }
-            localStorage.setItem("user", btoa(encodeURIComponent(JSON.stringify(cached))));
-          } catch (e) {
-            console.error("Failed to sync cache", e);
-          }
-        }
-        toast.success("Profile updated successfully!");
-      } else {
+      if (!res.ok || !json.success) {
         toast.error(json.error || "Failed to update profile");
+        throw new Error(json.error || "Failed to update profile");
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error updating profile");
-    }
-  };
 
-  const handleAvatarUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file || !profile?.id) return;
-    setUploadingAvatar(true);
-    try {
-      const fd = new FormData();
-      fd.append("avatar", file);
-      const res = await fetch(`/api/users/${profile.id}/avatar`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd
-      });
-      const json = await res.json();
-      if (json.success) {
-        const url = json.data.avatar;
-        setEditAvatar(url);
-        setProfile((prev) => ({
-          ...prev,
-          avatar: url,
-          fellow: prev.fellow ? { ...prev.fellow, avatar: url } : prev.fellow
-        }));
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          try {
-            const cached = JSON.parse(decodeURIComponent(atob(storedUser)));
-            cached.avatar = url;
-            localStorage.setItem("user", btoa(encodeURIComponent(JSON.stringify(cached))));
-          } catch (e) {
-            console.error("Failed to sync avatar cache", e);
+      setProfile(json.data);
+      setShowPersonalDetailsForm(false);
+
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const cached = JSON.parse(decodeURIComponent(atob(storedUser)));
+          cached.name = json.data.name;
+          cached.email = json.data.email;
+          if (json.data.fellow) {
+            cached.fellowName = json.data.fellow.name;
+            cached.avatar = json.data.fellow.avatar || json.data.avatar || cached.avatar;
+          } else {
+            cached.avatar = json.data.avatar || cached.avatar;
           }
+          localStorage.setItem("user", btoa(encodeURIComponent(JSON.stringify(cached))));
+        } catch (e) {
+          console.error("Failed to sync cache", e);
         }
-        toast.success("Photo updated successfully!");
-      } else {
-        toast.error(json.error || "Failed to upload photo");
       }
+
+      toast.success("Profile updated successfully!");
     } catch (err) {
-      console.error(err);
-      toast.error("Error uploading photo");
-    } finally {
-      setUploadingAvatar(false);
-      e.target.value = "";
+      console.error("Update personal details error:", err);
+      throw err;
     }
   };
 
@@ -447,8 +328,6 @@ function ProfilePageContent() {
     );
   }
 
-  const isFellow = !!profile.fellow;
-  const isPm = PROGRAM_ROLES.includes(profile.role?.name);
   const avatarUrl = profile.fellow?.avatar || profile.avatar || "";
   const initials = profile.name
     .split(" ")
@@ -459,14 +338,30 @@ function ProfilePageContent() {
 
   const assignedSchool = isFellow && profile.fellow.schools && profile.fellow.schools.length > 0 ? profile.fellow.schools[0].school : null;
   const afterSchoolCentres = isFellow && profile.fellow.afterSchoolCentres ? profile.fellow.afterSchoolCentres.map(fc => fc.centre) : [];
+  const fellowSchools = isFellow && profile.fellow.schools ? profile.fellow.schools.map((item) => item.school) : [];
+  const fellowPrograms = isFellow && profile.fellow.livelihoodPrograms
+    ? profile.fellow.livelihoodPrograms.map((item) => item.program)
+    : [];
 
   const managedSchools = (profile.managedSchools || []).map((m) => m.school);
   const managedCentres = (profile.managedCentres || []).map((m) => m.centre);
   const managedPrograms = (profile.managedLivelihoodPrograms || []).map((m) => m.program);
+  const canEditAssignments = isFellow
+    ? currentUser?.roleName === "ADMIN" ||
+      (PROGRAM_ROLES.includes(currentUser?.roleName) && can("education", "WRITE"))
+    : currentUser?.roleName === "ADMIN" && PROGRAM_ROLES.includes(profile.role?.name);
   const personalDob = profile.fellow?.dob || profile.dob;
   const personalGender = profile.fellow?.gender || profile.gender;
   const personalAddress = profile.fellow?.address || profile.address;
   const memberSince = formatDate(profile.createdAt);
+  const personalProfile = {
+    ...profile,
+    mobile: profile.mobile || profile.fellow?.phone,
+    dob: personalDob,
+    gender: personalGender,
+    address: personalAddress,
+    avatar: avatarUrl,
+  };
 
   return (
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -480,12 +375,11 @@ function ProfilePageContent() {
         </p>
       </div>
 
-      {/* Hero Card & Edit Profile Form */}
+      {/* Hero Card */}
       <div className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient border border-surface-container-low mb-8 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 duration-700"></div>
         
-        {!isEditing ? (
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
                 {avatarUrl ? (
@@ -500,7 +394,7 @@ function ProfilePageContent() {
                     {profile.name}
                   </h2>
                   <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                    {profile.role?.name || "User"}
+                    {formatRoleLabel(profile.role?.name)}
                   </span>
                 </div>
                 <p className="text-on-surface-variant font-medium mb-3 flex flex-wrap justify-center md:justify-start items-center gap-2 break-words">
@@ -572,7 +466,7 @@ function ProfilePageContent() {
               </div>
             </div>
             <button
-              onClick={() => setIsEditing(true)}
+              onClick={() => setShowPersonalDetailsForm(true)}
               className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
             >
               <span className="material-symbols-outlined text-[18px]">edit</span>
@@ -588,349 +482,83 @@ function ProfilePageContent() {
               </button>
             )}
           </div>
-        ) : (
-          <form onSubmit={handleUpdateProfile} className="relative z-10 space-y-6 font-sans text-sm">
-            <h3 className="text-lg font-bold text-on-surface mb-4">Edit Profile details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex flex-col gap-2 md:col-span-2">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Profile Photo</label>
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center shrink-0">
-                    {editAvatar ? (
-                      <img alt="avatar" className="w-full h-full object-cover" src={editAvatar} />
-                    ) : (
-                      <span className="text-lg font-bold text-on-surface-variant">{initials}</span>
-                    )}
-                  </div>
-                  <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-                    {uploadingAvatar ? "Uploading..." : "Upload Photo"}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      disabled={uploadingAvatar}
-                      onChange={handleAvatarUpload}
-                    />
-                  </label>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Name<span className="text-error ml-0.5">*</span></label>
-                <input
-                  type="text"
-                  required
-                  maxLength={60}
-                  value={editName}
-                  onChange={(e) => setEditName(toPersonNameInput(e.target.value))}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Email<span className="text-error ml-0.5">*</span></label>
-                <input
-                  type="email"
-                  required
-                  value={editEmail}
-                  onChange={(e) => setEditEmail(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Mobile / Phone</label>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  pattern="[0-9]{10}"
-                  title="Enter exactly 10 digits, without +91 or spaces."
-                  value={editMobile}
-                  onChange={(e) => setEditMobile(toMobileInput(e.target.value))}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Joining</label>
-                <input
-                  type="date"
-                  max={new Date().toISOString().slice(0, 10)}
-                  value={editDateOfJoining}
-                  onChange={(e) => setEditDateOfJoining(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                />
-              </div>
-              <>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Address</label>
-                    <input
-                      type="text"
-                      value={editAddress}
-                      onChange={(e) => setEditAddress(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Gender</label>
-                    <select
-                      value={editGender}
-                      onChange={(e) => setEditGender(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Birth</label>
-                    <input
-                      type="date"
-                      max={new Date().toISOString().slice(0, 10)}
-                      value={editDob}
-                      onChange={(e) => setEditDob(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Marital Status</label>
-                    <select
-                      value={editMaritalStatus}
-                      onChange={(e) => setEditMaritalStatus(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
-                    >
-                      <option value="">Select</option>
-                      <option value="Single">Single</option>
-                      <option value="Married">Married</option>
-                      <option value="Divorced">Divorced</option>
-                      <option value="Widowed">Widowed</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Blood Group</label>
-                    <select
-                      value={editBloodGroup}
-                      onChange={(e) => setEditBloodGroup(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
-                    >
-                      <option value="">Select</option>
-                      {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map((g) => (
-                        <option key={g} value={g}>{g}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Name</label>
-                    <input
-                      type="text"
-                      maxLength={60}
-                      value={editEmergencyContactName}
-                      onChange={(e) => setEditEmergencyContactName(toPersonNameInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Emergency Contact Phone</label>
-                    <input
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={10}
-                      pattern="[0-9]{10}"
-                      title="Enter exactly 10 digits, without +91 or spaces."
-                      value={editEmergencyContactPhone}
-                      onChange={(e) => setEditEmergencyContactPhone(toMobileInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aadhaar Number</label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={12}
-                      pattern="[0-9]{12}"
-                      title="Aadhaar must be exactly 12 digits."
-                      value={editAadharNumber}
-                      onChange={(e) => setEditAadharNumber(toAadhaarInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">PAN Card</label>
-                    <input
-                      type="text"
-                      maxLength={10}
-                      pattern="[A-Z]{5}[0-9]{4}[A-Z]"
-                      title="PAN must be in the format ABCDE1234F."
-                      value={editPanCard}
-                      onChange={(e) => setEditPanCard(toPanInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank Name</label>
-                    <input
-                      type="text"
-                      value={editBankName}
-                      onChange={(e) => setEditBankName(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank Account Number</label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={18}
-                      pattern="[0-9]{9,18}"
-                      title="Bank account number must be 9 to 18 digits."
-                      value={editBankAccountNo}
-                      onChange={(e) => setEditBankAccountNo(toBankAccountInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bank IFSC</label>
-                    <input
-                      type="text"
-                      maxLength={11}
-                      pattern="[A-Z]{4}0[A-Z0-9]{6}"
-                      title="IFSC must be in the format SBIN0007421."
-                      value={editBankIfsc}
-                      onChange={(e) => setEditBankIfsc(toIfscInput(e.target.value))}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
-                    />
-                  </div>
-                </>
-            </div>
-            <div className="flex justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setIsEditing(false)}
-                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer font-semibold"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
-              )}
+
 
             </div>
 
-      {/* Personal Details (non-fellow roles) */}
+      {/* Tabbed profile for non-fellow roles */}
       {!isFellow && (
-        <div className="mb-8">
-          <h3 className="font-headline font-bold text-xl text-on-surface mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary">badge</span>
-            Personal Details
-          </h3>
-          <BasicDetailsView person={profile} />
-        </div>
-      )}
-
-      {/* Program Manager assignments */}
-      {isPm && (
-        <div className="mb-8">
-          <h3 className="font-headline font-bold text-xl text-on-surface mb-4 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary">assignment_ind</span>
-            My Assignments
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Schools */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">school</span>
-                  Schools
-                </h4>
-                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">{managedSchools.length}</span>
-              </div>
-              {managedSchools.length === 0 ? (
-                <p className="text-sm text-on-surface-variant italic">No schools assigned.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {managedSchools.map((s) => (
-                    <li key={s.id}>
-                      <Link
-                        href={`/education/schools/${s.id}`}
-                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
-                      >
-                        <span className="truncate">{s.name}</span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {/* After School Centres */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">cottage</span>
-                  After School Centres
-                </h4>
-                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">{managedCentres.length}</span>
-              </div>
-              {managedCentres.length === 0 ? (
-                <p className="text-sm text-on-surface-variant italic">No centres assigned.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {managedCentres.map((c) => (
-                    <li key={c.id}>
-                      <Link
-                        href={`/education/after-school-centres/${c.id}`}
-                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
-                      >
-                        <span className="truncate">{c.name}</span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {/* Livelihood Programs */}
-            <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-headline font-bold text-base text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">agriculture</span>
-                  Livelihood Programs
-                </h4>
-                <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 rounded-full py-1">{managedPrograms.length}</span>
-              </div>
-              {managedPrograms.length === 0 ? (
-                <p className="text-sm text-on-surface-variant italic">No programs assigned.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {managedPrograms.map((p) => (
-                    <li key={p.id}>
-                      <Link
-                        href={`/livelihood/programs/${p.id}`}
-                        className="flex items-center justify-between gap-2 text-sm text-on-surface hover:text-primary transition-colors group"
-                      >
-                        <span className="truncate">
-                          {p.name}
-                          <span className="ml-1 text-[10px] uppercase tracking-wider text-slate-400">
-                            {p.category === "FARM" ? "Farm" : "Non-Farm"}
-                          </span>
-                        </span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-primary">chevron_right</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+        <>
+          <div className="md:hidden mb-6 font-sans">
+            <label htmlFor="staff-profile-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
+              Profile section
+            </label>
+            <select
+              id="staff-profile-tab"
+              value={activeTab}
+              onChange={(e) => {
+                const nextTab = STAFF_PROFILE_TABS.find((tab) => tab.label === e.target.value);
+                router.replace(`/profile?tab=${nextTab?.slug || "personal-details"}`, { scroll: false });
+              }}
+              className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
+            >
+              {STAFF_PROFILE_TABS.map((tab) => (
+                <option key={tab.slug} value={tab.label}>{tab.label}</option>
+              ))}
+            </select>
           </div>
-        </div>
+
+          <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+            {STAFF_PROFILE_TABS.map((tab) => {
+              const isActive = activeTab === tab.label;
+              return (
+                <button
+                  key={tab.slug}
+                  ref={isActive ? setActiveTabRef : null}
+                  onClick={() => router.replace(`/profile?tab=${tab.slug}`, { scroll: false })}
+                  className={`px-3 sm:px-6 py-2.5 sm:py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
+                    isActive
+                      ? "font-semibold text-primary border-b-2 border-primary"
+                      : "font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="min-w-0">
+            {activeTab === "Personal Details" && (
+              <div className="space-y-4">
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowPersonalDetailsForm(true)}
+                    className="w-full sm:w-auto justify-center bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">edit</span>
+                    Edit Personal Details
+                  </button>
+                </div>
+                <BasicDetailsView person={profile} />
+              </div>
+            )}
+            {activeTab === "Monthly Planner" && (
+              <MonthlyPlanner userId={profile.id} />
+            )}
+            {activeTab === "Assignments" && (
+              <AssignmentsSection
+                title="Assignments"
+                userId={profile.id}
+                schools={managedSchools}
+                centres={managedCentres}
+                programs={managedPrograms}
+                canEdit={canEditAssignments}
+              />
+            )}
+          </div>
+        </>
       )}
 
       {/* Render tab views for fellow role only */}
@@ -983,12 +611,13 @@ function ProfilePageContent() {
           </div>
 
           {/* Tabs */}
-          <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
+          <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
             {FELLOW_TABS.map((tab) => {
               const isActive = activeTab === tab.label;
               return (
                 <button
                   key={tab.slug}
+                  ref={isActive ? setActiveTabRef : null}
                   onClick={() => router.replace(`/profile?tab=${tab.slug}`, { scroll: false })}
                   className={`px-3 sm:px-6 py-2.5 sm:py-3 text-sm whitespace-nowrap transition-colors cursor-pointer ${
                     isActive
@@ -1002,12 +631,45 @@ function ProfilePageContent() {
             })}
           </div>
 
-          <div>
+          <div className="min-w-0">
               {activeTab === "Personal Details" && (
-                <BasicDetailsView person={profile} />
+                <div className="space-y-4">
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setShowPersonalDetailsForm(true)}
+                      className="w-full sm:w-auto justify-center bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">edit</span>
+                      Edit Personal Details
+                    </button>
+                  </div>
+                  <BasicDetailsView
+                    person={{
+                      ...profile,
+                      mobile: profile.mobile || profile.fellow?.phone,
+                      dob: personalDob,
+                      gender: personalGender,
+                      address: personalAddress,
+                    }}
+                  />
+                </div>
               )}
               {activeTab === "Monthly Planner" && (
                 <MonthlyPlanner fellowId={profile.fellow.id} />
+              )}
+              {activeTab === "Assignments" && (
+                <AssignmentsSection
+                  title="Assignments"
+                  isFellow
+                  fellowId={profile.fellow.id}
+                  userId={profile.id}
+                  schools={fellowSchools}
+                  centres={afterSchoolCentres}
+                  programs={fellowPrograms}
+                  canEdit={canEditAssignments}
+                  canEditLivelihoodPrograms={currentUser?.roleName === "ADMIN"}
+                />
               )}
               {activeTab === "Goals" && (
                 <div className="space-y-6">
@@ -1298,6 +960,42 @@ function ProfilePageContent() {
             />
           )}
         </>
+      )}
+
+      {showPersonalDetailsForm && (
+        <div className="fixed inset-0 bg-black/50 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-surface-container-lowest rounded-t-2xl sm:rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 z-10 bg-surface-container-lowest flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-surface-container">
+              <div className="min-w-0">
+                <h3 className="text-lg font-bold text-on-surface">Edit Personal Details</h3>
+                <p className="text-xs text-on-surface-variant mt-1 truncate">{profile.name}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPersonalDetailsForm(false)}
+                className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                aria-label="Close personal details editor"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <div className="p-4 sm:p-6">
+              <PersonalDetailsForm
+                person={personalProfile}
+                avatarUploadUrl={`/api/users/${profile.id}/avatar`}
+                onSubmit={handleSavePersonalDetails}
+                onCancel={() => setShowPersonalDetailsForm(false)}
+                onAvatarUpdated={(url) => {
+                  setProfile((prev) => (prev ? {
+                    ...prev,
+                    avatar: url,
+                    fellow: prev.fellow ? { ...prev.fellow, avatar: url } : prev.fellow,
+                  } : prev));
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       <ConfirmDeleteModal

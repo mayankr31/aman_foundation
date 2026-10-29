@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { ensureBirthdayNotifications } from "@/lib/teamToday";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    await ensureBirthdayNotifications();
 
     const [notifications, unreadCount] = await Promise.all([
       prisma.notification.findMany({

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canViewBeneficiary } from "@/lib/beneficiaryAccess";
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -34,15 +35,15 @@ export async function GET(req, { params }) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
       return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+    }
+
+    if (!(await canViewBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You do not have access to this beneficiary" }, { status: 403 });
     }
 
     const migrationRecords = await prisma.migrationRecord.findMany({

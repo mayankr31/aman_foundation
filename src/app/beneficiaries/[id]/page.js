@@ -9,6 +9,7 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import { useToast } from "@/context/ToastContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
+import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
@@ -38,7 +39,7 @@ import {
   toPersonNameInput,
 } from "@/lib/validation";
 
-const SHOW_TAKE_KYR_BUTTON = false;
+const SHOW_TAKE_KYR_BUTTON = true;
 
 export default function BeneficiaryProfileDetail() {
   return (
@@ -132,13 +133,23 @@ function BeneficiaryProfileDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { token, isInitializing } = useAuth();
-  const { getTypeConfig } = useLivelihoodTypes(token);
+  const { token, user, isInitializing, can } = useAuth();
+  const permissionsReady = Boolean(user?.permissions);
+  const canWrite = permissionsReady && can("livelihood", "WRITE");
+  const canBrowseDirectory = permissionsReady && can("livelihood", "READ");
+  const visibleTabs = canBrowseDirectory
+    ? BENEFICIARY_TABS
+    : BENEFICIARY_TABS.filter(({ slug }) => slug !== "id-proofs-bank-details");
+  const { getTypeConfig } = useLivelihoodTypes(token, { enabled: canBrowseDirectory });
   const toast = useToast();
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Program History";
   const [beneficiary, setBeneficiary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
+  const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
+    activeTab,
+    !loading && Boolean(beneficiary)
+  );
 
   // Edit modal states
   const [showEditModal, setShowEditModal] = useState(false);
@@ -300,94 +311,72 @@ function BeneficiaryProfileDetailContent() {
 
         setMigrationRecords(b.migrationRecords || []);
 
-        const incomeRes = await fetch(`/api/beneficiaries/${id}/income`, { headers });
-        if (incomeRes.ok) {
-          const incomeData = await incomeRes.json();
-          if (incomeData.success) {
-            setIncomeRecords(incomeData.data);
+        // These requests are independent — run them together so the profile is
+        // not limited by the slowest endpoint sequentially.
+        const fetchJson = async (url) => {
+          try {
+            const res = await fetch(url, { headers });
+            if (!res.ok) return null;
+            const json = await res.json();
+            return json.success ? json.data : null;
+          } catch {
+            return null;
+          }
+        };
 
-            if (!incomeFilterInitialized.current) {
-              const years = [
-                ...new Set(
-                  (incomeData.data || [])
-                    .map((record) => getIncomePeriod(record).year)
-                    .filter(Boolean)
-                ),
-              ];
-              const currentYear = new Date().getFullYear();
-              setIncomeYearFilter(
-                years.includes(currentYear)
-                  ? currentYear
-                  : years.length
-                    ? Math.max(...years)
-                    : currentYear
-              );
-              incomeFilterInitialized.current = true;
-            }
+        const [
+          incomeData,
+          resilienceData,
+          adaptiveData,
+          absorptiveData,
+          transformativeData,
+          vulnerabilityData,
+          solutionData,
+          programsData,
+        ] = await Promise.all([
+          fetchJson(`/api/beneficiaries/${id}/income`),
+          fetchJson(`/api/beneficiaries/${id}/resilience-surveys`),
+          fetchJson(`/api/beneficiaries/${id}/adaptive-surveys`),
+          fetchJson(`/api/beneficiaries/${id}/absorptive-surveys`),
+          fetchJson(`/api/beneficiaries/${id}/transformative-surveys`),
+          fetchJson(`/api/beneficiaries/${id}/vulnerability-surveys`),
+          fetchJson(`/api/beneficiaries/${id}/solution-plans`),
+          canBrowseDirectory ? fetchJson("/api/livelihood/programs") : Promise.resolve(null),
+        ]);
+
+        if (incomeData) {
+          setIncomeRecords(incomeData);
+
+          if (!incomeFilterInitialized.current) {
+            const years = [
+              ...new Set(
+                (incomeData || [])
+                  .map((record) => getIncomePeriod(record).year)
+                  .filter(Boolean)
+              ),
+            ];
+            const currentYear = new Date().getFullYear();
+            setIncomeYearFilter(
+              years.includes(currentYear)
+                ? currentYear
+                : years.length
+                  ? Math.max(...years)
+                  : currentYear
+            );
+            incomeFilterInitialized.current = true;
           }
         }
 
-        // Fetch Resilience Surveys
-        const resilienceRes = await fetch(`/api/beneficiaries/${id}/resilience-surveys`, { headers });
-        if (resilienceRes.ok) {
-          const resilienceData = await resilienceRes.json();
-          if (resilienceData.success) {
-            setSurveys(resilienceData.data);
-          }
-        }
+        if (resilienceData) setSurveys(resilienceData);
+        if (adaptiveData) setAdaptiveSurveys(adaptiveData);
+        if (absorptiveData) setAbsorptiveSurveys(absorptiveData);
+        if (transformativeData) setTransformativeSurveys(transformativeData);
+        if (vulnerabilityData) setVulnerabilitySurveys(vulnerabilityData);
+        if (solutionData) setSolutionPlans(solutionData);
 
-        // Fetch Adaptive Capacity Surveys
-        const adaptiveRes = await fetch(`/api/beneficiaries/${id}/adaptive-surveys`, { headers });
-        if (adaptiveRes.ok) {
-          const adaptiveData = await adaptiveRes.json();
-          if (adaptiveData.success) {
-            setAdaptiveSurveys(adaptiveData.data);
-          }
-        }
-
-        // Fetch Absorptive Capacity Surveys
-        const absorptiveRes = await fetch(`/api/beneficiaries/${id}/absorptive-surveys`, { headers });
-        if (absorptiveRes.ok) {
-          const absorptiveData = await absorptiveRes.json();
-          if (absorptiveData.success) {
-            setAbsorptiveSurveys(absorptiveData.data);
-          }
-        }
-
-        // Fetch Transformative Capacity Surveys
-        const transformativeRes = await fetch(`/api/beneficiaries/${id}/transformative-surveys`, { headers });
-        if (transformativeRes.ok) {
-          const transformativeData = await transformativeRes.json();
-          if (transformativeData.success) {
-            setTransformativeSurveys(transformativeData.data);
-          }
-        }
-
-        // Fetch Vulnerability Surveys
-        const vulnerabilityRes = await fetch(`/api/beneficiaries/${id}/vulnerability-surveys`, { headers });
-        if (vulnerabilityRes.ok) {
-          const vulnerabilityData = await vulnerabilityRes.json();
-          if (vulnerabilityData.success) {
-            setVulnerabilitySurveys(vulnerabilityData.data);
-          }
-        }
-
-        // Fetch Solution Plans
-        const solutionRes = await fetch(`/api/beneficiaries/${id}/solution-plans`, { headers });
-        if (solutionRes.ok) {
-          const solutionData = await solutionRes.json();
-          if (solutionData.success) {
-            setSolutionPlans(solutionData.data);
-          }
-        }
-
-        // Fetch livelihood programs (for program assignment)
-        const programsRes = await fetch("/api/livelihood/programs", { headers });
-        if (programsRes.ok) {
-          const programsData = await programsRes.json();
-          if (programsData.success) {
-            setLivelihoodPrograms(programsData.data.programs || []);
-          }
+        // Livelihood programs are only needed for editing program assignments.
+        if (programsData) {
+          setLivelihoodPrograms(programsData.programs || []);
         }
       }
     } catch (err) {
@@ -398,10 +387,12 @@ function BeneficiaryProfileDetailContent() {
   };
 
   useEffect(() => {
-    if (!isInitializing && id && id !== "undefined" && id !== "null") {
-      loadBeneficiaryDetail();
+    if (!isInitializing && permissionsReady && id && id !== "undefined" && id !== "null") {
+      // Defer so the effect itself stays free of synchronous state updates.
+      const timer = setTimeout(loadBeneficiaryDetail, 0);
+      return () => clearTimeout(timer);
     }
-  }, [id, token, isInitializing]);
+  }, [id, token, isInitializing, permissionsReady]);
 
   useEffect(() => {
     incomeFilterInitialized.current = false;
@@ -1088,14 +1079,14 @@ function BeneficiaryProfileDetailContent() {
     <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back link */}
       <Link
-        href="/beneficiaries"
+        href={canBrowseDirectory ? "/beneficiaries" : "/education/students"}
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-          Back to Beneficiaries Directory
+          {canBrowseDirectory ? "Back to Beneficiaries Directory" : "Back to Students"}
         </span>
       </Link>
 
@@ -1103,42 +1094,58 @@ function BeneficiaryProfileDetailContent() {
       <header className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <p className="text-label-md text-on-surface-variant mb-2 font-sans font-bold uppercase tracking-widest text-[10px]">
-            Livelihood Management
+            {canBrowseDirectory ? "Livelihood Management" : "Family Profile"}
           </p>
           <h1 className="page-title text-on-surface">
             Beneficiary Profile File
           </h1>
         </div>
         <div className="flex gap-3 font-sans flex-wrap">
-          <button
-            onClick={() => setShowConfirmMigrate(true)}
-            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
-          >
-            <span className="material-symbols-outlined text-[18px]">
-              {beneficiary.isMigrated ? "undo" : "moving"}
-            </span>
-            {beneficiary.isMigrated ? "Unmark Migrated" : "Mark Migrated"}
-          </button>
-          <button
-            onClick={() => setShowEditModal(true)}
-            className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
-          >
-            <span className="material-symbols-outlined text-[18px]">edit</span>
-            Edit Profile
-          </button>
+          {canWrite && (
+            <button
+              onClick={() => setShowConfirmMigrate(true)}
+              className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            >
+              <span className="material-symbols-outlined text-[18px]">
+                {beneficiary.isMigrated ? "undo" : "moving"}
+              </span>
+              {beneficiary.isMigrated ? "Unmark Migrated" : "Mark Migrated"}
+            </button>
+          )}
+          {canWrite && (
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            >
+              <span className="material-symbols-outlined text-[18px]">edit</span>
+              Edit Profile
+            </button>
+          )}
           <button className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-body-md font-medium shadow-glow hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border-none">
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Data
           </button>
-          <button
-            onClick={() => setShowConfirmDelete(true)}
-            className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
-          >
-            <span className="material-symbols-outlined text-[18px]">delete</span>
-            Delete
-          </button>
+          {canWrite && (
+            <button
+              onClick={() => setShowConfirmDelete(true)}
+              className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
+            >
+              <span className="material-symbols-outlined text-[18px]">delete</span>
+              Delete
+            </button>
+          )}
         </div>
       </header>
+
+      {!canBrowseDirectory && (
+        <div className="mb-6 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-xs sm:text-sm text-sky-800 flex items-start gap-2 font-sans">
+          <span className="material-symbols-outlined text-[18px] shrink-0">info</span>
+          <span>
+            You are viewing this household through a student you support. Editing is disabled and
+            identity/bank details are hidden.
+          </span>
+        </div>
+      )}
 
       {/* Bento Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1159,17 +1166,19 @@ function BeneficiaryProfileDetailContent() {
                   beneficiary.name.split(" ").map((n) => n[0]).join("")
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() => photoInputRef.current?.click()}
-                disabled={uploadingPhoto}
-                title={beneficiary.photoUrl ? "Replace photo" : "Add photo"}
-                className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md border border-surface cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                <span className="material-symbols-outlined text-[18px]">
-                  {uploadingPhoto ? "hourglass_top" : "photo_camera"}
-                </span>
-              </button>
+              {canWrite && (
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  disabled={uploadingPhoto}
+                  title={beneficiary.photoUrl ? "Replace photo" : "Add photo"}
+                  className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md border border-surface cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50"
+                >
+                  <span className="material-symbols-outlined text-[18px]">
+                    {uploadingPhoto ? "hourglass_top" : "photo_camera"}
+                  </span>
+                </button>
+              )}
               <input
                 ref={photoInputRef}
                 type="file"
@@ -1364,14 +1373,16 @@ function BeneficiaryProfileDetailContent() {
               </div>
             )}
 
-            <button
-              onClick={handleCalculateResilience}
-              disabled={resilienceScoreComputed === null || isCalculatingResilience}
-              className="mt-3 w-full gradient-primary bg-primary text-on-primary px-3 py-2 rounded-full text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span className="material-symbols-outlined text-[16px]">calculate</span>
-              {isCalculatingResilience ? "Calculating..." : "Calculate & Save Score"}
-            </button>
+            {canWrite && (
+              <button
+                onClick={handleCalculateResilience}
+                disabled={resilienceScoreComputed === null || isCalculatingResilience}
+                className="mt-3 w-full gradient-primary bg-primary text-on-primary px-3 py-2 rounded-full text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="material-symbols-outlined text-[16px]">calculate</span>
+                {isCalculatingResilience ? "Calculating..." : "Calculate & Save Score"}
+              </button>
+            )}
           </div>
         </div>
 
@@ -1386,15 +1397,15 @@ function BeneficiaryProfileDetailContent() {
             onChange={(e) => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(e.target.value)}`, { scroll: false })}
             className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
           >
-            {BENEFICIARY_TABS.map(({ label: tab }) => (
+            {visibleTabs.map(({ label: tab }) => (
               <option key={tab} value={tab}>{tab}</option>
             ))}
           </select>
         </div>
 
         {/* Tabs Navigation */}
-        <div className="hidden lg:flex lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
-          {BENEFICIARY_TABS.map(({ label: tab }) => {
+        <div ref={tabsContainerRef} className="hidden lg:flex lg:col-span-12 mt-4 mb-2 border-b border-surface-container-highest overflow-x-auto no-scrollbar font-sans">
+          {visibleTabs.map(({ label: tab }) => {
             const isActive = activeTab === tab;
             const tabLabel = tab === "Family Directory" && beneficiary.familyMembers?.length
               ? `Family Directory (${beneficiary.familyMembers.length})`
@@ -1406,6 +1417,7 @@ function BeneficiaryProfileDetailContent() {
             return (
               <button
                 key={tab}
+                ref={isActive ? setActiveTabRef : null}
                 onClick={() => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(tab)}`, { scroll: false })}
                 className={`px-3 sm:px-5 py-2.5 sm:py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
                   isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
@@ -1601,7 +1613,7 @@ function BeneficiaryProfileDetailContent() {
                   </p>
                 </div>
                 {/* Set SHOW_TAKE_KYR_BUTTON to true to re-enable the survey entry point. */}
-                {SHOW_TAKE_KYR_BUTTON && (
+                {SHOW_TAKE_KYR_BUTTON && canWrite && (
                   <Link
                     href={`/beneficiaries/${id}/kyr-survey`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
@@ -1648,14 +1660,16 @@ function BeneficiaryProfileDetailContent() {
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
-                        <button
-                          type="button"
-                          onClick={() => setEditingSurvey(survey)}
-                          className="text-secondary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer"
-                        >
-                          <span className="material-symbols-outlined text-[14px]">edit</span>
-                          Edit
-                        </button>
+                        {canWrite && (
+                          <button
+                            type="button"
+                            onClick={() => setEditingSurvey(survey)}
+                            className="text-secondary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">edit</span>
+                            Edit
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1680,13 +1694,15 @@ function BeneficiaryProfileDetailContent() {
                     Assess the household's ability to adapt to new situations.
                   </p>
                 </div>
-                <Link
-                  href={`/beneficiaries/${id}/adaptive-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Take New Survey
-                </Link>
+                {canWrite && (
+                  <Link
+                    href={`/beneficiaries/${id}/adaptive-capacity`}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Take New Survey
+                  </Link>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1732,13 +1748,15 @@ function BeneficiaryProfileDetailContent() {
                     Assess the household's ability to absorb shocks and disasters.
                   </p>
                 </div>
-                <Link
-                  href={`/beneficiaries/${id}/absorptive-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Take New Survey
-                </Link>
+                {canWrite && (
+                  <Link
+                    href={`/beneficiaries/${id}/absorptive-capacity`}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Take New Survey
+                  </Link>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1784,13 +1802,15 @@ function BeneficiaryProfileDetailContent() {
                     Assess systemic changes and access to markets, services, and opportunities.
                   </p>
                 </div>
-                <Link
-                  href={`/beneficiaries/${id}/transformative-capacity`}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Take New Survey
-                </Link>
+                {canWrite && (
+                  <Link
+                    href={`/beneficiaries/${id}/transformative-capacity`}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Take New Survey
+                  </Link>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1836,13 +1856,15 @@ function BeneficiaryProfileDetailContent() {
                     Assess the shocks, hardships, and effects faced by the household.
                   </p>
                 </div>
-                <Link
-                  href={`/beneficiaries/${id}/vulnerability`}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Take New Survey
-                </Link>
+                {canWrite && (
+                  <Link
+                    href={`/beneficiaries/${id}/vulnerability`}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Take New Survey
+                  </Link>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -1892,13 +1914,15 @@ function BeneficiaryProfileDetailContent() {
                     <span className="material-symbols-outlined text-[18px]">menu_book</span>
                     View Reference Board
                   </Link>
-                  <Link
-                    href={`/beneficiaries/${id}/solution-plan`}
-                    className="w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
-                    Create Solution Plan
-                  </Link>
+                  {canWrite && (
+                    <Link
+                      href={`/beneficiaries/${id}/solution-plan`}
+                      className="w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">add</span>
+                      Create Solution Plan
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -1929,16 +1953,20 @@ function BeneficiaryProfileDetailContent() {
                             <span className="material-symbols-outlined text-[14px]">visibility</span>
                             View Full Plan
                           </Link>
-                          <Link href={`/beneficiaries/${id}/solution-plan?planId=${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
-                            <span className="material-symbols-outlined text-[14px]">edit</span>
-                            Edit Plan
-                          </Link>
+                          {canWrite && (
+                            <Link href={`/beneficiaries/${id}/solution-plan?planId=${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                              <span className="material-symbols-outlined text-[14px]">edit</span>
+                              Edit Plan
+                            </Link>
+                          )}
                         </div>
                       </div>
                     ))
                   ) : (
                     <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                      No solution plans have been created for this beneficiary yet. Click "Create Solution Plan" to get started.
+                      {canWrite
+                        ? 'No solution plans have been created for this beneficiary yet. Click "Create Solution Plan" to get started.'
+                        : "No solution plans have been created for this beneficiary yet."}
                     </p>
                   )}
                 </div>
@@ -1971,13 +1999,15 @@ function BeneficiaryProfileDetailContent() {
                       ))}
                     </select>
                   </label>
-                  <button
-                    onClick={() => handleOpenIncomeForm()}
-                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">add</span>
-                    Add Income
-                  </button>
+                  {canWrite && (
+                    <button
+                      onClick={() => handleOpenIncomeForm()}
+                      className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">add</span>
+                      Add Income
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -2063,20 +2093,22 @@ function BeneficiaryProfileDetailContent() {
                             <p className="text-xs text-on-surface-variant mt-2 italic">&quot;{record.notes}&quot;</p>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <button
-                            onClick={() => handleOpenIncomeForm(record)}
-                            className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">edit</span>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteIncome(record.id)}
-                            className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
-                        </div>
+                        {canWrite && (
+                          <div className="flex items-center gap-2 shrink-0">
+                            <button
+                              onClick={() => handleOpenIncomeForm(record)}
+                              className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteIncome(record.id)}
+                              className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -2101,13 +2133,15 @@ function BeneficiaryProfileDetailContent() {
                     Track seasonal and permanent migration patterns for this household.
                   </p>
                 </div>
-                <button
-                  onClick={() => handleOpenMigrationForm()}
-                  className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                  Add Migration
-                </button>
+                {canWrite && (
+                  <button
+                    onClick={() => handleOpenMigrationForm()}
+                    className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">add</span>
+                    Add Migration
+                  </button>
+                )}
               </div>
 
               <div className="space-y-4">
@@ -2145,20 +2179,22 @@ function BeneficiaryProfileDetailContent() {
                           <p className="text-xs text-on-surface-variant mt-2 italic">"{record.notes}"</p>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <button
-                          onClick={() => handleOpenMigrationForm(record)}
-                          className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">edit</span>
-                        </button>
-                        <button
-                          onClick={() => handleDeleteMigration(record.id)}
-                          className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">delete</span>
-                        </button>
-                      </div>
+                      {canWrite && (
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            onClick={() => handleOpenMigrationForm(record)}
+                            className="p-1.5 hover:bg-surface-container-high rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMigration(record.id)}
+                            className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))
                 ) : (
@@ -2177,13 +2213,15 @@ function BeneficiaryProfileDetailContent() {
                   <span className="material-symbols-outlined text-primary">group</span>
                   Family Members &amp; Household Registry
                 </h3>
-                <button
-                  onClick={() => { setShowEditModal(true); setEditTab("Family"); }}
-                  className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
-                >
-                  <span className="material-symbols-outlined text-[14px]">add</span>
-                  Add Family Member
-                </button>
+                {canWrite && (
+                  <button
+                    onClick={() => { setShowEditModal(true); setEditTab("Family"); }}
+                    className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">add</span>
+                    Add Family Member
+                  </button>
+                )}
               </div>
               
               <div className="space-y-4">
@@ -2222,13 +2260,15 @@ function BeneficiaryProfileDetailContent() {
                     <span className="material-symbols-outlined text-primary text-[18px]">school</span>
                     Linked Students
                   </h4>
-                  <button
-                    onClick={() => { setStudentSearch(""); setShowLinkStudentModal(true); handleStudentSearch(""); }}
-                    className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
-                  >
-                    <span className="material-symbols-outlined text-[14px]">add_link</span>
-                    Link Student
-                  </button>
+                  {canWrite && (
+                    <button
+                      onClick={() => { setStudentSearch(""); setShowLinkStudentModal(true); handleStudentSearch(""); }}
+                      className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">add_link</span>
+                      Link Student
+                    </button>
+                  )}
                 </div>
 
                 <div className="space-y-3">
@@ -2238,7 +2278,7 @@ function BeneficiaryProfileDetailContent() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
                             <Link
-                              href={`/students/${student.id}`}
+                              href={`/education/students/${student.id}`}
                               className="font-bold text-sm text-primary hover:underline capitalize"
                             >
                               {student.name}
@@ -2254,18 +2294,22 @@ function BeneficiaryProfileDetailContent() {
                             <span>Grade: {student.grade || "N/A"}</span>
                           </div>
                         </div>
-                        <button
-                          onClick={() => handleUnlinkStudent(student.id)}
-                          className="px-2.5 py-1 bg-error-container/20 text-on-error-container hover:bg-error-container/40 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer border-none flex items-center gap-1 shrink-0"
-                        >
-                          <span className="material-symbols-outlined text-[14px]">link_off</span>
-                          Unlink
-                        </button>
+                        {canWrite && (
+                          <button
+                            onClick={() => handleUnlinkStudent(student.id)}
+                            className="px-2.5 py-1 bg-error-container/20 text-on-error-container hover:bg-error-container/40 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer border-none flex items-center gap-1 shrink-0"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">link_off</span>
+                            Unlink
+                          </button>
+                        )}
                       </div>
                     ))
                   ) : (
                     <p className="text-xs text-on-surface-variant italic p-3 border border-dashed border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                      No students linked to this household yet. Click "Link Student" to connect a student record.
+                      {canWrite
+                        ? 'No students linked to this household yet. Click "Link Student" to connect a student record.'
+                        : "No students linked to this household yet."}
                     </p>
                   )}
                 </div>
@@ -2273,7 +2317,7 @@ function BeneficiaryProfileDetailContent() {
             </div>
           )}
 
-          {activeTab === "ID Proofs & Bank Details" && (
+          {canBrowseDirectory && activeTab === "ID Proofs & Bank Details" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 lg:p-8 shadow-ambient border border-outline-variant/10 space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-on-surface flex items-center gap-2 font-headline">

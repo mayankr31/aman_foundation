@@ -8,6 +8,14 @@ import { useToast } from "@/context/ToastContext";
 import { formatDate, formatDateTime } from "@/lib/date";
 import { getISTDateKey } from "@/lib/time";
 import { validateDateOrder } from "@/lib/validation";
+import { formatRoleLabel } from "@/lib/roles";
+import {
+  TASK_TIME_SLOTS,
+  TASK_TIME_SLOT_CLASSES,
+  TASK_TIME_SLOT_LABELS,
+  defaultTaskTimeSlot,
+  normalizeTaskTimeSlot,
+} from "@/lib/taskSlots";
 
 const STATUSES = ["Pending", "In Progress", "Completed", "Blocked", "Cancelled"];
 const PRIORITIES = ["Low", "Medium", "High", "Urgent"];
@@ -46,6 +54,7 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
     deadline: toDateInput(task.deadline),
     status: task.status || "Pending",
     priority: task.priority || "Medium",
+    timeSlot: normalizeTaskTimeSlot(task.timeSlot),
   });
   const toast = useToast();
 
@@ -75,6 +84,7 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
           deadline: form.deadline || null,
           status: form.status,
           priority: form.priority,
+          timeSlot: form.timeSlot,
         }),
       });
       const data = await res.json();
@@ -87,6 +97,7 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
         deadline: toDateInput(data.data.deadline),
         status: data.data.status || "Pending",
         priority: data.data.priority || "Medium",
+        timeSlot: normalizeTaskTimeSlot(data.data.timeSlot),
       });
       setEditing(false);
       toast.success("Task updated");
@@ -181,6 +192,9 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded ${STATUS_CLASS[task.status] || "bg-slate-100 text-slate-700"}`}>{task.status}</span>
             <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded ${PRIORITY_CLASS[task.priority] || ""}`}>{task.priority}</span>
+            <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(task.timeSlot)]}`}>
+              {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(task.timeSlot)]}
+            </span>
             {task.assignedBy && <span className="text-[10px] font-bold uppercase px-2 py-1 rounded bg-teal-100 text-teal-800">Assigned</span>}
           </div>
           {!editing ? (
@@ -225,6 +239,12 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Priority</label>
                 <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-sm">
                   {PRIORITIES.map((item) => <option key={item} value={item}>{item}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Time Slot</label>
+                <select value={form.timeSlot} onChange={(e) => setForm({ ...form, timeSlot: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-sm">
+                  {TASK_TIME_SLOTS.map((slot) => <option key={slot} value={slot}>{TASK_TIME_SLOT_LABELS[slot]}</option>)}
                 </select>
               </div>
             </div>
@@ -357,6 +377,7 @@ function TasksPageContent() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [assignables, setAssignables] = useState([]);
+  const [hasTeam, setHasTeam] = useState(false);
   const [creating, setCreating] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -365,10 +386,12 @@ function TasksPageContent() {
     plannedDate: getISTDateKey(),
     deadline: "",
     priority: "Medium",
+    timeSlot: defaultTaskTimeSlot(),
   });
 
   const isAdmin = user?.roleName === "ADMIN";
   const canWrite = can("tasks", "WRITE");
+  const userId = user?.id;
 
   useEffect(() => {
     if (isAdmin) {
@@ -408,21 +431,34 @@ function TasksPageContent() {
     if (found) setSelectedTask(found);
   }, [searchParams, tasks]);
 
-  const openCreate = async () => {
-    setShowCreate(true);
-    setCreateFiles([]);
+  const loadAssignables = useCallback(async () => {
+    if (!token) return [];
     try {
       const res = await fetch("/api/tasks/assignable", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      if (res.ok) {
-        setAssignables(data.data || []);
-        setForm((prev) => ({ ...prev, assigneeId: prev.assigneeId || user.id }));
-      }
+      if (!res.ok) return [];
+      const people = data.data || [];
+      setAssignables(people);
+      setHasTeam(!!data.meta?.hasTeam);
+      setForm((prev) => ({ ...prev, assigneeId: prev.assigneeId || userId }));
+      return people;
     } catch {
       // Assignment list is optional; users can still create personal tasks.
+      return [];
     }
+  }, [token, userId]);
+
+  useEffect(() => {
+    loadAssignables();
+  }, [loadAssignables]);
+
+  const openCreate = async () => {
+    setShowCreate(true);
+    setCreateFiles([]);
+    setForm((prev) => ({ ...prev, timeSlot: defaultTaskTimeSlot() }));
+    await loadAssignables();
   };
 
   const createTask = async (e) => {
@@ -449,6 +485,7 @@ function TasksPageContent() {
           plannedDate: form.plannedDate || getISTDateKey(),
           deadline: form.deadline || null,
           priority: form.priority,
+          timeSlot: form.timeSlot,
         }),
       });
       const data = await res.json();
@@ -470,7 +507,7 @@ function TasksPageContent() {
       toast.success("Task created");
       setShowCreate(false);
       setCreateFiles([]);
-      setForm({ title: "", description: "", assigneeId: user.id, plannedDate: getISTDateKey(), deadline: "", priority: "Medium" });
+      setForm({ title: "", description: "", assigneeId: user.id, plannedDate: getISTDateKey(), deadline: "", priority: "Medium", timeSlot: defaultTaskTimeSlot() });
       loadTasks();
     } catch (err) {
       toast.error(err.message);
@@ -530,6 +567,7 @@ function TasksPageContent() {
       <div className="flex flex-wrap gap-2">
         {[
           ...(isAdmin ? [{ key: "all", label: "All Tasks" }] : [{ key: "mine", label: "My Tasks" }]),
+          ...(!isAdmin && hasTeam ? [{ key: "team", label: "Team Tasks" }] : []),
           { key: "assigned-by-me", label: "Assigned by Me" },
         ].map((tab) => (
           <button
@@ -582,6 +620,9 @@ function TasksPageContent() {
                     <div className="flex flex-wrap items-center gap-2 mt-1">
                       <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_CLASS[task.status] || ""}`}>{task.status}</span>
                       <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${PRIORITY_CLASS[task.priority] || ""}`}>{task.priority}</span>
+                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(task.timeSlot)]}`}>
+                        {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(task.timeSlot)]}
+                      </span>
                       {task.assignedBy && <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Assigned by {task.assignedBy.name}</span>}
                       {task.documents?.length > 0 && (
                         <span className="text-[10px] text-slate-500 flex items-center gap-0.5"><span className="material-symbols-outlined text-[13px]">attachment</span>{task.documents.length}</span>
@@ -623,15 +664,30 @@ function TasksPageContent() {
                   <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Assign To</label>
                   <select value={form.assigneeId} onChange={(e) => setForm({ ...form, assigneeId: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-sm">
                     <option value={user.id}>{user.name} (me)</option>
-                    {assignables.filter((person) => person.id !== user.id).map((person) => (
-                      <option key={person.id} value={person.id}>{person.name} ({person.role?.name?.replaceAll("_", " ")})</option>
-                    ))}
+                    {assignables.some((person) => person.id !== user.id) && (
+                      <optgroup label="People under you">
+                        {assignables.filter((person) => person.id !== user.id).map((person) => (
+                          <option key={person.id} value={person.id}>{person.name} ({formatRoleLabel(person.role?.name)})</option>
+                        ))}
+                      </optgroup>
+                    )}
                   </select>
+                  {hasTeam && (
+                    <p className="text-[10px] text-slate-500 mt-1">
+                      You can assign tasks to people who report to you.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Priority</label>
                   <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-sm">
                     {PRIORITIES.map((priority) => <option key={priority} value={priority}>{priority}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Time Slot</label>
+                  <select value={form.timeSlot} onChange={(e) => setForm({ ...form, timeSlot: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-white dark:bg-slate-900 text-sm">
+                    {TASK_TIME_SLOTS.map((slot) => <option key={slot} value={slot}>{TASK_TIME_SLOT_LABELS[slot]}</option>)}
                   </select>
                 </div>
                 <div>

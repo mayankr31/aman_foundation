@@ -163,6 +163,19 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             </Link>
           )}
 
+          {/* Assets */}
+          {can("assets") && (
+            <Link
+              href="/assets"
+              className={navItemClass(pathname === "/assets")}
+              onClick={onClose}
+              title="Assets"
+            >
+              <span className="material-symbols-outlined">inventory_2</span>
+              <span className={labelClass}>Assets</span>
+            </Link>
+          )}
+
           {/* My Profile Submenu (Fellow) */}
           {user?.roleName === "FELLOW" && (
             <div className="flex flex-col gap-1">
@@ -440,7 +453,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Travel Management */}
-          {can("travel-management") && (user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
+          {can("travel-management") && (
             <Link
               href="/travel/manage"
               className={navItemClass(pathname === "/travel/manage")}

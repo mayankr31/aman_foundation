@@ -57,6 +57,7 @@ const ALL_PAGES = [
   "self-attendance",
   "tasks",
   "task-analytics",
+  "assets",
   "admin",
 ];
 
@@ -65,7 +66,7 @@ const ACTIONS = ["READ", "WRITE"];
 // Per-role page grants.
 const ROLE_PAGES = {
   ADMIN: ALL_PAGES,
-  FELLOW: ["dashboard", "education", "leaves", "travel", "reimbursements", "attendance", "self-attendance", "tasks"],
+  FELLOW: ["dashboard", "education", "leaves", "travel", "reimbursements", "attendance", "self-attendance", "tasks", "task-analytics", "assets"],
   HR: [
     "dashboard",
     "education",
@@ -77,7 +78,15 @@ const ROLE_PAGES = {
     "attendance",
     "self-attendance",
     "tasks",
+    "task-analytics",
+    "assets",
   ],
+};
+
+// Pages that a role may open but must not write to. Fellows can view their own
+// assets, but only managers, HR and ADMIN can add/assign/return them.
+const READ_ONLY_PAGES = {
+  FELLOW: ["assets"],
 };
 
 // Program staff (PROGRAM_MANAGER + the 6 new roles) get the same set.
@@ -95,6 +104,8 @@ const PROGRAM_STAFF_PAGES = [
   "attendance",
   "self-attendance",
   "tasks",
+  "task-analytics",
+  "assets",
 ];
 
 async function main() {
@@ -143,8 +154,11 @@ async function main() {
       continue;
     }
 
+    const readOnlyPages = new Set(READ_ONLY_PAGES[roleName] || []);
+
     for (const page of pages) {
       for (const action of ACTIONS) {
+        if (action === "WRITE" && readOnlyPages.has(page)) continue;
         const perm = permissionByKey[`${page}:${action}`];
         if (!perm) continue;
         await prisma.rolePermission.upsert({
@@ -156,6 +170,25 @@ async function main() {
         });
       }
     }
+
+    // Keep the seed idempotent if a page later becomes read-only for a role.
+    if (readOnlyPages.size) {
+      const writePermissions = await prisma.permission.findMany({
+        where: {
+          app: "dashboard",
+          action: "WRITE",
+          page: { in: [...readOnlyPages] },
+        },
+        select: { id: true },
+      });
+      await prisma.rolePermission.deleteMany({
+        where: {
+          roleId: role.id,
+          permissionId: { in: writePermissions.map((p) => p.id) },
+        },
+      });
+    }
+
     console.log(`Granted ${pages.length} pages to ${roleName}.`);
   }
 

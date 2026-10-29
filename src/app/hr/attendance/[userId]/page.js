@@ -5,6 +5,13 @@ import Link from "next/link";
 import { useState, useEffect, useMemo, use } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
+import { formatWorkHours } from "@/lib/time";
+import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
+import {
+  TASK_TIME_SLOT_CLASSES,
+  TASK_TIME_SLOT_LABELS,
+  normalizeTaskTimeSlot,
+} from "@/lib/taskSlots";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -115,6 +122,7 @@ export default function UserAttendanceDetails({ params }) {
       processed[dateKey] = {
         ...item,
         status,
+        metrics: computeAttendanceMetrics(item),
         taskDetails: item.taskDetails || []
       };
     });
@@ -131,6 +139,7 @@ export default function UserAttendanceDetails({ params }) {
     let totalInMins = 0, inCount = 0;
     let totalOutMins = 0, outCount = 0;
     let tasksCompleted = 0, tasksTotal = 0;
+    let extraSeconds = 0;
 
     const now = new Date();
     const isCurrentMonthAndYear = year === now.getFullYear() && month === now.getMonth();
@@ -155,6 +164,8 @@ export default function UserAttendanceDetails({ params }) {
           tasksTotal += dayData.taskDetails.length;
           tasksCompleted += dayData.taskDetails.filter(t => t.completed).length;
         }
+
+        extraSeconds += dayData.metrics?.extraSeconds || 0;
 
         const parseTime = (timeStr) => {
           if (!timeStr || timeStr === "N/A" || !timeStr.includes(':')) return null;
@@ -211,6 +222,8 @@ export default function UserAttendanceDetails({ params }) {
       holidayDays,
       tasksCompleted,
       tasksTotal,
+      extraSeconds,
+      extraHours: formatWorkHours(extraSeconds),
       attendancePercentage: Math.min(100, attendancePercentage),
       averageCheckInTime: formatAvg(totalInMins, inCount),
       averageCheckOutTime: formatAvg(totalOutMins, outCount)
@@ -222,7 +235,7 @@ export default function UserAttendanceDetails({ params }) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const rows = [['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Tasks']];
+    const rows = [['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late Out', 'Extra Hours', 'Tasks']];
     
     for (let day = 1; day <= daysInMonth; day++) {
       const yyyy = year;
@@ -248,11 +261,14 @@ export default function UserAttendanceDetails({ params }) {
           data.status,
           data.intimelog || 'N/A',
           data.outtimelog || 'N/A',
-          data.workhours || 'N/A',
+          data.metrics?.autoClosed ? 'Auto checkout' : data.workhours || 'N/A',
+          data.metrics?.earlyHours || '0h 0m',
+          data.metrics?.lateHours || '0h 0m',
+          data.metrics?.autoClosed ? 'Not counted (auto checkout)' : data.metrics?.extraHours || '0h 0m',
           `"${tasks.replace(/"/g, '""')}"`
         ]);
       } else {
-        rows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', '']);
+        rows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
       }
     }
     
@@ -284,8 +300,9 @@ export default function UserAttendanceDetails({ params }) {
         doc.text(`Attendance %: ${analytics.attendancePercentage}%`, 14, 48);
         doc.text(`Average Check-in: ${analytics.averageCheckInTime}`, 14, 54);
         doc.text(`Average Check-out: ${analytics.averageCheckOutTime}`, 14, 60);
+        doc.text(`Extra Hours: ${analytics.extraHours} (${SHIFT_LABEL})`, 14, 66);
 
-        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Tasks'];
+        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late Out', 'Extra Hours', 'Tasks'];
         const tableRows = [];
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         
@@ -313,18 +330,21 @@ export default function UserAttendanceDetails({ params }) {
               data.status,
               data.intimelog || 'N/A',
               data.outtimelog || 'N/A',
-              data.workhours || 'N/A',
+              data.metrics?.autoClosed ? 'Auto checkout' : data.workhours || 'N/A',
+              data.metrics?.earlyHours || '0h 0m',
+              data.metrics?.lateHours || '0h 0m',
+              data.metrics?.autoClosed ? 'Auto checkout' : data.metrics?.extraHours || '0h 0m',
               tasks
             ]);
           } else {
-            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', '']);
+            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
           }
         }
 
         autoTable.default(doc, {
           head: [tableColumn],
           body: tableRows,
-          startY: 70,
+          startY: 76,
           theme: 'grid',
           headStyles: { fillColor: [22, 163, 74] },
           styles: { cellPadding: 3, fontSize: 8 }
@@ -369,14 +389,17 @@ export default function UserAttendanceDetails({ params }) {
 
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-lg font-semibold text-gray-800">Monthly Analytics</h2>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">Monthly Analytics</h2>
+            <p className="text-[11px] text-gray-500 mt-1">Standard shift: {SHIFT_LABEL}</p>
+          </div>
           <div className="flex space-x-2">
             <button onClick={exportCSV} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-semibold transition-colors cursor-pointer">Export CSV</button>
             <button onClick={exportPDF} className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 text-sm font-semibold transition-colors cursor-pointer">Export PDF</button>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
           <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-lg">
             <p className="text-xs font-semibold text-slate-500 uppercase">Total Days</p>
             <p className="text-2xl font-bold text-blue-700">{analytics.totalDays}</p>
@@ -392,6 +415,10 @@ export default function UserAttendanceDetails({ params }) {
           <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-lg">
             <p className="text-xs font-semibold text-slate-500 uppercase">Attendance %</p>
             <p className="text-2xl font-bold text-purple-700">{analytics.attendancePercentage}%</p>
+          </div>
+          <div className="bg-teal-50/50 border border-teal-100 p-4 rounded-lg">
+            <p className="text-xs font-semibold text-slate-500 uppercase">Extra Hours</p>
+            <p className="text-2xl font-bold text-teal-700">{analytics.extraHours}</p>
           </div>
         </div>
 
@@ -409,7 +436,7 @@ export default function UserAttendanceDetails({ params }) {
             <p className="text-lg font-bold text-slate-800">{analytics.tasksCompleted} / {analytics.tasksTotal}</p>
           </div>
           <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg">
-            <p className="text-xs font-semibold text-slate-500 uppercase">Leave / Holiday</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase">Leave / Weekly Off</p>
             <p className="text-lg font-bold text-slate-800">{analytics.leaveDays + analytics.holidayDays}</p>
           </div>
         </div>
@@ -476,7 +503,7 @@ export default function UserAttendanceDetails({ params }) {
                   {!dayData && isWeekend && (
                     <div className="hidden sm:flex flex-col gap-1 mt-auto items-center justify-center h-full opacity-50">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                        Weekend
+                        Weekly Off
                       </span>
                     </div>
                   )}
@@ -490,6 +517,11 @@ export default function UserAttendanceDetails({ params }) {
                          <span className="text-[10px] font-medium text-slate-600 truncate">{dayData.intimelog} - {dayData.outtimelog || '...'}</span>
                       )}
                     </div>
+                  )}
+                  {dayData?.metrics?.extraSeconds > 0 && (
+                    <span className="hidden sm:inline-flex absolute top-2 right-2 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm" title={`Extra worked: ${dayData.metrics.extraHours}`}>
+                      +{dayData.metrics.extraHours}
+                    </span>
                   )}
                   {dayData && Array.isArray(dayData.taskDetails) && dayData.taskDetails.length > 0 && (() => {
                      const completed = dayData.taskDetails.filter(t => t.completed).length;
@@ -545,13 +577,41 @@ export default function UserAttendanceDetails({ params }) {
               <div className="bg-gray-50 p-4 rounded-lg col-span-2 flex justify-between items-center">
                  <div>
                    <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Work Hours</p>
-                   <p className="font-bold text-gray-800">{selectedDate.workhours || 'N/A'}</p>
+                   <p className="font-bold text-gray-800">{selectedDate.metrics?.autoClosed ? '—' : selectedDate.workhours || 'N/A'}</p>
                  </div>
                  <div>
                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-800 bg-white shadow-sm border border-gray-200 px-2 py-1 rounded">
                      {selectedDate.status}
                    </span>
                  </div>
+              </div>
+
+              <div className="col-span-2 rounded-lg border border-emerald-100 bg-emerald-50/60 p-4">
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-800">Extra Hours Breakdown</p>
+                  <p className="text-[10px] font-semibold text-emerald-700">{SHIFT_LABEL}</p>
+                </div>
+                {selectedDate.metrics?.autoClosed && (
+                  <p className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mb-3">
+                    This shift was auto-closed at midnight, so extra time is not counted.
+                  </p>
+                )}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Early In</p>
+                    <p className="text-sm font-bold text-amber-700 tabular-nums">{selectedDate.metrics?.earlyHours || "0h 0m"}</p>
+                  </div>
+                  <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Late Out</p>
+                    <p className="text-sm font-bold text-indigo-700 tabular-nums">{selectedDate.metrics?.lateHours || "0h 0m"}</p>
+                  </div>
+                  <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Extra Worked</p>
+                    <p className="text-sm font-bold text-emerald-700 tabular-nums">
+                      {selectedDate.metrics?.autoClosed ? "—" : selectedDate.metrics?.extraHours || "0h 0m"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -565,6 +625,9 @@ export default function UserAttendanceDetails({ params }) {
                         {task.completed ? 'check_circle' : 'radio_button_unchecked'}
                       </span>
                       <div className="flex flex-col min-w-0">
+                        <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded w-fit mb-1 ${TASK_TIME_SLOT_CLASSES[normalizeTaskTimeSlot(task.timeSlot)]}`}>
+                          {TASK_TIME_SLOT_LABELS[normalizeTaskTimeSlot(task.timeSlot)]}
+                        </span>
                         <span className={`break-words ${task.completed ? 'line-through text-gray-500 font-normal' : 'text-gray-800 font-semibold'}`}>{task.text}</span>
                         {task.description && (
                           <span className="text-xs text-slate-500 mt-0.5 break-words">{task.description}</span>
