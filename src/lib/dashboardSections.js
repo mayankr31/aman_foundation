@@ -10,11 +10,14 @@ import {
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
+const KPI_GROUP_BY_KEY = new Map(
+  KPI_DEFINITIONS.map((kpi) => [kpi.key, kpi.group])
+);
+
 const KNOWN_GROUP_IDS = new Set([
   "workspace",
   "tasks",
   "education",
-  "observations",
   "livelihood",
   "disaster",
   "hr",
@@ -51,12 +54,12 @@ export function getDefaultLinkKeys(role) {
 
   const educationLinks = isFellow
     ? LINK_GROUPS.education.links.filter(
-        (link) => link.href !== "/education/fellows" && link.href !== "/education/pta"
+        (link) =>
+          link.href !== "/education/fellows" && link.href !== "/education/pta"
       )
     : LINK_GROUPS.education.links;
 
   keys.push(...educationLinks.map((link) => link.key));
-  keys.push(...LINK_GROUPS.observations.links.map((link) => link.key));
   keys.push(...LINK_GROUPS.livelihood.links.map((link) => link.key));
   keys.push(...LINK_GROUPS.disaster.links.map((link) => link.key));
 
@@ -69,7 +72,9 @@ export function getDefaultLinkKeys(role) {
     if (isFellow) keys.push(...LINK_GROUPS.workspace.links.map((link) => link.key));
     if (role === "HR" || isProgramRole) keys.push(...HR_LINKS.map((link) => link.key));
     if (isProgramRole) keys.push(...MANAGEMENT_LINKS.map((link) => link.key));
-    keys.push(...SELF_SERVICE_LINKS.map((link) => link.key));
+    keys.push(
+      ...SELF_SERVICE_LINKS.filter((link) => link.default !== false).map((link) => link.key)
+    );
     keys.push(...TASK_LINKS.map((link) => link.key));
   }
 
@@ -105,11 +110,6 @@ export function getDashboardSections(role, can, allowedLinkKeys) {
   const educationLinks = pick(LINK_GROUPS.education.links);
   if (educationLinks.length) {
     sections.push(makeSection(LINK_GROUPS.education, educationLinks));
-  }
-
-  const observationLinks = pick(LINK_GROUPS.observations.links);
-  if (observationLinks.length) {
-    sections.push(makeSection(LINK_GROUPS.observations, observationLinks));
   }
 
   const livelihoodLinks = pick(LINK_GROUPS.livelihood.links);
@@ -188,7 +188,10 @@ export function getDashboardSections(role, can, allowedLinkKeys) {
  * `allowedKpiKeys` narrows the result to an admin-configured selection.
  */
 export function getDashboardKpiConfig(role, allowedKpiKeys) {
-  const config = buildKpiConfig(role);
+  const config = buildKpiConfig(role).map((kpi) => ({
+    ...kpi,
+    group: KPI_GROUP_BY_KEY.get(kpi.key),
+  }));
   if (!Array.isArray(allowedKpiKeys)) return config;
 
   // Keep role-specific labels where they exist, but let admins add any KPI.

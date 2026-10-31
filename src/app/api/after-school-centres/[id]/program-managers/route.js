@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin } from "@/lib/scope";
+import { isAdmin, isCentreManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { canAssignPerson } from "@/lib/hierarchy";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -59,16 +60,24 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const centreId = await resolveCentreId(id);
     if (!centreId) return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
 
     const { userId } = await req.json();
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
+
+    if (!isAdmin(user)) {
+      if (!(await isCentreManaged(user.id, centreId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
+      }
+      if (!(await canAssignPerson(user, userId))) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only assign people who report to you" },
+          { status: 403 }
+        );
+      }
+    }
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
     if (!target || !PROGRAM_ROLES.includes(target.role.name)) {
@@ -100,16 +109,24 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const centreId = await resolveCentreId(id);
     if (!centreId) return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
 
     const { userId } = await req.json();
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
+
+    if (!isAdmin(user)) {
+      if (!(await isCentreManaged(user.id, centreId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
+      }
+      if (!(await canAssignPerson(user, userId))) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only unassign people who report to you" },
+          { status: 403 }
+        );
+      }
+    }
 
     const existing = await prisma.programManagerAfterSchoolCentre.findFirst({ where: { userId, centreId } });
     if (!existing) {

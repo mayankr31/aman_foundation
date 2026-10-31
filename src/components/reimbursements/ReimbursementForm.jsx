@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context/ToastContext";
+import DateInput from "@/components/ui/DateInput";
 import { REIMBURSEMENT_CATEGORIES, formatINR } from "@/lib/reimbursementCategories";
 
 function todayInput() {
@@ -125,10 +126,6 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
         toast.error(`Enter a valid amount for expense line ${index + 1}.`);
         return;
       }
-      if (!item.existingReceiptFiles.length && !item.files.length) {
-        toast.error(`Attach at least one receipt for expense line ${index + 1}.`);
-        return;
-      }
     }
 
     setSubmitting(true);
@@ -225,7 +222,7 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
               Expense Lines
             </h2>
             <p className="text-xs text-on-surface-variant mt-1">
-              Add each expense separately and attach its receipt.
+              Add each expense separately. Receipts are optional.
             </p>
           </div>
           <button
@@ -257,25 +254,24 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <div className="flex flex-col gap-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div className="flex flex-col gap-1 min-w-0">
                   <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Date *</label>
-                  <input
-                    type="date"
+                  <DateInput
                     required
                     value={item.expenseDate}
                     onChange={(event) => updateItem(index, { expenseDate: event.target.value })}
-                    className="px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                    className="w-full px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
                   />
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 min-w-0">
                   <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Category *</label>
                   <select
                     required
                     value={item.category}
                     onChange={(event) => updateItem(index, { category: event.target.value })}
-                    className="px-3 py-2 border rounded-lg bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                    className="w-full min-w-0 px-3 py-2 border rounded-lg bg-transparent dark:bg-slate-900 border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
                   >
                     <option value="">Select category</option>
                     {REIMBURSEMENT_CATEGORIES.map((category) => (
@@ -284,7 +280,7 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
                   </select>
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 min-w-0">
                   <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Amount (₹) *</label>
                   <input
                     type="number"
@@ -294,11 +290,11 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
                     value={item.amount}
                     onChange={(event) => updateItem(index, { amount: event.target.value })}
                     placeholder="0"
-                    className="px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                    className="w-full min-w-0 px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
                   />
                 </div>
 
-                <div className="flex flex-col gap-1 sm:col-span-2 lg:col-span-4">
+                <div className="flex flex-col gap-1 min-w-0 sm:col-span-2 lg:col-span-3">
                   <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Description *</label>
                   <input
                     type="text"
@@ -306,13 +302,13 @@ export default function ReimbursementForm({ token, user, initialData = null }) {
                     value={item.description}
                     onChange={(event) => updateItem(index, { description: event.target.value })}
                     placeholder="e.g. Auto fare from centre to school"
-                    className="px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                    className="w-full min-w-0 px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Receipts *</label>
+                <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Receipts (optional)</label>
                 <input
                   type="file"
                   multiple

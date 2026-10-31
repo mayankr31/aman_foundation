@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { canDeleteTaskRecord } from "@/lib/taskPermissions";
 
 async function canModify(user, taskId) {
   const task = await prisma.task.findUnique({
@@ -57,7 +58,14 @@ export async function DELETE(request, { params }) {
     if (error) return error;
 
     const { id: taskId } = await params;
-    if (!(await canModify(user, taskId))) {
+    const task = await prisma.task.findUnique({
+      where: { id: taskId },
+      select: { id: true, assigneeId: true, assignedById: true },
+    });
+    if (!task) {
+      return NextResponse.json({ success: false, error: "Task not found" }, { status: 404 });
+    }
+    if (!canDeleteTaskRecord(user, task)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 

@@ -92,7 +92,7 @@ function NewReimbursementContent() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-5xl mx-auto w-full font-sans">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-5xl mx-auto w-full font-sans">
       <Link
         href="/reimbursements"
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -111,7 +111,7 @@ function NewReimbursementContent() {
           {editId ? "Edit Reimbursement Claim" : "New Reimbursement Claim"}
         </h1>
         <p className="text-sm text-on-surface-variant mt-1">
-          Add itemized expenses, attach receipts and submit the claim for approval.
+          Add itemized expenses, optionally attach receipts and submit the claim for approval.
         </p>
       </div>
 

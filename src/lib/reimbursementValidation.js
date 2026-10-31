@@ -9,6 +9,7 @@ export const reimbursementInclude = {
       role: { select: { name: true } }
     }
   },
+  verifier: { select: { id: true, name: true } },
   approver: { select: { id: true, name: true } },
   reimburser: { select: { id: true, name: true } },
   items: { orderBy: { expenseDate: "asc" } }

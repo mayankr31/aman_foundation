@@ -21,6 +21,7 @@ export const PAYMENT_MODES = [
 
 export const REIMBURSEMENT_STATUSES = [
   "PENDING",
+  "VERIFIED",
   "APPROVED",
   "REJECTED",
   "REIMBURSED",
@@ -34,8 +35,14 @@ export function formatINR(value) {
 
 export function formatStatusLabel(status) {
   if (!status) return "—";
-  if (status === "REIMBURSED") return "Reimbursed";
-  return status.charAt(0) + status.slice(1).toLowerCase();
+  const labels = {
+    PENDING: "Pending",
+    VERIFIED: "Verified",
+    APPROVED: "Approved",
+    REJECTED: "Rejected",
+    REIMBURSED: "Reimbursed",
+  };
+  return labels[status] || status.charAt(0) + status.slice(1).toLowerCase();
 }
 
 export function formatRoleLabel(role) {

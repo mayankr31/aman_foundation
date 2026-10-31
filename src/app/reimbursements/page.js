@@ -7,7 +7,6 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
 import { formatINR, REIMBURSEMENT_STATUSES } from "@/lib/reimbursementCategories";
-import ConfirmActionModal from "@/components/ConfirmActionModal";
 import ReimbursementStatusBadge from "@/components/reimbursements/ReimbursementStatusBadge";
 import ReimbursementSummary from "@/components/reimbursements/ReimbursementSummary";
 
@@ -28,8 +27,6 @@ export default function ReimbursementsPage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [selected, setSelected] = useState(null);
-  const [claimToDelete, setClaimToDelete] = useState(null);
-  const [deleting, setDeleting] = useState(false);
   const canWrite = can("reimbursements", "WRITE");
 
   useEffect(() => {
@@ -99,6 +96,10 @@ export default function ReimbursementsPage() {
           accumulator.pending += claimed;
           accumulator.pendingCount += 1;
         }
+        if (claim.status === "VERIFIED") {
+          accumulator.verified += Number(claim.totalApproved ?? claimed);
+          accumulator.verifiedCount += 1;
+        }
         if (claim.status === "APPROVED") {
           accumulator.approved += Number(claim.totalApproved ?? claimed);
           accumulator.approvedCount += 1;
@@ -108,33 +109,17 @@ export default function ReimbursementsPage() {
         }
         return accumulator;
       },
-      { pending: 0, pendingCount: 0, approved: 0, approvedCount: 0, reimbursed: 0 }
+      {
+        pending: 0,
+        pendingCount: 0,
+        verified: 0,
+        verifiedCount: 0,
+        approved: 0,
+        approvedCount: 0,
+        reimbursed: 0,
+      }
     );
   }, [claims]);
-
-  const handleDelete = async () => {
-    if (!claimToDelete) return;
-    setDeleting(true);
-    try {
-      const res = await fetch(`/api/reimbursements/${claimToDelete.id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        throw new Error(json.error || "Failed to delete claim.");
-      }
-      setClaims((previous) => previous.filter((claim) => claim.id !== claimToDelete.id));
-      if (selected?.id === claimToDelete.id) setSelected(null);
-      setClaimToDelete(null);
-      toast.success("Reimbursement claim deleted.");
-    } catch (error) {
-      console.error("Delete reimbursement error:", error);
-      toast.error(error.message || "Failed to delete claim.");
-    } finally {
-      setDeleting(false);
-    }
-  };
 
   if (isInitializing || loading) {
     return (
@@ -145,7 +130,7 @@ export default function ReimbursementsPage() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">
@@ -153,7 +138,7 @@ export default function ReimbursementsPage() {
           </p>
           <h1 className="page-title text-on-surface">Reimbursements</h1>
           <p className="text-sm text-on-surface-variant mt-1">
-            Submit expense claims and track their approval and payment.
+            Submit expense claims and track their verification, approval and payment.
           </p>
         </div>
         {canWrite && (
@@ -167,11 +152,16 @@ export default function ReimbursementsPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Pending Claims</p>
           <p className="text-2xl font-bold text-amber-900 mt-2">{formatINR(totals.pending)}</p>
-          <p className="text-xs text-amber-700 mt-1">{totals.pendingCount} awaiting review</p>
+          <p className="text-xs text-amber-700 mt-1">{totals.pendingCount} awaiting verification</p>
+        </div>
+        <div className="rounded-xl border border-violet-200 bg-violet-50 p-5">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-violet-700">Verified</p>
+          <p className="text-2xl font-bold text-violet-900 mt-2">{formatINR(totals.verified)}</p>
+          <p className="text-xs text-violet-700 mt-1">{totals.verifiedCount} awaiting Executive Director approval</p>
         </div>
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Approved</p>
@@ -267,23 +257,13 @@ export default function ReimbursementsPage() {
                   View Details
                 </button>
                 {canWrite && claim.status === "PENDING" && (
-                  <>
-                    <Link
-                      href={`/reimbursements/new?id=${claim.id}`}
-                      className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface text-xs font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">edit</span>
-                      Edit
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => setClaimToDelete(claim)}
-                      className="px-3 py-1.5 rounded-full border border-error/20 text-error text-xs font-semibold hover:bg-error-container/20 transition-colors cursor-pointer flex items-center gap-1.5"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">delete</span>
-                      Delete
-                    </button>
-                  </>
+                  <Link
+                    href={`/reimbursements/new?id=${claim.id}`}
+                    className="px-3 py-1.5 rounded-full border border-outline-variant text-on-surface text-xs font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">edit</span>
+                    Edit
+                  </Link>
                 )}
               </div>
             </div>
@@ -327,16 +307,6 @@ export default function ReimbursementsPage() {
           </div>
         </div>
       )}
-
-      <ConfirmActionModal
-        isOpen={Boolean(claimToDelete)}
-        onClose={() => setClaimToDelete(null)}
-        onConfirm={handleDelete}
-        title="Delete reimbursement claim?"
-        message={`This will permanently delete "${claimToDelete?.title || "this claim"}". This action cannot be undone.`}
-        confirmText={deleting ? "Deleting..." : "Delete"}
-        variant="danger"
-      />
     </div>
   );
 }

@@ -5,12 +5,13 @@ import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
-import { STAFF_PROFILE_TABS } from "@/lib/profileTabs";
+import { getStaffProfileTabs, DEFAULT_STAFF_PROFILE_TAB } from "@/lib/profileTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import AssignmentsSection from "@/components/AssignmentsSection";
+import TeamCheckInSection from "@/components/TeamCheckInSection";
 import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import EngagementSurveyForm from "@/components/EngagementSurveyForm";
@@ -21,6 +22,7 @@ import { formatDate } from "@/lib/date";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import Avatar from "@/components/ui/Avatar";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import { formatRoleLabel } from "@/lib/roles";
 import dynamic from "next/dynamic";
@@ -44,7 +46,7 @@ export default function ProfilePage() {
 }
 
 function ProfilePageContent() {
-  const { token, isInitializing, user: currentUser, can } = useAuth();
+  const { token, isInitializing, user: currentUser, can, canDeleteRecords } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
@@ -60,8 +62,10 @@ function ProfilePageContent() {
   const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
   const isFellow = Boolean(profile?.fellow);
   const requestedTabSlug = searchParams.get("tab");
+  const staffTabs = getStaffProfileTabs(profile?.role?.name);
   const staffActiveTab =
-    STAFF_PROFILE_TABS.find((tab) => tab.slug === requestedTabSlug)?.label || "Personal Details";
+    staffTabs.find((tab) => tab.slug === requestedTabSlug)?.label ||
+    DEFAULT_STAFF_PROFILE_TAB;
   const activeTab = isFellow
     ? labelFromSlug(requestedTabSlug) || "Personal Details"
     : staffActiveTab;
@@ -364,7 +368,7 @@ function ProfilePageContent() {
   };
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Profile Title */}
       <div className="mb-6">
         <h2 className="page-title text-on-surface mb-3">
@@ -382,11 +386,14 @@ function ProfilePageContent() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
-                {avatarUrl ? (
-                  <img alt="avatar" className="w-full h-full object-cover cursor-pointer" src={avatarUrl} onClick={() => setLightboxPhoto(avatarUrl)} />
-                ) : (
-                  <span className="text-3xl font-bold font-headline text-on-surface-variant">{initials}</span>
-                )}
+                <Avatar
+                  src={avatarUrl}
+                  name={profile.name}
+                  fallback={initials}
+                  className="w-full h-full object-cover cursor-pointer"
+                  fallbackClassName="text-3xl font-bold font-headline text-on-surface-variant"
+                  onClick={() => setLightboxPhoto(avatarUrl)}
+                />
               </div>
               <div className="text-center md:text-left pt-2 min-w-0">
                 <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-2">
@@ -497,19 +504,19 @@ function ProfilePageContent() {
               id="staff-profile-tab"
               value={activeTab}
               onChange={(e) => {
-                const nextTab = STAFF_PROFILE_TABS.find((tab) => tab.label === e.target.value);
+                const nextTab = staffTabs.find((tab) => tab.label === e.target.value);
                 router.replace(`/profile?tab=${nextTab?.slug || "personal-details"}`, { scroll: false });
               }}
               className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
             >
-              {STAFF_PROFILE_TABS.map((tab) => (
+              {staffTabs.map((tab) => (
                 <option key={tab.slug} value={tab.label}>{tab.label}</option>
               ))}
             </select>
           </div>
 
           <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-            {STAFF_PROFILE_TABS.map((tab) => {
+            {staffTabs.map((tab) => {
               const isActive = activeTab === tab.label;
               return (
                 <button
@@ -547,7 +554,7 @@ function ProfilePageContent() {
             {activeTab === "Monthly Planner" && (
               <MonthlyPlanner userId={profile.id} />
             )}
-            {activeTab === "Assignments" && (
+            {activeTab === "Assignments" && profile.role?.name !== "ADMIN" && (
               <AssignmentsSection
                 title="Assignments"
                 userId={profile.id}
@@ -555,6 +562,14 @@ function ProfilePageContent() {
                 centres={managedCentres}
                 programs={managedPrograms}
                 canEdit={canEditAssignments}
+              />
+            )}
+            {activeTab === "Team CheckIn" && (
+              <TeamCheckInSection
+                userId={profile.id}
+                memberName={profile.name}
+                memberRole={profile.role?.name}
+                memberManagerId={profile.managerId}
               />
             )}
           </div>
@@ -724,13 +739,15 @@ function ProfilePageContent() {
                             >
                               {sheet.status}
                             </span>
-                            <button
-                              onClick={() => handleDeleteGoalSheet(sheet.id)}
-                              className="text-on-surface-variant hover:text-red-600 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer"
-                              title="Delete goal sheet"
-                            >
-                              <span className="material-symbols-outlined text-[18px]">delete</span>
-                            </button>
+                            {canDeleteRecords && (
+                              <button
+                                onClick={() => handleDeleteGoalSheet(sheet.id)}
+                                className="text-on-surface-variant hover:text-red-600 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer"
+                                title="Delete goal sheet"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>

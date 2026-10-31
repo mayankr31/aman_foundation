@@ -9,7 +9,7 @@ import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 
 export default function NonFarmPrograms() {
-  const { token } = useAuth();
+  const { token, canDeleteRecords } = useAuth();
   const { getTypeConfig, getTypesByCategory, refresh: refreshTypes } = useLivelihoodTypes(token);
   const [programs, setPrograms] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -94,7 +94,7 @@ export default function NonFarmPrograms() {
   });
 
   return (
-    <div className="p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
+    <div className="p-4 sm:p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
       <Link href="/livelihood" className="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest">Back to Livelihood Hub</span>
@@ -149,15 +149,17 @@ export default function NonFarmPrograms() {
               const config = getTypeConfig(prog.type);
               return (
                 <div key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors relative group">
-                  <div className="absolute top-3 right-3 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={(e) => { e.preventDefault(); setDeleteId(prog.id); setDeleteName(prog.name); }}
-                      className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
-                      title="Delete program"
-                    >
-                      <span className="material-symbols-outlined text-sm">delete</span>
-                    </button>
-                  </div>
+                  {canDeleteRecords && (
+                    <div className="absolute top-3 right-3 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={(e) => { e.preventDefault(); setDeleteId(prog.id); setDeleteName(prog.name); }}
+                        className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
+                        title="Delete program"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </div>
+                  )}
                   <Link href={`/livelihood/programs/${prog.id}`} className="no-underline text-left block">
                     <span className="px-2.5 py-0.5 rounded text-[9px] bg-secondary/10 text-secondary uppercase tracking-wider font-bold">
                       {config?.label || prog.type}

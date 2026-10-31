@@ -1,0 +1,137 @@
+/* Aman Foundation overrides for react-datepicker */
+
+.aman-datepicker-wrapper {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.aman-datepicker-wrapper.aman-datepicker-full {
+  display: block;
+  width: 100%;
+}
+
+.aman-datepicker-wrapper .react-datepicker__input-container {
+  width: 100%;
+  vertical-align: middle;
+}
+
+.aman-datepicker-wrapper .react-datepicker__input-container input {
+  min-width: 0;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 1rem 1rem;
+}
+
+.dark .aman-datepicker-wrapper .react-datepicker__input-container input {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+
+.aman-datepicker-popper.react-datepicker-popper {
+  z-index: 400 !important;
+}
+
+.react-datepicker.aman-datepicker-calendar {
+  font-family: inherit;
+  font-size: 0.8rem;
+  border: 1px solid var(--color-outline-variant, #bccac4);
+  border-radius: 0.75rem;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+  color: var(--color-on-surface, #191c1d);
+  background: var(--color-surface-container-lowest, #ffffff);
+}
+
+.aman-datepicker-calendar .react-datepicker__header {
+  background: var(--color-surface-container-low, #f3f4f5);
+  border-bottom: 1px solid var(--color-outline-variant, #bccac4);
+}
+
+.aman-datepicker-calendar .react-datepicker__current-month,
+.aman-datepicker-calendar .react-datepicker__day-name,
+.aman-datepicker-calendar .react-datepicker__day,
+.aman-datepicker-calendar .react-datepicker__year-header {
+  color: var(--color-on-surface, #191c1d);
+}
+
+.aman-datepicker-calendar .react-datepicker__month-select,
+.aman-datepicker-calendar .react-datepicker__year-select {
+  color: var(--color-on-surface, #191c1d);
+  background: var(--color-surface-container-lowest, #ffffff);
+  border: 1px solid var(--color-outline-variant, #bccac4);
+  border-radius: 0.5rem;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+}
+
+.aman-datepicker-calendar .react-datepicker__month-dropdown-container,
+.aman-datepicker-calendar .react-datepicker__year-dropdown-container {
+  margin: 0 4px;
+}
+
+.aman-datepicker-calendar .react-datepicker__day--selected,
+.aman-datepicker-calendar .react-datepicker__day--keyboard-selected {
+  background-color: var(--color-primary, #006857) !important;
+  color: #ffffff !important;
+}
+
+.aman-datepicker-calendar .react-datepicker__day--today {
+  color: var(--color-primary, #006857);
+  font-weight: 700;
+}
+
+.aman-datepicker-calendar .react-datepicker__day:not([aria-disabled="true"]):hover {
+  background-color: var(--color-primary-fixed, #7cf8da);
+  color: var(--color-on-primary-fixed, #00201a);
+}
+
+.aman-datepicker-calendar .react-datepicker__day--disabled {
+  color: #cbd5e1;
+}
+
+.aman-datepicker-calendar .react-datepicker__today-button {
+  background: var(--color-surface-container-low, #f3f4f5);
+  border-top: 1px solid var(--color-outline-variant, #bccac4);
+  border-radius: 0 0 0.75rem 0.75rem;
+  color: var(--color-primary, #006857);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.5rem;
+}
+
+.dark .react-datepicker.aman-datepicker-calendar {
+  background: #151e2d;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+}
+
+.dark .aman-datepicker-calendar .react-datepicker__header {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .aman-datepicker-calendar .react-datepicker__current-month,
+.dark .aman-datepicker-calendar .react-datepicker__day-name,
+.dark .aman-datepicker-calendar .react-datepicker__day,
+.dark .aman-datepicker-calendar .react-datepicker__year-header {
+  color: #e2e8f0;
+}
+
+.dark .aman-datepicker-calendar .react-datepicker__day--disabled {
+  color: #475569;
+}
+
+.dark .aman-datepicker-calendar .react-datepicker__month-select,
+.dark .aman-datepicker-calendar .react-datepicker__year-select {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.dark .aman-datepicker-calendar .react-datepicker__today-button {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #5ddbbe;
+}

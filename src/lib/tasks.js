@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { isSubordinate } from "@/lib/hierarchy";
-import { PROGRAM_ROLES } from "@/lib/scope";
+import { canAssignPerson } from "@/lib/hierarchy";
 import { getISTDateKey, istDayEnd, istDayStart } from "@/lib/time";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
@@ -62,27 +61,10 @@ export function hasInstitutionOverlap(a, b) {
 
 /**
  * A user may create their own task freely. Admin may assign to anyone.
- * Anyone with people under them in the Reports To tree may assign down that
- * tree. Program staff whose reporting lines are not configured yet keep the
- * legacy managed-team fallback (shared school / centre / program).
+ * Managers may assign people in their reporting tree, and any Fellow.
  */
 export async function canAssignTo(actor, assigneeId) {
-  if (!actor?.id || !assigneeId) return false;
-  if (actor.id === assigneeId) return true;
-  if (actor.role?.name === "ADMIN") return true;
-
-  if (await isSubordinate(actor.id, assigneeId)) return true;
-
-  // Legacy fallback only for program roles that have no explicit reports yet.
-  if (!PROGRAM_ROLES.includes(actor.role?.name)) return false;
-  const directReports = await prisma.user.count({ where: { managerId: actor.id } });
-  if (directReports > 0) return false;
-
-  const [actorScope, assigneeScope] = await Promise.all([
-    getInstitutionScope(actor.id),
-    getInstitutionScope(assigneeId),
-  ]);
-  return hasInstitutionOverlap(actorScope, assigneeScope);
+  return canAssignPerson(actor, assigneeId, { allowSelf: true });
 }
 
 /** Date range helpers for task lists. */

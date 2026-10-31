@@ -9,12 +9,15 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import AssignmentsSection from "@/components/AssignmentsSection";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import BasicDetailsView from "@/components/BasicDetailsView";
-import { EMPLOYEE_DETAIL_TABS, DEFAULT_EMPLOYEE_DETAIL_TAB } from "@/lib/profileTabs";
+import TeamCheckInSection from "@/components/TeamCheckInSection";
+import { DEFAULT_EMPLOYEE_DETAIL_TAB, getEmployeeDetailTabs } from "@/lib/profileTabs";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { formatDate } from "@/lib/date";
 import { QUALIFICATIONS, getDefaultDepartment, getDepartmentOptions } from "@/lib/organization";
 import { formatRoleLabel } from "@/lib/roles";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
+import DateInput from "@/components/ui/DateInput";
+import Avatar from "@/components/ui/Avatar";
 import {
   validateMobile,
   validateAadhaar,
@@ -105,8 +108,17 @@ function HrEmployeeProfileContent() {
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   const requestedTabSlug = searchParams.get("tab");
+  // Team CheckIns are only visible to the Executive Director, the employee
+  // themselves, or the employee's direct reporting manager.
+  const canViewTeamCheckIn =
+    isAdmin ||
+    (employee?.id && currentUser?.id === employee.id) ||
+    (employee?.managerId && currentUser?.id === employee.managerId);
+  const employeeTabs = getEmployeeDetailTabs(employee?.role?.name).filter(
+    (tab) => tab.slug !== "team-checkin" || canViewTeamCheckIn
+  );
   const activeTab =
-    EMPLOYEE_DETAIL_TABS.find((tab) => tab.slug === requestedTabSlug)?.label ||
+    employeeTabs.find((tab) => tab.slug === requestedTabSlug)?.label ||
     DEFAULT_EMPLOYEE_DETAIL_TAB;
   const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
     activeTab,
@@ -321,14 +333,26 @@ function HrEmployeeProfileContent() {
     return (
       <div className="flex flex-col gap-1">
         <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
-        <input
-          type={type}
-          value={form[field] ?? ""}
-          onChange={(e) => setField(field, transform ? transform(e.target.value) : e.target.value)}
-          aria-invalid={Boolean(fieldError)}
-          className={`px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
-          {...rest}
-        />
+        {type === "date" ? (
+          <DateInput
+            name={field}
+            value={form[field] ?? ""}
+            onChange={(e) => setField(field, e.target.value)}
+            aria-invalid={Boolean(fieldError)}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
+            required={required}
+            {...rest}
+          />
+        ) : (
+          <input
+            type={type}
+            value={form[field] ?? ""}
+            onChange={(e) => setField(field, transform ? transform(e.target.value) : e.target.value)}
+            aria-invalid={Boolean(fieldError)}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
+            {...rest}
+          />
+        )}
         {hint && !fieldError && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
         {fieldError && <span className="text-[11px] font-medium text-error">{fieldError}</span>}
       </div>
@@ -368,7 +392,7 @@ function HrEmployeeProfileContent() {
           value={form[field] ?? ""}
           onChange={(e) => setField(field, e.target.value)}
           aria-invalid={Boolean(fieldError)}
-          className={`px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-on-surface text-sm ${fieldError ? "border-error" : "border-outline-variant"}`}
         />
         {fieldError && <span className="text-[11px] font-medium text-error">{fieldError}</span>}
       </div>
@@ -389,7 +413,7 @@ function HrEmployeeProfileContent() {
   const canEditAssignments = isAdmin && PROGRAM_ROLES.includes(employee.role?.name);
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-5xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-5xl mx-auto w-full">
       <Link
         href="/hr"
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -407,11 +431,14 @@ function HrEmployeeProfileContent() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
           <div className="flex flex-col md:flex-row gap-6 items-center">
             <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
-              {employee.avatar ? (
-                <img alt="avatar" className="w-full h-full object-cover cursor-pointer" src={employee.avatar} onClick={() => setLightboxPhoto(employee.avatar)} />
-              ) : (
-                <span className="text-3xl font-bold font-headline text-on-surface-variant">{initials}</span>
-              )}
+              <Avatar
+                src={employee.avatar}
+                name={employee.name || employee.username}
+                fallback={initials}
+                className="w-full h-full object-cover cursor-pointer"
+                fallbackClassName="text-3xl font-bold font-headline text-on-surface-variant"
+                onClick={() => setLightboxPhoto(employee.avatar)}
+              />
             </div>
             <div className="text-center md:text-left">
               <h2 className="page-title text-on-surface capitalize mb-1">
@@ -461,11 +488,12 @@ function HrEmployeeProfileContent() {
             <h3 className="font-headline font-bold text-lg text-on-surface mb-4">Profile Photo</h3>
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 rounded-full overflow-hidden shrink-0 border-2 border-surface shadow bg-surface-container-high flex items-center justify-center">
-                {employee.avatar ? (
-                  <img alt="avatar" className="w-full h-full object-cover" src={employee.avatar} />
-                ) : (
-                  <span className="text-2xl font-bold font-headline text-on-surface-variant">{initials}</span>
-                )}
+                <Avatar
+                  src={employee.avatar}
+                  name={employee.name || employee.username}
+                  fallback={initials}
+                  fallbackClassName="text-2xl font-bold font-headline text-on-surface-variant"
+                />
               </div>
               <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
                 {uploading ? "Uploading..." : "Upload Photo"}
@@ -658,12 +686,12 @@ function HrEmployeeProfileContent() {
               id="employee-tab"
               value={activeTab}
               onChange={(e) => {
-                const nextTab = EMPLOYEE_DETAIL_TABS.find((tab) => tab.label === e.target.value);
+                const nextTab = employeeTabs.find((tab) => tab.label === e.target.value);
                 router.replace(`/hr/${id}?tab=${nextTab?.slug || "employment"}`, { scroll: false });
               }}
               className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
             >
-              {EMPLOYEE_DETAIL_TABS.map((tab) => (
+              {employeeTabs.map((tab) => (
                 <option key={tab.slug} value={tab.label}>{tab.label}</option>
               ))}
             </select>
@@ -671,7 +699,7 @@ function HrEmployeeProfileContent() {
 
           {/* Tabs */}
           <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar">
-            {EMPLOYEE_DETAIL_TABS.map((tab) => {
+            {employeeTabs.map((tab) => {
               const isActive = activeTab === tab.label;
               return (
                 <button
@@ -699,7 +727,7 @@ function HrEmployeeProfileContent() {
               <MonthlyPlanner userId={employee.id} canEdit={canWriteTasks} />
             )}
 
-            {activeTab === "Assignments" && (
+            {activeTab === "Assignments" && employee.role?.name !== "ADMIN" && (
               <AssignmentsSection
                 title="Assignments"
                 userId={employee.id}
@@ -707,6 +735,15 @@ function HrEmployeeProfileContent() {
                 centres={managedCentres}
                 programs={managedPrograms}
                 canEdit={canEditAssignments}
+              />
+            )}
+
+            {activeTab === "Team CheckIn" && (
+              <TeamCheckInSection
+                userId={employee.id}
+                memberName={employee.name}
+                memberRole={employee.role?.name}
+                memberManagerId={employee.managerId}
               />
             )}
           </div>

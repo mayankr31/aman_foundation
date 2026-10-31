@@ -4,6 +4,7 @@ import { formatStatusLabel } from "@/lib/reimbursementCategories";
 
 const STATUS_STYLES = {
   PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+  VERIFIED: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
   APPROVED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
   REJECTED: "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300",
   REIMBURSED: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",

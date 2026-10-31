@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Loader2, LayoutDashboard, RotateCcw, Check } from "lucide-react";
 import { formatRoleLabel } from "@/lib/roles";
+import { KPI_GROUPS } from "@/lib/dashboardRegistry";
 
 function DashboardConfigModalContent({ onClose, scope, entity, token }) {
   const [kpiKeys, setKpiKeys] = useState([]);
@@ -22,10 +23,19 @@ function DashboardConfigModalContent({ onClose, scope, entity, token }) {
       ? `/api/roles/${entityId}/dashboard`
       : `/api/users/${entityId}/dashboard`;
 
-  const availableKpiKeys = useMemo(
-    () => options.kpis.map((kpi) => kpi.key),
-    [options.kpis]
-  );
+  const kpiGroups = useMemo(() => {
+    const knownGroupIds = new Set(KPI_GROUPS.map((group) => group.id));
+    const groups = KPI_GROUPS.map((group) => ({
+      ...group,
+      kpis: options.kpis.filter((kpi) => kpi.group === group.id),
+    }));
+    const ungrouped = options.kpis.filter((kpi) => !knownGroupIds.has(kpi.group));
+
+    return [
+      ...groups,
+      ...(ungrouped.length ? [{ id: "other", title: "Other KPIs", kpis: ungrouped }] : []),
+    ].filter((group) => group.kpis.length > 0);
+  }, [options.kpis]);
 
   useEffect(() => {
     if (!entityId || !token) return;
@@ -93,6 +103,16 @@ function DashboardConfigModalContent({ onClose, scope, entity, token }) {
     );
   };
 
+  const toggleKpiGroup = (groupKpis, selectAll) => {
+    const keys = groupKpis.map((kpi) => kpi.key);
+    if (!keys.length) return;
+    setKpiKeys((prev) =>
+      selectAll
+        ? [...new Set([...prev, ...keys])]
+        : prev.filter((key) => !keys.includes(key))
+    );
+  };
+
   const handleSave = async () => {
     setSaving(true);
     setError("");
@@ -153,8 +173,8 @@ function DashboardConfigModalContent({ onClose, scope, entity, token }) {
                 Dashboard for {displayName}
               </h3>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
-                Every KPI and quick-link card is listed. Checked items appear on the dashboard;
-                unchecked items are hidden.
+                Checked KPIs appear on the matching hub page (Education or Livelihood).
+                Checked quick links appear on the dashboard.
               </p>
             </div>
           </div>
@@ -186,60 +206,70 @@ function DashboardConfigModalContent({ onClose, scope, entity, token }) {
                     Nothing to configure
                   </p>
                   <p className="text-xs text-slate-400 mt-1">
-                    This {scope} does not have access to any dashboard KPIs or quick links yet.
+                    This {scope} does not have access to any hub KPIs or quick links yet.
                   </p>
                 </div>
               ) : (
                 <>
                   {options.kpis.length > 0 && (
-                    <section>
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                          KPI Cards
-                        </h4>
-                        <div className="flex gap-2 text-[10px] font-bold">
-                          <button
-                            type="button"
-                            onClick={() => setKpiKeys(availableKpiKeys)}
-                            className="text-primary hover:underline"
-                          >
-                            All
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setKpiKeys([])}
-                            className="text-slate-400 hover:underline"
-                          >
-                            None
-                          </button>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                        {options.kpis.map((kpi) => {
-                          const checked = kpiKeys.includes(kpi.key);
-                          return (
-                            <button
-                              type="button"
-                              key={kpi.key}
-                              onClick={() => toggle(kpiKeys, setKpiKeys, kpi.key)}
-                              className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors ${
-                                checked
-                                  ? "border-primary/30 bg-primary/10 text-primary"
-                                  : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-white/5"
-                              }`}
-                            >
-                              <span
-                                className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
-                                  checked ? "bg-primary border-primary text-white" : "border-slate-300"
-                                }`}
+                    <section className="space-y-4">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        Hub KPIs
+                      </h4>
+                      {kpiGroups.map((group) => (
+                        <div
+                          key={group.id}
+                          className="rounded-2xl border border-slate-200 dark:border-white/10 p-3"
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <p className="text-xs font-bold text-slate-800 dark:text-white">
+                              {group.title}
+                            </p>
+                            <div className="flex gap-2 text-[10px] font-bold">
+                              <button
+                                type="button"
+                                onClick={() => toggleKpiGroup(group.kpis, true)}
+                                className="text-primary hover:underline"
                               >
-                                {checked && <Check size={11} strokeWidth={3} />}
-                              </span>
-                              <span className="truncate">{kpi.label}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
+                                All
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => toggleKpiGroup(group.kpis, false)}
+                                className="text-slate-400 hover:underline"
+                              >
+                                None
+                              </button>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {group.kpis.map((kpi) => {
+                              const checked = kpiKeys.includes(kpi.key);
+                              return (
+                                <button
+                                  type="button"
+                                  key={kpi.key}
+                                  onClick={() => toggle(kpiKeys, setKpiKeys, kpi.key)}
+                                  className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                                    checked
+                                      ? "border-primary/30 bg-primary/10 text-primary"
+                                      : "border-slate-200 dark:border-white/10 text-slate-600 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-white/5"
+                                  }`}
+                                >
+                                  <span
+                                    className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                                      checked ? "bg-primary border-primary text-white" : "border-slate-300"
+                                    }`}
+                                  >
+                                    {checked && <Check size={11} strokeWidth={3} />}
+                                  </span>
+                                  <span className="truncate">{kpi.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                     </section>
                   )}
 

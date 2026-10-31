@@ -520,6 +520,16 @@ export type AfterSchoolFLNResponse = $Result.DefaultSelection<Prisma.$AfterSchoo
  */
 export type FellowStudentDataNote = $Result.DefaultSelection<Prisma.$FellowStudentDataNotePayload>
 /**
+ * Model TeamCheckIn
+ * 
+ */
+export type TeamCheckIn = $Result.DefaultSelection<Prisma.$TeamCheckInPayload>
+/**
+ * Model TeamCheckInPromise
+ * 
+ */
+export type TeamCheckInPromise = $Result.DefaultSelection<Prisma.$TeamCheckInPromisePayload>
+/**
  * Model InstitutionStudentDataNote
  * 
  */
@@ -562,6 +572,7 @@ export type TravelStatus = (typeof TravelStatus)[keyof typeof TravelStatus]
 
 export const ReimbursementStatus: {
   PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   REIMBURSED: 'REIMBURSED'
@@ -1755,6 +1766,26 @@ export class PrismaClient<
   get fellowStudentDataNote(): Prisma.FellowStudentDataNoteDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.teamCheckIn`: Exposes CRUD operations for the **TeamCheckIn** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TeamCheckIns
+    * const teamCheckIns = await prisma.teamCheckIn.findMany()
+    * ```
+    */
+  get teamCheckIn(): Prisma.TeamCheckInDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.teamCheckInPromise`: Exposes CRUD operations for the **TeamCheckInPromise** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TeamCheckInPromises
+    * const teamCheckInPromises = await prisma.teamCheckInPromise.findMany()
+    * ```
+    */
+  get teamCheckInPromise(): Prisma.TeamCheckInPromiseDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.institutionStudentDataNote`: Exposes CRUD operations for the **InstitutionStudentDataNote** model.
     * Example usage:
     * ```ts
@@ -2298,6 +2329,8 @@ export namespace Prisma {
     AfterSchoolSubjectAssessmentResponse: 'AfterSchoolSubjectAssessmentResponse',
     AfterSchoolFLNResponse: 'AfterSchoolFLNResponse',
     FellowStudentDataNote: 'FellowStudentDataNote',
+    TeamCheckIn: 'TeamCheckIn',
+    TeamCheckInPromise: 'TeamCheckInPromise',
     InstitutionStudentDataNote: 'InstitutionStudentDataNote'
   };
 
@@ -2314,7 +2347,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -9792,6 +9825,154 @@ export namespace Prisma {
           }
         }
       }
+      TeamCheckIn: {
+        payload: Prisma.$TeamCheckInPayload<ExtArgs>
+        fields: Prisma.TeamCheckInFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TeamCheckInFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TeamCheckInFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          findFirst: {
+            args: Prisma.TeamCheckInFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TeamCheckInFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          findMany: {
+            args: Prisma.TeamCheckInFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>[]
+          }
+          create: {
+            args: Prisma.TeamCheckInCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          createMany: {
+            args: Prisma.TeamCheckInCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TeamCheckInCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>[]
+          }
+          delete: {
+            args: Prisma.TeamCheckInDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          update: {
+            args: Prisma.TeamCheckInUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          deleteMany: {
+            args: Prisma.TeamCheckInDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TeamCheckInUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TeamCheckInUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>[]
+          }
+          upsert: {
+            args: Prisma.TeamCheckInUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPayload>
+          }
+          aggregate: {
+            args: Prisma.TeamCheckInAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTeamCheckIn>
+          }
+          groupBy: {
+            args: Prisma.TeamCheckInGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TeamCheckInGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TeamCheckInCountArgs<ExtArgs>
+            result: $Utils.Optional<TeamCheckInCountAggregateOutputType> | number
+          }
+        }
+      }
+      TeamCheckInPromise: {
+        payload: Prisma.$TeamCheckInPromisePayload<ExtArgs>
+        fields: Prisma.TeamCheckInPromiseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TeamCheckInPromiseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TeamCheckInPromiseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          findFirst: {
+            args: Prisma.TeamCheckInPromiseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TeamCheckInPromiseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          findMany: {
+            args: Prisma.TeamCheckInPromiseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>[]
+          }
+          create: {
+            args: Prisma.TeamCheckInPromiseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          createMany: {
+            args: Prisma.TeamCheckInPromiseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TeamCheckInPromiseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>[]
+          }
+          delete: {
+            args: Prisma.TeamCheckInPromiseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          update: {
+            args: Prisma.TeamCheckInPromiseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          deleteMany: {
+            args: Prisma.TeamCheckInPromiseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TeamCheckInPromiseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TeamCheckInPromiseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>[]
+          }
+          upsert: {
+            args: Prisma.TeamCheckInPromiseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamCheckInPromisePayload>
+          }
+          aggregate: {
+            args: Prisma.TeamCheckInPromiseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTeamCheckInPromise>
+          }
+          groupBy: {
+            args: Prisma.TeamCheckInPromiseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TeamCheckInPromiseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TeamCheckInPromiseCountArgs<ExtArgs>
+            result: $Utils.Optional<TeamCheckInPromiseCountAggregateOutputType> | number
+          }
+        }
+      }
       InstitutionStudentDataNote: {
         payload: Prisma.$InstitutionStudentDataNotePayload<ExtArgs>
         fields: Prisma.InstitutionStudentDataNoteFieldRefs
@@ -10075,6 +10256,8 @@ export namespace Prisma {
     afterSchoolSubjectAssessmentResponse?: AfterSchoolSubjectAssessmentResponseOmit
     afterSchoolFLNResponse?: AfterSchoolFLNResponseOmit
     fellowStudentDataNote?: FellowStudentDataNoteOmit
+    teamCheckIn?: TeamCheckInOmit
+    teamCheckInPromise?: TeamCheckInPromiseOmit
     institutionStudentDataNote?: InstitutionStudentDataNoteOmit
   }
 
@@ -10213,6 +10396,7 @@ export namespace Prisma {
     approvedTravel: number
     revertedTravel: number
     reimbursementRequests: number
+    reimbursementsVerified: number
     reimbursementsApproved: number
     reimbursementsReimbursed: number
     coachingRecords: number
@@ -10228,6 +10412,8 @@ export namespace Prisma {
     assetAssignments: number
     assetAssignmentsMade: number
     createdAssets: number
+    teamCheckIns: number
+    teamCheckInEdits: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10248,6 +10434,7 @@ export namespace Prisma {
     approvedTravel?: boolean | UserCountOutputTypeCountApprovedTravelArgs
     revertedTravel?: boolean | UserCountOutputTypeCountRevertedTravelArgs
     reimbursementRequests?: boolean | UserCountOutputTypeCountReimbursementRequestsArgs
+    reimbursementsVerified?: boolean | UserCountOutputTypeCountReimbursementsVerifiedArgs
     reimbursementsApproved?: boolean | UserCountOutputTypeCountReimbursementsApprovedArgs
     reimbursementsReimbursed?: boolean | UserCountOutputTypeCountReimbursementsReimbursedArgs
     coachingRecords?: boolean | UserCountOutputTypeCountCoachingRecordsArgs
@@ -10263,6 +10450,8 @@ export namespace Prisma {
     assetAssignments?: boolean | UserCountOutputTypeCountAssetAssignmentsArgs
     assetAssignmentsMade?: boolean | UserCountOutputTypeCountAssetAssignmentsMadeArgs
     createdAssets?: boolean | UserCountOutputTypeCountCreatedAssetsArgs
+    teamCheckIns?: boolean | UserCountOutputTypeCountTeamCheckInsArgs
+    teamCheckInEdits?: boolean | UserCountOutputTypeCountTeamCheckInEditsArgs
   }
 
   // Custom InputTypes
@@ -10398,6 +10587,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountReimbursementsVerifiedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReimbursementWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountReimbursementsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReimbursementWhereInput
   }
@@ -10498,6 +10694,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AssetWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTeamCheckInsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamCheckInWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTeamCheckInEditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamCheckInWhereInput
   }
 
 
@@ -12119,6 +12329,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type TeamCheckInCountOutputType
+   */
+
+  export type TeamCheckInCountOutputType = {
+    promises: number
+  }
+
+  export type TeamCheckInCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    promises?: boolean | TeamCheckInCountOutputTypeCountPromisesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TeamCheckInCountOutputType without action
+   */
+  export type TeamCheckInCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInCountOutputType
+     */
+    select?: TeamCheckInCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TeamCheckInCountOutputType without action
+   */
+  export type TeamCheckInCountOutputTypeCountPromisesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamCheckInPromiseWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -13732,6 +13973,7 @@ export namespace Prisma {
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
     revertedTravel?: boolean | User$revertedTravelArgs<ExtArgs>
     reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
+    reimbursementsVerified?: boolean | User$reimbursementsVerifiedArgs<ExtArgs>
     reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
     reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
@@ -13748,6 +13990,8 @@ export namespace Prisma {
     assetAssignments?: boolean | User$assetAssignmentsArgs<ExtArgs>
     assetAssignmentsMade?: boolean | User$assetAssignmentsMadeArgs<ExtArgs>
     createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
+    teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
+    teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -13897,6 +14141,7 @@ export namespace Prisma {
     approvedTravel?: boolean | User$approvedTravelArgs<ExtArgs>
     revertedTravel?: boolean | User$revertedTravelArgs<ExtArgs>
     reimbursementRequests?: boolean | User$reimbursementRequestsArgs<ExtArgs>
+    reimbursementsVerified?: boolean | User$reimbursementsVerifiedArgs<ExtArgs>
     reimbursementsApproved?: boolean | User$reimbursementsApprovedArgs<ExtArgs>
     reimbursementsReimbursed?: boolean | User$reimbursementsReimbursedArgs<ExtArgs>
     coachingRecords?: boolean | User$coachingRecordsArgs<ExtArgs>
@@ -13913,6 +14158,8 @@ export namespace Prisma {
     assetAssignments?: boolean | User$assetAssignmentsArgs<ExtArgs>
     assetAssignmentsMade?: boolean | User$assetAssignmentsMadeArgs<ExtArgs>
     createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
+    teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
+    teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13950,6 +14197,7 @@ export namespace Prisma {
       approvedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
       revertedTravel: Prisma.$TravelRequestPayload<ExtArgs>[]
       reimbursementRequests: Prisma.$ReimbursementPayload<ExtArgs>[]
+      reimbursementsVerified: Prisma.$ReimbursementPayload<ExtArgs>[]
       reimbursementsApproved: Prisma.$ReimbursementPayload<ExtArgs>[]
       reimbursementsReimbursed: Prisma.$ReimbursementPayload<ExtArgs>[]
       coachingRecords: Prisma.$CoachingRecordPayload<ExtArgs>[]
@@ -13966,6 +14214,8 @@ export namespace Prisma {
       assetAssignments: Prisma.$AssetAssignmentPayload<ExtArgs>[]
       assetAssignmentsMade: Prisma.$AssetAssignmentPayload<ExtArgs>[]
       createdAssets: Prisma.$AssetPayload<ExtArgs>[]
+      teamCheckIns: Prisma.$TeamCheckInPayload<ExtArgs>[]
+      teamCheckInEdits: Prisma.$TeamCheckInPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14419,6 +14669,7 @@ export namespace Prisma {
     approvedTravel<T extends User$approvedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$approvedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     revertedTravel<T extends User$revertedTravelArgs<ExtArgs> = {}>(args?: Subset<T, User$revertedTravelArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementRequests<T extends User$reimbursementRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reimbursementsVerified<T extends User$reimbursementsVerifiedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsVerifiedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementsApproved<T extends User$reimbursementsApprovedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsApprovedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     reimbursementsReimbursed<T extends User$reimbursementsReimbursedArgs<ExtArgs> = {}>(args?: Subset<T, User$reimbursementsReimbursedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     coachingRecords<T extends User$coachingRecordsArgs<ExtArgs> = {}>(args?: Subset<T, User$coachingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoachingRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -14435,6 +14686,8 @@ export namespace Prisma {
     assetAssignments<T extends User$assetAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$assetAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assetAssignmentsMade<T extends User$assetAssignmentsMadeArgs<ExtArgs> = {}>(args?: Subset<T, User$assetAssignmentsMadeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdAssets<T extends User$createdAssetsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    teamCheckIns<T extends User$teamCheckInsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    teamCheckInEdits<T extends User$teamCheckInEditsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInEditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15366,6 +15619,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.reimbursementsVerified
+   */
+  export type User$reimbursementsVerifiedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reimbursement
+     */
+    select?: ReimbursementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Reimbursement
+     */
+    omit?: ReimbursementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReimbursementInclude<ExtArgs> | null
+    where?: ReimbursementWhereInput
+    orderBy?: ReimbursementOrderByWithRelationInput | ReimbursementOrderByWithRelationInput[]
+    cursor?: ReimbursementWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReimbursementScalarFieldEnum | ReimbursementScalarFieldEnum[]
+  }
+
+  /**
    * User.reimbursementsApproved
    */
   export type User$reimbursementsApprovedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15742,6 +16019,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AssetScalarFieldEnum | AssetScalarFieldEnum[]
+  }
+
+  /**
+   * User.teamCheckIns
+   */
+  export type User$teamCheckInsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    where?: TeamCheckInWhereInput
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    cursor?: TeamCheckInWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamCheckInScalarFieldEnum | TeamCheckInScalarFieldEnum[]
+  }
+
+  /**
+   * User.teamCheckInEdits
+   */
+  export type User$teamCheckInEditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    where?: TeamCheckInWhereInput
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    cursor?: TeamCheckInWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamCheckInScalarFieldEnum | TeamCheckInScalarFieldEnum[]
   }
 
   /**
@@ -79079,16 +79404,20 @@ export namespace Prisma {
   export type AttendanceLogAvgAggregateOutputType = {
     checkInLat: number | null
     checkInLng: number | null
+    checkInAccuracy: number | null
     checkOutLat: number | null
     checkOutLng: number | null
+    checkOutAccuracy: number | null
     workSeconds: number | null
   }
 
   export type AttendanceLogSumAggregateOutputType = {
     checkInLat: number | null
     checkInLng: number | null
+    checkInAccuracy: number | null
     checkOutLat: number | null
     checkOutLng: number | null
+    checkOutAccuracy: number | null
     workSeconds: number | null
   }
 
@@ -79107,8 +79436,10 @@ export namespace Prisma {
     logoutinfo: string | null
     checkInLat: number | null
     checkInLng: number | null
+    checkInAccuracy: number | null
     checkOutLat: number | null
     checkOutLng: number | null
+    checkOutAccuracy: number | null
     lessonPlanText: string | null
     isTeachingDay: boolean | null
     checkInAt: Date | null
@@ -79133,8 +79464,10 @@ export namespace Prisma {
     logoutinfo: string | null
     checkInLat: number | null
     checkInLng: number | null
+    checkInAccuracy: number | null
     checkOutLat: number | null
     checkOutLng: number | null
+    checkOutAccuracy: number | null
     lessonPlanText: string | null
     isTeachingDay: boolean | null
     checkInAt: Date | null
@@ -79159,8 +79492,10 @@ export namespace Prisma {
     logoutinfo: number
     checkInLat: number
     checkInLng: number
+    checkInAccuracy: number
     checkOutLat: number
     checkOutLng: number
+    checkOutAccuracy: number
     lessonPlanText: number
     lessonPlanFiles: number
     isTeachingDay: number
@@ -79176,16 +79511,20 @@ export namespace Prisma {
   export type AttendanceLogAvgAggregateInputType = {
     checkInLat?: true
     checkInLng?: true
+    checkInAccuracy?: true
     checkOutLat?: true
     checkOutLng?: true
+    checkOutAccuracy?: true
     workSeconds?: true
   }
 
   export type AttendanceLogSumAggregateInputType = {
     checkInLat?: true
     checkInLng?: true
+    checkInAccuracy?: true
     checkOutLat?: true
     checkOutLng?: true
+    checkOutAccuracy?: true
     workSeconds?: true
   }
 
@@ -79204,8 +79543,10 @@ export namespace Prisma {
     logoutinfo?: true
     checkInLat?: true
     checkInLng?: true
+    checkInAccuracy?: true
     checkOutLat?: true
     checkOutLng?: true
+    checkOutAccuracy?: true
     lessonPlanText?: true
     isTeachingDay?: true
     checkInAt?: true
@@ -79230,8 +79571,10 @@ export namespace Prisma {
     logoutinfo?: true
     checkInLat?: true
     checkInLng?: true
+    checkInAccuracy?: true
     checkOutLat?: true
     checkOutLng?: true
+    checkOutAccuracy?: true
     lessonPlanText?: true
     isTeachingDay?: true
     checkInAt?: true
@@ -79256,8 +79599,10 @@ export namespace Prisma {
     logoutinfo?: true
     checkInLat?: true
     checkInLng?: true
+    checkInAccuracy?: true
     checkOutLat?: true
     checkOutLng?: true
+    checkOutAccuracy?: true
     lessonPlanText?: true
     lessonPlanFiles?: true
     isTeachingDay?: true
@@ -79370,8 +79715,10 @@ export namespace Prisma {
     logoutinfo: string | null
     checkInLat: number | null
     checkInLng: number | null
+    checkInAccuracy: number | null
     checkOutLat: number | null
     checkOutLng: number | null
+    checkOutAccuracy: number | null
     lessonPlanText: string | null
     lessonPlanFiles: JsonValue | null
     isTeachingDay: boolean | null
@@ -79416,8 +79763,10 @@ export namespace Prisma {
     logoutinfo?: boolean
     checkInLat?: boolean
     checkInLng?: boolean
+    checkInAccuracy?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
+    checkOutAccuracy?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79444,8 +79793,10 @@ export namespace Prisma {
     logoutinfo?: boolean
     checkInLat?: boolean
     checkInLng?: boolean
+    checkInAccuracy?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
+    checkOutAccuracy?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79472,8 +79823,10 @@ export namespace Prisma {
     logoutinfo?: boolean
     checkInLat?: boolean
     checkInLng?: boolean
+    checkInAccuracy?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
+    checkOutAccuracy?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79500,8 +79853,10 @@ export namespace Prisma {
     logoutinfo?: boolean
     checkInLat?: boolean
     checkInLng?: boolean
+    checkInAccuracy?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
+    checkOutAccuracy?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79512,7 +79867,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "checkInLat" | "checkInLng" | "checkOutLat" | "checkOutLng" | "lessonPlanText" | "lessonPlanFiles" | "isTeachingDay" | "checkInAt" | "checkOutAt" | "workSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
+  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "checkInLat" | "checkInLng" | "checkInAccuracy" | "checkOutLat" | "checkOutLng" | "checkOutAccuracy" | "lessonPlanText" | "lessonPlanFiles" | "isTeachingDay" | "checkInAt" | "checkOutAt" | "workSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
   export type AttendanceLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -79543,8 +79898,10 @@ export namespace Prisma {
       logoutinfo: string | null
       checkInLat: number | null
       checkInLng: number | null
+      checkInAccuracy: number | null
       checkOutLat: number | null
       checkOutLng: number | null
+      checkOutAccuracy: number | null
       lessonPlanText: string | null
       lessonPlanFiles: Prisma.JsonValue | null
       isTeachingDay: boolean | null
@@ -79991,8 +80348,10 @@ export namespace Prisma {
     readonly logoutinfo: FieldRef<"AttendanceLog", 'String'>
     readonly checkInLat: FieldRef<"AttendanceLog", 'Float'>
     readonly checkInLng: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkInAccuracy: FieldRef<"AttendanceLog", 'Float'>
     readonly checkOutLat: FieldRef<"AttendanceLog", 'Float'>
     readonly checkOutLng: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkOutAccuracy: FieldRef<"AttendanceLog", 'Float'>
     readonly lessonPlanText: FieldRef<"AttendanceLog", 'String'>
     readonly lessonPlanFiles: FieldRef<"AttendanceLog", 'Json'>
     readonly isTeachingDay: FieldRef<"AttendanceLog", 'Boolean'>
@@ -80451,6 +80810,8 @@ export namespace Prisma {
     days: number | null
     compOffWorkedDate: Date | null
     compOffCreditId: string | null
+    holidayName: string | null
+    medicalCertificateRequired: boolean | null
     reason: string | null
     rejectionReason: string | null
     status: $Enums.LeaveStatus | null
@@ -80469,6 +80830,8 @@ export namespace Prisma {
     days: number | null
     compOffWorkedDate: Date | null
     compOffCreditId: string | null
+    holidayName: string | null
+    medicalCertificateRequired: boolean | null
     reason: string | null
     rejectionReason: string | null
     status: $Enums.LeaveStatus | null
@@ -80487,6 +80850,9 @@ export namespace Prisma {
     days: number
     compOffWorkedDate: number
     compOffCreditId: number
+    holidayName: number
+    medicalCertificateRequired: number
+    policyFlags: number
     reason: number
     rejectionReason: number
     status: number
@@ -80515,6 +80881,8 @@ export namespace Prisma {
     days?: true
     compOffWorkedDate?: true
     compOffCreditId?: true
+    holidayName?: true
+    medicalCertificateRequired?: true
     reason?: true
     rejectionReason?: true
     status?: true
@@ -80533,6 +80901,8 @@ export namespace Prisma {
     days?: true
     compOffWorkedDate?: true
     compOffCreditId?: true
+    holidayName?: true
+    medicalCertificateRequired?: true
     reason?: true
     rejectionReason?: true
     status?: true
@@ -80551,6 +80921,9 @@ export namespace Prisma {
     days?: true
     compOffWorkedDate?: true
     compOffCreditId?: true
+    holidayName?: true
+    medicalCertificateRequired?: true
+    policyFlags?: true
     reason?: true
     rejectionReason?: true
     status?: true
@@ -80656,6 +81029,9 @@ export namespace Prisma {
     days: number
     compOffWorkedDate: Date | null
     compOffCreditId: string | null
+    holidayName: string | null
+    medicalCertificateRequired: boolean
+    policyFlags: string[]
     reason: string | null
     rejectionReason: string | null
     status: $Enums.LeaveStatus
@@ -80693,6 +81069,9 @@ export namespace Prisma {
     days?: boolean
     compOffWorkedDate?: boolean
     compOffCreditId?: boolean
+    holidayName?: boolean
+    medicalCertificateRequired?: boolean
+    policyFlags?: boolean
     reason?: boolean
     rejectionReason?: boolean
     status?: boolean
@@ -80713,6 +81092,9 @@ export namespace Prisma {
     days?: boolean
     compOffWorkedDate?: boolean
     compOffCreditId?: boolean
+    holidayName?: boolean
+    medicalCertificateRequired?: boolean
+    policyFlags?: boolean
     reason?: boolean
     rejectionReason?: boolean
     status?: boolean
@@ -80733,6 +81115,9 @@ export namespace Prisma {
     days?: boolean
     compOffWorkedDate?: boolean
     compOffCreditId?: boolean
+    holidayName?: boolean
+    medicalCertificateRequired?: boolean
+    policyFlags?: boolean
     reason?: boolean
     rejectionReason?: boolean
     status?: boolean
@@ -80753,6 +81138,9 @@ export namespace Prisma {
     days?: boolean
     compOffWorkedDate?: boolean
     compOffCreditId?: boolean
+    holidayName?: boolean
+    medicalCertificateRequired?: boolean
+    policyFlags?: boolean
     reason?: boolean
     rejectionReason?: boolean
     status?: boolean
@@ -80760,7 +81148,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type LeaveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "leaveTypeKey" | "dates" | "startDate" | "endDate" | "days" | "compOffWorkedDate" | "compOffCreditId" | "reason" | "rejectionReason" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["leave"]>
+  export type LeaveOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "leaveTypeKey" | "dates" | "startDate" | "endDate" | "days" | "compOffWorkedDate" | "compOffCreditId" | "holidayName" | "medicalCertificateRequired" | "policyFlags" | "reason" | "rejectionReason" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["leave"]>
   export type LeaveInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     compOffCredit?: boolean | Leave$compOffCreditArgs<ExtArgs>
@@ -80791,6 +81179,9 @@ export namespace Prisma {
       days: number
       compOffWorkedDate: Date | null
       compOffCreditId: string | null
+      holidayName: string | null
+      medicalCertificateRequired: boolean
+      policyFlags: string[]
       reason: string | null
       rejectionReason: string | null
       status: $Enums.LeaveStatus
@@ -81231,6 +81622,9 @@ export namespace Prisma {
     readonly days: FieldRef<"Leave", 'Float'>
     readonly compOffWorkedDate: FieldRef<"Leave", 'DateTime'>
     readonly compOffCreditId: FieldRef<"Leave", 'String'>
+    readonly holidayName: FieldRef<"Leave", 'String'>
+    readonly medicalCertificateRequired: FieldRef<"Leave", 'Boolean'>
+    readonly policyFlags: FieldRef<"Leave", 'String[]'>
     readonly reason: FieldRef<"Leave", 'String'>
     readonly rejectionReason: FieldRef<"Leave", 'String'>
     readonly status: FieldRef<"Leave", 'LeaveStatus'>
@@ -81689,12 +82083,22 @@ export namespace Prisma {
   export type LeaveTypeConfigAvgAggregateOutputType = {
     annualQuota: number | null
     quarterlyQuota: number | null
+    maxConsecutiveDays: number | null
+    maxConsecutiveMonths: number | null
+    minServiceDays: number | null
+    medicalCertificateAfterDays: number | null
+    validityDays: number | null
     sortOrder: number | null
   }
 
   export type LeaveTypeConfigSumAggregateOutputType = {
     annualQuota: number | null
     quarterlyQuota: number | null
+    maxConsecutiveDays: number | null
+    maxConsecutiveMonths: number | null
+    minServiceDays: number | null
+    medicalCertificateAfterDays: number | null
+    validityDays: number | null
     sortOrder: number | null
   }
 
@@ -81702,8 +82106,21 @@ export namespace Prisma {
     id: string | null
     key: string | null
     name: string | null
+    code: string | null
+    policyNote: string | null
     annualQuota: number | null
     quarterlyQuota: number | null
+    quotaPeriod: string | null
+    maxConsecutiveDays: number | null
+    maxConsecutiveMonths: number | null
+    softMaxConsecutive: boolean | null
+    minServiceDays: number | null
+    medicalCertificateAfterDays: number | null
+    validityDays: number | null
+    paid: boolean | null
+    holidayNameRequired: boolean | null
+    isSystem: boolean | null
+    systemType: string | null
     active: boolean | null
     sortOrder: number | null
     createdAt: Date | null
@@ -81714,8 +82131,21 @@ export namespace Prisma {
     id: string | null
     key: string | null
     name: string | null
+    code: string | null
+    policyNote: string | null
     annualQuota: number | null
     quarterlyQuota: number | null
+    quotaPeriod: string | null
+    maxConsecutiveDays: number | null
+    maxConsecutiveMonths: number | null
+    softMaxConsecutive: boolean | null
+    minServiceDays: number | null
+    medicalCertificateAfterDays: number | null
+    validityDays: number | null
+    paid: boolean | null
+    holidayNameRequired: boolean | null
+    isSystem: boolean | null
+    systemType: string | null
     active: boolean | null
     sortOrder: number | null
     createdAt: Date | null
@@ -81726,8 +82156,21 @@ export namespace Prisma {
     id: number
     key: number
     name: number
+    code: number
+    policyNote: number
     annualQuota: number
     quarterlyQuota: number
+    quotaPeriod: number
+    maxConsecutiveDays: number
+    maxConsecutiveMonths: number
+    softMaxConsecutive: number
+    minServiceDays: number
+    medicalCertificateAfterDays: number
+    validityDays: number
+    paid: number
+    holidayNameRequired: number
+    isSystem: number
+    systemType: number
     active: number
     sortOrder: number
     createdAt: number
@@ -81739,12 +82182,22 @@ export namespace Prisma {
   export type LeaveTypeConfigAvgAggregateInputType = {
     annualQuota?: true
     quarterlyQuota?: true
+    maxConsecutiveDays?: true
+    maxConsecutiveMonths?: true
+    minServiceDays?: true
+    medicalCertificateAfterDays?: true
+    validityDays?: true
     sortOrder?: true
   }
 
   export type LeaveTypeConfigSumAggregateInputType = {
     annualQuota?: true
     quarterlyQuota?: true
+    maxConsecutiveDays?: true
+    maxConsecutiveMonths?: true
+    minServiceDays?: true
+    medicalCertificateAfterDays?: true
+    validityDays?: true
     sortOrder?: true
   }
 
@@ -81752,8 +82205,21 @@ export namespace Prisma {
     id?: true
     key?: true
     name?: true
+    code?: true
+    policyNote?: true
     annualQuota?: true
     quarterlyQuota?: true
+    quotaPeriod?: true
+    maxConsecutiveDays?: true
+    maxConsecutiveMonths?: true
+    softMaxConsecutive?: true
+    minServiceDays?: true
+    medicalCertificateAfterDays?: true
+    validityDays?: true
+    paid?: true
+    holidayNameRequired?: true
+    isSystem?: true
+    systemType?: true
     active?: true
     sortOrder?: true
     createdAt?: true
@@ -81764,8 +82230,21 @@ export namespace Prisma {
     id?: true
     key?: true
     name?: true
+    code?: true
+    policyNote?: true
     annualQuota?: true
     quarterlyQuota?: true
+    quotaPeriod?: true
+    maxConsecutiveDays?: true
+    maxConsecutiveMonths?: true
+    softMaxConsecutive?: true
+    minServiceDays?: true
+    medicalCertificateAfterDays?: true
+    validityDays?: true
+    paid?: true
+    holidayNameRequired?: true
+    isSystem?: true
+    systemType?: true
     active?: true
     sortOrder?: true
     createdAt?: true
@@ -81776,8 +82255,21 @@ export namespace Prisma {
     id?: true
     key?: true
     name?: true
+    code?: true
+    policyNote?: true
     annualQuota?: true
     quarterlyQuota?: true
+    quotaPeriod?: true
+    maxConsecutiveDays?: true
+    maxConsecutiveMonths?: true
+    softMaxConsecutive?: true
+    minServiceDays?: true
+    medicalCertificateAfterDays?: true
+    validityDays?: true
+    paid?: true
+    holidayNameRequired?: true
+    isSystem?: true
+    systemType?: true
     active?: true
     sortOrder?: true
     createdAt?: true
@@ -81875,8 +82367,21 @@ export namespace Prisma {
     id: string
     key: string
     name: string
+    code: string | null
+    policyNote: string | null
     annualQuota: number
     quarterlyQuota: number | null
+    quotaPeriod: string
+    maxConsecutiveDays: number | null
+    maxConsecutiveMonths: number | null
+    softMaxConsecutive: boolean
+    minServiceDays: number | null
+    medicalCertificateAfterDays: number | null
+    validityDays: number | null
+    paid: boolean
+    holidayNameRequired: boolean
+    isSystem: boolean
+    systemType: string | null
     active: boolean
     sortOrder: number
     createdAt: Date
@@ -81906,8 +82411,21 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     name?: boolean
+    code?: boolean
+    policyNote?: boolean
     annualQuota?: boolean
     quarterlyQuota?: boolean
+    quotaPeriod?: boolean
+    maxConsecutiveDays?: boolean
+    maxConsecutiveMonths?: boolean
+    softMaxConsecutive?: boolean
+    minServiceDays?: boolean
+    medicalCertificateAfterDays?: boolean
+    validityDays?: boolean
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: boolean
     active?: boolean
     sortOrder?: boolean
     createdAt?: boolean
@@ -81918,8 +82436,21 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     name?: boolean
+    code?: boolean
+    policyNote?: boolean
     annualQuota?: boolean
     quarterlyQuota?: boolean
+    quotaPeriod?: boolean
+    maxConsecutiveDays?: boolean
+    maxConsecutiveMonths?: boolean
+    softMaxConsecutive?: boolean
+    minServiceDays?: boolean
+    medicalCertificateAfterDays?: boolean
+    validityDays?: boolean
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: boolean
     active?: boolean
     sortOrder?: boolean
     createdAt?: boolean
@@ -81930,8 +82461,21 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     name?: boolean
+    code?: boolean
+    policyNote?: boolean
     annualQuota?: boolean
     quarterlyQuota?: boolean
+    quotaPeriod?: boolean
+    maxConsecutiveDays?: boolean
+    maxConsecutiveMonths?: boolean
+    softMaxConsecutive?: boolean
+    minServiceDays?: boolean
+    medicalCertificateAfterDays?: boolean
+    validityDays?: boolean
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: boolean
     active?: boolean
     sortOrder?: boolean
     createdAt?: boolean
@@ -81942,15 +82486,28 @@ export namespace Prisma {
     id?: boolean
     key?: boolean
     name?: boolean
+    code?: boolean
+    policyNote?: boolean
     annualQuota?: boolean
     quarterlyQuota?: boolean
+    quotaPeriod?: boolean
+    maxConsecutiveDays?: boolean
+    maxConsecutiveMonths?: boolean
+    softMaxConsecutive?: boolean
+    minServiceDays?: boolean
+    medicalCertificateAfterDays?: boolean
+    validityDays?: boolean
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: boolean
     active?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type LeaveTypeConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "name" | "annualQuota" | "quarterlyQuota" | "active" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveTypeConfig"]>
+  export type LeaveTypeConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "name" | "code" | "policyNote" | "annualQuota" | "quarterlyQuota" | "quotaPeriod" | "maxConsecutiveDays" | "maxConsecutiveMonths" | "softMaxConsecutive" | "minServiceDays" | "medicalCertificateAfterDays" | "validityDays" | "paid" | "holidayNameRequired" | "isSystem" | "systemType" | "active" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["leaveTypeConfig"]>
 
   export type $LeaveTypeConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LeaveTypeConfig"
@@ -81959,8 +82516,21 @@ export namespace Prisma {
       id: string
       key: string
       name: string
+      code: string | null
+      policyNote: string | null
       annualQuota: number
       quarterlyQuota: number | null
+      quotaPeriod: string
+      maxConsecutiveDays: number | null
+      maxConsecutiveMonths: number | null
+      softMaxConsecutive: boolean
+      minServiceDays: number | null
+      medicalCertificateAfterDays: number | null
+      validityDays: number | null
+      paid: boolean
+      holidayNameRequired: boolean
+      isSystem: boolean
+      systemType: string | null
       active: boolean
       sortOrder: number
       createdAt: Date
@@ -82391,8 +82961,21 @@ export namespace Prisma {
     readonly id: FieldRef<"LeaveTypeConfig", 'String'>
     readonly key: FieldRef<"LeaveTypeConfig", 'String'>
     readonly name: FieldRef<"LeaveTypeConfig", 'String'>
+    readonly code: FieldRef<"LeaveTypeConfig", 'String'>
+    readonly policyNote: FieldRef<"LeaveTypeConfig", 'String'>
     readonly annualQuota: FieldRef<"LeaveTypeConfig", 'Float'>
     readonly quarterlyQuota: FieldRef<"LeaveTypeConfig", 'Float'>
+    readonly quotaPeriod: FieldRef<"LeaveTypeConfig", 'String'>
+    readonly maxConsecutiveDays: FieldRef<"LeaveTypeConfig", 'Int'>
+    readonly maxConsecutiveMonths: FieldRef<"LeaveTypeConfig", 'Int'>
+    readonly softMaxConsecutive: FieldRef<"LeaveTypeConfig", 'Boolean'>
+    readonly minServiceDays: FieldRef<"LeaveTypeConfig", 'Int'>
+    readonly medicalCertificateAfterDays: FieldRef<"LeaveTypeConfig", 'Int'>
+    readonly validityDays: FieldRef<"LeaveTypeConfig", 'Int'>
+    readonly paid: FieldRef<"LeaveTypeConfig", 'Boolean'>
+    readonly holidayNameRequired: FieldRef<"LeaveTypeConfig", 'Boolean'>
+    readonly isSystem: FieldRef<"LeaveTypeConfig", 'Boolean'>
+    readonly systemType: FieldRef<"LeaveTypeConfig", 'String'>
     readonly active: FieldRef<"LeaveTypeConfig", 'Boolean'>
     readonly sortOrder: FieldRef<"LeaveTypeConfig", 'Int'>
     readonly createdAt: FieldRef<"LeaveTypeConfig", 'DateTime'>
@@ -103652,6 +104235,9 @@ export namespace Prisma {
     bankAccountNo: string | null
     bankIfsc: string | null
     rejectionReason: string | null
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
     approvedBy: string | null
     approvedAt: Date | null
     reimbursedBy: string | null
@@ -103677,6 +104263,9 @@ export namespace Prisma {
     bankAccountNo: string | null
     bankIfsc: string | null
     rejectionReason: string | null
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
     approvedBy: string | null
     approvedAt: Date | null
     reimbursedBy: string | null
@@ -103702,6 +104291,9 @@ export namespace Prisma {
     bankAccountNo: number
     bankIfsc: number
     rejectionReason: number
+    verifiedBy: number
+    verifiedAt: number
+    verificationNotes: number
     approvedBy: number
     approvedAt: number
     reimbursedBy: number
@@ -103741,6 +104333,9 @@ export namespace Prisma {
     bankAccountNo?: true
     bankIfsc?: true
     rejectionReason?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
     approvedBy?: true
     approvedAt?: true
     reimbursedBy?: true
@@ -103766,6 +104361,9 @@ export namespace Prisma {
     bankAccountNo?: true
     bankIfsc?: true
     rejectionReason?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
     approvedBy?: true
     approvedAt?: true
     reimbursedBy?: true
@@ -103791,6 +104389,9 @@ export namespace Prisma {
     bankAccountNo?: true
     bankIfsc?: true
     rejectionReason?: true
+    verifiedBy?: true
+    verifiedAt?: true
+    verificationNotes?: true
     approvedBy?: true
     approvedAt?: true
     reimbursedBy?: true
@@ -103903,6 +104504,9 @@ export namespace Prisma {
     bankAccountNo: string | null
     bankIfsc: string | null
     rejectionReason: string | null
+    verifiedBy: string | null
+    verifiedAt: Date | null
+    verificationNotes: string | null
     approvedBy: string | null
     approvedAt: Date | null
     reimbursedBy: string | null
@@ -103947,6 +104551,9 @@ export namespace Prisma {
     bankAccountNo?: boolean
     bankIfsc?: boolean
     rejectionReason?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
     reimbursedBy?: boolean
@@ -103957,6 +104564,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
     items?: boolean | Reimbursement$itemsArgs<ExtArgs>
@@ -103977,6 +104585,9 @@ export namespace Prisma {
     bankAccountNo?: boolean
     bankIfsc?: boolean
     rejectionReason?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
     reimbursedBy?: boolean
@@ -103987,6 +104598,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
   }, ExtArgs["result"]["reimbursement"]>
@@ -104005,6 +104617,9 @@ export namespace Prisma {
     bankAccountNo?: boolean
     bankIfsc?: boolean
     rejectionReason?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
     reimbursedBy?: boolean
@@ -104015,6 +104630,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
   }, ExtArgs["result"]["reimbursement"]>
@@ -104033,6 +104649,9 @@ export namespace Prisma {
     bankAccountNo?: boolean
     bankIfsc?: boolean
     rejectionReason?: boolean
+    verifiedBy?: boolean
+    verifiedAt?: boolean
+    verificationNotes?: boolean
     approvedBy?: boolean
     approvedAt?: boolean
     reimbursedBy?: boolean
@@ -104044,9 +104663,10 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ReimbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "purpose" | "notes" | "totalClaimed" | "totalApproved" | "totalReimbursed" | "status" | "bankName" | "bankAccountNo" | "bankIfsc" | "rejectionReason" | "approvedBy" | "approvedAt" | "reimbursedBy" | "reimbursedAt" | "paymentMode" | "paymentReference" | "paymentNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["reimbursement"]>
+  export type ReimbursementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "purpose" | "notes" | "totalClaimed" | "totalApproved" | "totalReimbursed" | "status" | "bankName" | "bankAccountNo" | "bankIfsc" | "rejectionReason" | "verifiedBy" | "verifiedAt" | "verificationNotes" | "approvedBy" | "approvedAt" | "reimbursedBy" | "reimbursedAt" | "paymentMode" | "paymentReference" | "paymentNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["reimbursement"]>
   export type ReimbursementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
     items?: boolean | Reimbursement$itemsArgs<ExtArgs>
@@ -104054,11 +104674,13 @@ export namespace Prisma {
   }
   export type ReimbursementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
   }
   export type ReimbursementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    verifier?: boolean | Reimbursement$verifierArgs<ExtArgs>
     approver?: boolean | Reimbursement$approverArgs<ExtArgs>
     reimburser?: boolean | Reimbursement$reimburserArgs<ExtArgs>
   }
@@ -104067,6 +104689,7 @@ export namespace Prisma {
     name: "Reimbursement"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      verifier: Prisma.$UserPayload<ExtArgs> | null
       approver: Prisma.$UserPayload<ExtArgs> | null
       reimburser: Prisma.$UserPayload<ExtArgs> | null
       items: Prisma.$ReimbursementItemPayload<ExtArgs>[]
@@ -104085,6 +104708,9 @@ export namespace Prisma {
       bankAccountNo: string | null
       bankIfsc: string | null
       rejectionReason: string | null
+      verifiedBy: string | null
+      verifiedAt: Date | null
+      verificationNotes: string | null
       approvedBy: string | null
       approvedAt: Date | null
       reimbursedBy: string | null
@@ -104489,6 +105115,7 @@ export namespace Prisma {
   export interface Prisma__ReimbursementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    verifier<T extends Reimbursement$verifierArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$verifierArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     approver<T extends Reimbursement$approverArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$approverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     reimburser<T extends Reimbursement$reimburserArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$reimburserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     items<T extends Reimbursement$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Reimbursement$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReimbursementItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -104534,6 +105161,9 @@ export namespace Prisma {
     readonly bankAccountNo: FieldRef<"Reimbursement", 'String'>
     readonly bankIfsc: FieldRef<"Reimbursement", 'String'>
     readonly rejectionReason: FieldRef<"Reimbursement", 'String'>
+    readonly verifiedBy: FieldRef<"Reimbursement", 'String'>
+    readonly verifiedAt: FieldRef<"Reimbursement", 'DateTime'>
+    readonly verificationNotes: FieldRef<"Reimbursement", 'String'>
     readonly approvedBy: FieldRef<"Reimbursement", 'String'>
     readonly approvedAt: FieldRef<"Reimbursement", 'DateTime'>
     readonly reimbursedBy: FieldRef<"Reimbursement", 'String'>
@@ -104941,6 +105571,25 @@ export namespace Prisma {
      * Limit how many Reimbursements to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Reimbursement.verifier
+   */
+  export type Reimbursement$verifierArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -131509,6 +132158,2418 @@ export namespace Prisma {
 
 
   /**
+   * Model TeamCheckIn
+   */
+
+  export type AggregateTeamCheckIn = {
+    _count: TeamCheckInCountAggregateOutputType | null
+    _min: TeamCheckInMinAggregateOutputType | null
+    _max: TeamCheckInMaxAggregateOutputType | null
+  }
+
+  export type TeamCheckInMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    date: Date | null
+    checkInType: string | null
+    areaOfWork: string | null
+    topPriorities: string | null
+    keyUpdates: string | null
+    toDiscussToday: string | null
+    memberReflection: string | null
+    managerNotes: string | null
+    challenges: string | null
+    directorInputs: string | null
+    submittedAt: Date | null
+    lastEditedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamCheckInMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    date: Date | null
+    checkInType: string | null
+    areaOfWork: string | null
+    topPriorities: string | null
+    keyUpdates: string | null
+    toDiscussToday: string | null
+    memberReflection: string | null
+    managerNotes: string | null
+    challenges: string | null
+    directorInputs: string | null
+    submittedAt: Date | null
+    lastEditedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamCheckInCountAggregateOutputType = {
+    id: number
+    userId: number
+    date: number
+    checkInType: number
+    areaOfWork: number
+    topPriorities: number
+    keyUpdates: number
+    toDiscussToday: number
+    memberReflection: number
+    managerNotes: number
+    challenges: number
+    directorInputs: number
+    submittedAt: number
+    lastEditedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TeamCheckInMinAggregateInputType = {
+    id?: true
+    userId?: true
+    date?: true
+    checkInType?: true
+    areaOfWork?: true
+    topPriorities?: true
+    keyUpdates?: true
+    toDiscussToday?: true
+    memberReflection?: true
+    managerNotes?: true
+    challenges?: true
+    directorInputs?: true
+    submittedAt?: true
+    lastEditedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamCheckInMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    date?: true
+    checkInType?: true
+    areaOfWork?: true
+    topPriorities?: true
+    keyUpdates?: true
+    toDiscussToday?: true
+    memberReflection?: true
+    managerNotes?: true
+    challenges?: true
+    directorInputs?: true
+    submittedAt?: true
+    lastEditedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamCheckInCountAggregateInputType = {
+    id?: true
+    userId?: true
+    date?: true
+    checkInType?: true
+    areaOfWork?: true
+    topPriorities?: true
+    keyUpdates?: true
+    toDiscussToday?: true
+    memberReflection?: true
+    managerNotes?: true
+    challenges?: true
+    directorInputs?: true
+    submittedAt?: true
+    lastEditedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TeamCheckInAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamCheckIn to aggregate.
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckIns to fetch.
+     */
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TeamCheckInWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckIns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckIns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TeamCheckIns
+    **/
+    _count?: true | TeamCheckInCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TeamCheckInMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TeamCheckInMaxAggregateInputType
+  }
+
+  export type GetTeamCheckInAggregateType<T extends TeamCheckInAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeamCheckIn]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeamCheckIn[P]>
+      : GetScalarType<T[P], AggregateTeamCheckIn[P]>
+  }
+
+
+
+
+  export type TeamCheckInGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamCheckInWhereInput
+    orderBy?: TeamCheckInOrderByWithAggregationInput | TeamCheckInOrderByWithAggregationInput[]
+    by: TeamCheckInScalarFieldEnum[] | TeamCheckInScalarFieldEnum
+    having?: TeamCheckInScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TeamCheckInCountAggregateInputType | true
+    _min?: TeamCheckInMinAggregateInputType
+    _max?: TeamCheckInMaxAggregateInputType
+  }
+
+  export type TeamCheckInGroupByOutputType = {
+    id: string
+    userId: string
+    date: Date
+    checkInType: string
+    areaOfWork: string | null
+    topPriorities: string | null
+    keyUpdates: string | null
+    toDiscussToday: string | null
+    memberReflection: string | null
+    managerNotes: string | null
+    challenges: string | null
+    directorInputs: string | null
+    submittedAt: Date
+    lastEditedById: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TeamCheckInCountAggregateOutputType | null
+    _min: TeamCheckInMinAggregateOutputType | null
+    _max: TeamCheckInMaxAggregateOutputType | null
+  }
+
+  type GetTeamCheckInGroupByPayload<T extends TeamCheckInGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TeamCheckInGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TeamCheckInGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TeamCheckInGroupByOutputType[P]>
+            : GetScalarType<T[P], TeamCheckInGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TeamCheckInSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    date?: boolean
+    checkInType?: boolean
+    areaOfWork?: boolean
+    topPriorities?: boolean
+    keyUpdates?: boolean
+    toDiscussToday?: boolean
+    memberReflection?: boolean
+    managerNotes?: boolean
+    challenges?: boolean
+    directorInputs?: boolean
+    submittedAt?: boolean
+    lastEditedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+    promises?: boolean | TeamCheckIn$promisesArgs<ExtArgs>
+    _count?: boolean | TeamCheckInCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckIn"]>
+
+  export type TeamCheckInSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    date?: boolean
+    checkInType?: boolean
+    areaOfWork?: boolean
+    topPriorities?: boolean
+    keyUpdates?: boolean
+    toDiscussToday?: boolean
+    memberReflection?: boolean
+    managerNotes?: boolean
+    challenges?: boolean
+    directorInputs?: boolean
+    submittedAt?: boolean
+    lastEditedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckIn"]>
+
+  export type TeamCheckInSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    date?: boolean
+    checkInType?: boolean
+    areaOfWork?: boolean
+    topPriorities?: boolean
+    keyUpdates?: boolean
+    toDiscussToday?: boolean
+    memberReflection?: boolean
+    managerNotes?: boolean
+    challenges?: boolean
+    directorInputs?: boolean
+    submittedAt?: boolean
+    lastEditedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckIn"]>
+
+  export type TeamCheckInSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    date?: boolean
+    checkInType?: boolean
+    areaOfWork?: boolean
+    topPriorities?: boolean
+    keyUpdates?: boolean
+    toDiscussToday?: boolean
+    memberReflection?: boolean
+    managerNotes?: boolean
+    challenges?: boolean
+    directorInputs?: boolean
+    submittedAt?: boolean
+    lastEditedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TeamCheckInOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "checkInType" | "areaOfWork" | "topPriorities" | "keyUpdates" | "toDiscussToday" | "memberReflection" | "managerNotes" | "challenges" | "directorInputs" | "submittedAt" | "lastEditedById" | "createdAt" | "updatedAt", ExtArgs["result"]["teamCheckIn"]>
+  export type TeamCheckInInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+    promises?: boolean | TeamCheckIn$promisesArgs<ExtArgs>
+    _count?: boolean | TeamCheckInCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TeamCheckInIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+  }
+  export type TeamCheckInIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    lastEditedBy?: boolean | TeamCheckIn$lastEditedByArgs<ExtArgs>
+  }
+
+  export type $TeamCheckInPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TeamCheckIn"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      lastEditedBy: Prisma.$UserPayload<ExtArgs> | null
+      promises: Prisma.$TeamCheckInPromisePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      date: Date
+      checkInType: string
+      areaOfWork: string | null
+      topPriorities: string | null
+      keyUpdates: string | null
+      toDiscussToday: string | null
+      memberReflection: string | null
+      managerNotes: string | null
+      challenges: string | null
+      directorInputs: string | null
+      submittedAt: Date
+      lastEditedById: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["teamCheckIn"]>
+    composites: {}
+  }
+
+  type TeamCheckInGetPayload<S extends boolean | null | undefined | TeamCheckInDefaultArgs> = $Result.GetResult<Prisma.$TeamCheckInPayload, S>
+
+  type TeamCheckInCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TeamCheckInFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TeamCheckInCountAggregateInputType | true
+    }
+
+  export interface TeamCheckInDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TeamCheckIn'], meta: { name: 'TeamCheckIn' } }
+    /**
+     * Find zero or one TeamCheckIn that matches the filter.
+     * @param {TeamCheckInFindUniqueArgs} args - Arguments to find a TeamCheckIn
+     * @example
+     * // Get one TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TeamCheckInFindUniqueArgs>(args: SelectSubset<T, TeamCheckInFindUniqueArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TeamCheckIn that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TeamCheckInFindUniqueOrThrowArgs} args - Arguments to find a TeamCheckIn
+     * @example
+     * // Get one TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TeamCheckInFindUniqueOrThrowArgs>(args: SelectSubset<T, TeamCheckInFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamCheckIn that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInFindFirstArgs} args - Arguments to find a TeamCheckIn
+     * @example
+     * // Get one TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TeamCheckInFindFirstArgs>(args?: SelectSubset<T, TeamCheckInFindFirstArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamCheckIn that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInFindFirstOrThrowArgs} args - Arguments to find a TeamCheckIn
+     * @example
+     * // Get one TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TeamCheckInFindFirstOrThrowArgs>(args?: SelectSubset<T, TeamCheckInFindFirstOrThrowArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TeamCheckIns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TeamCheckIns
+     * const teamCheckIns = await prisma.teamCheckIn.findMany()
+     * 
+     * // Get first 10 TeamCheckIns
+     * const teamCheckIns = await prisma.teamCheckIn.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const teamCheckInWithIdOnly = await prisma.teamCheckIn.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TeamCheckInFindManyArgs>(args?: SelectSubset<T, TeamCheckInFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TeamCheckIn.
+     * @param {TeamCheckInCreateArgs} args - Arguments to create a TeamCheckIn.
+     * @example
+     * // Create one TeamCheckIn
+     * const TeamCheckIn = await prisma.teamCheckIn.create({
+     *   data: {
+     *     // ... data to create a TeamCheckIn
+     *   }
+     * })
+     * 
+     */
+    create<T extends TeamCheckInCreateArgs>(args: SelectSubset<T, TeamCheckInCreateArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TeamCheckIns.
+     * @param {TeamCheckInCreateManyArgs} args - Arguments to create many TeamCheckIns.
+     * @example
+     * // Create many TeamCheckIns
+     * const teamCheckIn = await prisma.teamCheckIn.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TeamCheckInCreateManyArgs>(args?: SelectSubset<T, TeamCheckInCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TeamCheckIns and returns the data saved in the database.
+     * @param {TeamCheckInCreateManyAndReturnArgs} args - Arguments to create many TeamCheckIns.
+     * @example
+     * // Create many TeamCheckIns
+     * const teamCheckIn = await prisma.teamCheckIn.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TeamCheckIns and only return the `id`
+     * const teamCheckInWithIdOnly = await prisma.teamCheckIn.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TeamCheckInCreateManyAndReturnArgs>(args?: SelectSubset<T, TeamCheckInCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TeamCheckIn.
+     * @param {TeamCheckInDeleteArgs} args - Arguments to delete one TeamCheckIn.
+     * @example
+     * // Delete one TeamCheckIn
+     * const TeamCheckIn = await prisma.teamCheckIn.delete({
+     *   where: {
+     *     // ... filter to delete one TeamCheckIn
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TeamCheckInDeleteArgs>(args: SelectSubset<T, TeamCheckInDeleteArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TeamCheckIn.
+     * @param {TeamCheckInUpdateArgs} args - Arguments to update one TeamCheckIn.
+     * @example
+     * // Update one TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TeamCheckInUpdateArgs>(args: SelectSubset<T, TeamCheckInUpdateArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TeamCheckIns.
+     * @param {TeamCheckInDeleteManyArgs} args - Arguments to filter TeamCheckIns to delete.
+     * @example
+     * // Delete a few TeamCheckIns
+     * const { count } = await prisma.teamCheckIn.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TeamCheckInDeleteManyArgs>(args?: SelectSubset<T, TeamCheckInDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamCheckIns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TeamCheckIns
+     * const teamCheckIn = await prisma.teamCheckIn.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TeamCheckInUpdateManyArgs>(args: SelectSubset<T, TeamCheckInUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamCheckIns and returns the data updated in the database.
+     * @param {TeamCheckInUpdateManyAndReturnArgs} args - Arguments to update many TeamCheckIns.
+     * @example
+     * // Update many TeamCheckIns
+     * const teamCheckIn = await prisma.teamCheckIn.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TeamCheckIns and only return the `id`
+     * const teamCheckInWithIdOnly = await prisma.teamCheckIn.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TeamCheckInUpdateManyAndReturnArgs>(args: SelectSubset<T, TeamCheckInUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TeamCheckIn.
+     * @param {TeamCheckInUpsertArgs} args - Arguments to update or create a TeamCheckIn.
+     * @example
+     * // Update or create a TeamCheckIn
+     * const teamCheckIn = await prisma.teamCheckIn.upsert({
+     *   create: {
+     *     // ... data to create a TeamCheckIn
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TeamCheckIn we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TeamCheckInUpsertArgs>(args: SelectSubset<T, TeamCheckInUpsertArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TeamCheckIns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInCountArgs} args - Arguments to filter TeamCheckIns to count.
+     * @example
+     * // Count the number of TeamCheckIns
+     * const count = await prisma.teamCheckIn.count({
+     *   where: {
+     *     // ... the filter for the TeamCheckIns we want to count
+     *   }
+     * })
+    **/
+    count<T extends TeamCheckInCountArgs>(
+      args?: Subset<T, TeamCheckInCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TeamCheckInCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TeamCheckIn.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TeamCheckInAggregateArgs>(args: Subset<T, TeamCheckInAggregateArgs>): Prisma.PrismaPromise<GetTeamCheckInAggregateType<T>>
+
+    /**
+     * Group by TeamCheckIn.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TeamCheckInGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TeamCheckInGroupByArgs['orderBy'] }
+        : { orderBy?: TeamCheckInGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TeamCheckInGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeamCheckInGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TeamCheckIn model
+   */
+  readonly fields: TeamCheckInFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TeamCheckIn.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TeamCheckInClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lastEditedBy<T extends TeamCheckIn$lastEditedByArgs<ExtArgs> = {}>(args?: Subset<T, TeamCheckIn$lastEditedByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    promises<T extends TeamCheckIn$promisesArgs<ExtArgs> = {}>(args?: Subset<T, TeamCheckIn$promisesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TeamCheckIn model
+   */
+  interface TeamCheckInFieldRefs {
+    readonly id: FieldRef<"TeamCheckIn", 'String'>
+    readonly userId: FieldRef<"TeamCheckIn", 'String'>
+    readonly date: FieldRef<"TeamCheckIn", 'DateTime'>
+    readonly checkInType: FieldRef<"TeamCheckIn", 'String'>
+    readonly areaOfWork: FieldRef<"TeamCheckIn", 'String'>
+    readonly topPriorities: FieldRef<"TeamCheckIn", 'String'>
+    readonly keyUpdates: FieldRef<"TeamCheckIn", 'String'>
+    readonly toDiscussToday: FieldRef<"TeamCheckIn", 'String'>
+    readonly memberReflection: FieldRef<"TeamCheckIn", 'String'>
+    readonly managerNotes: FieldRef<"TeamCheckIn", 'String'>
+    readonly challenges: FieldRef<"TeamCheckIn", 'String'>
+    readonly directorInputs: FieldRef<"TeamCheckIn", 'String'>
+    readonly submittedAt: FieldRef<"TeamCheckIn", 'DateTime'>
+    readonly lastEditedById: FieldRef<"TeamCheckIn", 'String'>
+    readonly createdAt: FieldRef<"TeamCheckIn", 'DateTime'>
+    readonly updatedAt: FieldRef<"TeamCheckIn", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TeamCheckIn findUnique
+   */
+  export type TeamCheckInFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckIn to fetch.
+     */
+    where: TeamCheckInWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckIn findUniqueOrThrow
+   */
+  export type TeamCheckInFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckIn to fetch.
+     */
+    where: TeamCheckInWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckIn findFirst
+   */
+  export type TeamCheckInFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckIn to fetch.
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckIns to fetch.
+     */
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamCheckIns.
+     */
+    cursor?: TeamCheckInWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckIns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckIns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckIns.
+     */
+    distinct?: TeamCheckInScalarFieldEnum | TeamCheckInScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckIn findFirstOrThrow
+   */
+  export type TeamCheckInFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckIn to fetch.
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckIns to fetch.
+     */
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamCheckIns.
+     */
+    cursor?: TeamCheckInWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckIns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckIns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckIns.
+     */
+    distinct?: TeamCheckInScalarFieldEnum | TeamCheckInScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckIn findMany
+   */
+  export type TeamCheckInFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckIns to fetch.
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckIns to fetch.
+     */
+    orderBy?: TeamCheckInOrderByWithRelationInput | TeamCheckInOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TeamCheckIns.
+     */
+    cursor?: TeamCheckInWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckIns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckIns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckIns.
+     */
+    distinct?: TeamCheckInScalarFieldEnum | TeamCheckInScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckIn create
+   */
+  export type TeamCheckInCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TeamCheckIn.
+     */
+    data: XOR<TeamCheckInCreateInput, TeamCheckInUncheckedCreateInput>
+  }
+
+  /**
+   * TeamCheckIn createMany
+   */
+  export type TeamCheckInCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TeamCheckIns.
+     */
+    data: TeamCheckInCreateManyInput | TeamCheckInCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TeamCheckIn createManyAndReturn
+   */
+  export type TeamCheckInCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * The data used to create many TeamCheckIns.
+     */
+    data: TeamCheckInCreateManyInput | TeamCheckInCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamCheckIn update
+   */
+  export type TeamCheckInUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TeamCheckIn.
+     */
+    data: XOR<TeamCheckInUpdateInput, TeamCheckInUncheckedUpdateInput>
+    /**
+     * Choose, which TeamCheckIn to update.
+     */
+    where: TeamCheckInWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckIn updateMany
+   */
+  export type TeamCheckInUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TeamCheckIns.
+     */
+    data: XOR<TeamCheckInUpdateManyMutationInput, TeamCheckInUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamCheckIns to update
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * Limit how many TeamCheckIns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamCheckIn updateManyAndReturn
+   */
+  export type TeamCheckInUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * The data used to update TeamCheckIns.
+     */
+    data: XOR<TeamCheckInUpdateManyMutationInput, TeamCheckInUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamCheckIns to update
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * Limit how many TeamCheckIns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamCheckIn upsert
+   */
+  export type TeamCheckInUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TeamCheckIn to update in case it exists.
+     */
+    where: TeamCheckInWhereUniqueInput
+    /**
+     * In case the TeamCheckIn found by the `where` argument doesn't exist, create a new TeamCheckIn with this data.
+     */
+    create: XOR<TeamCheckInCreateInput, TeamCheckInUncheckedCreateInput>
+    /**
+     * In case the TeamCheckIn was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TeamCheckInUpdateInput, TeamCheckInUncheckedUpdateInput>
+  }
+
+  /**
+   * TeamCheckIn delete
+   */
+  export type TeamCheckInDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+    /**
+     * Filter which TeamCheckIn to delete.
+     */
+    where: TeamCheckInWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckIn deleteMany
+   */
+  export type TeamCheckInDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamCheckIns to delete
+     */
+    where?: TeamCheckInWhereInput
+    /**
+     * Limit how many TeamCheckIns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamCheckIn.lastEditedBy
+   */
+  export type TeamCheckIn$lastEditedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * TeamCheckIn.promises
+   */
+  export type TeamCheckIn$promisesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    where?: TeamCheckInPromiseWhereInput
+    orderBy?: TeamCheckInPromiseOrderByWithRelationInput | TeamCheckInPromiseOrderByWithRelationInput[]
+    cursor?: TeamCheckInPromiseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamCheckInPromiseScalarFieldEnum | TeamCheckInPromiseScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckIn without action
+   */
+  export type TeamCheckInDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckIn
+     */
+    select?: TeamCheckInSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckIn
+     */
+    omit?: TeamCheckInOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TeamCheckInPromise
+   */
+
+  export type AggregateTeamCheckInPromise = {
+    _count: TeamCheckInPromiseCountAggregateOutputType | null
+    _avg: TeamCheckInPromiseAvgAggregateOutputType | null
+    _sum: TeamCheckInPromiseSumAggregateOutputType | null
+    _min: TeamCheckInPromiseMinAggregateOutputType | null
+    _max: TeamCheckInPromiseMaxAggregateOutputType | null
+  }
+
+  export type TeamCheckInPromiseAvgAggregateOutputType = {
+    order: number | null
+  }
+
+  export type TeamCheckInPromiseSumAggregateOutputType = {
+    order: number | null
+  }
+
+  export type TeamCheckInPromiseMinAggregateOutputType = {
+    id: string | null
+    checkInId: string | null
+    actionItem: string | null
+    owner: string | null
+    deadline: Date | null
+    status: string | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamCheckInPromiseMaxAggregateOutputType = {
+    id: string | null
+    checkInId: string | null
+    actionItem: string | null
+    owner: string | null
+    deadline: Date | null
+    status: string | null
+    order: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamCheckInPromiseCountAggregateOutputType = {
+    id: number
+    checkInId: number
+    actionItem: number
+    owner: number
+    deadline: number
+    status: number
+    order: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TeamCheckInPromiseAvgAggregateInputType = {
+    order?: true
+  }
+
+  export type TeamCheckInPromiseSumAggregateInputType = {
+    order?: true
+  }
+
+  export type TeamCheckInPromiseMinAggregateInputType = {
+    id?: true
+    checkInId?: true
+    actionItem?: true
+    owner?: true
+    deadline?: true
+    status?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamCheckInPromiseMaxAggregateInputType = {
+    id?: true
+    checkInId?: true
+    actionItem?: true
+    owner?: true
+    deadline?: true
+    status?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamCheckInPromiseCountAggregateInputType = {
+    id?: true
+    checkInId?: true
+    actionItem?: true
+    owner?: true
+    deadline?: true
+    status?: true
+    order?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TeamCheckInPromiseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamCheckInPromise to aggregate.
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckInPromises to fetch.
+     */
+    orderBy?: TeamCheckInPromiseOrderByWithRelationInput | TeamCheckInPromiseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TeamCheckInPromiseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckInPromises from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckInPromises.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TeamCheckInPromises
+    **/
+    _count?: true | TeamCheckInPromiseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TeamCheckInPromiseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TeamCheckInPromiseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TeamCheckInPromiseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TeamCheckInPromiseMaxAggregateInputType
+  }
+
+  export type GetTeamCheckInPromiseAggregateType<T extends TeamCheckInPromiseAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeamCheckInPromise]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeamCheckInPromise[P]>
+      : GetScalarType<T[P], AggregateTeamCheckInPromise[P]>
+  }
+
+
+
+
+  export type TeamCheckInPromiseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamCheckInPromiseWhereInput
+    orderBy?: TeamCheckInPromiseOrderByWithAggregationInput | TeamCheckInPromiseOrderByWithAggregationInput[]
+    by: TeamCheckInPromiseScalarFieldEnum[] | TeamCheckInPromiseScalarFieldEnum
+    having?: TeamCheckInPromiseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TeamCheckInPromiseCountAggregateInputType | true
+    _avg?: TeamCheckInPromiseAvgAggregateInputType
+    _sum?: TeamCheckInPromiseSumAggregateInputType
+    _min?: TeamCheckInPromiseMinAggregateInputType
+    _max?: TeamCheckInPromiseMaxAggregateInputType
+  }
+
+  export type TeamCheckInPromiseGroupByOutputType = {
+    id: string
+    checkInId: string
+    actionItem: string
+    owner: string | null
+    deadline: Date | null
+    status: string
+    order: number
+    createdAt: Date
+    updatedAt: Date
+    _count: TeamCheckInPromiseCountAggregateOutputType | null
+    _avg: TeamCheckInPromiseAvgAggregateOutputType | null
+    _sum: TeamCheckInPromiseSumAggregateOutputType | null
+    _min: TeamCheckInPromiseMinAggregateOutputType | null
+    _max: TeamCheckInPromiseMaxAggregateOutputType | null
+  }
+
+  type GetTeamCheckInPromiseGroupByPayload<T extends TeamCheckInPromiseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TeamCheckInPromiseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TeamCheckInPromiseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TeamCheckInPromiseGroupByOutputType[P]>
+            : GetScalarType<T[P], TeamCheckInPromiseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TeamCheckInPromiseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    checkInId?: boolean
+    actionItem?: boolean
+    owner?: boolean
+    deadline?: boolean
+    status?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckInPromise"]>
+
+  export type TeamCheckInPromiseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    checkInId?: boolean
+    actionItem?: boolean
+    owner?: boolean
+    deadline?: boolean
+    status?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckInPromise"]>
+
+  export type TeamCheckInPromiseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    checkInId?: boolean
+    actionItem?: boolean
+    owner?: boolean
+    deadline?: boolean
+    status?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teamCheckInPromise"]>
+
+  export type TeamCheckInPromiseSelectScalar = {
+    id?: boolean
+    checkInId?: boolean
+    actionItem?: boolean
+    owner?: boolean
+    deadline?: boolean
+    status?: boolean
+    order?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TeamCheckInPromiseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "checkInId" | "actionItem" | "owner" | "deadline" | "status" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["teamCheckInPromise"]>
+  export type TeamCheckInPromiseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }
+  export type TeamCheckInPromiseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }
+  export type TeamCheckInPromiseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    checkIn?: boolean | TeamCheckInDefaultArgs<ExtArgs>
+  }
+
+  export type $TeamCheckInPromisePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TeamCheckInPromise"
+    objects: {
+      checkIn: Prisma.$TeamCheckInPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      checkInId: string
+      actionItem: string
+      owner: string | null
+      deadline: Date | null
+      status: string
+      order: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["teamCheckInPromise"]>
+    composites: {}
+  }
+
+  type TeamCheckInPromiseGetPayload<S extends boolean | null | undefined | TeamCheckInPromiseDefaultArgs> = $Result.GetResult<Prisma.$TeamCheckInPromisePayload, S>
+
+  type TeamCheckInPromiseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TeamCheckInPromiseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TeamCheckInPromiseCountAggregateInputType | true
+    }
+
+  export interface TeamCheckInPromiseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TeamCheckInPromise'], meta: { name: 'TeamCheckInPromise' } }
+    /**
+     * Find zero or one TeamCheckInPromise that matches the filter.
+     * @param {TeamCheckInPromiseFindUniqueArgs} args - Arguments to find a TeamCheckInPromise
+     * @example
+     * // Get one TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TeamCheckInPromiseFindUniqueArgs>(args: SelectSubset<T, TeamCheckInPromiseFindUniqueArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TeamCheckInPromise that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TeamCheckInPromiseFindUniqueOrThrowArgs} args - Arguments to find a TeamCheckInPromise
+     * @example
+     * // Get one TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TeamCheckInPromiseFindUniqueOrThrowArgs>(args: SelectSubset<T, TeamCheckInPromiseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamCheckInPromise that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseFindFirstArgs} args - Arguments to find a TeamCheckInPromise
+     * @example
+     * // Get one TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TeamCheckInPromiseFindFirstArgs>(args?: SelectSubset<T, TeamCheckInPromiseFindFirstArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TeamCheckInPromise that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseFindFirstOrThrowArgs} args - Arguments to find a TeamCheckInPromise
+     * @example
+     * // Get one TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TeamCheckInPromiseFindFirstOrThrowArgs>(args?: SelectSubset<T, TeamCheckInPromiseFindFirstOrThrowArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TeamCheckInPromises that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TeamCheckInPromises
+     * const teamCheckInPromises = await prisma.teamCheckInPromise.findMany()
+     * 
+     * // Get first 10 TeamCheckInPromises
+     * const teamCheckInPromises = await prisma.teamCheckInPromise.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const teamCheckInPromiseWithIdOnly = await prisma.teamCheckInPromise.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TeamCheckInPromiseFindManyArgs>(args?: SelectSubset<T, TeamCheckInPromiseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TeamCheckInPromise.
+     * @param {TeamCheckInPromiseCreateArgs} args - Arguments to create a TeamCheckInPromise.
+     * @example
+     * // Create one TeamCheckInPromise
+     * const TeamCheckInPromise = await prisma.teamCheckInPromise.create({
+     *   data: {
+     *     // ... data to create a TeamCheckInPromise
+     *   }
+     * })
+     * 
+     */
+    create<T extends TeamCheckInPromiseCreateArgs>(args: SelectSubset<T, TeamCheckInPromiseCreateArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TeamCheckInPromises.
+     * @param {TeamCheckInPromiseCreateManyArgs} args - Arguments to create many TeamCheckInPromises.
+     * @example
+     * // Create many TeamCheckInPromises
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TeamCheckInPromiseCreateManyArgs>(args?: SelectSubset<T, TeamCheckInPromiseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TeamCheckInPromises and returns the data saved in the database.
+     * @param {TeamCheckInPromiseCreateManyAndReturnArgs} args - Arguments to create many TeamCheckInPromises.
+     * @example
+     * // Create many TeamCheckInPromises
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TeamCheckInPromises and only return the `id`
+     * const teamCheckInPromiseWithIdOnly = await prisma.teamCheckInPromise.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TeamCheckInPromiseCreateManyAndReturnArgs>(args?: SelectSubset<T, TeamCheckInPromiseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TeamCheckInPromise.
+     * @param {TeamCheckInPromiseDeleteArgs} args - Arguments to delete one TeamCheckInPromise.
+     * @example
+     * // Delete one TeamCheckInPromise
+     * const TeamCheckInPromise = await prisma.teamCheckInPromise.delete({
+     *   where: {
+     *     // ... filter to delete one TeamCheckInPromise
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TeamCheckInPromiseDeleteArgs>(args: SelectSubset<T, TeamCheckInPromiseDeleteArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TeamCheckInPromise.
+     * @param {TeamCheckInPromiseUpdateArgs} args - Arguments to update one TeamCheckInPromise.
+     * @example
+     * // Update one TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TeamCheckInPromiseUpdateArgs>(args: SelectSubset<T, TeamCheckInPromiseUpdateArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TeamCheckInPromises.
+     * @param {TeamCheckInPromiseDeleteManyArgs} args - Arguments to filter TeamCheckInPromises to delete.
+     * @example
+     * // Delete a few TeamCheckInPromises
+     * const { count } = await prisma.teamCheckInPromise.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TeamCheckInPromiseDeleteManyArgs>(args?: SelectSubset<T, TeamCheckInPromiseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamCheckInPromises.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TeamCheckInPromises
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TeamCheckInPromiseUpdateManyArgs>(args: SelectSubset<T, TeamCheckInPromiseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamCheckInPromises and returns the data updated in the database.
+     * @param {TeamCheckInPromiseUpdateManyAndReturnArgs} args - Arguments to update many TeamCheckInPromises.
+     * @example
+     * // Update many TeamCheckInPromises
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TeamCheckInPromises and only return the `id`
+     * const teamCheckInPromiseWithIdOnly = await prisma.teamCheckInPromise.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TeamCheckInPromiseUpdateManyAndReturnArgs>(args: SelectSubset<T, TeamCheckInPromiseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TeamCheckInPromise.
+     * @param {TeamCheckInPromiseUpsertArgs} args - Arguments to update or create a TeamCheckInPromise.
+     * @example
+     * // Update or create a TeamCheckInPromise
+     * const teamCheckInPromise = await prisma.teamCheckInPromise.upsert({
+     *   create: {
+     *     // ... data to create a TeamCheckInPromise
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TeamCheckInPromise we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TeamCheckInPromiseUpsertArgs>(args: SelectSubset<T, TeamCheckInPromiseUpsertArgs<ExtArgs>>): Prisma__TeamCheckInPromiseClient<$Result.GetResult<Prisma.$TeamCheckInPromisePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TeamCheckInPromises.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseCountArgs} args - Arguments to filter TeamCheckInPromises to count.
+     * @example
+     * // Count the number of TeamCheckInPromises
+     * const count = await prisma.teamCheckInPromise.count({
+     *   where: {
+     *     // ... the filter for the TeamCheckInPromises we want to count
+     *   }
+     * })
+    **/
+    count<T extends TeamCheckInPromiseCountArgs>(
+      args?: Subset<T, TeamCheckInPromiseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TeamCheckInPromiseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TeamCheckInPromise.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TeamCheckInPromiseAggregateArgs>(args: Subset<T, TeamCheckInPromiseAggregateArgs>): Prisma.PrismaPromise<GetTeamCheckInPromiseAggregateType<T>>
+
+    /**
+     * Group by TeamCheckInPromise.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCheckInPromiseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TeamCheckInPromiseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TeamCheckInPromiseGroupByArgs['orderBy'] }
+        : { orderBy?: TeamCheckInPromiseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TeamCheckInPromiseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeamCheckInPromiseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TeamCheckInPromise model
+   */
+  readonly fields: TeamCheckInPromiseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TeamCheckInPromise.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TeamCheckInPromiseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    checkIn<T extends TeamCheckInDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamCheckInDefaultArgs<ExtArgs>>): Prisma__TeamCheckInClient<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TeamCheckInPromise model
+   */
+  interface TeamCheckInPromiseFieldRefs {
+    readonly id: FieldRef<"TeamCheckInPromise", 'String'>
+    readonly checkInId: FieldRef<"TeamCheckInPromise", 'String'>
+    readonly actionItem: FieldRef<"TeamCheckInPromise", 'String'>
+    readonly owner: FieldRef<"TeamCheckInPromise", 'String'>
+    readonly deadline: FieldRef<"TeamCheckInPromise", 'DateTime'>
+    readonly status: FieldRef<"TeamCheckInPromise", 'String'>
+    readonly order: FieldRef<"TeamCheckInPromise", 'Int'>
+    readonly createdAt: FieldRef<"TeamCheckInPromise", 'DateTime'>
+    readonly updatedAt: FieldRef<"TeamCheckInPromise", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TeamCheckInPromise findUnique
+   */
+  export type TeamCheckInPromiseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckInPromise to fetch.
+     */
+    where: TeamCheckInPromiseWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckInPromise findUniqueOrThrow
+   */
+  export type TeamCheckInPromiseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckInPromise to fetch.
+     */
+    where: TeamCheckInPromiseWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckInPromise findFirst
+   */
+  export type TeamCheckInPromiseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckInPromise to fetch.
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckInPromises to fetch.
+     */
+    orderBy?: TeamCheckInPromiseOrderByWithRelationInput | TeamCheckInPromiseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamCheckInPromises.
+     */
+    cursor?: TeamCheckInPromiseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckInPromises from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckInPromises.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckInPromises.
+     */
+    distinct?: TeamCheckInPromiseScalarFieldEnum | TeamCheckInPromiseScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckInPromise findFirstOrThrow
+   */
+  export type TeamCheckInPromiseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckInPromise to fetch.
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckInPromises to fetch.
+     */
+    orderBy?: TeamCheckInPromiseOrderByWithRelationInput | TeamCheckInPromiseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamCheckInPromises.
+     */
+    cursor?: TeamCheckInPromiseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckInPromises from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckInPromises.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckInPromises.
+     */
+    distinct?: TeamCheckInPromiseScalarFieldEnum | TeamCheckInPromiseScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckInPromise findMany
+   */
+  export type TeamCheckInPromiseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter, which TeamCheckInPromises to fetch.
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamCheckInPromises to fetch.
+     */
+    orderBy?: TeamCheckInPromiseOrderByWithRelationInput | TeamCheckInPromiseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TeamCheckInPromises.
+     */
+    cursor?: TeamCheckInPromiseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamCheckInPromises from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamCheckInPromises.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamCheckInPromises.
+     */
+    distinct?: TeamCheckInPromiseScalarFieldEnum | TeamCheckInPromiseScalarFieldEnum[]
+  }
+
+  /**
+   * TeamCheckInPromise create
+   */
+  export type TeamCheckInPromiseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TeamCheckInPromise.
+     */
+    data: XOR<TeamCheckInPromiseCreateInput, TeamCheckInPromiseUncheckedCreateInput>
+  }
+
+  /**
+   * TeamCheckInPromise createMany
+   */
+  export type TeamCheckInPromiseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TeamCheckInPromises.
+     */
+    data: TeamCheckInPromiseCreateManyInput | TeamCheckInPromiseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TeamCheckInPromise createManyAndReturn
+   */
+  export type TeamCheckInPromiseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * The data used to create many TeamCheckInPromises.
+     */
+    data: TeamCheckInPromiseCreateManyInput | TeamCheckInPromiseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamCheckInPromise update
+   */
+  export type TeamCheckInPromiseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TeamCheckInPromise.
+     */
+    data: XOR<TeamCheckInPromiseUpdateInput, TeamCheckInPromiseUncheckedUpdateInput>
+    /**
+     * Choose, which TeamCheckInPromise to update.
+     */
+    where: TeamCheckInPromiseWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckInPromise updateMany
+   */
+  export type TeamCheckInPromiseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TeamCheckInPromises.
+     */
+    data: XOR<TeamCheckInPromiseUpdateManyMutationInput, TeamCheckInPromiseUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamCheckInPromises to update
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * Limit how many TeamCheckInPromises to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamCheckInPromise updateManyAndReturn
+   */
+  export type TeamCheckInPromiseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * The data used to update TeamCheckInPromises.
+     */
+    data: XOR<TeamCheckInPromiseUpdateManyMutationInput, TeamCheckInPromiseUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamCheckInPromises to update
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * Limit how many TeamCheckInPromises to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TeamCheckInPromise upsert
+   */
+  export type TeamCheckInPromiseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TeamCheckInPromise to update in case it exists.
+     */
+    where: TeamCheckInPromiseWhereUniqueInput
+    /**
+     * In case the TeamCheckInPromise found by the `where` argument doesn't exist, create a new TeamCheckInPromise with this data.
+     */
+    create: XOR<TeamCheckInPromiseCreateInput, TeamCheckInPromiseUncheckedCreateInput>
+    /**
+     * In case the TeamCheckInPromise was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TeamCheckInPromiseUpdateInput, TeamCheckInPromiseUncheckedUpdateInput>
+  }
+
+  /**
+   * TeamCheckInPromise delete
+   */
+  export type TeamCheckInPromiseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+    /**
+     * Filter which TeamCheckInPromise to delete.
+     */
+    where: TeamCheckInPromiseWhereUniqueInput
+  }
+
+  /**
+   * TeamCheckInPromise deleteMany
+   */
+  export type TeamCheckInPromiseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TeamCheckInPromises to delete
+     */
+    where?: TeamCheckInPromiseWhereInput
+    /**
+     * Limit how many TeamCheckInPromises to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TeamCheckInPromise without action
+   */
+  export type TeamCheckInPromiseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCheckInPromise
+     */
+    select?: TeamCheckInPromiseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TeamCheckInPromise
+     */
+    omit?: TeamCheckInPromiseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamCheckInPromiseInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model InstitutionStudentDataNote
    */
 
@@ -133483,8 +136544,10 @@ export namespace Prisma {
     logoutinfo: 'logoutinfo',
     checkInLat: 'checkInLat',
     checkInLng: 'checkInLng',
+    checkInAccuracy: 'checkInAccuracy',
     checkOutLat: 'checkOutLat',
     checkOutLng: 'checkOutLng',
+    checkOutAccuracy: 'checkOutAccuracy',
     lessonPlanText: 'lessonPlanText',
     lessonPlanFiles: 'lessonPlanFiles',
     isTeachingDay: 'isTeachingDay',
@@ -133509,6 +136572,9 @@ export namespace Prisma {
     days: 'days',
     compOffWorkedDate: 'compOffWorkedDate',
     compOffCreditId: 'compOffCreditId',
+    holidayName: 'holidayName',
+    medicalCertificateRequired: 'medicalCertificateRequired',
+    policyFlags: 'policyFlags',
     reason: 'reason',
     rejectionReason: 'rejectionReason',
     status: 'status',
@@ -133523,8 +136589,21 @@ export namespace Prisma {
     id: 'id',
     key: 'key',
     name: 'name',
+    code: 'code',
+    policyNote: 'policyNote',
     annualQuota: 'annualQuota',
     quarterlyQuota: 'quarterlyQuota',
+    quotaPeriod: 'quotaPeriod',
+    maxConsecutiveDays: 'maxConsecutiveDays',
+    maxConsecutiveMonths: 'maxConsecutiveMonths',
+    softMaxConsecutive: 'softMaxConsecutive',
+    minServiceDays: 'minServiceDays',
+    medicalCertificateAfterDays: 'medicalCertificateAfterDays',
+    validityDays: 'validityDays',
+    paid: 'paid',
+    holidayNameRequired: 'holidayNameRequired',
+    isSystem: 'isSystem',
+    systemType: 'systemType',
     active: 'active',
     sortOrder: 'sortOrder',
     createdAt: 'createdAt',
@@ -133824,6 +136903,9 @@ export namespace Prisma {
     bankAccountNo: 'bankAccountNo',
     bankIfsc: 'bankIfsc',
     rejectionReason: 'rejectionReason',
+    verifiedBy: 'verifiedBy',
+    verifiedAt: 'verifiedAt',
+    verificationNotes: 'verificationNotes',
     approvedBy: 'approvedBy',
     approvedAt: 'approvedAt',
     reimbursedBy: 'reimbursedBy',
@@ -134152,6 +137234,43 @@ export namespace Prisma {
   };
 
   export type FellowStudentDataNoteScalarFieldEnum = (typeof FellowStudentDataNoteScalarFieldEnum)[keyof typeof FellowStudentDataNoteScalarFieldEnum]
+
+
+  export const TeamCheckInScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    date: 'date',
+    checkInType: 'checkInType',
+    areaOfWork: 'areaOfWork',
+    topPriorities: 'topPriorities',
+    keyUpdates: 'keyUpdates',
+    toDiscussToday: 'toDiscussToday',
+    memberReflection: 'memberReflection',
+    managerNotes: 'managerNotes',
+    challenges: 'challenges',
+    directorInputs: 'directorInputs',
+    submittedAt: 'submittedAt',
+    lastEditedById: 'lastEditedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TeamCheckInScalarFieldEnum = (typeof TeamCheckInScalarFieldEnum)[keyof typeof TeamCheckInScalarFieldEnum]
+
+
+  export const TeamCheckInPromiseScalarFieldEnum: {
+    id: 'id',
+    checkInId: 'checkInId',
+    actionItem: 'actionItem',
+    owner: 'owner',
+    deadline: 'deadline',
+    status: 'status',
+    order: 'order',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TeamCheckInPromiseScalarFieldEnum = (typeof TeamCheckInPromiseScalarFieldEnum)[keyof typeof TeamCheckInPromiseScalarFieldEnum]
 
 
   export const InstitutionStudentDataNoteScalarFieldEnum: {
@@ -134528,6 +137647,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestListRelationFilter
     revertedTravel?: TravelRequestListRelationFilter
     reimbursementRequests?: ReimbursementListRelationFilter
+    reimbursementsVerified?: ReimbursementListRelationFilter
     reimbursementsApproved?: ReimbursementListRelationFilter
     reimbursementsReimbursed?: ReimbursementListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
@@ -134544,6 +137664,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentListRelationFilter
     assetAssignmentsMade?: AssetAssignmentListRelationFilter
     createdAssets?: AssetListRelationFilter
+    teamCheckIns?: TeamCheckInListRelationFilter
+    teamCheckInEdits?: TeamCheckInListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -134604,6 +137726,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestOrderByRelationAggregateInput
     revertedTravel?: TravelRequestOrderByRelationAggregateInput
     reimbursementRequests?: ReimbursementOrderByRelationAggregateInput
+    reimbursementsVerified?: ReimbursementOrderByRelationAggregateInput
     reimbursementsApproved?: ReimbursementOrderByRelationAggregateInput
     reimbursementsReimbursed?: ReimbursementOrderByRelationAggregateInput
     coachingRecords?: CoachingRecordOrderByRelationAggregateInput
@@ -134620,6 +137743,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentOrderByRelationAggregateInput
     assetAssignmentsMade?: AssetAssignmentOrderByRelationAggregateInput
     createdAssets?: AssetOrderByRelationAggregateInput
+    teamCheckIns?: TeamCheckInOrderByRelationAggregateInput
+    teamCheckInEdits?: TeamCheckInOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -134683,6 +137808,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestListRelationFilter
     revertedTravel?: TravelRequestListRelationFilter
     reimbursementRequests?: ReimbursementListRelationFilter
+    reimbursementsVerified?: ReimbursementListRelationFilter
     reimbursementsApproved?: ReimbursementListRelationFilter
     reimbursementsReimbursed?: ReimbursementListRelationFilter
     coachingRecords?: CoachingRecordListRelationFilter
@@ -134699,6 +137825,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentListRelationFilter
     assetAssignmentsMade?: AssetAssignmentListRelationFilter
     createdAssets?: AssetListRelationFilter
+    teamCheckIns?: TeamCheckInListRelationFilter
+    teamCheckInEdits?: TeamCheckInListRelationFilter
   }, "id" | "username" | "email" | "employeeId">
 
   export type UserOrderByWithAggregationInput = {
@@ -139244,8 +142372,10 @@ export namespace Prisma {
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -139272,8 +142402,10 @@ export namespace Prisma {
     logoutinfo?: SortOrderInput | SortOrder
     checkInLat?: SortOrderInput | SortOrder
     checkInLng?: SortOrderInput | SortOrder
+    checkInAccuracy?: SortOrderInput | SortOrder
     checkOutLat?: SortOrderInput | SortOrder
     checkOutLng?: SortOrderInput | SortOrder
+    checkOutAccuracy?: SortOrderInput | SortOrder
     lessonPlanText?: SortOrderInput | SortOrder
     lessonPlanFiles?: SortOrderInput | SortOrder
     isTeachingDay?: SortOrderInput | SortOrder
@@ -139303,8 +142435,10 @@ export namespace Prisma {
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -139331,8 +142465,10 @@ export namespace Prisma {
     logoutinfo?: SortOrderInput | SortOrder
     checkInLat?: SortOrderInput | SortOrder
     checkInLng?: SortOrderInput | SortOrder
+    checkInAccuracy?: SortOrderInput | SortOrder
     checkOutLat?: SortOrderInput | SortOrder
     checkOutLng?: SortOrderInput | SortOrder
+    checkOutAccuracy?: SortOrderInput | SortOrder
     lessonPlanText?: SortOrderInput | SortOrder
     lessonPlanFiles?: SortOrderInput | SortOrder
     isTeachingDay?: SortOrderInput | SortOrder
@@ -139366,8 +142502,10 @@ export namespace Prisma {
     logoutinfo?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     checkInLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkInAccuracy?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkOutLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkOutAccuracy?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     lessonPlanText?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableWithAggregatesFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableWithAggregatesFilter<"AttendanceLog"> | boolean | null
@@ -139392,6 +142530,9 @@ export namespace Prisma {
     days?: FloatFilter<"Leave"> | number
     compOffWorkedDate?: DateTimeNullableFilter<"Leave"> | Date | string | null
     compOffCreditId?: StringNullableFilter<"Leave"> | string | null
+    holidayName?: StringNullableFilter<"Leave"> | string | null
+    medicalCertificateRequired?: BoolFilter<"Leave"> | boolean
+    policyFlags?: StringNullableListFilter<"Leave">
     reason?: StringNullableFilter<"Leave"> | string | null
     rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
@@ -139412,6 +142553,9 @@ export namespace Prisma {
     days?: SortOrder
     compOffWorkedDate?: SortOrderInput | SortOrder
     compOffCreditId?: SortOrderInput | SortOrder
+    holidayName?: SortOrderInput | SortOrder
+    medicalCertificateRequired?: SortOrder
+    policyFlags?: SortOrder
     reason?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -139435,6 +142579,9 @@ export namespace Prisma {
     endDate?: DateTimeNullableFilter<"Leave"> | Date | string | null
     days?: FloatFilter<"Leave"> | number
     compOffWorkedDate?: DateTimeNullableFilter<"Leave"> | Date | string | null
+    holidayName?: StringNullableFilter<"Leave"> | string | null
+    medicalCertificateRequired?: BoolFilter<"Leave"> | boolean
+    policyFlags?: StringNullableListFilter<"Leave">
     reason?: StringNullableFilter<"Leave"> | string | null
     rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
@@ -139455,6 +142602,9 @@ export namespace Prisma {
     days?: SortOrder
     compOffWorkedDate?: SortOrderInput | SortOrder
     compOffCreditId?: SortOrderInput | SortOrder
+    holidayName?: SortOrderInput | SortOrder
+    medicalCertificateRequired?: SortOrder
+    policyFlags?: SortOrder
     reason?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -139481,6 +142631,9 @@ export namespace Prisma {
     days?: FloatWithAggregatesFilter<"Leave"> | number
     compOffWorkedDate?: DateTimeNullableWithAggregatesFilter<"Leave"> | Date | string | null
     compOffCreditId?: StringNullableWithAggregatesFilter<"Leave"> | string | null
+    holidayName?: StringNullableWithAggregatesFilter<"Leave"> | string | null
+    medicalCertificateRequired?: BoolWithAggregatesFilter<"Leave"> | boolean
+    policyFlags?: StringNullableListFilter<"Leave">
     reason?: StringNullableWithAggregatesFilter<"Leave"> | string | null
     rejectionReason?: StringNullableWithAggregatesFilter<"Leave"> | string | null
     status?: EnumLeaveStatusWithAggregatesFilter<"Leave"> | $Enums.LeaveStatus
@@ -139495,8 +142648,21 @@ export namespace Prisma {
     id?: StringFilter<"LeaveTypeConfig"> | string
     key?: StringFilter<"LeaveTypeConfig"> | string
     name?: StringFilter<"LeaveTypeConfig"> | string
+    code?: StringNullableFilter<"LeaveTypeConfig"> | string | null
+    policyNote?: StringNullableFilter<"LeaveTypeConfig"> | string | null
     annualQuota?: FloatFilter<"LeaveTypeConfig"> | number
     quarterlyQuota?: FloatNullableFilter<"LeaveTypeConfig"> | number | null
+    quotaPeriod?: StringFilter<"LeaveTypeConfig"> | string
+    maxConsecutiveDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    maxConsecutiveMonths?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    softMaxConsecutive?: BoolFilter<"LeaveTypeConfig"> | boolean
+    minServiceDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    medicalCertificateAfterDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    validityDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    paid?: BoolFilter<"LeaveTypeConfig"> | boolean
+    holidayNameRequired?: BoolFilter<"LeaveTypeConfig"> | boolean
+    isSystem?: BoolFilter<"LeaveTypeConfig"> | boolean
+    systemType?: StringNullableFilter<"LeaveTypeConfig"> | string | null
     active?: BoolFilter<"LeaveTypeConfig"> | boolean
     sortOrder?: IntFilter<"LeaveTypeConfig"> | number
     createdAt?: DateTimeFilter<"LeaveTypeConfig"> | Date | string
@@ -139507,8 +142673,21 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     name?: SortOrder
+    code?: SortOrderInput | SortOrder
+    policyNote?: SortOrderInput | SortOrder
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrderInput | SortOrder
+    quotaPeriod?: SortOrder
+    maxConsecutiveDays?: SortOrderInput | SortOrder
+    maxConsecutiveMonths?: SortOrderInput | SortOrder
+    softMaxConsecutive?: SortOrder
+    minServiceDays?: SortOrderInput | SortOrder
+    medicalCertificateAfterDays?: SortOrderInput | SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    paid?: SortOrder
+    holidayNameRequired?: SortOrder
+    isSystem?: SortOrder
+    systemType?: SortOrderInput | SortOrder
     active?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
@@ -139522,8 +142701,21 @@ export namespace Prisma {
     OR?: LeaveTypeConfigWhereInput[]
     NOT?: LeaveTypeConfigWhereInput | LeaveTypeConfigWhereInput[]
     name?: StringFilter<"LeaveTypeConfig"> | string
+    code?: StringNullableFilter<"LeaveTypeConfig"> | string | null
+    policyNote?: StringNullableFilter<"LeaveTypeConfig"> | string | null
     annualQuota?: FloatFilter<"LeaveTypeConfig"> | number
     quarterlyQuota?: FloatNullableFilter<"LeaveTypeConfig"> | number | null
+    quotaPeriod?: StringFilter<"LeaveTypeConfig"> | string
+    maxConsecutiveDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    maxConsecutiveMonths?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    softMaxConsecutive?: BoolFilter<"LeaveTypeConfig"> | boolean
+    minServiceDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    medicalCertificateAfterDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    validityDays?: IntNullableFilter<"LeaveTypeConfig"> | number | null
+    paid?: BoolFilter<"LeaveTypeConfig"> | boolean
+    holidayNameRequired?: BoolFilter<"LeaveTypeConfig"> | boolean
+    isSystem?: BoolFilter<"LeaveTypeConfig"> | boolean
+    systemType?: StringNullableFilter<"LeaveTypeConfig"> | string | null
     active?: BoolFilter<"LeaveTypeConfig"> | boolean
     sortOrder?: IntFilter<"LeaveTypeConfig"> | number
     createdAt?: DateTimeFilter<"LeaveTypeConfig"> | Date | string
@@ -139534,8 +142726,21 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     name?: SortOrder
+    code?: SortOrderInput | SortOrder
+    policyNote?: SortOrderInput | SortOrder
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrderInput | SortOrder
+    quotaPeriod?: SortOrder
+    maxConsecutiveDays?: SortOrderInput | SortOrder
+    maxConsecutiveMonths?: SortOrderInput | SortOrder
+    softMaxConsecutive?: SortOrder
+    minServiceDays?: SortOrderInput | SortOrder
+    medicalCertificateAfterDays?: SortOrderInput | SortOrder
+    validityDays?: SortOrderInput | SortOrder
+    paid?: SortOrder
+    holidayNameRequired?: SortOrder
+    isSystem?: SortOrder
+    systemType?: SortOrderInput | SortOrder
     active?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
@@ -139554,8 +142759,21 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"LeaveTypeConfig"> | string
     key?: StringWithAggregatesFilter<"LeaveTypeConfig"> | string
     name?: StringWithAggregatesFilter<"LeaveTypeConfig"> | string
+    code?: StringNullableWithAggregatesFilter<"LeaveTypeConfig"> | string | null
+    policyNote?: StringNullableWithAggregatesFilter<"LeaveTypeConfig"> | string | null
     annualQuota?: FloatWithAggregatesFilter<"LeaveTypeConfig"> | number
     quarterlyQuota?: FloatNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    quotaPeriod?: StringWithAggregatesFilter<"LeaveTypeConfig"> | string
+    maxConsecutiveDays?: IntNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    maxConsecutiveMonths?: IntNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    softMaxConsecutive?: BoolWithAggregatesFilter<"LeaveTypeConfig"> | boolean
+    minServiceDays?: IntNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    medicalCertificateAfterDays?: IntNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    validityDays?: IntNullableWithAggregatesFilter<"LeaveTypeConfig"> | number | null
+    paid?: BoolWithAggregatesFilter<"LeaveTypeConfig"> | boolean
+    holidayNameRequired?: BoolWithAggregatesFilter<"LeaveTypeConfig"> | boolean
+    isSystem?: BoolWithAggregatesFilter<"LeaveTypeConfig"> | boolean
+    systemType?: StringNullableWithAggregatesFilter<"LeaveTypeConfig"> | string | null
     active?: BoolWithAggregatesFilter<"LeaveTypeConfig"> | boolean
     sortOrder?: IntWithAggregatesFilter<"LeaveTypeConfig"> | number
     createdAt?: DateTimeWithAggregatesFilter<"LeaveTypeConfig"> | Date | string
@@ -141026,6 +144244,9 @@ export namespace Prisma {
     bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
     bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
     rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"Reimbursement"> | string | null
     approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
     reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
@@ -141036,6 +144257,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
     updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    verifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     reimburser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: ReimbursementItemListRelationFilter
@@ -141055,6 +144277,9 @@ export namespace Prisma {
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    verifiedBy?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    verificationNotes?: SortOrderInput | SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     reimbursedBy?: SortOrderInput | SortOrder
@@ -141065,6 +144290,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    verifier?: UserOrderByWithRelationInput
     approver?: UserOrderByWithRelationInput
     reimburser?: UserOrderByWithRelationInput
     items?: ReimbursementItemOrderByRelationAggregateInput
@@ -141087,6 +144313,9 @@ export namespace Prisma {
     bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
     bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
     rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"Reimbursement"> | string | null
     approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
     reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
@@ -141097,6 +144326,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
     updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    verifier?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     approver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     reimburser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     items?: ReimbursementItemListRelationFilter
@@ -141116,6 +144346,9 @@ export namespace Prisma {
     bankAccountNo?: SortOrderInput | SortOrder
     bankIfsc?: SortOrderInput | SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    verifiedBy?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    verificationNotes?: SortOrderInput | SortOrder
     approvedBy?: SortOrderInput | SortOrder
     approvedAt?: SortOrderInput | SortOrder
     reimbursedBy?: SortOrderInput | SortOrder
@@ -141149,6 +144382,9 @@ export namespace Prisma {
     bankAccountNo?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
     bankIfsc?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
     rejectionReason?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    verifiedBy?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"Reimbursement"> | Date | string | null
+    verificationNotes?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
     approvedBy?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
     approvedAt?: DateTimeNullableWithAggregatesFilter<"Reimbursement"> | Date | string | null
     reimbursedBy?: StringNullableWithAggregatesFilter<"Reimbursement"> | string | null
@@ -142876,6 +146112,199 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"FellowStudentDataNote"> | Date | string
   }
 
+  export type TeamCheckInWhereInput = {
+    AND?: TeamCheckInWhereInput | TeamCheckInWhereInput[]
+    OR?: TeamCheckInWhereInput[]
+    NOT?: TeamCheckInWhereInput | TeamCheckInWhereInput[]
+    id?: StringFilter<"TeamCheckIn"> | string
+    userId?: StringFilter<"TeamCheckIn"> | string
+    date?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    checkInType?: StringFilter<"TeamCheckIn"> | string
+    areaOfWork?: StringNullableFilter<"TeamCheckIn"> | string | null
+    topPriorities?: StringNullableFilter<"TeamCheckIn"> | string | null
+    keyUpdates?: StringNullableFilter<"TeamCheckIn"> | string | null
+    toDiscussToday?: StringNullableFilter<"TeamCheckIn"> | string | null
+    memberReflection?: StringNullableFilter<"TeamCheckIn"> | string | null
+    managerNotes?: StringNullableFilter<"TeamCheckIn"> | string | null
+    challenges?: StringNullableFilter<"TeamCheckIn"> | string | null
+    directorInputs?: StringNullableFilter<"TeamCheckIn"> | string | null
+    submittedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    lastEditedById?: StringNullableFilter<"TeamCheckIn"> | string | null
+    createdAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    lastEditedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    promises?: TeamCheckInPromiseListRelationFilter
+  }
+
+  export type TeamCheckInOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    checkInType?: SortOrder
+    areaOfWork?: SortOrderInput | SortOrder
+    topPriorities?: SortOrderInput | SortOrder
+    keyUpdates?: SortOrderInput | SortOrder
+    toDiscussToday?: SortOrderInput | SortOrder
+    memberReflection?: SortOrderInput | SortOrder
+    managerNotes?: SortOrderInput | SortOrder
+    challenges?: SortOrderInput | SortOrder
+    directorInputs?: SortOrderInput | SortOrder
+    submittedAt?: SortOrder
+    lastEditedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    lastEditedBy?: UserOrderByWithRelationInput
+    promises?: TeamCheckInPromiseOrderByRelationAggregateInput
+  }
+
+  export type TeamCheckInWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TeamCheckInWhereInput | TeamCheckInWhereInput[]
+    OR?: TeamCheckInWhereInput[]
+    NOT?: TeamCheckInWhereInput | TeamCheckInWhereInput[]
+    userId?: StringFilter<"TeamCheckIn"> | string
+    date?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    checkInType?: StringFilter<"TeamCheckIn"> | string
+    areaOfWork?: StringNullableFilter<"TeamCheckIn"> | string | null
+    topPriorities?: StringNullableFilter<"TeamCheckIn"> | string | null
+    keyUpdates?: StringNullableFilter<"TeamCheckIn"> | string | null
+    toDiscussToday?: StringNullableFilter<"TeamCheckIn"> | string | null
+    memberReflection?: StringNullableFilter<"TeamCheckIn"> | string | null
+    managerNotes?: StringNullableFilter<"TeamCheckIn"> | string | null
+    challenges?: StringNullableFilter<"TeamCheckIn"> | string | null
+    directorInputs?: StringNullableFilter<"TeamCheckIn"> | string | null
+    submittedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    lastEditedById?: StringNullableFilter<"TeamCheckIn"> | string | null
+    createdAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    lastEditedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    promises?: TeamCheckInPromiseListRelationFilter
+  }, "id">
+
+  export type TeamCheckInOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    checkInType?: SortOrder
+    areaOfWork?: SortOrderInput | SortOrder
+    topPriorities?: SortOrderInput | SortOrder
+    keyUpdates?: SortOrderInput | SortOrder
+    toDiscussToday?: SortOrderInput | SortOrder
+    memberReflection?: SortOrderInput | SortOrder
+    managerNotes?: SortOrderInput | SortOrder
+    challenges?: SortOrderInput | SortOrder
+    directorInputs?: SortOrderInput | SortOrder
+    submittedAt?: SortOrder
+    lastEditedById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TeamCheckInCountOrderByAggregateInput
+    _max?: TeamCheckInMaxOrderByAggregateInput
+    _min?: TeamCheckInMinOrderByAggregateInput
+  }
+
+  export type TeamCheckInScalarWhereWithAggregatesInput = {
+    AND?: TeamCheckInScalarWhereWithAggregatesInput | TeamCheckInScalarWhereWithAggregatesInput[]
+    OR?: TeamCheckInScalarWhereWithAggregatesInput[]
+    NOT?: TeamCheckInScalarWhereWithAggregatesInput | TeamCheckInScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TeamCheckIn"> | string
+    userId?: StringWithAggregatesFilter<"TeamCheckIn"> | string
+    date?: DateTimeWithAggregatesFilter<"TeamCheckIn"> | Date | string
+    checkInType?: StringWithAggregatesFilter<"TeamCheckIn"> | string
+    areaOfWork?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    topPriorities?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    keyUpdates?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    toDiscussToday?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    memberReflection?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    managerNotes?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    challenges?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    directorInputs?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    submittedAt?: DateTimeWithAggregatesFilter<"TeamCheckIn"> | Date | string
+    lastEditedById?: StringNullableWithAggregatesFilter<"TeamCheckIn"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TeamCheckIn"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TeamCheckIn"> | Date | string
+  }
+
+  export type TeamCheckInPromiseWhereInput = {
+    AND?: TeamCheckInPromiseWhereInput | TeamCheckInPromiseWhereInput[]
+    OR?: TeamCheckInPromiseWhereInput[]
+    NOT?: TeamCheckInPromiseWhereInput | TeamCheckInPromiseWhereInput[]
+    id?: StringFilter<"TeamCheckInPromise"> | string
+    checkInId?: StringFilter<"TeamCheckInPromise"> | string
+    actionItem?: StringFilter<"TeamCheckInPromise"> | string
+    owner?: StringNullableFilter<"TeamCheckInPromise"> | string | null
+    deadline?: DateTimeNullableFilter<"TeamCheckInPromise"> | Date | string | null
+    status?: StringFilter<"TeamCheckInPromise"> | string
+    order?: IntFilter<"TeamCheckInPromise"> | number
+    createdAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+    checkIn?: XOR<TeamCheckInScalarRelationFilter, TeamCheckInWhereInput>
+  }
+
+  export type TeamCheckInPromiseOrderByWithRelationInput = {
+    id?: SortOrder
+    checkInId?: SortOrder
+    actionItem?: SortOrder
+    owner?: SortOrderInput | SortOrder
+    deadline?: SortOrderInput | SortOrder
+    status?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    checkIn?: TeamCheckInOrderByWithRelationInput
+  }
+
+  export type TeamCheckInPromiseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TeamCheckInPromiseWhereInput | TeamCheckInPromiseWhereInput[]
+    OR?: TeamCheckInPromiseWhereInput[]
+    NOT?: TeamCheckInPromiseWhereInput | TeamCheckInPromiseWhereInput[]
+    checkInId?: StringFilter<"TeamCheckInPromise"> | string
+    actionItem?: StringFilter<"TeamCheckInPromise"> | string
+    owner?: StringNullableFilter<"TeamCheckInPromise"> | string | null
+    deadline?: DateTimeNullableFilter<"TeamCheckInPromise"> | Date | string | null
+    status?: StringFilter<"TeamCheckInPromise"> | string
+    order?: IntFilter<"TeamCheckInPromise"> | number
+    createdAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+    checkIn?: XOR<TeamCheckInScalarRelationFilter, TeamCheckInWhereInput>
+  }, "id">
+
+  export type TeamCheckInPromiseOrderByWithAggregationInput = {
+    id?: SortOrder
+    checkInId?: SortOrder
+    actionItem?: SortOrder
+    owner?: SortOrderInput | SortOrder
+    deadline?: SortOrderInput | SortOrder
+    status?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TeamCheckInPromiseCountOrderByAggregateInput
+    _avg?: TeamCheckInPromiseAvgOrderByAggregateInput
+    _max?: TeamCheckInPromiseMaxOrderByAggregateInput
+    _min?: TeamCheckInPromiseMinOrderByAggregateInput
+    _sum?: TeamCheckInPromiseSumOrderByAggregateInput
+  }
+
+  export type TeamCheckInPromiseScalarWhereWithAggregatesInput = {
+    AND?: TeamCheckInPromiseScalarWhereWithAggregatesInput | TeamCheckInPromiseScalarWhereWithAggregatesInput[]
+    OR?: TeamCheckInPromiseScalarWhereWithAggregatesInput[]
+    NOT?: TeamCheckInPromiseScalarWhereWithAggregatesInput | TeamCheckInPromiseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TeamCheckInPromise"> | string
+    checkInId?: StringWithAggregatesFilter<"TeamCheckInPromise"> | string
+    actionItem?: StringWithAggregatesFilter<"TeamCheckInPromise"> | string
+    owner?: StringNullableWithAggregatesFilter<"TeamCheckInPromise"> | string | null
+    deadline?: DateTimeNullableWithAggregatesFilter<"TeamCheckInPromise"> | Date | string | null
+    status?: StringWithAggregatesFilter<"TeamCheckInPromise"> | string
+    order?: IntWithAggregatesFilter<"TeamCheckInPromise"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"TeamCheckInPromise"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TeamCheckInPromise"> | Date | string
+  }
+
   export type InstitutionStudentDataNoteWhereInput = {
     AND?: InstitutionStudentDataNoteWhereInput | InstitutionStudentDataNoteWhereInput[]
     OR?: InstitutionStudentDataNoteWhereInput[]
@@ -143084,6 +146513,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -143100,6 +146530,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -143157,6 +146589,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -143173,6 +146606,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUpdateInput = {
@@ -143230,6 +146665,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -143246,6 +146682,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -143303,6 +146741,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -143319,6 +146758,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -148308,8 +151749,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -148336,8 +151779,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -148362,8 +151807,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -148390,8 +151837,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -148417,8 +151866,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -148443,8 +151894,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -148470,8 +151923,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -148491,6 +151946,9 @@ export namespace Prisma {
     endDate?: Date | string | null
     days?: number
     compOffWorkedDate?: Date | string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -148511,6 +151969,9 @@ export namespace Prisma {
     days?: number
     compOffWorkedDate?: Date | string | null
     compOffCreditId?: string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -148527,6 +151988,9 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -148547,6 +152011,9 @@ export namespace Prisma {
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     compOffCreditId?: NullableStringFieldUpdateOperationsInput | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -148565,6 +152032,9 @@ export namespace Prisma {
     days?: number
     compOffWorkedDate?: Date | string | null
     compOffCreditId?: string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -148581,6 +152051,9 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -148599,6 +152072,9 @@ export namespace Prisma {
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     compOffCreditId?: NullableStringFieldUpdateOperationsInput | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -148610,8 +152086,21 @@ export namespace Prisma {
     id?: string
     key: string
     name: string
+    code?: string | null
+    policyNote?: string | null
     annualQuota?: number
     quarterlyQuota?: number | null
+    quotaPeriod?: string
+    maxConsecutiveDays?: number | null
+    maxConsecutiveMonths?: number | null
+    softMaxConsecutive?: boolean
+    minServiceDays?: number | null
+    medicalCertificateAfterDays?: number | null
+    validityDays?: number | null
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: string | null
     active?: boolean
     sortOrder?: number
     createdAt?: Date | string
@@ -148622,8 +152111,21 @@ export namespace Prisma {
     id?: string
     key: string
     name: string
+    code?: string | null
+    policyNote?: string | null
     annualQuota?: number
     quarterlyQuota?: number | null
+    quotaPeriod?: string
+    maxConsecutiveDays?: number | null
+    maxConsecutiveMonths?: number | null
+    softMaxConsecutive?: boolean
+    minServiceDays?: number | null
+    medicalCertificateAfterDays?: number | null
+    validityDays?: number | null
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: string | null
     active?: boolean
     sortOrder?: number
     createdAt?: Date | string
@@ -148634,8 +152136,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    policyNote?: NullableStringFieldUpdateOperationsInput | string | null
     annualQuota?: FloatFieldUpdateOperationsInput | number
     quarterlyQuota?: NullableFloatFieldUpdateOperationsInput | number | null
+    quotaPeriod?: StringFieldUpdateOperationsInput | string
+    maxConsecutiveDays?: NullableIntFieldUpdateOperationsInput | number | null
+    maxConsecutiveMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    softMaxConsecutive?: BoolFieldUpdateOperationsInput | boolean
+    minServiceDays?: NullableIntFieldUpdateOperationsInput | number | null
+    medicalCertificateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    paid?: BoolFieldUpdateOperationsInput | boolean
+    holidayNameRequired?: BoolFieldUpdateOperationsInput | boolean
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -148646,8 +152161,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    policyNote?: NullableStringFieldUpdateOperationsInput | string | null
     annualQuota?: FloatFieldUpdateOperationsInput | number
     quarterlyQuota?: NullableFloatFieldUpdateOperationsInput | number | null
+    quotaPeriod?: StringFieldUpdateOperationsInput | string
+    maxConsecutiveDays?: NullableIntFieldUpdateOperationsInput | number | null
+    maxConsecutiveMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    softMaxConsecutive?: BoolFieldUpdateOperationsInput | boolean
+    minServiceDays?: NullableIntFieldUpdateOperationsInput | number | null
+    medicalCertificateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    paid?: BoolFieldUpdateOperationsInput | boolean
+    holidayNameRequired?: BoolFieldUpdateOperationsInput | boolean
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -148658,8 +152186,21 @@ export namespace Prisma {
     id?: string
     key: string
     name: string
+    code?: string | null
+    policyNote?: string | null
     annualQuota?: number
     quarterlyQuota?: number | null
+    quotaPeriod?: string
+    maxConsecutiveDays?: number | null
+    maxConsecutiveMonths?: number | null
+    softMaxConsecutive?: boolean
+    minServiceDays?: number | null
+    medicalCertificateAfterDays?: number | null
+    validityDays?: number | null
+    paid?: boolean
+    holidayNameRequired?: boolean
+    isSystem?: boolean
+    systemType?: string | null
     active?: boolean
     sortOrder?: number
     createdAt?: Date | string
@@ -148670,8 +152211,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    policyNote?: NullableStringFieldUpdateOperationsInput | string | null
     annualQuota?: FloatFieldUpdateOperationsInput | number
     quarterlyQuota?: NullableFloatFieldUpdateOperationsInput | number | null
+    quotaPeriod?: StringFieldUpdateOperationsInput | string
+    maxConsecutiveDays?: NullableIntFieldUpdateOperationsInput | number | null
+    maxConsecutiveMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    softMaxConsecutive?: BoolFieldUpdateOperationsInput | boolean
+    minServiceDays?: NullableIntFieldUpdateOperationsInput | number | null
+    medicalCertificateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    paid?: BoolFieldUpdateOperationsInput | boolean
+    holidayNameRequired?: BoolFieldUpdateOperationsInput | boolean
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -148682,8 +152236,21 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     key?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    policyNote?: NullableStringFieldUpdateOperationsInput | string | null
     annualQuota?: FloatFieldUpdateOperationsInput | number
     quarterlyQuota?: NullableFloatFieldUpdateOperationsInput | number | null
+    quotaPeriod?: StringFieldUpdateOperationsInput | string
+    maxConsecutiveDays?: NullableIntFieldUpdateOperationsInput | number | null
+    maxConsecutiveMonths?: NullableIntFieldUpdateOperationsInput | number | null
+    softMaxConsecutive?: BoolFieldUpdateOperationsInput | boolean
+    minServiceDays?: NullableIntFieldUpdateOperationsInput | number | null
+    medicalCertificateAfterDays?: NullableIntFieldUpdateOperationsInput | number | null
+    validityDays?: NullableIntFieldUpdateOperationsInput | number | null
+    paid?: BoolFieldUpdateOperationsInput | boolean
+    holidayNameRequired?: BoolFieldUpdateOperationsInput | boolean
+    isSystem?: BoolFieldUpdateOperationsInput | boolean
+    systemType?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150254,6 +153821,8 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
     paymentMode?: string | null
@@ -150262,6 +153831,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    verifier?: UserCreateNestedOneWithoutReimbursementsVerifiedInput
     approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
     reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
     items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
@@ -150281,6 +153851,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
@@ -150306,6 +153879,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -150314,6 +153889,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    verifier?: UserUpdateOneWithoutReimbursementsVerifiedNestedInput
     approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
     reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
     items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
@@ -150333,6 +153909,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -150359,6 +153938,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
@@ -150383,6 +153965,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -150406,6 +153990,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -152213,6 +155800,224 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TeamCheckInCreateInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeamCheckInsInput
+    lastEditedBy?: UserCreateNestedOneWithoutTeamCheckInEditsInput
+    promises?: TeamCheckInPromiseCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInUncheckedCreateInput = {
+    id?: string
+    userId: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    lastEditedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promises?: TeamCheckInPromiseUncheckedCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeamCheckInsNestedInput
+    lastEditedBy?: UserUpdateOneWithoutTeamCheckInEditsNestedInput
+    promises?: TeamCheckInPromiseUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promises?: TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInCreateManyInput = {
+    id?: string
+    userId: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    lastEditedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseCreateInput = {
+    id?: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    checkIn: TeamCheckInCreateNestedOneWithoutPromisesInput
+  }
+
+  export type TeamCheckInPromiseUncheckedCreateInput = {
+    id?: string
+    checkInId: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInPromiseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkIn?: TeamCheckInUpdateOneRequiredWithoutPromisesNestedInput
+  }
+
+  export type TeamCheckInPromiseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkInId?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseCreateManyInput = {
+    id?: string
+    checkInId: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInPromiseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    checkInId?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type InstitutionStudentDataNoteCreateInput = {
     id?: string
     scopeType: string
@@ -152653,6 +156458,12 @@ export namespace Prisma {
     none?: AssetWhereInput
   }
 
+  export type TeamCheckInListRelationFilter = {
+    every?: TeamCheckInWhereInput
+    some?: TeamCheckInWhereInput
+    none?: TeamCheckInWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -152746,6 +156557,10 @@ export namespace Prisma {
   }
 
   export type AssetOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TeamCheckInOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -155966,8 +159781,10 @@ export namespace Prisma {
     logoutinfo?: SortOrder
     checkInLat?: SortOrder
     checkInLng?: SortOrder
+    checkInAccuracy?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
+    checkOutAccuracy?: SortOrder
     lessonPlanText?: SortOrder
     lessonPlanFiles?: SortOrder
     isTeachingDay?: SortOrder
@@ -155981,8 +159798,10 @@ export namespace Prisma {
   export type AttendanceLogAvgOrderByAggregateInput = {
     checkInLat?: SortOrder
     checkInLng?: SortOrder
+    checkInAccuracy?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
+    checkOutAccuracy?: SortOrder
     workSeconds?: SortOrder
   }
 
@@ -156001,8 +159820,10 @@ export namespace Prisma {
     logoutinfo?: SortOrder
     checkInLat?: SortOrder
     checkInLng?: SortOrder
+    checkInAccuracy?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
+    checkOutAccuracy?: SortOrder
     lessonPlanText?: SortOrder
     isTeachingDay?: SortOrder
     checkInAt?: SortOrder
@@ -156027,8 +159848,10 @@ export namespace Prisma {
     logoutinfo?: SortOrder
     checkInLat?: SortOrder
     checkInLng?: SortOrder
+    checkInAccuracy?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
+    checkOutAccuracy?: SortOrder
     lessonPlanText?: SortOrder
     isTeachingDay?: SortOrder
     checkInAt?: SortOrder
@@ -156041,8 +159864,10 @@ export namespace Prisma {
   export type AttendanceLogSumOrderByAggregateInput = {
     checkInLat?: SortOrder
     checkInLng?: SortOrder
+    checkInAccuracy?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
+    checkOutAccuracy?: SortOrder
     workSeconds?: SortOrder
   }
 
@@ -156077,6 +159902,9 @@ export namespace Prisma {
     days?: SortOrder
     compOffWorkedDate?: SortOrder
     compOffCreditId?: SortOrder
+    holidayName?: SortOrder
+    medicalCertificateRequired?: SortOrder
+    policyFlags?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
     status?: SortOrder
@@ -156099,6 +159927,8 @@ export namespace Prisma {
     days?: SortOrder
     compOffWorkedDate?: SortOrder
     compOffCreditId?: SortOrder
+    holidayName?: SortOrder
+    medicalCertificateRequired?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
     status?: SortOrder
@@ -156117,6 +159947,8 @@ export namespace Prisma {
     days?: SortOrder
     compOffWorkedDate?: SortOrder
     compOffCreditId?: SortOrder
+    holidayName?: SortOrder
+    medicalCertificateRequired?: SortOrder
     reason?: SortOrder
     rejectionReason?: SortOrder
     status?: SortOrder
@@ -156142,8 +159974,21 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    policyNote?: SortOrder
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrder
+    quotaPeriod?: SortOrder
+    maxConsecutiveDays?: SortOrder
+    maxConsecutiveMonths?: SortOrder
+    softMaxConsecutive?: SortOrder
+    minServiceDays?: SortOrder
+    medicalCertificateAfterDays?: SortOrder
+    validityDays?: SortOrder
+    paid?: SortOrder
+    holidayNameRequired?: SortOrder
+    isSystem?: SortOrder
+    systemType?: SortOrder
     active?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
@@ -156153,6 +159998,11 @@ export namespace Prisma {
   export type LeaveTypeConfigAvgOrderByAggregateInput = {
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrder
+    maxConsecutiveDays?: SortOrder
+    maxConsecutiveMonths?: SortOrder
+    minServiceDays?: SortOrder
+    medicalCertificateAfterDays?: SortOrder
+    validityDays?: SortOrder
     sortOrder?: SortOrder
   }
 
@@ -156160,8 +160010,21 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    policyNote?: SortOrder
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrder
+    quotaPeriod?: SortOrder
+    maxConsecutiveDays?: SortOrder
+    maxConsecutiveMonths?: SortOrder
+    softMaxConsecutive?: SortOrder
+    minServiceDays?: SortOrder
+    medicalCertificateAfterDays?: SortOrder
+    validityDays?: SortOrder
+    paid?: SortOrder
+    holidayNameRequired?: SortOrder
+    isSystem?: SortOrder
+    systemType?: SortOrder
     active?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
@@ -156172,8 +160035,21 @@ export namespace Prisma {
     id?: SortOrder
     key?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    policyNote?: SortOrder
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrder
+    quotaPeriod?: SortOrder
+    maxConsecutiveDays?: SortOrder
+    maxConsecutiveMonths?: SortOrder
+    softMaxConsecutive?: SortOrder
+    minServiceDays?: SortOrder
+    medicalCertificateAfterDays?: SortOrder
+    validityDays?: SortOrder
+    paid?: SortOrder
+    holidayNameRequired?: SortOrder
+    isSystem?: SortOrder
+    systemType?: SortOrder
     active?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
@@ -156183,6 +160059,11 @@ export namespace Prisma {
   export type LeaveTypeConfigSumOrderByAggregateInput = {
     annualQuota?: SortOrder
     quarterlyQuota?: SortOrder
+    maxConsecutiveDays?: SortOrder
+    maxConsecutiveMonths?: SortOrder
+    minServiceDays?: SortOrder
+    medicalCertificateAfterDays?: SortOrder
+    validityDays?: SortOrder
     sortOrder?: SortOrder
   }
 
@@ -157040,6 +160921,9 @@ export namespace Prisma {
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     rejectionReason?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
     reimbursedBy?: SortOrder
@@ -157071,6 +160955,9 @@ export namespace Prisma {
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     rejectionReason?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
     reimbursedBy?: SortOrder
@@ -157096,6 +160983,9 @@ export namespace Prisma {
     bankAccountNo?: SortOrder
     bankIfsc?: SortOrder
     rejectionReason?: SortOrder
+    verifiedBy?: SortOrder
+    verifiedAt?: SortOrder
+    verificationNotes?: SortOrder
     approvedBy?: SortOrder
     approvedAt?: SortOrder
     reimbursedBy?: SortOrder
@@ -158174,6 +162064,122 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type TeamCheckInPromiseListRelationFilter = {
+    every?: TeamCheckInPromiseWhereInput
+    some?: TeamCheckInPromiseWhereInput
+    none?: TeamCheckInPromiseWhereInput
+  }
+
+  export type TeamCheckInPromiseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TeamCheckInCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    checkInType?: SortOrder
+    areaOfWork?: SortOrder
+    topPriorities?: SortOrder
+    keyUpdates?: SortOrder
+    toDiscussToday?: SortOrder
+    memberReflection?: SortOrder
+    managerNotes?: SortOrder
+    challenges?: SortOrder
+    directorInputs?: SortOrder
+    submittedAt?: SortOrder
+    lastEditedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    checkInType?: SortOrder
+    areaOfWork?: SortOrder
+    topPriorities?: SortOrder
+    keyUpdates?: SortOrder
+    toDiscussToday?: SortOrder
+    memberReflection?: SortOrder
+    managerNotes?: SortOrder
+    challenges?: SortOrder
+    directorInputs?: SortOrder
+    submittedAt?: SortOrder
+    lastEditedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    date?: SortOrder
+    checkInType?: SortOrder
+    areaOfWork?: SortOrder
+    topPriorities?: SortOrder
+    keyUpdates?: SortOrder
+    toDiscussToday?: SortOrder
+    memberReflection?: SortOrder
+    managerNotes?: SortOrder
+    challenges?: SortOrder
+    directorInputs?: SortOrder
+    submittedAt?: SortOrder
+    lastEditedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInScalarRelationFilter = {
+    is?: TeamCheckInWhereInput
+    isNot?: TeamCheckInWhereInput
+  }
+
+  export type TeamCheckInPromiseCountOrderByAggregateInput = {
+    id?: SortOrder
+    checkInId?: SortOrder
+    actionItem?: SortOrder
+    owner?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInPromiseAvgOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
+  export type TeamCheckInPromiseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    checkInId?: SortOrder
+    actionItem?: SortOrder
+    owner?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInPromiseMinOrderByAggregateInput = {
+    id?: SortOrder
+    checkInId?: SortOrder
+    actionItem?: SortOrder
+    owner?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    order?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamCheckInPromiseSumOrderByAggregateInput = {
+    order?: SortOrder
+  }
+
   export type InstitutionStudentDataNoteScopeTypeScopeIdSessionPhaseSectionKeySourceCompoundUniqueInput = {
     scopeType: string
     scopeId: string
@@ -158497,6 +162503,13 @@ export namespace Prisma {
     connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
   }
 
+  export type ReimbursementCreateNestedManyWithoutVerifierInput = {
+    create?: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput> | ReimbursementCreateWithoutVerifierInput[] | ReimbursementUncheckedCreateWithoutVerifierInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutVerifierInput | ReimbursementCreateOrConnectWithoutVerifierInput[]
+    createMany?: ReimbursementCreateManyVerifierInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
   export type ReimbursementCreateNestedManyWithoutApproverInput = {
     create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
@@ -158606,6 +162619,20 @@ export namespace Prisma {
     connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
     createMany?: AssetCreateManyCreatedByInputEnvelope
     connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  }
+
+  export type TeamCheckInCreateNestedManyWithoutUserInput = {
+    create?: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput> | TeamCheckInCreateWithoutUserInput[] | TeamCheckInUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutUserInput | TeamCheckInCreateOrConnectWithoutUserInput[]
+    createMany?: TeamCheckInCreateManyUserInputEnvelope
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+  }
+
+  export type TeamCheckInCreateNestedManyWithoutLastEditedByInput = {
+    create?: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput> | TeamCheckInCreateWithoutLastEditedByInput[] | TeamCheckInUncheckedCreateWithoutLastEditedByInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutLastEditedByInput | TeamCheckInCreateOrConnectWithoutLastEditedByInput[]
+    createMany?: TeamCheckInCreateManyLastEditedByInputEnvelope
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
   }
 
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
@@ -158733,6 +162760,13 @@ export namespace Prisma {
     connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
   }
 
+  export type ReimbursementUncheckedCreateNestedManyWithoutVerifierInput = {
+    create?: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput> | ReimbursementCreateWithoutVerifierInput[] | ReimbursementUncheckedCreateWithoutVerifierInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutVerifierInput | ReimbursementCreateOrConnectWithoutVerifierInput[]
+    createMany?: ReimbursementCreateManyVerifierInputEnvelope
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+  }
+
   export type ReimbursementUncheckedCreateNestedManyWithoutApproverInput = {
     create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
@@ -158842,6 +162876,20 @@ export namespace Prisma {
     connectOrCreate?: AssetCreateOrConnectWithoutCreatedByInput | AssetCreateOrConnectWithoutCreatedByInput[]
     createMany?: AssetCreateManyCreatedByInputEnvelope
     connect?: AssetWhereUniqueInput | AssetWhereUniqueInput[]
+  }
+
+  export type TeamCheckInUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput> | TeamCheckInCreateWithoutUserInput[] | TeamCheckInUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutUserInput | TeamCheckInCreateOrConnectWithoutUserInput[]
+    createMany?: TeamCheckInCreateManyUserInputEnvelope
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+  }
+
+  export type TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput = {
+    create?: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput> | TeamCheckInCreateWithoutLastEditedByInput[] | TeamCheckInUncheckedCreateWithoutLastEditedByInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutLastEditedByInput | TeamCheckInCreateOrConnectWithoutLastEditedByInput[]
+    createMany?: TeamCheckInCreateManyLastEditedByInputEnvelope
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
   }
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -159136,6 +163184,20 @@ export namespace Prisma {
     deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
   }
 
+  export type ReimbursementUpdateManyWithoutVerifierNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput> | ReimbursementCreateWithoutVerifierInput[] | ReimbursementUncheckedCreateWithoutVerifierInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutVerifierInput | ReimbursementCreateOrConnectWithoutVerifierInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutVerifierInput | ReimbursementUpsertWithWhereUniqueWithoutVerifierInput[]
+    createMany?: ReimbursementCreateManyVerifierInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutVerifierInput | ReimbursementUpdateWithWhereUniqueWithoutVerifierInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutVerifierInput | ReimbursementUpdateManyWithWhereWithoutVerifierInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
   export type ReimbursementUpdateManyWithoutApproverNestedInput = {
     create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
@@ -159354,6 +163416,34 @@ export namespace Prisma {
     update?: AssetUpdateWithWhereUniqueWithoutCreatedByInput | AssetUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: AssetUpdateManyWithWhereWithoutCreatedByInput | AssetUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  }
+
+  export type TeamCheckInUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput> | TeamCheckInCreateWithoutUserInput[] | TeamCheckInUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutUserInput | TeamCheckInCreateOrConnectWithoutUserInput[]
+    upsert?: TeamCheckInUpsertWithWhereUniqueWithoutUserInput | TeamCheckInUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TeamCheckInCreateManyUserInputEnvelope
+    set?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    disconnect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    delete?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    update?: TeamCheckInUpdateWithWhereUniqueWithoutUserInput | TeamCheckInUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TeamCheckInUpdateManyWithWhereWithoutUserInput | TeamCheckInUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
+  }
+
+  export type TeamCheckInUpdateManyWithoutLastEditedByNestedInput = {
+    create?: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput> | TeamCheckInCreateWithoutLastEditedByInput[] | TeamCheckInUncheckedCreateWithoutLastEditedByInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutLastEditedByInput | TeamCheckInCreateOrConnectWithoutLastEditedByInput[]
+    upsert?: TeamCheckInUpsertWithWhereUniqueWithoutLastEditedByInput | TeamCheckInUpsertWithWhereUniqueWithoutLastEditedByInput[]
+    createMany?: TeamCheckInCreateManyLastEditedByInputEnvelope
+    set?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    disconnect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    delete?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    update?: TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput | TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput[]
+    updateMany?: TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput | TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput[]
+    deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
   }
 
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -159604,6 +163694,20 @@ export namespace Prisma {
     deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
   }
 
+  export type ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput = {
+    create?: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput> | ReimbursementCreateWithoutVerifierInput[] | ReimbursementUncheckedCreateWithoutVerifierInput[]
+    connectOrCreate?: ReimbursementCreateOrConnectWithoutVerifierInput | ReimbursementCreateOrConnectWithoutVerifierInput[]
+    upsert?: ReimbursementUpsertWithWhereUniqueWithoutVerifierInput | ReimbursementUpsertWithWhereUniqueWithoutVerifierInput[]
+    createMany?: ReimbursementCreateManyVerifierInputEnvelope
+    set?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    disconnect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    delete?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    connect?: ReimbursementWhereUniqueInput | ReimbursementWhereUniqueInput[]
+    update?: ReimbursementUpdateWithWhereUniqueWithoutVerifierInput | ReimbursementUpdateWithWhereUniqueWithoutVerifierInput[]
+    updateMany?: ReimbursementUpdateManyWithWhereWithoutVerifierInput | ReimbursementUpdateManyWithWhereWithoutVerifierInput[]
+    deleteMany?: ReimbursementScalarWhereInput | ReimbursementScalarWhereInput[]
+  }
+
   export type ReimbursementUncheckedUpdateManyWithoutApproverNestedInput = {
     create?: XOR<ReimbursementCreateWithoutApproverInput, ReimbursementUncheckedCreateWithoutApproverInput> | ReimbursementCreateWithoutApproverInput[] | ReimbursementUncheckedCreateWithoutApproverInput[]
     connectOrCreate?: ReimbursementCreateOrConnectWithoutApproverInput | ReimbursementCreateOrConnectWithoutApproverInput[]
@@ -159822,6 +163926,34 @@ export namespace Prisma {
     update?: AssetUpdateWithWhereUniqueWithoutCreatedByInput | AssetUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: AssetUpdateManyWithWhereWithoutCreatedByInput | AssetUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: AssetScalarWhereInput | AssetScalarWhereInput[]
+  }
+
+  export type TeamCheckInUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput> | TeamCheckInCreateWithoutUserInput[] | TeamCheckInUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutUserInput | TeamCheckInCreateOrConnectWithoutUserInput[]
+    upsert?: TeamCheckInUpsertWithWhereUniqueWithoutUserInput | TeamCheckInUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TeamCheckInCreateManyUserInputEnvelope
+    set?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    disconnect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    delete?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    update?: TeamCheckInUpdateWithWhereUniqueWithoutUserInput | TeamCheckInUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TeamCheckInUpdateManyWithWhereWithoutUserInput | TeamCheckInUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
+  }
+
+  export type TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput = {
+    create?: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput> | TeamCheckInCreateWithoutLastEditedByInput[] | TeamCheckInUncheckedCreateWithoutLastEditedByInput[]
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutLastEditedByInput | TeamCheckInCreateOrConnectWithoutLastEditedByInput[]
+    upsert?: TeamCheckInUpsertWithWhereUniqueWithoutLastEditedByInput | TeamCheckInUpsertWithWhereUniqueWithoutLastEditedByInput[]
+    createMany?: TeamCheckInCreateManyLastEditedByInputEnvelope
+    set?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    disconnect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    delete?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+    update?: TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput | TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput[]
+    updateMany?: TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput | TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput[]
+    deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
   }
 
   export type DashboardConfigCreatekpiKeysInput = {
@@ -163734,6 +167866,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAttendanceLogsInput, UserUpdateWithoutAttendanceLogsInput>, UserUncheckedUpdateWithoutAttendanceLogsInput>
   }
 
+  export type LeaveCreatepolicyFlagsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutLeavesInput = {
     create?: XOR<UserCreateWithoutLeavesInput, UserUncheckedCreateWithoutLeavesInput>
     connectOrCreate?: UserCreateOrConnectWithoutLeavesInput
@@ -163744,6 +167880,11 @@ export namespace Prisma {
     create?: XOR<CompOffCreditCreateWithoutLeaveInput, CompOffCreditUncheckedCreateWithoutLeaveInput>
     connectOrCreate?: CompOffCreditCreateOrConnectWithoutLeaveInput
     connect?: CompOffCreditWhereUniqueInput
+  }
+
+  export type LeaveUpdatepolicyFlagsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type EnumLeaveStatusFieldUpdateOperationsInput = {
@@ -164408,6 +168549,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type UserCreateNestedOneWithoutReimbursementsVerifiedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsVerifiedInput, UserUncheckedCreateWithoutReimbursementsVerifiedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsVerifiedInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutReimbursementsApprovedInput = {
     create?: XOR<UserCreateWithoutReimbursementsApprovedInput, UserUncheckedCreateWithoutReimbursementsApprovedInput>
     connectOrCreate?: UserCreateOrConnectWithoutReimbursementsApprovedInput
@@ -164444,6 +168591,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutReimbursementRequestsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReimbursementRequestsInput, UserUpdateWithoutReimbursementRequestsInput>, UserUncheckedUpdateWithoutReimbursementRequestsInput>
+  }
+
+  export type UserUpdateOneWithoutReimbursementsVerifiedNestedInput = {
+    create?: XOR<UserCreateWithoutReimbursementsVerifiedInput, UserUncheckedCreateWithoutReimbursementsVerifiedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReimbursementsVerifiedInput
+    upsert?: UserUpsertWithoutReimbursementsVerifiedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReimbursementsVerifiedInput, UserUpdateWithoutReimbursementsVerifiedInput>, UserUncheckedUpdateWithoutReimbursementsVerifiedInput>
   }
 
   export type UserUpdateOneWithoutReimbursementsApprovedNestedInput = {
@@ -166018,6 +170175,92 @@ export namespace Prisma {
     update?: XOR<XOR<FellowUpdateToOneWithWhereWithoutStudentDataNotesInput, FellowUpdateWithoutStudentDataNotesInput>, FellowUncheckedUpdateWithoutStudentDataNotesInput>
   }
 
+  export type UserCreateNestedOneWithoutTeamCheckInsInput = {
+    create?: XOR<UserCreateWithoutTeamCheckInsInput, UserUncheckedCreateWithoutTeamCheckInsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTeamCheckInsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutTeamCheckInEditsInput = {
+    create?: XOR<UserCreateWithoutTeamCheckInEditsInput, UserUncheckedCreateWithoutTeamCheckInEditsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTeamCheckInEditsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TeamCheckInPromiseCreateNestedManyWithoutCheckInInput = {
+    create?: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput> | TeamCheckInPromiseCreateWithoutCheckInInput[] | TeamCheckInPromiseUncheckedCreateWithoutCheckInInput[]
+    connectOrCreate?: TeamCheckInPromiseCreateOrConnectWithoutCheckInInput | TeamCheckInPromiseCreateOrConnectWithoutCheckInInput[]
+    createMany?: TeamCheckInPromiseCreateManyCheckInInputEnvelope
+    connect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+  }
+
+  export type TeamCheckInPromiseUncheckedCreateNestedManyWithoutCheckInInput = {
+    create?: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput> | TeamCheckInPromiseCreateWithoutCheckInInput[] | TeamCheckInPromiseUncheckedCreateWithoutCheckInInput[]
+    connectOrCreate?: TeamCheckInPromiseCreateOrConnectWithoutCheckInInput | TeamCheckInPromiseCreateOrConnectWithoutCheckInInput[]
+    createMany?: TeamCheckInPromiseCreateManyCheckInInputEnvelope
+    connect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutTeamCheckInsNestedInput = {
+    create?: XOR<UserCreateWithoutTeamCheckInsInput, UserUncheckedCreateWithoutTeamCheckInsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTeamCheckInsInput
+    upsert?: UserUpsertWithoutTeamCheckInsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTeamCheckInsInput, UserUpdateWithoutTeamCheckInsInput>, UserUncheckedUpdateWithoutTeamCheckInsInput>
+  }
+
+  export type UserUpdateOneWithoutTeamCheckInEditsNestedInput = {
+    create?: XOR<UserCreateWithoutTeamCheckInEditsInput, UserUncheckedCreateWithoutTeamCheckInEditsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTeamCheckInEditsInput
+    upsert?: UserUpsertWithoutTeamCheckInEditsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTeamCheckInEditsInput, UserUpdateWithoutTeamCheckInEditsInput>, UserUncheckedUpdateWithoutTeamCheckInEditsInput>
+  }
+
+  export type TeamCheckInPromiseUpdateManyWithoutCheckInNestedInput = {
+    create?: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput> | TeamCheckInPromiseCreateWithoutCheckInInput[] | TeamCheckInPromiseUncheckedCreateWithoutCheckInInput[]
+    connectOrCreate?: TeamCheckInPromiseCreateOrConnectWithoutCheckInInput | TeamCheckInPromiseCreateOrConnectWithoutCheckInInput[]
+    upsert?: TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput | TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput[]
+    createMany?: TeamCheckInPromiseCreateManyCheckInInputEnvelope
+    set?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    disconnect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    delete?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    connect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    update?: TeamCheckInPromiseUpdateWithWhereUniqueWithoutCheckInInput | TeamCheckInPromiseUpdateWithWhereUniqueWithoutCheckInInput[]
+    updateMany?: TeamCheckInPromiseUpdateManyWithWhereWithoutCheckInInput | TeamCheckInPromiseUpdateManyWithWhereWithoutCheckInInput[]
+    deleteMany?: TeamCheckInPromiseScalarWhereInput | TeamCheckInPromiseScalarWhereInput[]
+  }
+
+  export type TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInNestedInput = {
+    create?: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput> | TeamCheckInPromiseCreateWithoutCheckInInput[] | TeamCheckInPromiseUncheckedCreateWithoutCheckInInput[]
+    connectOrCreate?: TeamCheckInPromiseCreateOrConnectWithoutCheckInInput | TeamCheckInPromiseCreateOrConnectWithoutCheckInInput[]
+    upsert?: TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput | TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput[]
+    createMany?: TeamCheckInPromiseCreateManyCheckInInputEnvelope
+    set?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    disconnect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    delete?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    connect?: TeamCheckInPromiseWhereUniqueInput | TeamCheckInPromiseWhereUniqueInput[]
+    update?: TeamCheckInPromiseUpdateWithWhereUniqueWithoutCheckInInput | TeamCheckInPromiseUpdateWithWhereUniqueWithoutCheckInInput[]
+    updateMany?: TeamCheckInPromiseUpdateManyWithWhereWithoutCheckInInput | TeamCheckInPromiseUpdateManyWithWhereWithoutCheckInInput[]
+    deleteMany?: TeamCheckInPromiseScalarWhereInput | TeamCheckInPromiseScalarWhereInput[]
+  }
+
+  export type TeamCheckInCreateNestedOneWithoutPromisesInput = {
+    create?: XOR<TeamCheckInCreateWithoutPromisesInput, TeamCheckInUncheckedCreateWithoutPromisesInput>
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutPromisesInput
+    connect?: TeamCheckInWhereUniqueInput
+  }
+
+  export type TeamCheckInUpdateOneRequiredWithoutPromisesNestedInput = {
+    create?: XOR<TeamCheckInCreateWithoutPromisesInput, TeamCheckInUncheckedCreateWithoutPromisesInput>
+    connectOrCreate?: TeamCheckInCreateOrConnectWithoutPromisesInput
+    upsert?: TeamCheckInUpsertWithoutPromisesInput
+    connect?: TeamCheckInWhereUniqueInput
+    update?: XOR<XOR<TeamCheckInUpdateToOneWithWhereWithoutPromisesInput, TeamCheckInUpdateWithoutPromisesInput>, TeamCheckInUncheckedUpdateWithoutPromisesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -166483,6 +170726,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -166499,6 +170743,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -166555,6 +170801,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -166571,6 +170818,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -166855,6 +171104,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -166871,6 +171121,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedUsersInput = {
@@ -166927,6 +171179,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -166943,6 +171196,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedUsersInput = {
@@ -167004,6 +171259,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -167020,6 +171276,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedByInput = {
@@ -167076,6 +171334,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -167092,6 +171351,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedByInput = {
@@ -167158,6 +171419,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -167174,6 +171436,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutDirectReportsInput = {
@@ -167230,6 +171494,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -167246,6 +171511,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutDirectReportsInput = {
@@ -167307,6 +171574,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -167323,6 +171591,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -167379,6 +171649,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -167395,6 +171666,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -167485,6 +171758,9 @@ export namespace Prisma {
     endDate?: Date | string | null
     days?: number
     compOffWorkedDate?: Date | string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -167503,6 +171779,9 @@ export namespace Prisma {
     days?: number
     compOffWorkedDate?: Date | string | null
     compOffCreditId?: string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -167602,8 +171881,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -167628,8 +171909,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -168027,6 +172310,8 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
     paymentMode?: string | null
@@ -168034,6 +172319,7 @@ export namespace Prisma {
     paymentNotes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    verifier?: UserCreateNestedOneWithoutReimbursementsVerifiedInput
     approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
     reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
     items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
@@ -168052,6 +172338,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
@@ -168074,6 +172363,72 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ReimbursementCreateWithoutVerifierInput = {
+    id?: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    approvedAt?: Date | string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
+    reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
+    items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementUncheckedCreateWithoutVerifierInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: ReimbursementItemUncheckedCreateNestedManyWithoutReimbursementInput
+  }
+
+  export type ReimbursementCreateOrConnectWithoutVerifierInput = {
+    where: ReimbursementWhereUniqueInput
+    create: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput>
+  }
+
+  export type ReimbursementCreateManyVerifierInputEnvelope = {
+    data: ReimbursementCreateManyVerifierInput | ReimbursementCreateManyVerifierInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ReimbursementCreateWithoutApproverInput = {
     id?: string
     title: string
@@ -168087,6 +172442,8 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
     paymentMode?: string | null
@@ -168095,6 +172452,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    verifier?: UserCreateNestedOneWithoutReimbursementsVerifiedInput
     reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
     items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
   }
@@ -168113,6 +172471,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
     reimbursedAt?: Date | string | null
@@ -168147,6 +172508,8 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
     paymentMode?: string | null
@@ -168155,6 +172518,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    verifier?: UserCreateNestedOneWithoutReimbursementsVerifiedInput
     approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
     items?: ReimbursementItemCreateNestedManyWithoutReimbursementInput
   }
@@ -168173,6 +172537,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
@@ -168657,6 +173024,102 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TeamCheckInCreateWithoutUserInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lastEditedBy?: UserCreateNestedOneWithoutTeamCheckInEditsInput
+    promises?: TeamCheckInPromiseCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInUncheckedCreateWithoutUserInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    lastEditedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promises?: TeamCheckInPromiseUncheckedCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInCreateOrConnectWithoutUserInput = {
+    where: TeamCheckInWhereUniqueInput
+    create: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput>
+  }
+
+  export type TeamCheckInCreateManyUserInputEnvelope = {
+    data: TeamCheckInCreateManyUserInput | TeamCheckInCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TeamCheckInCreateWithoutLastEditedByInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeamCheckInsInput
+    promises?: TeamCheckInPromiseCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInUncheckedCreateWithoutLastEditedByInput = {
+    id?: string
+    userId: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    promises?: TeamCheckInPromiseUncheckedCreateNestedManyWithoutCheckInInput
+  }
+
+  export type TeamCheckInCreateOrConnectWithoutLastEditedByInput = {
+    where: TeamCheckInWhereUniqueInput
+    create: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput>
+  }
+
+  export type TeamCheckInCreateManyLastEditedByInputEnvelope = {
+    data: TeamCheckInCreateManyLastEditedByInput | TeamCheckInCreateManyLastEditedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -168783,6 +173246,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -168799,6 +173263,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedUsersInput = {
@@ -168855,6 +173321,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -168871,6 +173338,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -168954,6 +173423,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -168970,6 +173440,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDirectReportsInput = {
@@ -169026,6 +173498,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -169042,6 +173515,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -169165,6 +173640,9 @@ export namespace Prisma {
     days?: FloatFilter<"Leave"> | number
     compOffWorkedDate?: DateTimeNullableFilter<"Leave"> | Date | string | null
     compOffCreditId?: StringNullableFilter<"Leave"> | string | null
+    holidayName?: StringNullableFilter<"Leave"> | string | null
+    medicalCertificateRequired?: BoolFilter<"Leave"> | boolean
+    policyFlags?: StringNullableListFilter<"Leave">
     reason?: StringNullableFilter<"Leave"> | string | null
     rejectionReason?: StringNullableFilter<"Leave"> | string | null
     status?: EnumLeaveStatusFilter<"Leave"> | $Enums.LeaveStatus
@@ -169269,8 +173747,10 @@ export namespace Prisma {
     logoutinfo?: StringNullableFilter<"AttendanceLog"> | string | null
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -169555,6 +174035,9 @@ export namespace Prisma {
     bankAccountNo?: StringNullableFilter<"Reimbursement"> | string | null
     bankIfsc?: StringNullableFilter<"Reimbursement"> | string | null
     rejectionReason?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedBy?: StringNullableFilter<"Reimbursement"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
+    verificationNotes?: StringNullableFilter<"Reimbursement"> | string | null
     approvedBy?: StringNullableFilter<"Reimbursement"> | string | null
     approvedAt?: DateTimeNullableFilter<"Reimbursement"> | Date | string | null
     reimbursedBy?: StringNullableFilter<"Reimbursement"> | string | null
@@ -169564,6 +174047,22 @@ export namespace Prisma {
     paymentNotes?: StringNullableFilter<"Reimbursement"> | string | null
     createdAt?: DateTimeFilter<"Reimbursement"> | Date | string
     updatedAt?: DateTimeFilter<"Reimbursement"> | Date | string
+  }
+
+  export type ReimbursementUpsertWithWhereUniqueWithoutVerifierInput = {
+    where: ReimbursementWhereUniqueInput
+    update: XOR<ReimbursementUpdateWithoutVerifierInput, ReimbursementUncheckedUpdateWithoutVerifierInput>
+    create: XOR<ReimbursementCreateWithoutVerifierInput, ReimbursementUncheckedCreateWithoutVerifierInput>
+  }
+
+  export type ReimbursementUpdateWithWhereUniqueWithoutVerifierInput = {
+    where: ReimbursementWhereUniqueInput
+    data: XOR<ReimbursementUpdateWithoutVerifierInput, ReimbursementUncheckedUpdateWithoutVerifierInput>
+  }
+
+  export type ReimbursementUpdateManyWithWhereWithoutVerifierInput = {
+    where: ReimbursementScalarWhereInput
+    data: XOR<ReimbursementUpdateManyMutationInput, ReimbursementUncheckedUpdateManyWithoutVerifierInput>
   }
 
   export type ReimbursementUpsertWithWhereUniqueWithoutApproverInput = {
@@ -170024,6 +174523,60 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Asset"> | Date | string
   }
 
+  export type TeamCheckInUpsertWithWhereUniqueWithoutUserInput = {
+    where: TeamCheckInWhereUniqueInput
+    update: XOR<TeamCheckInUpdateWithoutUserInput, TeamCheckInUncheckedUpdateWithoutUserInput>
+    create: XOR<TeamCheckInCreateWithoutUserInput, TeamCheckInUncheckedCreateWithoutUserInput>
+  }
+
+  export type TeamCheckInUpdateWithWhereUniqueWithoutUserInput = {
+    where: TeamCheckInWhereUniqueInput
+    data: XOR<TeamCheckInUpdateWithoutUserInput, TeamCheckInUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TeamCheckInUpdateManyWithWhereWithoutUserInput = {
+    where: TeamCheckInScalarWhereInput
+    data: XOR<TeamCheckInUpdateManyMutationInput, TeamCheckInUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TeamCheckInScalarWhereInput = {
+    AND?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
+    OR?: TeamCheckInScalarWhereInput[]
+    NOT?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
+    id?: StringFilter<"TeamCheckIn"> | string
+    userId?: StringFilter<"TeamCheckIn"> | string
+    date?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    checkInType?: StringFilter<"TeamCheckIn"> | string
+    areaOfWork?: StringNullableFilter<"TeamCheckIn"> | string | null
+    topPriorities?: StringNullableFilter<"TeamCheckIn"> | string | null
+    keyUpdates?: StringNullableFilter<"TeamCheckIn"> | string | null
+    toDiscussToday?: StringNullableFilter<"TeamCheckIn"> | string | null
+    memberReflection?: StringNullableFilter<"TeamCheckIn"> | string | null
+    managerNotes?: StringNullableFilter<"TeamCheckIn"> | string | null
+    challenges?: StringNullableFilter<"TeamCheckIn"> | string | null
+    directorInputs?: StringNullableFilter<"TeamCheckIn"> | string | null
+    submittedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    lastEditedById?: StringNullableFilter<"TeamCheckIn"> | string | null
+    createdAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckIn"> | Date | string
+  }
+
+  export type TeamCheckInUpsertWithWhereUniqueWithoutLastEditedByInput = {
+    where: TeamCheckInWhereUniqueInput
+    update: XOR<TeamCheckInUpdateWithoutLastEditedByInput, TeamCheckInUncheckedUpdateWithoutLastEditedByInput>
+    create: XOR<TeamCheckInCreateWithoutLastEditedByInput, TeamCheckInUncheckedCreateWithoutLastEditedByInput>
+  }
+
+  export type TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput = {
+    where: TeamCheckInWhereUniqueInput
+    data: XOR<TeamCheckInUpdateWithoutLastEditedByInput, TeamCheckInUncheckedUpdateWithoutLastEditedByInput>
+  }
+
+  export type TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput = {
+    where: TeamCheckInScalarWhereInput
+    data: XOR<TeamCheckInUpdateManyMutationInput, TeamCheckInUncheckedUpdateManyWithoutLastEditedByInput>
+  }
+
   export type RoleCreateWithoutDashboardConfigInput = {
     id?: string
     name: string
@@ -170106,6 +174659,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -170121,6 +174675,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutDashboardConfigInput = {
@@ -170178,6 +174734,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -170193,6 +174750,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutDashboardConfigInput = {
@@ -170299,6 +174858,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -170314,6 +174874,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDashboardConfigInput = {
@@ -170371,6 +174933,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -170386,6 +174949,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -170443,6 +175008,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -170458,6 +175024,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -170515,6 +175083,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -170530,6 +175099,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -170603,6 +175174,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -170618,6 +175190,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -170675,6 +175249,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -170690,6 +175265,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -170944,6 +175521,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -170960,6 +175538,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -171016,6 +175596,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -171032,6 +175613,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -171129,6 +175712,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -171145,6 +175729,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -171201,6 +175787,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -171217,6 +175804,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -171756,6 +176345,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -171772,6 +176362,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -171828,6 +176420,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -171844,6 +176437,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -172568,6 +177163,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -172584,6 +177180,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -172640,6 +177238,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -172656,6 +177255,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -173352,6 +177953,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -173367,6 +177969,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -173424,6 +178028,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -173439,6 +178044,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -173587,6 +178194,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -173602,6 +178210,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -173659,6 +178269,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -173674,6 +178285,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type FellowCreateWithoutPerformanceObservationsInput = {
@@ -173800,6 +178413,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -173815,6 +178429,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -173872,6 +178488,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -173887,6 +178504,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -174035,6 +178654,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -174050,6 +178670,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -174107,6 +178729,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -174122,6 +178745,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -176895,6 +181520,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -176910,6 +181536,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedSchoolsInput = {
@@ -176967,6 +181595,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -176982,6 +181611,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedSchoolsInput = {
@@ -177110,6 +181741,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -177125,6 +181757,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
@@ -177182,6 +181816,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -177197,6 +181832,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type SchoolUpsertWithoutProgramManagersInput = {
@@ -177315,6 +181952,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -177330,6 +181968,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedCentresInput = {
@@ -177387,6 +182027,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -177402,6 +182043,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedCentresInput = {
@@ -177524,6 +182167,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -177539,6 +182183,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedCentresInput = {
@@ -177596,6 +182242,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -177611,6 +182258,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
@@ -177723,6 +182372,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -177738,6 +182388,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
@@ -177795,6 +182447,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -177810,6 +182463,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
@@ -177916,6 +182571,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -177931,6 +182587,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
@@ -177988,6 +182646,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -178003,6 +182662,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
@@ -178099,6 +182760,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -178114,6 +182776,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutPmTasksInput = {
@@ -178171,6 +182835,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -178186,6 +182851,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutPmTasksInput = {
@@ -178285,6 +182952,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -178300,6 +182968,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTasksInput = {
@@ -178357,6 +183027,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -178372,6 +183043,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -178476,6 +183149,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -178491,6 +183165,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
@@ -178548,6 +183224,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -178563,6 +183240,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
@@ -178673,6 +183352,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -178688,6 +183368,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
@@ -178745,6 +183427,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -178760,6 +183443,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateWithoutAssignedTasksInput = {
@@ -178816,6 +183501,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -178832,6 +183518,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -178888,6 +183576,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -178904,6 +183593,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -178965,6 +183656,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -178981,6 +183673,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -179037,6 +183731,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -179053,6 +183748,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -179181,6 +183878,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -179197,6 +183895,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -179253,6 +183953,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -179269,6 +183970,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -179336,6 +184039,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -179352,6 +184056,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -179408,6 +184114,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -179424,6 +184131,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type TaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -179553,6 +184262,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -179569,6 +184279,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsNewInput = {
@@ -179625,6 +184337,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -179641,6 +184354,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsNewInput = {
@@ -179760,6 +184475,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -179776,6 +184492,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsNewInput = {
@@ -179832,6 +184550,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -179848,6 +184567,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type TaskCreateWithoutDocumentsInput = {
@@ -179945,6 +184666,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -179961,6 +184683,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskDocumentsInput = {
@@ -180017,6 +184741,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -180033,6 +184758,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskDocumentsInput = {
@@ -180152,6 +184879,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -180168,6 +184896,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskDocumentsInput = {
@@ -180224,6 +184954,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -180240,6 +184971,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateWithoutCreatedAssetsInput = {
@@ -180297,6 +185030,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -180312,6 +185046,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCreatedAssetsInput = {
@@ -180369,6 +185105,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -180384,6 +185121,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedAssetsInput = {
@@ -180493,6 +185232,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -180508,6 +185248,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
@@ -180565,6 +185307,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -180580,6 +185323,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput = {
@@ -180686,6 +185431,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -180701,6 +185447,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsInput = {
@@ -180758,6 +185506,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -180773,6 +185522,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsInput = {
@@ -180835,6 +185586,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -180850,6 +185602,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsMadeInput = {
@@ -180907,6 +185661,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -180922,6 +185677,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsMadeInput = {
@@ -181034,6 +185791,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -181049,6 +185807,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsInput = {
@@ -181106,6 +185866,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -181121,6 +185882,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutAssetAssignmentsMadeInput = {
@@ -181189,6 +185952,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -181204,6 +185968,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsMadeInput = {
@@ -181261,6 +186027,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -181276,6 +186043,8 @@ export namespace Prisma {
     dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type SchoolCreateWithoutProgramsInput = {
@@ -185290,6 +190059,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -185306,6 +190076,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -185362,6 +190134,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -185378,6 +190151,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -185516,6 +190291,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -185532,6 +190308,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -185588,6 +190366,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -185604,6 +190383,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -185697,6 +190478,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -185713,6 +190495,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -185769,6 +190553,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -185785,6 +190570,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -185857,6 +190644,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -185873,6 +190661,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -185929,6 +190719,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -185945,6 +190736,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -186001,6 +190794,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -186017,6 +190811,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -186073,6 +190869,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -186089,6 +190886,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -186190,6 +190989,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -186206,6 +191006,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -186262,6 +191064,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -186278,6 +191081,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type CompOffCreditUpsertWithoutLeaveInput = {
@@ -186369,6 +191174,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -186385,6 +191191,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCompOffCreditsInput = {
@@ -186441,6 +191249,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -186457,6 +191266,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCompOffCreditsInput = {
@@ -186473,6 +191284,9 @@ export namespace Prisma {
     endDate?: Date | string | null
     days?: number
     compOffWorkedDate?: Date | string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -186491,6 +191305,9 @@ export namespace Prisma {
     endDate?: Date | string | null
     days?: number
     compOffWorkedDate?: Date | string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -186568,6 +191385,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -186584,6 +191402,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompOffCreditsInput = {
@@ -186640,6 +191460,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -186656,6 +191477,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type LeaveUpsertWithoutCompOffCreditInput = {
@@ -186678,6 +191501,9 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -186696,6 +191522,9 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -187030,6 +191859,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -187046,6 +191876,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutReliefDistributionsInput = {
@@ -187102,6 +191934,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -187118,6 +191951,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutReliefDistributionsInput = {
@@ -187263,6 +192098,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -187279,6 +192115,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReliefDistributionsInput = {
@@ -187335,6 +192173,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -187351,6 +192190,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput = {
@@ -187844,6 +192685,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -187860,6 +192702,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -187916,6 +192760,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -187932,6 +192777,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -188041,6 +192888,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -188057,6 +192905,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -188113,6 +192963,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -188129,6 +192980,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -189551,6 +194404,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
@@ -189566,6 +194420,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -189623,6 +194479,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
@@ -189638,6 +194495,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -189786,6 +194645,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
@@ -189801,6 +194661,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -189858,6 +194720,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
@@ -189873,6 +194736,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -190287,6 +195152,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -190302,6 +195168,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -190359,6 +195227,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -190374,6 +195243,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -190522,6 +195393,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -190537,6 +195409,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -190594,6 +195468,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -190609,6 +195484,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -190665,6 +195542,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -190681,6 +195559,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -190737,6 +195617,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -190753,6 +195634,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -190814,6 +195697,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -190830,6 +195714,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -190886,6 +195772,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -190902,6 +195789,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
@@ -190963,6 +195852,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -190979,6 +195869,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutRevertedTravelInput = {
@@ -191035,6 +195927,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -191051,6 +195944,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutRevertedTravelInput = {
@@ -191155,6 +196050,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -191171,6 +196067,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -191227,6 +196125,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -191243,6 +196142,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -191310,6 +196211,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -191326,6 +196228,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -191382,6 +196286,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -191398,6 +196303,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutRevertedTravelInput = {
@@ -191465,6 +196372,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -191481,6 +196389,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRevertedTravelInput = {
@@ -191537,6 +196447,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -191553,6 +196464,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -191740,6 +196653,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
@@ -191756,6 +196670,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementRequestsInput = {
@@ -191812,6 +196728,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
@@ -191828,11 +196745,168 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementRequestsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutReimbursementRequestsInput, UserUncheckedCreateWithoutReimbursementRequestsInput>
+  }
+
+  export type UserCreateWithoutReimbursementsVerifiedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserUncheckedCreateWithoutReimbursementsVerifiedInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserCreateOrConnectWithoutReimbursementsVerifiedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReimbursementsVerifiedInput, UserUncheckedCreateWithoutReimbursementsVerifiedInput>
   }
 
   export type UserCreateWithoutReimbursementsApprovedInput = {
@@ -191890,6 +196964,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
@@ -191905,6 +196980,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsApprovedInput = {
@@ -191962,6 +197039,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
@@ -191977,6 +197055,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsApprovedInput = {
@@ -192039,6 +197119,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
@@ -192054,6 +197135,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsReimbursedInput = {
@@ -192111,6 +197194,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
     revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
     reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
     reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
     coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
     pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
@@ -192126,6 +197210,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsReimbursedInput = {
@@ -192232,6 +197318,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -192248,6 +197335,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementRequestsInput = {
@@ -192304,6 +197393,7 @@ export namespace Prisma {
     travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -192320,6 +197410,169 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+  }
+
+  export type UserUpsertWithoutReimbursementsVerifiedInput = {
+    update: XOR<UserUpdateWithoutReimbursementsVerifiedInput, UserUncheckedUpdateWithoutReimbursementsVerifiedInput>
+    create: XOR<UserCreateWithoutReimbursementsVerifiedInput, UserUncheckedCreateWithoutReimbursementsVerifiedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReimbursementsVerifiedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReimbursementsVerifiedInput, UserUncheckedUpdateWithoutReimbursementsVerifiedInput>
+  }
+
+  export type UserUpdateWithoutReimbursementsVerifiedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReimbursementsVerifiedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsApprovedInput = {
@@ -192388,6 +197641,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
@@ -192403,6 +197657,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsApprovedInput = {
@@ -192460,6 +197716,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
@@ -192475,6 +197732,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsReimbursedInput = {
@@ -192543,6 +197802,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
@@ -192558,6 +197818,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsReimbursedInput = {
@@ -192615,6 +197877,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
     pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
@@ -192630,6 +197893,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput = {
@@ -192677,6 +197942,8 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
     paymentMode?: string | null
@@ -192685,6 +197952,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutReimbursementRequestsInput
+    verifier?: UserCreateNestedOneWithoutReimbursementsVerifiedInput
     approver?: UserCreateNestedOneWithoutReimbursementsApprovedInput
     reimburser?: UserCreateNestedOneWithoutReimbursementsReimbursedInput
   }
@@ -192703,6 +197971,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
@@ -192743,6 +198014,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -192751,6 +198024,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    verifier?: UserUpdateOneWithoutReimbursementsVerifiedNestedInput
     approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
     reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
   }
@@ -192769,6 +198043,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -197357,6 +202634,793 @@ export namespace Prisma {
     livelihoodPrograms?: FellowLivelihoodProgramUncheckedUpdateManyWithoutFellowNestedInput
   }
 
+  export type UserCreateWithoutTeamCheckInsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserUncheckedCreateWithoutTeamCheckInsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserCreateOrConnectWithoutTeamCheckInsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTeamCheckInsInput, UserUncheckedCreateWithoutTeamCheckInsInput>
+  }
+
+  export type UserCreateWithoutTeamCheckInEditsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTeamCheckInEditsInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTeamCheckInEditsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTeamCheckInEditsInput, UserUncheckedCreateWithoutTeamCheckInEditsInput>
+  }
+
+  export type TeamCheckInPromiseCreateWithoutCheckInInput = {
+    id?: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInPromiseUncheckedCreateWithoutCheckInInput = {
+    id?: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInPromiseCreateOrConnectWithoutCheckInInput = {
+    where: TeamCheckInPromiseWhereUniqueInput
+    create: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput>
+  }
+
+  export type TeamCheckInPromiseCreateManyCheckInInputEnvelope = {
+    data: TeamCheckInPromiseCreateManyCheckInInput | TeamCheckInPromiseCreateManyCheckInInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutTeamCheckInsInput = {
+    update: XOR<UserUpdateWithoutTeamCheckInsInput, UserUncheckedUpdateWithoutTeamCheckInsInput>
+    create: XOR<UserCreateWithoutTeamCheckInsInput, UserUncheckedCreateWithoutTeamCheckInsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTeamCheckInsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTeamCheckInsInput, UserUncheckedUpdateWithoutTeamCheckInsInput>
+  }
+
+  export type UserUpdateWithoutTeamCheckInsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTeamCheckInsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+  }
+
+  export type UserUpsertWithoutTeamCheckInEditsInput = {
+    update: XOR<UserUpdateWithoutTeamCheckInEditsInput, UserUncheckedUpdateWithoutTeamCheckInEditsInput>
+    create: XOR<UserCreateWithoutTeamCheckInEditsInput, UserUncheckedCreateWithoutTeamCheckInEditsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTeamCheckInEditsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTeamCheckInEditsInput, UserUncheckedUpdateWithoutTeamCheckInEditsInput>
+  }
+
+  export type UserUpdateWithoutTeamCheckInEditsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTeamCheckInEditsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput = {
+    where: TeamCheckInPromiseWhereUniqueInput
+    update: XOR<TeamCheckInPromiseUpdateWithoutCheckInInput, TeamCheckInPromiseUncheckedUpdateWithoutCheckInInput>
+    create: XOR<TeamCheckInPromiseCreateWithoutCheckInInput, TeamCheckInPromiseUncheckedCreateWithoutCheckInInput>
+  }
+
+  export type TeamCheckInPromiseUpdateWithWhereUniqueWithoutCheckInInput = {
+    where: TeamCheckInPromiseWhereUniqueInput
+    data: XOR<TeamCheckInPromiseUpdateWithoutCheckInInput, TeamCheckInPromiseUncheckedUpdateWithoutCheckInInput>
+  }
+
+  export type TeamCheckInPromiseUpdateManyWithWhereWithoutCheckInInput = {
+    where: TeamCheckInPromiseScalarWhereInput
+    data: XOR<TeamCheckInPromiseUpdateManyMutationInput, TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInInput>
+  }
+
+  export type TeamCheckInPromiseScalarWhereInput = {
+    AND?: TeamCheckInPromiseScalarWhereInput | TeamCheckInPromiseScalarWhereInput[]
+    OR?: TeamCheckInPromiseScalarWhereInput[]
+    NOT?: TeamCheckInPromiseScalarWhereInput | TeamCheckInPromiseScalarWhereInput[]
+    id?: StringFilter<"TeamCheckInPromise"> | string
+    checkInId?: StringFilter<"TeamCheckInPromise"> | string
+    actionItem?: StringFilter<"TeamCheckInPromise"> | string
+    owner?: StringNullableFilter<"TeamCheckInPromise"> | string | null
+    deadline?: DateTimeNullableFilter<"TeamCheckInPromise"> | Date | string | null
+    status?: StringFilter<"TeamCheckInPromise"> | string
+    order?: IntFilter<"TeamCheckInPromise"> | number
+    createdAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+    updatedAt?: DateTimeFilter<"TeamCheckInPromise"> | Date | string
+  }
+
+  export type TeamCheckInCreateWithoutPromisesInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTeamCheckInsInput
+    lastEditedBy?: UserCreateNestedOneWithoutTeamCheckInEditsInput
+  }
+
+  export type TeamCheckInUncheckedCreateWithoutPromisesInput = {
+    id?: string
+    userId: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    lastEditedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInCreateOrConnectWithoutPromisesInput = {
+    where: TeamCheckInWhereUniqueInput
+    create: XOR<TeamCheckInCreateWithoutPromisesInput, TeamCheckInUncheckedCreateWithoutPromisesInput>
+  }
+
+  export type TeamCheckInUpsertWithoutPromisesInput = {
+    update: XOR<TeamCheckInUpdateWithoutPromisesInput, TeamCheckInUncheckedUpdateWithoutPromisesInput>
+    create: XOR<TeamCheckInCreateWithoutPromisesInput, TeamCheckInUncheckedCreateWithoutPromisesInput>
+    where?: TeamCheckInWhereInput
+  }
+
+  export type TeamCheckInUpdateToOneWithWhereWithoutPromisesInput = {
+    where?: TeamCheckInWhereInput
+    data: XOR<TeamCheckInUpdateWithoutPromisesInput, TeamCheckInUncheckedUpdateWithoutPromisesInput>
+  }
+
+  export type TeamCheckInUpdateWithoutPromisesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeamCheckInsNestedInput
+    lastEditedBy?: UserUpdateOneWithoutTeamCheckInEditsNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateWithoutPromisesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyRoleInput = {
     id?: string
     name: string
@@ -197456,6 +203520,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -197472,6 +203537,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -197528,6 +203595,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -197544,6 +203612,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -197699,6 +203769,9 @@ export namespace Prisma {
     days?: number
     compOffWorkedDate?: Date | string | null
     compOffCreditId?: string | null
+    holidayName?: string | null
+    medicalCertificateRequired?: boolean
+    policyFlags?: LeaveCreatepolicyFlagsInput | string[]
     reason?: string | null
     rejectionReason?: string | null
     status?: $Enums.LeaveStatus
@@ -197743,8 +203816,10 @@ export namespace Prisma {
     logoutinfo?: string | null
     checkInLat?: number | null
     checkInLng?: number | null
+    checkInAccuracy?: number | null
     checkOutLat?: number | null
     checkOutLng?: number | null
+    checkOutAccuracy?: number | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -197897,6 +203972,36 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
+    approvedBy?: string | null
+    approvedAt?: Date | string | null
+    reimbursedBy?: string | null
+    reimbursedAt?: Date | string | null
+    paymentMode?: string | null
+    paymentReference?: string | null
+    paymentNotes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReimbursementCreateManyVerifierInput = {
+    id?: string
+    userId: string
+    title: string
+    purpose?: string | null
+    notes?: string | null
+    totalClaimed: number
+    totalApproved?: number | null
+    totalReimbursed?: number | null
+    status?: $Enums.ReimbursementStatus
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    rejectionReason?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
@@ -197922,6 +204027,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedAt?: Date | string | null
     reimbursedBy?: string | null
     reimbursedAt?: Date | string | null
@@ -197946,6 +204054,9 @@ export namespace Prisma {
     bankAccountNo?: string | null
     bankIfsc?: string | null
     rejectionReason?: string | null
+    verifiedBy?: string | null
+    verifiedAt?: Date | string | null
+    verificationNotes?: string | null
     approvedBy?: string | null
     approvedAt?: Date | string | null
     reimbursedAt?: Date | string | null
@@ -198108,6 +204219,42 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type TeamCheckInCreateManyUserInput = {
+    id?: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    lastEditedById?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInCreateManyLastEditedByInput = {
+    id?: string
+    userId: string
+    date: Date | string
+    checkInType?: string
+    areaOfWork?: string | null
+    topPriorities?: string | null
+    keyUpdates?: string | null
+    toDiscussToday?: string | null
+    memberReflection?: string | null
+    managerNotes?: string | null
+    challenges?: string | null
+    directorInputs?: string | null
+    submittedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type UserPermissionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
@@ -198186,6 +204333,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -198202,6 +204350,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedByInput = {
@@ -198258,6 +204408,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -198274,6 +204425,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCreatedByInput = {
@@ -198368,6 +204521,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
@@ -198384,6 +204538,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -198440,6 +204596,7 @@ export namespace Prisma {
     approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
     revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
     reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
     reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
     reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
     coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
@@ -198456,6 +204613,8 @@ export namespace Prisma {
     assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -198505,6 +204664,9 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -198523,6 +204685,9 @@ export namespace Prisma {
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     compOffCreditId?: NullableStringFieldUpdateOperationsInput | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -198540,6 +204705,9 @@ export namespace Prisma {
     days?: FloatFieldUpdateOperationsInput | number
     compOffWorkedDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     compOffCreditId?: NullableStringFieldUpdateOperationsInput | string | null
+    holidayName?: NullableStringFieldUpdateOperationsInput | string | null
+    medicalCertificateRequired?: BoolFieldUpdateOperationsInput | boolean
+    policyFlags?: LeaveUpdatepolicyFlagsInput | string[]
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumLeaveStatusFieldUpdateOperationsInput | $Enums.LeaveStatus
@@ -198632,8 +204800,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -198658,8 +204828,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -198684,8 +204856,10 @@ export namespace Prisma {
     logoutinfo?: NullableStringFieldUpdateOperationsInput | string | null
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -199112,6 +205286,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199119,6 +205295,7 @@ export namespace Prisma {
     paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifier?: UserUpdateOneWithoutReimbursementsVerifiedNestedInput
     approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
     reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
     items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
@@ -199137,6 +205314,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199162,6 +205342,92 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReimbursementUpdateWithoutVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
+    reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
+    items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateWithoutVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ReimbursementItemUncheckedUpdateManyWithoutReimbursementNestedInput
+  }
+
+  export type ReimbursementUncheckedUpdateManyWithoutVerifierInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    purpose?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    totalClaimed?: FloatFieldUpdateOperationsInput | number
+    totalApproved?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalReimbursed?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumReimbursementStatusFieldUpdateOperationsInput | $Enums.ReimbursementStatus
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199186,6 +205452,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199194,6 +205462,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    verifier?: UserUpdateOneWithoutReimbursementsVerifiedNestedInput
     reimburser?: UserUpdateOneWithoutReimbursementsReimbursedNestedInput
     items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
   }
@@ -199212,6 +205481,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199237,6 +205509,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedBy?: NullableStringFieldUpdateOperationsInput | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199260,6 +205535,8 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -199268,6 +205545,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutReimbursementRequestsNestedInput
+    verifier?: UserUpdateOneWithoutReimbursementsVerifiedNestedInput
     approver?: UserUpdateOneWithoutReimbursementsApprovedNestedInput
     items?: ReimbursementItemUpdateManyWithoutReimbursementNestedInput
   }
@@ -199286,6 +205564,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199311,6 +205592,9 @@ export namespace Prisma {
     bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
     bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationNotes?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
     approvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reimbursedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -199777,6 +206061,118 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     condition?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedBy?: UserUpdateOneWithoutTeamCheckInEditsNestedInput
+    promises?: TeamCheckInPromiseUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promises?: TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastEditedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInUpdateWithoutLastEditedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTeamCheckInsNestedInput
+    promises?: TeamCheckInPromiseUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateWithoutLastEditedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    promises?: TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInNestedInput
+  }
+
+  export type TeamCheckInUncheckedUpdateManyWithoutLastEditedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    checkInType?: StringFieldUpdateOperationsInput | string
+    areaOfWork?: NullableStringFieldUpdateOperationsInput | string | null
+    topPriorities?: NullableStringFieldUpdateOperationsInput | string | null
+    keyUpdates?: NullableStringFieldUpdateOperationsInput | string | null
+    toDiscussToday?: NullableStringFieldUpdateOperationsInput | string | null
+    memberReflection?: NullableStringFieldUpdateOperationsInput | string | null
+    managerNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    challenges?: NullableStringFieldUpdateOperationsInput | string | null
+    directorInputs?: NullableStringFieldUpdateOperationsInput | string | null
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -204091,6 +210487,50 @@ export namespace Prisma {
     flnQuestionId?: StringFieldUpdateOperationsInput | string
     score?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseCreateManyCheckInInput = {
+    id?: string
+    actionItem: string
+    owner?: string | null
+    deadline?: Date | string | null
+    status?: string
+    order?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamCheckInPromiseUpdateWithoutCheckInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseUncheckedUpdateWithoutCheckInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamCheckInPromiseUncheckedUpdateManyWithoutCheckInInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    actionItem?: StringFieldUpdateOperationsInput | string
+    owner?: NullableStringFieldUpdateOperationsInput | string | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

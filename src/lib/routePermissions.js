@@ -26,7 +26,6 @@ export const PAGE_KEYS = [
 export const ROUTE_PERMISSION_MAP = [
   ["/admin", "admin"],
   ["/assets", "assets"],
-  ["/tasks/analytics", "task-analytics"],
   ["/tasks", "tasks"],
   ["/education", "education"],
   ["/fellow-observations", "fellow-observations"],

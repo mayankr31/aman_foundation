@@ -8,6 +8,7 @@ import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import GoalSheetForm from "@/components/GoalSheetForm";
 import Pagination from "@/components/ui/Pagination";
+import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { useToast } from "@/context/ToastContext";
@@ -16,6 +17,7 @@ import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
 import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import Avatar from "@/components/ui/Avatar";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import AssignmentsSection from "@/components/AssignmentsSection";
@@ -43,7 +45,7 @@ export default function FellowProfileDetail() {
 
 function FellowProfileDetailContent() {
   const { id } = useParams();
-  const { token, user, isInitializing, can } = useAuth();
+  const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
@@ -227,6 +229,32 @@ function FellowProfileDetailContent() {
     }
   };
 
+  const handleDeleteSurvey = async (surveyType, surveyId) => {
+    if (!window.confirm(`Delete this ${surveyType === "engagement" ? "engagement" : "look beyond"} survey?`)) return;
+    const endpoint =
+      surveyType === "engagement"
+        ? `/api/fellows/${id}/engagement-surveys/${surveyId}`
+        : `/api/fellows/${id}/look-beyond/${surveyId}`;
+    try {
+      const res = await fetch(endpoint, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete survey");
+      }
+      if (surveyType === "engagement") {
+        setEngagementSurveys((prev) => prev.filter((survey) => survey.id !== surveyId));
+      } else {
+        setLookBeyondSurveys((prev) => prev.filter((survey) => survey.id !== surveyId));
+      }
+      toast.success("Survey deleted");
+    } catch (err) {
+      toast.error(err.message || "Failed to delete survey");
+    }
+  };
+
   const handleGoalSheetSaved = (updatedSheet) => {
     setGoalSheets((prev) => {
       const idx = prev.findIndex((s) => s.id === updatedSheet.id);
@@ -330,7 +358,7 @@ function FellowProfileDetailContent() {
     (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back Link */}
       {user?.roleName !== "FELLOW" ? (
         <Link
@@ -362,19 +390,15 @@ function FellowProfileDetailContent() {
       <header className="bg-surface-container-lowest rounded-xl p-5 sm:p-8 shadow-ambient flex flex-col lg:flex-row gap-8 items-start justify-between relative overflow-hidden group mb-8 border border-surface-container-low">
         <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-bl-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
-          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md">
-            {fellow.avatar ? (
-              <img
-                alt="Fellow avatar"
-                className="w-full h-full object-cover cursor-pointer"
-                src={fellow.avatar}
-                onClick={() => setLightboxPhoto(fellow.avatar)}
-              />
-            ) : (
-              <div className="w-full h-full bg-surface-container-high flex items-center justify-center text-on-surface-variant text-3xl font-bold font-headline">
-                {fellow.name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)}
-              </div>
-            )}
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shrink-0 border-4 border-surface shadow-md bg-surface-container-high flex items-center justify-center">
+            <Avatar
+              src={fellow.avatar}
+              name={fellow.name}
+              alt="Fellow avatar"
+              className="w-full h-full object-cover cursor-pointer"
+              fallbackClassName="text-3xl font-bold font-headline text-on-surface-variant"
+              onClick={() => setLightboxPhoto(fellow.avatar)}
+            />
           </div>
           <div className="pt-2 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-2">
@@ -580,13 +604,15 @@ function FellowProfileDetailContent() {
                             Write Review
                           </button>
                         )}
-                        <button
-                          onClick={() => handleDeleteGoalSheet(sheet.id)}
-                          className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
-                          title="Delete goal sheet"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">delete</span>
-                        </button>
+                        {canDeleteRecords && (
+                          <button
+                            onClick={() => handleDeleteGoalSheet(sheet.id)}
+                            className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
+                            title="Delete goal sheet"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -625,7 +651,7 @@ function FellowProfileDetailContent() {
                             {formatDate(record.date)}
                           </p>
                         </div>
-                        {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
+                        {canDeleteRecords && (
                           <button
                             onClick={() => handleDeleteCoachingRecord(record.id)}
                             className="text-on-surface-variant hover:text-red-600 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
@@ -718,6 +744,15 @@ function FellowProfileDetailContent() {
                         >
                           <span className="material-symbols-outlined text-[22px]">visibility</span>
                         </button>
+                        {canDeleteRecords && (
+                          <button
+                            onClick={() => handleDeleteSurvey("engagement", survey.id)}
+                            className="inline-flex items-center justify-center min-w-9 min-h-9 p-2 hover:bg-error-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-error"
+                            title="Delete survey"
+                          >
+                            <span className="material-symbols-outlined text-[22px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -759,6 +794,15 @@ function FellowProfileDetailContent() {
                         >
                           <span className="material-symbols-outlined text-[22px]">visibility</span>
                         </button>
+                        {canDeleteRecords && (
+                          <button
+                            onClick={() => handleDeleteSurvey("look-beyond", survey.id)}
+                            className="inline-flex items-center justify-center min-w-9 min-h-9 p-2 hover:bg-error-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-error"
+                            title="Delete survey"
+                          >
+                            <span className="material-symbols-outlined text-[22px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -829,8 +873,7 @@ function FellowProfileDetailContent() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date</label>
-                <input
-                  type="date"
+                <DateInput
                   required
                   value={newCoachingDate}
                   onChange={(e) => setNewCoachingDate(e.target.value)}

@@ -41,7 +41,7 @@ const MATRIX_HEADERS = MATRIX_CELLS.map((cell) => ({
 }));
 
 export default function FellowPmReflectionPage() {
-  const { token, user, isInitializing } = useAuth();
+  const { token, user, isInitializing, canDeleteRecords } = useAuth();
   const router = useRouter();
   const { success: toastSuccess, error: toastError } = useToast();
 
@@ -298,7 +298,7 @@ export default function FellowPmReflectionPage() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
       <Link
         href="/education/fellows"
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -712,18 +712,20 @@ export default function FellowPmReflectionPage() {
                         >
                           Edit
                         </button>
-                        <button
-                          onClick={() =>
-                            setDeleteTarget({
-                              fellowId: historyFellow.id,
-                              reflectionId: reflection.id,
-                            })
-                          }
-                          className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
-                          title="Delete reflection"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">delete</span>
-                        </button>
+                        {canDeleteRecords && (
+                          <button
+                            onClick={() =>
+                              setDeleteTarget({
+                                fellowId: historyFellow.id,
+                                reflectionId: reflection.id,
+                              })
+                            }
+                            className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
+                            title="Delete reflection"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   );

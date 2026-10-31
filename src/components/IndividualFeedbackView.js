@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/lib/useAuth";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import IndividualFeedbackForm from "@/components/IndividualFeedbackForm";
 import { formatDate } from "@/lib/date";
@@ -22,6 +23,7 @@ function Section({ label, value, tone }) {
 
 export default function IndividualFeedbackView({ fellowId, token, canManage = false }) {
   const toast = useToast();
+  const { canDeleteRecords } = useAuth();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -170,13 +172,15 @@ export default function IndividualFeedbackView({ fellowId, token, canManage = fa
                     >
                       <span className="material-symbols-outlined text-[18px]">edit</span>
                     </button>
-                    <button
-                      onClick={() => setDeleteTarget(record)}
-                      className="p-2 rounded-full text-on-surface-variant hover:text-red-600 hover:bg-surface-container transition-colors cursor-pointer"
-                      title="Delete feedback"
-                    >
-                      <span className="material-symbols-outlined text-[18px]">delete</span>
-                    </button>
+                    {canDeleteRecords && (
+                      <button
+                        onClick={() => setDeleteTarget(record)}
+                        className="p-2 rounded-full text-on-surface-variant hover:text-red-600 hover:bg-surface-container transition-colors cursor-pointer"
+                        title="Delete feedback"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

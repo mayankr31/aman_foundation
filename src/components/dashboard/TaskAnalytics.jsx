@@ -264,11 +264,18 @@ function CalendarHeatmap({ calendar }) {
   );
 }
 
-export default function TaskAnalyticsPage() {
+/**
+ * Task analytics panel for the dashboard.
+ * Uses the same reporting-line scoped API (`/api/tasks/analytics`) so results
+ * are identical to the previous standalone analytics page.
+ */
+export default function TaskAnalytics() {
   const { token, user, can } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const allowed = can("task-analytics") || user?.roleName === "ADMIN";
 
   const load = useCallback(async () => {
     if (!token) return;
@@ -289,32 +296,25 @@ export default function TaskAnalyticsPage() {
   }, [token]);
 
   useEffect(() => {
+    if (!allowed) return;
     load();
-  }, [load]);
+  }, [allowed, load]);
 
-  if (!can("task-analytics") && user?.roleName !== "ADMIN") {
-    return (
-      <div className="p-10 text-center">
-        <p className="text-sm font-bold text-rose-600">You do not have access to task analytics.</p>
-      </div>
-    );
-  }
-
-  const isAdmin = user?.roleName === "ADMIN";
+  if (!allowed) return null;
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-6">
+    <section id="task-analytics" className="space-y-4 scroll-mt-24">
       <div>
-        <h1 className="page-title text-on-surface">Task Analytics</h1>
-        <p className="text-sm text-on-surface-variant mt-2">
-          {isAdmin
+        <h2 className="text-xl font-bold text-on-surface tracking-tight">Task Analytics</h2>
+        <p className="text-sm text-on-surface-variant mt-1">
+          {user?.roleName === "ADMIN"
             ? "Organisation-wide task volume, completion and deadline trends."
             : "Your tasks, your team's tasks and tasks you assigned."}
         </p>
       </div>
 
       {loading ? (
-        <div className="py-20 text-center text-sm text-slate-500">Loading analytics...</div>
+        <div className="py-16 text-center text-sm text-slate-500">Loading analytics...</div>
       ) : error ? (
         <div className="rounded-xl border border-rose-200 bg-rose-50 text-rose-700 p-4 text-sm">{error}</div>
       ) : data ? (
@@ -327,7 +327,7 @@ export default function TaskAnalyticsPage() {
               { label: "Overdue", value: data.counts.overdue, icon: "warning", color: "text-rose-700 bg-rose-100" },
               { label: "Due Today", value: data.counts.dueToday, icon: "today", color: "text-blue-700 bg-blue-100" },
             ].map((card) => (
-              <div key={card.label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 flex items-center justify-between">
+              <div key={card.label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 flex items-center justify-between last:col-span-2 lg:last:col-span-1">
                 <div>
                   <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">{card.label}</p>
                   <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">{card.value}</p>
@@ -339,25 +339,25 @@ export default function TaskAnalyticsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Assigned vs Completed</h2>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Assigned vs Completed</h3>
               <TrendChart trend={data.trend} />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Deadline Calendar</h2>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Deadline Calendar</h3>
               <CalendarHeatmap calendar={data.calendar} />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Priority</h2>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Priority</h3>
               <DonutChart data={data.byPriority} colors={PRIORITY_COLORS} />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Status</h2>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Status</h3>
               <DonutChart data={data.byStatus} colors={STATUS_COLORS} />
             </section>
           </div>
 
           <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-            <h2 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">By Assignee</h2>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">By Assignee</h3>
 
             {/* Mobile / tablet cards */}
             <div className="lg:hidden space-y-3">
@@ -428,6 +428,6 @@ export default function TaskAnalyticsPage() {
           </section>
         </>
       ) : null}
-    </div>
+    </section>
   );
 }

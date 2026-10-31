@@ -8,13 +8,14 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import FellowPerformanceForm from "@/components/FellowPerformanceForm";
 import RatingCategoriesModal from "@/components/RatingCategoriesModal";
 import Pagination from "@/components/ui/Pagination";
+import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function FellowPerformancePage() {
-  const { token, user, isInitializing } = useAuth();
+  const { token, user, isInitializing, canDeleteRecords } = useAuth();
   const router = useRouter();
   const { success: toastSuccess, error: toastError } = useToast();
 
@@ -197,7 +198,7 @@ export default function FellowPerformancePage() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full min-w-0 overflow-x-hidden">
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div>
           <h2 className="page-title text-on-surface mb-3">
@@ -255,22 +256,20 @@ export default function FellowPerformancePage() {
           <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
             From
           </label>
-          <input
-            type="date"
+          <DateInput
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm [color-scheme:light] dark:[color-scheme:dark]"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
           />
         </div>
         <div>
           <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
             To
           </label>
-          <input
-            type="date"
+          <DateInput
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm [color-scheme:light] dark:[color-scheme:dark]"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
           />
         </div>
         {hasFilters && (
@@ -336,12 +335,14 @@ export default function FellowPerformancePage() {
               >
                 Edit
               </button>
-              <button
-                onClick={() => setDeleteTarget(record)}
-                className="text-xs font-semibold text-error hover:underline cursor-pointer"
-              >
-                Delete
-              </button>
+              {canDeleteRecords && (
+                <button
+                  onClick={() => setDeleteTarget(record)}
+                  className="text-xs font-semibold text-error hover:underline cursor-pointer"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -425,13 +426,15 @@ export default function FellowPerformancePage() {
                       >
                         Edit
                       </button>
-                      <button
-                        onClick={() => setDeleteTarget(record)}
-                        className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
-                        title="Delete record"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">delete</span>
-                      </button>
+                      {canDeleteRecords && (
+                        <button
+                          onClick={() => setDeleteTarget(record)}
+                          className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
+                          title="Delete record"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

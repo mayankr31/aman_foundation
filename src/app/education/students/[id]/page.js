@@ -7,6 +7,9 @@ import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import AssessmentTemplatesModal from "@/components/AssessmentTemplatesModal";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import DateInput from "@/components/ui/DateInput";
+import Avatar from "@/components/ui/Avatar";
+import AddBeneficiaryModal from "@/components/AddBeneficiaryModal";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import { formatDate } from "@/lib/date";
@@ -16,7 +19,7 @@ const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "
 // ─── Small helpers ─────────────────────────────────────────────────────────────
 import { toMobileInput, toPersonNameInput } from "@/lib/validation";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
-  const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
+  const inputClasses = `w-full px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
     if (!transform) return onChange(event);
     onChange({ target: { name, value: transform(event.target.value) } });
@@ -35,6 +38,16 @@ function InputField({ label, name, value, onChange, type = "text", required = fa
         >
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
+      ) : type === "date" ? (
+        <DateInput
+          name={name}
+          value={value}
+          onChange={(event) => onChange({ target: { name, value: event.target.value } })}
+          aria-invalid={Boolean(error)}
+          className={inputClasses}
+          required={required}
+          {...rest}
+        />
       ) : (
         <input
           type={type}
@@ -72,7 +85,7 @@ function Modal({ title, onClose, children }) {
 // ─── Main Component ─────────────────────────────────────────────────────────────
 export default function StudentProfileDetail() {
   const { id } = useParams();
-  const { user, token, isInitializing } = useAuth();
+  const { user, token, isInitializing, canDeleteRecords } = useAuth();
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -589,7 +602,7 @@ export default function StudentProfileDetail() {
   const isAdminOrManager = user && (user.roleName === "ADMIN" || PROGRAM_ROLES.includes(user.roleName));
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back Link */}
       <Link href="/education/students" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
@@ -602,11 +615,12 @@ export default function StudentProfileDetail() {
         <div className="flex flex-col md:flex-row gap-6 items-start relative z-10">
           <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0">
             <div className="w-full h-full rounded-full overflow-hidden bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-4xl border-4 border-surface shadow-md">
-              {student.photoUrl ? (
-                <img alt="student" className="w-full h-full object-cover cursor-pointer" src={student.photoUrl} onClick={() => setLightboxPhoto(student.photoUrl)} />
-              ) : (
-                name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)
-              )}
+              <Avatar
+                src={student.photoUrl}
+                name={student.name}
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => setLightboxPhoto(student.photoUrl)}
+              />
             </div>
             <label className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container transition-colors" title="Upload photo">
               <span className="material-symbols-outlined text-[18px]">{uploadingPhoto ? "hourglass_top" : "photo_camera"}</span>
@@ -673,20 +687,18 @@ export default function StudentProfileDetail() {
         <div className="grid grid-cols-2 gap-3 sm:flex sm:items-end">
           <div className="flex flex-col gap-1 min-w-0">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">From</label>
-            <input
-              type="date"
+            <DateInput
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
             />
           </div>
           <div className="flex flex-col gap-1 min-w-0">
             <label className="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wide">To</label>
-            <input
-              type="date"
+            <DateInput
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
-              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
+              className="w-full min-w-0 px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary"
             />
           </div>
         </div>
@@ -820,10 +832,10 @@ export default function StudentProfileDetail() {
                           >
                             <span className="material-symbols-outlined text-[14px]">edit</span>
                           </button>
-                          {isAdminOrManager && (
+                          {canDeleteRecords && (
                             <button
                               onClick={() => handleDeleteAssessmentForm(form.id)}
-                              className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
+                              className="inline-flex items-center justify-center min-w-9 min-h-9 p-1 hover:bg-error-container rounded-full cursor-pointer text-error"
                             >
                               <span className="material-symbols-outlined text-[14px]">delete</span>
                             </button>
@@ -983,10 +995,12 @@ export default function StudentProfileDetail() {
                           className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
                           <span className="material-symbols-outlined text-[14px]">edit</span>
                         </button>
-                        <button onClick={() => handleDeleteTransition(t.id)}
-                          className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
-                          <span className="material-symbols-outlined text-[14px]">delete</span>
-                        </button>
+                        {canDeleteRecords && (
+                          <button onClick={() => handleDeleteTransition(t.id)}
+                            className="inline-flex items-center justify-center min-w-9 min-h-9 p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -1094,7 +1108,7 @@ export default function StudentProfileDetail() {
               </div>
 
               <div className="p-4 bg-surface rounded-lg">
-                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Beneficiary Family</p>
+                <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Family</p>
                 {student.beneficiary ? (
                   <div className="flex items-center justify-between">
                     <Link href={`/beneficiaries/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
@@ -1106,7 +1120,7 @@ export default function StudentProfileDetail() {
                 ) : (
                   <button onClick={() => { setModal("linkBeneficiary"); setSearchQ(""); loadBeneficiaries(); }}
                     className="text-primary text-xs font-medium hover:underline cursor-pointer">
-                    + Link to Beneficiary
+                    + Link Parents
                   </button>
                 )}
               </div>
@@ -1126,10 +1140,13 @@ export default function StudentProfileDetail() {
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center shrink-0">
                   {editPhoto ? (
                     <img alt="preview" className="w-full h-full object-cover" src={URL.createObjectURL(editPhoto)} />
-                  ) : student.photoUrl ? (
-                    <img alt="student" className="w-full h-full object-cover" src={student.photoUrl} />
                   ) : (
-                    <span className="material-symbols-outlined text-on-surface-variant">person</span>
+                    <Avatar
+                      src={student.photoUrl}
+                      name={student.name}
+                      alt="student"
+                      fallbackClassName="text-lg font-bold text-on-surface-variant"
+                    />
                   )}
                 </div>
                 <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-surface-container transition-colors cursor-pointer">
@@ -1461,15 +1478,28 @@ export default function StudentProfileDetail() {
         </Modal>
       )}
 
-      {/* Link Beneficiary Modal */}
+      {/* Link Parents Modal */}
       {modal === "linkBeneficiary" && (
-        <Modal title="Link to Beneficiary" onClose={() => setModal(null)}>
-          <p className="text-sm text-on-surface-variant mb-4">Search and select a beneficiary to link this student to.</p>
+        <Modal title="Link Parents" onClose={() => setModal(null)}>
+          <p className="text-sm text-on-surface-variant mb-4">
+            Search and select an existing beneficiary, or add parents&apos; details.
+          </p>
+          <button
+            onClick={() => setModal("addBeneficiary")}
+            className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-primary text-on-primary text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px]">person_add</span>
+            Add Parents Details
+          </button>
           <input type="text" placeholder="Search beneficiaries..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
             className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
           <div className="space-y-2 max-h-72 overflow-y-auto">
             {beneficiaries
-              .filter(b => b.name.toLowerCase().includes(searchQ.toLowerCase()) || b.enrolmentId?.includes(searchQ))
+              .filter(b =>
+                b.name?.toLowerCase().includes(searchQ.toLowerCase()) ||
+                b.enrolmentId?.toLowerCase().includes(searchQ.toLowerCase()) ||
+                b.village?.toLowerCase().includes(searchQ.toLowerCase())
+              )
               .map(b => (
                 <button key={b.id}
                   onClick={() => handleLinkBeneficiary(b.id)}
@@ -1477,10 +1507,35 @@ export default function StudentProfileDetail() {
                 >
                   <span className="font-semibold text-on-surface">{b.name}</span>
                   <span className="text-xs text-on-surface-variant ml-2">{b.enrolmentId}</span>
+                  {(b.village || b.district) && (
+                    <span className="block mt-0.5 text-xs text-on-surface-variant">
+                      {[b.village, b.district].filter(Boolean).join(", ")}
+                    </span>
+                  )}
                 </button>
               ))}
+            {beneficiaries.filter(b =>
+              b.name?.toLowerCase().includes(searchQ.toLowerCase()) ||
+              b.enrolmentId?.toLowerCase().includes(searchQ.toLowerCase()) ||
+              b.village?.toLowerCase().includes(searchQ.toLowerCase())
+            ).length === 0 && (
+              <p className="text-sm text-on-surface-variant text-center py-6">
+                No beneficiaries found. Use Add Parents Details to create one.
+              </p>
+            )}
           </div>
         </Modal>
+      )}
+
+      {/* Add Parents Details Modal */}
+      {modal === "addBeneficiary" && (
+        <AddBeneficiaryModal
+          studentId={student.id}
+          title="Add Parents Details"
+          allPrograms={user?.roleName === "FELLOW"}
+          onCreated={() => loadStudent()}
+          onClose={() => setModal(null)}
+        />
       )}
 
       <ConfirmActionModal

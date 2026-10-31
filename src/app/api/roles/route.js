@@ -48,12 +48,28 @@ export async function POST(req) {
     // Convert name to uppercase uppercase tracking e.g. "PROGRAM_MANAGER"
     const uppercaseName = name.trim().toUpperCase().replace(/[\s-]/g, "_");
 
-    const newRole = await prisma.role.create({
-      data: {
-        name: uppercaseName,
-        description,
-        displayInRegister: displayInRegister ?? true,
+    const newRole = await prisma.$transaction(async (tx) => {
+      const role = await tx.role.create({
+        data: {
+          name: uppercaseName,
+          description,
+          displayInRegister: displayInRegister ?? true,
+        },
+      });
+
+      // Every role gets access to its own attendance logs by default. Admins
+      // can still remove it from Role Permissions if needed.
+      const attendanceRead = await tx.permission.findFirst({
+        where: { app: "dashboard", page: "attendance", action: "READ" },
+        select: { id: true },
+      });
+      if (attendanceRead) {
+        await tx.rolePermission.create({
+          data: { roleId: role.id, permissionId: attendanceRead.id },
+        });
       }
+
+      return role;
     });
 
     return NextResponse.json({ success: true, data: newRole }, { status: 201 });

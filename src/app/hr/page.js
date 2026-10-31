@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
+import Avatar from "@/components/ui/Avatar";
 import usePagination from "@/lib/usePagination";
 import { DEPARTMENTS } from "@/lib/organization";
 import { formatRoleLabel } from "@/lib/roles";
@@ -98,7 +99,7 @@ export default function HrEmployeeManagement() {
   // Employees Logic only
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
       <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Dashboard</span>
@@ -109,34 +110,6 @@ export default function HrEmployeeManagement() {
           <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Administration Module</p>
           <h2 className="page-title text-on-surface">Human Resources &amp; Personnel</h2>
         </div>
-      </div>
-
-      <div className="md:hidden mb-6 font-sans">
-        <label htmlFor="hr-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-          HR section
-        </label>
-        <select
-          id="hr-tab"
-          value="/hr"
-          onChange={(e) => router.push(e.target.value)}
-          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
-        >
-          <option value="/hr">Employees</option>
-          <option value="/hr/attendance">Attendance Logs</option>
-          <option value="/hr/leaves">Leave Requests</option>
-        </select>
-      </div>
-
-      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans">
-        <div className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-semibold text-primary border-b-2 border-primary cursor-default">
-          Employees
-        </div>
-        <Link href="/hr/attendance" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Attendance Logs
-        </Link>
-        <Link href="/hr/leaves" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Leave Requests
-        </Link>
       </div>
 
       <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
@@ -198,11 +171,7 @@ export default function HrEmployeeManagement() {
                       <td data-label="" className="py-4 px-4 font-bold text-on-surface">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
-                            {emp.avatar ? (
-                              <img alt="avatar" className="w-full h-full object-cover" src={emp.avatar} />
-                            ) : (
-                              initials
-                            )}
+                            <Avatar src={emp.avatar} name={name} fallback={initials} />
                           </div>
                           <div className="min-w-0">
                             <span className="break-words">{name}</span>

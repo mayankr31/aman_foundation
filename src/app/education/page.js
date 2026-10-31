@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
+import HubKpiStrip from "@/components/dashboard/HubKpiStrip";
 
 export default function EducationHub() {
   const { user } = useAuth();
 
   return (
-    <div className="flex-1 p-6 md:p-10 pb-24">
+    <div className="flex-1 p-4 sm:p-6 md:p-10 pb-24">
       {/* Back link */}
       <Link
         href="/"
@@ -22,7 +23,7 @@ export default function EducationHub() {
       </Link>
 
       {/* Hero Header */}
-      <div className="mb-12 max-w-4xl">
+      <div className="mb-8 max-w-4xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed/20 text-on-primary-fixed rounded-full text-xs font-semibold uppercase tracking-wider mb-4 font-sans">
           <span className="material-symbols-outlined text-[16px]">hub</span>
           Central Hub
@@ -34,6 +35,9 @@ export default function EducationHub() {
           Oversee, evaluate, and scale our educational initiatives. This central module provides a unified view of our impact across fellows, students, institutional partnerships, and community programs.
         </p>
       </div>
+
+      {/* Education KPIs (configurable from Dashboard Config) */}
+      <HubKpiStrip group="education" />
 
       {/* Bento Grid Layout for Sub-modules */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl">

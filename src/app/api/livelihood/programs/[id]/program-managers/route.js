@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin } from "@/lib/scope";
+import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { canAssignPerson } from "@/lib/hierarchy";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -48,16 +49,24 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id: programId } = await params;
     const program = await prisma.livelihoodProgram.findUnique({ where: { id: programId } });
     if (!program) return NextResponse.json({ error: "Program not found" }, { status: 404 });
 
     const { userId } = await req.json();
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
+
+    if (!isAdmin(user)) {
+      if (!(await isLivelihoodProgramManaged(user.id, programId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
+      }
+      if (!(await canAssignPerson(user, userId))) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only assign people who report to you" },
+          { status: 403 }
+        );
+      }
+    }
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
     if (!target || !PROGRAM_ROLES.includes(target.role.name)) {
@@ -89,13 +98,21 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id: programId } = await params;
     const { userId } = await req.json();
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
+
+    if (!isAdmin(user)) {
+      if (!(await isLivelihoodProgramManaged(user.id, programId))) {
+        return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
+      }
+      if (!(await canAssignPerson(user, userId))) {
+        return NextResponse.json(
+          { error: "Forbidden: You can only unassign people who report to you" },
+          { status: 403 }
+        );
+      }
+    }
 
     const existing = await prisma.programManagerLivelihoodProgram.findFirst({
       where: { userId, programId },

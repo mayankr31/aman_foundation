@@ -62,3 +62,36 @@ export async function GET(req, { params }) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req, { params }) {
+  try {
+    const { user, error } = await authenticateUser(req);
+    if (error) return error;
+
+    if (user.role?.name !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can delete records" },
+        { status: 403 }
+      );
+    }
+
+    const { id, surveyId } = await params;
+    const fellowId = await resolveFellowId(id);
+    if (!fellowId) {
+      return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
+    }
+
+    const survey = await prisma.engagementSurvey.findFirst({
+      where: { id: surveyId, fellowId },
+    });
+    if (!survey) {
+      return NextResponse.json({ error: "Survey not found" }, { status: 404 });
+    }
+
+    await prisma.engagementSurvey.delete({ where: { id: surveyId } });
+    return NextResponse.json({ success: true, message: "Engagement survey deleted" });
+  } catch (err) {
+    console.error("Failed to delete engagement survey:", err);
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  }
+}

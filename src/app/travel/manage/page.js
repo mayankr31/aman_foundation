@@ -8,7 +8,7 @@ import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 
 export default function TravelManagePage() {
-  const { token, user, isInitializing, can } = useAuth();
+  const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
   const router = useRouter();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -170,6 +170,22 @@ export default function TravelManagePage() {
     }
   };
 
+  const handleDeleteRequest = async (req) => {
+    if (!window.confirm(`Delete the travel request to ${req.destination}? This cannot be undone.`)) return;
+    try {
+      const res = await fetch(`/api/travel-requests/${req.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.error || "Failed to delete request");
+      setRequests((prev) => prev.filter((item) => item.id !== req.id));
+      triggerToast("Travel request deleted");
+    } catch (error) {
+      triggerToast(error.message || "Failed to delete request");
+    }
+  };
+
   const statusBadge = (status) => {
     const colors = {
       PENDING: "bg-yellow-100 text-yellow-800",
@@ -196,7 +212,7 @@ export default function TravelManagePage() {
   const pendingCount = requests.filter(r => r.status === "PENDING").length;
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="mb-8">
         <h2 className="page-title text-on-surface mb-2">Travel Management</h2>
         <div className="flex items-center gap-4">
@@ -282,6 +298,15 @@ export default function TravelManagePage() {
                   <p className="font-bold text-on-surface mt-1">
                     Est: {req.expectedExpenses?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) || "N/A"}
                   </p>
+                  {canDeleteRecords && (
+                    <button
+                      onClick={() => handleDeleteRequest(req)}
+                      className="mt-2 text-[11px] font-bold text-rose-600 hover:text-rose-700 inline-flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-[15px]">delete</span>
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
 

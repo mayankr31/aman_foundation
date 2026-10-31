@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import EmptyState from "@/components/ui/EmptyState";
 import Pagination from "@/components/ui/Pagination";
+import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 
@@ -271,7 +272,7 @@ export default function PtaPrograms() {
   return (
     <div className="flex-grow flex flex-col overflow-y-auto">
       {/* Header */}
-      <div className="flex flex-col px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
+      <div className="flex flex-col px-4 sm:px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
         <Link
           href="/education"
           className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -322,7 +323,7 @@ export default function PtaPrograms() {
       </div>
 
       {/* Main Content Dashboard */}
-      <div className="flex-grow px-6 md:px-12 pb-24 md:pb-12 mt-8">
+      <div className="flex-grow px-4 sm:px-6 md:px-12 pb-24 md:pb-12 mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
           
           {/* Active Statistics Card */}
@@ -568,12 +569,11 @@ export default function PtaPrograms() {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                       Event Date
                     </label>
-                    <input
-                      type="date"
+                    <DateInput
                       required
                       value={newEventDate}
                       onChange={(e) => setNewEventDate(e.target.value)}
-                      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface"
                     />
                   </div>
                   <div className="flex flex-col gap-1">

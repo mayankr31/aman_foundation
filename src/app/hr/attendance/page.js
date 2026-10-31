@@ -8,6 +8,8 @@ import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import OnLeaveToday from "@/components/OnLeaveToday";
 import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
+import { formatDate } from "@/lib/date";
+import AttendanceLocation from "@/components/AttendanceLocation";
 import {
   TASK_TIME_SLOT_CLASSES,
   TASK_TIME_SLOT_LABELS,
@@ -15,6 +17,17 @@ import {
 } from "@/lib/taskSlots";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+function logRecency(log) {
+  return [log?.logdate || "", new Date(log?.checkInAt || log?.createdAt || 0).getTime()];
+}
+
+function isNewerLog(candidate, current) {
+  const [candidateDate, candidateTime] = logRecency(candidate);
+  const [currentDate, currentTime] = logRecency(current);
+  if (candidateDate !== currentDate) return candidateDate > currentDate;
+  return candidateTime > currentTime;
+}
 
 export default function HrAttendanceLogs() {
   const router = useRouter();
@@ -27,44 +40,6 @@ export default function HrAttendanceLogs() {
   // Task Modal
   const [selectedTaskLog, setSelectedTaskLog] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
-  const [checkInLocation, setCheckInLocation] = useState(null);
-  const [checkOutLocation, setCheckOutLocation] = useState(null);
-  const [isLocLoading, setIsLocLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchLocations = async () => {
-      if (!selectedTaskLog || !showTaskModal) {
-        setCheckInLocation(null);
-        setCheckOutLocation(null);
-        return;
-      }
-      setIsLocLoading(true);
-      try {
-        if (selectedTaskLog.checkInLat && selectedTaskLog.checkInLng) {
-          const inRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedTaskLog.checkInLat}&lon=${selectedTaskLog.checkInLng}`);
-          const inData = await inRes.json();
-          setCheckInLocation(inData.display_name || "Unknown");
-        } else {
-          setCheckInLocation("Location not recorded");
-        }
-
-        if (selectedTaskLog.checkOutLat && selectedTaskLog.checkOutLng) {
-          const outRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedTaskLog.checkOutLat}&lon=${selectedTaskLog.checkOutLng}`);
-          const outData = await outRes.json();
-          setCheckOutLocation(outData.display_name || "Unknown");
-        } else {
-          setCheckOutLocation("Location not recorded");
-        }
-      } catch(e) {
-        console.error("Location fetch error", e);
-        setCheckInLocation("Failed to load");
-        setCheckOutLocation("Failed to load");
-      } finally {
-        setIsLocLoading(false);
-      }
-    };
-    fetchLocations();
-  }, [selectedTaskLog, showTaskModal]);
 
   useEffect(() => {
     if (token) {
@@ -98,24 +73,27 @@ export default function HrAttendanceLogs() {
     setShowTaskModal(true);
   };
 
-  // Group logs by user for the grid, taking the latest log
+  // Group logs by user, keeping each employee's most recent attendance date.
   const groupedAttendance = useMemo(() => {
     const map = new Map();
     attendanceLogs.forEach(log => {
-      if (!map.has(log.userId)) {
+      const existing = map.get(log.userId);
+      if (!existing || isNewerLog(log, existing)) {
         map.set(log.userId, log);
-      } else {
-        const existing = map.get(log.userId);
-        if (new Date(log.createdAt) > new Date(existing.createdAt)) {
-          map.set(log.userId, log);
-        }
       }
     });
-    
-    return Array.from(map.values()).filter(log => {
-      const name = log.user?.name || log.email || "";
-      return name.toLowerCase().includes(attendanceSearch.toLowerCase());
-    });
+
+    return Array.from(map.values())
+      .filter(log => {
+        const name = log.user?.name || log.email || "";
+        return name.toLowerCase().includes(attendanceSearch.toLowerCase());
+      })
+      .sort((a, b) => {
+        const [aDate, aTime] = logRecency(a);
+        const [bDate, bTime] = logRecency(b);
+        if (aDate !== bDate) return bDate.localeCompare(aDate);
+        return bTime - aTime;
+      });
   }, [attendanceLogs, attendanceSearch]);
 
   const { pageItems: pagedAttendance, currentPage, setCurrentPage } = usePagination(groupedAttendance, 10);
@@ -139,7 +117,7 @@ export default function HrAttendanceLogs() {
   };
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 flex-grow flex flex-col overflow-y-auto pb-24 max-w-7xl mx-auto w-full">
       <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">Back to Dashboard</span>
@@ -147,37 +125,13 @@ export default function HrAttendanceLogs() {
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div>
-          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">Administration Module</p>
-          <h2 className="page-title text-on-surface">Human Resources &amp; Personnel</h2>
+          <p className="text-primary text-xs uppercase tracking-[0.05em] font-bold mb-2 block font-sans">
+            {canReview ? "Administration Module" : "Self Service"}
+          </p>
+          <h2 className="page-title text-on-surface">
+            {canReview ? "Human Resources & Personnel" : "My Attendance"}
+          </h2>
         </div>
-      </div>
-
-      <div className="md:hidden mb-6 font-sans">
-        <label htmlFor="hr-tab" className="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-          HR section
-        </label>
-        <select
-          id="hr-tab"
-          value="/hr/attendance"
-          onChange={(e) => router.push(e.target.value)}
-          className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
-        >
-          <option value="/hr">Employees</option>
-          <option value="/hr/attendance">Attendance Logs</option>
-          <option value="/hr/leaves">Leave Requests</option>
-        </select>
-      </div>
-
-      <div className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar tabs-mobile-wrap font-sans">
-        <Link href="/hr" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Employees
-        </Link>
-        <div className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-semibold text-primary border-b-2 border-primary cursor-default">
-          Attendance Logs
-        </div>
-        <Link href="/hr/leaves" className="px-6 py-3 text-sm whitespace-nowrap transition-colors font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50 border-b-2 border-transparent">
-          Leave Requests
-        </Link>
       </div>
 
       {canReview && <OnLeaveToday className="mb-6" />}
@@ -189,16 +143,20 @@ export default function HrAttendanceLogs() {
           <div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
               <div>
-                <h3 className="font-headline font-bold text-xl text-on-surface">Daily Attendance Ledger</h3>
+                <h3 className="font-headline font-bold text-xl text-on-surface">
+                  {canReview ? "Daily Attendance Ledger" : "My Attendance"}
+                </h3>
                 <p className="text-[11px] text-on-surface-variant mt-1">Standard shift: {SHIFT_LABEL}</p>
               </div>
-              <input
-                type="text"
-                placeholder="Search employee..."
-                value={attendanceSearch}
-                onChange={(e) => setAttendanceSearch(e.target.value)}
-                className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
-              />
+              {canReview && (
+                <input
+                  type="text"
+                  placeholder="Search employee..."
+                  value={attendanceSearch}
+                  onChange={(e) => setAttendanceSearch(e.target.value)}
+                  className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
+                />
+              )}
             </div>
             
             <div className="w-full overflow-x-auto">
@@ -246,7 +204,16 @@ export default function HrAttendanceLogs() {
                             )}
                           </div>
                         </td>
-                        <td data-label="Login Time" className="py-4 px-4 text-on-surface text-xs font-semibold">{log.intimelog || "N/A"}</td>
+                        <td data-label="Login Time" className="py-4 px-4 text-on-surface text-xs font-semibold">
+                          <div className="flex flex-col gap-0.5">
+                            <span>{log.intimelog || "N/A"}</span>
+                            {log.logdate && (
+                              <span className="text-[10px] font-medium text-slate-400">
+                                {formatDate(log.logdate)}
+                              </span>
+                            )}
+                          </div>
+                        </td>
                         <td data-label="Daily Tasks" className="py-4 px-4">
                           <div className="flex items-center gap-1.5 text-xs font-medium">
                             {log.taskDetails && log.taskDetails.length > 0 ? (() => {
@@ -302,7 +269,7 @@ export default function HrAttendanceLogs() {
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Daily Tasks
+                  Daily Tasks{selectedTaskLog.logdate ? ` — ${formatDate(selectedTaskLog.logdate)}` : ""}
                 </h3>
                 <button
                   onClick={() => setShowTaskModal(false)}
@@ -354,12 +321,22 @@ export default function HrAttendanceLogs() {
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check In</p>
                       <p className="font-bold text-gray-800">{selectedTaskLog.intimelog || 'N/A'}</p>
-                      <p className="text-[10px] text-gray-500 mt-2 leading-tight">{isLocLoading ? 'Loading location...' : checkInLocation}</p>
+                      <AttendanceLocation
+                        lat={selectedTaskLog.checkInLat}
+                        lng={selectedTaskLog.checkInLng}
+                        accuracy={selectedTaskLog.checkInAccuracy}
+                        className="mt-2"
+                      />
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
                       <p className="font-bold text-gray-800">{selectedTaskLog.outtimelog || 'N/A'}</p>
-                      <p className="text-[10px] text-gray-500 mt-2 leading-tight">{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
+                      <AttendanceLocation
+                        lat={selectedTaskLog.checkOutLat}
+                        lng={selectedTaskLog.checkOutLng}
+                        accuracy={selectedTaskLog.checkOutAccuracy}
+                        className="mt-2"
+                      />
                     </div>
                   </div>
                 </div>

@@ -185,3 +185,29 @@ export async function PATCH(req, context) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+export async function DELETE(req, context) {
+  try {
+    const { user, error } = await authenticateUser(req);
+    if (error) return error;
+
+    if (user.role?.name !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can delete assets" },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await context.params;
+    const asset = await prisma.asset.findUnique({ where: { id } });
+    if (!asset) {
+      return NextResponse.json({ error: "Asset not found" }, { status: 404 });
+    }
+
+    await prisma.asset.delete({ where: { id } });
+    return NextResponse.json({ success: true, message: "Asset deleted" });
+  } catch (error) {
+    console.error("Delete asset error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}

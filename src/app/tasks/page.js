@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { formatDate, formatDateTime } from "@/lib/date";
+import DateInput from "@/components/ui/DateInput";
 import { getISTDateKey } from "@/lib/time";
 import { validateDateOrder } from "@/lib/validation";
 import { formatRoleLabel } from "@/lib/roles";
@@ -223,11 +224,11 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Planned Date</label>
-                <input type="date" value={form.plannedDate} onChange={(e) => setForm({ ...form, plannedDate: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
+                <DateInput value={form.plannedDate} onChange={(e) => setForm({ ...form, plannedDate: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
               </div>
               <div>
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Deadline</label>
-                <input type="date" min={form.plannedDate || undefined} value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
+                <DateInput min={form.plannedDate || undefined} value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
               </div>
               <div>
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Status</label>
@@ -534,7 +535,7 @@ function TasksPageContent() {
   };
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-6">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full space-y-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="page-title text-on-surface">Tasks</h1>
@@ -692,11 +693,11 @@ function TasksPageContent() {
                 </div>
                 <div>
                   <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Planned Date</label>
-                  <input type="date" value={form.plannedDate} onChange={(e) => setForm({ ...form, plannedDate: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
+                  <DateInput value={form.plannedDate} onChange={(e) => setForm({ ...form, plannedDate: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
                 </div>
                 <div>
                   <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Deadline</label>
-                  <input type="date" min={form.plannedDate || undefined} value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
+                  <DateInput min={form.plannedDate || undefined} value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })} className="mt-1 w-full px-3 py-2 border rounded-lg bg-transparent text-sm" />
                 </div>
               </div>
               <div>
@@ -734,12 +735,6 @@ function TasksPageContent() {
           canWrite={canWrite}
         />
       )}
-
-      <div className="flex justify-end">
-        <a href="/tasks/analytics" className={`text-xs font-bold text-primary hover:underline ${can("task-analytics") ? "" : "hidden"}`}>
-          Open task analytics →
-        </a>
-      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   NOTIFICATION_TYPES,
 } from "@/lib/notifications";
 import {
+  addDays,
   daysInclusive,
   ensureLeaveConfigs,
   parseDateOnly,
@@ -31,7 +32,7 @@ export async function GET(req) {
 
     // Only Admin/HR roles can see all leaves. PROGRAM_MANAGER sees their team's + own. Others (like FELLOW) see only their own.
     let where;
-    if (user.role?.name === "ADMIN" || user.role?.name === "HR") {
+    if (["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name)) {
       where = undefined;
     } else if (PROGRAM_ROLES.includes(user.role?.name)) {
       const team = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [user.id];
@@ -73,6 +74,9 @@ export async function POST(req) {
     if (!config) {
       return NextResponse.json({ error: "Please select a valid leave type" }, { status: 400 });
     }
+    if (!config.active) {
+      return NextResponse.json({ error: "This leave type is no longer available" }, { status: 400 });
+    }
 
     const startDate = parseDateOnly(body.startDate || body.singleDate || dates);
     const endDate = parseDateOnly(body.endDate || body.singleDate || dates) || startDate;
@@ -80,9 +84,15 @@ export async function POST(req) {
       return NextResponse.json({ error: "Please select valid leave dates" }, { status: 400 });
     }
 
+    const holidayName = String(body.holidayName || "").trim();
+    if (config.holidayNameRequired && !holidayName) {
+      return NextResponse.json({ error: "Enter the name of the approved holiday" }, { status: 400 });
+    }
+
     const days = daysInclusive(startDate, endDate);
     let compOffWorkedDate = null;
     let compOffCreditId = null;
+    let policyFlags = [];
 
     if (leaveTypeKey === "COMP_OFF") {
       compOffWorkedDate = parseDateOnly(body.compOffWorkedDate);
@@ -92,13 +102,12 @@ export async function POST(req) {
       if (compOffWorkedDate >= startDate) {
         return NextResponse.json({ error: "The comp-off leave date must be after the worked date" }, { status: 400 });
       }
-      const expiry = new Date(Date.UTC(
-        compOffWorkedDate.getUTCFullYear(),
-        compOffWorkedDate.getUTCMonth() + 3,
-        compOffWorkedDate.getUTCDate()
-      ));
+      const expiry = addDays(compOffWorkedDate, Number(config.validityDays || 90));
       if (startDate > expiry) {
-        return NextResponse.json({ error: "Comp off must be availed within 3 months of the worked date" }, { status: 400 });
+        return NextResponse.json(
+          { error: `Compensatory leave must be availed within ${Number(config.validityDays || 90)} days of the worked date` },
+          { status: 400 }
+        );
       }
 
       const existingCredit = await prisma.compOffCredit.findUnique({
@@ -134,8 +143,10 @@ export async function POST(req) {
       if (!validation.ok) {
         return NextResponse.json({ error: validation.error }, { status: 400 });
       }
+      policyFlags = validation.warnings || [];
     }
 
+    const medicalCertificateRequired = policyFlags.includes("MEDICAL_CERTIFICATE_REQUIRED");
     const leave = await prisma.leave.create({
       data: {
         userId: user.id,
@@ -146,8 +157,11 @@ export async function POST(req) {
         days,
         dates: body.dates || `${startDate.toISOString().slice(0, 10)} to ${endDate.toISOString().slice(0, 10)}`,
         reason,
+        holidayName: holidayName || null,
         compOffWorkedDate,
         compOffCreditId,
+        medicalCertificateRequired,
+        policyFlags,
         status: "PENDING",
       },
       include: { compOffCredit: true },
@@ -168,10 +182,11 @@ export async function POST(req) {
       recipients = [...managers, ...admins];
     }
 
+    const certificateNote = medicalCertificateRequired ? " A medical certificate is required at the office." : "";
     await notifyUsers(recipients, {
       type: NOTIFICATION_TYPES.LEAVE_REQUESTED,
       title: "New Leave Request",
-      message: `${user.name || "A staff member"} has requested leave${type ? ` (${type})` : ""} for approval.`,
+      message: `${user.name || "A staff member"} has requested ${config.name} for approval.${certificateNote}`,
       link: `/hr/leaves`,
       actorId: user.id,
     });

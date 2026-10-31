@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
+import Avatar from "@/components/ui/Avatar";
 
 function Initial({ name, avatar, tone = "teal" }) {
   const initial = (name || "?").charAt(0).toUpperCase();
@@ -14,15 +15,7 @@ function Initial({ name, avatar, tone = "teal" }) {
       : "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300";
   return (
     <div className={`w-9 h-9 rounded-full overflow-hidden flex items-center justify-center font-bold text-sm shrink-0 ${classes}`}>
-      {avatar ? (
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${avatar})` }}
-          aria-hidden="true"
-        />
-      ) : (
-        initial
-      )}
+      <Avatar src={avatar} name={name} fallback={initial} />
     </div>
   );
 }

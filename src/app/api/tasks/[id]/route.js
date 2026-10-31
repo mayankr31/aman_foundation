@@ -4,6 +4,7 @@ import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { TASK_PRIORITIES, TASK_STATUSES, notifyTaskEvent, NOTIFICATION_TYPES } from "@/lib/tasks";
 import { canViewTask } from "@/lib/taskScope";
+import { canDeleteTaskRecord } from "@/lib/taskPermissions";
 import { TASK_TIME_SLOTS } from "@/lib/taskSlots";
 
 function parseDateValue(value) {
@@ -135,12 +136,11 @@ export async function DELETE(req, { params }) {
     const existing = await prisma.task.findUnique({ where: { id } });
     if (!existing) return NextResponse.json({ error: "Task not found" }, { status: 404 });
 
-    const canDelete =
-      user.role.name === "ADMIN" ||
-      existing.assignedById === user.id ||
-      (existing.assigneeId === user.id && !existing.assignedById);
-    if (!canDelete) {
-      return NextResponse.json({ error: "Only the assigner or an admin can delete this task" }, { status: 403 });
+    if (!canDeleteTaskRecord(user, existing)) {
+      return NextResponse.json(
+        { error: "You can only delete tasks you created or self-created tasks assigned to you" },
+        { status: 403 }
+      );
     }
 
     await prisma.task.delete({ where: { id } });

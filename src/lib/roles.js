@@ -6,6 +6,14 @@ const ROLE_LABELS = {
   ADMIN: "Executive Director",
 };
 
+/**
+ * True only for the Executive Director (the ADMIN role).
+ * Used to gate destructive record deletion across the app.
+ */
+export function canDeleteRecords(user) {
+  return user?.role?.name === "ADMIN" || user?.roleName === "ADMIN";
+}
+
 /** Turns a stored role code (e.g. PROGRAM_MANAGER) into a readable label. */
 export function formatRoleLabel(role) {
   if (!role) return "—";

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DateInput from "@/components/ui/DateInput";
 import { useToast } from "@/context/ToastContext";
 import { SUBJECT_OPTIONS } from "@/data/fellowPerformanceConstants";
 
@@ -136,8 +137,7 @@ export default function IndividualFeedbackForm({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
               <label className={labelClass}>Date</label>
-              <input
-                type="date"
+              <DateInput
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}

@@ -1,10 +1,60 @@
 "use client";
 
 import Link from "next/link";
+import HubKpiStrip from "@/components/dashboard/HubKpiStrip";
+
+const TONES = {
+  emerald: {
+    glow: "bg-emerald-500/5",
+    icon: "bg-emerald-100 text-emerald-700 group-hover:bg-emerald-200/70",
+    title: "group-hover:text-emerald-600",
+    action: "text-emerald-600",
+  },
+  amber: {
+    glow: "bg-amber-500/5",
+    icon: "bg-amber-100 text-amber-700 group-hover:bg-amber-200/70",
+    title: "group-hover:text-amber-600",
+    action: "text-amber-600",
+  },
+  primary: {
+    glow: "bg-primary/5",
+    icon: "bg-primary/10 text-primary group-hover:bg-primary/20",
+    title: "group-hover:text-primary",
+    action: "text-primary",
+  },
+};
+
+function HubCard({ href, icon, title, description, actionLabel, tone = "primary" }) {
+  const colors = TONES[tone] || TONES.primary;
+
+  return (
+    <Link
+      href={href}
+      className="group relative bg-surface-container-lowest rounded-xl p-8 shadow-glow hover:shadow-lg transition-all duration-300 border border-outline-variant/15 flex flex-col h-full overflow-hidden"
+    >
+      <div className={`absolute right-0 top-0 w-32 h-32 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110 ${colors.glow}`} />
+      <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-6 z-10 transition-colors ${colors.icon}`}>
+        <span className="material-symbols-outlined text-3xl">{icon}</span>
+      </div>
+      <h3 className={`text-xl font-semibold text-on-surface mb-3 z-10 transition-colors ${colors.title}`}>
+        {title}
+      </h3>
+      <p className="text-on-surface-variant body-md leading-relaxed mb-6 flex-1 z-10">
+        {description}
+      </p>
+      <div className={`flex items-center gap-2 font-medium text-sm mt-auto z-10 font-sans ${colors.action}`}>
+        <span>{actionLabel}</span>
+        <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">
+          arrow_forward
+        </span>
+      </div>
+    </Link>
+  );
+}
 
 export default function LivelihoodHub() {
   return (
-    <main className="flex-1 p-6 md:p-12 bg-surface">
+    <div className="flex-1 p-4 sm:p-6 md:p-10 pb-24">
       <Link
         href="/"
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -12,112 +62,57 @@ export default function LivelihoodHub() {
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal">
           arrow_back
         </span>
-        <span className="text-[10px] font-bold uppercase tracking-widest">
+        <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
           Back to Dashboard
         </span>
       </Link>
 
-      <div className="mb-16 max-w-4xl">
-        <h2 className="text-display-md font-headline text-on-surface mb-6">
+      <div className="mb-12 max-w-4xl">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary-fixed/20 text-on-primary-fixed rounded-full text-xs font-semibold uppercase tracking-wider mb-4 font-sans">
+          <span className="material-symbols-outlined text-[16px]">agriculture</span>
+          Livelihood Hub
+        </div>
+        <h1 className="page-title text-on-surface mb-4">
           Livelihood Management
-        </h2>
-        <p className="text-body-md text-on-surface-variant max-w-2xl leading-relaxed">
-          Oversee and optimize community economic development programs across Farm (cultivation-based) and Non-Farm (livestock &amp; allied) categories. Track enrollments, yields, events, and revenue.
+        </h1>
+        <p className="text-lg text-on-surface-variant leading-relaxed max-w-2xl">
+          Oversee and optimize community economic development programs across Farm (cultivation-based)
+          and Non-Farm (livestock &amp; allied) categories, with a central registry for all program
+          participants.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
-        {/* Farm Programs */}
-        <Link
-          className="block group bg-surface-container-lowest rounded-lg p-8 ambient-shadow hover:-translate-y-1 transition-transform duration-300 h-full flex flex-col justify-between"
+      {/* Livelihood KPIs (configurable from Dashboard Config) */}
+      <HubKpiStrip group="livelihood" />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl">
+        <HubCard
           href="/livelihood/farm"
-        >
-          <div>
-            <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-6 text-emerald-700">
-              <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>
-                agriculture
-              </span>
-            </div>
-            <h3 className="text-xl font-headline font-semibold text-on-surface mb-3 group-hover:text-emerald-600 transition-colors">
-              Farm Programs
-            </h3>
-            <p className="text-body-md text-on-surface-variant">
-              Cultivation-based initiatives: sugarcane, maize, rice, and other crops. Track land allocation, crop stages, yields, and revenue per beneficiary.
-            </p>
-          </div>
-          <div className="mt-8 flex items-center justify-between">
-            <span className="text-label-md text-emerald-600 font-medium tracking-widest">
-              Manage Farm Programs
-            </span>
-            <span className="material-symbols-outlined text-emerald-600 group-hover:translate-x-1 transition-transform">
-              arrow_forward
-            </span>
-          </div>
-        </Link>
+          icon="agriculture"
+          title="Farm Programs"
+          description="Cultivation-based initiatives: sugarcane, maize, rice, and other crops. Track land allocation, crop stages, yields, and revenue per beneficiary."
+          actionLabel="Manage Farm Programs"
+          tone="emerald"
+        />
 
-        {/* Non-Farm Programs */}
-        <Link
-          className="block group bg-surface-container-lowest rounded-lg p-8 ambient-shadow hover:-translate-y-1 transition-transform duration-300 h-full flex flex-col justify-between"
+        <HubCard
           href="/livelihood/non-farm"
-        >
-          <div>
-            <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-6 text-amber-700">
-              <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>
-                pets
-              </span>
-            </div>
-            <h3 className="text-xl font-headline font-semibold text-on-surface mb-3 group-hover:text-amber-600 transition-colors">
-              Non-Farm Programs
-            </h3>
-            <p className="text-body-md text-on-surface-variant">
-              Livestock &amp; allied activities: goat rearing, fish farming, poultry, and more. Track asset distribution, ROI, health events, and growth metrics.
-            </p>
-          </div>
-          <div className="mt-8 flex items-center justify-between">
-            <span className="text-label-md text-amber-600 font-medium tracking-widest">
-              Manage Non-Farm Programs
-            </span>
-            <span className="material-symbols-outlined text-amber-600 group-hover:translate-x-1 transition-transform">
-              arrow_forward
-            </span>
-          </div>
-        </Link>
-      </div>
+          icon="pets"
+          title="Non-Farm Programs"
+          description="Livestock and allied activities: goat rearing, fish farming, poultry, and more. Track asset distribution, ROI, health events, and growth metrics."
+          actionLabel="Manage Non-Farm Programs"
+          tone="amber"
+        />
 
-      {/* Beneficiaries Master */}
-      <div className="mt-8 max-w-3xl">
-        <Link
-          className="block group bg-primary rounded-lg p-8 ambient-shadow hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden"
+        <HubCard
           href="/beneficiaries"
-        >
-          <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary-container rounded-full opacity-50 blur-2xl"></div>
-          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="min-w-0">
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary">
-                  <span className="material-symbols-outlined" style={{ fontSize: "24px" }}>
-                    group
-                  </span>
-                </div>
-                <h3 className="text-xl font-headline font-semibold text-on-primary">
-                  Beneficiaries Master
-                </h3>
-              </div>
-              <p className="text-body-md text-on-primary/80 max-w-xl">
-                Central database for all program participants. View complete profiles, program history, resilience scoring, and cross-module engagement data.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
-              <span className="text-label-md text-primary-fixed font-medium tracking-widest">
-                Access Database
-              </span>
-              <span className="material-symbols-outlined text-primary-fixed group-hover:translate-x-1 transition-transform">
-                arrow_forward
-              </span>
-            </div>
-          </div>
-        </Link>
+          icon="diversity_3"
+          title="Beneficiary Master"
+          description="Central database for all program participants. View complete profiles, program history, resilience scoring, and cross-module engagement data."
+          actionLabel="Open Registry"
+          tone="primary"
+        />
       </div>
-    </main>
+    </div>
   );
 }

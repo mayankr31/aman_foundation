@@ -9,6 +9,12 @@ import {
   getDefaultLinkKeys,
 } from "@/lib/dashboardSections";
 
+/** Hub-page permission that owns each KPI group. */
+const KPI_GROUP_PAGE = {
+  education: "education",
+  livelihood: "livelihood",
+};
+
 /**
  * Every quick-link group in the registry, in a stable display order.
  * New groups added to LINK_GROUPS automatically appear here.
@@ -18,7 +24,6 @@ function getOrderedGroups() {
     "workspace",
     "tasks",
     "education",
-    "observations",
     "livelihood",
     "disaster",
     "hr",
@@ -60,13 +65,18 @@ function shapeSections(roleName, can) {
 
 function shapeOptions(roleName, can, config) {
   return {
-    kpis: KPI_DEFINITIONS.map((kpi) => ({
-      key: kpi.key,
-      label: kpi.label,
-      icon: kpi.icon,
-      tone: kpi.tone,
-      allowed: true,
-    })),
+    kpis: KPI_DEFINITIONS.map((kpi) => {
+      const page = KPI_GROUP_PAGE[kpi.group];
+      return {
+        key: kpi.key,
+        label: kpi.label,
+        icon: kpi.icon,
+        tone: kpi.tone,
+        group: kpi.group,
+        // Hub KPIs are only useful to roles that can open the hub page.
+        allowed: page ? can(page) : true,
+      };
+    }),
     sections: shapeSections(roleName, can),
     defaults: {
       kpiKeys: getDashboardKpiConfig(roleName).map((kpi) => kpi.key),

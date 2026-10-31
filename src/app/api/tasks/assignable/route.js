@@ -33,7 +33,16 @@ export async function GET(req) {
       });
     } else {
       const scopedIds = (await getTaskTeamUserIds(user, { includeSelf: true })) || [];
-      const targetIds = scopedIds.length ? scopedIds : [user.id];
+      const fellows = await prisma.fellow.findMany({
+        where: { userId: { not: null } },
+        select: { userId: true },
+      });
+      const targetIds = [
+        ...new Set([
+          ...(scopedIds.length ? scopedIds : [user.id]),
+          ...fellows.map((fellow) => fellow.userId).filter(Boolean),
+        ]),
+      ];
 
       const rows = await prisma.user.findMany({
         where: { id: { in: targetIds }, status: "ACTIVE" },

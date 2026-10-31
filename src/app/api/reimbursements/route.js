@@ -6,19 +6,82 @@ import {
   getFellowIdByUserId,
 } from "@/lib/scope";
 import {
+  getAccountantUserIds,
   getAdminUserIds,
   getProgramStaffForFellow,
   notifyUsers,
   NOTIFICATION_TYPES,
 } from "@/lib/notifications";
 import { saveReceiptFile, validateReceiptFile } from "@/lib/reimbursementUploads";
-import { getManagedFellowUserIds } from "@/lib/reimbursementScope";
+import { getReimbursementManagementWhere } from "@/lib/reimbursementScope";
+import { getAncestorUserIds } from "@/lib/hierarchy";
 import {
   collectReceiptFiles,
   parseItems,
   reimbursementInclude,
   validateItem,
 } from "@/lib/reimbursementValidation";
+
+/**
+ * People who should review a newly submitted claim: reporting-line seniors with
+ * reimbursement-management access, all active accountants and (for fellows) the
+ * program staff assigned to them. Admins are the fallback when no reviewer is
+ * configured.
+ */
+async function getReimbursementReviewerUserIds(user) {
+  const [admins, accountantIds, ancestorIds] = await Promise.all([
+    getAdminUserIds(),
+    getAccountantUserIds(),
+    getAncestorUserIds(user.id),
+  ]);
+
+  const ancestorCandidates = ancestorIds.filter(
+    (id) => !admins.includes(id) && !accountantIds.includes(id)
+  );
+
+  const users = ancestorCandidates.length
+    ? await prisma.user.findMany({
+        where: { id: { in: ancestorCandidates }, status: "ACTIVE" },
+        include: { role: true },
+      })
+    : [];
+
+  const checks = await Promise.all(
+    users.map((candidate) =>
+      checkPermission(candidate, "dashboard", "reimbursement-management", "READ")
+    )
+  );
+
+  const recipients = new Set(accountantIds);
+  users.forEach((candidate, index) => {
+    if (checks[index]) recipients.add(candidate.id);
+  });
+
+  if (user.role?.name === "FELLOW") {
+    const fellowId = await getFellowIdByUserId(user.id);
+    const programStaffIds = (await getProgramStaffForFellow(fellowId)).filter(
+      (id) => !admins.includes(id) && !recipients.has(id)
+    );
+    const programStaff = programStaffIds.length
+      ? await prisma.user.findMany({
+          where: { id: { in: programStaffIds }, status: "ACTIVE" },
+          include: { role: true },
+        })
+      : [];
+    const programChecks = await Promise.all(
+      programStaff.map((candidate) =>
+        checkPermission(candidate, "dashboard", "reimbursement-management", "READ")
+      )
+    );
+    programStaff.forEach((candidate, index) => {
+      if (programChecks[index]) recipients.add(candidate.id);
+    });
+  }
+
+  recipients.delete(user.id);
+  if (!recipients.size) return admins;
+  return [...recipients];
+}
 
 export async function GET(req) {
   try {
@@ -40,15 +103,7 @@ export async function GET(req) {
         return NextResponse.json({ error: "Forbidden: Reimbursement management access required" }, { status: 403 });
       }
 
-      if (user.role?.name === "ADMIN") {
-        where = {};
-      } else if (user.role?.name === "PROGRAM_MANAGER") {
-        const managedUserIds = await getManagedFellowUserIds(user.id);
-        where = { userId: { in: managedUserIds } };
-      } else {
-        // Other roles may be granted management access explicitly.
-        where = {};
-      }
+      where = await getReimbursementManagementWhere(user);
     } else {
       if (!canOwn) {
         return NextResponse.json({ error: "Forbidden: Insufficient permissions for reimbursements" }, { status: 403 });
@@ -106,13 +161,6 @@ export async function POST(req) {
       }
 
       const itemFiles = filesByItem[index];
-      if (!itemFiles.length) {
-        return NextResponse.json(
-          { error: `Expense line ${index + 1} needs at least one receipt.` },
-          { status: 400 }
-        );
-      }
-
       for (const file of itemFiles) {
         const validation = validateReceiptFile(file);
         if (!validation.ok) {
@@ -158,27 +206,7 @@ export async function POST(req) {
       include: reimbursementInclude,
     });
 
-    let recipients;
-    if (user.role?.name === "FELLOW") {
-      const fellowId = await getFellowIdByUserId(user.id);
-      const [programStaff, admins] = await Promise.all([
-        getProgramStaffForFellow(fellowId),
-        getAdminUserIds(),
-      ]);
-      const programManagers = programStaff.length
-        ? await prisma.user.findMany({
-            where: {
-              id: { in: programStaff },
-              status: "ACTIVE",
-              role: { name: "PROGRAM_MANAGER" },
-            },
-            select: { id: true },
-          })
-        : [];
-      recipients = [...programManagers.map((manager) => manager.id), ...admins];
-    } else {
-      recipients = await getAdminUserIds();
-    }
+    const recipients = await getReimbursementReviewerUserIds(user);
 
     await notifyUsers(recipients, {
       type: NOTIFICATION_TYPES.REIMBURSEMENT_REQUESTED,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DateInput from "@/components/ui/DateInput";
 import {
   COMPETENCY_CATEGORIES,
   CATEGORY_COUNT,
@@ -124,8 +125,7 @@ export default function PMReflectionForm({
             <label className="text-sm font-semibold text-on-surface-variant">
               Reflection Date
             </label>
-            <input
-              type="date"
+            <DateInput
               required
               value={date}
               onChange={(e) => setDate(e.target.value)}

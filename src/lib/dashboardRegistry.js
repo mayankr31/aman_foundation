@@ -7,29 +7,50 @@ import { FELLOW_WORKSPACE_LINKS } from "@/lib/fellowTabs";
  */
 
 export const KPI_DEFINITIONS = [
-  { key: "students", label: "Students", icon: "groups", tone: "emerald" },
-  { key: "schools", label: "Schools", icon: "school", tone: "emerald" },
+  { key: "students", label: "Students", icon: "groups", tone: "emerald", group: "education" },
+  { key: "schools", label: "Schools", icon: "school", tone: "emerald", group: "education" },
   {
     key: "afterSchoolStudents",
     label: "After School Students",
     icon: "escalator_warning",
     tone: "emerald",
+    group: "education",
   },
-  { key: "afterSchools", label: "After Schools", icon: "cottage", tone: "emerald" },
-  { key: "fellows", label: "Fellows", icon: "badge", tone: "sky" },
+  {
+    key: "afterSchools",
+    label: "After Schools",
+    icon: "cottage",
+    tone: "emerald",
+    group: "education",
+  },
+  { key: "fellows", label: "Fellows", icon: "badge", tone: "sky", group: "education" },
   {
     key: "beneficiaries",
     label: "Beneficiaries",
     icon: "volunteer_activism",
     tone: "amber",
+    group: "livelihood",
   },
-  { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
+  {
+    key: "farmPrograms",
+    label: "Farm Programs",
+    icon: "agriculture",
+    tone: "amber",
+    group: "livelihood",
+  },
   {
     key: "nonFarmPrograms",
     label: "Non-Farm Programs",
     icon: "pets",
     tone: "amber",
+    group: "livelihood",
   },
+];
+
+/** KPI groups, in display order. */
+export const KPI_GROUPS = [
+  { id: "education", title: "Education Hub KPIs" },
+  { id: "livelihood", title: "Livelihood Hub KPIs" },
 ];
 
 export const KPI_KEYS = KPI_DEFINITIONS.map((kpi) => kpi.key);
@@ -41,13 +62,6 @@ const FELLOW_WORKSPACE = FELLOW_WORKSPACE_LINKS.map((link) => ({
 
 const TASK_LINKS = [
   { key: "tasks.mine", label: "My Tasks", href: "/tasks", icon: "checklist", page: "tasks" },
-  {
-    key: "tasks.analytics",
-    label: "Task Analytics",
-    href: "/tasks/analytics",
-    icon: "insights",
-    page: "task-analytics",
-  },
 ];
 
 const EDUCATION_LINKS = [
@@ -98,9 +112,8 @@ const EDUCATION_LINKS = [
     icon: "badge",
     page: "education",
   },
-];
-
-const OBSERVATION_LINKS = [
+  // Observation tools stay in the Education card, but keep their stable keys
+  // and permission so existing saved dashboard configs keep working.
   {
     key: "observations.pm-reflection",
     label: "PM Reflection",
@@ -216,6 +229,30 @@ const SELF_SERVICE_LINKS = [
     icon: "event_available",
     page: "leaves",
   },
+  {
+    key: "self.employees",
+    label: "Employees",
+    href: "/hr",
+    icon: "group",
+    page: "employees",
+    default: false,
+  },
+  {
+    key: "self.attendance",
+    label: "Attendance Logs",
+    href: "/hr/attendance",
+    icon: "co_present",
+    page: "attendance",
+    default: false,
+  },
+  {
+    key: "self.leave-requests",
+    label: "Leave Requests",
+    href: "/hr/leaves",
+    icon: "event_note",
+    page: "leaves",
+    default: false,
+  },
   { key: "self.travel", label: "Travel", href: "/travel", icon: "flight", page: "travel" },
   {
     key: "self.reimbursements",
@@ -237,13 +274,6 @@ export const LINK_GROUPS = {
   workspace: { id: "workspace", title: "My Profile", icon: "person", tone: "sky", links: FELLOW_WORKSPACE },
   tasks: { id: "tasks", title: "Tasks", icon: "checklist", tone: "violet", links: TASK_LINKS },
   education: { id: "education", title: "Education", icon: "school", tone: "emerald", links: EDUCATION_LINKS },
-  observations: {
-    id: "observations",
-    title: "Fellow Observations",
-    icon: "rate_review",
-    tone: "emerald",
-    links: OBSERVATION_LINKS,
-  },
   livelihood: { id: "livelihood", title: "Livelihood", icon: "agriculture", tone: "amber", links: LIVELIHOOD_LINKS },
   disaster: {
     id: "disaster",
@@ -268,7 +298,6 @@ export function getDashboardLinkOptions() {
     ["workspace", LINK_GROUPS.workspace],
     ["tasks", LINK_GROUPS.tasks],
     ["education", LINK_GROUPS.education],
-    ["observations", LINK_GROUPS.observations],
     ["livelihood", LINK_GROUPS.livelihood],
     ["disaster", LINK_GROUPS.disaster],
     ["hr", LINK_GROUPS.hr],

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin } from "@/lib/scope";
+import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 
 // GET /api/livelihood/programs/[id]/fellows
@@ -46,13 +46,13 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id: programId } = await params;
     const program = await prisma.livelihoodProgram.findUnique({ where: { id: programId } });
     if (!program) return NextResponse.json({ error: "Program not found" }, { status: 404 });
+
+    if (!isAdmin(user) && !(await isLivelihoodProgramManaged(user.id, programId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
+    }
 
     const { fellowId } = await req.json();
     if (!fellowId) return NextResponse.json({ error: "fellowId is required" }, { status: 400 });
@@ -87,11 +87,11 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (!isAdmin(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
+    const { id: programId } = await params;
+    if (!isAdmin(user) && !(await isLivelihoodProgramManaged(user.id, programId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 
-    const { id: programId } = await params;
     const { fellowId } = await req.json();
     if (!fellowId) return NextResponse.json({ error: "fellowId is required" }, { status: 400 });
 

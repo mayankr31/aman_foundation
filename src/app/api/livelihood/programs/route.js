@@ -10,23 +10,32 @@ export async function GET(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "livelihood", "READ"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
     const type = searchParams.get("type");
     const status = searchParams.get("status");
+    // `all=true` lets education users (e.g. a fellow linking a student's
+    // parents) see every available livelihood program in the add form,
+    // instead of only the programs they are assigned to.
+    const all = searchParams.get("all") === "true";
+
+    const canReadLivelihood = await checkPermission(user, "dashboard", "livelihood", "READ");
+    const canReadEducation = all && (await checkPermission(user, "dashboard", "education", "READ"));
+
+    if (!canReadLivelihood && !canReadEducation) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+    }
 
     const where = {};
     if (category && category !== "all") where.category = category;
     if (type) where.type = type;
     if (status) where.status = status;
-    if (PROGRAM_ROLES.includes(user.role.name)) {
-      where.programManagers = { some: { userId: user.id } };
-    } else if (user.role.name === "FELLOW") {
-      where.fellows = { some: { fellow: { userId: user.id } } };
+    if (!all) {
+      if (PROGRAM_ROLES.includes(user.role.name)) {
+        where.programManagers = { some: { userId: user.id } };
+      } else if (user.role.name === "FELLOW") {
+        where.fellows = { some: { fellow: { userId: user.id } } };
+      }
     }
 
     const programs = await prisma.livelihoodProgram.findMany({
@@ -38,7 +47,7 @@ export async function GET(req) {
     });
 
     // Also return old-style programs for backward compatibility
-    const showLegacy = !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW";
+    const showLegacy = !all && !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW";
     const goatRearingPrograms = showLegacy
       ? await prisma.goatRearingProgram.findMany({ orderBy: { name: "asc" } })
       : [];

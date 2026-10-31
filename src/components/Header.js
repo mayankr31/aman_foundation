@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import NotificationBell from "@/components/NotificationBell";
 import GlobalSearch from "@/components/GlobalSearch";
+import Avatar from "@/components/ui/Avatar";
 import { formatRoleLabel } from "@/lib/roles";
 
 export default function Header({ onMenuToggle }) {
@@ -76,11 +77,7 @@ export default function Header({ onMenuToggle }) {
               </span>
             </div>
             <div className="w-8 h-8 rounded-full overflow-hidden bg-[#1a7a5e]/15 text-[#1a7a5e] flex items-center justify-center font-black text-xs shrink-0 border border-[#1a7a5e]/10">
-              {user?.avatar ? (
-                <img alt="avatar" className="w-full h-full object-cover" src={user.avatar} />
-              ) : (
-                initials
-              )}
+              <Avatar src={user?.avatar} name={user?.name} fallback={initials} />
             </div>
           </button>
 

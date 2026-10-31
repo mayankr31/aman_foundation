@@ -43,7 +43,7 @@ export default function DisasterRelief() {
 }
 
 function DisasterReliefContent() {
-  const { token, isInitializing } = useAuth();
+  const { token, isInitializing, canDeleteRecords } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -450,10 +450,48 @@ function DisasterReliefContent() {
     }
   };
 
+  const handleDeleteIncident = async (id) => {
+    if (!confirm("Delete this calamity? This cannot be undone.")) return;
+    try {
+      const res = await fetch(`/api/disaster-relief/incidents/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadData();
+      } else {
+        alert(json.error || "Failed to delete calamity");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting calamity");
+    }
+  };
+
+  const handleDeleteProvider = async (id) => {
+    if (!confirm("Delete this help provider? This cannot be undone.")) return;
+    try {
+      const res = await fetch(`/api/disaster-relief/help-providers/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadData();
+      } else {
+        alert(json.error || "Failed to delete help provider");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting help provider");
+    }
+  };
+
   return (
     <div className="flex-grow flex flex-col overflow-y-auto">
       {/* Header */}
-      <div className="flex flex-col px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
+      <div className="flex flex-col px-4 sm:px-6 md:px-12 pt-8 md:pt-12 pb-2 z-10 relative">
         <Link
           href="/"
           className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
@@ -495,7 +533,7 @@ function DisasterReliefContent() {
       </div>
 
       {/* Main Page Layout */}
-      <div className="flex-grow px-6 md:px-12 pb-24 md:pb-12 mt-8">
+      <div className="flex-grow px-4 sm:px-6 md:px-12 pb-24 md:pb-12 mt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
           
           {/* Main Content & Inventory */}
@@ -527,6 +565,15 @@ function DisasterReliefContent() {
                         >
                           <span className="material-symbols-outlined text-[18px]">edit</span>
                         </button>
+                        {canDeleteRecords && (
+                          <button
+                            onClick={() => handleDeleteIncident(incident.id)}
+                            className="inline-flex items-center justify-center min-w-9 min-h-9 p-2 rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors cursor-pointer"
+                            title="Delete calamity"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -635,7 +682,20 @@ function DisasterReliefContent() {
                                 {p.type}
                               </span>
                             </td>
-                            <td data-label="Contact Details" className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono break-words">{p.contact}</td>
+                            <td data-label="Contact Details" className="py-4 px-4 text-xs font-semibold text-slate-500 font-mono break-words">
+                              <div className="flex items-center justify-between gap-2">
+                                <span>{p.contact}</span>
+                                {canDeleteRecords && (
+                                  <button
+                                    onClick={() => handleDeleteProvider(p.id)}
+                                    className="inline-flex items-center justify-center min-w-9 min-h-9 p-1.5 rounded-full text-slate-400 hover:text-error hover:bg-error-container/30 transition-colors cursor-pointer border-none bg-transparent"
+                                    title="Delete help provider"
+                                  >
+                                    <span className="material-symbols-outlined text-[16px]">delete</span>
+                                  </button>
+                                )}
+                              </div>
+                            </td>
                           </tr>
                         ))
                       )}
@@ -788,12 +848,14 @@ function DisasterReliefContent() {
                                     {d.notes && <p className="text-xs text-on-surface-variant mb-3">Notes: {d.notes}</p>}
                                     <div className="flex justify-between items-center">
                                       <span className="text-[10px] text-slate-400 font-mono">Logged by {d.handledByUser?.name || "System"}</span>
-                                      <button
-                                        onClick={(e) => { e.stopPropagation(); handleDeleteDistribution(d.id); }}
-                                        className="text-error text-xs font-semibold hover:underline cursor-pointer bg-transparent border-none"
-                                      >
-                                        Delete
-                                      </button>
+                                      {canDeleteRecords && (
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); handleDeleteDistribution(d.id); }}
+                                          className="text-error text-xs font-semibold hover:underline cursor-pointer bg-transparent border-none"
+                                        >
+                                          Delete
+                                        </button>
+                                      )}
                                     </div>
                                   </td>
                                 </tr>

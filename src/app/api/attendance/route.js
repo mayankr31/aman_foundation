@@ -19,6 +19,27 @@ function dateKeyOf(value) {
   return getISTDateKey(new Date(value));
 }
 
+function parseFiniteNumber(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function sanitizeLatitude(value) {
+  const number = parseFiniteNumber(value);
+  return number !== null && number >= -90 && number <= 90 ? number : null;
+}
+
+function sanitizeLongitude(value) {
+  const number = parseFiniteNumber(value);
+  return number !== null && number >= -180 && number <= 180 ? number : null;
+}
+
+function sanitizeAccuracy(value) {
+  const number = parseFiniteNumber(value);
+  return number !== null && number >= 0 ? number : null;
+}
+
 async function closeStaleShifts(userIds = null) {
   if (Array.isArray(userIds) && userIds.length === 0) return;
   const today = getISTDateKey();
@@ -61,9 +82,13 @@ export async function GET(req) {
     // Self attendance is separate from the HR attendance-log permission. A
     // user without the HR page permission can still fetch their own log/draft.
     const canViewTeam = await checkPermission(user, "dashboard", "attendance", "READ");
+    const { searchParams } = new URL(req.url);
+    const selfOnly = searchParams.get("self") === "1";
 
     let where = {};
-    if (user.role.name === "ADMIN" || user.role.name === "HR") {
+    if (selfOnly) {
+      where = { userId: user.id };
+    } else if (user.role.name === "ADMIN" || user.role.name === "HR") {
       where = {};
     } else if (canViewTeam) {
       const scoped = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [user.id];
@@ -72,7 +97,7 @@ export async function GET(req) {
       where = { userId: user.id };
     }
 
-    const scopedUserIds = where.userId?.in || null;
+    const scopedUserIds = where.userId?.in || (where.userId ? [where.userId] : null);
     await closeStaleShifts(scopedUserIds);
 
     const logs = await prisma.attendanceLog.findMany({
@@ -90,7 +115,6 @@ export async function GET(req) {
       orderBy: { createdAt: "desc" },
     });
 
-    const { searchParams } = new URL(req.url);
     const includeDrafts = searchParams.get("includeDrafts") === "1";
 
     // Lesson-plan drafts are only returned to their owner when explicitly
@@ -189,6 +213,9 @@ export async function POST(req) {
     }
 
     const now = new Date();
+    const checkInLat = sanitizeLatitude(body.checkInLat);
+    const checkInLng = sanitizeLongitude(body.checkInLng);
+    const hasCheckInLocation = checkInLat !== null && checkInLng !== null;
     const logData = {
       email: user.email,
       logdate,
@@ -199,8 +226,9 @@ export async function POST(req) {
       ef1: body.ef1 ?? existing?.ef1,
       ef2: body.ef2 ?? existing?.ef2,
       logininfo: body.logininfo,
-      checkInLat: body.checkInLat,
-      checkInLng: body.checkInLng,
+      checkInLat: hasCheckInLocation ? checkInLat : null,
+      checkInLng: hasCheckInLocation ? checkInLng : null,
+      checkInAccuracy: hasCheckInLocation ? sanitizeAccuracy(body.checkInAccuracy) : null,
       lessonPlanText: body.lessonPlanText ?? existing?.lessonPlanText,
       isTeachingDay:
         typeof body.isTeachingDay === "boolean"
@@ -246,14 +274,24 @@ export async function PATCH(req) {
     }
 
     const isCheckout = body.checkout === true || body.outtimelog != null;
+    const checkOutLat = sanitizeLatitude(body.checkOutLat);
+    const checkOutLng = sanitizeLongitude(body.checkOutLng);
+    const hasCheckOutLocation = checkOutLat !== null && checkOutLng !== null;
+    const hasCheckOutPayload =
+      body.checkOutLat !== undefined ||
+      body.checkOutLng !== undefined ||
+      body.checkOutAccuracy !== undefined;
     const data = {
       ...(body.lessonPlanText !== undefined && { lessonPlanText: body.lessonPlanText }),
       ...(typeof body.isTeachingDay === "boolean" && { isTeachingDay: body.isTeachingDay }),
       ...(body.ef1 !== undefined && { ef1: body.ef1 }),
       ...(body.ef2 !== undefined && { ef2: body.ef2 }),
       ...(body.logoutinfo !== undefined && { logoutinfo: body.logoutinfo }),
-      ...(body.checkOutLat !== undefined && { checkOutLat: body.checkOutLat }),
-      ...(body.checkOutLng !== undefined && { checkOutLng: body.checkOutLng }),
+      ...(hasCheckOutPayload && {
+        checkOutLat: hasCheckOutLocation ? checkOutLat : null,
+        checkOutLng: hasCheckOutLocation ? checkOutLng : null,
+        checkOutAccuracy: hasCheckOutLocation ? sanitizeAccuracy(body.checkOutAccuracy) : null,
+      }),
     };
 
     if (isCheckout && !existingLog.outtimelog) {

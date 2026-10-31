@@ -3,6 +3,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { canDeleteRecords as canDeleteRecordsForUser } from "@/lib/roles";
 
 const AuthContext = createContext(null);
 
@@ -209,6 +210,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         can,
+        canDeleteRecords: canDeleteRecordsForUser(user),
         refreshPermissions,
         setUser: persistUser,
       }}

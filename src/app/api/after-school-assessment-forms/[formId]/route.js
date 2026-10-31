@@ -78,6 +78,13 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+    if (user.role?.name !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can delete records" },
+        { status: 403 }
+      );
+    }
+
     if (!canManageTemplates(user)) {
       return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
     }

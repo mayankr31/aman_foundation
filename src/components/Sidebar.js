@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS } from "@/lib/fellowTabs";
+import { getHrPageLinks } from "@/lib/hrTabs";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -148,18 +149,6 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             >
               <span className="material-symbols-outlined">checklist</span>
               <span className={labelClass}>Tasks</span>
-            </Link>
-          )}
-
-          {can("task-analytics") && (
-            <Link
-              href="/tasks/analytics"
-              className={navItemClass(pathname === "/tasks/analytics")}
-              onClick={onClose}
-              title="Task Analytics"
-            >
-              <span className="material-symbols-outlined">insights</span>
-              <span className={labelClass}>Task Analytics</span>
             </Link>
           )}
 
@@ -426,18 +415,24 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             </Link>
           )}
 
-          {/* Leaves */}
-          {can("leaves") && user?.roleName !== "ADMIN" && (
+          {/* HR pages: employees, attendance and leave requests are each
+              exposed only when the user has that page permission. */}
+          {getHrPageLinks(can).map((link) => (
             <Link
-              href={user?.roleName === "HR" ? "/hr/leaves" : "/hr/leaves/apply"}
-              className={navItemClass(pathname.includes("/leaves"))}
+              key={link.key}
+              href={link.href}
+              className={navItemClass(
+                link.href === "/hr"
+                  ? pathname === "/hr"
+                  : pathname === link.href || pathname.startsWith(`${link.href}/`)
+              )}
               onClick={onClose}
-              title="Leaves"
+              title={link.label}
             >
-              <span className="material-symbols-outlined">event_note</span>
-              <span className={labelClass}>Leaves</span>
+              <span className="material-symbols-outlined">{link.icon}</span>
+              <span className={labelClass}>{link.label}</span>
             </Link>
-          )}
+          ))}
 
           {/* Travel */}
           {can("travel") && user?.roleName !== "ADMIN" && (
@@ -488,19 +483,6 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
             >
               <span className="material-symbols-outlined">approval</span>
               <span className={labelClass}>Reimbursement Management</span>
-            </Link>
-          )}
-
-          {/* HR Management */}
-          {can("employees") && user?.roleName !== "FELLOW" && (
-            <Link
-              href="/hr"
-              className={navItemClass(pathname === "/hr")}
-              onClick={onClose}
-              title="Employees"
-            >
-              <span className="material-symbols-outlined">group</span>
-              <span className={labelClass}>Employees</span>
             </Link>
           )}
 

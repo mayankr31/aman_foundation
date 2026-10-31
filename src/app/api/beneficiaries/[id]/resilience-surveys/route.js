@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireBeneficiaryAccess } from "@/lib/beneficiaryApiAuth";
+import { buildResilienceSurveyCreateData } from "@/lib/resilienceSurvey";
 
 export async function GET(req, { params }) {
   const { id: beneficiaryId } = await params;
@@ -29,24 +30,16 @@ export async function POST(req, { params }) {
 
   try {
     const body = await req.json();
-    const { responses, scores } = body;
+    const surveyData = buildResilienceSurveyCreateData(body);
+
+    if (!surveyData) {
+      return NextResponse.json({ success: false, error: "Survey responses are required" }, { status: 400 });
+    }
 
     const newSurvey = await prisma.resilienceSurvey.create({
       data: {
         beneficiaryId,
-        responses,
-        lifeSatisfactionScore: scores?.lifeSatisfactionScore || 0,
-        planningScore: scores?.planningScore || 0,
-        disasterReadinessScore: scores?.disasterReadinessScore || 0,
-        disasterBeliefsScore: scores?.disasterBeliefsScore || 0,
-        disasterMindsetScore: scores?.disasterMindsetScore || 0,
-        financialResilienceScore: scores?.financialResilienceScore || 0,
-        healthResilienceScore: scores?.healthResilienceScore || 0,
-        socialConnectednessScore: scores?.socialConnectednessScore || 0,
-        socialProtectionScore: scores?.socialProtectionScore || 0,
-        disasterWarningScore: scores?.disasterWarningScore || 0,
-        vulnerabilityScore: scores?.vulnerabilityScore || 0,
-        overallScore: scores?.overallScore || 0,
+        ...surveyData,
       },
     });
 

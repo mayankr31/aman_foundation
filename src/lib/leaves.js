@@ -1,137 +1,58 @@
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_LEAVE_CONFIGS } from "@/lib/leavePolicyDefaults";
+import {
+  QUOTA_PERIODS,
+  daysInclusive,
+  formatDays,
+  formatPeriodKey,
+  getEntitlementLabel,
+  getFinancialYearRange,
+  getFinancialYearStart,
+  getMaxEndDateForMonths,
+  getServiceDays,
+  getStoredLeaveTypeKey,
+  parseDateOnly,
+  parseLegacyLeaveRange,
+  splitDaysByPeriod,
+} from "@/lib/leavePolicy";
 
-export const DEFAULT_LEAVE_CONFIGS = [
-  { key: "SICK", name: "Sick Leave", annualQuota: 16, quarterlyQuota: 4, sortOrder: 1 },
-  { key: "CASUAL", name: "Casual Leave", annualQuota: 12, quarterlyQuota: 3, sortOrder: 2 },
-  { key: "EMERGENCY", name: "Emergency Leave", annualQuota: 4, quarterlyQuota: 1, sortOrder: 3 },
-  { key: "COMP_OFF", name: "Comp Off Leave", annualQuota: 0, quarterlyQuota: null, sortOrder: 4 },
-];
-
-export function parseDateOnly(value) {
-  if (!value) return null;
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate()));
-  }
-  const str = String(value).trim();
-  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (iso) return new Date(Date.UTC(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3])));
-  const dmy = str.match(/^(\d{2})-(\d{2})-(\d{4})$/);
-  if (dmy) return new Date(Date.UTC(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1])));
-  const parsed = new Date(str);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return new Date(Date.UTC(parsed.getFullYear(), parsed.getMonth(), parsed.getDate()));
-}
-
-export function parseLegacyLeaveRange(dates) {
-  const str = String(dates || "").trim();
-  if (!str) return { startDate: null, endDate: null };
-  const parts = str.split(/\s+to\s+/i);
-  const startDate = parseDateOnly(parts[0]);
-  const endDate = parts[1] ? parseDateOnly(parts[1]) : startDate;
-  return { startDate, endDate };
-}
-
-export function getFinancialYearStart(date = new Date()) {
-  const year = date.getFullYear();
-  const month = date.getMonth(); // 0-based
-  return month >= 3 ? year : year - 1; // April (3) starts a new financial year
-}
-
-export function getFinancialYearRange(fyStart) {
-  return {
-    start: new Date(Date.UTC(fyStart, 3, 1)),
-    end: new Date(Date.UTC(fyStart + 1, 2, 31)),
-  };
-}
-
-/** Quarter number 1-4 for an FY starting in April. */
-export function getQuarterNumber(date) {
-  const month = date.getMonth();
-  if (month >= 3 && month <= 5) return 1; // Apr-Jun
-  if (month >= 6 && month <= 8) return 2; // Jul-Sep
-  if (month >= 9 && month <= 11) return 3; // Oct-Dec
-  return 4; // Jan-Mar
-}
-
-export function quarterKey(fyStart, quarter) {
-  return `${fyStart}-Q${quarter}`;
-}
-
-export function quarterDateRange(fyStart, quarter) {
-  const starts = [
-    [fyStart, 3, 1],
-    [fyStart, 6, 1],
-    [fyStart, 9, 1],
-    [fyStart + 1, 0, 1],
-  ];
-  const ends = [
-    [fyStart, 5, 30],
-    [fyStart, 8, 30],
-    [fyStart, 11, 31],
-    [fyStart + 1, 2, 31],
-  ];
-  const [sy, sm, sd] = starts[quarter - 1];
-  const [ey, em, ed] = ends[quarter - 1];
-  return {
-    start: new Date(Date.UTC(sy, sm, sd)),
-    end: new Date(Date.UTC(ey, em, ed)),
-  };
-}
-
-export function daysInclusive(startDate, endDate) {
-  if (!startDate || !endDate) return 0;
-  const ms = endDate.getTime() - startDate.getTime();
-  return Math.max(0, Math.floor(ms / 86400000) + 1);
-}
-
-/** Splits a leave range into day counts per FY quarter. */
-export function splitDaysByQuarter(startDate, endDate, fyStart) {
-  const result = {
-    [quarterKey(fyStart, 1)]: 0,
-    [quarterKey(fyStart, 2)]: 0,
-    [quarterKey(fyStart, 3)]: 0,
-    [quarterKey(fyStart, 4)]: 0,
-  };
-
-  for (let quarter = 1; quarter <= 4; quarter += 1) {
-    const range = quarterDateRange(fyStart, quarter);
-    const overlapStart = startDate > range.start ? startDate : range.start;
-    const overlapEnd = endDate < range.end ? endDate : range.end;
-    if (overlapStart <= overlapEnd) {
-      result[quarterKey(fyStart, quarter)] = daysInclusive(overlapStart, overlapEnd);
-    }
-  }
-  return result;
-}
-
-export function quarterOfDate(date, fyStart) {
-  const q = getQuarterNumber(date);
-  return quarterKey(fyStart, q);
-}
+export {
+  QUOTA_PERIODS,
+  addDays,
+  addMonths,
+  daysInclusive,
+  formatDays,
+  formatPeriodKey,
+  getEntitlementLabel,
+  getFinancialYearRange,
+  getFinancialYearStart,
+  getPolicyWarnings,
+  getServiceDays,
+  getStoredLeaveTypeKey,
+  parseDateOnly,
+  parseLegacyLeaveRange,
+  periodKeyForDate,
+  splitDaysByPeriod,
+} from "@/lib/leavePolicy";
 
 export async function ensureLeaveConfigs() {
-  const existing = await prisma.leaveTypeConfig.findMany();
-  if (existing.length >= DEFAULT_LEAVE_CONFIGS.length) return existing;
-
-  for (const config of DEFAULT_LEAVE_CONFIGS) {
+  const existing = await prisma.leaveTypeConfig.findMany({ select: { key: true } });
+  const existingKeys = new Set(existing.map((config) => config.key));
+  const missing = DEFAULT_LEAVE_CONFIGS.filter((config) => !existingKeys.has(config.key));
+  for (const config of missing) {
     await prisma.leaveTypeConfig.upsert({
       where: { key: config.key },
       update: {},
       create: { ...config, active: true },
     });
   }
-  return prisma.leaveTypeConfig.findMany({ orderBy: { sortOrder: "asc" } });
+  return prisma.leaveTypeConfig.findMany({
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+  });
 }
 
 export function typeKeyFromName(name, configs) {
-  const normalized = String(name || "").trim().toLowerCase();
-  const byName = configs.find((c) => c.name.toLowerCase() === normalized || c.key.toLowerCase() === normalized);
-  if (byName) return byName.key;
-  if (normalized.includes("comp")) return "COMP_OFF";
-  if (normalized.includes("sick")) return "SICK";
-  if (normalized.includes("casual")) return "CASUAL";
-  if (normalized.includes("emergency")) return "EMERGENCY";
-  return null;
+  return getStoredLeaveTypeKey({ type: name }, configs);
 }
 
 function expiryStatus(credit, now) {
@@ -140,72 +61,118 @@ function expiryStatus(credit, now) {
   return credit.status;
 }
 
+function annualQuotaPeriod(quotaPeriod) {
+  return quotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR
+    ? QUOTA_PERIODS.CALENDAR_YEAR
+    : QUOTA_PERIODS.FINANCIAL_YEAR;
+}
+
 /**
- * Computes the leave summary for a user using approved leaves + configured
- * quarterly quotas. Unused quota lapses at the end of each quarter.
+ * Computes the current leave policy balances for a user. Annual/calendar quotas
+ * count approved and pending requests. Event-based and unlimited types show
+ * usage for the selected financial year but do not carry an annual balance.
  */
 export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStart()) {
-  const [configs, leaves, credits] = await Promise.all([
+  const [configs, leaves, credits, user] = await Promise.all([
     ensureLeaveConfigs(),
     prisma.leave.findMany({
-      where: { userId, status: "APPROVED" },
+      where: { userId, status: { in: ["APPROVED", "PENDING"] } },
       orderBy: { createdAt: "desc" },
     }),
     prisma.compOffCredit.findMany({
       where: { userId },
       orderBy: { workedDate: "desc" },
     }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { dateOfJoining: true },
+    }),
   ]);
 
   const fyRange = getFinancialYearRange(fyStart);
+  const calendarYear = new Date().getUTCFullYear();
+  const configByKey = new Map(configs.map((config) => [config.key, config]));
   const types = {};
+
   for (const config of configs) {
-    if (!config.active) continue;
-    const quarterly = config.quarterlyQuota != null ? config.quarterlyQuota : config.annualQuota / 4;
+    if (!config.active || config.key === "COMP_OFF" || config.systemType === "COMP_OFF") continue;
+    const quotaPeriod = config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR;
     types[config.key] = {
       key: config.key,
       name: config.name,
-      annualQuota: config.annualQuota,
-      quarterlyQuota: quarterly,
-      quarters: {},
+      code: config.code || null,
+      policyNote: config.policyNote || null,
+      paid: config.paid !== false,
+      quotaPeriod,
+      entitlement: config.annualQuota,
+      entitlementLabel: getEntitlementLabel(config),
+      maxConsecutiveDays: config.maxConsecutiveDays,
+      maxConsecutiveMonths: config.maxConsecutiveMonths,
+      softMaxConsecutive: !!config.softMaxConsecutive,
+      minServiceDays: config.minServiceDays,
+      medicalCertificateAfterDays: config.medicalCertificateAfterDays,
+      holidayNameRequired: !!config.holidayNameRequired,
       used: 0,
-      remaining: 0,
+      pending: 0,
+      remaining: null,
+      available: null,
     };
-    for (let q = 1; q <= 4; q += 1) {
-      types[config.key].quarters[quarterKey(fyStart, q)] = {
-        quarter: q,
-        entitlement: quarterly,
-        used: 0,
-        remaining: quarterly,
-      };
+
+    if (config.minServiceDays != null) {
+      const serviceDays = getServiceDays(user?.dateOfJoining, new Date());
+      types[config.key].serviceDays = serviceDays;
+      types[config.key].eligible = serviceDays != null && serviceDays >= config.minServiceDays;
     }
   }
 
   for (const leave of leaves) {
-    const parsed = leave.startDate && leave.endDate
-      ? { startDate: parseDateOnly(leave.startDate), endDate: parseDateOnly(leave.endDate) }
-      : parseLegacyLeaveRange(leave.dates);
+    const parsed =
+      leave.startDate && leave.endDate
+        ? { startDate: parseDateOnly(leave.startDate), endDate: parseDateOnly(leave.endDate) }
+        : parseLegacyLeaveRange(leave.dates);
     if (!parsed.startDate || !parsed.endDate) continue;
-    if (parsed.endDate < fyRange.start || parsed.startDate > fyRange.end) continue;
 
-    const key = leave.leaveTypeKey || typeKeyFromName(leave.type, configs);
-    if (!key || !types[key]) continue;
+    const key = getStoredLeaveTypeKey(leave, configs);
+    const type = key ? types[key] : null;
+    const config = key ? configByKey.get(key) : null;
+    if (!type || !config) continue;
 
-    const split = splitDaysByQuarter(parsed.startDate, parsed.endDate, fyStart);
-    for (const [qKey, days] of Object.entries(split)) {
-      if (types[key].quarters[qKey]) {
-        types[key].quarters[qKey].used += days;
-        types[key].used += days;
-      }
+    const configQuotaPeriod = config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR;
+    const isAnnual = [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(configQuotaPeriod);
+    let countedDays = 0;
+
+    if (isAnnual) {
+      const split = splitDaysByPeriod(parsed.startDate, parsed.endDate, annualQuotaPeriod(configQuotaPeriod));
+      const displayKey =
+        configQuotaPeriod === QUOTA_PERIODS.CALENDAR_YEAR ? `CY-${calendarYear}` : `FY-${fyStart}`;
+      countedDays = split[displayKey] || 0;
+    } else {
+      const overlapStart = parsed.startDate > fyRange.start ? parsed.startDate : fyRange.start;
+      const overlapEnd = parsed.endDate < fyRange.end ? parsed.endDate : fyRange.end;
+      countedDays = overlapStart <= overlapEnd ? daysInclusive(overlapStart, overlapEnd) : 0;
     }
+
+    if (!countedDays) continue;
+    if (leave.status === "APPROVED") type.used += countedDays;
+    else type.pending += countedDays;
   }
 
   for (const type of Object.values(types)) {
-    for (const q of Object.values(type.quarters)) {
-      q.remaining = Math.max(0, q.entitlement - q.used);
-      type.remaining += q.remaining;
+    if ([QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(type.quotaPeriod)) {
+      type.remaining = Math.max(0, Number(type.entitlement) - type.used);
+      type.available = Math.max(0, Number(type.entitlement) - type.used - type.pending);
     }
   }
+
+  const annualPaidTypes = Object.values(types).filter(
+    (type) => type.paid && [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(type.quotaPeriod)
+  );
+  const totals = {
+    paidEntitlement: annualPaidTypes.reduce((sum, type) => sum + Number(type.entitlement || 0), 0),
+    paidUsed: annualPaidTypes.reduce((sum, type) => sum + type.used, 0),
+    paidPending: annualPaidTypes.reduce((sum, type) => sum + type.pending, 0),
+    paidAvailable: annualPaidTypes.reduce((sum, type) => sum + Number(type.available || 0), 0),
+  };
 
   const now = new Date();
   const compOff = credits.map((credit) => ({
@@ -217,37 +184,168 @@ export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStar
     fyStart,
     fyLabel: `FY ${fyStart}-${String(fyStart + 1).slice(-2)}`,
     types,
+    totals,
     compOff: {
       available: compOff.filter((c) => c.status === "Available").reduce((sum, c) => sum + (c.days || 1), 0),
       reserved: compOff.filter((c) => c.status === "Reserved").reduce((sum, c) => sum + (c.days || 1), 0),
       used: compOff.filter((c) => c.status === "Used").reduce((sum, c) => sum + (c.days || 1), 0),
+      expired: compOff.filter((c) => c.status === "Expired").reduce((sum, c) => sum + (c.days || 1), 0),
       credits: compOff,
     },
   };
 }
 
-/** Validates a leave request against the quarterly quota. */
-export async function validateLeaveQuota({ userId, leaveTypeKey, startDate, endDate, excludeLeaveId = null }) {
+/**
+ * Validates a leave request against the configured policy. Returns hard errors
+ * as { ok:false, error } and soft policy exceptions as warning flags.
+ */
+export async function validateLeaveQuota({
+  userId,
+  leaveTypeKey,
+  startDate,
+  endDate,
+  excludeLeaveId = null,
+  allowInactive = false,
+}) {
   const configs = await ensureLeaveConfigs();
-  const config = configs.find((c) => c.key === leaveTypeKey);
-  if (!config) return { ok: false, error: "Invalid leave type" };
-  if (leaveTypeKey === "COMP_OFF") return { ok: true, config };
+  const config = configs.find((item) => item.key === leaveTypeKey);
+  if (!config) return { ok: false, error: "Invalid leave type." };
+  if (!config.active && !allowInactive) {
+    return { ok: false, error: "This leave type is no longer available." };
+  }
 
-  const fyStart = getFinancialYearStart(startDate);
-  const summary = await getUserLeaveSummary(userId, fyStart);
-  const type = summary.types[leaveTypeKey];
-  if (!type) return { ok: false, error: "Leave type is not configured" };
+  const days = daysInclusive(startDate, endDate);
+  if (!days) return { ok: false, error: "Please select valid leave dates." };
 
-  const split = splitDaysByQuarter(startDate, endDate, fyStart);
-  for (const [qKey, days] of Object.entries(split)) {
-    if (!days) continue;
-    const quarter = type.quarters[qKey];
-    if (!quarter || days > quarter.remaining) {
+  if (config.key === "COMP_OFF" || config.systemType === "COMP_OFF") {
+    return { ok: true, config, days, warnings: [] };
+  }
+
+  if (config.maxConsecutiveDays != null && days > Number(config.maxConsecutiveDays)) {
+    if (!config.softMaxConsecutive) {
       return {
         ok: false,
-        error: `Not enough ${config.name} balance in Q${quarter?.quarter || "?"} (${quarter?.remaining ?? 0} remaining)`,
+        error: `${config.name} is limited to ${formatDays(config.maxConsecutiveDays)} consecutive day${
+          Number(config.maxConsecutiveDays) === 1 ? "" : "s"
+        }.`,
       };
     }
   }
-  return { ok: true, config, split, fyStart };
+
+  if (config.maxConsecutiveMonths != null) {
+    const maxEndDate = getMaxEndDateForMonths(startDate, config.maxConsecutiveMonths);
+    if (endDate > maxEndDate) {
+      return {
+        ok: false,
+        error: `${config.name} is limited to ${formatDays(config.maxConsecutiveMonths)} month${
+          Number(config.maxConsecutiveMonths) === 1 ? "" : "s"
+        } per request.`,
+      };
+    }
+  }
+
+  if (config.minServiceDays != null) {
+    const targetUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { dateOfJoining: true },
+    });
+    const serviceDays = getServiceDays(targetUser?.dateOfJoining, startDate);
+    if (serviceDays == null) {
+      return {
+        ok: false,
+        error: `Date of joining is not set. Please contact HR before applying for ${config.name}.`,
+      };
+    }
+    if (serviceDays < Number(config.minServiceDays)) {
+      return {
+        ok: false,
+        error: `${config.name} is available after ${formatDays(config.minServiceDays)} days of service. You have completed ${serviceDays} days.`,
+      };
+    }
+  }
+
+  const warnings = [];
+  if (config.maxConsecutiveDays != null && days > Number(config.maxConsecutiveDays) && config.softMaxConsecutive) {
+    warnings.push("CONSECUTIVE_LIMIT_EXCEEDED");
+  }
+  if (config.medicalCertificateAfterDays != null && days > Number(config.medicalCertificateAfterDays)) {
+    warnings.push("MEDICAL_CERTIFICATE_REQUIRED");
+  }
+
+  if (config.quotaPeriod === QUOTA_PERIODS.UNLIMITED) {
+    const summary = await getUserLeaveSummary(userId, getFinancialYearStart(startDate));
+    if (config.paid === false && summary.totals.paidAvailable > 0) {
+      warnings.push("PAID_LEAVE_AVAILABLE");
+    }
+    return { ok: true, config, days, warnings };
+  }
+
+  if (config.quotaPeriod === QUOTA_PERIODS.PER_EVENT) {
+    if (Number(config.annualQuota) > 0 && days > Number(config.annualQuota)) {
+      return {
+        ok: false,
+        error: `${config.name} is limited to ${formatDays(config.annualQuota)} day${
+          Number(config.annualQuota) === 1 ? "" : "s"
+        } per event.`,
+      };
+    }
+    return { ok: true, config, days, warnings };
+  }
+
+  const quotaPeriod = annualQuotaPeriod(config.quotaPeriod);
+  const requestedSplit = splitDaysByPeriod(startDate, endDate, quotaPeriod);
+  const leaves = await prisma.leave.findMany({
+    where: {
+      userId,
+      status: { in: ["APPROVED", "PENDING"] },
+      ...(excludeLeaveId ? { id: { not: excludeLeaveId } } : {}),
+    },
+    select: {
+      id: true,
+      leaveTypeKey: true,
+      type: true,
+      dates: true,
+      startDate: true,
+      endDate: true,
+      status: true,
+    },
+  });
+
+  const usedByPeriod = {};
+  for (const leave of leaves) {
+    const key = getStoredLeaveTypeKey(leave, configs);
+    if (key !== leaveTypeKey) continue;
+    const parsed =
+      leave.startDate && leave.endDate
+        ? { startDate: parseDateOnly(leave.startDate), endDate: parseDateOnly(leave.endDate) }
+        : parseLegacyLeaveRange(leave.dates);
+    if (!parsed.startDate || !parsed.endDate) continue;
+    const split = splitDaysByPeriod(parsed.startDate, parsed.endDate, quotaPeriod);
+    for (const [periodKey, periodDays] of Object.entries(split)) {
+      usedByPeriod[periodKey] = (usedByPeriod[periodKey] || 0) + periodDays;
+    }
+  }
+
+  for (const [periodKey, requestedDays] of Object.entries(requestedSplit)) {
+    if (!requestedDays) continue;
+    const usedDays = usedByPeriod[periodKey] || 0;
+    const remaining = Number(config.annualQuota) - usedDays;
+    if (requestedDays > remaining) {
+      return {
+        ok: false,
+        error: `Not enough ${config.name} balance in ${formatPeriodKey(periodKey, quotaPeriod)} (${formatDays(
+          Math.max(0, remaining)
+        )} remaining).`,
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    config,
+    days,
+    warnings,
+    split: requestedSplit,
+    fyStart: getFinancialYearStart(startDate),
+  };
 }

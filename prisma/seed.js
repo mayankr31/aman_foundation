@@ -161,12 +161,12 @@ async function main() {
   console.log("Seeding user accounts...");
   const hashedPassword = await bcrypt.hash("Admin@123", 10);
   const defaultAdmin = await prisma.user.upsert({
-    where: { email: "admin@amanfoundation.org" },
-    update: { name: "Executive Director" },
+    where: { username: "admin" },
+    update: { name: "Executive Director", email: "connect@amanindia.org" },
     create: {
       name: "Executive Director",
       username: "admin",
-      email: "admin@amanfoundation.org",
+      email: "connect@amanindia.org",
       password: hashedPassword,
       status: "ACTIVE",
       roleId: adminRole.id,

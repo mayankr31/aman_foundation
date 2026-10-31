@@ -1,6 +1,7 @@
 import React from 'react';
 import kyrDict from '@/lib/kyrDictionary.json';
 import { getCapacityQuestionText, getCapacityOptionLabel } from '@/lib/capacityDictionaries';
+import { formatDate } from '@/lib/date';
 
 const SHOCKS_DICT = {
   "s1": "Flood", "s2": "Drought", "s3": "Cyclone", "s4": "Unseasonal Rain",
@@ -110,6 +111,9 @@ export default function SurveyResponseViewer({ type, responses, planData }) {
         if (type === 'kyr') {
           // Check for sub-questions or exact match
           questionText = kyrDict[key] || kyrDict[key.split('_')[0]] || key;
+          if (key === 'B.1') {
+            formattedVal = formatDate(val, renderValue(val));
+          }
         } else if (['adaptive', 'absorptive', 'transformative'].includes(type)) {
           questionText = getCapacityQuestionText(type, key);
           formattedVal = getCapacityOptionLabel(type, key, val);

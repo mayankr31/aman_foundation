@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DateInput from "@/components/ui/DateInput";
 
 const sections = [
   "Consent",
@@ -232,20 +233,35 @@ export default function ResilienceSurveyForm({
     </div>
   );
 
-  const renderInputQuestion = (id, text, type = "text") => (
-    <div key={id} className={cardClass(id)}>
-      <div className="flex items-center gap-2 mb-1">
-        <label className="block text-sm font-semibold">{labelText(id, text)}</label>
+  const renderInputQuestion = (id, text, type = "text") => {
+    const inputClassName = `w-full max-w-md bg-surface-container-high border-none rounded p-3 text-sm focus:ring-2 focus:ring-primary outline-none ${
+      locked.has(id) ? "opacity-60 cursor-not-allowed" : ""
+    }`;
+
+    return (
+      <div key={id} className={cardClass(id)}>
+        <div className="flex items-center gap-2 mb-1">
+          <label className="block text-sm font-semibold">{labelText(id, text)}</label>
+        </div>
+        {type === "date" ? (
+          <DateInput
+            value={responses[id] || ""}
+            disabled={locked.has(id)}
+            onChange={(e) => handleChange(id, e.target.value)}
+            className={inputClassName}
+          />
+        ) : (
+          <input
+            type={type}
+            value={responses[id] || ""}
+            disabled={locked.has(id)}
+            onChange={(e) => handleChange(id, e.target.value)}
+            className={inputClassName}
+          />
+        )}
       </div>
-      <input
-        type={type}
-        value={responses[id] || ""}
-        disabled={locked.has(id)}
-        onChange={(e) => handleChange(id, e.target.value)}
-        className={`w-full max-w-md bg-surface-container-high border-none rounded p-3 text-sm focus:ring-2 focus:ring-primary outline-none ${locked.has(id) ? "opacity-60 cursor-not-allowed" : ""}`}
-      />
-    </div>
-  );
+    );
+  };
 
   const renderGridQuestion = (id, text, rows, cols, isMulti = false, description = "") => (
     <div key={id} className={`${cardClass(id)} overflow-x-auto`}>

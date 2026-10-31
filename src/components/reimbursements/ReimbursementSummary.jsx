@@ -49,7 +49,7 @@ export default function ReimbursementSummary({ reimbursement }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
           <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Submitted</p>
           <p className="text-xs font-semibold text-on-surface mt-1">{formatDate(reimbursement.createdAt)}</p>
@@ -57,7 +57,25 @@ export default function ReimbursementSummary({ reimbursement }) {
         </div>
 
         <div className="rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
-          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Approval</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Verified</p>
+          {reimbursement.verifiedAt ? (
+            <>
+              <p className="text-xs font-semibold text-on-surface mt-1">
+                {reimbursement.status === "VERIFIED" && totalApproved !== null ? formatINR(totalApproved) : "Verified"}
+              </p>
+              <p className="text-[11px] text-on-surface-variant mt-0.5">
+                {reimbursement.verifier?.name || "—"} · {formatDate(reimbursement.verifiedAt)}
+              </p>
+            </>
+          ) : (
+            <p className="text-xs font-semibold text-on-surface-variant mt-1">
+              {reimbursement.status === "REJECTED" ? "—" : "Awaiting verification"}
+            </p>
+          )}
+        </div>
+
+        <div className="rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
+          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Approved</p>
           {reimbursement.approvedAt ? (
             <>
               <p className="text-xs font-semibold text-on-surface mt-1">
@@ -68,12 +86,18 @@ export default function ReimbursementSummary({ reimbursement }) {
               </p>
             </>
           ) : (
-            <p className="text-xs font-semibold text-on-surface-variant mt-1">Pending review</p>
+            <p className="text-xs font-semibold text-on-surface-variant mt-1">
+              {reimbursement.status === "REJECTED"
+                ? "—"
+                : reimbursement.status === "VERIFIED"
+                  ? "Awaiting Executive Director approval"
+                  : "Pending review"}
+            </p>
           )}
         </div>
 
         <div className="rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
-          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Reimbursed</p>
+          <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Payment</p>
           {reimbursement.reimbursedAt ? (
             <>
               <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-1">
@@ -88,6 +112,13 @@ export default function ReimbursementSummary({ reimbursement }) {
           )}
         </div>
       </div>
+
+      {reimbursement.verificationNotes && (
+        <div className="rounded-lg border border-violet-200 bg-violet-50 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-violet-700">Verification Notes</p>
+          <p className="text-sm text-violet-900 mt-1">{reimbursement.verificationNotes}</p>
+        </div>
+      )}
 
       {reimbursement.status === "REJECTED" && reimbursement.rejectionReason && (
         <div className="rounded-lg border border-rose-200 bg-rose-50 p-3">
@@ -129,7 +160,7 @@ export default function ReimbursementSummary({ reimbursement }) {
                 <th className="py-2.5 px-3">Category</th>
                 <th className="py-2.5 px-3">Description</th>
                 <th className="py-2.5 px-3 text-right">Claimed</th>
-                <th className="py-2.5 px-3 text-right">Approved</th>
+                <th className="py-2.5 px-3 text-right">Verified / Approved</th>
                 <th className="py-2.5 px-3">Receipts</th>
               </tr>
             </thead>
@@ -142,7 +173,7 @@ export default function ReimbursementSummary({ reimbursement }) {
                     <td data-label="Category" className="py-2.5 px-3 text-on-surface-variant">{item.category}</td>
                     <td data-label="Description" className="py-2.5 px-3 text-on-surface min-w-[180px]">{item.description}</td>
                     <td data-label="Claimed" className="py-2.5 px-3 text-right font-semibold text-on-surface whitespace-nowrap">{formatINR(item.amount)}</td>
-                    <td data-label="Approved" className="py-2.5 px-3 text-right font-semibold text-on-surface whitespace-nowrap">
+                    <td data-label="Verified / Approved" className="py-2.5 px-3 text-right font-semibold text-on-surface whitespace-nowrap">
                       {item.approvedAmount !== null && item.approvedAmount !== undefined ? formatINR(item.approvedAmount) : "—"}
                     </td>
                     <td data-label="Receipts" className="py-2.5 px-3">
@@ -188,7 +219,7 @@ export default function ReimbursementSummary({ reimbursement }) {
             <p className="text-sm font-bold text-on-surface mt-1">{formatINR(totalClaimed)}</p>
           </div>
           <div className="rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
-            <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Total Approved</p>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Total Verified / Approved</p>
             <p className="text-sm font-bold text-on-surface mt-1">{totalApproved !== null ? formatINR(totalApproved) : "—"}</p>
           </div>
         </div>

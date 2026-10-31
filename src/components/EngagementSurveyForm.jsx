@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DateInput from "@/components/ui/DateInput";
 
 const LIKERT_OPTIONS = ["Strongly disagree", "Disagree", "Agree", "Strongly agree"];
 const GENDER_OPTIONS = ["Male", "Female", "Transgender", "Non-binary", "Prefer not to disclose"];
@@ -138,8 +139,7 @@ export default function EngagementSurveyForm({ onSubmit, onCancel }) {
         </div>
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-on-surface">Survey Date:</label>
-          <input
-            type="date"
+          <DateInput
             value={surveyDate}
             onChange={(e) => setSurveyDate(e.target.value)}
             required

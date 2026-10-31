@@ -11,7 +11,9 @@ import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStat
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import StudentDataView from "@/components/StudentDataView";
+import DateInput from "@/components/ui/DateInput";
 import { formatRoleLabel } from "@/lib/roles";
+import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -28,6 +30,16 @@ function InputField({ label, name, value, onChange, type = "text", required = fa
         <select name={name} value={value} onChange={handleChange} aria-invalid={Boolean(error)} className={inputClasses} {...rest}>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
+      ) : type === "date" ? (
+        <DateInput
+          name={name}
+          value={value}
+          onChange={(event) => onChange({ target: { name, value: event.target.value } })}
+          required={required}
+          aria-invalid={Boolean(error)}
+          className={inputClasses}
+          {...rest}
+        />
       ) : (
         <input type={type} name={name} value={value} onChange={handleChange} required={required} aria-invalid={Boolean(error)} className={inputClasses} {...rest} />
       )}
@@ -333,6 +345,8 @@ export default function AfterSchoolCentreProfileDetail() {
   const assignedPrograms = centre.programs || [];
   const assignedManagers = centre.programManagers || [];
   const isAdmin = user?.roleName === "ADMIN";
+  const canManageStaff =
+    isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
   const { totalEnrolled = 0, genderRatio = {} } = centre;
   const maleCount = genderRatio.male || 0;
   const femaleCount = genderRatio.female || 0;
@@ -347,10 +361,10 @@ export default function AfterSchoolCentreProfileDetail() {
   const filteredStudents = allStudents.filter(s => s.name.toLowerCase().includes(searchQ.toLowerCase()) || s.studentId?.includes(searchQ));
   const filteredFellows = allFellows.filter(f => f.name.toLowerCase().includes(searchQ.toLowerCase()));
   const filteredPrograms = allPrograms.filter(p => p.title.toLowerCase().includes(searchQ.toLowerCase()));
-  const filteredManagers = allProgramManagers.filter(m => (m.name || "").toLowerCase().includes(searchQ.toLowerCase()) || (m.email || "").toLowerCase().includes(searchQ.toLowerCase()));
+  const filteredManagers = allProgramManagers.filter(m => m.id !== user?.id && ((m.name || "").toLowerCase().includes(searchQ.toLowerCase()) || (m.email || "").toLowerCase().includes(searchQ.toLowerCase())));
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back */}
       <Link href="/education/after-school-centres" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
@@ -736,7 +750,7 @@ export default function AfterSchoolCentreProfileDetail() {
                 <span className="material-symbols-outlined text-primary">supervisor_account</span>
                 Assigned Staff ({assignedManagers.length})
               </h3>
-              {isAdmin && (
+              {canManageStaff && (
                 <button onClick={() => { setModal("managers"); setSearchQ(""); }}
                   className="bg-primary/10 text-primary p-1.5 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer">
                   <span className="material-symbols-outlined text-[16px]">edit</span>
@@ -763,7 +777,7 @@ export default function AfterSchoolCentreProfileDetail() {
                         )}
                       </div>
                     </div>
-                    {isAdmin && (
+                    {canManageStaff && (
                       <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error">
                         <span className="material-symbols-outlined text-[14px]">remove_circle</span>
                       </button>
@@ -798,7 +812,7 @@ export default function AfterSchoolCentreProfileDetail() {
           {viewOnlyMode ? (
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-4 border-b border-outline-variant/20 pb-4">
-                <h4 className="font-bold text-lg text-on-surface">Date: {attendanceDate}</h4>
+                <h4 className="font-bold text-lg text-on-surface">Date: {formatDate(attendanceDate)}</h4>
                 <button type="button" onClick={() => setViewOnlyMode(false)} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors cursor-pointer text-sm">
                   Edit Attendance
                 </button>
@@ -995,7 +1009,7 @@ export default function AfterSchoolCentreProfileDetail() {
             </div>
           ) : (
             <div className="space-y-4">
-              <h4 className="font-bold text-lg text-on-surface mb-2">Review Attendance - {attendanceDate}</h4>
+              <h4 className="font-bold text-lg text-on-surface mb-2">Review Attendance - {formatDate(attendanceDate)}</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="border border-outline-variant/30 rounded-lg p-3">
                   <h5 className="font-bold text-primary mb-2 border-b border-outline-variant/20 pb-2">Present ({attendanceSelection.size})</h5>

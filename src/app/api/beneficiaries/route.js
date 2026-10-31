@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isLivelihoodProgramManaged } from "@/lib/scope";
+import { getManagedSchoolIds, isLivelihoodProgramManaged } from "@/lib/scope";
+import { buildResilienceSurveyCreateData } from "@/lib/resilienceSurvey";
 import { checkPermission } from "@/lib/permissions";
 import { computeCapacityScore } from "@/lib/capacityDictionaries";
 import {
@@ -134,22 +135,40 @@ export async function GET(req) {
   }
 }
 
+async function canLinkStudent(user, studentId) {
+  const student = await prisma.student.findUnique({
+    where: { id: studentId },
+    select: { schoolId: true },
+  });
+  if (!student) return false;
+
+  if (user.role.name === "ADMIN") return true;
+
+  if (user.role.name === "FELLOW") {
+    if (!student.schoolId) return false;
+    const assigned = await prisma.fellowSchool.findFirst({
+      where: {
+        schoolId: student.schoolId,
+        fellow: { userId: user.id },
+      },
+      select: { id: true },
+    });
+    return Boolean(assigned);
+  }
+
+  if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (!student.schoolId) return false;
+    const managed = await getManagedSchoolIds(user.id);
+    return managed.includes(student.schoolId);
+  }
+
+  return false;
+}
+
 export async function POST(req) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
-
-    if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
-      return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
-    }
 
     const body = await req.json();
     const {
@@ -183,8 +202,33 @@ export async function POST(req) {
       bankIfsc,
       schemes,
       programId,
-      attributes
+      attributes,
+      studentId,
+      resilienceSurvey,
     } = body;
+
+    // A fellow may add a student's parents from the student detail page even
+    // though they do not have Livelihood write access. The beneficiary is
+    // linked to that student, which also grants read-only profile access.
+    const hasLivelihoodWrite = await checkPermission(user, "dashboard", "livelihood", "WRITE");
+    if (!hasLivelihoodWrite) {
+      const canWriteEducation = await checkPermission(user, "dashboard", "education", "WRITE");
+      if (user.role.name !== "FELLOW" || !studentId || !canWriteEducation) {
+        return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+      }
+    }
+
+    if (
+      user.role.name !== "ADMIN" &&
+      user.role.name !== "FELLOW" &&
+      !PROGRAM_ROLES.includes(user.role.name)
+    ) {
+      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
+    }
+
+    if (studentId && !(await canLinkStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+    }
 
     if (!name || !enrolmentId) {
       return NextResponse.json({ error: "Name and Enrolment ID are required" }, { status: 400 });
@@ -213,6 +257,8 @@ export async function POST(req) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
       }
     }
+
+    const resilienceSurveyCreate = buildResilienceSurveyCreateData(resilienceSurvey);
 
     const beneficiary = await prisma.beneficiary.create({
       data: {
@@ -263,6 +309,12 @@ export async function POST(req) {
         } : undefined,
         livelihoodDetails: programId ? {
           create: { programId, attributes: attributes || {} }
+        } : undefined,
+        students: studentId ? {
+          connect: { id: studentId }
+        } : undefined,
+        resilienceSurveys: resilienceSurveyCreate ? {
+          create: resilienceSurveyCreate
         } : undefined
       }
     });

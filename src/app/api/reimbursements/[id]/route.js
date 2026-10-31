@@ -2,14 +2,18 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { notifyUsers, NOTIFICATION_TYPES, getAdminUserIds } from "@/lib/notifications";
 import { PAYMENT_MODES } from "@/lib/reimbursementCategories";
 import {
   isReimbursementReceiptUrl,
   saveReceiptFile,
   validateReceiptFile,
 } from "@/lib/reimbursementUploads";
-import { canManageReimbursementForUser } from "@/lib/reimbursementScope";
+import {
+  canApproveVerifiedReimbursement,
+  canManageReimbursementForUser,
+  canReimburseApprovedReimbursement,
+} from "@/lib/reimbursementScope";
 import {
   collectReceiptFiles,
   isFutureDate,
@@ -34,6 +38,39 @@ async function canViewReimbursement(user, reimbursement) {
   if (!canManage) return false;
 
   return canManageReimbursementForUser(user, reimbursement.userId);
+}
+
+/**
+ * Resolves the per-line amounts supplied by the verifier/approver. Missing
+ * lines fall back to the previously verified amount, then to the claimed
+ * amount.
+ */
+function buildApprovedItems(items, requestedItems) {
+  const requestedById = new Map(
+    (Array.isArray(requestedItems) ? requestedItems : []).map((item) => [
+      item.id,
+      Number.parseFloat(item.approvedAmount),
+    ])
+  );
+
+  return items.map((item) => {
+    let approvedAmount =
+      item.approvedAmount !== null && item.approvedAmount !== undefined
+        ? Number(item.approvedAmount)
+        : Number(item.amount);
+
+    if (requestedById.has(item.id)) {
+      approvedAmount = requestedById.get(item.id);
+    }
+
+    if (!Number.isFinite(approvedAmount) || approvedAmount < 0 || approvedAmount > Number(item.amount)) {
+      throw new Error(
+        `Approved amount for "${item.description}" must be between 0 and ₹${Number(item.amount).toLocaleString("en-IN")}.`
+      );
+    }
+
+    return { id: item.id, approvedAmount };
+  });
 }
 
 export async function GET(req, context) {
@@ -73,34 +110,82 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Reimbursement not found" }, { status: 404 });
     }
 
-    if (!(await canManageReimbursementForUser(user, existing.userId))) {
-      return NextResponse.json({ error: "Forbidden: You cannot review this claim" }, { status: 403 });
-    }
-
     const body = await req.json();
     const action = String(body.action || "").toUpperCase();
 
-    if (action === "APPROVE") {
+    if (action === "VERIFY") {
       if (existing.status !== "PENDING") {
-        return NextResponse.json({ error: "Only pending claims can be approved." }, { status: 400 });
+        return NextResponse.json({ error: "Only pending claims can be verified." }, { status: 400 });
+      }
+      if (existing.userId === user.id) {
+        return NextResponse.json({ error: "You cannot verify your own claim." }, { status: 403 });
+      }
+      if (!(await canManageReimbursementForUser(user, existing.userId))) {
+        return NextResponse.json({ error: "Forbidden: You cannot verify this claim" }, { status: 403 });
       }
 
-      const requestedItems = Array.isArray(body.items) ? body.items : [];
-      const approvedById = new Map(
-        requestedItems.map((item) => [item.id, Number.parseFloat(item.approvedAmount)])
-      );
+      const verifiedItems = buildApprovedItems(existing.items, body.items);
+      const totalApproved = verifiedItems.reduce((sum, item) => sum + item.approvedAmount, 0);
+      if (totalApproved <= 0) {
+        return NextResponse.json({ error: "The verified amount must be greater than zero." }, { status: 400 });
+      }
 
-      const approvedItems = existing.items.map((item) => {
-        let approvedAmount = Number(item.amount);
-        if (approvedById.has(item.id)) {
-          approvedAmount = approvedById.get(item.id);
-        }
-        if (!Number.isFinite(approvedAmount) || approvedAmount < 0 || approvedAmount > Number(item.amount)) {
-          throw new Error(`Approved amount for "${item.description}" must be between 0 and ₹${Number(item.amount).toLocaleString("en-IN")}.`);
-        }
-        return { id: item.id, approvedAmount };
+      const verificationNotes = String(body.verificationNotes || "").trim() || null;
+
+      await prisma.$transaction([
+        ...verifiedItems.map((item) =>
+          prisma.reimbursementItem.update({
+            where: { id: item.id },
+            data: { approvedAmount: item.approvedAmount },
+          })
+        ),
+        prisma.reimbursement.update({
+          where: { id },
+          data: {
+            status: "VERIFIED",
+            totalApproved,
+            verifiedBy: user.id,
+            verifiedAt: new Date(),
+            verificationNotes,
+            rejectionReason: null,
+          },
+        }),
+      ]);
+
+      const updated = await findReimbursement(id);
+
+      await notifyUsers([existing.userId], {
+        type: NOTIFICATION_TYPES.REIMBURSEMENT_VERIFIED,
+        title: "Reimbursement Verified",
+        message: `Your reimbursement "${existing.title}" was verified for ₹${totalApproved.toLocaleString("en-IN")} and sent to the Executive Director for approval.`,
+        link: "/reimbursements",
+        actorId: user.id,
       });
 
+      const adminIds = await getAdminUserIds();
+      await notifyUsers(adminIds, {
+        type: NOTIFICATION_TYPES.REIMBURSEMENT_SENT_FOR_APPROVAL,
+        title: "Reimbursement Awaiting Approval",
+        message: `${user.name || "A reviewer"} verified "${existing.title}" for ₹${totalApproved.toLocaleString("en-IN")}. It is ready for your approval.`,
+        link: "/reimbursements/manage",
+        actorId: user.id,
+      });
+
+      return NextResponse.json({ success: true, data: updated });
+    }
+
+    if (action === "APPROVE") {
+      if (!canApproveVerifiedReimbursement(user)) {
+        return NextResponse.json(
+          { error: "Only the Executive Director (Admin) can approve verified claims." },
+          { status: 403 }
+        );
+      }
+      if (existing.status !== "VERIFIED") {
+        return NextResponse.json({ error: "Only verified claims can be approved." }, { status: 400 });
+      }
+
+      const approvedItems = buildApprovedItems(existing.items, body.items);
       const totalApproved = approvedItems.reduce((sum, item) => sum + item.approvedAmount, 0);
       if (totalApproved <= 0) {
         return NextResponse.json({ error: "The approved amount must be greater than zero." }, { status: 400 });
@@ -138,8 +223,25 @@ export async function PATCH(req, context) {
     }
 
     if (action === "REJECT") {
-      if (existing.status !== "PENDING") {
-        return NextResponse.json({ error: "Only pending claims can be rejected." }, { status: 400 });
+      if (existing.status !== "PENDING" && existing.status !== "VERIFIED") {
+        return NextResponse.json(
+          { error: "Only pending or verified claims can be rejected." },
+          { status: 400 }
+        );
+      }
+
+      if (existing.status === "PENDING") {
+        if (existing.userId === user.id) {
+          return NextResponse.json({ error: "You cannot reject your own claim." }, { status: 403 });
+        }
+        if (!(await canManageReimbursementForUser(user, existing.userId))) {
+          return NextResponse.json({ error: "Forbidden: You cannot reject this claim" }, { status: 403 });
+        }
+      } else if (!canApproveVerifiedReimbursement(user)) {
+        return NextResponse.json(
+          { error: "Only the Executive Director (Admin) can reject verified claims." },
+          { status: 403 }
+        );
       }
 
       const rejectionReason = String(body.rejectionReason || "").trim();
@@ -157,8 +259,6 @@ export async function PATCH(req, context) {
           data: {
             status: "REJECTED",
             rejectionReason,
-            approvedBy: user.id,
-            approvedAt: new Date(),
             totalApproved: null,
           },
         }),
@@ -177,6 +277,12 @@ export async function PATCH(req, context) {
     }
 
     if (action === "REIMBURSE") {
+      if (!canReimburseApprovedReimbursement(user)) {
+        return NextResponse.json(
+          { error: "Only the Admin or Accountant can record reimbursements." },
+          { status: 403 }
+        );
+      }
       if (existing.status !== "APPROVED") {
         return NextResponse.json({ error: "Only approved claims can be marked reimbursed." }, { status: 400 });
       }
@@ -236,7 +342,7 @@ export async function PATCH(req, context) {
       return NextResponse.json({ success: true, data: updated });
     }
 
-    return NextResponse.json({ error: "Invalid action. Use APPROVE, REJECT or REIMBURSE." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid action. Use VERIFY, APPROVE, REJECT or REIMBURSE." }, { status: 400 });
   } catch (error) {
     if (error?.message?.startsWith("Approved amount for")) {
       return NextResponse.json({ error: error.message }, { status: 400 });
@@ -302,13 +408,6 @@ export async function PUT(req, context) {
         }
       }
 
-      if (!existingReceipts.length && !newFiles.length) {
-        return NextResponse.json(
-          { error: `Expense line ${index + 1} needs at least one receipt.` },
-          { status: 400 }
-        );
-      }
-
       cleanedItems.push({ ...result, existingReceipts });
     }
 
@@ -367,15 +466,11 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Reimbursement not found" }, { status: 404 });
     }
 
-    const isOwner = existing.userId === user.id
-      && existing.status === "PENDING"
-      && (await checkPermission(user, "dashboard", "reimbursements", "WRITE"));
-
     const isAdmin = user.role?.name === "ADMIN"
       && (await checkPermission(user, "dashboard", "reimbursement-management", "WRITE"));
 
-    if (!isOwner && !isAdmin) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Forbidden: Only an Admin can delete reimbursement claims." }, { status: 403 });
     }
 
     await prisma.reimbursement.delete({ where: { id } });

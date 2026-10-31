@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
+import Avatar from "@/components/ui/Avatar";
 
 export default function FellowsModule() {
   const { token, user } = useAuth();
@@ -81,7 +82,7 @@ export default function FellowsModule() {
   );
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Header Section */}
       <Link
         href="/education"
@@ -186,11 +187,7 @@ export default function FellowsModule() {
                   <td data-label="" className="px-8 py-4 font-semibold text-on-surface">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold">
-                        {f.avatar ? (
-                          <img alt="avatar" className="w-full h-full object-cover" src={f.avatar} />
-                        ) : (
-                          f.name.split(" ").map((n) => n[0]).join("").toUpperCase().substring(0, 2)
-                        )}
+                        <Avatar src={f.avatar} name={f.name} />
                       </div>
                       <span className="break-words">{f.name}</span>
                     </div>

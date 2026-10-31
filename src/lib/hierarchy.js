@@ -72,6 +72,30 @@ export async function isSubordinate(
 }
 
 /**
+ * People-assignment rule used by task assignment and association management:
+ * admins may assign anyone, anybody may be assigned a Fellow, and managers may
+ * assign people in their reporting tree. This intentionally does not use a
+ * separate role-rank ladder; the Reports To configuration already enforces the
+ * valid hierarchy.
+ */
+export async function canAssignPerson(actor, targetUserId, { allowSelf = false } = {}) {
+  if (!actor?.id || !targetUserId) return false;
+  if (actor.role?.name === "ADMIN") return true;
+  if (actor.id === targetUserId) return allowSelf;
+  if (actor.role?.name === "FELLOW") return false;
+
+  const target = await prisma.user.findUnique({
+    where: { id: targetUserId },
+    select: { status: true, role: { select: { name: true } } },
+  });
+  if (!target) return false;
+  if (target.status && target.status !== "ACTIVE") return false;
+  if (target.role?.name === "FELLOW") return true;
+
+  return isSubordinate(actor.id, targetUserId);
+}
+
+/**
  * Scope used by team-wide widgets (birthdays, on-leave-today, assets).
  * ADMIN/HR get `null` (unrestricted). Any user with reports gets their whole
  * reporting tree, even outside the standard program roles. Program roles with

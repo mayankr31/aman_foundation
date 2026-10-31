@@ -11,6 +11,8 @@ import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } 
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import DateInput from "@/components/ui/DateInput";
+import Avatar from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, isKnownIncomeCategory, MONTH_OPTIONS, getIncomePeriod, formatIncomePeriod } from "@/lib/incomeCategories";
@@ -133,7 +135,7 @@ function BeneficiaryProfileDetailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { token, user, isInitializing, can } = useAuth();
+  const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
   const permissionsReady = Boolean(user?.permissions);
   const canWrite = permissionsReady && can("livelihood", "WRITE");
   const canBrowseDirectory = permissionsReady && can("livelihood", "READ");
@@ -811,6 +813,46 @@ function BeneficiaryProfileDetailContent() {
     }
   };
 
+  const handleDeleteSurveyRecord = async (surveyType, surveyId) => {
+    if (!confirm(`Are you sure you want to delete this ${surveyType} survey?`)) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(
+        `/api/beneficiaries/${id}/${surveyType}-surveys/${surveyId}`,
+        { method: "DELETE", headers }
+      );
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+        toast.success("Survey deleted.");
+      } else {
+        alert(json.error || "Failed to delete survey");
+      }
+    } catch (err) {
+      console.error("Delete survey error:", err);
+    }
+  };
+
+  const handleDeleteSolutionPlan = async (planId) => {
+    if (!confirm("Are you sure you want to delete this solution plan?")) return;
+    try {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch(`/api/beneficiaries/${id}/solution-plans/${planId}`, {
+        method: "DELETE",
+        headers,
+      });
+      const json = await res.json();
+      if (json.success) {
+        loadBeneficiaryDetail();
+        toast.success("Solution plan deleted.");
+      } else {
+        alert(json.error || "Failed to delete solution plan");
+      }
+    } catch (err) {
+      console.error("Delete solution plan error:", err);
+    }
+  };
+
   const handleStudentSearch = async (query) => {
     setStudentSearch(query);
     setStudentSearchLoading(true);
@@ -1076,7 +1118,7 @@ function BeneficiaryProfileDetailContent() {
       : null;
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back link */}
       <Link
         href={canBrowseDirectory ? "/beneficiaries" : "/education/students"}
@@ -1125,7 +1167,7 @@ function BeneficiaryProfileDetailContent() {
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Data
           </button>
-          {canWrite && (
+          {canWrite && canDeleteRecords && (
             <button
               onClick={() => setShowConfirmDelete(true)}
               className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
@@ -1155,16 +1197,13 @@ function BeneficiaryProfileDetailContent() {
           <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
             <div className="relative shrink-0">
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-surface shadow-md bg-primary/10 text-primary flex items-center justify-center font-bold text-4xl">
-                {beneficiary.photoUrl ? (
-                  <img
-                    src={beneficiary.photoUrl}
-                    alt={beneficiary.name}
-                    className="w-full h-full object-cover cursor-pointer"
-                    onClick={() => setLightboxPhoto(beneficiary.photoUrl)}
-                  />
-                ) : (
-                  beneficiary.name.split(" ").map((n) => n[0]).join("")
-                )}
+                <Avatar
+                  src={beneficiary.photoUrl}
+                  name={beneficiary.name}
+                  className="w-full h-full object-cover cursor-pointer"
+                  fallbackClassName="text-4xl font-bold"
+                  onClick={() => setLightboxPhoto(beneficiary.photoUrl)}
+                />
               </div>
               {canWrite && (
                 <button
@@ -1670,6 +1709,16 @@ function BeneficiaryProfileDetailContent() {
                             Edit
                           </button>
                         )}
+                        {canDeleteRecords && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteSurveyRecord("resilience", survey.id)}
+                            className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1719,11 +1768,17 @@ function BeneficiaryProfileDetailContent() {
                           </p>
                         </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
                         <Link href={`/beneficiaries/${id}/responses/adaptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
+                        {canDeleteRecords && (
+                          <button type="button" onClick={() => handleDeleteSurveyRecord("adaptive", survey.id)} className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1773,11 +1828,17 @@ function BeneficiaryProfileDetailContent() {
                           </p>
                         </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
                         <Link href={`/beneficiaries/${id}/responses/absorptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
+                        {canDeleteRecords && (
+                          <button type="button" onClick={() => handleDeleteSurveyRecord("absorptive", survey.id)} className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1827,11 +1888,17 @@ function BeneficiaryProfileDetailContent() {
                           </p>
                         </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
                         <Link href={`/beneficiaries/${id}/responses/transformative/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
+                        {canDeleteRecords && (
+                          <button type="button" onClick={() => handleDeleteSurveyRecord("transformative", survey.id)} className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1877,11 +1944,17 @@ function BeneficiaryProfileDetailContent() {
                           <p className="text-xs text-on-surface-variant mt-1">Shocks, Hardships, and Severities Recorded</p>
                         </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-surface-container-highest">
+                      <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
                         <Link href={`/beneficiaries/${id}/responses/vulnerability/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
+                        {canDeleteRecords && (
+                          <button type="button" onClick={() => handleDeleteSurveyRecord("vulnerability", survey.id)} className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer">
+                            <span className="material-symbols-outlined text-[14px]">delete</span>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))
@@ -1958,6 +2031,12 @@ function BeneficiaryProfileDetailContent() {
                               <span className="material-symbols-outlined text-[14px]">edit</span>
                               Edit Plan
                             </Link>
+                          )}
+                          {canDeleteRecords && (
+                            <button type="button" onClick={() => handleDeleteSolutionPlan(plan.id)} className="text-error hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit border-none bg-transparent cursor-pointer">
+                              <span className="material-symbols-outlined text-[14px]">delete</span>
+                              Delete Plan
+                            </button>
                           )}
                         </div>
                       </div>
@@ -2101,12 +2180,14 @@ function BeneficiaryProfileDetailContent() {
                             >
                               <span className="material-symbols-outlined text-[18px]">edit</span>
                             </button>
-                            <button
-                              onClick={() => handleDeleteIncome(record.id)}
-                              className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
-                            >
-                              <span className="material-symbols-outlined text-[18px]">delete</span>
-                            </button>
+                            {canDeleteRecords && (
+                              <button
+                                onClick={() => handleDeleteIncome(record.id)}
+                                className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                              >
+                                <span className="material-symbols-outlined text-[18px]">delete</span>
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
@@ -2187,12 +2268,14 @@ function BeneficiaryProfileDetailContent() {
                           >
                             <span className="material-symbols-outlined text-[18px]">edit</span>
                           </button>
-                          <button
-                            onClick={() => handleDeleteMigration(record.id)}
-                            className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">delete</span>
-                          </button>
+                          {canDeleteRecords && (
+                            <button
+                              onClick={() => handleDeleteMigration(record.id)}
+                              className="p-1.5 hover:bg-error-container/20 rounded-full transition-colors cursor-pointer border-none bg-transparent text-on-surface-variant hover:text-error"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">delete</span>
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
@@ -2605,7 +2688,7 @@ function BeneficiaryProfileDetailContent() {
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">DOB</label>
-                    <input type="date" max={new Date().toISOString().slice(0, 10)} value={dob} onChange={e => setDob(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                    <DateInput max={new Date().toISOString().slice(0, 10)} value={dob} onChange={e => setDob(e.target.value)} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
                   </div>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Gender</label>
@@ -2770,7 +2853,7 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                         <div className="w-40 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">DOB</label>
-                          <input type="date" max={new Date().toISOString().slice(0, 10)} value={m.dob} onChange={e => updateFamilyMemberRow(idx, "dob", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
+                          <DateInput max={new Date().toISOString().slice(0, 10)} value={m.dob} onChange={e => updateFamilyMemberRow(idx, "dob", e.target.value)} className="px-2 py-1.5 border rounded bg-transparent border-outline-variant text-on-surface text-xs" />
                         </div>
                         <div className="w-44 flex flex-col gap-1">
                           <label className="font-semibold text-slate-400 text-[9px] uppercase tracking-wider">Contact Mobile</label>
@@ -3141,8 +3224,7 @@ function BeneficiaryProfileDetailContent() {
 
               <div className="flex flex-col gap-1">
                 <label className="font-semibold uppercase tracking-wider text-slate-400">Migration Date</label>
-                <input
-                  type="date"
+                <DateInput
                   required
                   value={migrationForm.migrationDate}
                   onChange={e => setMigrationForm({ ...migrationForm, migrationDate: e.target.value })}
@@ -3154,8 +3236,7 @@ function BeneficiaryProfileDetailContent() {
                 <>
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Expected Return Date</label>
-                    <input
-                      type="date"
+                    <DateInput
                       value={migrationForm.expectedReturnDate}
                       onChange={e => setMigrationForm({ ...migrationForm, expectedReturnDate: e.target.value })}
                       className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"
@@ -3164,8 +3245,7 @@ function BeneficiaryProfileDetailContent() {
 
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold uppercase tracking-wider text-slate-400">Actual Return Date</label>
-                    <input
-                      type="date"
+                    <DateInput
                       value={migrationForm.actualReturnDate}
                       onChange={e => setMigrationForm({ ...migrationForm, actualReturnDate: e.target.value })}
                       className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface"

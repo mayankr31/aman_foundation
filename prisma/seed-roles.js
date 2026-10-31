@@ -192,6 +192,23 @@ async function main() {
     console.log(`Granted ${pages.length} pages to ${roleName}.`);
   }
 
+  // Every role must be able to open its own attendance logs, including custom
+  // roles that are not part of the explicit page map above.
+  const attendanceRead = permissionByKey["attendance:READ"];
+  if (attendanceRead) {
+    const allRoles = await prisma.role.findMany({ select: { id: true } });
+    for (const role of allRoles) {
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: { roleId: role.id, permissionId: attendanceRead.id },
+        },
+        update: {},
+        create: { roleId: role.id, permissionId: attendanceRead.id },
+      });
+    }
+    console.log(`Ensured attendance access for ${allRoles.length} roles.`);
+  }
+
   // Fellows no longer have a Livelihood section. Remove any existing grant so
   // the sidebar, quick links and APIs all stay in sync.
   const fellowRole = await prisma.role.findUnique({ where: { name: "FELLOW" } });
@@ -225,6 +242,24 @@ async function main() {
       });
     }
     console.log("Granted reimbursement management to PROGRAM_MANAGER.");
+  }
+
+  // Accountants verify claims and record payments across every program, so they
+  // need full reimbursement-management access.
+  const accountantRole = await prisma.role.findUnique({ where: { name: "ACCOUNTANT" } });
+  if (accountantRole) {
+    for (const action of ACTIONS) {
+      const perm = permissionByKey[`reimbursement-management:${action}`];
+      if (!perm) continue;
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: { roleId: accountantRole.id, permissionId: perm.id },
+        },
+        update: {},
+        create: { roleId: accountantRole.id, permissionId: perm.id },
+      });
+    }
+    console.log("Granted reimbursement management to ACCOUNTANT.");
   }
 
   console.log("Role & permission seeding completed.");

@@ -41,7 +41,8 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Leave not found" }, { status: 404 });
     }
 
-    const isFellowOrOther = user.role?.name !== "ADMIN" && user.role?.name !== "HR";
+    const isAdminViewer = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
+    const isFellowOrOther = !isAdminViewer;
     if (PROGRAM_ROLES.includes(user.role?.name)) {
       if (!(await isPmTeamMember(user, leave.userId))) {
         return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
@@ -81,7 +82,7 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: "Leave not found" }, { status: 404 });
     }
 
-    const isApprover = user.role?.name === "ADMIN" || user.role?.name === "HR";
+    const isApprover = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
     if (!isApprover) {
       if (PROGRAM_ROLES.includes(user.role?.name)) {
         if (existing.userId === user.id || !(await isPmTeamMember(user, existing.userId))) {
@@ -101,6 +102,7 @@ export async function PUT(req, { params }) {
       }
     }
 
+    let approvalPolicyFlags = null;
     if (nextStatus === "APPROVED" && existing.status !== "APPROVED" && existing.leaveTypeKey !== "COMP_OFF") {
       const startDate = existing.startDate ? parseDateOnly(existing.startDate) : parseLegacyLeaveRange(existing.dates).startDate;
       const endDate = existing.endDate ? parseDateOnly(existing.endDate) : parseLegacyLeaveRange(existing.dates).endDate;
@@ -111,10 +113,13 @@ export async function PUT(req, { params }) {
           leaveTypeKey,
           startDate,
           endDate,
+          excludeLeaveId: existing.id,
+          allowInactive: true,
         });
         if (!validation.ok) {
           return NextResponse.json({ error: validation.error }, { status: 400 });
         }
+        approvalPolicyFlags = validation.warnings || [];
       }
     }
 
@@ -127,11 +132,13 @@ export async function PUT(req, { params }) {
           ...(body.reason !== undefined && { reason: body.reason }),
           ...(body.rejectionReason !== undefined && { rejectionReason: body.rejectionReason }),
           ...(body.status !== undefined && { status: body.status }),
+          ...(approvalPolicyFlags !== null && {
+            policyFlags: approvalPolicyFlags,
+            medicalCertificateRequired: approvalPolicyFlags.includes("MEDICAL_CERTIFICATE_REQUIRED"),
+          }),
         },
         include: { compOffCredit: true },
       });
-
-      const dayCount = Math.max(1, Math.round(Number(existing.days) || 1));
 
       if (body.status === "APPROVED" && existing.status !== "APPROVED") {
         if (existing.compOffCreditId) {
@@ -140,13 +147,6 @@ export async function PUT(req, { params }) {
             data: { status: "Used" },
           });
         }
-        await tx.user.update({
-          where: { id: existing.userId },
-          data: {
-            leavesTaken: { increment: dayCount },
-            leavesRemaining: { decrement: dayCount },
-          },
-        });
       } else if (existing.status === "APPROVED" && (body.status === "REJECTED" || body.status === "PENDING")) {
         if (existing.compOffCreditId) {
           await tx.compOffCredit.update({
@@ -154,13 +154,6 @@ export async function PUT(req, { params }) {
             data: { status: "Available" },
           });
         }
-        await tx.user.update({
-          where: { id: existing.userId },
-          data: {
-            leavesTaken: { decrement: dayCount },
-            leavesRemaining: { increment: dayCount },
-          },
-        });
       } else if (
         body.status === "REJECTED" &&
         (existing.status === "PENDING" || existing.status === "REJECTED") &&
@@ -205,6 +198,13 @@ export async function DELETE(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+    if (user.role?.name !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can delete records" },
+        { status: 403 }
+      );
+    }
+
 
     if (!(await checkPermission(user, "dashboard", "leaves", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for leaves" }, { status: 403 });
@@ -218,7 +218,7 @@ export async function DELETE(req, { params }) {
     }
 
     const isOwner = existing.userId === user.id;
-    const isAdmin = user.role?.name === "ADMIN";
+    const isAdmin = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
     let isPmTeam = false;
     if (PROGRAM_ROLES.includes(user.role?.name)) {
       isPmTeam = await isPmTeamMember(user, existing.userId);
@@ -228,16 +228,6 @@ export async function DELETE(req, { params }) {
     }
 
     await prisma.$transaction(async (tx) => {
-      if (existing.status === "APPROVED" && existing.userId) {
-        const dayCount = Math.max(1, Math.round(Number(existing.days) || 1));
-        await tx.user.update({
-          where: { id: existing.userId },
-          data: {
-            leavesTaken: { decrement: dayCount },
-            leavesRemaining: { increment: dayCount },
-          },
-        });
-      }
       if (existing.compOffCreditId) {
         await tx.compOffCredit.updateMany({
           where: { id: existing.compOffCreditId, status: { in: ["Reserved", "Used"] } },

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { QUALIFICATIONS } from "@/lib/organization";
+import DateInput from "@/components/ui/DateInput";
+import Avatar from "@/components/ui/Avatar";
 import {
   validateMobile,
   validateAadhaar,
@@ -168,13 +170,24 @@ export default function PersonalDetailsForm({
           {label}
           {required && <span className="text-error ml-0.5">*</span>}
         </label>
-        <input
-          type={type}
-          value={form[field] ?? ""}
-          onChange={(event) => setField(field, transform ? transform(event.target.value) : event.target.value)}
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
-          {...rest}
-        />
+        {type === "date" ? (
+          <DateInput
+            name={field}
+            value={form[field] ?? ""}
+            onChange={(event) => setField(field, event.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+            required={required}
+            {...rest}
+          />
+        ) : (
+          <input
+            type={type}
+            value={form[field] ?? ""}
+            onChange={(event) => setField(field, transform ? transform(event.target.value) : event.target.value)}
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+            {...rest}
+          />
+        )}
         {hint && <span className="text-[11px] text-on-surface-variant">{hint}</span>}
       </div>
     );
@@ -207,11 +220,12 @@ export default function PersonalDetailsForm({
         <h3 className="font-headline font-bold text-base text-on-surface mb-4">Profile Photo</h3>
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-outline-variant bg-surface-container-high flex items-center justify-center">
-            {form.avatar ? (
-              <img alt="avatar" className="w-full h-full object-cover" src={form.avatar} />
-            ) : (
-              <span className="text-lg font-bold text-on-surface-variant">{initials}</span>
-            )}
+            <Avatar
+              src={form.avatar}
+              name={form.name}
+              fallback={initials}
+              fallbackClassName="text-lg font-bold text-on-surface-variant"
+            />
           </div>
           {avatarUploadUrl && (
             <label className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-sm font-semibold hover:bg-surface-container transition-colors cursor-pointer">

@@ -15,6 +15,8 @@ export const NOTIFICATION_TYPES = {
   TRAVEL_COMPLETED: "TRAVEL_COMPLETED",
   TRAVEL_EXPENSE_SUBMITTED: "TRAVEL_EXPENSE_SUBMITTED",
   REIMBURSEMENT_REQUESTED: "REIMBURSEMENT_REQUESTED",
+  REIMBURSEMENT_VERIFIED: "REIMBURSEMENT_VERIFIED",
+  REIMBURSEMENT_SENT_FOR_APPROVAL: "REIMBURSEMENT_SENT_FOR_APPROVAL",
   REIMBURSEMENT_APPROVED: "REIMBURSEMENT_APPROVED",
   REIMBURSEMENT_REJECTED: "REIMBURSEMENT_REJECTED",
   REIMBURSEMENT_REIMBURSED: "REIMBURSEMENT_REIMBURSED",
@@ -27,6 +29,9 @@ export const NOTIFICATION_TYPES = {
   EMPLOYEE_BIRTHDAY: "EMPLOYEE_BIRTHDAY",
   ASSET_ASSIGNED: "ASSET_ASSIGNED",
   ASSET_RETURNED: "ASSET_RETURNED",
+  TEAM_CHECK_IN_SUBMITTED: "TEAM_CHECK_IN_SUBMITTED",
+  TEAM_CHECK_IN_UPDATED: "TEAM_CHECK_IN_UPDATED",
+  TEAM_CHECK_IN_PROMISE_UPDATED: "TEAM_CHECK_IN_PROMISE_UPDATED",
 };
 
 /** All ACTIVE users whose role is ADMIN. Admins are global (not school scoped). */
@@ -36,6 +41,15 @@ export async function getAdminUserIds() {
     select: { id: true },
   });
   return admins.map((u) => u.id);
+}
+
+/** All ACTIVE accountants, who can verify claims and record payments. */
+export async function getAccountantUserIds() {
+  const accountants = await prisma.user.findMany({
+    where: { status: "ACTIVE", role: { name: "ACCOUNTANT" } },
+    select: { id: true },
+  });
+  return accountants.map((u) => u.id);
 }
 
 /**

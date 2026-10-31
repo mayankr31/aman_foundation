@@ -3,6 +3,8 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import { ToastProvider } from "@/context/ToastContext";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "./datepicker.css";
 
 const inter = Inter({
   subsets: ["latin"],

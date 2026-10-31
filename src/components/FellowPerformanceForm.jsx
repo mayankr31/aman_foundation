@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import DateInput from "@/components/ui/DateInput";
 import { useToast } from "@/context/ToastContext";
 import {
   SUBJECT_OPTIONS,
@@ -169,12 +170,11 @@ export default function FellowPerformanceForm({
               <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
                 Date
               </label>
-              <input
-                type="date"
+              <DateInput
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className={inputClass + " [color-scheme:light] dark:[color-scheme:dark]"}
+                className={inputClass}
               />
             </div>
             <div>

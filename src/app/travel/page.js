@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import DateInput from "@/components/ui/DateInput";
 import { validateAmount, validateDateOrder, firstError } from "@/lib/validation";
 
 export default function TravelPage() {
@@ -247,7 +248,7 @@ export default function TravelPage() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-8">
         <div>
           <h2 className="page-title text-on-surface mb-2">Travel Requests</h2>
@@ -382,31 +383,31 @@ export default function TravelPage() {
                 <label className="text-xs font-semibold text-slate-500 uppercase">Destination</label>
                 <input type="text" required placeholder="e.g. Guwahati, Assam"
                   value={newDestination} onChange={e => setNewDestination(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase">Purpose</label>
                 <input type="text" required placeholder="e.g. Teacher training workshop"
                   value={newPurpose} onChange={e => setNewPurpose(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase">Start Date</label>
-                  <input type="date" required value={newStartDate} onChange={e => setNewStartDate(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <DateInput required value={newStartDate} onChange={e => setNewStartDate(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase">End Date</label>
-                  <input type="date" required min={newStartDate || undefined} value={newEndDate} onChange={e => setNewEndDate(e.target.value)}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  <DateInput required min={newStartDate || undefined} value={newEndDate} onChange={e => setNewEndDate(e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase">Expected Expenses (INR)</label>
                 <input type="number" min="0" step="0.01" placeholder="e.g. 5000"
                   value={newExpectedExpenses} onChange={e => setNewExpectedExpenses(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowNewModal(false)}
@@ -445,29 +446,29 @@ export default function TravelPage() {
                 <input type="text" required
                   value={resubmitForm.destination}
                   onChange={e => setResubmitForm({ ...resubmitForm, destination: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase">Purpose</label>
                 <input type="text" required
                   value={resubmitForm.purpose}
                   onChange={e => setResubmitForm({ ...resubmitForm, purpose: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase">Start Date</label>
-                  <input type="date" required
+                  <DateInput required
                     value={resubmitForm.startDate}
                     onChange={e => setResubmitForm({ ...resubmitForm, startDate: e.target.value })}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-semibold text-slate-500 uppercase">End Date</label>
-                  <input type="date" required min={resubmitForm.startDate || undefined}
+                  <DateInput required min={resubmitForm.startDate || undefined}
                     value={resubmitForm.endDate}
                     onChange={e => setResubmitForm({ ...resubmitForm, endDate: e.target.value })}
-                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
@@ -475,7 +476,7 @@ export default function TravelPage() {
                 <input type="number" min="0" step="0.01"
                   value={resubmitForm.expectedExpenses}
                   onChange={e => setResubmitForm({ ...resubmitForm, expectedExpenses: e.target.value })}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setResubmitRequest(null)}
@@ -550,7 +551,7 @@ export default function TravelPage() {
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase">Notes (optional)</label>
                 <textarea rows={2} value={expenseNotes} onChange={e => setExpenseNotes(e.target.value)}
-                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase">Upload Receipts</label>

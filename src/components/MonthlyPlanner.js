@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
+import { canDeleteTaskRecord } from "@/lib/taskPermissions";
 
 export default function MonthlyPlanner({
   fellowId = null,
@@ -10,7 +11,7 @@ export default function MonthlyPlanner({
   title = "Monthly Planner",
   canEdit = true,
 }) {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,12 @@ export default function MonthlyPlanner({
     : userId
       ? `/api/program-managers/${userId}/tasks`
       : null;
+
+  const canDelete = (task) =>
+    canDeleteTaskRecord(user, {
+      assignedById: task.assignedBy?.id || task.assignedById || null,
+      assigneeId: task.assignee?.id || task.assigneeId || null,
+    });
 
   const fetchTasks = async () => {
     if (!taskEndpoint) {
@@ -309,7 +316,7 @@ export default function MonthlyPlanner({
                       {task.description && <div className="text-xs text-slate-500 mt-1">{task.description}</div>}
                     </div>
                   </div>
-                  {canEdit && (
+                  {canEdit && canDelete(task) && (
                     <button
                       onClick={(e) => handleDeleteTask(task.id, e)}
                       className="text-red-400 hover:text-red-600 p-1 opacity-100 sm:opacity-0 sm:group-hover/taskitem:opacity-100 transition-opacity cursor-pointer flex shrink-0"

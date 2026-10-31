@@ -30,7 +30,7 @@ const TONES = {
   },
 };
 
-export default function SectionCard({ section, kpis }) {
+export default function SectionCard({ section }) {
   const tone = TONES[section.tone] || TONES.emerald;
 
   return (
@@ -55,17 +55,10 @@ export default function SectionCard({ section, kpis }) {
               </span>
               {link.label}
             </span>
-            <span className="flex items-center gap-2">
-              {link.kpiKey && kpis && kpis[link.kpiKey] != null && (
-                <span className="text-xs font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">
-                  {Number(kpis[link.kpiKey]).toLocaleString("en-IN")}
-                </span>
-              )}
-              <span
-                className={`material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity ${tone.arrow}`}
-              >
-                arrow_forward
-              </span>
+            <span
+              className={`material-symbols-outlined text-[18px] opacity-0 group-hover:opacity-100 transition-opacity ${tone.arrow}`}
+            >
+              arrow_forward
             </span>
           </Link>
         ))}

@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
+import DateInput from "@/components/ui/DateInput";
 import { formatINR, PAYMENT_MODES, REIMBURSEMENT_STATUSES, formatRoleLabel } from "@/lib/reimbursementCategories";
 import usePagination from "@/lib/usePagination";
 import Pagination from "@/components/ui/Pagination";
 import ReimbursementStatusBadge from "@/components/reimbursements/ReimbursementStatusBadge";
 import ReimbursementSummary from "@/components/reimbursements/ReimbursementSummary";
+import ConfirmActionModal from "@/components/ConfirmActionModal";
 
 const FILTERS = ["ALL", ...REIMBURSEMENT_STATUSES];
 
@@ -30,8 +32,11 @@ export default function ReimbursementManagementPage() {
   const [staffFilter, setStaffFilter] = useState("All");
   const [selected, setSelected] = useState(null);
   const [actionMode, setActionMode] = useState(null);
-  const [approvedAmounts, setApprovedAmounts] = useState({});
+  const [lineAmounts, setLineAmounts] = useState({});
+  const [verificationNotes, setVerificationNotes] = useState("");
   const [rejectionReason, setRejectionReason] = useState("");
+  const [claimToDelete, setClaimToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   const [paymentForm, setPaymentForm] = useState({
     reimbursedAmount: "",
     paymentMode: "Bank Transfer",
@@ -41,6 +46,8 @@ export default function ReimbursementManagementPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const canAct = can("reimbursement-management", "WRITE");
+  const isAdmin = user?.roleName === "ADMIN";
+  const isAccountant = user?.roleName === "ACCOUNTANT";
 
   useEffect(() => {
     if (isInitializing) return;
@@ -113,6 +120,10 @@ export default function ReimbursementManagementPage() {
           accumulator.pending += claimed;
           accumulator.pendingCount += 1;
         }
+        if (claim.status === "VERIFIED") {
+          accumulator.verified += Number(claim.totalApproved ?? claimed);
+          accumulator.verifiedCount += 1;
+        }
         if (claim.status === "APPROVED") {
           accumulator.approved += Number(claim.totalApproved ?? claimed);
           accumulator.approvedCount += 1;
@@ -122,7 +133,15 @@ export default function ReimbursementManagementPage() {
         }
         return accumulator;
       },
-      { pending: 0, pendingCount: 0, approved: 0, approvedCount: 0, reimbursed: 0 }
+      {
+        pending: 0,
+        pendingCount: 0,
+        verified: 0,
+        verifiedCount: 0,
+        approved: 0,
+        approvedCount: 0,
+        reimbursed: 0,
+      }
     );
   }, [claims]);
 
@@ -134,7 +153,8 @@ export default function ReimbursementManagementPage() {
 
     setSelected(claim);
     setActionMode(null);
-    setApprovedAmounts(amounts);
+    setLineAmounts(amounts);
+    setVerificationNotes("");
     setRejectionReason("");
     setPaymentForm({
       reimbursedAmount: claim.totalApproved ?? claim.totalClaimed ?? "",
@@ -181,28 +201,43 @@ export default function ReimbursementManagementPage() {
     }
   };
 
-  const handleApprove = () => {
-    if (!selected) return;
+  const collectLineAmounts = () => {
+    if (!selected) return null;
     const items = [];
     for (const item of selected.items || []) {
-      const amount = Number.parseFloat(approvedAmounts[item.id]);
+      const amount = Number.parseFloat(lineAmounts[item.id]);
       if (!Number.isFinite(amount) || amount < 0) {
-        toast.error(`Enter a valid approved amount for "${item.description}".`);
-        return;
+        toast.error(`Enter a valid amount for "${item.description}".`);
+        return null;
       }
       if (amount > Number(item.amount)) {
-        toast.error(`Approved amount for "${item.description}" cannot exceed the claimed amount.`);
-        return;
+        toast.error(`Amount for "${item.description}" cannot exceed the claimed amount.`);
+        return null;
       }
       items.push({ id: item.id, approvedAmount: amount });
     }
 
     const total = items.reduce((sum, item) => sum + item.approvedAmount, 0);
     if (total <= 0) {
-      toast.error("The total approved amount must be greater than zero.");
-      return;
+      toast.error("The total amount must be greater than zero.");
+      return null;
     }
 
+    return items;
+  };
+
+  const handleVerify = () => {
+    const items = collectLineAmounts();
+    if (!items) return;
+    submitAction(
+      { action: "VERIFY", items, verificationNotes },
+      "Claim verified and sent to the Executive Director."
+    );
+  };
+
+  const handleApprove = () => {
+    const items = collectLineAmounts();
+    if (!items) return;
     submitAction({ action: "APPROVE", items }, "Reimbursement claim approved.");
   };
 
@@ -248,9 +283,58 @@ export default function ReimbursementManagementPage() {
     );
   };
 
-  const approvedTotal = selected
-    ? (selected.items || []).reduce((sum, item) => sum + (Number.parseFloat(approvedAmounts[item.id]) || 0), 0)
+  const handleDelete = async () => {
+    if (!claimToDelete) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/reimbursements/${claimToDelete.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete claim.");
+      }
+      setClaims((previous) => previous.filter((claim) => claim.id !== claimToDelete.id));
+      if (selected?.id === claimToDelete.id) setSelected(null);
+      setClaimToDelete(null);
+      toast.success("Reimbursement claim deleted.");
+    } catch (error) {
+      console.error("Delete reimbursement error:", error);
+      toast.error(error.message || "Failed to delete claim.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const lineTotal = selected
+    ? (selected.items || []).reduce((sum, item) => sum + (Number.parseFloat(lineAmounts[item.id]) || 0), 0)
     : 0;
+
+  const canVerifySelected =
+    Boolean(selected) &&
+    canAct &&
+    selected.status === "PENDING" &&
+    selected.userId !== user?.id;
+  const canApproveSelected = Boolean(selected) && isAdmin && selected.status === "VERIFIED";
+  const canReimburseSelected =
+    Boolean(selected) &&
+    canAct &&
+    (isAdmin || isAccountant) &&
+    selected.status === "APPROVED";
+
+  const claimActionMeta = (claim) => {
+    if (claim.status === "PENDING" && canAct && claim.userId !== user?.id) {
+      return { label: "Verify Claim", icon: "rate_review" };
+    }
+    if (claim.status === "VERIFIED" && isAdmin) {
+      return { label: "Approve Claim", icon: "approval" };
+    }
+    if (claim.status === "APPROVED" && canAct && (isAdmin || isAccountant)) {
+      return { label: "Record Payment", icon: "payments" };
+    }
+    return { label: "View Details", icon: "visibility" };
+  };
 
   if (isInitializing || loading) {
     return (
@@ -261,22 +345,33 @@ export default function ReimbursementManagementPage() {
   }
 
   return (
-    <div className="p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 max-w-7xl mx-auto w-full font-sans">
       <div className="mb-8">
         <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">
           Staff Expenses
         </p>
         <h1 className="page-title text-on-surface">Reimbursement Management</h1>
         <p className="text-sm text-on-surface-variant mt-1">
-          Review claims, approve or reject expenses, and record reimbursements.
+          Verify claims and send them to the Executive Director, track approval, and record payments.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="rounded-lg border border-outline-variant/40 bg-surface-container-low/30 p-3 mb-6 text-xs text-on-surface-variant">
+        Claims move from Pending → Verified → Approved → Reimbursed. A manager or accountant verifies
+        the details, the Executive Director approves, and the Executive Director or Accountant records
+        the payment.
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Pending Review</p>
           <p className="text-2xl font-bold text-amber-900 mt-2">{formatINR(totals.pending)}</p>
-          <p className="text-xs text-amber-700 mt-1">{totals.pendingCount} claim{totals.pendingCount === 1 ? "" : "s"} waiting</p>
+          <p className="text-xs text-amber-700 mt-1">{totals.pendingCount} claim{totals.pendingCount === 1 ? "" : "s"} awaiting verification</p>
+        </div>
+        <div className="rounded-xl border border-violet-200 bg-violet-50 p-5">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-violet-700">Verified · Awaiting ED</p>
+          <p className="text-2xl font-bold text-violet-900 mt-2">{formatINR(totals.verified)}</p>
+          <p className="text-xs text-violet-700 mt-1">{totals.verifiedCount} claim{totals.verifiedCount === 1 ? "" : "s"} with Executive Director</p>
         </div>
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Approved · Awaiting Payment</p>
@@ -364,6 +459,11 @@ export default function ReimbursementManagementPage() {
                 <div className="text-left sm:text-right shrink-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Claimed</p>
                   <p className="text-lg font-bold text-on-surface">{formatINR(claim.totalClaimed)}</p>
+                  {claim.status === "VERIFIED" && (
+                    <p className="text-[11px] font-semibold text-violet-700 mt-1">
+                      {formatINR(claim.totalApproved)} verified
+                    </p>
+                  )}
                   {claim.status === "APPROVED" && (
                     <p className="text-[11px] font-semibold text-emerald-700 mt-1">
                       {formatINR(claim.totalApproved)} approved
@@ -384,9 +484,9 @@ export default function ReimbursementManagementPage() {
                   className="px-3 py-1.5 rounded-full bg-primary text-on-primary text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer flex items-center gap-1.5"
                 >
                   <span className="material-symbols-outlined text-[16px]">
-                    {claim.status === "PENDING" ? "rate_review" : "visibility"}
+                    {claimActionMeta(claim).icon}
                   </span>
-                  {claim.status === "PENDING" ? "Review Claim" : "View Details"}
+                  {claimActionMeta(claim).label}
                 </button>
               </div>
             </div>
@@ -405,7 +505,7 @@ export default function ReimbursementManagementPage() {
       {selected && (
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full shadow-2xl flex flex-col max-h-[92vh] border border-outline-variant/10">
-            <div className="flex items-center justify-between border-b border-surface-container-high px-6 py-4">
+            <div className="flex items-center justify-between border-b border-surface-container-high px-4 sm:px-6 py-4">
               <div>
                 <h3 className="text-lg font-bold text-on-surface">Review Reimbursement</h3>
                 <p className="text-xs text-on-surface-variant mt-0.5">
@@ -421,16 +521,18 @@ export default function ReimbursementManagementPage() {
               </button>
             </div>
 
-            <div className="overflow-y-auto px-6 py-5 space-y-5">
+            <div className="overflow-y-auto px-4 sm:px-6 py-5 space-y-5">
               <ReimbursementSummary reimbursement={selected} />
 
-              {!canAct && (selected.status === "PENDING" || selected.status === "APPROVED") && (
+              {selected.status === "PENDING" && !canVerifySelected && (
                 <div className="rounded-lg border border-outline-variant bg-surface-container-low/20 p-3 text-xs text-on-surface-variant">
-                  You have view-only access to this claim. An approver with write access can take action.
+                  {selected.userId === user?.id
+                    ? "You cannot verify your own claim. A manager or accountant will review it."
+                    : "You have view-only access to this claim. A manager or accountant with write access can verify it."}
                 </div>
               )}
 
-              {canAct && selected.status === "PENDING" && (
+              {canVerifySelected && selected.status === "PENDING" && (
                 <div className="border-t border-surface-container-high pt-5">
                   {!actionMode && (
                     <div className="flex flex-wrap justify-end gap-2">
@@ -444,25 +546,26 @@ export default function ReimbursementManagementPage() {
                       <button
                         type="button"
                         onClick={() => {
-                          setActionMode("approve");
+                          setActionMode("verify");
                           const amounts = {};
                           (selected.items || []).forEach((item) => {
                             amounts[item.id] = item.amount;
                           });
-                          setApprovedAmounts(amounts);
+                          setLineAmounts(amounts);
+                          setVerificationNotes("");
                         }}
-                        className="px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors cursor-pointer"
+                        className="px-4 py-2 rounded-full bg-violet-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-violet-700 transition-colors cursor-pointer"
                       >
-                        Approve Claim
+                        Verify &amp; Send to ED
                       </button>
                     </div>
                   )}
 
-                  {actionMode === "approve" && (
+                  {actionMode === "verify" && (
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-bold text-on-surface">Approved Amounts</h4>
-                        <p className="text-xs text-on-surface-variant">Adjust an item if only part of it is approved.</p>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <h4 className="text-sm font-bold text-on-surface">Verified Amounts</h4>
+                        <p className="text-xs text-on-surface-variant">Confirm each expense line before sending it to the Executive Director.</p>
                       </div>
 
                       <div className="space-y-2">
@@ -479,8 +582,8 @@ export default function ReimbursementManagementPage() {
                               min="0"
                               max={item.amount}
                               step="0.01"
-                              value={approvedAmounts[item.id] ?? ""}
-                              onChange={(event) => setApprovedAmounts((previous) => ({
+                              value={lineAmounts[item.id] ?? ""}
+                              onChange={(event) => setLineAmounts((previous) => ({
                                 ...previous,
                                 [item.id]: event.target.value,
                               }))}
@@ -491,8 +594,19 @@ export default function ReimbursementManagementPage() {
                       </div>
 
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg bg-surface-container-low/30 p-3">
-                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Approved</p>
-                        <p className="text-lg font-bold text-emerald-700">{formatINR(approvedTotal)}</p>
+                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Verified</p>
+                        <p className="text-lg font-bold text-violet-700">{formatINR(lineTotal)}</p>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Verification Notes (optional)</label>
+                        <textarea
+                          rows={2}
+                          value={verificationNotes}
+                          onChange={(event) => setVerificationNotes(event.target.value)}
+                          placeholder="Add context for the Executive Director..."
+                          className="w-full px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary resize-none"
+                        />
                       </div>
 
                       <div className="flex justify-end gap-2">
@@ -506,10 +620,10 @@ export default function ReimbursementManagementPage() {
                         <button
                           type="button"
                           disabled={submitting}
-                          onClick={handleApprove}
-                          className="px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors disabled:opacity-50 cursor-pointer"
+                          onClick={handleVerify}
+                          className="px-4 py-2 rounded-full bg-violet-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-violet-700 transition-colors disabled:opacity-50 cursor-pointer"
                         >
-                          {submitting ? "Approving..." : "Confirm Approval"}
+                          {submitting ? "Sending..." : "Verify & Send to ED"}
                         </button>
                       </div>
                     </div>
@@ -547,7 +661,136 @@ export default function ReimbursementManagementPage() {
                 </div>
               )}
 
-              {canAct && selected.status === "APPROVED" && (
+              {selected.status === "VERIFIED" && !canApproveSelected && (
+                <div className="rounded-lg border border-violet-200 bg-violet-50 p-3 text-xs text-violet-800">
+                  This claim is verified and waiting for Executive Director approval.
+                </div>
+              )}
+
+              {canApproveSelected && (
+                <div className="border-t border-surface-container-high pt-5">
+                  {!actionMode && (
+                    <div className="flex flex-wrap justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setActionMode("reject")}
+                        className="px-4 py-2 rounded-full border border-rose-200 text-rose-700 text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-colors cursor-pointer"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActionMode("approve");
+                          const amounts = {};
+                          (selected.items || []).forEach((item) => {
+                            amounts[item.id] = item.approvedAmount ?? item.amount;
+                          });
+                          setLineAmounts(amounts);
+                        }}
+                        className="px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors cursor-pointer"
+                      >
+                        Approve
+                      </button>
+                    </div>
+                  )}
+
+                  {actionMode === "approve" && (
+                    <div className="space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <h4 className="text-sm font-bold text-on-surface">Approved Amounts</h4>
+                        <p className="text-xs text-on-surface-variant">Verified amounts are prefilled. Adjust if needed — this becomes the final approved amount.</p>
+                      </div>
+
+                      <div className="space-y-2">
+                        {(selected.items || []).map((item) => (
+                          <div key={item.id} className="grid grid-cols-1 sm:grid-cols-[1fr_150px] gap-2 items-center rounded-lg border border-surface-container-highest bg-surface-container-low/20 p-3">
+                            <div>
+                              <p className="text-xs font-semibold text-on-surface">{item.description}</p>
+                              <p className="text-[11px] text-on-surface-variant mt-0.5">
+                                {item.category} · claimed {formatINR(item.amount)}
+                              </p>
+                            </div>
+                            <input
+                              type="number"
+                              min="0"
+                              max={item.amount}
+                              step="0.01"
+                              value={lineAmounts[item.id] ?? ""}
+                              onChange={(event) => setLineAmounts((previous) => ({
+                                ...previous,
+                                [item.id]: event.target.value,
+                              }))}
+                              className="px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg bg-surface-container-low/30 p-3">
+                        <p className="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Total Approved</p>
+                        <p className="text-lg font-bold text-emerald-700">{formatINR(lineTotal)}</p>
+                      </div>
+
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setActionMode(null)}
+                          className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-xs font-bold uppercase tracking-wider hover:bg-surface-container-low transition-colors cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          disabled={submitting}
+                          onClick={handleApprove}
+                          className="px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          {submitting ? "Approving..." : "Confirm Approval"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {actionMode === "reject" && (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-bold text-on-surface">Rejection Reason</h4>
+                      <textarea
+                        rows={3}
+                        value={rejectionReason}
+                        onChange={(event) => setRejectionReason(event.target.value)}
+                        placeholder="Explain why this verified claim is being rejected..."
+                        className="w-full px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary resize-none"
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setActionMode(null)}
+                          className="px-4 py-2 rounded-full border border-outline-variant text-on-surface text-xs font-bold uppercase tracking-wider hover:bg-surface-container-low transition-colors cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          disabled={submitting}
+                          onClick={handleReject}
+                          className="px-4 py-2 rounded-full bg-rose-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-rose-700 transition-colors disabled:opacity-50 cursor-pointer"
+                        >
+                          {submitting ? "Rejecting..." : "Confirm Rejection"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {selected.status === "APPROVED" && !canReimburseSelected && (
+                <div className="rounded-lg border border-outline-variant bg-surface-container-low/20 p-3 text-xs text-on-surface-variant">
+                  This claim is approved. Payment is recorded by the Executive Director or Accountant.
+                </div>
+              )}
+
+              {canReimburseSelected && (
                 <div className="border-t border-surface-container-high pt-5">
                   {!actionMode && (
                     <div className="flex justify-end">
@@ -579,11 +822,10 @@ export default function ReimbursementManagementPage() {
                         </div>
                         <div className="flex flex-col gap-1">
                           <label className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Payment Date</label>
-                          <input
-                            type="date"
+                          <DateInput
                             value={paymentForm.reimbursedAt}
                             onChange={(event) => setPaymentForm((previous) => ({ ...previous, reimbursedAt: event.target.value }))}
-                            className="px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
+                            className="w-full px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary"
                           />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -643,7 +885,19 @@ export default function ReimbursementManagementPage() {
               )}
             </div>
 
-            <div className="flex justify-end border-t border-surface-container-high px-6 py-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-t border-surface-container-high px-4 sm:px-6 py-4">
+              {isAdmin ? (
+                <button
+                  type="button"
+                  onClick={() => setClaimToDelete(selected)}
+                  className="px-4 py-2 rounded-full border border-rose-200 text-rose-700 text-xs font-bold uppercase tracking-wider hover:bg-rose-50 transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-[16px]">delete</span>
+                  Delete Claim
+                </button>
+              ) : (
+                <span className="hidden sm:block" />
+              )}
               <button
                 type="button"
                 onClick={closeClaim}
@@ -655,6 +909,16 @@ export default function ReimbursementManagementPage() {
           </div>
         </div>
       )}
+
+      <ConfirmActionModal
+        isOpen={Boolean(claimToDelete)}
+        onClose={() => setClaimToDelete(null)}
+        onConfirm={handleDelete}
+        title="Delete reimbursement claim?"
+        message={`This will permanently delete "${claimToDelete?.title || "this claim"}". This action cannot be undone.`}
+        confirmText={deleting ? "Deleting..." : "Delete"}
+        variant="danger"
+      />
     </div>
   );
 }

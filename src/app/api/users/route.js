@@ -17,8 +17,6 @@ import {
   normalizeEmailForSave,
 } from "@/lib/validation";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export async function GET(req) {
   try {
     const { user, error } = await authenticateUser(req);
@@ -30,11 +28,6 @@ export async function GET(req) {
 
     const isAdmin = user.role.name === "ADMIN";
     const isHr = user.role.name === "HR";
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
-
-    if (!isAdmin && !isHr && !isPm) {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
 
     const { searchParams } = new URL(req.url);
     const roleFilter = searchParams.get("role");
@@ -43,10 +36,11 @@ export async function GET(req) {
       ? rolesFilter.split(",").map((r) => r.trim()).filter(Boolean)
       : null;
 
-    // Program staff only see themselves and users below them in the
-    // Reports To hierarchy (with the legacy assignment scope as a fallback).
+    // Admin/HR are unrestricted. Everyone else follows the Reports To
+    // hierarchy, so a permission grant exposes the page without exposing the
+    // entire company directory.
     let scopeWhere;
-    if (isPm) {
+    if (!isAdmin && !isHr) {
       const team = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [];
       scopeWhere = { id: { in: team.length ? team : [user.id] } };
     }

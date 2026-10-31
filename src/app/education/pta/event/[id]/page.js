@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import DateInput from "@/components/ui/DateInput";
 import { formatDate } from "@/lib/date";
 
 function Modal({ title, onClose, children }) {
@@ -99,7 +100,7 @@ export default function PtaEventDetail() {
   const linkedSchools = event.program?.schools || [];
 
   return (
-    <div className="p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back */}
       <Link href="/education/pta" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
@@ -242,7 +243,7 @@ export default function PtaEventDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Date</label>
-                <input type="date" value={editForm.date} onChange={e => setEditForm(f => ({ ...f, date: e.target.value }))}
+                <DateInput value={editForm.date} onChange={e => setEditForm(f => ({ ...f, date: e.target.value }))}
                   className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
               </div>
               <div className="flex flex-col gap-1">

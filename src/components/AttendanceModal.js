@@ -16,6 +16,12 @@ import {
   defaultTaskTimeSlot,
   normalizeTaskTimeSlot,
 } from "@/lib/taskSlots";
+import {
+  formatCoordinates,
+  getBestPosition,
+  hasAccuracy,
+  isApproximateAccuracy,
+} from "@/lib/geolocation";
 import AttendanceTimer from "@/components/AttendanceTimer";
 
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
@@ -109,6 +115,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     if (!roleName) return "Workspace";
     if (roleName === "FELLOW") return "Fellow Workspace";
     if (roleName === "PROGRAM_MANAGER") return "PM Workspace";
+    if (roleName === "ADMIN") return "Executive Director Workspace";
     const pretty = roleName
       .toLowerCase()
       .split("_")
@@ -149,7 +156,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       const today = getISTDateKey();
 
       // Fetch Attendance Log
-      const resLog = await fetch('/api/attendance?includeDrafts=1', {
+      const resLog = await fetch('/api/attendance?includeDrafts=1&self=1', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const dataLog = await resLog.json();
@@ -203,17 +210,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
     let lat = null;
     let lng = null;
+    let accuracy = null;
 
-    if (navigator.geolocation) {
-      try {
-        const pos = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
-        });
-        lat = pos.coords.latitude;
-        lng = pos.coords.longitude;
-      } catch (err) {
-        console.warn("Geolocation failed or denied:", err);
-      }
+    const { position } = await getBestPosition();
+    if (position) {
+      lat = position.lat;
+      lng = position.lng;
+      accuracy = position.accuracy;
     }
 
     try {
@@ -230,6 +233,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           logininfo: navigator.userAgent,
           checkInLat: lat,
           checkInLng: lng,
+          checkInAccuracy: accuracy,
           isTeachingDay: isFellow ? isTeachingDay : null
         })
       });
@@ -237,7 +241,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       if (res.ok) {
         setCurrentLog(data.data);
         onStatusChange?.(data.data);
-        triggerToast("Checked in successfully!");
+        if (!position) {
+          triggerToast("Checked in, but location could not be captured.");
+        } else if (isApproximateAccuracy(accuracy)) {
+          triggerToast(`Checked in. Location is approximate (±${Math.round(accuracy)} m).`);
+        } else {
+          triggerToast("Checked in successfully!");
+        }
       }
     } catch (e) {
       triggerToast("Check in failed");
@@ -249,20 +259,16 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const handleConfirmCheckOut = async () => {
     if (!currentLog) return;
     setIsCheckingOut(true);
-    
+
     let lat = null;
     let lng = null;
+    let accuracy = null;
 
-    if (navigator.geolocation) {
-      try {
-        const pos = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
-        });
-        lat = pos.coords.latitude;
-        lng = pos.coords.longitude;
-      } catch (err) {
-        console.warn("Geolocation failed or denied:", err);
-      }
+    const { position } = await getBestPosition();
+    if (position) {
+      lat = position.lat;
+      lng = position.lng;
+      accuracy = position.accuracy;
     }
 
     try {
@@ -278,7 +284,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           workstatus: "Checked out",
           logoutinfo: navigator.userAgent,
           checkOutLat: lat,
-          checkOutLng: lng
+          checkOutLng: lng,
+          checkOutAccuracy: accuracy
         })
       });
       const data = await res.json();
@@ -286,7 +293,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         setCurrentLog(data.data);
         setCheckoutMode(false);
         onStatusChange?.(data.data);
-        triggerToast("Checked out successfully!");
+        if (!position) {
+          triggerToast("Checked out, but location could not be captured.");
+        } else if (isApproximateAccuracy(accuracy)) {
+          triggerToast(`Checked out. Location is approximate (±${Math.round(accuracy)} m).`);
+        } else {
+          triggerToast("Checked out successfully!");
+        }
       }
     } catch (e) {
       triggerToast("Check out failed");
@@ -439,7 +452,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-10 relative mt-10 md:mt-0 font-sans max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-4 sm:p-6 md:p-10 relative mt-10 md:mt-0 font-sans max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <button 
           onClick={onClose} 
           className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-full p-2 transition-colors"
@@ -545,6 +558,44 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <span className="text-on-surface-variant font-medium text-sm">Check-out Time</span>
                   <span className="font-semibold text-rose-600 text-sm">{currentLog?.outtimelog || "--:--"}</span>
                 </div>
+                {currentLog?.checkInLat != null && currentLog?.checkInLng != null && (
+                  <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
+                    <span className="text-on-surface-variant font-medium text-sm">Check-in Location</span>
+                    <div className="text-right min-w-0">
+                      {isApproximateAccuracy(currentLog.checkInAccuracy) ? (
+                        <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+                          Approximate (±{Math.round(Number(currentLog.checkInAccuracy))} m)
+                        </span>
+                      ) : hasAccuracy(currentLog.checkInAccuracy) ? (
+                        <span className="text-[11px] font-semibold text-slate-500">Recorded</span>
+                      ) : (
+                        <span className="text-[11px] font-semibold text-slate-400">Accuracy unknown</span>
+                      )}
+                      <p className="mt-1 break-all text-[10px] text-slate-400">
+                        {formatCoordinates(currentLog.checkInLat, currentLog.checkInLng, currentLog.checkInAccuracy)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {currentLog?.checkOutLat != null && currentLog?.checkOutLng != null && (
+                  <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
+                    <span className="text-on-surface-variant font-medium text-sm">Check-out Location</span>
+                    <div className="text-right min-w-0">
+                      {isApproximateAccuracy(currentLog.checkOutAccuracy) ? (
+                        <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+                          Approximate (±{Math.round(Number(currentLog.checkOutAccuracy))} m)
+                        </span>
+                      ) : hasAccuracy(currentLog.checkOutAccuracy) ? (
+                        <span className="text-[11px] font-semibold text-slate-500">Recorded</span>
+                      ) : (
+                        <span className="text-[11px] font-semibold text-slate-400">Accuracy unknown</span>
+                      )}
+                      <p className="mt-1 break-all text-[10px] text-slate-400">
+                        {formatCoordinates(currentLog.checkOutLat, currentLog.checkOutLng, currentLog.checkOutAccuracy)}
+                      </p>
+                    </div>
+                  </div>
+                )}
                 {isFellow && (
                   <div className="py-2 border-b border-surface-container">
                     <span className="text-on-surface-variant font-medium text-sm">Day Type</span>

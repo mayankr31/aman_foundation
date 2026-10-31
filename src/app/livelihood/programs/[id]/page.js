@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import Pagination from "@/components/ui/Pagination";
+import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
@@ -15,7 +16,7 @@ const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "
 export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { token, user } = useAuth();
+  const { token, user, canDeleteRecords } = useAuth();
   const { getTypeConfig } = useLivelihoodTypes(token);
   const isAdmin = user?.roleName === "ADMIN";
 
@@ -406,11 +407,14 @@ export default function ProgramDetail() {
   const backLink = program.category === "FARM" ? "/livelihood/farm" : "/livelihood/non-farm";
   const accentColor = program.category === "FARM" ? "emerald" : "amber";
   const assignedManagers = program.programManagers || [];
+  const canManagePeople =
+    isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
   const programManagerIds = new Set(assignedManagers.map((m) => m.userId));
   const filteredManagers = allProgramManagers.filter(
     (m) =>
-      (m.name || "").toLowerCase().includes(searchManagerQ.toLowerCase()) ||
-      (m.email || "").toLowerCase().includes(searchManagerQ.toLowerCase())
+      m.id !== user?.id &&
+      ((m.name || "").toLowerCase().includes(searchManagerQ.toLowerCase()) ||
+        (m.email || "").toLowerCase().includes(searchManagerQ.toLowerCase()))
   );
 
   const assignedFellows = program.fellows || [];
@@ -422,7 +426,7 @@ export default function ProgramDetail() {
   );
 
   return (
-    <div className="p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
+    <div className="p-4 sm:p-6 md:p-10 flex-1 max-w-7xl mx-auto w-full pb-24">
       {/* Back */}
       <Link href={backLink} className={`flex items-center gap-2 text-slate-500 hover:text-${accentColor}-600 transition-colors mb-4 group w-fit`}>
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
@@ -443,12 +447,14 @@ export default function ProgramDetail() {
           <p className="page-description mt-2">{program.description || "No description"}</p>
         </div>
         <div className="flex flex-wrap gap-3 shrink-0">
-          <button
-            onClick={() => setShowDeleteProgram(true)}
-            className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-red-200 bg-transparent"
-          >
-            <span className="material-symbols-outlined text-sm">delete</span>Delete Program
-          </button>
+          {canDeleteRecords && (
+            <button
+              onClick={() => setShowDeleteProgram(true)}
+              className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer border border-red-200 bg-transparent"
+            >
+              <span className="material-symbols-outlined text-sm">delete</span>Delete Program
+            </button>
+          )}
           <button
             onClick={openEnrollModal}
             className="bg-primary text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg active:scale-95 cursor-pointer border-none"
@@ -496,7 +502,7 @@ export default function ProgramDetail() {
             <span className="material-symbols-outlined text-primary">supervisor_account</span>
             Assigned Staff ({assignedManagers.length})
           </h3>
-          {isAdmin && (
+          {canManagePeople && (
             <button
               onClick={openManagerModal}
               className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border-none bg-transparent"
@@ -523,7 +529,7 @@ export default function ProgramDetail() {
                     </span>
                   )}
                 </div>
-                {isAdmin && (
+                {canManagePeople && (
                   <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
                     <span className="material-symbols-outlined text-[14px]">close</span>
                   </button>
@@ -541,7 +547,7 @@ export default function ProgramDetail() {
             <span className="material-symbols-outlined text-primary">school</span>
             Fellows ({assignedFellows.length})
           </h3>
-          {isAdmin && (
+          {canManagePeople && (
             <button
               onClick={openFellowModal}
               className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border-none bg-transparent"
@@ -563,7 +569,7 @@ export default function ProgramDetail() {
                   <p className="text-sm font-semibold text-on-surface truncate">{f.fellow?.name || "—"}</p>
                   <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{f.fellow?.email || ""}</p>
                 </div>
-                {isAdmin && (
+                {canManagePeople && (
                   <button onClick={() => handleRemoveFellow(f.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
                     <span className="material-symbols-outlined text-[14px]">close</span>
                   </button>
@@ -840,7 +846,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Event Date</label>
-                <input type="date" required value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
+                <DateInput required value={eventDate} onChange={(e) => setEventDate(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Quantity</label>
@@ -884,7 +890,7 @@ export default function ProgramDetail() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Event Date</label>
-                <input type="date" value={editEventDate} onChange={(e) => setEditEventDate(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
+                <DateInput value={editEventDate} onChange={(e) => setEditEventDate(e.target.value)} className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans" />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Quantity</label>

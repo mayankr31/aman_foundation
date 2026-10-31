@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getManagedLivelihoodProgramIds, getManagedTeamUserIds } from "@/lib/scope";
+import { getSubordinateUserIds } from "@/lib/hierarchy";
 
 /**
  * User ids of fellows managed by a program manager through schools, centres or
@@ -28,31 +29,55 @@ export async function getManagedFellowUserIds(userId) {
   return [...ids];
 }
 
-/** Where-clause for the reimbursement management queue. */
-export async function getReimbursementManagementWhere(user) {
-  if (user?.role?.name === "ADMIN") return {};
-  if (user?.role?.name === "PROGRAM_MANAGER") {
-    const managedUserIds = await getManagedFellowUserIds(user.id);
-    return { userId: { in: managedUserIds } };
-  }
-  // Any other role with management permission can see the full queue.
-  return {};
+export function isReimbursementAdmin(user) {
+  return user?.role?.name === "ADMIN";
+}
+
+export function isReimbursementAccountant(user) {
+  return user?.role?.name === "ACCOUNTANT";
 }
 
 /**
- * Approval/payment is allowed for admins, for program managers on behalf of
- * the fellows they manage, and for other explicitly granted roles. Nobody can
- * approve their own claim.
+ * Users a manager can review claims for. Prefers the explicit Reports To tree
+ * and falls back to the legacy managed-team scope while reporting lines are
+ * still being configured.
+ */
+export async function getReimbursementReviewUserIds(userId) {
+  if (!userId) return [];
+  const reports = await getSubordinateUserIds(userId);
+  if (reports.length) return reports;
+  return getManagedFellowUserIds(userId);
+}
+
+/** Where-clause for the reimbursement management queue. */
+export async function getReimbursementManagementWhere(user) {
+  if (isReimbursementAdmin(user) || isReimbursementAccountant(user)) return {};
+
+  const managedUserIds = await getReimbursementReviewUserIds(user?.id);
+  return { userId: { in: managedUserIds } };
+}
+
+/**
+ * Verification is allowed for admins, accountants and managers acting for
+ * someone in their reporting line. Nobody can verify their own claim.
  */
 export async function canManageReimbursementForUser(managerUser, claimantUserId) {
   if (!managerUser?.id || !claimantUserId) return false;
   if (managerUser.id === claimantUserId) return false;
-  if (managerUser.role?.name === "ADMIN") return true;
-
-  if (managerUser.role?.name === "PROGRAM_MANAGER") {
-    const managedUserIds = await getManagedFellowUserIds(managerUser.id);
-    return managedUserIds.includes(claimantUserId);
+  if (isReimbursementAdmin(managerUser) || isReimbursementAccountant(managerUser)) {
+    return true;
   }
 
-  return true;
+  const managedUserIds = await getReimbursementReviewUserIds(managerUser.id);
+  return managedUserIds.includes(claimantUserId);
+}
+
+/** Only the Executive Director (ADMIN) may approve or reject a verified claim. */
+export function canApproveVerifiedReimbursement(user) {
+  return isReimbursementAdmin(user);
+}
+
+/** ADMIN or ACCOUNTANT may record payment for an approved claim. */
+export function canReimburseApprovedReimbursement(user) {
+  return isReimbursementAdmin(user) || isReimbursementAccountant(user);
 }

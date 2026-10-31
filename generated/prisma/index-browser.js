@@ -848,8 +848,10 @@ exports.Prisma.AttendanceLogScalarFieldEnum = {
   logoutinfo: 'logoutinfo',
   checkInLat: 'checkInLat',
   checkInLng: 'checkInLng',
+  checkInAccuracy: 'checkInAccuracy',
   checkOutLat: 'checkOutLat',
   checkOutLng: 'checkOutLng',
+  checkOutAccuracy: 'checkOutAccuracy',
   lessonPlanText: 'lessonPlanText',
   lessonPlanFiles: 'lessonPlanFiles',
   isTeachingDay: 'isTeachingDay',
@@ -871,6 +873,9 @@ exports.Prisma.LeaveScalarFieldEnum = {
   days: 'days',
   compOffWorkedDate: 'compOffWorkedDate',
   compOffCreditId: 'compOffCreditId',
+  holidayName: 'holidayName',
+  medicalCertificateRequired: 'medicalCertificateRequired',
+  policyFlags: 'policyFlags',
   reason: 'reason',
   rejectionReason: 'rejectionReason',
   status: 'status',
@@ -882,8 +887,21 @@ exports.Prisma.LeaveTypeConfigScalarFieldEnum = {
   id: 'id',
   key: 'key',
   name: 'name',
+  code: 'code',
+  policyNote: 'policyNote',
   annualQuota: 'annualQuota',
   quarterlyQuota: 'quarterlyQuota',
+  quotaPeriod: 'quotaPeriod',
+  maxConsecutiveDays: 'maxConsecutiveDays',
+  maxConsecutiveMonths: 'maxConsecutiveMonths',
+  softMaxConsecutive: 'softMaxConsecutive',
+  minServiceDays: 'minServiceDays',
+  medicalCertificateAfterDays: 'medicalCertificateAfterDays',
+  validityDays: 'validityDays',
+  paid: 'paid',
+  holidayNameRequired: 'holidayNameRequired',
+  isSystem: 'isSystem',
+  systemType: 'systemType',
   active: 'active',
   sortOrder: 'sortOrder',
   createdAt: 'createdAt',
@@ -1126,6 +1144,9 @@ exports.Prisma.ReimbursementScalarFieldEnum = {
   bankAccountNo: 'bankAccountNo',
   bankIfsc: 'bankIfsc',
   rejectionReason: 'rejectionReason',
+  verifiedBy: 'verifiedBy',
+  verifiedAt: 'verifiedAt',
+  verificationNotes: 'verificationNotes',
   approvedBy: 'approvedBy',
   approvedAt: 'approvedAt',
   reimbursedBy: 'reimbursedBy',
@@ -1384,6 +1405,37 @@ exports.Prisma.FellowStudentDataNoteScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TeamCheckInScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date',
+  checkInType: 'checkInType',
+  areaOfWork: 'areaOfWork',
+  topPriorities: 'topPriorities',
+  keyUpdates: 'keyUpdates',
+  toDiscussToday: 'toDiscussToday',
+  memberReflection: 'memberReflection',
+  managerNotes: 'managerNotes',
+  challenges: 'challenges',
+  directorInputs: 'directorInputs',
+  submittedAt: 'submittedAt',
+  lastEditedById: 'lastEditedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeamCheckInPromiseScalarFieldEnum = {
+  id: 'id',
+  checkInId: 'checkInId',
+  actionItem: 'actionItem',
+  owner: 'owner',
+  deadline: 'deadline',
+  status: 'status',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.InstitutionStudentDataNoteScalarFieldEnum = {
   id: 'id',
   scopeType: 'scopeType',
@@ -1465,6 +1517,7 @@ exports.TravelStatus = exports.$Enums.TravelStatus = {
 
 exports.ReimbursementStatus = exports.$Enums.ReimbursementStatus = {
   PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   REIMBURSED: 'REIMBURSED'
@@ -1572,6 +1625,8 @@ exports.Prisma.ModelName = {
   AfterSchoolSubjectAssessmentResponse: 'AfterSchoolSubjectAssessmentResponse',
   AfterSchoolFLNResponse: 'AfterSchoolFLNResponse',
   FellowStudentDataNote: 'FellowStudentDataNote',
+  TeamCheckIn: 'TeamCheckIn',
+  TeamCheckInPromise: 'TeamCheckInPromise',
   InstitutionStudentDataNote: 'InstitutionStudentDataNote'
 };
 

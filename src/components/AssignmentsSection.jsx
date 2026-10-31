@@ -203,6 +203,7 @@ export default function AssignmentsSection({
   };
 
   const activeConfig = CATEGORIES.find((item) => item.key === activeCategory) || CATEGORIES[0];
+  const visibleCategories = CATEGORIES.filter((category) => assigned[category.key].length > 0);
   const assignedIds = new Set(assigned[activeCategory].map((item) => item.id));
   const mergedOptions = [
     ...options[activeCategory],
@@ -230,8 +231,17 @@ export default function AssignmentsSection({
         )}
       </div>
 
+      {visibleCategories.length === 0 ? (
+        <div className="bg-surface-container-lowest rounded-xl p-6 sm:p-8 shadow-ambient border border-outline-variant/10 text-center">
+          <span className="material-symbols-outlined text-4xl text-slate-300">assignment_ind</span>
+          <p className="mt-2 text-sm font-semibold text-on-surface">No assignments yet</p>
+          <p className="mt-1 text-xs text-on-surface-variant">
+            No schools, after school centres, or livelihood programs are assigned.
+          </p>
+        </div>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-        {CATEGORIES.map((category) => {
+        {visibleCategories.map((category) => {
           const items = assigned[category.key];
           return (
             <div
@@ -277,6 +287,7 @@ export default function AssignmentsSection({
           );
         })}
       </div>
+      )}
 
       {open && (
         <div className="fixed inset-0 bg-black/50 z-[120] flex items-end sm:items-center justify-center p-0 sm:p-4">

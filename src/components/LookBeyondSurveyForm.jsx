@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import DateInput from "@/components/ui/DateInput";
 
 const LIKERT_OPTIONS = ["Strongly disagree", "Disagree", "Agree", "Strongly agree"];
 const EXTENT_OPTIONS = ["To a great extent", "Somewhat", "Little", "Not at all"];
@@ -348,8 +349,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
         </div>
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-on-surface">Survey Date:</label>
-          <input
-            type="date"
+          <DateInput
             value={surveyDate}
             onChange={(e) => setSurveyDate(e.target.value)}
             required

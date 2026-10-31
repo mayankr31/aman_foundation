@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
 import { formatWorkHours } from "@/lib/time";
 import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
+import AttendanceLocation from "@/components/AttendanceLocation";
 import {
   TASK_TIME_SLOT_CLASSES,
   TASK_TIME_SLOT_LABELS,
@@ -35,45 +36,7 @@ export default function UserAttendanceDetails({ params }) {
   
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const [checkInLocation, setCheckInLocation] = useState(null);
-  const [checkOutLocation, setCheckOutLocation] = useState(null);
-  const [isLocLoading, setIsLocLoading] = useState(false);
-  
-  useEffect(() => {
-    const fetchLocations = async () => {
-      if (!selectedDate) {
-        setCheckInLocation(null);
-        setCheckOutLocation(null);
-        return;
-      }
-      setIsLocLoading(true);
-      try {
-        if (selectedDate.checkInLat && selectedDate.checkInLng) {
-          const inRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedDate.checkInLat}&lon=${selectedDate.checkInLng}`);
-          const inData = await inRes.json();
-          setCheckInLocation(inData.display_name || "Unknown");
-        } else {
-          setCheckInLocation("Location not recorded");
-        }
 
-        if (selectedDate.checkOutLat && selectedDate.checkOutLng) {
-          const outRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${selectedDate.checkOutLat}&lon=${selectedDate.checkOutLng}`);
-          const outData = await outRes.json();
-          setCheckOutLocation(outData.display_name || "Unknown");
-        } else {
-          setCheckOutLocation("Location not recorded");
-        }
-      } catch(e) {
-        console.error("Location fetch error", e);
-        setCheckInLocation("Failed to load");
-        setCheckOutLocation("Failed to load");
-      } finally {
-        setIsLocLoading(false);
-      }
-    };
-    fetchLocations();
-  }, [selectedDate]);
-  
   useEffect(() => {
     if (token && userId) {
       fetchUserLogs();
@@ -376,10 +339,10 @@ export default function UserAttendanceDetails({ params }) {
   const isPm = PROGRAM_ROLES.includes(userData?.role?.name);
 
   return (
-    <div className="p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full font-sans bg-gray-50/50">
-      <Link href="/hr" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
+    <div className="p-4 sm:p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-7xl mx-auto w-full font-sans bg-gray-50/50">
+      <Link href="/hr/attendance" className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit">
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">arrow_back</span>
-        <span className="text-[10px] font-bold uppercase tracking-widest">Back to HR Management</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest">Back to Attendance Logs</span>
       </Link>
 
       <div className="mb-8">
@@ -567,12 +530,22 @@ export default function UserAttendanceDetails({ params }) {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check In</p>
                 <p className="font-bold text-gray-800">{selectedDate.intimelog || 'N/A'}</p>
-                <p className="text-[10px] text-gray-500 mt-2 leading-tight break-words" title={checkInLocation}>{isLocLoading ? 'Loading location...' : checkInLocation}</p>
+                <AttendanceLocation
+                  lat={selectedDate.checkInLat}
+                  lng={selectedDate.checkInLng}
+                  accuracy={selectedDate.checkInAccuracy}
+                  className="mt-2"
+                />
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
                 <p className="font-bold text-gray-800">{selectedDate.outtimelog || 'N/A'}</p>
-                <p className="text-[10px] text-gray-500 mt-2 leading-tight break-words" title={checkOutLocation}>{isLocLoading ? 'Loading location...' : checkOutLocation}</p>
+                <AttendanceLocation
+                  lat={selectedDate.checkOutLat}
+                  lng={selectedDate.checkOutLng}
+                  accuracy={selectedDate.checkOutAccuracy}
+                  className="mt-2"
+                />
               </div>
               <div className="bg-gray-50 p-4 rounded-lg col-span-2 flex justify-between items-center">
                  <div>

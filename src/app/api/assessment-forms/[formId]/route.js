@@ -91,6 +91,13 @@ export async function DELETE(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+    if (user.role?.name !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can delete records" },
+        { status: 403 }
+      );
+    }
+
 
     if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });

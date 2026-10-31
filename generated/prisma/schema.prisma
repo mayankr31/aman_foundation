@@ -34,6 +34,7 @@ enum TravelStatus {
 
 enum ReimbursementStatus {
   PENDING
+  VERIFIED
   APPROVED
   REJECTED
   REIMBURSED
@@ -127,6 +128,7 @@ model User {
   approvedTravel           TravelRequest[]      @relation("ApprovedByUser")
   revertedTravel           TravelRequest[]      @relation("RevertedByUser")
   reimbursementRequests    Reimbursement[]      @relation("ReimbursementRequester")
+  reimbursementsVerified   Reimbursement[]      @relation("ReimbursementVerifier")
   reimbursementsApproved   Reimbursement[]      @relation("ReimbursementApprover")
   reimbursementsReimbursed Reimbursement[]      @relation("ReimbursementPayer")
   coachingRecords          CoachingRecord[]
@@ -145,6 +147,9 @@ model User {
   assetAssignments     AssetAssignment[] @relation("AssetAssignee")
   assetAssignmentsMade AssetAssignment[] @relation("AssetAssigner")
   createdAssets        Asset[]           @relation("AssetCreator")
+
+  teamCheckIns     TeamCheckIn[] @relation("TeamCheckInOwner")
+  teamCheckInEdits TeamCheckIn[] @relation("TeamCheckInEditor")
 }
 
 /// Per-role or per-user dashboard selection for KPIs and quick links.
@@ -1065,50 +1070,55 @@ model InventoryLedger {
 }
 
 model AttendanceLog {
-  id              String    @id @default(uuid())
-  userId          String
-  email           String?
-  logdate         String?
-  intimelog       String?
-  outtimelog      String?
-  workhours       String?
-  workstatus      String?
-  ef1             String?
-  ef2             String?
-  logininfo       String?
-  logoutinfo      String?
-  checkInLat      Float?
-  checkInLng      Float?
-  checkOutLat     Float?
-  checkOutLng     Float?
-  lessonPlanText  String?
-  lessonPlanFiles Json?
-  isTeachingDay   Boolean?
-  checkInAt       DateTime?
-  checkOutAt      DateTime?
-  workSeconds     Int?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id               String    @id @default(uuid())
+  userId           String
+  email            String?
+  logdate          String?
+  intimelog        String?
+  outtimelog       String?
+  workhours        String?
+  workstatus       String?
+  ef1              String?
+  ef2              String?
+  logininfo        String?
+  logoutinfo       String?
+  checkInLat       Float?
+  checkInLng       Float?
+  checkInAccuracy  Float?
+  checkOutLat      Float?
+  checkOutLng      Float?
+  checkOutAccuracy Float?
+  lessonPlanText   String?
+  lessonPlanFiles  Json?
+  isTeachingDay    Boolean?
+  checkInAt        DateTime?
+  checkOutAt       DateTime?
+  workSeconds      Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Leave {
-  id                String      @id @default(uuid())
-  userId            String
-  type              String?
-  leaveTypeKey      String?
-  dates             String?
-  startDate         DateTime?
-  endDate           DateTime?
-  days              Float       @default(0)
-  compOffWorkedDate DateTime?
-  compOffCreditId   String?     @unique
-  reason            String?
-  rejectionReason   String?
-  status            LeaveStatus @default(PENDING)
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
+  id                         String      @id @default(uuid())
+  userId                     String
+  type                       String?
+  leaveTypeKey               String?
+  dates                      String?
+  startDate                  DateTime?
+  endDate                    DateTime?
+  days                       Float       @default(0)
+  compOffWorkedDate          DateTime?
+  compOffCreditId            String?     @unique
+  holidayName                String?
+  medicalCertificateRequired Boolean     @default(false)
+  policyFlags                String[]    @default([])
+  reason                     String?
+  rejectionReason            String?
+  status                     LeaveStatus @default(PENDING)
+  createdAt                  DateTime    @default(now())
+  updatedAt                  DateTime    @updatedAt
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   compOffCredit CompOffCredit? @relation(fields: [compOffCreditId], references: [id], onDelete: SetNull)
@@ -1117,15 +1127,28 @@ model Leave {
 }
 
 model LeaveTypeConfig {
-  id             String   @id @default(uuid())
-  key            String   @unique
-  name           String
-  annualQuota    Float    @default(0)
-  quarterlyQuota Float?
-  active         Boolean  @default(true)
-  sortOrder      Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                          String   @id @default(uuid())
+  key                         String   @unique
+  name                        String
+  code                        String?
+  policyNote                  String?
+  annualQuota                 Float    @default(0)
+  quarterlyQuota              Float?
+  quotaPeriod                 String   @default("FINANCIAL_YEAR")
+  maxConsecutiveDays          Int?
+  maxConsecutiveMonths        Int?
+  softMaxConsecutive          Boolean  @default(false)
+  minServiceDays              Int?
+  medicalCertificateAfterDays Int?
+  validityDays                Int?
+  paid                        Boolean  @default(true)
+  holidayNameRequired         Boolean  @default(false)
+  isSystem                    Boolean  @default(false)
+  systemType                  String?
+  active                      Boolean  @default(true)
+  sortOrder                   Int      @default(0)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
 }
 
 model CompOffCredit {
@@ -1434,30 +1457,34 @@ model TravelExpense {
 }
 
 model Reimbursement {
-  id               String              @id @default(uuid())
-  userId           String
-  title            String
-  purpose          String?
-  notes            String?
-  totalClaimed     Float
-  totalApproved    Float?
-  totalReimbursed  Float?
-  status           ReimbursementStatus @default(PENDING)
-  bankName         String?
-  bankAccountNo    String?
-  bankIfsc         String?
-  rejectionReason  String?
-  approvedBy       String?
-  approvedAt       DateTime?
-  reimbursedBy     String?
-  reimbursedAt     DateTime?
-  paymentMode      String?
-  paymentReference String?
-  paymentNotes     String?
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
+  id                String              @id @default(uuid())
+  userId            String
+  title             String
+  purpose           String?
+  notes             String?
+  totalClaimed      Float
+  totalApproved     Float?
+  totalReimbursed   Float?
+  status            ReimbursementStatus @default(PENDING)
+  bankName          String?
+  bankAccountNo     String?
+  bankIfsc          String?
+  rejectionReason   String?
+  verifiedBy        String?
+  verifiedAt        DateTime?
+  verificationNotes String?
+  approvedBy        String?
+  approvedAt        DateTime?
+  reimbursedBy      String?
+  reimbursedAt      DateTime?
+  paymentMode       String?
+  paymentReference  String?
+  paymentNotes      String?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 
   user       User                @relation("ReimbursementRequester", fields: [userId], references: [id], onDelete: Cascade)
+  verifier   User?               @relation("ReimbursementVerifier", fields: [verifiedBy], references: [id], onDelete: SetNull)
   approver   User?               @relation("ReimbursementApprover", fields: [approvedBy], references: [id], onDelete: SetNull)
   reimburser User?               @relation("ReimbursementPayer", fields: [reimbursedBy], references: [id], onDelete: SetNull)
   items      ReimbursementItem[]
@@ -1825,6 +1852,50 @@ model FellowStudentDataNote {
   fellow Fellow @relation(fields: [fellowId], references: [id], onDelete: Cascade)
 
   @@unique([fellowId, session, phase, sectionKey, source])
+}
+
+// ─── Team Check-In (non-admin, non-fellow staff) ───
+
+model TeamCheckIn {
+  id               String   @id @default(uuid())
+  userId           String
+  date             DateTime
+  checkInType      String   @default("7_DAYS") // 7_DAYS | 15_DAYS
+  areaOfWork       String?
+  topPriorities    String?
+  keyUpdates       String?
+  toDiscussToday   String?
+  memberReflection String?
+  managerNotes     String?
+  challenges       String?
+  directorInputs   String?
+  submittedAt      DateTime @default(now())
+  lastEditedById   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user         User                 @relation("TeamCheckInOwner", fields: [userId], references: [id], onDelete: Cascade)
+  lastEditedBy User?                @relation("TeamCheckInEditor", fields: [lastEditedById], references: [id], onDelete: SetNull)
+  promises     TeamCheckInPromise[]
+
+  @@index([userId, date])
+  @@index([lastEditedById])
+}
+
+model TeamCheckInPromise {
+  id         String    @id @default(uuid())
+  checkInId  String
+  actionItem String
+  owner      String?
+  deadline   DateTime?
+  status     String    @default("Pending")
+  order      Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  checkIn TeamCheckIn @relation(fields: [checkInId], references: [id], onDelete: Cascade)
+
+  @@index([checkInId])
 }
 
 // Notes shown on the institution-level Student Data views (school or
