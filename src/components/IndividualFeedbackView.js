@@ -5,6 +5,7 @@ import { useToast } from "@/context/ToastContext";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import IndividualFeedbackForm from "@/components/IndividualFeedbackForm";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
 import { formatDate } from "@/lib/date";
 
 function Section({ label, value, tone }) {
@@ -187,15 +188,14 @@ export default function IndividualFeedbackView({ fellowId, token, canManage = fa
 
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 {record.lessonPlanLink && (
-                  <a
+                  <FilePreviewLink
                     href={record.lessonPlanLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    name="Lesson Plan"
                     className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-xs text-blue-600 dark:text-blue-400 font-semibold transition-colors"
                   >
                     <span className="material-symbols-outlined text-[16px]">link</span>
                     View Lesson Plan
-                  </a>
+                  </FilePreviewLink>
                 )}
                 {record.lessonPlanFeedback && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-lg text-xs font-bold">

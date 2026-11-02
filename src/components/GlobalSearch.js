@@ -239,7 +239,7 @@ export default function GlobalSearch() {
         ref={containerRef}
         className={
           mobileOpen
-            ? "fixed inset-x-0 top-0 z-[80] flex-1 bg-white dark:bg-slate-950 px-3 py-3 shadow-lg md:static md:z-auto md:bg-transparent md:p-0 md:shadow-none md:relative md:max-w-xl md:mx-6 md:min-w-0"
+            ? "pwa-mobile-search-safe fixed inset-x-0 top-0 z-[80] flex-1 bg-white dark:bg-slate-950 px-3 py-3 shadow-lg md:static md:z-auto md:bg-transparent md:p-0 md:shadow-none md:relative md:max-w-xl md:mx-6 md:min-w-0"
             : "relative hidden md:block flex-1 max-w-xl mx-6 min-w-0"
         }
       >

@@ -3,6 +3,7 @@
 import { formatDate } from "@/lib/date";
 import { formatINR, formatRoleLabel } from "@/lib/reimbursementCategories";
 import ReimbursementStatusBadge from "./ReimbursementStatusBadge";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
 
 function receiptFilesFor(item) {
   return Array.isArray(item.receiptFiles) ? item.receiptFiles.filter(Boolean) : [];
@@ -180,16 +181,15 @@ export default function ReimbursementSummary({ reimbursement }) {
                       {receipts.length > 0 ? (
                         <div className="flex flex-wrap gap-1.5">
                           {receipts.map((file, index) => (
-                            <a
+                            <FilePreviewLink
                               key={`${file}-${index}`}
                               href={file}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              name={`Receipt ${index + 1}`}
                               className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary-container/10 px-2 py-1 text-[10px] font-semibold text-primary hover:underline"
                             >
                               <span className="material-symbols-outlined text-[12px]">receipt</span>
                               {index + 1}
-                            </a>
+                            </FilePreviewLink>
                           ))}
                         </div>
                       ) : (

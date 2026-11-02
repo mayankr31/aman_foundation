@@ -5,11 +5,22 @@ import {
   istDayStart,
 } from "@/lib/time";
 
-/** Standard shift: Monday–Saturday, 9:30 AM – 5:00 PM IST. */
-export const SHIFT_START_MINUTES = 9 * 60 + 30;
+/** Standard shift: Monday–Saturday, 9:00 AM – 5:00 PM IST. */
+export const SHIFT_START_MINUTES = 9 * 60;
 export const SHIFT_END_MINUTES = 17 * 60;
+
+function formatShiftTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  const suffix = hours >= 12 ? "PM" : "AM";
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12;
+  return `${hour12}:${String(mins).padStart(2, "0")} ${suffix}`;
+}
+
+export const SHIFT_START_LABEL = formatShiftTime(SHIFT_START_MINUTES);
+export const SHIFT_END_LABEL = formatShiftTime(SHIFT_END_MINUTES);
 export const STANDARD_WORK_SECONDS = (SHIFT_END_MINUTES - SHIFT_START_MINUTES) * 60;
-export const SHIFT_LABEL = "9:30 AM – 5:00 PM (Mon–Sat)";
+export const SHIFT_LABEL = `${SHIFT_START_LABEL} – ${SHIFT_END_LABEL} (Mon–Sat)`;
 
 /** Parses a legacy 12-hour time string against an IST calendar date. */
 export function parseLegacyTime(timeStr, dateKey) {

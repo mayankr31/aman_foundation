@@ -283,3 +283,158 @@ body.modal-open {
   color: var(--color-on-surface-variant);
   max-width: 42rem;
 }
+
+/* --------------------------------------------------------------------------
+   Installed PWA / iOS safe areas
+   -------------------------------------------------------------------------- */
+.pwa-header-safe {
+  height: calc(4rem + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.pwa-sidebar-safe {
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+}
+
+@media (min-width: 640px) {
+  .pwa-sidebar-safe {
+    padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+.pwa-footer-safe {
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  .pwa-footer-safe {
+    padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.pwa-floating-bottom {
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 640px) {
+  .pwa-floating-bottom {
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 639px) {
+  .pwa-notification-panel {
+    top: calc(4rem + env(safe-area-inset-top, 0px));
+    max-height: calc(100dvh - 5rem - env(safe-area-inset-top, 0px));
+  }
+}
+
+@media (max-width: 767px) {
+  .pwa-mobile-search-safe {
+    padding-top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+/* Full-screen overlays ignore the notch/home indicator unless they opt in. */
+.modal-lightbox {
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+}
+
+.modal-viewer {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+  padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+}
+
+.modal-lightbox-close {
+  top: max(0.75rem, env(safe-area-inset-top, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 640px) {
+  .modal-lightbox {
+    padding: max(2rem, env(safe-area-inset-top, 0px))
+      max(2rem, env(safe-area-inset-right, 0px))
+      max(2rem, env(safe-area-inset-bottom, 0px))
+      max(2rem, env(safe-area-inset-left, 0px));
+  }
+
+  .modal-viewer {
+    padding: max(1rem, env(safe-area-inset-top, 0px))
+      max(1rem, env(safe-area-inset-right, 0px))
+      max(1rem, env(safe-area-inset-bottom, 0px))
+      max(1rem, env(safe-area-inset-left, 0px));
+  }
+
+  .modal-lightbox-close {
+    top: max(1rem, env(safe-area-inset-top, 0px));
+    right: max(1rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* PDF viewer: use the dynamic viewport height when available so mobile
+   browser chrome does not push the modal off screen. */
+.pdf-modal-height {
+  width: 100%;
+  height: 90vh;
+  max-height: 90vh;
+}
+
+@supports (height: 100dvh) {
+  .pdf-modal-height {
+    height: 92dvh;
+    max-height: 92dvh;
+  }
+}
+
+@media (min-width: 640px) {
+  .pdf-modal-height {
+    max-width: 84rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tall centered modals on phones
+   `items-center` plus a card taller than the visible viewport pushes the top
+   (and the close button) above the screen, where it cannot be scrolled to.
+   Top-aligning and making the overlay scroll fixes attendance, asset and all
+   other modals that follow the same pattern.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px), (max-height: 600px) {
+  .fixed.inset-0.flex.items-center.justify-center:not(.modal-lightbox):not(.modal-viewer) {
+    align-items: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* `margin-block: auto` keeps short dialogs vertically centred while letting
+     tall ones collapse to the top and scroll in the overlay. Their own
+     `max-h-*` / `overflow-y-auto` still govern tall modal cards. */
+  .fixed.inset-0.flex.items-center.justify-center:not(.modal-lightbox):not(.modal-viewer) > * {
+    margin-block: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/* iOS Safari zooms the whole page when a form control smaller than 16px gets
+   focus. Keep the compact desktop sizing but use a readable 16px on phones. */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+    select,
+    textarea {
+      font-size: 16px;
+    }
+  }
+}
+
+/* Standalone launches should not bounce the body (iOS rubber-banding). */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
+}

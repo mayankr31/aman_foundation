@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { ToastProvider } from "@/context/ToastContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { PwaProvider } from "@/components/pwa/PwaProvider";
+import { FilePreviewProvider } from "@/components/files/FilePreviewProvider";
 import "./globals.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker.css";
@@ -13,7 +15,30 @@ const inter = Inter({
 
 export const metadata = {
   title: "Aman Foundation - Impact Portal",
-  description: "High-end editorial dashboard system designed for clarity, prestige, and actionable data.",
+  description:
+    "High-end editorial dashboard system designed for clarity, prestige, and actionable data.",
+  applicationName: "Aman Portal",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Aman Portal",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#006857",
 };
 
 export default function RootLayout({ children }) {
@@ -35,7 +60,11 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex bg-surface text-on-surface">
         <ToastProvider>
           <AuthProvider>
-            <LayoutWrapper>{children}</LayoutWrapper>
+            <PwaProvider>
+              <FilePreviewProvider>
+                <LayoutWrapper>{children}</LayoutWrapper>
+              </FilePreviewProvider>
+            </PwaProvider>
           </AuthProvider>
         </ToastProvider>
       </body>

@@ -115,7 +115,7 @@ export default function LayoutWrapper({ children }) {
         <Header onMenuToggle={() => setSidebarOpen(true)} />
         <main className="flex-grow flex flex-col bg-surface justify-between">
           <div className="flex-grow">{children}</div>
-          <footer className="flex flex-col md:flex-row justify-between items-center py-8 md:py-12 px-4 sm:px-8 gap-4 md:gap-6 bg-slate-50 dark:bg-slate-950 w-full border-t border-slate-200 dark:border-slate-800 shrink-0 font-sans">
+          <footer className="pwa-footer-safe flex flex-col md:flex-row justify-between items-center py-8 md:py-12 px-4 sm:px-8 gap-4 md:gap-6 bg-slate-50 dark:bg-slate-950 w-full border-t border-slate-200 dark:border-slate-800 shrink-0 font-sans">
             <div className="text-center md:text-left max-w-full">
               <span className="font-bold text-slate-900 dark:text-slate-100 text-xs tracking-normal">
                 Aman Foundation

@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { formatDate, formatDateTime } from "@/lib/date";
 import DateInput from "@/components/ui/DateInput";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
 import { getISTDateKey } from "@/lib/time";
 import { validateDateOrder } from "@/lib/validation";
 import { formatRoleLabel } from "@/lib/roles";
@@ -300,7 +301,7 @@ function TaskDetailModal({ task, onClose, token, onChanged, canManage, currentUs
               {documents.map((doc) => (
                 <div key={doc.id} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg px-3 py-2">
                   <span className="material-symbols-outlined text-slate-400 text-[18px]">description</span>
-                  <a href={doc.url} target="_blank" rel="noreferrer" className="flex-1 text-xs font-medium text-blue-600 hover:underline truncate">{doc.name}</a>
+                  <FilePreviewLink href={doc.url} name={doc.name} className="flex-1 text-xs font-medium text-blue-600 hover:underline truncate">{doc.name}</FilePreviewLink>
                   {canWrite && (
                     <button onClick={() => deleteDocument(doc.id)} className="text-rose-500 hover:text-rose-700">
                       <span className="material-symbols-outlined text-[16px]">delete</span>

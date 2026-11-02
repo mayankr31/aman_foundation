@@ -9,6 +9,7 @@ import useBodyScrollLock from "@/lib/useBodyScrollLock";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, DEFAULT_PRIMARY_INCOME } from "@/lib/incomeCategories";
 import {
+  validateRequired,
   validateMobile,
   validateAadhaar,
   validatePan,
@@ -58,6 +59,15 @@ export const emptyAddForm = {
   bankIfsc: "",
   programId: "",
 };
+
+function RequiredLabel({ children }) {
+  return (
+    <>
+      {children}
+      <span className="text-error"> *</span>
+    </>
+  );
+}
 
 export default function AddBeneficiaryModal({
   onClose,
@@ -117,37 +127,56 @@ export default function AddBeneficiaryModal({
   const validateForm = () => {
     const validationErrors = {};
 
-    if (!form.name.trim()) {
-      validationErrors.name = "Full name is required.";
-    } else {
-      const nameError = validatePersonName(form.name, { required: true });
-      if (nameError) validationErrors.name = nameError;
+    const nameError = validatePersonName(form.name, { required: true });
+    if (nameError) validationErrors.name = nameError;
+
+    const dobError = validateDateNotFuture(form.dob, {
+      required: true,
+      label: "Date of birth",
+    });
+    if (dobError) validationErrors.dob = dobError;
+
+    const requiredFields = [
+      ["gender", "Gender"],
+      ["caste", "Caste"],
+      ["religion", "Religion"],
+      ["state", "State"],
+      ["district", "District"],
+      ["block", "Block"],
+      ["ward", "Ward / GP"],
+      ["village", "Village"],
+      ["landmark", "Nearby landmark"],
+      ["primaryIncomeType", "Primary income category"],
+      ["tier", "Socio-economic tier"],
+      ["bankName", "Bank name"],
+      ["programId", "Livelihood program"],
+    ];
+
+    for (const [key, label] of requiredFields) {
+      const message = validateRequired(form[key], label);
+      if (message) validationErrors[key] = message;
     }
 
-    if (form.dob) {
-      const dobError = validateDateNotFuture(form.dob, { label: "Date of birth" });
-      if (dobError) validationErrors.dob = dobError;
+    if (form.primaryIncomeType === "Other") {
+      const otherIncomeError = validateRequired(form.primaryIncomeOther, "Income category");
+      if (otherIncomeError) validationErrors.primaryIncomeOther = otherIncomeError;
     }
 
     const validators = [
-      ["mobNumber", validateMobile(form.mobNumber)],
-      ["emergencyContact", validateMobile(form.emergencyContact)],
-      ["aadhar", validateAadhaar(form.aadhar)],
-      ["panCard", validatePan(form.panCard)],
-      ["voterId", validateVoterId(form.voterId)],
-      ["rationCard", validateRationCard(form.rationCard)],
-      ["bankAccountNo", validateBankAccount(form.bankAccountNo)],
-      ["bankIfsc", validateIfsc(form.bankIfsc)],
-      ["monthlyIncome", validateAmount(form.monthlyIncome, { min: 0 })],
-      ["householdSize", validateInteger(form.householdSize, { min: 1, max: 20 })],
+      ["mobNumber", validateMobile(form.mobNumber, { required: true })],
+      ["emergencyContact", validateMobile(form.emergencyContact, { required: true })],
+      ["aadhar", validateAadhaar(form.aadhar, { required: true })],
+      ["panCard", validatePan(form.panCard, { required: true })],
+      ["voterId", validateVoterId(form.voterId, { required: true })],
+      ["rationCard", validateRationCard(form.rationCard, { required: true })],
+      ["bankAccountNo", validateBankAccount(form.bankAccountNo, { required: true })],
+      ["bankIfsc", validateIfsc(form.bankIfsc, { required: true })],
+      ["monthlyIncome", validateAmount(form.monthlyIncome, { required: true, min: 0 })],
+      ["householdSize", validateInteger(form.householdSize, { required: true, min: 1, max: 20 })],
     ];
 
     for (const [key, message] of validators) {
       if (message) validationErrors[key] = message;
-    }
-
-    if (!form.programId) {
-      validationErrors.programId = "Please select a livelihood program.";
     }
 
     return validationErrors;
@@ -309,6 +338,10 @@ export default function AddBeneficiaryModal({
   const inputClass =
     "w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-base sm:text-sm";
   const fieldClass = (key) => `${inputClass}${errors[key] ? " ring-1 ring-error" : ""}`;
+  const fieldError = (key) =>
+    errors[key] ? (
+      <p data-add-error className="text-[11px] font-semibold text-error">{errors[key]}</p>
+    ) : null;
   const labelClass = "text-xs font-semibold text-on-surface-variant uppercase tracking-wider";
 
   return (
@@ -345,9 +378,12 @@ export default function AddBeneficiaryModal({
 
         {step === "details" && (
           <form onSubmit={handleNext} noValidate className="space-y-4 text-sm">
+            <p className="text-[11px] font-semibold text-on-surface-variant">
+              All fields in this step are required.
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Full Name</label>
+                <label className={labelClass}><RequiredLabel>Full Name</RequiredLabel></label>
                 <input
                   type="text"
                   required
@@ -357,28 +393,26 @@ export default function AddBeneficiaryModal({
                   value={form.name}
                   onChange={(e) => updateField("name", toPersonNameInput(e.target.value))}
                 />
-                {errors.name && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.name}</p>
-                )}
+                {fieldError("name")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Date of Birth</label>
+                <label className={labelClass}><RequiredLabel>Date of Birth</RequiredLabel></label>
                 <DateInput
+                  required
                   max={new Date().toISOString().slice(0, 10)}
                   className={fieldClass("dob")}
                   value={form.dob}
                   onChange={(e) => updateField("dob", e.target.value)}
                 />
-                {errors.dob && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.dob}</p>
-                )}
+                {fieldError("dob")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Gender</label>
+                <label className={labelClass}><RequiredLabel>Gender</RequiredLabel></label>
                 <select
-                  className={inputClass}
+                  required
+                  className={fieldClass("gender")}
                   value={form.gender}
                   onChange={(e) => updateField("gender", e.target.value)}
                 >
@@ -388,13 +422,15 @@ export default function AddBeneficiaryModal({
                   <option value="Don't want to respond">Don&apos;t want to respond</option>
                   <option value="Others">Others</option>
                 </select>
+                {fieldError("gender")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Mobile Number</label>
+                <label className={labelClass}><RequiredLabel>Mobile Number</RequiredLabel></label>
                 <input
                   type="tel"
                   inputMode="numeric"
+                  required
                   maxLength={10}
                   pattern="[0-9]{10}"
                   title="Enter exactly 10 digits, without +91 or spaces."
@@ -403,19 +439,18 @@ export default function AddBeneficiaryModal({
                   value={form.mobNumber}
                   onChange={(e) => updateField("mobNumber", toMobileInput(e.target.value))}
                 />
-                {errors.mobNumber && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.mobNumber}</p>
-                )}
+                {fieldError("mobNumber")}
                 <span className="text-[10px] text-on-surface-variant">
                   10 digits, numbers only (no +91).
                 </span>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Emergency Contact Number</label>
+                <label className={labelClass}><RequiredLabel>Emergency Contact Number</RequiredLabel></label>
                 <input
                   type="tel"
                   inputMode="numeric"
+                  required
                   maxLength={10}
                   pattern="[0-9]{10}"
                   title="Enter exactly 10 digits, without +91 or spaces."
@@ -424,53 +459,66 @@ export default function AddBeneficiaryModal({
                   value={form.emergencyContact}
                   onChange={(e) => updateField("emergencyContact", toMobileInput(e.target.value))}
                 />
-                {errors.emergencyContact && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.emergencyContact}</p>
-                )}
+                {fieldError("emergencyContact")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Caste</label>
+                <label className={labelClass}><RequiredLabel>Caste</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. General, SC, ST"
-                  className={inputClass}
+                  className={fieldClass("caste")}
                   value={form.caste}
                   onChange={(e) => updateField("caste", e.target.value)}
                 />
+                {fieldError("caste")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Religion</label>
+                <label className={labelClass}><RequiredLabel>Religion</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. Islam, Hinduism"
-                  className={inputClass}
+                  className={fieldClass("religion")}
                   value={form.religion}
                   onChange={(e) => updateField("religion", e.target.value)}
                 />
+                {fieldError("religion")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>State</label>
+                <label className={labelClass}><RequiredLabel>State</RequiredLabel></label>
                 <select
-                  className={inputClass}
+                  required
+                  className={fieldClass("state")}
                   value={form.state}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, state: e.target.value, district: "" }))
-                  }
+                  onChange={(e) => {
+                    const state = e.target.value;
+                    setForm((prev) => ({ ...prev, state, district: "" }));
+                    setErrors((prev) => {
+                      if (!prev.state && !prev.district) return prev;
+                      const next = { ...prev };
+                      delete next.state;
+                      delete next.district;
+                      return next;
+                    });
+                  }}
                 >
                   <option value="">— Select State —</option>
                   {stateOptions.map((state) => (
                     <option key={state} value={state}>{state}</option>
                   ))}
                 </select>
+                {fieldError("state")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>District</label>
+                <label className={labelClass}><RequiredLabel>District</RequiredLabel></label>
                 <select
-                  className={inputClass}
+                  required
+                  className={fieldClass("district")}
                   value={form.district}
                   disabled={!form.state}
                   onChange={(e) => updateField("district", e.target.value)}
@@ -480,56 +528,66 @@ export default function AddBeneficiaryModal({
                     <option key={district} value={district}>{district}</option>
                   ))}
                 </select>
+                {fieldError("district")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Block</label>
+                <label className={labelClass}><RequiredLabel>Block</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. Kalgachia"
-                  className={inputClass}
+                  className={fieldClass("block")}
                   value={form.block}
                   onChange={(e) => updateField("block", e.target.value)}
                 />
+                {fieldError("block")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Ward / GP</label>
+                <label className={labelClass}><RequiredLabel>Ward / GP</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. Ward 2"
-                  className={inputClass}
+                  className={fieldClass("ward")}
                   value={form.ward}
                   onChange={(e) => updateField("ward", e.target.value)}
                 />
+                {fieldError("ward")}
               </div>
 
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label className={labelClass}>Village</label>
+                <label className={labelClass}><RequiredLabel>Village</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. Bartari"
-                  className={inputClass}
+                  className={fieldClass("village")}
                   value={form.village}
                   onChange={(e) => updateField("village", e.target.value)}
                 />
+                {fieldError("village")}
               </div>
 
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label className={labelClass}>Nearby Landmark</label>
+                <label className={labelClass}><RequiredLabel>Nearby Landmark</RequiredLabel></label>
                 <input
                   type="text"
+                  required
                   placeholder="e.g. Near Kalgachia College"
-                  className={inputClass}
+                  className={fieldClass("landmark")}
                   value={form.landmark}
                   onChange={(e) => updateField("landmark", e.target.value)}
                 />
+                {fieldError("landmark")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Primary Income Category</label>
+                <label className={labelClass}><RequiredLabel>Primary Income Category</RequiredLabel></label>
                 <select
-                  className={inputClass}
+                  required
+                  className={fieldClass("primaryIncomeType")}
                   value={form.primaryIncomeType}
                   onChange={(e) => updateField("primaryIncomeType", e.target.value)}
                 >
@@ -537,25 +595,29 @@ export default function AddBeneficiaryModal({
                     <option key={category} value={category}>{category}</option>
                   ))}
                 </select>
+                {fieldError("primaryIncomeType")}
               </div>
 
               {form.primaryIncomeType === "Other" && (
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Specify Income Category</label>
+                  <label className={labelClass}><RequiredLabel>Specify Income Category</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     placeholder="e.g. Fishing, Pension"
-                    className={inputClass}
+                    className={fieldClass("primaryIncomeOther")}
                     value={form.primaryIncomeOther}
                     onChange={(e) => updateField("primaryIncomeOther", e.target.value)}
                   />
+                  {fieldError("primaryIncomeOther")}
                 </div>
               )}
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Socio-Economic Tier</label>
+                <label className={labelClass}><RequiredLabel>Socio-Economic Tier</RequiredLabel></label>
                 <select
-                  className={inputClass}
+                  required
+                  className={fieldClass("tier")}
                   value={form.tier}
                   onChange={(e) => updateField("tier", e.target.value)}
                 >
@@ -563,22 +625,22 @@ export default function AddBeneficiaryModal({
                   <option value="Tier 2">Tier 2 (Progressing)</option>
                   <option value="Tier 3">Tier 3 (Stable)</option>
                 </select>
+                {fieldError("tier")}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Monthly Income (₹)</label>
+                <label className={labelClass}><RequiredLabel>Monthly Income (₹)</RequiredLabel></label>
                 <input
                   type="number"
                   min="0"
                   step="0.01"
+                  required
                   placeholder="e.g. 3750"
                   className={fieldClass("monthlyIncome")}
                   value={form.monthlyIncome}
                   onChange={(e) => updateField("monthlyIncome", e.target.value)}
                 />
-                {errors.monthlyIncome && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.monthlyIncome}</p>
-                )}
+                {fieldError("monthlyIncome")}
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -594,7 +656,7 @@ export default function AddBeneficiaryModal({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Household Size</label>
+                <label className={labelClass}><RequiredLabel>Household Size</RequiredLabel></label>
                 <input
                   type="number"
                   min="1"
@@ -605,9 +667,7 @@ export default function AddBeneficiaryModal({
                   value={form.householdSize}
                   onChange={(e) => updateField("householdSize", e.target.value)}
                 />
-                {errors.householdSize && (
-                  <p data-add-error className="text-[11px] font-semibold text-error">{errors.householdSize}</p>
-                )}
+                {fieldError("householdSize")}
               </div>
             </div>
 
@@ -615,10 +675,11 @@ export default function AddBeneficiaryModal({
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Proofs</h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Aadhar Number</label>
+                  <label className={labelClass}><RequiredLabel>Aadhar Number</RequiredLabel></label>
                   <input
                     type="text"
                     inputMode="numeric"
+                    required
                     maxLength={12}
                     pattern="[0-9]{12}"
                     title="Aadhaar must be exactly 12 digits."
@@ -627,15 +688,14 @@ export default function AddBeneficiaryModal({
                     value={form.aadhar}
                     onChange={(e) => updateField("aadhar", toAadhaarInput(e.target.value))}
                   />
-                  {errors.aadhar && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.aadhar}</p>
-                  )}
+                  {fieldError("aadhar")}
                   <span className="text-[10px] text-on-surface-variant">12 digits, numbers only.</span>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>PAN Card</label>
+                  <label className={labelClass}><RequiredLabel>PAN Card</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     maxLength={10}
                     pattern="[A-Z]{5}[0-9]{4}[A-Z]"
                     title="PAN must be in the format ABCDE1234F."
@@ -644,14 +704,13 @@ export default function AddBeneficiaryModal({
                     value={form.panCard}
                     onChange={(e) => updateField("panCard", toPanInput(e.target.value))}
                   />
-                  {errors.panCard && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.panCard}</p>
-                  )}
+                  {fieldError("panCard")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Voter ID</label>
+                  <label className={labelClass}><RequiredLabel>Voter ID</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     maxLength={10}
                     pattern="[A-Z]{3}[0-9]{7}"
                     title="Voter ID must be 3 letters followed by 7 digits."
@@ -660,14 +719,13 @@ export default function AddBeneficiaryModal({
                     value={form.voterId}
                     onChange={(e) => updateField("voterId", toVoterIdInput(e.target.value))}
                   />
-                  {errors.voterId && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.voterId}</p>
-                  )}
+                  {fieldError("voterId")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Ration Card</label>
+                  <label className={labelClass}><RequiredLabel>Ration Card</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     maxLength={20}
                     pattern="[A-Z0-9][A-Z0-9-]{5,19}"
                     title="Ration card must be 6 to 20 letters, digits or hyphens."
@@ -676,9 +734,7 @@ export default function AddBeneficiaryModal({
                     value={form.rationCard}
                     onChange={(e) => updateField("rationCard", toRationCardInput(e.target.value))}
                   />
-                  {errors.rationCard && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.rationCard}</p>
-                  )}
+                  {fieldError("rationCard")}
                 </div>
               </div>
             </div>
@@ -687,20 +743,23 @@ export default function AddBeneficiaryModal({
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Bank Details</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Bank Name</label>
+                  <label className={labelClass}><RequiredLabel>Bank Name</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     placeholder="e.g. State Bank of India"
-                    className={inputClass}
+                    className={fieldClass("bankName")}
                     value={form.bankName}
                     onChange={(e) => updateField("bankName", e.target.value)}
                   />
+                  {fieldError("bankName")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Account Number</label>
+                  <label className={labelClass}><RequiredLabel>Account Number</RequiredLabel></label>
                   <input
                     type="text"
                     inputMode="numeric"
+                    required
                     maxLength={18}
                     pattern="[0-9]{9,18}"
                     title="Bank account number must be 9 to 18 digits."
@@ -709,14 +768,13 @@ export default function AddBeneficiaryModal({
                     value={form.bankAccountNo}
                     onChange={(e) => updateField("bankAccountNo", toBankAccountInput(e.target.value))}
                   />
-                  {errors.bankAccountNo && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.bankAccountNo}</p>
-                  )}
+                  {fieldError("bankAccountNo")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>IFSC Code</label>
+                  <label className={labelClass}><RequiredLabel>IFSC Code</RequiredLabel></label>
                   <input
                     type="text"
+                    required
                     maxLength={11}
                     pattern="[A-Z]{4}0[A-Z0-9]{6}"
                     title="IFSC must be in the format SBIN0007421."
@@ -725,15 +783,13 @@ export default function AddBeneficiaryModal({
                     value={form.bankIfsc}
                     onChange={(e) => updateField("bankIfsc", toIfscInput(e.target.value))}
                   />
-                  {errors.bankIfsc && (
-                    <p data-add-error className="text-[11px] font-semibold text-error">{errors.bankIfsc}</p>
-                  )}
+                  {fieldError("bankIfsc")}
                 </div>
               </div>
             </div>
 
             <div className="pt-2">
-              <label className={labelClass}>Livelihood Program *</label>
+              <label className={labelClass}><RequiredLabel>Livelihood Program</RequiredLabel></label>
               <select
                 required
                 className={`${fieldClass("programId")} w-full mt-1.5`}

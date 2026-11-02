@@ -146,7 +146,7 @@ export default function HrAttendanceLogs() {
                 <h3 className="font-headline font-bold text-xl text-on-surface">
                   {canReview ? "Daily Attendance Ledger" : "My Attendance"}
                 </h3>
-                <p className="text-[11px] text-on-surface-variant mt-1">Standard shift: {SHIFT_LABEL}</p>
+                <p className="text-[11px] text-on-surface-variant mt-1">Office hours: {SHIFT_LABEL}</p>
               </div>
               {canReview && (
                 <input
@@ -194,6 +194,16 @@ export default function HrAttendanceLogs() {
                         <td data-label="Work Hours" className="py-4 px-4 text-on-surface font-medium text-xs">
                           <div className="flex flex-col gap-0.5">
                             <span>{metrics?.autoClosed ? "—" : log.workhours || metrics?.workHours || "N/A"}</span>
+                            {metrics?.earlySeconds > 0 && (
+                              <span className="text-[10px] font-semibold text-amber-600">
+                                Early in {metrics.earlyHours}
+                              </span>
+                            )}
+                            {metrics?.lateSeconds > 0 && (
+                              <span className="text-[10px] font-semibold text-indigo-600">
+                                Late out {metrics.lateHours}
+                              </span>
+                            )}
                             {metrics?.extraSeconds > 0 && (
                               <span className="text-[10px] font-bold text-emerald-600">
                                 +{metrics.extraHours} extra

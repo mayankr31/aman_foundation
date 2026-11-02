@@ -7,6 +7,8 @@ import { formatDate, formatDateTime } from "@/lib/date";
 import { formatISTTime, getISTDateKey } from "@/lib/time";
 import {
   SHIFT_LABEL,
+  SHIFT_START_LABEL,
+  SHIFT_END_LABEL,
   computeAttendanceMetrics,
 } from "@/lib/attendanceMetrics";
 import {
@@ -23,6 +25,7 @@ import {
   isApproximateAccuracy,
 } from "@/lib/geolocation";
 import AttendanceTimer from "@/components/AttendanceTimer";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
 
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
   const [comments, setComments] = useState(task.comments || []);
@@ -547,7 +550,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <span className="font-semibold text-on-surface text-sm">{formatDate(new Date())}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-surface-container gap-3">
-                  <span className="text-on-surface-variant font-medium text-sm">Standard Shift</span>
+                  <span className="text-on-surface-variant font-medium text-sm">Office Hours</span>
                   <span className="font-semibold text-on-surface text-xs text-right">{SHIFT_LABEL}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
@@ -632,20 +635,25 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               {currentLog && <div className="mb-4"><AttendanceTimer log={currentLog} /></div>}
 
               {isCheckedIn && extraMetrics && (
-                <div className="mb-4 grid grid-cols-3 gap-2 text-center">
-                  <div className="rounded-lg bg-amber-50 border border-amber-100 px-2 py-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700">Early In</p>
-                    <p className="text-xs font-bold text-amber-800 tabular-nums">{extraMetrics.earlyHours}</p>
-                  </div>
-                  <div className="rounded-lg bg-indigo-50 border border-indigo-100 px-2 py-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-indigo-700">Late Out</p>
-                    <p className="text-xs font-bold text-indigo-800 tabular-nums">{extraMetrics.lateHours}</p>
-                  </div>
-                  <div className="rounded-lg bg-emerald-50 border border-emerald-100 px-2 py-2">
-                    <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-700">Extra</p>
-                    <p className="text-xs font-bold text-emerald-800 tabular-nums">
-                      {extraMetrics.autoClosed ? "—" : extraMetrics.extraHours}
-                    </p>
+                <div className="mb-4">
+                  <p className="mb-2 text-center text-[10px] font-medium text-slate-500">
+                    Early In = checked in before {SHIFT_START_LABEL} · Late Out = checked out after {SHIFT_END_LABEL}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="rounded-lg bg-amber-50 border border-amber-100 px-2 py-2">
+                      <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700">Early In</p>
+                      <p className="text-xs font-bold text-amber-800 tabular-nums">{extraMetrics.earlyHours}</p>
+                    </div>
+                    <div className="rounded-lg bg-indigo-50 border border-indigo-100 px-2 py-2">
+                      <p className="text-[9px] font-bold uppercase tracking-wider text-indigo-700">Late Out</p>
+                      <p className="text-xs font-bold text-indigo-800 tabular-nums">{extraMetrics.lateHours}</p>
+                    </div>
+                    <div className="rounded-lg bg-emerald-50 border border-emerald-100 px-2 py-2">
+                      <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-700">Extra</p>
+                      <p className="text-xs font-bold text-emerald-800 tabular-nums">
+                        {extraMetrics.autoClosed ? "—" : extraMetrics.extraHours}
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
@@ -870,9 +878,13 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                           {lessonPlanFiles.map((fileUrl, idx) => (
                             <div key={`existing-${idx}`} className="flex items-center gap-2 text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-lg">
                               <span className="material-symbols-outlined text-[14px] text-slate-400">description</span>
-                              <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-blue-600 hover:underline">
+                              <FilePreviewLink
+                                href={fileUrl}
+                                name={fileUrl.split("/").pop()}
+                                className="flex-1 truncate text-blue-600 hover:underline"
+                              >
                                 {fileUrl.split("/").pop()}
-                              </a>
+                              </FilePreviewLink>
                               <button onClick={() => handleRemoveFile(idx)} className={`text-red-500 hover:text-red-700 ${canWrite ? "" : "hidden"}`}>
                                 <span className="material-symbols-outlined text-[14px]">delete</span>
                               </button>

@@ -10,6 +10,7 @@ import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
+import PhotoLightbox from "@/components/PhotoLightbox";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -1000,12 +1001,11 @@ export default function ProgramDetail() {
         </div>
       )}
 
-      {/* Lightbox */}
-      {lightboxPhoto && (
-        <div className="fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4 cursor-pointer" onClick={() => setLightboxPhoto(null)}>
-          <img src={lightboxPhoto} alt="Event" className="max-w-full max-h-[90vh] rounded-lg object-contain" />
-        </div>
-      )}
+      <PhotoLightbox
+        src={lightboxPhoto}
+        alt="Event photo"
+        onClose={() => setLightboxPhoto(null)}
+      />
       </div>
     </div>
   );

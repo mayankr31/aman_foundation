@@ -7,9 +7,11 @@ import NotificationBell from "@/components/NotificationBell";
 import GlobalSearch from "@/components/GlobalSearch";
 import Avatar from "@/components/ui/Avatar";
 import { formatRoleLabel } from "@/lib/roles";
+import { usePwa } from "@/components/pwa/PwaProvider";
 
 export default function Header({ onMenuToggle }) {
   const { user, logout } = useAuth();
+  const { canInstall, install } = usePwa();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -38,7 +40,7 @@ export default function Header({ onMenuToggle }) {
   }, [menuOpen]);
 
   return (
-    <header className="bg-white/85 dark:bg-slate-950/85 backdrop-blur-md text-teal-700 dark:text-teal-400 font-sans text-sm tracking-wide uppercase font-semibold sticky top-0 z-40 w-full flex justify-between items-center gap-2 h-16 px-3 sm:px-8 border-b border-surface-container/50 transition-all duration-300 flex-shrink-0">
+    <header className="pwa-header-safe bg-white/85 dark:bg-slate-950/85 backdrop-blur-md text-teal-700 dark:text-teal-400 font-sans text-sm tracking-wide uppercase font-semibold sticky top-0 z-40 w-full flex justify-between items-center gap-2 h-16 px-3 sm:px-8 border-b border-surface-container/50 transition-all duration-300 flex-shrink-0">
       <div className="flex items-center gap-1 sm:gap-4 min-w-0">
         <button
           onClick={onMenuToggle}
@@ -85,7 +87,7 @@ export default function Header({ onMenuToggle }) {
             <div
               role="menu"
               aria-label="Account menu"
-              className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-1.5rem)] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden z-50 font-sans normal-case tracking-normal"
+              className="absolute right-0 top-full mt-2 w-64 max-w-[calc(100vw-1.5rem)] max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 font-sans normal-case tracking-normal"
             >
               <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
                 <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
@@ -108,6 +110,22 @@ export default function Header({ onMenuToggle }) {
                   <span className="material-symbols-outlined text-[20px] text-slate-400">person</span>
                   My Profile
                 </Link>
+                {canInstall && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      install();
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                  >
+                    <span className="material-symbols-outlined text-[20px] text-slate-400">
+                      install_mobile
+                    </span>
+                    Install app
+                  </button>
+                )}
                 <button
                   type="button"
                   role="menuitem"

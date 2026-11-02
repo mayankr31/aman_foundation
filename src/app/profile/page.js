@@ -22,6 +22,8 @@ import { formatDate } from "@/lib/date";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
+import FilePreviewImage from "@/components/files/FilePreviewImage";
 import Avatar from "@/components/ui/Avatar";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import { formatRoleLabel } from "@/lib/roles";
@@ -795,22 +797,21 @@ function ProfilePageContent() {
                           {record.fileUrl && (
                             <div className="mb-4">
                               {/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(record.fileUrl) ? (
-                                <img
+                                <FilePreviewImage
                                   src={record.fileUrl}
                                   alt={record.heading}
+                                  name={record.heading}
                                   className="max-w-full max-h-64 rounded-lg border border-gray-200 object-contain cursor-pointer"
-                                  onClick={() => window.open(record.fileUrl, '_blank')}
                                 />
                               ) : (
-                                <a
+                                <FilePreviewLink
                                   href={record.fileUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                  name={record.fileUrl.split("/").pop()}
                                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm text-blue-600 font-semibold transition-colors max-w-full"
                                 >
                                   <span className="material-symbols-outlined text-[16px] shrink-0">attach_file</span>
                                   <span className="truncate">{record.fileUrl.split("/").pop()}</span>
-                                </a>
+                                </FilePreviewLink>
                               )}
                             </div>
                           )}
@@ -1026,7 +1027,14 @@ function ProfilePageContent() {
         message="Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
       />
 
-      <PDFViewerModal isOpen={showPDFModal} onClose={() => setShowPDFModal(false)} />
+      {showPDFModal && (
+        <PDFViewerModal
+          isOpen
+          onClose={() => setShowPDFModal(false)}
+          file="/docs/Learning-Leadership-Progression-Framework.pdf"
+          title="Learning & Leadership Progression Framework"
+        />
+      )}
 
       {viewingSurvey && (
         <EngagementSurveyViewer

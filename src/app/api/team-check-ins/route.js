@@ -72,7 +72,9 @@ export async function POST(req) {
 
     const body = await req.json();
     const date = parseCheckInDate(body.date);
-    const textData = buildCheckInData(body, { allowManagerFields: false });
+    const textData = buildCheckInData(body, {
+      allowManagerFields: access.canEditManagerFields,
+    });
     const promises = normalizePromises(body.promises);
 
     const checkIn = await prisma.teamCheckIn.create({

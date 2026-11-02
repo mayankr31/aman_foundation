@@ -8,6 +8,8 @@ import { formatDate } from "@/lib/date";
 import { formatWorkHours } from "@/lib/time";
 import { SHIFT_LABEL, computeAttendanceMetrics } from "@/lib/attendanceMetrics";
 import AttendanceLocation from "@/components/AttendanceLocation";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
+import FilePreviewImage from "@/components/files/FilePreviewImage";
 import {
   TASK_TIME_SLOT_CLASSES,
   TASK_TIME_SLOT_LABELS,
@@ -354,7 +356,7 @@ export default function UserAttendanceDetails({ params }) {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-800">Monthly Analytics</h2>
-            <p className="text-[11px] text-gray-500 mt-1">Standard shift: {SHIFT_LABEL}</p>
+            <p className="text-[11px] text-gray-500 mt-1">Office hours: {SHIFT_LABEL}</p>
           </div>
           <div className="flex space-x-2">
             <button onClick={exportCSV} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-semibold transition-colors cursor-pointer">Export CSV</button>
@@ -635,24 +637,23 @@ export default function UserAttendanceDetails({ params }) {
                       <div className="space-y-2">
                         {selectedDate.lessonPlanFiles.map((fileUrl, idx) => (
                           /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileUrl) ? (
-                            <img
+                            <FilePreviewImage
                               key={idx}
                               src={fileUrl}
                               alt="Lesson plan attachment"
+                              name={`Lesson plan ${idx + 1}`}
                               className="max-w-full max-h-48 rounded-lg border border-gray-200 object-contain cursor-pointer"
-                              onClick={() => window.open(fileUrl, '_blank')}
                             />
                           ) : (
-                            <a
+                            <FilePreviewLink
                               key={idx}
                               href={fileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              name={fileUrl.split("/").pop()}
                               className="flex items-center gap-2 text-sm text-blue-600 hover:underline bg-white px-3 py-1.5 rounded border border-gray-200 max-w-full"
                             >
                               <span className="material-symbols-outlined text-[16px] shrink-0">description</span>
                               <span className="truncate">{fileUrl.split("/").pop()}</span>
-                            </a>
+                            </FilePreviewLink>
                           )
                         ))}
                       </div>

@@ -12,7 +12,7 @@ export const TEAM_CHECK_IN_TYPE_VALUES = TEAM_CHECK_IN_TYPES.map((item) => item.
 export const DEFAULT_CHECK_IN_TYPE = "7_DAYS";
 
 /** Roles that never see the Team CheckIn tab. */
-export const TEAM_CHECK_IN_EXCLUDED_ROLES = ["ADMIN", "FELLOW"];
+export const TEAM_CHECK_IN_EXCLUDED_ROLES = ["FELLOW"];
 
 export function canRoleHaveTeamCheckIn(roleName) {
   return Boolean(roleName) && !TEAM_CHECK_IN_EXCLUDED_ROLES.includes(roleName);

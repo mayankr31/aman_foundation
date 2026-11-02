@@ -4,13 +4,14 @@
 import React, { Suspense, useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X, LayoutDashboard } from 'lucide-react';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X, LayoutDashboard, UserCog } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
 import RolePermissionsModal from '@/components/users/RolePermissionsModal';
 import AddRoleModal from '@/components/users/AddRoleModal';
 import CreateUserModal from '@/components/users/CreateUserModal';
+import EditRoleModal from '@/components/users/EditRoleModal';
 import ResetPasswordModal from '@/components/users/ResetPasswordModal';
 import DashboardConfigModal from '@/components/users/DashboardConfigModal';
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
@@ -73,6 +74,7 @@ function AdminPageContent() {
   const [dashboardTarget, setDashboardTarget] = useState(null);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const [editRoleUser, setEditRoleUser] = useState(null);
   const [resetPasswordUser, setResetPasswordUser] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
@@ -202,6 +204,22 @@ function AdminPageContent() {
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const handleRoleUpdated = (updated) => {
+    if (!updated?.id) return;
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === updated.id
+          ? {
+              ...u,
+              roleId: updated.roleId,
+              role: updated.role,
+              managerId: updated.managerId,
+            }
+          : u
+      )
+    );
   };
 
   const handleDeleteRole = (roleId) => {
@@ -554,6 +572,15 @@ function AdminPageContent() {
                                     </button>
                                     {item.id !== currentUser?.id && (
                                       <button
+                                        onClick={() => setEditRoleUser(item)}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 border border-teal-500/20 transition-all hover:scale-105"
+                                      >
+                                        <UserCog size={12} />
+                                        Edit Role
+                                      </button>
+                                    )}
+                                    {item.id !== currentUser?.id && (
+                                      <button
                                         onClick={() => handleDeleteUser(item.id)}
                                         disabled={actionLoading === item.id}
                                         className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-[#f43f5e]/10 hover:bg-[#f43f5e]/20 text-[#f43f5e] border border-[#f43f5e]/20 transition-all hover:scale-105 cursor-pointer"
@@ -612,6 +639,15 @@ function AdminPageContent() {
                                       <ShieldAlert size={12} />
                                       Edit Permissions
                                     </button>
+                                    {item.id !== currentUser?.id && (
+                                      <button
+                                        onClick={() => setEditRoleUser(item)}
+                                        className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 border border-teal-500/20 transition-all hover:scale-105"
+                                      >
+                                        <UserCog size={12} />
+                                        Edit Role
+                                      </button>
+                                    )}
                                     <button
                                       onClick={() => setDashboardTarget({ scope: 'user', entity: item })}
                                       className="py-1.5 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 transition-all hover:scale-105"
@@ -755,6 +791,18 @@ function AdminPageContent() {
         roles={roles}
         onUserCreated={(newUser) => setUsers(prev => [newUser, ...prev])}
       />
+
+      {editRoleUser && (
+        <EditRoleModal
+          isOpen
+          onClose={() => setEditRoleUser(null)}
+          isDarkMode={isDarkMode}
+          token={token}
+          user={editRoleUser}
+          roles={roles}
+          onRoleUpdated={handleRoleUpdated}
+        />
+      )}
 
       <ResetPasswordModal
         isOpen={!!resetPasswordUser}

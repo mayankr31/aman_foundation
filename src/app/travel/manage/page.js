@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import FilePreviewLink from "@/components/files/FilePreviewLink";
 
 export default function TravelManagePage() {
   const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
@@ -409,10 +410,10 @@ export default function TravelManagePage() {
                   {Array.isArray(req.expenses[0].receiptFiles) && req.expenses[0].receiptFiles.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {req.expenses[0].receiptFiles.map((file, idx) => (
-                        <a key={idx} href={file} target="_blank" rel="noopener noreferrer"
+                        <FilePreviewLink key={idx} href={file} name={`Receipt ${idx + 1}`}
                           className="text-xs text-blue-600 hover:underline bg-white px-2 py-1 rounded border border-gray-200">
                           Receipt {idx + 1}
-                        </a>
+                        </FilePreviewLink>
                       ))}
                     </div>
                   )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
@@ -68,6 +69,18 @@ export default function NotificationBell() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  // Close the mobile sheet when the viewport grows so its backdrop cannot
+  // leave the body scroll-locked on desktop.
+  useEffect(() => {
+    if (!open) return;
+    const query = window.matchMedia("(min-width: 640px)");
+    const handleChange = (event) => {
+      if (event.matches) setOpen(false);
+    };
+    query.addEventListener?.("change", handleChange);
+    return () => query.removeEventListener?.("change", handleChange);
   }, [open]);
 
   const authHeaders = () => ({
@@ -159,8 +172,23 @@ export default function NotificationBell() {
         )}
       </button>
 
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-30 bg-black/20 sm:hidden"
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+          />,
+          document.body
+        )}
+
       {open && (
-        <div className="fixed left-3 right-3 top-16 w-auto max-h-[calc(100dvh-5rem)] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden z-[60] normal-case tracking-normal font-sans sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 sm:max-h-[70vh]">
+        <div
+          role="dialog"
+          aria-label="Notifications"
+          className="pwa-notification-panel fixed left-3 right-3 top-16 w-auto max-h-[calc(100dvh-5rem)] flex flex-col overflow-hidden overscroll-contain bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl z-[60] normal-case tracking-normal font-sans sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 sm:max-h-[70vh]"
+        >
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-slate-800 dark:text-white">Notifications</span>
@@ -188,7 +216,7 @@ export default function NotificationBell() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
             {isLoading && notifications.length === 0 ? (
               <div className="py-10 text-center text-xs text-slate-400">Loading...</div>
             ) : notifications.length === 0 ? (
