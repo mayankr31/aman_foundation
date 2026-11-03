@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "org.amanindia.app.twa",
+        "sha256_cert_fingerprints": ["B1:A1:B6:E4:82:CD:6D:07:9F:4C:D5:82:92:05:4E:34:89:AE:8C:5E:90:CC:1F:09:59:28:CB:A5:06:D0:74:B8"]
+      }
+    }]
