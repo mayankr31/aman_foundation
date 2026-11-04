@@ -4,6 +4,7 @@ import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isSchoolManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 import { canAssignPerson } from "@/lib/hierarchy";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -88,6 +89,22 @@ export async function POST(req, context) {
       data: { userId, schoolId },
       include: { user: { select: { id: true, name: true, username: true, email: true } } },
     });
+
+    try {
+      const school = await prisma.school.findUnique({
+        where: { id: schoolId },
+        select: { name: true },
+      });
+      await notifyUsers([userId], {
+        type: NOTIFICATION_TYPES.PROGRAM_ASSIGNED,
+        title: "School Management Assigned",
+        message: `You have been assigned as a Program Manager for ${school?.name || "a school"}.`,
+        link: `/education/schools/${id}`,
+        actorId: user.id,
+      });
+    } catch (notificationError) {
+      console.error("School assignment notification error:", notificationError);
+    }
 
     return NextResponse.json({ success: true, data: assignment }, { status: 201 });
   } catch (error) {

@@ -160,18 +160,20 @@ export async function DELETE(req, context) {
         });
       }
       
-      // 2. Dissociate broadcast alerts sent by this user
-      await tx.broadcastAlert.updateMany({
-        where: { sentByUserId: id },
-        data: { sentByUserId: null }
-      });
-      
+      // 2. Remove evaluations/observations authored by this user. Their author
+      // relations are required (Restrict), so they must be cleared before the
+      // user row can be deleted.
+      await tx.pMReflection.deleteMany({ where: { authorId: id } });
+      await tx.fellowPerformance.deleteMany({ where: { authorId: id } });
+      await tx.individualFeedback.deleteMany({ where: { authorId: id } });
+      await tx.coachingRecord.deleteMany({ where: { authorId: id } });
+
       // 3. Dissociate inventory ledger transactions handled by this user
       await tx.inventoryLedger.updateMany({
         where: { handledByUserId: id },
         data: { handledByUserId: null }
       });
-      
+
       // 4. Delete the user record (which cascades to UserPermission in db)
       await tx.user.delete({
         where: { id }

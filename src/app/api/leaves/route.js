@@ -189,6 +189,7 @@ export async function POST(req) {
       message: `${user.name || "A staff member"} has requested ${config.name} for approval.${certificateNote}`,
       link: `/hr/leaves`,
       actorId: user.id,
+      dedupeKey: `leave-request:${leave.id}`,
     });
 
     return NextResponse.json({ success: true, data: leave }, { status: 201 });

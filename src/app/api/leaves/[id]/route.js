@@ -235,6 +235,15 @@ export async function DELETE(req, { params }) {
         });
       }
       await tx.leave.delete({ where: { id } });
+
+      // Remove the pending "New Leave Request" notification from approvers so
+      // their bell doesn't point at a withdrawn request.
+      await tx.notification.deleteMany({
+        where: {
+          type: NOTIFICATION_TYPES.LEAVE_REQUESTED,
+          dedupeKey: { startsWith: `leave-request:${id}:` },
+        },
+      });
     });
 
     return NextResponse.json({ success: true, message: "Leave deleted successfully" });

@@ -7,6 +7,15 @@ import { canViewTask } from "@/lib/taskScope";
 import { canDeleteTaskRecord } from "@/lib/taskPermissions";
 import { TASK_TIME_SLOTS } from "@/lib/taskSlots";
 
+async function clearOverdueNotifications(taskId) {
+  await prisma.notification.deleteMany({
+    where: {
+      type: NOTIFICATION_TYPES.TASK_OVERDUE,
+      dedupeKey: { startsWith: `task-overdue:${taskId}:` },
+    },
+  });
+}
+
 function parseDateValue(value) {
   if (value === null || value === "") return null;
   const str = String(value);
@@ -102,6 +111,16 @@ export async function PATCH(req, { params }) {
 
     const task = await prisma.task.update({ where: { id }, data, include: includeTask() });
 
+    // A completed/cancelled task, or one whose deadline moved into the future,
+    // is no longer overdue.
+    if (
+      task.status === "Completed" ||
+      task.status === "Cancelled" ||
+      (task.deadline && task.deadline.getTime() > Date.now())
+    ) {
+      await clearOverdueNotifications(id);
+    }
+
     const recipients = [];
     if (user.id !== task.assigneeId) recipients.push(task.assigneeId);
     if (task.assignedById && user.id !== task.assignedById) recipients.push(task.assignedById);
@@ -144,6 +163,7 @@ export async function DELETE(req, { params }) {
     }
 
     await prisma.task.delete({ where: { id } });
+    await clearOverdueNotifications(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete task error:", error);

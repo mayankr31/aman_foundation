@@ -4,6 +4,7 @@ import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 import { canAssignPerson } from "@/lib/hierarchy";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -77,6 +78,18 @@ export async function POST(req, { params }) {
       data: { userId, programId },
       include: { user: { select: { id: true, name: true, username: true, email: true } } },
     });
+
+    try {
+      await notifyUsers([userId], {
+        type: NOTIFICATION_TYPES.PROGRAM_ASSIGNED,
+        title: "Livelihood Program Management Assigned",
+        message: `You have been assigned as a Program Manager for ${program.name}.`,
+        link: `/livelihood/programs/${programId}`,
+        actorId: user.id,
+      });
+    } catch (notificationError) {
+      console.error("Livelihood program assignment notification error:", notificationError);
+    }
 
     return NextResponse.json({ success: true, data: assignment }, { status: 201 });
   } catch (error) {

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { canAssignPerson } from "@/lib/hierarchy";
 import { getISTDateKey, istDayEnd, istDayStart } from "@/lib/time";
+import { formatDate } from "@/lib/date";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
 export const TASK_STATUSES = ["Pending", "In Progress", "Completed", "Blocked", "Cancelled"];
@@ -100,6 +101,44 @@ export function dailyTaskWhere(userId, dateKey = getISTDateKey()) {
 
 export async function notifyTaskEvent(userIds, payload) {
   await notifyUsers(userIds, payload);
+}
+
+/**
+ * Creates one deduplicated reminder per overdue task for the given assignee.
+ * Runs on notification fetch (same lazy pattern as birthday notifications).
+ */
+export async function ensureOverdueTaskNotifications(userId) {
+  if (!userId) return;
+
+  try {
+    const now = new Date();
+    const tasks = await prisma.task.findMany({
+      where: {
+        assigneeId: userId,
+        status: { notIn: ["Completed", "Cancelled"] },
+        deadline: { lt: now },
+      },
+      select: { id: true, title: true, deadline: true },
+      orderBy: { deadline: "asc" },
+      take: 50,
+    });
+    if (!tasks.length) return;
+
+    await prisma.notification.createMany({
+      data: tasks.map((task) => ({
+        userId,
+        type: NOTIFICATION_TYPES.TASK_OVERDUE,
+        title: "Task overdue",
+        message: `"${task.title}" was due on ${formatDate(task.deadline)} and is still open.`,
+        link: `/tasks?task=${task.id}`,
+        metadata: { taskId: task.id },
+        dedupeKey: `task-overdue:${task.id}:${userId}`,
+      })),
+      skipDuplicates: true,
+    });
+  } catch (error) {
+    console.error("Overdue task notification sweep error:", error);
+  }
 }
 
 export { NOTIFICATION_TYPES };

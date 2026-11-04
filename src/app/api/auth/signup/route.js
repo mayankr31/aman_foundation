@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { notifyUsers, getAdminUserIds, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { formatRoleLabel } from "@/lib/roles";
 import {
   validatePersonName,
   validateEmail,
@@ -86,8 +88,25 @@ export async function POST(req) {
         email: true,
         status: true,
         roleId: true,
+        role: { select: { name: true } },
       }
     });
+
+    // Let every active admin know there is a new account waiting for approval.
+    // Notification failures must never block a successful registration.
+    try {
+      const admins = await getAdminUserIds();
+      await notifyUsers(admins, {
+        type: NOTIFICATION_TYPES.USER_REGISTERED,
+        title: "New User Awaiting Approval",
+        message: `${newUser.name} (${formatRoleLabel(newUser.role?.name)}) has registered with ${newUser.email} and is waiting for approval.`,
+        link: "/admin?tab=approvals",
+        actorId: newUser.id,
+        dedupeKey: `user-registered:${newUser.id}`,
+      });
+    } catch (notificationError) {
+      console.error("New user notification error:", notificationError);
+    }
 
     return NextResponse.json({ success: true, data: newUser }, { status: 201 });
   } catch (error) {
