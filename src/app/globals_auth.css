@@ -584,6 +584,85 @@
   text-decoration: underline;
 }
 
+/* AUTH ALERTS */
+.auth-alert {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* OTP INPUT ROW */
+.otp-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.otp-input {
+  width: 100%;
+  min-width: 0;
+  height: 3.4rem;
+  padding: 0 !important;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-family: var(--font-dm-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.otp-input:focus {
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px rgba(0, 104, 87, 0.12);
+  background-color: #ffffff;
+}
+
+/* LINK-ONLY ACTIONS */
+.auth-link-row {
+  display: flex;
+  justify-content: center;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-brand-primary);
+  font-family: var(--font-dm-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.link-button:hover:not(:disabled) {
+  color: var(--color-brand-hover);
+  text-decoration: underline;
+}
+
+.link-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
+/* Anchor buttons reuse the button styles */
+a.btn-primary,
+a.btn-secondary {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
 /* SUCCESS MODAL POPUPS (PREMIUM WHITE OVERLAY) */
 .modal-overlay {
   position: fixed;
@@ -664,6 +743,18 @@
   border-radius: 50%;
   display: none;
   animation: spin-auth 0.8s linear infinite;
+}
+
+.btn-spinner.is-visible {
+  display: block;
+}
+
+.btn-spinner.auth-spinner--dark {
+  width: 28px;
+  height: 28px;
+  border-width: 3px;
+  border-color: #cbd5e1;
+  border-top-color: #006857;
 }
 
 @keyframes spin-auth {

@@ -40,6 +40,12 @@ function sanitizeAccuracy(value) {
   return number !== null && number >= 0 ? number : null;
 }
 
+function sanitizeSelfieUrl(value) {
+  if (typeof value !== "string") return null;
+  const url = value.trim();
+  return /^\/uploads\/attendance-selfies\/[A-Za-z0-9._-]+$/.test(url) ? url : null;
+}
+
 async function closeStaleShifts(userIds = null) {
   if (Array.isArray(userIds) && userIds.length === 0) return;
   const today = getISTDateKey();
@@ -229,6 +235,7 @@ export async function POST(req) {
       checkInLat: hasCheckInLocation ? checkInLat : null,
       checkInLng: hasCheckInLocation ? checkInLng : null,
       checkInAccuracy: hasCheckInLocation ? sanitizeAccuracy(body.checkInAccuracy) : null,
+      checkInSelfie: sanitizeSelfieUrl(body.checkInSelfie),
       lessonPlanText: body.lessonPlanText ?? existing?.lessonPlanText,
       isTeachingDay:
         typeof body.isTeachingDay === "boolean"
@@ -287,6 +294,12 @@ export async function PATCH(req) {
       ...(body.ef1 !== undefined && { ef1: body.ef1 }),
       ...(body.ef2 !== undefined && { ef2: body.ef2 }),
       ...(body.logoutinfo !== undefined && { logoutinfo: body.logoutinfo }),
+      ...(body.checkInSelfie !== undefined && {
+        checkInSelfie: sanitizeSelfieUrl(body.checkInSelfie),
+      }),
+      ...(body.checkOutSelfie !== undefined && {
+        checkOutSelfie: sanitizeSelfieUrl(body.checkOutSelfie),
+      }),
       ...(hasCheckOutPayload && {
         checkOutLat: hasCheckOutLocation ? checkOutLat : null,
         checkOutLng: hasCheckOutLocation ? checkOutLng : null,

@@ -25,7 +25,9 @@ import {
   isApproximateAccuracy,
 } from "@/lib/geolocation";
 import AttendanceTimer from "@/components/AttendanceTimer";
+import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
 import FilePreviewLink from "@/components/files/FilePreviewLink";
+import FilePreviewImage from "@/components/files/FilePreviewImage";
 
 function TaskCommentsModal({ task, onClose, token, commentsBase = "/api/tasks" }) {
   const [comments, setComments] = useState(task.comments || []);
@@ -140,6 +142,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const [selectedTaskForComments, setSelectedTaskForComments] = useState(null);
   const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [selfieMode, setSelfieMode] = useState(null);
 
   const [lessonPlanText, setLessonPlanText] = useState("");
   const [lessonPlanFiles, setLessonPlanFiles] = useState([]);
@@ -201,7 +204,26 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, token, user]);
 
-  const handleCheckIn = async () => {
+  const uploadSelfie = async (selfieBlob) => {
+    if (!selfieBlob) return null;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selfieBlob, `selfie-${Date.now()}.jpg`);
+      const res = await fetch("/api/attendance/selfie", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      return res.ok ? data?.data?.url || null : null;
+    } catch (error) {
+      console.error("Selfie upload failed:", error);
+      return null;
+    }
+  };
+
+  const performCheckIn = async (selfieBlob = null) => {
     if (isFellow && tasks.length === 0) {
       triggerToast("Add at least one task for today before checking in.");
       return;
@@ -210,6 +232,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     const now = new Date();
     const timeString = formatISTTime(now);
     const dateString = getISTDateKey(now);
+
+    const selfieUrl = await uploadSelfie(selfieBlob);
 
     let lat = null;
     let lng = null;
@@ -237,6 +261,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           checkInLat: lat,
           checkInLng: lng,
           checkInAccuracy: accuracy,
+          checkInSelfie: selfieUrl,
           isTeachingDay: isFellow ? isTeachingDay : null
         })
       });
@@ -244,7 +269,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       if (res.ok) {
         setCurrentLog(data.data);
         onStatusChange?.(data.data);
-        if (!position) {
+        if (selfieBlob && !selfieUrl) {
+          triggerToast("Checked in, but the selfie could not be uploaded.");
+        } else if (!position) {
           triggerToast("Checked in, but location could not be captured.");
         } else if (isApproximateAccuracy(accuracy)) {
           triggerToast(`Checked in. Location is approximate (±${Math.round(accuracy)} m).`);
@@ -259,9 +286,11 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     }
   };
 
-  const handleConfirmCheckOut = async () => {
+  const performCheckOut = async (selfieBlob = null) => {
     if (!currentLog) return;
     setIsCheckingOut(true);
+
+    const selfieUrl = await uploadSelfie(selfieBlob);
 
     let lat = null;
     let lng = null;
@@ -288,7 +317,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           logoutinfo: navigator.userAgent,
           checkOutLat: lat,
           checkOutLng: lng,
-          checkOutAccuracy: accuracy
+          checkOutAccuracy: accuracy,
+          checkOutSelfie: selfieUrl
         })
       });
       const data = await res.json();
@@ -296,7 +326,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         setCurrentLog(data.data);
         setCheckoutMode(false);
         onStatusChange?.(data.data);
-        if (!position) {
+        if (selfieBlob && !selfieUrl) {
+          triggerToast("Checked out, but the selfie could not be uploaded.");
+        } else if (!position) {
           triggerToast("Checked out, but location could not be captured.");
         } else if (isApproximateAccuracy(accuracy)) {
           triggerToast(`Checked out. Location is approximate (±${Math.round(accuracy)} m).`);
@@ -308,6 +340,26 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       triggerToast("Check out failed");
     } finally {
       setIsCheckingOut(false);
+    }
+  };
+
+  const handleSelfieUse = async (blob) => {
+    const mode = selfieMode;
+    if (mode === "check-out") {
+      await performCheckOut(blob);
+    } else {
+      await performCheckIn(blob);
+    }
+    setSelfieMode(null);
+  };
+
+  const handleSelfieSkip = async () => {
+    const mode = selfieMode;
+    setSelfieMode(null);
+    if (mode === "check-out") {
+      await performCheckOut(null);
+    } else {
+      await performCheckIn(null);
     }
   };
 
@@ -529,7 +581,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 Back
               </button>
               <button
-                onClick={handleConfirmCheckOut}
+                onClick={() => setSelfieMode("check-out")}
                 disabled={isCheckingOut}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20 flex justify-center items-center gap-2"
               >
@@ -599,6 +651,28 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                     </div>
                   </div>
                 )}
+                {currentLog?.checkInSelfie && (
+                  <div className="flex items-center justify-between gap-3 py-2 border-b border-surface-container">
+                    <span className="text-on-surface-variant font-medium text-sm">Check-in Selfie</span>
+                    <FilePreviewImage
+                      src={currentLog.checkInSelfie}
+                      alt="Check-in selfie"
+                      name="Check-in selfie"
+                      className="h-14 w-14 rounded-lg border border-slate-200 object-cover"
+                    />
+                  </div>
+                )}
+                {currentLog?.checkOutSelfie && (
+                  <div className="flex items-center justify-between gap-3 py-2 border-b border-surface-container">
+                    <span className="text-on-surface-variant font-medium text-sm">Check-out Selfie</span>
+                    <FilePreviewImage
+                      src={currentLog.checkOutSelfie}
+                      alt="Check-out selfie"
+                      name="Check-out selfie"
+                      className="h-14 w-14 rounded-lg border border-slate-200 object-cover"
+                    />
+                  </div>
+                )}
                 {isFellow && (
                   <div className="py-2 border-b border-surface-container">
                     <span className="text-on-surface-variant font-medium text-sm">Day Type</span>
@@ -666,7 +740,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                     </p>
                   )}
                   <button
-                    onClick={handleCheckIn}
+                    onClick={() => setSelfieMode("check-in")}
                     disabled={!canWrite || isCheckingIn || (isFellow && tasks.length === 0)}
                     className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-600/20 flex justify-center items-center gap-2"
                   >
@@ -931,6 +1005,17 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             commentsBase={taskItemBase}
           />
         )}
+
+        <SelfieCaptureModal
+          open={!!selfieMode}
+          mode={selfieMode || "check-in"}
+          busy={selfieMode === "check-out" ? isCheckingOut : isCheckingIn}
+          onClose={() => {
+            if (!isCheckingIn && !isCheckingOut) setSelfieMode(null);
+          }}
+          onSkip={handleSelfieSkip}
+          onUse={handleSelfieUse}
+        />
       </div>
     </div>
   );

@@ -160,12 +160,24 @@ exports.Prisma.UserScalarFieldEnum = {
   resignationReason: 'resignationReason',
   inactiveSince: 'inactiveSince',
   avatar: 'avatar',
+  otp: 'otp',
+  otpExpiry: 'otpExpiry',
   leavesTaken: 'leavesTaken',
   leavesRemaining: 'leavesRemaining',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdById: 'createdById',
   managerId: 'managerId'
+};
+
+exports.Prisma.VerificationTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  type: 'type',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.DashboardConfigScalarFieldEnum = {
@@ -849,9 +861,11 @@ exports.Prisma.AttendanceLogScalarFieldEnum = {
   checkInLat: 'checkInLat',
   checkInLng: 'checkInLng',
   checkInAccuracy: 'checkInAccuracy',
+  checkInSelfie: 'checkInSelfie',
   checkOutLat: 'checkOutLat',
   checkOutLng: 'checkOutLng',
   checkOutAccuracy: 'checkOutAccuracy',
+  checkOutSelfie: 'checkOutSelfie',
   lessonPlanText: 'lessonPlanText',
   lessonPlanFiles: 'lessonPlanFiles',
   isTeachingDay: 'isTeachingDay',
@@ -1526,6 +1540,7 @@ exports.ReimbursementStatus = exports.$Enums.ReimbursementStatus = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
+  VerificationToken: 'VerificationToken',
   DashboardConfig: 'DashboardConfig',
   Notification: 'Notification',
   Permission: 'Permission',

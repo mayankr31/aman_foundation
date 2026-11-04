@@ -149,7 +149,7 @@ export default function LoginPage() {
               <div className="form-group">
                 <label htmlFor="password">
                   Password
-                  <a href="#" className="forgot-link">Forgot password?</a>
+                  <a href="/forgot-password" className="forgot-link">Forgot password?</a>
                 </label>
                 <div className="input-wrapper">
                   <span className="input-icon">

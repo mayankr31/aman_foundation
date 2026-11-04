@@ -15,7 +15,11 @@ export default function LayoutWrapper({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isAuthPage =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password";
   const requiredPage = getPageForPath(pathname);
   // A fellow linking a student to a beneficiary must be able to open that
   // beneficiary profile even without Livelihood page access. The API enforces

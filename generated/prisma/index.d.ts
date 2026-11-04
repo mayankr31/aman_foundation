@@ -24,6 +24,11 @@ export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model VerificationToken
+ * Single-use tokens emailed for password reset links.
+ */
+export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
+/**
  * Model DashboardConfig
  * Per-role or per-user dashboard selection for KPIs and quick links.
  * Exactly one of roleId / userId is set. No row = use role defaults.
@@ -774,6 +779,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.verificationToken`: Exposes CRUD operations for the **VerificationToken** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VerificationTokens
+    * const verificationTokens = await prisma.verificationToken.findMany()
+    * ```
+    */
+  get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.dashboardConfig`: Exposes CRUD operations for the **DashboardConfig** model.
@@ -2230,6 +2245,7 @@ export namespace Prisma {
   export const ModelName: {
     Role: 'Role',
     User: 'User',
+    VerificationToken: 'VerificationToken',
     DashboardConfig: 'DashboardConfig',
     Notification: 'Notification',
     Permission: 'Permission',
@@ -2347,7 +2363,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2496,6 +2512,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      VerificationToken: {
+        payload: Prisma.$VerificationTokenPayload<ExtArgs>
+        fields: Prisma.VerificationTokenFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VerificationTokenFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VerificationTokenFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          findFirst: {
+            args: Prisma.VerificationTokenFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VerificationTokenFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          findMany: {
+            args: Prisma.VerificationTokenFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>[]
+          }
+          create: {
+            args: Prisma.VerificationTokenCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          createMany: {
+            args: Prisma.VerificationTokenCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VerificationTokenCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>[]
+          }
+          delete: {
+            args: Prisma.VerificationTokenDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          update: {
+            args: Prisma.VerificationTokenUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          deleteMany: {
+            args: Prisma.VerificationTokenDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VerificationTokenUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VerificationTokenUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>[]
+          }
+          upsert: {
+            args: Prisma.VerificationTokenUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VerificationTokenPayload>
+          }
+          aggregate: {
+            args: Prisma.VerificationTokenAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVerificationToken>
+          }
+          groupBy: {
+            args: Prisma.VerificationTokenGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VerificationTokenGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VerificationTokenCountArgs<ExtArgs>
+            result: $Utils.Optional<VerificationTokenCountAggregateOutputType> | number
           }
         }
       }
@@ -10157,6 +10247,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     role?: RoleOmit
     user?: UserOmit
+    verificationToken?: VerificationTokenOmit
     dashboardConfig?: DashboardConfigOmit
     notification?: NotificationOmit
     permission?: PermissionOmit
@@ -10414,6 +10505,7 @@ export namespace Prisma {
     createdAssets: number
     teamCheckIns: number
     teamCheckInEdits: number
+    verificationTokens: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10452,6 +10544,7 @@ export namespace Prisma {
     createdAssets?: boolean | UserCountOutputTypeCountCreatedAssetsArgs
     teamCheckIns?: boolean | UserCountOutputTypeCountTeamCheckInsArgs
     teamCheckInEdits?: boolean | UserCountOutputTypeCountTeamCheckInEditsArgs
+    verificationTokens?: boolean | UserCountOutputTypeCountVerificationTokensArgs
   }
 
   // Custom InputTypes
@@ -10708,6 +10801,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountTeamCheckInEditsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TeamCheckInWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountVerificationTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VerificationTokenWhereInput
   }
 
 
@@ -13555,6 +13655,8 @@ export namespace Prisma {
     resignationReason: string | null
     inactiveSince: Date | null
     avatar: string | null
+    otp: string | null
+    otpExpiry: Date | null
     leavesTaken: number | null
     leavesRemaining: number | null
     createdAt: Date | null
@@ -13594,6 +13696,8 @@ export namespace Prisma {
     resignationReason: string | null
     inactiveSince: Date | null
     avatar: string | null
+    otp: string | null
+    otpExpiry: Date | null
     leavesTaken: number | null
     leavesRemaining: number | null
     createdAt: Date | null
@@ -13633,6 +13737,8 @@ export namespace Prisma {
     resignationReason: number
     inactiveSince: number
     avatar: number
+    otp: number
+    otpExpiry: number
     leavesTaken: number
     leavesRemaining: number
     createdAt: number
@@ -13684,6 +13790,8 @@ export namespace Prisma {
     resignationReason?: true
     inactiveSince?: true
     avatar?: true
+    otp?: true
+    otpExpiry?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -13723,6 +13831,8 @@ export namespace Prisma {
     resignationReason?: true
     inactiveSince?: true
     avatar?: true
+    otp?: true
+    otpExpiry?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -13762,6 +13872,8 @@ export namespace Prisma {
     resignationReason?: true
     inactiveSince?: true
     avatar?: true
+    otp?: true
+    otpExpiry?: true
     leavesTaken?: true
     leavesRemaining?: true
     createdAt?: true
@@ -13888,6 +14000,8 @@ export namespace Prisma {
     resignationReason: string | null
     inactiveSince: Date | null
     avatar: string | null
+    otp: string | null
+    otpExpiry: Date | null
     leavesTaken: number
     leavesRemaining: number
     createdAt: Date
@@ -13946,6 +14060,8 @@ export namespace Prisma {
     resignationReason?: boolean
     inactiveSince?: boolean
     avatar?: boolean
+    otp?: boolean
+    otpExpiry?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -13992,6 +14108,7 @@ export namespace Prisma {
     createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
     teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
     teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
+    verificationTokens?: boolean | User$verificationTokensArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -14026,6 +14143,8 @@ export namespace Prisma {
     resignationReason?: boolean
     inactiveSince?: boolean
     avatar?: boolean
+    otp?: boolean
+    otpExpiry?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -14068,6 +14187,8 @@ export namespace Prisma {
     resignationReason?: boolean
     inactiveSince?: boolean
     avatar?: boolean
+    otp?: boolean
+    otpExpiry?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -14110,6 +14231,8 @@ export namespace Prisma {
     resignationReason?: boolean
     inactiveSince?: boolean
     avatar?: boolean
+    otp?: boolean
+    otpExpiry?: boolean
     leavesTaken?: boolean
     leavesRemaining?: boolean
     createdAt?: boolean
@@ -14118,7 +14241,7 @@ export namespace Prisma {
     managerId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "voterId" | "highestQualification" | "highestQualificationDetail" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "dateOfLeaving" | "resignationReason" | "inactiveSince" | "avatar" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt" | "createdById" | "managerId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "username" | "email" | "password" | "mobile" | "roleId" | "status" | "department" | "employeeId" | "dob" | "gender" | "maritalStatus" | "bloodGroup" | "address" | "emergencyContactName" | "emergencyContactPhone" | "aadharNumber" | "panCard" | "voterId" | "highestQualification" | "highestQualificationDetail" | "bankName" | "bankAccountNo" | "bankIfsc" | "dateOfJoining" | "dateOfLeaving" | "resignationReason" | "inactiveSince" | "avatar" | "otp" | "otpExpiry" | "leavesTaken" | "leavesRemaining" | "createdAt" | "updatedAt" | "createdById" | "managerId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     role?: boolean | RoleDefaultArgs<ExtArgs>
     permissions?: boolean | User$permissionsArgs<ExtArgs>
@@ -14160,6 +14283,7 @@ export namespace Prisma {
     createdAssets?: boolean | User$createdAssetsArgs<ExtArgs>
     teamCheckIns?: boolean | User$teamCheckInsArgs<ExtArgs>
     teamCheckInEdits?: boolean | User$teamCheckInEditsArgs<ExtArgs>
+    verificationTokens?: boolean | User$verificationTokensArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14216,6 +14340,7 @@ export namespace Prisma {
       createdAssets: Prisma.$AssetPayload<ExtArgs>[]
       teamCheckIns: Prisma.$TeamCheckInPayload<ExtArgs>[]
       teamCheckInEdits: Prisma.$TeamCheckInPayload<ExtArgs>[]
+      verificationTokens: Prisma.$VerificationTokenPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14248,6 +14373,8 @@ export namespace Prisma {
       resignationReason: string | null
       inactiveSince: Date | null
       avatar: string | null
+      otp: string | null
+      otpExpiry: Date | null
       leavesTaken: number
       leavesRemaining: number
       createdAt: Date
@@ -14688,6 +14815,7 @@ export namespace Prisma {
     createdAssets<T extends User$createdAssetsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     teamCheckIns<T extends User$teamCheckInsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     teamCheckInEdits<T extends User$teamCheckInEditsArgs<ExtArgs> = {}>(args?: Subset<T, User$teamCheckInEditsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamCheckInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    verificationTokens<T extends User$verificationTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$verificationTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14747,6 +14875,8 @@ export namespace Prisma {
     readonly resignationReason: FieldRef<"User", 'String'>
     readonly inactiveSince: FieldRef<"User", 'DateTime'>
     readonly avatar: FieldRef<"User", 'String'>
+    readonly otp: FieldRef<"User", 'String'>
+    readonly otpExpiry: FieldRef<"User", 'DateTime'>
     readonly leavesTaken: FieldRef<"User", 'Int'>
     readonly leavesRemaining: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
@@ -16070,6 +16200,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.verificationTokens
+   */
+  export type User$verificationTokensArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    where?: VerificationTokenWhereInput
+    orderBy?: VerificationTokenOrderByWithRelationInput | VerificationTokenOrderByWithRelationInput[]
+    cursor?: VerificationTokenWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16085,6 +16239,1095 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model VerificationToken
+   */
+
+  export type AggregateVerificationToken = {
+    _count: VerificationTokenCountAggregateOutputType | null
+    _min: VerificationTokenMinAggregateOutputType | null
+    _max: VerificationTokenMaxAggregateOutputType | null
+  }
+
+  export type VerificationTokenMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    token: string | null
+    type: string | null
+    expiresAt: Date | null
+    used: boolean | null
+    createdAt: Date | null
+  }
+
+  export type VerificationTokenMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    token: string | null
+    type: string | null
+    expiresAt: Date | null
+    used: boolean | null
+    createdAt: Date | null
+  }
+
+  export type VerificationTokenCountAggregateOutputType = {
+    id: number
+    userId: number
+    token: number
+    type: number
+    expiresAt: number
+    used: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type VerificationTokenMinAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    type?: true
+    expiresAt?: true
+    used?: true
+    createdAt?: true
+  }
+
+  export type VerificationTokenMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    type?: true
+    expiresAt?: true
+    used?: true
+    createdAt?: true
+  }
+
+  export type VerificationTokenCountAggregateInputType = {
+    id?: true
+    userId?: true
+    token?: true
+    type?: true
+    expiresAt?: true
+    used?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type VerificationTokenAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VerificationToken to aggregate.
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VerificationTokens to fetch.
+     */
+    orderBy?: VerificationTokenOrderByWithRelationInput | VerificationTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VerificationTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VerificationTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VerificationTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VerificationTokens
+    **/
+    _count?: true | VerificationTokenCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VerificationTokenMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VerificationTokenMaxAggregateInputType
+  }
+
+  export type GetVerificationTokenAggregateType<T extends VerificationTokenAggregateArgs> = {
+        [P in keyof T & keyof AggregateVerificationToken]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVerificationToken[P]>
+      : GetScalarType<T[P], AggregateVerificationToken[P]>
+  }
+
+
+
+
+  export type VerificationTokenGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VerificationTokenWhereInput
+    orderBy?: VerificationTokenOrderByWithAggregationInput | VerificationTokenOrderByWithAggregationInput[]
+    by: VerificationTokenScalarFieldEnum[] | VerificationTokenScalarFieldEnum
+    having?: VerificationTokenScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VerificationTokenCountAggregateInputType | true
+    _min?: VerificationTokenMinAggregateInputType
+    _max?: VerificationTokenMaxAggregateInputType
+  }
+
+  export type VerificationTokenGroupByOutputType = {
+    id: string
+    userId: string
+    token: string
+    type: string
+    expiresAt: Date
+    used: boolean
+    createdAt: Date
+    _count: VerificationTokenCountAggregateOutputType | null
+    _min: VerificationTokenMinAggregateOutputType | null
+    _max: VerificationTokenMaxAggregateOutputType | null
+  }
+
+  type GetVerificationTokenGroupByPayload<T extends VerificationTokenGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VerificationTokenGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VerificationTokenGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VerificationTokenGroupByOutputType[P]>
+            : GetScalarType<T[P], VerificationTokenGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VerificationTokenSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    type?: boolean
+    expiresAt?: boolean
+    used?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["verificationToken"]>
+
+  export type VerificationTokenSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    type?: boolean
+    expiresAt?: boolean
+    used?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["verificationToken"]>
+
+  export type VerificationTokenSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    type?: boolean
+    expiresAt?: boolean
+    used?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["verificationToken"]>
+
+  export type VerificationTokenSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    token?: boolean
+    type?: boolean
+    expiresAt?: boolean
+    used?: boolean
+    createdAt?: boolean
+  }
+
+  export type VerificationTokenOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "token" | "type" | "expiresAt" | "used" | "createdAt", ExtArgs["result"]["verificationToken"]>
+  export type VerificationTokenInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type VerificationTokenIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type VerificationTokenIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $VerificationTokenPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VerificationToken"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      token: string
+      type: string
+      expiresAt: Date
+      used: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["verificationToken"]>
+    composites: {}
+  }
+
+  type VerificationTokenGetPayload<S extends boolean | null | undefined | VerificationTokenDefaultArgs> = $Result.GetResult<Prisma.$VerificationTokenPayload, S>
+
+  type VerificationTokenCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VerificationTokenFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VerificationTokenCountAggregateInputType | true
+    }
+
+  export interface VerificationTokenDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VerificationToken'], meta: { name: 'VerificationToken' } }
+    /**
+     * Find zero or one VerificationToken that matches the filter.
+     * @param {VerificationTokenFindUniqueArgs} args - Arguments to find a VerificationToken
+     * @example
+     * // Get one VerificationToken
+     * const verificationToken = await prisma.verificationToken.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VerificationTokenFindUniqueArgs>(args: SelectSubset<T, VerificationTokenFindUniqueArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VerificationToken that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VerificationTokenFindUniqueOrThrowArgs} args - Arguments to find a VerificationToken
+     * @example
+     * // Get one VerificationToken
+     * const verificationToken = await prisma.verificationToken.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VerificationTokenFindUniqueOrThrowArgs>(args: SelectSubset<T, VerificationTokenFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VerificationToken that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenFindFirstArgs} args - Arguments to find a VerificationToken
+     * @example
+     * // Get one VerificationToken
+     * const verificationToken = await prisma.verificationToken.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VerificationTokenFindFirstArgs>(args?: SelectSubset<T, VerificationTokenFindFirstArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VerificationToken that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenFindFirstOrThrowArgs} args - Arguments to find a VerificationToken
+     * @example
+     * // Get one VerificationToken
+     * const verificationToken = await prisma.verificationToken.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VerificationTokenFindFirstOrThrowArgs>(args?: SelectSubset<T, VerificationTokenFindFirstOrThrowArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VerificationTokens that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VerificationTokens
+     * const verificationTokens = await prisma.verificationToken.findMany()
+     * 
+     * // Get first 10 VerificationTokens
+     * const verificationTokens = await prisma.verificationToken.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const verificationTokenWithIdOnly = await prisma.verificationToken.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VerificationTokenFindManyArgs>(args?: SelectSubset<T, VerificationTokenFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VerificationToken.
+     * @param {VerificationTokenCreateArgs} args - Arguments to create a VerificationToken.
+     * @example
+     * // Create one VerificationToken
+     * const VerificationToken = await prisma.verificationToken.create({
+     *   data: {
+     *     // ... data to create a VerificationToken
+     *   }
+     * })
+     * 
+     */
+    create<T extends VerificationTokenCreateArgs>(args: SelectSubset<T, VerificationTokenCreateArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VerificationTokens.
+     * @param {VerificationTokenCreateManyArgs} args - Arguments to create many VerificationTokens.
+     * @example
+     * // Create many VerificationTokens
+     * const verificationToken = await prisma.verificationToken.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VerificationTokenCreateManyArgs>(args?: SelectSubset<T, VerificationTokenCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VerificationTokens and returns the data saved in the database.
+     * @param {VerificationTokenCreateManyAndReturnArgs} args - Arguments to create many VerificationTokens.
+     * @example
+     * // Create many VerificationTokens
+     * const verificationToken = await prisma.verificationToken.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VerificationTokens and only return the `id`
+     * const verificationTokenWithIdOnly = await prisma.verificationToken.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VerificationTokenCreateManyAndReturnArgs>(args?: SelectSubset<T, VerificationTokenCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VerificationToken.
+     * @param {VerificationTokenDeleteArgs} args - Arguments to delete one VerificationToken.
+     * @example
+     * // Delete one VerificationToken
+     * const VerificationToken = await prisma.verificationToken.delete({
+     *   where: {
+     *     // ... filter to delete one VerificationToken
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VerificationTokenDeleteArgs>(args: SelectSubset<T, VerificationTokenDeleteArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VerificationToken.
+     * @param {VerificationTokenUpdateArgs} args - Arguments to update one VerificationToken.
+     * @example
+     * // Update one VerificationToken
+     * const verificationToken = await prisma.verificationToken.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VerificationTokenUpdateArgs>(args: SelectSubset<T, VerificationTokenUpdateArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VerificationTokens.
+     * @param {VerificationTokenDeleteManyArgs} args - Arguments to filter VerificationTokens to delete.
+     * @example
+     * // Delete a few VerificationTokens
+     * const { count } = await prisma.verificationToken.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VerificationTokenDeleteManyArgs>(args?: SelectSubset<T, VerificationTokenDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VerificationTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VerificationTokens
+     * const verificationToken = await prisma.verificationToken.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VerificationTokenUpdateManyArgs>(args: SelectSubset<T, VerificationTokenUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VerificationTokens and returns the data updated in the database.
+     * @param {VerificationTokenUpdateManyAndReturnArgs} args - Arguments to update many VerificationTokens.
+     * @example
+     * // Update many VerificationTokens
+     * const verificationToken = await prisma.verificationToken.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VerificationTokens and only return the `id`
+     * const verificationTokenWithIdOnly = await prisma.verificationToken.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VerificationTokenUpdateManyAndReturnArgs>(args: SelectSubset<T, VerificationTokenUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VerificationToken.
+     * @param {VerificationTokenUpsertArgs} args - Arguments to update or create a VerificationToken.
+     * @example
+     * // Update or create a VerificationToken
+     * const verificationToken = await prisma.verificationToken.upsert({
+     *   create: {
+     *     // ... data to create a VerificationToken
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VerificationToken we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VerificationTokenUpsertArgs>(args: SelectSubset<T, VerificationTokenUpsertArgs<ExtArgs>>): Prisma__VerificationTokenClient<$Result.GetResult<Prisma.$VerificationTokenPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VerificationTokens.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenCountArgs} args - Arguments to filter VerificationTokens to count.
+     * @example
+     * // Count the number of VerificationTokens
+     * const count = await prisma.verificationToken.count({
+     *   where: {
+     *     // ... the filter for the VerificationTokens we want to count
+     *   }
+     * })
+    **/
+    count<T extends VerificationTokenCountArgs>(
+      args?: Subset<T, VerificationTokenCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VerificationTokenCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VerificationToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VerificationTokenAggregateArgs>(args: Subset<T, VerificationTokenAggregateArgs>): Prisma.PrismaPromise<GetVerificationTokenAggregateType<T>>
+
+    /**
+     * Group by VerificationToken.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VerificationTokenGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VerificationTokenGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VerificationTokenGroupByArgs['orderBy'] }
+        : { orderBy?: VerificationTokenGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VerificationTokenGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVerificationTokenGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VerificationToken model
+   */
+  readonly fields: VerificationTokenFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VerificationToken.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VerificationTokenClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VerificationToken model
+   */
+  interface VerificationTokenFieldRefs {
+    readonly id: FieldRef<"VerificationToken", 'String'>
+    readonly userId: FieldRef<"VerificationToken", 'String'>
+    readonly token: FieldRef<"VerificationToken", 'String'>
+    readonly type: FieldRef<"VerificationToken", 'String'>
+    readonly expiresAt: FieldRef<"VerificationToken", 'DateTime'>
+    readonly used: FieldRef<"VerificationToken", 'Boolean'>
+    readonly createdAt: FieldRef<"VerificationToken", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VerificationToken findUnique
+   */
+  export type VerificationTokenFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which VerificationToken to fetch.
+     */
+    where: VerificationTokenWhereUniqueInput
+  }
+
+  /**
+   * VerificationToken findUniqueOrThrow
+   */
+  export type VerificationTokenFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which VerificationToken to fetch.
+     */
+    where: VerificationTokenWhereUniqueInput
+  }
+
+  /**
+   * VerificationToken findFirst
+   */
+  export type VerificationTokenFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which VerificationToken to fetch.
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VerificationTokens to fetch.
+     */
+    orderBy?: VerificationTokenOrderByWithRelationInput | VerificationTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VerificationTokens.
+     */
+    cursor?: VerificationTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VerificationTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VerificationTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VerificationTokens.
+     */
+    distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
+  }
+
+  /**
+   * VerificationToken findFirstOrThrow
+   */
+  export type VerificationTokenFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which VerificationToken to fetch.
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VerificationTokens to fetch.
+     */
+    orderBy?: VerificationTokenOrderByWithRelationInput | VerificationTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VerificationTokens.
+     */
+    cursor?: VerificationTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VerificationTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VerificationTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VerificationTokens.
+     */
+    distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
+  }
+
+  /**
+   * VerificationToken findMany
+   */
+  export type VerificationTokenFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter, which VerificationTokens to fetch.
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VerificationTokens to fetch.
+     */
+    orderBy?: VerificationTokenOrderByWithRelationInput | VerificationTokenOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VerificationTokens.
+     */
+    cursor?: VerificationTokenWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VerificationTokens from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VerificationTokens.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VerificationTokens.
+     */
+    distinct?: VerificationTokenScalarFieldEnum | VerificationTokenScalarFieldEnum[]
+  }
+
+  /**
+   * VerificationToken create
+   */
+  export type VerificationTokenCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to create a VerificationToken.
+     */
+    data: XOR<VerificationTokenCreateInput, VerificationTokenUncheckedCreateInput>
+  }
+
+  /**
+   * VerificationToken createMany
+   */
+  export type VerificationTokenCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VerificationTokens.
+     */
+    data: VerificationTokenCreateManyInput | VerificationTokenCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VerificationToken createManyAndReturn
+   */
+  export type VerificationTokenCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * The data used to create many VerificationTokens.
+     */
+    data: VerificationTokenCreateManyInput | VerificationTokenCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VerificationToken update
+   */
+  export type VerificationTokenUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * The data needed to update a VerificationToken.
+     */
+    data: XOR<VerificationTokenUpdateInput, VerificationTokenUncheckedUpdateInput>
+    /**
+     * Choose, which VerificationToken to update.
+     */
+    where: VerificationTokenWhereUniqueInput
+  }
+
+  /**
+   * VerificationToken updateMany
+   */
+  export type VerificationTokenUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VerificationTokens.
+     */
+    data: XOR<VerificationTokenUpdateManyMutationInput, VerificationTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which VerificationTokens to update
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * Limit how many VerificationTokens to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VerificationToken updateManyAndReturn
+   */
+  export type VerificationTokenUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * The data used to update VerificationTokens.
+     */
+    data: XOR<VerificationTokenUpdateManyMutationInput, VerificationTokenUncheckedUpdateManyInput>
+    /**
+     * Filter which VerificationTokens to update
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * Limit how many VerificationTokens to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * VerificationToken upsert
+   */
+  export type VerificationTokenUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * The filter to search for the VerificationToken to update in case it exists.
+     */
+    where: VerificationTokenWhereUniqueInput
+    /**
+     * In case the VerificationToken found by the `where` argument doesn't exist, create a new VerificationToken with this data.
+     */
+    create: XOR<VerificationTokenCreateInput, VerificationTokenUncheckedCreateInput>
+    /**
+     * In case the VerificationToken was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VerificationTokenUpdateInput, VerificationTokenUncheckedUpdateInput>
+  }
+
+  /**
+   * VerificationToken delete
+   */
+  export type VerificationTokenDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
+    /**
+     * Filter which VerificationToken to delete.
+     */
+    where: VerificationTokenWhereUniqueInput
+  }
+
+  /**
+   * VerificationToken deleteMany
+   */
+  export type VerificationTokenDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VerificationTokens to delete
+     */
+    where?: VerificationTokenWhereInput
+    /**
+     * Limit how many VerificationTokens to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VerificationToken without action
+   */
+  export type VerificationTokenDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VerificationToken
+     */
+    select?: VerificationTokenSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VerificationToken
+     */
+    omit?: VerificationTokenOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VerificationTokenInclude<ExtArgs> | null
   }
 
 
@@ -79437,9 +80680,11 @@ export namespace Prisma {
     checkInLat: number | null
     checkInLng: number | null
     checkInAccuracy: number | null
+    checkInSelfie: string | null
     checkOutLat: number | null
     checkOutLng: number | null
     checkOutAccuracy: number | null
+    checkOutSelfie: string | null
     lessonPlanText: string | null
     isTeachingDay: boolean | null
     checkInAt: Date | null
@@ -79465,9 +80710,11 @@ export namespace Prisma {
     checkInLat: number | null
     checkInLng: number | null
     checkInAccuracy: number | null
+    checkInSelfie: string | null
     checkOutLat: number | null
     checkOutLng: number | null
     checkOutAccuracy: number | null
+    checkOutSelfie: string | null
     lessonPlanText: string | null
     isTeachingDay: boolean | null
     checkInAt: Date | null
@@ -79493,9 +80740,11 @@ export namespace Prisma {
     checkInLat: number
     checkInLng: number
     checkInAccuracy: number
+    checkInSelfie: number
     checkOutLat: number
     checkOutLng: number
     checkOutAccuracy: number
+    checkOutSelfie: number
     lessonPlanText: number
     lessonPlanFiles: number
     isTeachingDay: number
@@ -79544,9 +80793,11 @@ export namespace Prisma {
     checkInLat?: true
     checkInLng?: true
     checkInAccuracy?: true
+    checkInSelfie?: true
     checkOutLat?: true
     checkOutLng?: true
     checkOutAccuracy?: true
+    checkOutSelfie?: true
     lessonPlanText?: true
     isTeachingDay?: true
     checkInAt?: true
@@ -79572,9 +80823,11 @@ export namespace Prisma {
     checkInLat?: true
     checkInLng?: true
     checkInAccuracy?: true
+    checkInSelfie?: true
     checkOutLat?: true
     checkOutLng?: true
     checkOutAccuracy?: true
+    checkOutSelfie?: true
     lessonPlanText?: true
     isTeachingDay?: true
     checkInAt?: true
@@ -79600,9 +80853,11 @@ export namespace Prisma {
     checkInLat?: true
     checkInLng?: true
     checkInAccuracy?: true
+    checkInSelfie?: true
     checkOutLat?: true
     checkOutLng?: true
     checkOutAccuracy?: true
+    checkOutSelfie?: true
     lessonPlanText?: true
     lessonPlanFiles?: true
     isTeachingDay?: true
@@ -79716,9 +80971,11 @@ export namespace Prisma {
     checkInLat: number | null
     checkInLng: number | null
     checkInAccuracy: number | null
+    checkInSelfie: string | null
     checkOutLat: number | null
     checkOutLng: number | null
     checkOutAccuracy: number | null
+    checkOutSelfie: string | null
     lessonPlanText: string | null
     lessonPlanFiles: JsonValue | null
     isTeachingDay: boolean | null
@@ -79764,9 +81021,11 @@ export namespace Prisma {
     checkInLat?: boolean
     checkInLng?: boolean
     checkInAccuracy?: boolean
+    checkInSelfie?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
     checkOutAccuracy?: boolean
+    checkOutSelfie?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79794,9 +81053,11 @@ export namespace Prisma {
     checkInLat?: boolean
     checkInLng?: boolean
     checkInAccuracy?: boolean
+    checkInSelfie?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
     checkOutAccuracy?: boolean
+    checkOutSelfie?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79824,9 +81085,11 @@ export namespace Prisma {
     checkInLat?: boolean
     checkInLng?: boolean
     checkInAccuracy?: boolean
+    checkInSelfie?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
     checkOutAccuracy?: boolean
+    checkOutSelfie?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79854,9 +81117,11 @@ export namespace Prisma {
     checkInLat?: boolean
     checkInLng?: boolean
     checkInAccuracy?: boolean
+    checkInSelfie?: boolean
     checkOutLat?: boolean
     checkOutLng?: boolean
     checkOutAccuracy?: boolean
+    checkOutSelfie?: boolean
     lessonPlanText?: boolean
     lessonPlanFiles?: boolean
     isTeachingDay?: boolean
@@ -79867,7 +81132,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "checkInLat" | "checkInLng" | "checkInAccuracy" | "checkOutLat" | "checkOutLng" | "checkOutAccuracy" | "lessonPlanText" | "lessonPlanFiles" | "isTeachingDay" | "checkInAt" | "checkOutAt" | "workSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
+  export type AttendanceLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "email" | "logdate" | "intimelog" | "outtimelog" | "workhours" | "workstatus" | "ef1" | "ef2" | "logininfo" | "logoutinfo" | "checkInLat" | "checkInLng" | "checkInAccuracy" | "checkInSelfie" | "checkOutLat" | "checkOutLng" | "checkOutAccuracy" | "checkOutSelfie" | "lessonPlanText" | "lessonPlanFiles" | "isTeachingDay" | "checkInAt" | "checkOutAt" | "workSeconds" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceLog"]>
   export type AttendanceLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -79899,9 +81164,11 @@ export namespace Prisma {
       checkInLat: number | null
       checkInLng: number | null
       checkInAccuracy: number | null
+      checkInSelfie: string | null
       checkOutLat: number | null
       checkOutLng: number | null
       checkOutAccuracy: number | null
+      checkOutSelfie: string | null
       lessonPlanText: string | null
       lessonPlanFiles: Prisma.JsonValue | null
       isTeachingDay: boolean | null
@@ -80349,9 +81616,11 @@ export namespace Prisma {
     readonly checkInLat: FieldRef<"AttendanceLog", 'Float'>
     readonly checkInLng: FieldRef<"AttendanceLog", 'Float'>
     readonly checkInAccuracy: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkInSelfie: FieldRef<"AttendanceLog", 'String'>
     readonly checkOutLat: FieldRef<"AttendanceLog", 'Float'>
     readonly checkOutLng: FieldRef<"AttendanceLog", 'Float'>
     readonly checkOutAccuracy: FieldRef<"AttendanceLog", 'Float'>
+    readonly checkOutSelfie: FieldRef<"AttendanceLog", 'String'>
     readonly lessonPlanText: FieldRef<"AttendanceLog", 'String'>
     readonly lessonPlanFiles: FieldRef<"AttendanceLog", 'Json'>
     readonly isTeachingDay: FieldRef<"AttendanceLog", 'Boolean'>
@@ -135691,6 +136960,8 @@ export namespace Prisma {
     resignationReason: 'resignationReason',
     inactiveSince: 'inactiveSince',
     avatar: 'avatar',
+    otp: 'otp',
+    otpExpiry: 'otpExpiry',
     leavesTaken: 'leavesTaken',
     leavesRemaining: 'leavesRemaining',
     createdAt: 'createdAt',
@@ -135700,6 +136971,19 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const VerificationTokenScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    token: 'token',
+    type: 'type',
+    expiresAt: 'expiresAt',
+    used: 'used',
+    createdAt: 'createdAt'
+  };
+
+  export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
 
 
   export const DashboardConfigScalarFieldEnum: {
@@ -136545,9 +137829,11 @@ export namespace Prisma {
     checkInLat: 'checkInLat',
     checkInLng: 'checkInLng',
     checkInAccuracy: 'checkInAccuracy',
+    checkInSelfie: 'checkInSelfie',
     checkOutLat: 'checkOutLat',
     checkOutLng: 'checkOutLng',
     checkOutAccuracy: 'checkOutAccuracy',
+    checkOutSelfie: 'checkOutSelfie',
     lessonPlanText: 'lessonPlanText',
     lessonPlanFiles: 'lessonPlanFiles',
     isTeachingDay: 'isTeachingDay',
@@ -137620,6 +138906,8 @@ export namespace Prisma {
     resignationReason?: StringNullableFilter<"User"> | string | null
     inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
+    otp?: StringNullableFilter<"User"> | string | null
+    otpExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -137666,6 +138954,7 @@ export namespace Prisma {
     createdAssets?: AssetListRelationFilter
     teamCheckIns?: TeamCheckInListRelationFilter
     teamCheckInEdits?: TeamCheckInListRelationFilter
+    verificationTokens?: VerificationTokenListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -137699,6 +138988,8 @@ export namespace Prisma {
     resignationReason?: SortOrderInput | SortOrder
     inactiveSince?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
+    otp?: SortOrderInput | SortOrder
+    otpExpiry?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -137745,6 +139036,7 @@ export namespace Prisma {
     createdAssets?: AssetOrderByRelationAggregateInput
     teamCheckIns?: TeamCheckInOrderByRelationAggregateInput
     teamCheckInEdits?: TeamCheckInOrderByRelationAggregateInput
+    verificationTokens?: VerificationTokenOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -137781,6 +139073,8 @@ export namespace Prisma {
     resignationReason?: StringNullableFilter<"User"> | string | null
     inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
+    otp?: StringNullableFilter<"User"> | string | null
+    otpExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -137827,6 +139121,7 @@ export namespace Prisma {
     createdAssets?: AssetListRelationFilter
     teamCheckIns?: TeamCheckInListRelationFilter
     teamCheckInEdits?: TeamCheckInListRelationFilter
+    verificationTokens?: VerificationTokenListRelationFilter
   }, "id" | "username" | "email" | "employeeId">
 
   export type UserOrderByWithAggregationInput = {
@@ -137860,6 +139155,8 @@ export namespace Prisma {
     resignationReason?: SortOrderInput | SortOrder
     inactiveSince?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
+    otp?: SortOrderInput | SortOrder
+    otpExpiry?: SortOrderInput | SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -137907,12 +139204,79 @@ export namespace Prisma {
     resignationReason?: StringNullableWithAggregatesFilter<"User"> | string | null
     inactiveSince?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
+    otp?: StringNullableWithAggregatesFilter<"User"> | string | null
+    otpExpiry?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     leavesTaken?: IntWithAggregatesFilter<"User"> | number
     leavesRemaining?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     createdById?: StringNullableWithAggregatesFilter<"User"> | string | null
     managerId?: StringNullableWithAggregatesFilter<"User"> | string | null
+  }
+
+  export type VerificationTokenWhereInput = {
+    AND?: VerificationTokenWhereInput | VerificationTokenWhereInput[]
+    OR?: VerificationTokenWhereInput[]
+    NOT?: VerificationTokenWhereInput | VerificationTokenWhereInput[]
+    id?: StringFilter<"VerificationToken"> | string
+    userId?: StringFilter<"VerificationToken"> | string
+    token?: StringFilter<"VerificationToken"> | string
+    type?: StringFilter<"VerificationToken"> | string
+    expiresAt?: DateTimeFilter<"VerificationToken"> | Date | string
+    used?: BoolFilter<"VerificationToken"> | boolean
+    createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type VerificationTokenOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    type?: SortOrder
+    expiresAt?: SortOrder
+    used?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type VerificationTokenWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: VerificationTokenWhereInput | VerificationTokenWhereInput[]
+    OR?: VerificationTokenWhereInput[]
+    NOT?: VerificationTokenWhereInput | VerificationTokenWhereInput[]
+    userId?: StringFilter<"VerificationToken"> | string
+    type?: StringFilter<"VerificationToken"> | string
+    expiresAt?: DateTimeFilter<"VerificationToken"> | Date | string
+    used?: BoolFilter<"VerificationToken"> | boolean
+    createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "token">
+
+  export type VerificationTokenOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    type?: SortOrder
+    expiresAt?: SortOrder
+    used?: SortOrder
+    createdAt?: SortOrder
+    _count?: VerificationTokenCountOrderByAggregateInput
+    _max?: VerificationTokenMaxOrderByAggregateInput
+    _min?: VerificationTokenMinOrderByAggregateInput
+  }
+
+  export type VerificationTokenScalarWhereWithAggregatesInput = {
+    AND?: VerificationTokenScalarWhereWithAggregatesInput | VerificationTokenScalarWhereWithAggregatesInput[]
+    OR?: VerificationTokenScalarWhereWithAggregatesInput[]
+    NOT?: VerificationTokenScalarWhereWithAggregatesInput | VerificationTokenScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"VerificationToken"> | string
+    userId?: StringWithAggregatesFilter<"VerificationToken"> | string
+    token?: StringWithAggregatesFilter<"VerificationToken"> | string
+    type?: StringWithAggregatesFilter<"VerificationToken"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
+    used?: BoolWithAggregatesFilter<"VerificationToken"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
   }
 
   export type DashboardConfigWhereInput = {
@@ -142373,9 +143737,11 @@ export namespace Prisma {
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -142403,9 +143769,11 @@ export namespace Prisma {
     checkInLat?: SortOrderInput | SortOrder
     checkInLng?: SortOrderInput | SortOrder
     checkInAccuracy?: SortOrderInput | SortOrder
+    checkInSelfie?: SortOrderInput | SortOrder
     checkOutLat?: SortOrderInput | SortOrder
     checkOutLng?: SortOrderInput | SortOrder
     checkOutAccuracy?: SortOrderInput | SortOrder
+    checkOutSelfie?: SortOrderInput | SortOrder
     lessonPlanText?: SortOrderInput | SortOrder
     lessonPlanFiles?: SortOrderInput | SortOrder
     isTeachingDay?: SortOrderInput | SortOrder
@@ -142436,9 +143804,11 @@ export namespace Prisma {
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -142466,9 +143836,11 @@ export namespace Prisma {
     checkInLat?: SortOrderInput | SortOrder
     checkInLng?: SortOrderInput | SortOrder
     checkInAccuracy?: SortOrderInput | SortOrder
+    checkInSelfie?: SortOrderInput | SortOrder
     checkOutLat?: SortOrderInput | SortOrder
     checkOutLng?: SortOrderInput | SortOrder
     checkOutAccuracy?: SortOrderInput | SortOrder
+    checkOutSelfie?: SortOrderInput | SortOrder
     lessonPlanText?: SortOrderInput | SortOrder
     lessonPlanFiles?: SortOrderInput | SortOrder
     isTeachingDay?: SortOrderInput | SortOrder
@@ -142503,9 +143875,11 @@ export namespace Prisma {
     checkInLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkInAccuracy?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkInSelfie?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     checkOutLat?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
     checkOutAccuracy?: FloatNullableWithAggregatesFilter<"AttendanceLog"> | number | null
+    checkOutSelfie?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     lessonPlanText?: StringNullableWithAggregatesFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableWithAggregatesFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableWithAggregatesFilter<"AttendanceLog"> | boolean | null
@@ -146488,6 +147862,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -146532,6 +147908,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -146565,6 +147942,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -146608,6 +147987,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -146640,6 +148020,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -146684,6 +148066,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -146717,6 +148100,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -146760,6 +148145,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -146793,6 +148179,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -146831,6 +148219,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -146868,12 +148258,83 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     managerId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type VerificationTokenCreateInput = {
+    id?: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutVerificationTokensInput
+  }
+
+  export type VerificationTokenUncheckedCreateInput = {
+    id?: string
+    userId: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+  }
+
+  export type VerificationTokenUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutVerificationTokensNestedInput
+  }
+
+  export type VerificationTokenUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VerificationTokenCreateManyInput = {
+    id?: string
+    userId: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+  }
+
+  export type VerificationTokenUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VerificationTokenUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DashboardConfigCreateInput = {
@@ -151750,9 +153211,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -151780,9 +153243,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -151808,9 +153273,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -151838,9 +153305,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -151867,9 +153336,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -151895,9 +153366,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -151924,9 +153397,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -156464,6 +157939,12 @@ export namespace Prisma {
     none?: TeamCheckInWhereInput
   }
 
+  export type VerificationTokenListRelationFilter = {
+    every?: VerificationTokenWhereInput
+    some?: VerificationTokenWhereInput
+    none?: VerificationTokenWhereInput
+  }
+
   export type UserPermissionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -156564,6 +158045,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type VerificationTokenOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -156595,6 +158080,8 @@ export namespace Prisma {
     resignationReason?: SortOrder
     inactiveSince?: SortOrder
     avatar?: SortOrder
+    otp?: SortOrder
+    otpExpiry?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -156639,6 +158126,8 @@ export namespace Prisma {
     resignationReason?: SortOrder
     inactiveSince?: SortOrder
     avatar?: SortOrder
+    otp?: SortOrder
+    otpExpiry?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -156678,6 +158167,8 @@ export namespace Prisma {
     resignationReason?: SortOrder
     inactiveSince?: SortOrder
     avatar?: SortOrder
+    otp?: SortOrder
+    otpExpiry?: SortOrder
     leavesTaken?: SortOrder
     leavesRemaining?: SortOrder
     createdAt?: SortOrder
@@ -156729,6 +158220,41 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type VerificationTokenCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    type?: SortOrder
+    expiresAt?: SortOrder
+    used?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type VerificationTokenMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    type?: SortOrder
+    expiresAt?: SortOrder
+    used?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type VerificationTokenMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    token?: SortOrder
+    type?: SortOrder
+    expiresAt?: SortOrder
+    used?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -156794,11 +158320,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type NotificationCountOrderByAggregateInput = {
@@ -159782,9 +161303,11 @@ export namespace Prisma {
     checkInLat?: SortOrder
     checkInLng?: SortOrder
     checkInAccuracy?: SortOrder
+    checkInSelfie?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
     checkOutAccuracy?: SortOrder
+    checkOutSelfie?: SortOrder
     lessonPlanText?: SortOrder
     lessonPlanFiles?: SortOrder
     isTeachingDay?: SortOrder
@@ -159821,9 +161344,11 @@ export namespace Prisma {
     checkInLat?: SortOrder
     checkInLng?: SortOrder
     checkInAccuracy?: SortOrder
+    checkInSelfie?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
     checkOutAccuracy?: SortOrder
+    checkOutSelfie?: SortOrder
     lessonPlanText?: SortOrder
     isTeachingDay?: SortOrder
     checkInAt?: SortOrder
@@ -159849,9 +161374,11 @@ export namespace Prisma {
     checkInLat?: SortOrder
     checkInLng?: SortOrder
     checkInAccuracy?: SortOrder
+    checkInSelfie?: SortOrder
     checkOutLat?: SortOrder
     checkOutLng?: SortOrder
     checkOutAccuracy?: SortOrder
+    checkOutSelfie?: SortOrder
     lessonPlanText?: SortOrder
     isTeachingDay?: SortOrder
     checkInAt?: SortOrder
@@ -162635,6 +164162,13 @@ export namespace Prisma {
     connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
   }
 
+  export type VerificationTokenCreateNestedManyWithoutUserInput = {
+    create?: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput> | VerificationTokenCreateWithoutUserInput[] | VerificationTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VerificationTokenCreateOrConnectWithoutUserInput | VerificationTokenCreateOrConnectWithoutUserInput[]
+    createMany?: VerificationTokenCreateManyUserInputEnvelope
+    connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+  }
+
   export type UserPermissionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -162890,6 +164424,13 @@ export namespace Prisma {
     connectOrCreate?: TeamCheckInCreateOrConnectWithoutLastEditedByInput | TeamCheckInCreateOrConnectWithoutLastEditedByInput[]
     createMany?: TeamCheckInCreateManyLastEditedByInputEnvelope
     connect?: TeamCheckInWhereUniqueInput | TeamCheckInWhereUniqueInput[]
+  }
+
+  export type VerificationTokenUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput> | VerificationTokenCreateWithoutUserInput[] | VerificationTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VerificationTokenCreateOrConnectWithoutUserInput | VerificationTokenCreateOrConnectWithoutUserInput[]
+    createMany?: VerificationTokenCreateManyUserInputEnvelope
+    connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
   }
 
   export type EnumUserStatusFieldUpdateOperationsInput = {
@@ -163446,6 +164987,20 @@ export namespace Prisma {
     deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
   }
 
+  export type VerificationTokenUpdateManyWithoutUserNestedInput = {
+    create?: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput> | VerificationTokenCreateWithoutUserInput[] | VerificationTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VerificationTokenCreateOrConnectWithoutUserInput | VerificationTokenCreateOrConnectWithoutUserInput[]
+    upsert?: VerificationTokenUpsertWithWhereUniqueWithoutUserInput | VerificationTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: VerificationTokenCreateManyUserInputEnvelope
+    set?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    disconnect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    delete?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    update?: VerificationTokenUpdateWithWhereUniqueWithoutUserInput | VerificationTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: VerificationTokenUpdateManyWithWhereWithoutUserInput | VerificationTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
+  }
+
   export type UserPermissionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserPermissionCreateWithoutUserInput, UserPermissionUncheckedCreateWithoutUserInput> | UserPermissionCreateWithoutUserInput[] | UserPermissionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserPermissionCreateOrConnectWithoutUserInput | UserPermissionCreateOrConnectWithoutUserInput[]
@@ -163954,6 +165509,34 @@ export namespace Prisma {
     update?: TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput | TeamCheckInUpdateWithWhereUniqueWithoutLastEditedByInput[]
     updateMany?: TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput | TeamCheckInUpdateManyWithWhereWithoutLastEditedByInput[]
     deleteMany?: TeamCheckInScalarWhereInput | TeamCheckInScalarWhereInput[]
+  }
+
+  export type VerificationTokenUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput> | VerificationTokenCreateWithoutUserInput[] | VerificationTokenUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: VerificationTokenCreateOrConnectWithoutUserInput | VerificationTokenCreateOrConnectWithoutUserInput[]
+    upsert?: VerificationTokenUpsertWithWhereUniqueWithoutUserInput | VerificationTokenUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: VerificationTokenCreateManyUserInputEnvelope
+    set?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    disconnect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    delete?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    connect?: VerificationTokenWhereUniqueInput | VerificationTokenWhereUniqueInput[]
+    update?: VerificationTokenUpdateWithWhereUniqueWithoutUserInput | VerificationTokenUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: VerificationTokenUpdateManyWithWhereWithoutUserInput | VerificationTokenUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutVerificationTokensInput = {
+    create?: XOR<UserCreateWithoutVerificationTokensInput, UserUncheckedCreateWithoutVerificationTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerificationTokensInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutVerificationTokensNestedInput = {
+    create?: XOR<UserCreateWithoutVerificationTokensInput, UserUncheckedCreateWithoutVerificationTokensInput>
+    connectOrCreate?: UserCreateOrConnectWithoutVerificationTokensInput
+    upsert?: UserUpsertWithoutVerificationTokensInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutVerificationTokensInput, UserUpdateWithoutVerificationTokensInput>, UserUncheckedUpdateWithoutVerificationTokensInput>
   }
 
   export type DashboardConfigCreatekpiKeysInput = {
@@ -170702,6 +172285,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -170745,6 +172330,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -170777,6 +172363,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -170820,6 +172408,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -170931,6 +172520,8 @@ export namespace Prisma {
     resignationReason?: StringNullableFilter<"User"> | string | null
     inactiveSince?: DateTimeNullableFilter<"User"> | Date | string | null
     avatar?: StringNullableFilter<"User"> | string | null
+    otp?: StringNullableFilter<"User"> | string | null
+    otpExpiry?: DateTimeNullableFilter<"User"> | Date | string | null
     leavesTaken?: IntFilter<"User"> | number
     leavesRemaining?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
@@ -171080,6 +172671,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171123,6 +172716,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedUsersInput = {
@@ -171156,6 +172750,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171198,6 +172794,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedUsersInput = {
@@ -171235,6 +172832,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171278,6 +172877,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedByInput = {
@@ -171311,6 +172911,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171353,6 +172955,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedByInput = {
@@ -171395,6 +172998,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171438,6 +173043,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDirectReportsInput = {
@@ -171471,6 +173077,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171513,6 +173121,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDirectReportsInput = {
@@ -171550,6 +173159,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171593,6 +173204,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagerInput = {
@@ -171626,6 +173238,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -171668,6 +173282,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagerInput = {
@@ -171882,9 +173497,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -171910,9 +173527,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -173120,6 +174739,34 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type VerificationTokenCreateWithoutUserInput = {
+    id?: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+  }
+
+  export type VerificationTokenUncheckedCreateWithoutUserInput = {
+    id?: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+  }
+
+  export type VerificationTokenCreateOrConnectWithoutUserInput = {
+    where: VerificationTokenWhereUniqueInput
+    create: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type VerificationTokenCreateManyUserInputEnvelope = {
+    data: VerificationTokenCreateManyUserInput | VerificationTokenCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RoleUpsertWithoutUsersInput = {
     update: XOR<RoleUpdateWithoutUsersInput, RoleUncheckedUpdateWithoutUsersInput>
     create: XOR<RoleCreateWithoutUsersInput, RoleUncheckedCreateWithoutUsersInput>
@@ -173222,6 +174869,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173265,6 +174914,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedUsersInput = {
@@ -173298,6 +174948,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173340,6 +174992,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -173399,6 +175052,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173442,6 +175097,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDirectReportsInput = {
@@ -173475,6 +175131,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173517,6 +175175,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutManagerInput = {
@@ -173748,9 +175407,11 @@ export namespace Prisma {
     checkInLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkInAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkInSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     checkOutLat?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutLng?: FloatNullableFilter<"AttendanceLog"> | number | null
     checkOutAccuracy?: FloatNullableFilter<"AttendanceLog"> | number | null
+    checkOutSelfie?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanText?: StringNullableFilter<"AttendanceLog"> | string | null
     lessonPlanFiles?: JsonNullableFilter<"AttendanceLog">
     isTeachingDay?: BoolNullableFilter<"AttendanceLog"> | boolean | null
@@ -174577,6 +176238,363 @@ export namespace Prisma {
     data: XOR<TeamCheckInUpdateManyMutationInput, TeamCheckInUncheckedUpdateManyWithoutLastEditedByInput>
   }
 
+  export type VerificationTokenUpsertWithWhereUniqueWithoutUserInput = {
+    where: VerificationTokenWhereUniqueInput
+    update: XOR<VerificationTokenUpdateWithoutUserInput, VerificationTokenUncheckedUpdateWithoutUserInput>
+    create: XOR<VerificationTokenCreateWithoutUserInput, VerificationTokenUncheckedCreateWithoutUserInput>
+  }
+
+  export type VerificationTokenUpdateWithWhereUniqueWithoutUserInput = {
+    where: VerificationTokenWhereUniqueInput
+    data: XOR<VerificationTokenUpdateWithoutUserInput, VerificationTokenUncheckedUpdateWithoutUserInput>
+  }
+
+  export type VerificationTokenUpdateManyWithWhereWithoutUserInput = {
+    where: VerificationTokenScalarWhereInput
+    data: XOR<VerificationTokenUpdateManyMutationInput, VerificationTokenUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type VerificationTokenScalarWhereInput = {
+    AND?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
+    OR?: VerificationTokenScalarWhereInput[]
+    NOT?: VerificationTokenScalarWhereInput | VerificationTokenScalarWhereInput[]
+    id?: StringFilter<"VerificationToken"> | string
+    userId?: StringFilter<"VerificationToken"> | string
+    token?: StringFilter<"VerificationToken"> | string
+    type?: StringFilter<"VerificationToken"> | string
+    expiresAt?: DateTimeFilter<"VerificationToken"> | Date | string
+    used?: BoolFilter<"VerificationToken"> | boolean
+    createdAt?: DateTimeFilter<"VerificationToken"> | Date | string
+  }
+
+  export type UserCreateWithoutVerificationTokensInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role: RoleCreateNestedOneWithoutUsersInput
+    permissions?: UserPermissionCreateNestedManyWithoutUserInput
+    createdBy?: UserCreateNestedOneWithoutCreatedUsersInput
+    createdUsers?: UserCreateNestedManyWithoutCreatedByInput
+    manager?: UserCreateNestedOneWithoutDirectReportsInput
+    directReports?: UserCreateNestedManyWithoutManagerInput
+    fellow?: FellowCreateNestedOneWithoutUserInput
+    leaves?: LeaveCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserUncheckedCreateWithoutVerificationTokensInput = {
+    id?: string
+    name: string
+    username: string
+    email: string
+    password: string
+    mobile?: string | null
+    roleId: string
+    status?: $Enums.UserStatus
+    department?: string | null
+    employeeId?: string | null
+    dob?: Date | string | null
+    gender?: string | null
+    maritalStatus?: string | null
+    bloodGroup?: string | null
+    address?: string | null
+    emergencyContactName?: string | null
+    emergencyContactPhone?: string | null
+    aadharNumber?: string | null
+    panCard?: string | null
+    voterId?: string | null
+    highestQualification?: string | null
+    highestQualificationDetail?: string | null
+    bankName?: string | null
+    bankAccountNo?: string | null
+    bankIfsc?: string | null
+    dateOfJoining?: Date | string | null
+    dateOfLeaving?: Date | string | null
+    resignationReason?: string | null
+    inactiveSince?: Date | string | null
+    avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
+    leavesTaken?: number
+    leavesRemaining?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdById?: string | null
+    managerId?: string | null
+    permissions?: UserPermissionUncheckedCreateNestedManyWithoutUserInput
+    createdUsers?: UserUncheckedCreateNestedManyWithoutCreatedByInput
+    directReports?: UserUncheckedCreateNestedManyWithoutManagerInput
+    fellow?: FellowUncheckedCreateNestedOneWithoutUserInput
+    leaves?: LeaveUncheckedCreateNestedManyWithoutUserInput
+    verifiedTransactions?: InventoryLedgerUncheckedCreateNestedManyWithoutHandledByUserInput
+    reliefDistributions?: ReliefDistributionUncheckedCreateNestedManyWithoutHandledByUserInput
+    attendanceLogs?: AttendanceLogUncheckedCreateNestedManyWithoutUserInput
+    taskComments?: FellowTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutAssignedByInput
+    taskCommentsNew?: TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    taskDocuments?: TaskDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    compOffCredits?: CompOffCreditUncheckedCreateNestedManyWithoutUserInput
+    travelRequests?: TravelRequestUncheckedCreateNestedManyWithoutUserInput
+    approvedTravel?: TravelRequestUncheckedCreateNestedManyWithoutApproverInput
+    revertedTravel?: TravelRequestUncheckedCreateNestedManyWithoutReverterInput
+    reimbursementRequests?: ReimbursementUncheckedCreateNestedManyWithoutUserInput
+    reimbursementsVerified?: ReimbursementUncheckedCreateNestedManyWithoutVerifierInput
+    reimbursementsApproved?: ReimbursementUncheckedCreateNestedManyWithoutApproverInput
+    reimbursementsReimbursed?: ReimbursementUncheckedCreateNestedManyWithoutReimburserInput
+    coachingRecords?: CoachingRecordUncheckedCreateNestedManyWithoutAuthorInput
+    pmReflections?: PMReflectionUncheckedCreateNestedManyWithoutAuthorInput
+    individualFeedback?: IndividualFeedbackUncheckedCreateNestedManyWithoutAuthorInput
+    performanceObservations?: FellowPerformanceUncheckedCreateNestedManyWithoutAuthorInput
+    managedSchools?: ProgramManagerSchoolUncheckedCreateNestedManyWithoutUserInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedCreateNestedManyWithoutUserInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedCreateNestedManyWithoutUserInput
+    pmTasks?: ProgramManagerTaskUncheckedCreateNestedManyWithoutUserInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    dashboardConfig?: DashboardConfigUncheckedCreateNestedOneWithoutUserInput
+    assetAssignments?: AssetAssignmentUncheckedCreateNestedManyWithoutUserInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
+    createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
+    teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+  }
+
+  export type UserCreateOrConnectWithoutVerificationTokensInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutVerificationTokensInput, UserUncheckedCreateWithoutVerificationTokensInput>
+  }
+
+  export type UserUpsertWithoutVerificationTokensInput = {
+    update: XOR<UserUpdateWithoutVerificationTokensInput, UserUncheckedUpdateWithoutVerificationTokensInput>
+    create: XOR<UserCreateWithoutVerificationTokensInput, UserUncheckedCreateWithoutVerificationTokensInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutVerificationTokensInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutVerificationTokensInput, UserUncheckedUpdateWithoutVerificationTokensInput>
+  }
+
+  export type UserUpdateWithoutVerificationTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: RoleUpdateOneRequiredWithoutUsersNestedInput
+    permissions?: UserPermissionUpdateManyWithoutUserNestedInput
+    createdBy?: UserUpdateOneWithoutCreatedUsersNestedInput
+    createdUsers?: UserUpdateManyWithoutCreatedByNestedInput
+    manager?: UserUpdateOneWithoutDirectReportsNestedInput
+    directReports?: UserUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutVerificationTokensInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    roleId?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    maritalStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    emergencyContactPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    panCard?: NullableStringFieldUpdateOperationsInput | string | null
+    voterId?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualification?: NullableStringFieldUpdateOperationsInput | string | null
+    highestQualificationDetail?: NullableStringFieldUpdateOperationsInput | string | null
+    bankName?: NullableStringFieldUpdateOperationsInput | string | null
+    bankAccountNo?: NullableStringFieldUpdateOperationsInput | string | null
+    bankIfsc?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dateOfLeaving?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
+    inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leavesTaken?: IntFieldUpdateOperationsInput | number
+    leavesRemaining?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: UserPermissionUncheckedUpdateManyWithoutUserNestedInput
+    createdUsers?: UserUncheckedUpdateManyWithoutCreatedByNestedInput
+    directReports?: UserUncheckedUpdateManyWithoutManagerNestedInput
+    fellow?: FellowUncheckedUpdateOneWithoutUserNestedInput
+    leaves?: LeaveUncheckedUpdateManyWithoutUserNestedInput
+    verifiedTransactions?: InventoryLedgerUncheckedUpdateManyWithoutHandledByUserNestedInput
+    reliefDistributions?: ReliefDistributionUncheckedUpdateManyWithoutHandledByUserNestedInput
+    attendanceLogs?: AttendanceLogUncheckedUpdateManyWithoutUserNestedInput
+    taskComments?: FellowTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutAssignedByNestedInput
+    taskCommentsNew?: TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    taskDocuments?: TaskDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    compOffCredits?: CompOffCreditUncheckedUpdateManyWithoutUserNestedInput
+    travelRequests?: TravelRequestUncheckedUpdateManyWithoutUserNestedInput
+    approvedTravel?: TravelRequestUncheckedUpdateManyWithoutApproverNestedInput
+    revertedTravel?: TravelRequestUncheckedUpdateManyWithoutReverterNestedInput
+    reimbursementRequests?: ReimbursementUncheckedUpdateManyWithoutUserNestedInput
+    reimbursementsVerified?: ReimbursementUncheckedUpdateManyWithoutVerifierNestedInput
+    reimbursementsApproved?: ReimbursementUncheckedUpdateManyWithoutApproverNestedInput
+    reimbursementsReimbursed?: ReimbursementUncheckedUpdateManyWithoutReimburserNestedInput
+    coachingRecords?: CoachingRecordUncheckedUpdateManyWithoutAuthorNestedInput
+    pmReflections?: PMReflectionUncheckedUpdateManyWithoutAuthorNestedInput
+    individualFeedback?: IndividualFeedbackUncheckedUpdateManyWithoutAuthorNestedInput
+    performanceObservations?: FellowPerformanceUncheckedUpdateManyWithoutAuthorNestedInput
+    managedSchools?: ProgramManagerSchoolUncheckedUpdateManyWithoutUserNestedInput
+    managedCentres?: ProgramManagerAfterSchoolCentreUncheckedUpdateManyWithoutUserNestedInput
+    managedLivelihoodPrograms?: ProgramManagerLivelihoodProgramUncheckedUpdateManyWithoutUserNestedInput
+    pmTasks?: ProgramManagerTaskUncheckedUpdateManyWithoutUserNestedInput
+    pmTaskComments?: ProgramManagerTaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    dashboardConfig?: DashboardConfigUncheckedUpdateOneWithoutUserNestedInput
+    assetAssignments?: AssetAssignmentUncheckedUpdateManyWithoutUserNestedInput
+    assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
+    createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
+    teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+  }
+
   export type RoleCreateWithoutDashboardConfigInput = {
     id?: string
     name: string
@@ -174634,6 +176652,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -174677,6 +176697,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDashboardConfigInput = {
@@ -174710,6 +176731,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -174752,6 +176775,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDashboardConfigInput = {
@@ -174833,6 +176857,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -174876,6 +176902,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDashboardConfigInput = {
@@ -174909,6 +176936,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -174951,6 +176980,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -174983,6 +177013,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -175026,6 +177058,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -175059,6 +177092,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -175101,6 +177136,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -175149,6 +177185,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175192,6 +177230,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -175225,6 +177264,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175267,6 +177308,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -175497,6 +177539,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -175540,6 +177584,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPermissionsInput = {
@@ -175573,6 +177618,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -175615,6 +177662,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -175688,6 +177736,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175731,6 +177781,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPermissionsInput = {
@@ -175764,6 +177815,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -175806,6 +177859,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PermissionUpsertWithoutUsersInput = {
@@ -176321,6 +178375,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -176364,6 +178420,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFellowInput = {
@@ -176397,6 +178454,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -176439,6 +178498,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFellowInput = {
@@ -177139,6 +179199,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -177182,6 +179244,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFellowInput = {
@@ -177215,6 +179278,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -177257,6 +179322,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowSchoolUpsertWithWhereUniqueWithoutFellowInput = {
@@ -177928,6 +179994,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -177971,6 +180039,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmReflectionsInput = {
@@ -178004,6 +180073,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -178046,6 +180117,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmReflectionsInput = {
@@ -178169,6 +180241,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -178212,6 +180286,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmReflectionsInput = {
@@ -178245,6 +180320,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -178287,6 +180364,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutPerformanceObservationsInput = {
@@ -178388,6 +180466,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -178431,6 +180511,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPerformanceObservationsInput = {
@@ -178464,6 +180545,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -178506,6 +180589,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPerformanceObservationsInput = {
@@ -178629,6 +180713,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -178672,6 +180758,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPerformanceObservationsInput = {
@@ -178705,6 +180792,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -178747,6 +180836,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutReviewsInput = {
@@ -181495,6 +183585,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -181538,6 +183630,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedSchoolsInput = {
@@ -181571,6 +183664,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -181613,6 +183708,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedSchoolsInput = {
@@ -181716,6 +183812,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181759,6 +183857,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedSchoolsInput = {
@@ -181792,6 +183891,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181834,6 +183935,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SchoolUpsertWithoutProgramManagersInput = {
@@ -181927,6 +184029,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -181970,6 +184074,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedCentresInput = {
@@ -182003,6 +184108,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -182045,6 +184152,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedCentresInput = {
@@ -182142,6 +184250,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182185,6 +184295,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedCentresInput = {
@@ -182218,6 +184329,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182260,6 +184373,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AfterSchoolCentreUpsertWithoutProgramManagersInput = {
@@ -182347,6 +184461,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -182390,6 +184506,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutManagedLivelihoodProgramsInput = {
@@ -182423,6 +184540,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -182465,6 +184584,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutManagedLivelihoodProgramsInput = {
@@ -182546,6 +184666,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182589,6 +184711,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagedLivelihoodProgramsInput = {
@@ -182622,6 +184745,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182664,6 +184789,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LivelihoodProgramUpsertWithoutProgramManagersInput = {
@@ -182735,6 +184861,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -182778,6 +184906,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmTasksInput = {
@@ -182811,6 +184940,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -182853,6 +184984,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmTasksInput = {
@@ -182927,6 +185059,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182970,6 +185104,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTasksInput = {
@@ -183003,6 +185138,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183045,6 +185182,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProgramManagerTaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -183124,6 +185262,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183167,6 +185307,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPmTaskCommentsInput = {
@@ -183200,6 +185341,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183242,6 +185385,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPmTaskCommentsInput = {
@@ -183327,6 +185471,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183370,6 +185516,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPmTaskCommentsInput = {
@@ -183403,6 +185550,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183445,6 +185594,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAssignedTasksInput = {
@@ -183477,6 +185627,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183520,6 +185672,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -183553,6 +185706,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183595,6 +185750,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -183632,6 +185788,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183675,6 +185833,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -183708,6 +185867,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -183750,6 +185911,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -183854,6 +186016,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183897,6 +186061,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -183930,6 +186095,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183972,6 +186139,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -184015,6 +186183,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184058,6 +186228,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -184091,6 +186262,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184133,6 +186306,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskCommentUpsertWithWhereUniqueWithoutTaskInput = {
@@ -184238,6 +186412,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -184281,6 +186457,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsNewInput = {
@@ -184314,6 +186491,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -184356,6 +186535,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsNewInput = {
@@ -184451,6 +186631,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184494,6 +186676,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsNewInput = {
@@ -184527,6 +186710,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184569,6 +186754,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskCreateWithoutDocumentsInput = {
@@ -184642,6 +186828,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -184685,6 +186873,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskDocumentsInput = {
@@ -184718,6 +186907,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -184760,6 +186951,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskDocumentsInput = {
@@ -184855,6 +187047,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184898,6 +187092,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskDocumentsInput = {
@@ -184931,6 +187126,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -184973,6 +187170,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCreatedAssetsInput = {
@@ -185005,6 +187203,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185048,6 +187248,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedAssetsInput = {
@@ -185081,6 +187282,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185123,6 +187326,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedAssetsInput = {
@@ -185207,6 +187411,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185250,6 +187456,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedAssetsInput = {
@@ -185283,6 +187490,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185325,6 +187534,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AssetAssignmentUpsertWithWhereUniqueWithoutAssetInput = {
@@ -185406,6 +187616,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185449,6 +187661,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsInput = {
@@ -185482,6 +187695,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185524,6 +187739,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsInput = {
@@ -185561,6 +187777,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185604,6 +187822,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssetAssignmentsMadeInput = {
@@ -185637,6 +187856,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -185679,6 +187900,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssetAssignmentsMadeInput = {
@@ -185766,6 +187988,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185809,6 +188033,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsInput = {
@@ -185842,6 +188067,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185884,6 +188111,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutAssetAssignmentsMadeInput = {
@@ -185927,6 +188155,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -185970,6 +188200,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssetAssignmentsMadeInput = {
@@ -186003,6 +188234,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -186045,6 +188278,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SchoolCreateWithoutProgramsInput = {
@@ -190035,6 +192269,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190078,6 +192314,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVerifiedTransactionsInput = {
@@ -190111,6 +192348,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190153,6 +192392,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVerifiedTransactionsInput = {
@@ -190267,6 +192507,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190310,6 +192552,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVerifiedTransactionsInput = {
@@ -190343,6 +192586,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190385,6 +192630,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type IncidentResourceNeedUpsertWithoutTransactionsInput = {
@@ -190454,6 +192700,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190497,6 +192745,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAttendanceLogsInput = {
@@ -190530,6 +192779,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190572,6 +192823,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAttendanceLogsInput = {
@@ -190620,6 +192872,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190663,6 +192917,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAttendanceLogsInput = {
@@ -190696,6 +192951,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -190738,6 +192995,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLeavesInput = {
@@ -190770,6 +193028,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190813,6 +193073,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeavesInput = {
@@ -190846,6 +193107,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -190888,6 +193151,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeavesInput = {
@@ -190965,6 +193229,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -191008,6 +193274,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeavesInput = {
@@ -191041,6 +193308,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -191083,6 +193352,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CompOffCreditUpsertWithoutLeaveInput = {
@@ -191150,6 +193420,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -191193,6 +193465,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCompOffCreditsInput = {
@@ -191226,6 +193499,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -191268,6 +193543,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCompOffCreditsInput = {
@@ -191361,6 +193637,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -191404,6 +193682,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompOffCreditsInput = {
@@ -191437,6 +193716,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -191479,6 +193760,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LeaveUpsertWithoutCompOffCreditInput = {
@@ -191835,6 +194117,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -191878,6 +194162,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReliefDistributionsInput = {
@@ -191911,6 +194196,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -191953,6 +194240,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReliefDistributionsInput = {
@@ -192074,6 +194362,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192117,6 +194407,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReliefDistributionsInput = {
@@ -192150,6 +194441,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192192,6 +194485,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReliefDistributionItemUpsertWithWhereUniqueWithoutDistributionInput = {
@@ -192661,6 +194955,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -192704,6 +195000,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaskCommentsInput = {
@@ -192737,6 +195034,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -192779,6 +195078,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaskCommentsInput = {
@@ -192864,6 +195164,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192907,6 +195209,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaskCommentsInput = {
@@ -192940,6 +195243,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192982,6 +195287,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BeneficiaryCreateWithoutResilienceSurveysInput = {
@@ -194379,6 +196685,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -194422,6 +196730,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCoachingRecordsInput = {
@@ -194455,6 +196764,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -194497,6 +196808,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCoachingRecordsInput = {
@@ -194620,6 +196932,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -194663,6 +196977,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCoachingRecordsInput = {
@@ -194696,6 +197011,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -194738,6 +197055,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FellowCreateWithoutEngagementSurveysInput = {
@@ -195127,6 +197445,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195170,6 +197490,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutIndividualFeedbackInput = {
@@ -195203,6 +197524,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195245,6 +197568,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutIndividualFeedbackInput = {
@@ -195368,6 +197692,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -195411,6 +197737,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutIndividualFeedbackInput = {
@@ -195444,6 +197771,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -195486,6 +197815,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutTravelRequestsInput = {
@@ -195518,6 +197848,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195561,6 +197893,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTravelRequestsInput = {
@@ -195594,6 +197927,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195636,6 +197971,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTravelRequestsInput = {
@@ -195673,6 +198009,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195716,6 +198054,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovedTravelInput = {
@@ -195749,6 +198088,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195791,6 +198132,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovedTravelInput = {
@@ -195828,6 +198170,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195871,6 +198215,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRevertedTravelInput = {
@@ -195904,6 +198249,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -195946,6 +198293,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRevertedTravelInput = {
@@ -196026,6 +198374,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196069,6 +198419,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTravelRequestsInput = {
@@ -196102,6 +198453,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196144,6 +198497,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutApprovedTravelInput = {
@@ -196187,6 +198541,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196230,6 +198586,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovedTravelInput = {
@@ -196263,6 +198620,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196305,6 +198664,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutRevertedTravelInput = {
@@ -196348,6 +198708,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196391,6 +198753,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRevertedTravelInput = {
@@ -196424,6 +198787,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -196466,6 +198831,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TravelExpenseUpsertWithWhereUniqueWithoutTravelRequestInput = {
@@ -196629,6 +198995,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -196672,6 +199040,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementRequestsInput = {
@@ -196705,6 +199074,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -196747,6 +199118,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementRequestsInput = {
@@ -196784,6 +199156,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -196827,6 +199201,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsVerifiedInput = {
@@ -196860,6 +199235,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -196902,6 +199279,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsVerifiedInput = {
@@ -196939,6 +199317,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -196982,6 +199362,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsApprovedInput = {
@@ -197015,6 +199396,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -197057,6 +199440,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsApprovedInput = {
@@ -197094,6 +199478,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -197137,6 +199523,7 @@ export namespace Prisma {
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReimbursementsReimbursedInput = {
@@ -197170,6 +199557,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -197212,6 +199601,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReimbursementsReimbursedInput = {
@@ -197294,6 +199684,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197337,6 +199729,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementRequestsInput = {
@@ -197370,6 +199763,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197412,6 +199807,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsVerifiedInput = {
@@ -197455,6 +199851,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197498,6 +199896,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsVerifiedInput = {
@@ -197531,6 +199930,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197573,6 +199974,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsApprovedInput = {
@@ -197616,6 +200018,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197659,6 +200063,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsApprovedInput = {
@@ -197692,6 +200097,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197734,6 +200141,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReimbursementsReimbursedInput = {
@@ -197777,6 +200185,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197820,6 +200230,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReimbursementsReimbursedInput = {
@@ -197853,6 +200264,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -197895,6 +200308,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReimbursementItemUpsertWithWhereUniqueWithoutReimbursementInput = {
@@ -202664,6 +205078,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -202707,6 +205123,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckInEdits?: TeamCheckInCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTeamCheckInsInput = {
@@ -202740,6 +205157,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -202782,6 +205201,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckInEdits?: TeamCheckInUncheckedCreateNestedManyWithoutLastEditedByInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTeamCheckInsInput = {
@@ -202819,6 +205239,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -202862,6 +205284,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInCreateNestedManyWithoutUserInput
+    verificationTokens?: VerificationTokenCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTeamCheckInEditsInput = {
@@ -202895,6 +205318,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -202937,6 +205362,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedCreateNestedManyWithoutAssignedByInput
     createdAssets?: AssetUncheckedCreateNestedManyWithoutCreatedByInput
     teamCheckIns?: TeamCheckInUncheckedCreateNestedManyWithoutUserInput
+    verificationTokens?: VerificationTokenUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTeamCheckInEditsInput = {
@@ -203017,6 +205443,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203060,6 +205488,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeamCheckInsInput = {
@@ -203093,6 +205522,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203135,6 +205566,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutTeamCheckInEditsInput = {
@@ -203178,6 +205610,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203221,6 +205655,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTeamCheckInEditsInput = {
@@ -203254,6 +205689,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203296,6 +205733,7 @@ export namespace Prisma {
     assetAssignmentsMade?: AssetAssignmentUncheckedUpdateManyWithoutAssignedByNestedInput
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TeamCheckInPromiseUpsertWithWhereUniqueWithoutCheckInInput = {
@@ -203451,6 +205889,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -203496,6 +205936,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203539,6 +205981,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -203571,6 +206014,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203614,6 +206059,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -203646,6 +206092,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -203714,6 +206162,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -203752,6 +206202,8 @@ export namespace Prisma {
     resignationReason?: string | null
     inactiveSince?: Date | string | null
     avatar?: string | null
+    otp?: string | null
+    otpExpiry?: Date | string | null
     leavesTaken?: number
     leavesRemaining?: number
     createdAt?: Date | string
@@ -203817,9 +206269,11 @@ export namespace Prisma {
     checkInLat?: number | null
     checkInLng?: number | null
     checkInAccuracy?: number | null
+    checkInSelfie?: string | null
     checkOutLat?: number | null
     checkOutLng?: number | null
     checkOutAccuracy?: number | null
+    checkOutSelfie?: string | null
     lessonPlanText?: string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: boolean | null
@@ -204255,6 +206709,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type VerificationTokenCreateManyUserInput = {
+    id?: string
+    token: string
+    type: string
+    expiresAt: Date | string
+    used?: boolean
+    createdAt?: Date | string
+  }
+
   export type UserPermissionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPermissionTypeFieldUpdateOperationsInput | $Enums.PermissionType
@@ -204309,6 +206772,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204352,6 +206817,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedByInput = {
@@ -204385,6 +206851,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204427,6 +206895,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCreatedByInput = {
@@ -204460,6 +206929,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204497,6 +206968,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204540,6 +207013,7 @@ export namespace Prisma {
     createdAssets?: AssetUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutManagerInput = {
@@ -204573,6 +207047,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204615,6 +207091,7 @@ export namespace Prisma {
     createdAssets?: AssetUncheckedUpdateManyWithoutCreatedByNestedInput
     teamCheckIns?: TeamCheckInUncheckedUpdateManyWithoutUserNestedInput
     teamCheckInEdits?: TeamCheckInUncheckedUpdateManyWithoutLastEditedByNestedInput
+    verificationTokens?: VerificationTokenUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutManagerInput = {
@@ -204648,6 +207125,8 @@ export namespace Prisma {
     resignationReason?: NullableStringFieldUpdateOperationsInput | string | null
     inactiveSince?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpExpiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     leavesTaken?: IntFieldUpdateOperationsInput | number
     leavesRemaining?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -204801,9 +207280,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -204829,9 +207310,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -204857,9 +207340,11 @@ export namespace Prisma {
     checkInLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkInAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkInSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     checkOutLat?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutLng?: NullableFloatFieldUpdateOperationsInput | number | null
     checkOutAccuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    checkOutSelfie?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanText?: NullableStringFieldUpdateOperationsInput | string | null
     lessonPlanFiles?: NullableJsonNullValueInput | InputJsonValue
     isTeachingDay?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -206175,6 +208660,33 @@ export namespace Prisma {
     submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VerificationTokenUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VerificationTokenUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VerificationTokenUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    used?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RolePermissionCreateManyPermissionInput = {

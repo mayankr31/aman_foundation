@@ -538,6 +538,17 @@ export default function UserAttendanceDetails({ params }) {
                   accuracy={selectedDate.checkInAccuracy}
                   className="mt-2"
                 />
+                {selectedDate.checkInSelfie && (
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold text-gray-500 uppercase mb-1">Selfie</p>
+                    <FilePreviewImage
+                      src={selectedDate.checkInSelfie}
+                      alt="Check-in selfie"
+                      name="Check-in selfie"
+                      className="h-24 w-24 rounded-lg border border-gray-200 object-cover"
+                    />
+                  </div>
+                )}
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Check Out</p>
@@ -548,6 +559,17 @@ export default function UserAttendanceDetails({ params }) {
                   accuracy={selectedDate.checkOutAccuracy}
                   className="mt-2"
                 />
+                {selectedDate.checkOutSelfie && (
+                  <div className="mt-3">
+                    <p className="text-[10px] font-semibold text-gray-500 uppercase mb-1">Selfie</p>
+                    <FilePreviewImage
+                      src={selectedDate.checkOutSelfie}
+                      alt="Check-out selfie"
+                      name="Check-out selfie"
+                      className="h-24 w-24 rounded-lg border border-gray-200 object-cover"
+                    />
+                  </div>
+                )}
               </div>
               <div className="bg-gray-50 p-4 rounded-lg col-span-2 flex justify-between items-center">
                  <div>
