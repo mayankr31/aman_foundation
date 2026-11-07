@@ -25,6 +25,7 @@ import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import AssignmentsSection from "@/components/AssignmentsSection";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
+import { getManagerCandidates } from "@/lib/roleHierarchy";
 import dynamic from "next/dynamic";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -54,6 +55,7 @@ function FellowProfileDetailContent() {
   const [fellow, setFellow] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
+  const [managers, setManagers] = useState([]);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [goalSheets, setGoalSheets] = useState([]);
   const [coachingRecords, setCoachingRecords] = useState([]);
@@ -116,6 +118,20 @@ function FellowProfileDetailContent() {
       loadFellowDetail();
     }
   }, [id, token, isInitializing]);
+
+  useEffect(() => {
+    if (!token) return;
+    if (user?.roleName !== "ADMIN" && user?.roleName !== "HR" && !can("employees", "READ")) {
+      return;
+    }
+    fetch("/api/users", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (json?.success) setManagers(json.data || []);
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, user]);
 
   useEffect(() => {
     async function loadCoachingRecords() {
@@ -352,9 +368,14 @@ function FellowProfileDetailContent() {
     avatar: fellowUser.avatar || fellow.avatar,
     dateOfJoining: fellowUser.dateOfJoining,
   };
+  const managerOptions = getManagerCandidates(managers, fellowUser.role?.name, {
+    excludeUserId: fellowUser.id,
+  });
   const canEditPersonalDetails =
     user?.roleName === "ADMIN" ||
-    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
+    user?.roleName === "HR" ||
+    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE")) ||
+    (can("education", "WRITE") && fellowUser.managerId === user?.id);
   const canEditAssignments =
     user?.roleName === "ADMIN" ||
     (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
@@ -954,6 +975,11 @@ function FellowProfileDetailContent() {
                 avatarUploadUrl={fellow.userId ? `/api/users/${fellow.userId}/avatar` : null}
                 onSubmit={handlePersonalDetailsSaved}
                 onCancel={() => setShowPersonalDetailsForm(false)}
+                showEmployment
+                canEditDepartment
+                canEditReporting
+                canEditExit
+                managerOptions={managerOptions}
                 onAvatarUpdated={(url) => {
                   setFellow((prev) => (prev ? { ...prev, avatar: url } : prev));
                 }}

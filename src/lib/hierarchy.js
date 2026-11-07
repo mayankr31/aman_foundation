@@ -86,7 +86,7 @@ export async function canAssignPerson(actor, targetUserId, { allowSelf = false }
 
   const target = await prisma.user.findUnique({
     where: { id: targetUserId },
-    select: { status: true, role: { select: { name: true } } },
+    select: { status: true, role: { select: { name: true, displayName: true, rank: true } } },
   });
   if (!target) return false;
   if (target.status && target.status !== "ACTIVE") return false;

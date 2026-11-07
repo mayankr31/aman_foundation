@@ -14,7 +14,7 @@ export async function getTeamCheckInOwner(ownerUserId) {
       name: true,
       managerId: true,
       avatar: true,
-      role: { select: { name: true } },
+      role: { select: { name: true, displayName: true, rank: true } },
     },
   });
 }

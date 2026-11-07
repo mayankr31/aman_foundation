@@ -83,7 +83,7 @@ export default function TeamToday() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-on-surface truncate">{person.name}</p>
                     <p className="text-[11px] text-on-surface-variant truncate">
-                      {formatRoleLabel(person.role?.name)}
+                      {formatRoleLabel(person.role)}
                       {person.department ? ` · ${person.department}` : ""}
                     </p>
                   </div>
@@ -117,7 +117,7 @@ export default function TeamToday() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-on-surface truncate">{leave.user?.name || "Employee"}</p>
                     <p className="text-[11px] text-on-surface-variant truncate">
-                      {formatRoleLabel(leave.user?.role?.name)}
+                      {formatRoleLabel(leave.user?.role)}
                       {leave.leaveTypes?.length ? ` · ${leave.leaveTypes.join(", ")}` : ""}
                     </p>
                   </div>

@@ -111,6 +111,16 @@ export function computeAttendanceMetrics(log, now = new Date()) {
       ? secondsBetween(shiftStart, checkInAt)
       : 0;
 
+  const lateInSeconds =
+    workingDay && shiftStart && checkInAt > shiftStart
+      ? secondsBetween(checkInAt, shiftStart)
+      : 0;
+
+  const earlyOutSeconds =
+    !running && !autoClosed && workingDay && shiftEnd && checkOutAt && checkOutAt < shiftEnd
+      ? secondsBetween(shiftEnd, checkOutAt)
+      : 0;
+
   const lateSeconds =
     !autoClosed && workingDay && shiftEnd && checkOutAt && checkOutAt > shiftEnd
       ? secondsBetween(checkOutAt, shiftEnd)
@@ -129,6 +139,8 @@ export function computeAttendanceMetrics(log, now = new Date()) {
     checkOutAt,
     workSeconds,
     earlySeconds,
+    lateInSeconds,
+    earlyOutSeconds,
     lateSeconds,
     extraSeconds,
     standardSeconds: STANDARD_WORK_SECONDS,
@@ -141,6 +153,8 @@ export function computeAttendanceMetrics(log, now = new Date()) {
     running,
     workHours: formatWorkHours(workSeconds),
     earlyHours: formatWorkHours(earlySeconds),
+    lateInHours: formatWorkHours(lateInSeconds),
+    earlyOutHours: formatWorkHours(earlyOutSeconds),
     lateHours: formatWorkHours(lateSeconds),
     extraHours: formatWorkHours(extraSeconds),
   };

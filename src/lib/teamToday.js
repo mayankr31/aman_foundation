@@ -36,7 +36,7 @@ async function findTodayBirthdays(scope) {
       dob: true,
       avatar: true,
       department: true,
-      role: { select: { name: true } },
+      role: { select: { name: true, displayName: true, rank: true } },
     },
     orderBy: { name: "asc" },
   });
@@ -65,7 +65,7 @@ export async function ensureBirthdayNotifications(now = new Date()) {
           name: true,
           dob: true,
           managerId: true,
-          role: { select: { name: true } },
+          role: { select: { name: true, displayName: true, rank: true } },
         },
       }),
       getAdminUserIds(),
@@ -80,7 +80,7 @@ export async function ensureBirthdayNotifications(now = new Date()) {
       if (!recipients.length) continue;
 
       const roleLabel = birthdayUser.role?.name
-        ? ` (${formatRoleLabel(birthdayUser.role.name)})`
+        ? ` (${formatRoleLabel(birthdayUser.role)})`
         : "";
 
       await notifyUsers(recipients, {
@@ -146,7 +146,7 @@ export async function getTodayLeaves(user) {
           name: true,
           avatar: true,
           department: true,
-          role: { select: { name: true } },
+          role: { select: { name: true, displayName: true, rank: true } },
         },
       },
     },

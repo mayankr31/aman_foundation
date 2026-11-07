@@ -200,7 +200,7 @@ export default function UserAttendanceDetails({ params }) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const rows = [['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late Out', 'Extra Hours', 'Tasks']];
+    const rows = [['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late In', 'Early Out', 'Late Out', 'Extra Hours', 'Tasks']];
     
     for (let day = 1; day <= daysInMonth; day++) {
       const yyyy = year;
@@ -228,12 +228,14 @@ export default function UserAttendanceDetails({ params }) {
           data.outtimelog || 'N/A',
           data.metrics?.autoClosed ? 'Auto checkout' : data.workhours || 'N/A',
           data.metrics?.earlyHours || '0h 0m',
+          data.metrics?.lateInHours || '0h 0m',
+          data.metrics?.earlyOutHours || '0h 0m',
           data.metrics?.lateHours || '0h 0m',
           data.metrics?.autoClosed ? 'Not counted (auto checkout)' : data.metrics?.extraHours || '0h 0m',
           `"${tasks.replace(/"/g, '""')}"`
         ]);
       } else {
-        rows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
+        rows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
       }
     }
     
@@ -267,7 +269,7 @@ export default function UserAttendanceDetails({ params }) {
         doc.text(`Average Check-out: ${analytics.averageCheckOutTime}`, 14, 60);
         doc.text(`Extra Hours: ${analytics.extraHours} (${SHIFT_LABEL})`, 14, 66);
 
-        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late Out', 'Extra Hours', 'Tasks'];
+        const tableColumn = ['Date', 'Status', 'Login Time', 'Logout Time', 'Work Hours', 'Early In', 'Late In', 'Early Out', 'Late Out', 'Extra Hours', 'Tasks'];
         const tableRows = [];
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         
@@ -297,12 +299,14 @@ export default function UserAttendanceDetails({ params }) {
               data.outtimelog || 'N/A',
               data.metrics?.autoClosed ? 'Auto checkout' : data.workhours || 'N/A',
               data.metrics?.earlyHours || '0h 0m',
+              data.metrics?.lateInHours || '0h 0m',
+              data.metrics?.earlyOutHours || '0h 0m',
               data.metrics?.lateHours || '0h 0m',
               data.metrics?.autoClosed ? 'Auto checkout' : data.metrics?.extraHours || '0h 0m',
               tasks
             ]);
           } else {
-            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
+            tableRows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
           }
         }
 
@@ -593,10 +597,18 @@ export default function UserAttendanceDetails({ params }) {
                     This shift was auto-closed at midnight, so extra time is not counted.
                   </p>
                 )}
-                <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-center">
                   <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
                     <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Early In</p>
                     <p className="text-sm font-bold text-amber-700 tabular-nums">{selectedDate.metrics?.earlyHours || "0h 0m"}</p>
+                  </div>
+                  <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Late In</p>
+                    <p className="text-sm font-bold text-rose-700 tabular-nums">{selectedDate.metrics?.lateInHours || "0h 0m"}</p>
+                  </div>
+                  <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Early Out</p>
+                    <p className="text-sm font-bold text-orange-700 tabular-nums">{selectedDate.metrics?.earlyOutHours || "0h 0m"}</p>
                   </div>
                   <div className="rounded-lg bg-white/80 border border-emerald-100 px-2 py-2">
                     <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Late Out</p>

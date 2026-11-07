@@ -11,6 +11,7 @@ import {
   istDayEnd,
 } from "@/lib/time";
 import { parseLegacyTime } from "@/lib/attendanceMetrics";
+import { REQUIRED_ACCURACY_METERS } from "@/lib/geolocation";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +44,27 @@ function sanitizeAccuracy(value) {
 function sanitizeSelfieUrl(value) {
   if (typeof value !== "string") return null;
   const url = value.trim();
-  return /^\/uploads\/attendance-selfies\/[A-Za-z0-9._-]+$/.test(url) ? url : null;
+  return /^\/(?:api\/)?uploads\/attendance-selfies\/[A-Za-z0-9._-]+$/.test(url) ? url : null;
+}
+
+function validatePreciseLocation(latValue, lngValue, accuracyValue, label) {
+  const lat = sanitizeLatitude(latValue);
+  const lng = sanitizeLongitude(lngValue);
+  const accuracy = sanitizeAccuracy(accuracyValue);
+
+  if (lat === null || lng === null) {
+    return { error: `${label} location is required. Turn on location/GPS and try again.` };
+  }
+  if (accuracy === null) {
+    return { error: `${label} location accuracy could not be verified. Turn on precise location and try again.` };
+  }
+  if (accuracy > REQUIRED_ACCURACY_METERS) {
+    return {
+      error: `${label} location is not precise enough (±${Math.round(accuracy)} m). Move to an open area with GPS enabled and retry.`,
+    };
+  }
+
+  return { lat, lng, accuracy };
 }
 
 async function closeStaleShifts(userIds = null) {
@@ -114,7 +135,7 @@ export async function GET(req) {
             name: true,
             email: true,
             department: true,
-            role: { select: { name: true } },
+            role: { select: { name: true, displayName: true, rank: true } },
           },
         },
       },
@@ -207,21 +228,26 @@ export async function POST(req) {
       return NextResponse.json({ success: true, data: existing });
     }
 
-    // Fellows must plan at least one task for the day before checking in.
-    if (user.role.name === "FELLOW") {
-      const taskCount = await prisma.task.count({ where: dailyTaskWhere(user.id, today) });
-      if (taskCount === 0) {
-        return NextResponse.json(
-          { error: "Add at least one task for today before checking in." },
-          { status: 400 }
-        );
-      }
+    // Every role must plan at least one task for the day before checking in.
+    const taskCount = await prisma.task.count({ where: dailyTaskWhere(user.id, today) });
+    if (taskCount === 0) {
+      return NextResponse.json(
+        { error: "Add at least one task for today before checking in." },
+        { status: 400 }
+      );
+    }
+
+    const location = validatePreciseLocation(
+      body.checkInLat,
+      body.checkInLng,
+      body.checkInAccuracy,
+      "Check-in"
+    );
+    if (location.error) {
+      return NextResponse.json({ error: location.error }, { status: 400 });
     }
 
     const now = new Date();
-    const checkInLat = sanitizeLatitude(body.checkInLat);
-    const checkInLng = sanitizeLongitude(body.checkInLng);
-    const hasCheckInLocation = checkInLat !== null && checkInLng !== null;
     const logData = {
       email: user.email,
       logdate,
@@ -232,9 +258,9 @@ export async function POST(req) {
       ef1: body.ef1 ?? existing?.ef1,
       ef2: body.ef2 ?? existing?.ef2,
       logininfo: body.logininfo,
-      checkInLat: hasCheckInLocation ? checkInLat : null,
-      checkInLng: hasCheckInLocation ? checkInLng : null,
-      checkInAccuracy: hasCheckInLocation ? sanitizeAccuracy(body.checkInAccuracy) : null,
+      checkInLat: location.lat,
+      checkInLng: location.lng,
+      checkInAccuracy: location.accuracy,
       checkInSelfie: sanitizeSelfieUrl(body.checkInSelfie),
       lessonPlanText: body.lessonPlanText ?? existing?.lessonPlanText,
       isTeachingDay:
@@ -281,10 +307,23 @@ export async function PATCH(req) {
     }
 
     const isCheckout = body.checkout === true || body.outtimelog != null;
-    const checkOutLat = sanitizeLatitude(body.checkOutLat);
-    const checkOutLng = sanitizeLongitude(body.checkOutLng);
-    const hasCheckOutLocation = checkOutLat !== null && checkOutLng !== null;
+    const needsLocation = isCheckout && !existingLog.outtimelog;
+    let checkoutLocation = null;
+
+    if (needsLocation) {
+      checkoutLocation = validatePreciseLocation(
+        body.checkOutLat,
+        body.checkOutLng,
+        body.checkOutAccuracy,
+        "Check-out"
+      );
+      if (checkoutLocation.error) {
+        return NextResponse.json({ error: checkoutLocation.error }, { status: 400 });
+      }
+    }
+
     const hasCheckOutPayload =
+      needsLocation ||
       body.checkOutLat !== undefined ||
       body.checkOutLng !== undefined ||
       body.checkOutAccuracy !== undefined;
@@ -301,9 +340,11 @@ export async function PATCH(req) {
         checkOutSelfie: sanitizeSelfieUrl(body.checkOutSelfie),
       }),
       ...(hasCheckOutPayload && {
-        checkOutLat: hasCheckOutLocation ? checkOutLat : null,
-        checkOutLng: hasCheckOutLocation ? checkOutLng : null,
-        checkOutAccuracy: hasCheckOutLocation ? sanitizeAccuracy(body.checkOutAccuracy) : null,
+        checkOutLat: checkoutLocation ? checkoutLocation.lat : sanitizeLatitude(body.checkOutLat),
+        checkOutLng: checkoutLocation ? checkoutLocation.lng : sanitizeLongitude(body.checkOutLng),
+        checkOutAccuracy: checkoutLocation
+          ? checkoutLocation.accuracy
+          : sanitizeAccuracy(body.checkOutAccuracy),
       }),
     };
 

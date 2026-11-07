@@ -111,7 +111,7 @@ export default function EditRoleModal({
           <div className="flex flex-col gap-2">
             <label className={labelClass}>Current Role</label>
             <div className={`w-full px-4 py-3 rounded-xl text-sm font-semibold border ${theme.text} ${theme.inputBg} ${theme.inputBorder}`}>
-              {formatRoleLabel(currentRoleName)}
+              {formatRoleLabel(user?.role || currentRoleName)}
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export default function EditRoleModal({
               <option value="" disabled>Select a role</option>
               {roles.map((role) => (
                 <option key={role.id} value={role.id}>
-                  {formatRoleLabel(role.name)}
+                  {formatRoleLabel(role)}
                 </option>
               ))}
             </select>

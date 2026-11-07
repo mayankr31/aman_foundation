@@ -6,7 +6,7 @@ export const reimbursementInclude = {
       email: true,
       department: true,
       mobile: true,
-      role: { select: { name: true } }
+      role: { select: { name: true, displayName: true, rank: true } }
     }
   },
   verifier: { select: { id: true, name: true } },

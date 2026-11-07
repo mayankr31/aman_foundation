@@ -27,6 +27,7 @@ import FilePreviewImage from "@/components/files/FilePreviewImage";
 import Avatar from "@/components/ui/Avatar";
 import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
 import { formatRoleLabel } from "@/lib/roles";
+import { getMissingProfileFields } from "@/lib/profileCompleteness";
 import dynamic from "next/dynamic";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -48,13 +49,15 @@ export default function ProfilePage() {
 }
 
 function ProfilePageContent() {
-  const { token, isInitializing, user: currentUser, can, canDeleteRecords } = useAuth();
+  const { token, isInitializing, user: currentUser, can, canDeleteRecords, setUser } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
+  const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(
+    () => searchParams.get("edit") === "1" || searchParams.get("complete") === "1"
+  );
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
 
   // Fellow specific dashboard states
@@ -252,6 +255,12 @@ function ProfilePageContent() {
 
       setProfile(json.data);
       setShowPersonalDetailsForm(false);
+      if (currentUser) {
+        setUser({
+          ...currentUser,
+          profileIncomplete: Boolean(json.data.profileIncomplete),
+        });
+      }
 
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
@@ -379,6 +388,23 @@ function ProfilePageContent() {
         <p className="text-sm font-medium text-on-surface-variant max-w-2xl leading-relaxed">
           Manage your account profile, personal placement settings, and track classroom indicators.
         </p>
+        {getMissingProfileFields(profile).length > 0 && (
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-amber-900">Your personal details are incomplete</p>
+              <p className="text-xs text-amber-800 mt-0.5">
+                Please fill in the mandatory personal details to finish setting up your profile.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowPersonalDetailsForm(true)}
+              className="shrink-0 rounded-full bg-amber-600 px-4 py-2 text-xs font-bold text-white hover:bg-amber-700 transition-colors"
+            >
+              Complete now
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Hero Card */}
@@ -403,7 +429,7 @@ function ProfilePageContent() {
                     {profile.name}
                   </h2>
                   <span className="bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                    {formatRoleLabel(profile.role?.name)}
+                    {formatRoleLabel(profile.role)}
                   </span>
                 </div>
                 <p className="text-on-surface-variant font-medium mb-3 flex flex-wrap justify-center md:justify-start items-center gap-2 break-words">
@@ -420,7 +446,8 @@ function ProfilePageContent() {
                 {isFellow && (
                   <div className="text-xs font-medium text-slate-500 font-sans flex flex-wrap justify-center md:justify-start gap-4">
                     <div>
-                      <span className="font-bold text-on-surface">District:</span> {profile.fellow.address || "Kalgachia, Assam"}
+                      <span className="font-bold text-on-surface">District:</span>{" "}
+                      {profile.district || profile.fellow.address || "—"}
                     </div>
                     <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
                     <div>
@@ -570,7 +597,7 @@ function ProfilePageContent() {
               <TeamCheckInSection
                 userId={profile.id}
                 memberName={profile.name}
-                memberRole={profile.role?.name}
+                memberRole={profile.role}
                 memberManagerId={profile.managerId}
               />
             )}
@@ -1003,6 +1030,11 @@ function ProfilePageContent() {
                 avatarUploadUrl={`/api/users/${profile.id}/avatar`}
                 onSubmit={handleSavePersonalDetails}
                 onCancel={() => setShowPersonalDetailsForm(false)}
+                showEmployment
+                canEditDepartment={false}
+                canEditReporting={false}
+                canEditExit={false}
+                readOnlyManagerName={profile.manager?.name || "No manager / top level"}
                 onAvatarUpdated={(url) => {
                   setProfile((prev) => (prev ? {
                     ...prev,

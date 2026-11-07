@@ -155,7 +155,7 @@ function DashboardConfigModalContent({ onClose, scope, entity, token }) {
 
   const displayName =
     scope === "role"
-      ? formatRoleLabel(entity?.name)
+      ? formatRoleLabel(entity)
       : entity?.name || entity?.username || "this user";
 
   const hasItems = options.kpis.length > 0 || options.sections.length > 0;

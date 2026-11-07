@@ -32,7 +32,7 @@ export async function GET(req, { params }) {
     const leave = await prisma.leave.findUnique({
       where: { id },
       include: {
-        user: { select: { id: true, name: true, email: true, username: true, mobile: true, role: { select: { name: true } }, leavesTaken: true, leavesRemaining: true } },
+        user: { select: { id: true, name: true, email: true, username: true, mobile: true, role: { select: { name: true, displayName: true, rank: true } }, leavesTaken: true, leavesRemaining: true } },
         compOffCredit: true,
       },
     });

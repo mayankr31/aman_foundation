@@ -302,7 +302,7 @@ export default function AssetsPage() {
                           <div className="min-w-0">
                             <p className="text-xs font-semibold text-on-surface break-words">{display.user.name}</p>
                             <p className="text-[10px] text-on-surface-variant break-words">
-                              {formatRoleLabel(display.user.role?.name)}
+                              {formatRoleLabel(display.user.role)}
                               {display.user.employeeId ? ` · ${display.user.employeeId}` : ""}
                               {!current ? " · Returned" : ""}
                             </p>

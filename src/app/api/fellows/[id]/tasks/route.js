@@ -18,7 +18,7 @@ function parseDateOnly(value) {
 
 function includeTask() {
   return {
-    assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+    assignee: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
     assignedBy: { select: { id: true, name: true } },
     comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } },
     documents: { orderBy: { createdAt: "asc" } },

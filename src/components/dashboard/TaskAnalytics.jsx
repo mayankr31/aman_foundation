@@ -19,7 +19,22 @@ const PRIORITY_COLORS = {
   Urgent: "#ef4444",
 };
 
-function DonutChart({ data, colors }) {
+const STATUS_BADGE = {
+  Pending: "bg-amber-100 text-amber-800",
+  "In Progress": "bg-blue-100 text-blue-800",
+  Completed: "bg-emerald-100 text-emerald-800",
+  Blocked: "bg-rose-100 text-rose-800",
+  Cancelled: "bg-slate-200 text-slate-600",
+};
+
+const PRIORITY_BADGE = {
+  Low: "bg-slate-100 text-slate-700",
+  Medium: "bg-blue-100 text-blue-800",
+  High: "bg-amber-100 text-amber-800",
+  Urgent: "bg-rose-100 text-rose-800",
+};
+
+function DonutChart({ data, colors, emptyLabel = "No data yet." }) {
   const [active, setActive] = useState(null);
   const entries = Object.entries(data || {}).filter(([, value]) => value > 0);
   const total = entries.reduce((sum, [, value]) => sum + value, 0);
@@ -35,7 +50,7 @@ function DonutChart({ data, colors }) {
   });
 
   if (!entries.length) {
-    return <p className="text-xs text-slate-500 text-center py-8">No priority data yet.</p>;
+    return <p className="text-xs text-slate-500 text-center py-8">{emptyLabel}</p>;
   }
 
   const activeEntry = active ? entries.find(([label]) => label === active) : null;
@@ -179,11 +194,55 @@ function TrendChart({ trend }) {
   );
 }
 
+function formatDayLabel(dateKey) {
+  if (!dateKey) return "";
+  const date = new Date(`${dateKey}T12:00:00+05:30`);
+  if (Number.isNaN(date.getTime())) return dateKey;
+  return date.toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Kolkata",
+  });
+}
+
 function CalendarHeatmap({ calendar }) {
+  const { token } = useAuth();
   const [monthDate, setMonthDate] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [dayTasks, setDayTasks] = useState([]);
+  const [dayLoading, setDayLoading] = useState(false);
+  const [dayError, setDayError] = useState("");
+
+  const openDay = async (dateKey) => {
+    if (!token) return;
+    setSelectedDate(dateKey);
+    setDayTasks([]);
+    setDayError("");
+    setDayLoading(true);
+    try {
+      const res = await fetch(`/api/tasks/analytics?deadline=${encodeURIComponent(dateKey)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Failed to load tasks");
+      setDayTasks(json.data?.tasks || []);
+    } catch (err) {
+      setDayError(err.message || "Failed to load tasks");
+    } finally {
+      setDayLoading(false);
+    }
+  };
+
+  const closeDay = () => {
+    setSelectedDate(null);
+    setDayTasks([]);
+    setDayError("");
+  };
 
   const today = new Date();
   const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
@@ -233,10 +292,15 @@ function CalendarHeatmap({ calendar }) {
         {values.map((item) => {
           const intensity = item.value === 0 ? 0.04 : 0.15 + (item.value / max) * 0.75;
           return (
-            <div
+            <button
               key={item.key}
+              type="button"
+              onClick={() => item.value > 0 && openDay(item.key)}
+              disabled={item.value === 0}
               title={`${item.day} ${monthDate.toLocaleString("default", { month: "short" })} ${year}: ${item.value} deadline${item.value === 1 ? "" : "s"}`}
-              className={`aspect-square rounded-lg p-1 flex flex-col justify-between border transition-transform hover:scale-[1.04] ${
+              className={`aspect-square rounded-lg p-1 flex flex-col justify-between border transition-transform text-left ${
+                item.value > 0 ? "cursor-pointer hover:scale-[1.04]" : "cursor-default"
+              } ${
                 item.key === todayKey
                   ? "border-emerald-500 ring-1 ring-emerald-500/40"
                   : "border-transparent"
@@ -249,7 +313,7 @@ function CalendarHeatmap({ calendar }) {
                   {item.value}
                 </span>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -260,6 +324,63 @@ function CalendarHeatmap({ calendar }) {
         ))}
         <span>More</span>
       </div>
+
+      {selectedDate && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div className="min-w-0">
+                <h4 className="text-base font-bold text-slate-900 dark:text-white">Tasks due</h4>
+                <p className="text-xs text-slate-500 mt-0.5">{formatDayLabel(selectedDate)}</p>
+              </div>
+              <button
+                type="button"
+                onClick={closeDay}
+                className="rounded-full bg-slate-100 dark:bg-slate-800 p-2 text-slate-500 hover:text-slate-800 dark:hover:text-white shrink-0"
+                aria-label="Close"
+              >
+                <span className="material-symbols-outlined text-lg leading-none">close</span>
+              </button>
+            </div>
+
+            {dayLoading ? (
+              <p className="py-8 text-center text-sm text-slate-500">Loading tasks...</p>
+            ) : dayError ? (
+              <p className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                {dayError}
+              </p>
+            ) : dayTasks.length === 0 ? (
+              <p className="py-8 text-center text-sm text-slate-500">No tasks have a deadline on this date.</p>
+            ) : (
+              <div className="space-y-2">
+                {dayTasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="rounded-xl border border-slate-200 dark:border-slate-800 p-3"
+                  >
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 break-words">
+                      {task.title}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${STATUS_BADGE[task.status] || "bg-slate-100 text-slate-700"}`}>
+                        {task.status}
+                      </span>
+                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${PRIORITY_BADGE[task.priority] || "bg-slate-100 text-slate-700"}`}>
+                        {task.priority}
+                      </span>
+                      {task.assignee?.name && (
+                        <span className="text-[10px] text-slate-500">
+                          {task.assignee.name}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -274,6 +395,8 @@ export default function TaskAnalytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [range, setRange] = useState("today");
+  const showingToday = range === "today";
 
   const allowed = can("task-analytics") || user?.roleName === "ADMIN";
 
@@ -304,13 +427,39 @@ export default function TaskAnalytics() {
 
   return (
     <section id="task-analytics" className="space-y-4 scroll-mt-24">
-      <div>
-        <h2 className="text-xl font-bold text-on-surface tracking-tight">Task Analytics</h2>
-        <p className="text-sm text-on-surface-variant mt-1">
-          {user?.roleName === "ADMIN"
-            ? "Organisation-wide task volume, completion and deadline trends."
-            : "Your tasks, your team's tasks and tasks you assigned."}
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-on-surface tracking-tight">Task Analytics</h2>
+          <p className="text-sm text-on-surface-variant mt-1">
+            {user?.roleName === "ADMIN"
+              ? "Organisation-wide task volume, completion and deadline trends."
+              : "Your tasks, your team's tasks and tasks you assigned."}
+          </p>
+        </div>
+        <div className="inline-flex shrink-0 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1">
+          <button
+            type="button"
+            onClick={() => setRange("today")}
+            className={`rounded-full px-3 py-1.5 text-[11px] font-bold transition-colors ${
+              showingToday
+                ? "bg-primary text-white"
+                : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            }`}
+          >
+            Today
+          </button>
+          <button
+            type="button"
+            onClick={() => setRange("all")}
+            className={`rounded-full px-3 py-1.5 text-[11px] font-bold transition-colors ${
+              !showingToday
+                ? "bg-primary text-white"
+                : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            }`}
+          >
+            All time
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -319,22 +468,36 @@ export default function TaskAnalytics() {
         <div className="rounded-xl border border-rose-200 bg-rose-50 text-rose-700 p-4 text-sm">{error}</div>
       ) : data ? (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-            {[
-              { label: "Total", value: data.counts.total, icon: "checklist", color: "text-slate-700 bg-slate-100" },
-              { label: "Completed", value: data.counts.completed, icon: "task_alt", color: "text-emerald-700 bg-emerald-100" },
-              { label: "Pending", value: data.counts.pending, icon: "pending_actions", color: "text-amber-700 bg-amber-100" },
-              { label: "Overdue", value: data.counts.overdue, icon: "warning", color: "text-rose-700 bg-rose-100" },
-              { label: "Due Today", value: data.counts.dueToday, icon: "today", color: "text-blue-700 bg-blue-100" },
-            ].map((card) => (
-              <div key={card.label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 flex items-center justify-between last:col-span-2 lg:last:col-span-1">
-                <div>
-                  <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">{card.label}</p>
-                  <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">{card.value}</p>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
+              {showingToday ? `Today · ${formatDayLabel(data.today?.date)}` : "All time"}
+            </p>
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+              {(showingToday
+                ? [
+                    { label: "Total", value: data.today?.counts?.total ?? 0, icon: "checklist", color: "text-slate-700 bg-slate-100" },
+                    { label: "Completed", value: data.today?.counts?.completed ?? 0, icon: "task_alt", color: "text-emerald-700 bg-emerald-100" },
+                    { label: "Pending", value: data.today?.counts?.pending ?? 0, icon: "pending_actions", color: "text-amber-700 bg-amber-100" },
+                    { label: "Overdue", value: data.today?.counts?.overdue ?? 0, icon: "warning", color: "text-rose-700 bg-rose-100" },
+                    { label: "Due Today", value: data.counts.dueToday, icon: "today", color: "text-blue-700 bg-blue-100" },
+                  ]
+                : [
+                    { label: "Total", value: data.counts.total, icon: "checklist", color: "text-slate-700 bg-slate-100" },
+                    { label: "Completed", value: data.counts.completed, icon: "task_alt", color: "text-emerald-700 bg-emerald-100" },
+                    { label: "Pending", value: data.counts.pending, icon: "pending_actions", color: "text-amber-700 bg-amber-100" },
+                    { label: "Overdue", value: data.counts.overdue, icon: "warning", color: "text-rose-700 bg-rose-100" },
+                    { label: "Due Today", value: data.counts.dueToday, icon: "today", color: "text-blue-700 bg-blue-100" },
+                  ]
+              ).map((card) => (
+                <div key={card.label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-3 sm:p-4 flex items-center justify-between last:col-span-2 lg:last:col-span-1">
+                  <div>
+                    <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500">{card.label}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">{card.value}</p>
+                  </div>
+                  <span className={`material-symbols-outlined rounded-xl p-2 ${card.color}`}>{card.icon}</span>
                 </div>
-                <span className={`material-symbols-outlined rounded-xl p-2 ${card.color}`}>{card.icon}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -347,17 +510,41 @@ export default function TaskAnalytics() {
               <CalendarHeatmap calendar={data.calendar} />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Priority</h3>
-              <DonutChart data={data.byPriority} colors={PRIORITY_COLORS} />
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Tasks by Priority</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-slate-600 dark:text-slate-300">
+                  {showingToday ? `Today · ${formatDayLabel(data.today?.date)}` : "All time"}
+                </span>
+              </div>
+              <DonutChart
+                data={showingToday ? data.today?.byPriority : data.byPriority}
+                colors={PRIORITY_COLORS}
+                emptyLabel={showingToday ? "No tasks today." : "No priority data yet."}
+              />
             </section>
             <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">Tasks by Status</h3>
-              <DonutChart data={data.byStatus} colors={STATUS_COLORS} />
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Tasks by Status</h3>
+                <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-slate-600 dark:text-slate-300">
+                  {showingToday ? `Today · ${formatDayLabel(data.today?.date)}` : "All time"}
+                </span>
+              </div>
+              <DonutChart
+                data={showingToday ? data.today?.byStatus : data.byStatus}
+                colors={STATUS_COLORS}
+                emptyLabel={showingToday ? "No tasks today." : "No status data yet."}
+              />
             </section>
           </div>
 
+          {!showingToday && (
           <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 mb-4">By Assignee</h3>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">By Assignee</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-slate-600 dark:text-slate-300">
+                All time
+              </span>
+            </div>
 
             {/* Mobile / tablet cards */}
             <div className="lg:hidden space-y-3">
@@ -426,6 +613,54 @@ export default function TaskAnalytics() {
               </table>
             </div>
           </section>
+          )}
+
+          {showingToday && (
+          <section className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">By Assignee</h3>
+              <span className="text-[10px] font-bold uppercase tracking-wide rounded-full bg-emerald-50 text-emerald-700 px-2.5 py-1">
+                {formatDayLabel(data.today?.date)}
+              </span>
+            </div>
+
+            {!data.today?.assignees?.length ? (
+              <p className="py-8 text-center text-sm text-slate-500">No tasks planned or due today.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-widest text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                      <th className="py-2 pr-4">Name</th>
+                      <th className="py-2 px-3">Role</th>
+                      <th className="py-2 px-3">Today&apos;s Tasks</th>
+                      <th className="py-2 px-3">Completed</th>
+                      <th className="py-2 pl-3">Completion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.today.assignees.map((row) => (
+                      <tr key={row.id || row.name} className="border-b border-slate-100 dark:border-slate-800 last:border-none">
+                        <td className="py-3 pr-4 font-bold text-slate-800 dark:text-slate-100">{row.name}</td>
+                        <td className="py-3 px-3 text-slate-500">{row.role?.replaceAll("_", " ") || "—"}</td>
+                        <td className="py-3 px-3 text-slate-600 dark:text-slate-300">{row.total}</td>
+                        <td className="py-3 px-3 text-emerald-600 font-semibold">{row.completed}</td>
+                        <td className="py-3 pl-3">
+                          <div className="flex items-center gap-2">
+                            <div className="h-1.5 w-24 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                              <div className="h-full bg-emerald-500" style={{ width: `${row.completionRate}%` }} />
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-500">{row.completionRate}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+          )}
         </>
       ) : null}
     </section>

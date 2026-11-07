@@ -24,6 +24,7 @@ const CONTENT_TYPES = {
   svg: "image/svg+xml",
   ico: "image/x-icon",
   heic: "image/heic",
+  heif: "image/heif",
   pdf: "application/pdf",
   txt: "text/plain; charset=utf-8",
   csv: "text/csv; charset=utf-8",
@@ -31,6 +32,8 @@ const CONTENT_TYPES = {
   xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   doc: "application/msword",
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ppt: "application/vnd.ms-powerpoint",
+  pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 };
 
 function contentTypeFor(filePath) {

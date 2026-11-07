@@ -53,7 +53,6 @@ export default function SelfieCaptureModal({
   const [previewUrl, setPreviewUrl] = useState("");
   const videoRef = useRef(null);
   const streamRef = useRef(null);
-  const fileInputRef = useRef(null);
   const previewUrlRef = useRef("");
 
   const stopStream = useCallback(() => {
@@ -85,7 +84,7 @@ export default function SelfieCaptureModal({
     ) {
       setStatus("error");
       setErrorMessage(
-        "Camera is not available on this device or browser. You can upload a photo instead."
+        "Camera is not available on this device or browser. Allow camera access and try again."
       );
       return;
     }
@@ -105,8 +104,8 @@ export default function SelfieCaptureModal({
       setStatus("error");
       setErrorMessage(
         error?.name === "NotAllowedError"
-          ? "Camera access was denied. Allow camera permission or upload a photo instead."
-          : "Could not start the camera. You can upload a photo instead."
+          ? "Camera access was denied. Allow camera permission in your browser settings and try again."
+          : "Could not start the camera. Please try again."
       );
     }
   }, [clearPreview, stopStream]);
@@ -130,7 +129,7 @@ export default function SelfieCaptureModal({
         if (!cancelled) {
           setStatus("error");
           setErrorMessage(
-            "Camera is not available on this device or browser. You can upload a photo instead."
+            "Camera is not available on this device or browser. Allow camera access and try again."
           );
         }
         return;
@@ -158,8 +157,8 @@ export default function SelfieCaptureModal({
           setStatus("error");
           setErrorMessage(
             error?.name === "NotAllowedError"
-              ? "Camera access was denied. Allow camera permission or upload a photo instead."
-              : "Could not start the camera. You can upload a photo instead."
+              ? "Camera access was denied. Allow camera permission in your browser settings and try again."
+              : "Could not start the camera. Please try again."
           );
         }
       }
@@ -218,47 +217,6 @@ export default function SelfieCaptureModal({
 
     stopStream();
     setPreviewFromBlob(blob);
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      setErrorMessage("Please choose an image file.");
-      return;
-    }
-
-    setErrorMessage("");
-    const objectUrl = URL.createObjectURL(file);
-    const image = new Image();
-
-    image.onload = async () => {
-      const canvas = drawSquareImage(image, image.naturalWidth, image.naturalHeight);
-      URL.revokeObjectURL(objectUrl);
-
-      if (!canvas) {
-        setErrorMessage("Could not read that photo. Please try another one.");
-        return;
-      }
-
-      const blob = await canvasToBlob(canvas);
-      if (!blob) {
-        setErrorMessage("Could not process that photo. Please try another one.");
-        return;
-      }
-
-      stopStream();
-      setPreviewFromBlob(blob);
-    };
-
-    image.onerror = () => {
-      URL.revokeObjectURL(objectUrl);
-      setErrorMessage("Could not read that photo. Please try another one.");
-    };
-
-    image.src = objectUrl;
   };
 
   const handleRetake = () => {
@@ -375,18 +333,6 @@ export default function SelfieCaptureModal({
               </div>
             )}
 
-            {(status === "starting" || status === "ready" || status === "error") && (
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={busy}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <span className="material-symbols-outlined text-lg">upload</span>
-                Upload a Photo Instead
-              </button>
-            )}
-
             <button
               type="button"
               onClick={onSkip || onClose}
@@ -396,15 +342,6 @@ export default function SelfieCaptureModal({
               Skip for now
             </button>
           </div>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="user"
-            className="hidden"
-            onChange={handleFileChange}
-          />
         </div>
       </div>
     </div>

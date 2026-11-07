@@ -526,7 +526,7 @@ export default function ProgramDetail() {
                   <p className="text-[11px] text-slate-400 truncate max-w-[180px]">{pm.user?.email || ""}</p>
                   {pm.user?.role?.name && (
                     <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[9px] font-semibold uppercase tracking-wide">
-                      {formatRoleLabel(pm.user.role.name)}
+                      {formatRoleLabel(pm.user.role)}
                     </span>
                   )}
                 </div>
@@ -941,7 +941,7 @@ export default function ProgramDetail() {
                         <p className="text-xs text-on-surface-variant">{m.email}</p>
                         {m.role?.name && (
                           <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
-                            {formatRoleLabel(m.role.name)}
+                            {formatRoleLabel(m.role)}
                           </span>
                         )}
                       </div>

@@ -8,9 +8,11 @@ import {
   validateEmail,
   validateMobile,
   validateDateNotFuture,
+  validateRequired,
   firstError,
   normalizeMobileForSave,
   normalizeEmailForSave,
+  normalizePersonName,
 } from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -169,6 +171,27 @@ export async function PATCH(req, context) {
     }
 
     const body = await req.json();
+    const isFullEdit = body.name !== undefined;
+
+    if (isFullEdit) {
+      const requiredMessage = firstError([
+        validateRequired(body.name, "Full name"),
+        validateRequired(body.dob, "Date of birth"),
+        validateRequired(body.gender, "Gender"),
+        validateRequired(body.grade, "Grade"),
+        validateRequired(body.gradeGroup, "Grade group"),
+        validateRequired(body.district, "District"),
+        validateRequired(body.primaryLanguage, "Primary language"),
+        validateRequired(body.fatherName, "Father's name"),
+        validateRequired(body.fatherMobile, "Father's mobile"),
+        validateRequired(body.motherName, "Mother's name"),
+        validateRequired(body.address, "Address"),
+        validateRequired(body.enrolmentDate, "Enrolment date"),
+      ]);
+      if (requiredMessage) {
+        return NextResponse.json({ error: requiredMessage }, { status: 400 });
+      }
+    }
 
     const validationMessage = firstError([
       body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
@@ -176,9 +199,12 @@ export async function PATCH(req, context) {
       body.enrolmentDate ? validateDateNotFuture(body.enrolmentDate, { label: "Enrolment date" }) : null,
       validateMobile(body.phone),
       validateMobile(body.guardianPhone),
-      validateMobile(body.fatherMobile),
+      validateMobile(body.fatherMobile, { required: isFullEdit }),
       validateMobile(body.motherMobile),
       validateEmail(body.email),
+      validatePersonName(body.guardianName),
+      validatePersonName(body.fatherName, { required: isFullEdit }),
+      validatePersonName(body.motherName, { required: isFullEdit }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -207,26 +233,26 @@ export async function PATCH(req, context) {
     const updatedStudent = await prisma.afterSchoolStudent.update({
       where: { id: studentId },
       data: {
-        studentId: body.studentId,
-        name: body.name !== undefined ? body.name.trim() : undefined,
+        studentId: body.studentId ? String(body.studentId).trim() : undefined,
+        name: body.name !== undefined ? normalizePersonName(body.name) : undefined,
         dob: body.dob ? new Date(body.dob) : undefined,
         gender: body.gender,
         email: body.email !== undefined ? normalizeEmailForSave(body.email) : undefined,
         phone: body.phone !== undefined ? normalizeMobileForSave(body.phone) : undefined,
-        address: body.address,
+        address: body.address !== undefined ? String(body.address).trim() : undefined,
         grade: body.grade,
         gradeGroup: body.gradeGroup,
-        district: body.district,
+        district: body.district !== undefined ? String(body.district).trim() : undefined,
         attendance: body.attendance !== undefined ? parseFloat(body.attendance) : undefined,
-        guardianName: body.guardianName,
+        guardianName: body.guardianName !== undefined ? (normalizePersonName(body.guardianName) || null) : undefined,
         guardianPhone: body.guardianPhone !== undefined ? normalizeMobileForSave(body.guardianPhone) : undefined,
-        guardianRelation: body.guardianRelation,
-        fatherName: body.fatherName,
+        guardianRelation: body.guardianRelation !== undefined ? (String(body.guardianRelation).trim() || null) : undefined,
+        fatherName: body.fatherName !== undefined ? normalizePersonName(body.fatherName) : undefined,
         fatherMobile: body.fatherMobile !== undefined ? normalizeMobileForSave(body.fatherMobile) : undefined,
-        motherName: body.motherName,
+        motherName: body.motherName !== undefined ? normalizePersonName(body.motherName) : undefined,
         motherMobile: body.motherMobile !== undefined ? normalizeMobileForSave(body.motherMobile) : undefined,
         enrolmentDate: body.enrolmentDate ? new Date(body.enrolmentDate) : undefined,
-        primaryLanguage: body.primaryLanguage,
+        primaryLanguage: body.primaryLanguage !== undefined ? String(body.primaryLanguage).trim() : undefined,
         centreId: body.centreId,
         fellowId: body.fellowId
       }

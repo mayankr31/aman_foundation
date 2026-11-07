@@ -22,6 +22,7 @@ import {
   normalizeBankAccountForSave,
   normalizeEmailForSave,
 } from "@/lib/validation";
+import { composeProfileAddress, getMissingProfileFields } from "@/lib/profileCompleteness";
 
 export async function GET(req) {
   try {
@@ -32,9 +33,9 @@ export async function GET(req) {
       where: { id: user.id },
       include: {
         role: true,
-        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+        manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
         directReports: {
-          select: { id: true, name: true, status: true, role: { select: { name: true } } },
+          select: { id: true, name: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
         },
         fellow: {
           include: {
@@ -67,7 +68,16 @@ export async function GET(req) {
 
     const { password: _pw, ...safeUser } = fullUser;
     const permissions = await getEffectivePermissions(fullUser);
-    return NextResponse.json({ success: true, data: { ...safeUser, permissions } });
+    const missingProfileFields = getMissingProfileFields(fullUser);
+    return NextResponse.json({
+      success: true,
+      data: {
+        ...safeUser,
+        permissions,
+        profileIncomplete: missingProfileFields.length > 0,
+        missingProfileFields,
+      },
+    });
   } catch (error) {
     console.error("Fetch profile error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -85,13 +95,30 @@ export async function PATCH(req) {
       maritalStatus, bloodGroup, emergencyContactName, emergencyContactPhone,
       aadharNumber, panCard, voterId, highestQualification, highestQualificationDetail,
       bankName, bankAccountNo, bankIfsc, dateOfJoining,
+      state, district, block, village, landmark,
     } = body;
+
+    const hasStructuredAddress =
+      state !== undefined ||
+      district !== undefined ||
+      block !== undefined ||
+      village !== undefined ||
+      landmark !== undefined;
+    const composedAddress = hasStructuredAddress
+      ? composeProfileAddress({ state, district, block, village })
+      : undefined;
 
     const validationMessage = firstError([
       name !== undefined ? validatePersonName(name, { required: true }) : null,
       email !== undefined ? validateEmail(email, { required: true }) : null,
       mobile !== undefined ? validateMobile(mobile, { required: true }) : null,
-      address !== undefined ? validateRequired(address, "Address") : null,
+      address !== undefined && !hasStructuredAddress
+        ? validateRequired(address, "Address")
+        : null,
+      hasStructuredAddress ? validateRequired(state, "State") : null,
+      hasStructuredAddress ? validateRequired(district, "District") : null,
+      hasStructuredAddress ? validateRequired(block, "Block") : null,
+      hasStructuredAddress ? validateRequired(village, "City / Village") : null,
       gender !== undefined ? validateRequired(gender, "Gender") : null,
       dob !== undefined ? validateDateNotFuture(dob, { required: true, label: "Date of birth" }) : null,
       maritalStatus !== undefined ? validateRequired(maritalStatus, "Marital status") : null,
@@ -130,7 +157,16 @@ export async function PATCH(req) {
           mobile: mobile !== undefined ? normalizeMobileForSave(mobile) : undefined,
           // Store personal details directly on the User record (used by
           // Program Managers and other non-fellow roles).
-          address: address !== undefined ? address : undefined,
+          address: composedAddress !== undefined
+            ? composedAddress || null
+            : address !== undefined
+              ? address
+              : undefined,
+          state: state !== undefined ? state : undefined,
+          district: district !== undefined ? district : undefined,
+          block: block !== undefined ? block : undefined,
+          village: village !== undefined ? village : undefined,
+          landmark: landmark !== undefined ? landmark : undefined,
           gender: gender !== undefined ? gender : undefined,
           dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,
           avatar: avatar !== undefined ? avatar : undefined,
@@ -166,7 +202,11 @@ export async function PATCH(req) {
             name: name ? name.trim() : undefined,
             email: email ? normalizeEmailForSave(email) : undefined,
             phone: mobile !== undefined ? normalizeMobileForSave(mobile) : undefined,
-            address: address !== undefined ? address : undefined,
+            address: composedAddress !== undefined
+              ? composedAddress || null
+              : address !== undefined
+                ? address
+                : undefined,
             gender: gender !== undefined ? gender : undefined,
             dob: dob !== undefined ? (dob ? new Date(dob) : null) : undefined,
             avatar: avatar !== undefined ? avatar : undefined,
@@ -179,9 +219,9 @@ export async function PATCH(req) {
         where: { id: user.id },
         include: {
           role: true,
-          manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+          manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
           directReports: {
-            select: { id: true, name: true, status: true, role: { select: { name: true } } },
+            select: { id: true, name: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
           },
           fellow: {
             include: {
@@ -210,7 +250,15 @@ export async function PATCH(req) {
     });
 
     const { password: _pw2, ...safeUpdatedUser } = updatedUser;
-    return NextResponse.json({ success: true, data: safeUpdatedUser });
+    const missingProfileFields = getMissingProfileFields(updatedUser);
+    return NextResponse.json({
+      success: true,
+      data: {
+        ...safeUpdatedUser,
+        profileIncomplete: missingProfileFields.length > 0,
+        missingProfileFields,
+      },
+    });
   } catch (error) {
     console.error("Update profile error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

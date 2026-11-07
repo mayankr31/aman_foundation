@@ -44,7 +44,7 @@ export async function GET(req) {
     const leaves = await prisma.leave.findMany({
       where,
       include: {
-        user: { select: { id: true, name: true, role: { select: { name: true } }, leavesTaken: true, leavesRemaining: true } },
+        user: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } }, leavesTaken: true, leavesRemaining: true } },
         compOffCredit: true,
       },
       orderBy: { createdAt: "desc" },

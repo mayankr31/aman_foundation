@@ -16,6 +16,8 @@ import { formatDate } from "@/lib/date";
 import { QUALIFICATIONS, getDefaultDepartment, getDepartmentOptions } from "@/lib/organization";
 import { formatRoleLabel } from "@/lib/roles";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
 import {
@@ -49,6 +51,11 @@ const PERSONAL_FIELDS = [
   "maritalStatus",
   "bloodGroup",
   "address",
+  "state",
+  "district",
+  "block",
+  "village",
+  "landmark",
   "emergencyContactName",
   "emergencyContactPhone",
   "aadharNumber",
@@ -232,7 +239,10 @@ function HrEmployeeProfileContent() {
     add("dob", validateDateNotFuture(form.dob, { required: true, label: "Date of birth" }));
     add("maritalStatus", validateRequired(form.maritalStatus, "Marital status"));
     add("bloodGroup", validateRequired(form.bloodGroup, "Blood group"));
-    add("address", validateRequired(form.address, "Address"));
+    add("state", validateRequired(form.state, "State"));
+    add("district", validateRequired(form.district, "District"));
+    add("block", validateRequired(form.block, "Block"));
+    add("village", validateRequired(form.village, "City / Village"));
     add("emergencyContactName", validatePersonName(form.emergencyContactName, { required: true }));
     add("emergencyContactPhone", validateMobile(form.emergencyContactPhone, { required: true }));
     add("aadharNumber", validateAadhaar(form.aadharNumber, { required: true }));
@@ -271,7 +281,7 @@ function HrEmployeeProfileContent() {
 
     setSaving(true);
     try {
-      const payload = { ...form };
+      const payload = { ...form, address: composeProfileAddress(form) };
       if (!canManageExit) {
         delete payload.dateOfLeaving;
         delete payload.resignationReason;
@@ -401,11 +411,19 @@ function HrEmployeeProfileContent() {
 
   const departmentOptions = getDepartmentOptions(employee.role?.name, form.department);
   const departmentError = fieldErrors.department;
-  const managerCandidates = getManagerCandidates(managers, employee.role?.name, {
+  const managerCandidates = getManagerCandidates(managers, employee.role, {
     excludeUserId: employee.id,
   });
   const currentManagerMissing =
     employee.manager && !managerCandidates.some((manager) => manager.id === employee.manager.id);
+  const stateOptions = withCurrentOption(
+    INDIA_STATES.map((state) => state.name),
+    form.state
+  );
+  const districtOptions = withCurrentOption(
+    getDistrictsForState(form.state),
+    form.district
+  );
   const inactiveDate = employee.inactiveSince || employee.dateOfLeaving;
   const managedSchools = (employee.managedSchools || []).map((item) => item.school);
   const managedCentres = (employee.managedCentres || []).map((item) => item.centre);
@@ -446,7 +464,7 @@ function HrEmployeeProfileContent() {
               </h2>
               <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 text-sm text-on-surface-variant">
                 <span className="text-primary font-semibold">
-                  {formatRoleLabel(employee.role?.name)}
+                  {formatRoleLabel(employee.role)}
                 </span>
                 <span className="w-1.5 h-1.5 bg-slate-300 rounded-full"></span>
                 <span>{employee.department || "Unassigned"}</span>
@@ -560,17 +578,17 @@ function HrEmployeeProfileContent() {
                     <option value="">No manager / top level</option>
                     {currentManagerMissing && employee.manager && (
                       <option value={employee.manager.id}>
-                        {employee.manager.name} ({formatRoleLabel(employee.manager.role?.name)}) — current
+                        {employee.manager.name} ({formatRoleLabel(employee.manager.role)}) — current
                       </option>
                     )}
                     {managerCandidates.map((manager) => (
                       <option key={manager.id} value={manager.id}>
-                        {manager.name} ({formatRoleLabel(manager.role?.name)})
+                        {manager.name} ({formatRoleLabel(manager.role)})
                       </option>
                     ))}
                   </select>
                   <span className="text-[11px] text-on-surface-variant">
-                    Only roles senior to {formatRoleLabel(employee.role?.name)} are listed.
+                    Only roles senior to {formatRoleLabel(employee.role)} are listed.
                   </span>
                 </div>
               )}
@@ -626,8 +644,44 @@ function HrEmployeeProfileContent() {
               {input("Date of Birth", "dob", "date", true, { max: new Date().toISOString().slice(0, 10) })}
               {select("Marital Status", "maritalStatus", ["Single", "Married", "Divorced", "Widowed"], { required: true })}
               {select("Blood Group", "bloodGroup", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], { required: true })}
+              <div className="flex flex-col gap-1">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">State<span className="text-error ml-0.5">*</span></label>
+                <select
+                  value={form.state ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setForm((prev) => ({ ...prev, state: value, district: "" }));
+                  }}
+                  aria-invalid={Boolean(fieldErrors.state)}
+                  className={`px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent dark:bg-slate-900 text-on-surface text-sm ${fieldErrors.state ? "border-error" : "border-outline-variant"}`}
+                >
+                  <option value="">Select state</option>
+                  {stateOptions.map((state) => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+                {fieldErrors.state && <span className="text-[11px] font-medium text-error">{fieldErrors.state}</span>}
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">District<span className="text-error ml-0.5">*</span></label>
+                <select
+                  value={form.district ?? ""}
+                  onChange={(e) => setField("district", e.target.value)}
+                  disabled={!form.state}
+                  aria-invalid={Boolean(fieldErrors.district)}
+                  className={`px-4 py-2 border rounded-lg focus:outline-none focus:border-primary bg-transparent dark:bg-slate-900 text-on-surface text-sm disabled:opacity-60 ${fieldErrors.district ? "border-error" : "border-outline-variant"}`}
+                >
+                  <option value="">{form.state ? "Select district" : "Select state first"}</option>
+                  {districtOptions.map((district) => (
+                    <option key={district} value={district}>{district}</option>
+                  ))}
+                </select>
+                {fieldErrors.district && <span className="text-[11px] font-medium text-error">{fieldErrors.district}</span>}
+              </div>
+              {input("Block", "block", "text", true, { maxLength: 80 })}
+              {input("City / Village", "village", "text", true, { maxLength: 80 })}
               <div className="md:col-span-2">
-                {textarea("Address", "address", true)}
+                {input("Nearby Landmark (optional)", "landmark", "text", false, { maxLength: 120 })}
               </div>
             </div>
           </section>
@@ -742,7 +796,7 @@ function HrEmployeeProfileContent() {
               <TeamCheckInSection
                 userId={employee.id}
                 memberName={employee.name}
-                memberRole={employee.role?.name}
+                memberRole={employee.role}
                 memberManagerId={employee.managerId}
               />
             )}

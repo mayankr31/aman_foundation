@@ -1,18 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { deriveAcademicStatus, getAcademicStatusClass, PERFORMANCE_FILTERS } from "@/lib/academicStatus";
 import { formatDate } from "@/lib/date";
 import { toMobileInput, toPersonNameInput } from "@/lib/validation";
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 
 const EMPTY_STUDENT_FORM = {
   name: "",
-  studentId: "",
   dob: "",
   gender: "",
   grade: "Grade 8",
@@ -83,7 +84,8 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
 
 export default function StudentsModule() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, canDeleteRecords } = useAuth();
+  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeFilter, setGradeFilter] = useState("All Grades");
   const [performanceFilter, setPerformanceFilter] = useState("All Performance");
@@ -98,6 +100,10 @@ export default function StudentsModule() {
   // Form states for adding a student
   const [newStudentForm, setNewStudentForm] = useState(EMPTY_STUDENT_FORM);
   const [newStudentPhoto, setNewStudentPhoto] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submitLockRef = useRef(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const handleNewStudentChange = (name, value) => {
     setNewStudentForm((f) => ({ ...f, [name]: value }));
@@ -124,11 +130,14 @@ export default function StudentsModule() {
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
+    if (submitLockRef.current) return;
     if (!newStudentForm.name || !newStudentForm.schoolId) {
       alert("Full Name and Partner School are required.");
       return;
     }
 
+    submitLockRef.current = true;
+    setIsSubmitting(true);
     try {
       const res = await fetch("/api/students", {
         method: "POST",
@@ -138,7 +147,6 @@ export default function StudentsModule() {
         },
         body: JSON.stringify({
           ...newStudentForm,
-          studentId: newStudentForm.studentId || `STU-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
           attendance: 0,
           dob: newStudentForm.dob || null,
           enrolmentDate: newStudentForm.enrolmentDate || null,
@@ -171,6 +179,31 @@ export default function StudentsModule() {
       }
     } catch (err) {
       console.error("Failed to add student:", err);
+    } finally {
+      submitLockRef.current = false;
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteStudent = async () => {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/students/${deleteTarget.id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete student");
+      }
+      setStudents((prev) => prev.filter((s) => s.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      toast.success("Student deleted successfully");
+    } catch (err) {
+      alert(err.message || "Failed to delete student");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -427,7 +460,7 @@ export default function StudentsModule() {
                 const academicStatus = deriveAcademicStatus(s.attendance);
                 const statusClass = getAcademicStatusClass(academicStatus);
                 
-                const profileHref = `/education/students/${encodeURIComponent(s.name.replace(/\s+/g, '-'))}`;
+                const profileHref = `/education/students/${s.id}`;
                 return (
                   <tr
                     key={s.id}
@@ -479,13 +512,28 @@ export default function StudentsModule() {
                       </div>
                     </td>
                     <td data-label="Actions" className="px-6 py-5 text-right">
-                      <Link
-                        href={profileHref}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline"
-                      >
-                        View Profile
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          href={profileHref}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline"
+                        >
+                          View Profile
+                        </Link>
+                        {canDeleteRecords && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeleteTarget(s);
+                            }}
+                            className="p-1.5 rounded-full text-on-surface-variant hover:text-error hover:bg-error-container transition-colors cursor-pointer"
+                            title="Delete student"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">delete</span>
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -605,7 +653,6 @@ export default function StudentsModule() {
                   )}
                 </div>
                 <FormField label="Full Name" name="name" value={newStudentForm.name} onChange={handleNewStudentChange} required placeholder="e.g. Aarav Kumar" transform={toPersonNameInput} maxLength={60} />
-                <FormField label="Student ID (Optional)" name="studentId" value={newStudentForm.studentId} onChange={handleNewStudentChange} placeholder="Leave blank to auto-generate" />
                 <div className="md:col-span-2">
                   <FormField
                     label="Partner School Linkage"
@@ -616,37 +663,39 @@ export default function StudentsModule() {
                     options={[{ value: "", label: "Select partner school..." }, ...schools.map((sch) => ({ value: sch.id, label: sch.name }))]}
                   />
                 </div>
-                <FormField label="Date of Birth" name="dob" type="date" value={newStudentForm.dob} onChange={handleNewStudentChange} max={new Date().toISOString().slice(0, 10)} />
-                <FormField label="Gender" name="gender" value={newStudentForm.gender} onChange={handleNewStudentChange} options={["", "Male", "Female", "Other"]} />
-                <FormField label="Grade" name="grade" value={newStudentForm.grade} onChange={handleNewStudentChange} options={Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`)} />
-                <FormField label="Grade Group" name="gradeGroup" value={newStudentForm.gradeGroup} onChange={handleNewStudentChange} options={["Primary", "Middle", "Secondary", "Senior Secondary"]} />
-                <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} placeholder="e.g. Kalgachia" />
-                <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} placeholder="e.g. Hindi" />
+                <FormField label="Date of Birth" name="dob" type="date" value={newStudentForm.dob} onChange={handleNewStudentChange} required max={new Date().toISOString().slice(0, 10)} />
+                <FormField label="Gender" name="gender" value={newStudentForm.gender} onChange={handleNewStudentChange} required options={["", "Male", "Female", "Other"]} />
+                <FormField label="Grade" name="grade" value={newStudentForm.grade} onChange={handleNewStudentChange} required options={Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`)} />
+                <FormField label="Grade Group" name="gradeGroup" value={newStudentForm.gradeGroup} onChange={handleNewStudentChange} required options={["Primary", "Middle", "Secondary", "Senior Secondary"]} />
+                <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} required placeholder="e.g. Kalgachia" />
+                <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} required placeholder="e.g. Hindi" />
                 <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Guardian Relation" name="guardianRelation" value={newStudentForm.guardianRelation} onChange={handleNewStudentChange} placeholder="e.g. Father" />
                 <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
                 <FormField label="Email" name="email" type="email" value={newStudentForm.email} onChange={handleNewStudentChange} autoComplete="email" />
-                <FormField label="Father's Name" name="fatherName" value={newStudentForm.fatherName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
-                <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-                <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
+                <FormField label="Father's Name" name="fatherName" value={newStudentForm.fatherName} onChange={handleNewStudentChange} required transform={toPersonNameInput} maxLength={60} />
+                <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} required type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+                <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} required transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Mother's Mobile" name="motherMobile" value={newStudentForm.motherMobile} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
                 <div className="md:col-span-2">
-                  <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} placeholder="Village / Town, Post Office" />
+                  <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} required placeholder="Village / Town, Post Office" />
                 </div>
-                <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} max={new Date().toISOString().slice(0, 10)} />
+                <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} required max={new Date().toISOString().slice(0, 10)} />
                 <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                    disabled={isSubmitting}
+                    className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+                    disabled={isSubmitting}
+                    className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
                   >
-                    Add Student
+                    {isSubmitting ? "Adding..." : "Add Student"}
                   </button>
                 </div>
               </form>
@@ -654,6 +703,14 @@ export default function StudentsModule() {
           </div>
         </div>
       )}
+
+      <ConfirmDeleteModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteStudent}
+        title="Delete Student"
+        message={`Are you sure you want to permanently delete ${deleteTarget?.name || "this student"} and all of their records? This cannot be undone.`}
+      />
     </div>
   );
 }

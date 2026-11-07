@@ -73,11 +73,13 @@ export async function GET(req) {
         createdById: true,
         roleId: true,
         managerId: true,
-        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+        manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
         role: {
           select: {
             id: true,
             name: true,
+            displayName: true,
+            rank: true,
           }
         },
         fellow: { select: { id: true } },
@@ -172,7 +174,7 @@ export async function POST(req) {
     if (managerId) {
       const manager = await prisma.user.findUnique({
         where: { id: managerId },
-        select: { id: true, status: true, role: { select: { name: true } } },
+        select: { id: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
       });
       if (!manager) {
         return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
@@ -180,7 +182,7 @@ export async function POST(req) {
       if (manager.status !== "ACTIVE") {
         return NextResponse.json({ error: "Selected manager is not active" }, { status: 400 });
       }
-      if (!isManagerRoleAllowed(role.name, manager.role?.name)) {
+      if (!isManagerRoleAllowed(role, manager.role)) {
         return NextResponse.json(
           { error: "Selected manager must be senior to this employee" },
           { status: 400 }
@@ -222,7 +224,7 @@ export async function POST(req) {
         createdAt: true,
         managerId: true,
         manager: { select: { id: true, name: true } },
-        role: { select: { id: true, name: true } },
+        role: { select: { id: true, name: true, displayName: true, rank: true } },
       },
     });
 

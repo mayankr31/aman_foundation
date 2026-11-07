@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getEffectivePermissions } from "@/lib/permissions";
+import { formatRoleLabel } from "@/lib/roles";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,7 @@ export async function GET(req) {
 
     const [permissions, role] = await Promise.all([
       getEffectivePermissions(user),
-      prisma.role.findUnique({ where: { id: user.roleId }, select: { name: true, updatedAt: true } }),
+      prisma.role.findUnique({ where: { id: user.roleId }, select: { name: true, displayName: true, updatedAt: true } }),
     ]);
 
     const version = `${user.updatedAt?.getTime?.() || 0}:${role?.updatedAt?.getTime?.() || 0}`;
@@ -22,6 +23,7 @@ export async function GET(req) {
       data: {
         roleId: user.roleId,
         roleName: role?.name || user.role?.name || null,
+        roleDisplayName: role ? formatRoleLabel(role) : null,
         permissions,
         version,
       },

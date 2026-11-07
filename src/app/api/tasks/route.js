@@ -21,10 +21,10 @@ function parseDateOnly(value) {
 
 function taskInclude() {
   return {
-    assignee: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } },
+    assignee: { select: { id: true, name: true, avatar: true, role: { select: { name: true, displayName: true, rank: true } } } },
     assignedBy: { select: { id: true, name: true, avatar: true } },
     comments: {
-      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } } },
+      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true, displayName: true, rank: true } } } } },
       orderBy: { createdAt: "asc" },
     },
     documents: { orderBy: { createdAt: "asc" } },

@@ -69,7 +69,7 @@ export async function GET(req, context) {
         programManagers: {
           include: {
             user: {
-              select: { id: true, name: true, username: true, email: true, mobile: true, role: { select: { name: true } } }
+              select: { id: true, name: true, username: true, email: true, mobile: true, role: { select: { name: true, displayName: true, rank: true } } }
             }
           },
           orderBy: { createdAt: "asc" }

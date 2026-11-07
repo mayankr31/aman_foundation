@@ -57,7 +57,12 @@ enum LivelihoodCategory {
 
 model Role {
   id                String           @id @default(uuid())
+  // Stable internal code used by permission/API checks. Never renamed.
   name              String           @unique
+  // Exact label entered by the admin. This is what the UI displays.
+  displayName       String?
+  // Reporting seniority. Higher rank = more senior.
+  rank              Int?
   description       String?
   displayInRegister Boolean          @default(true)
   createdAt         DateTime         @default(now())
@@ -84,6 +89,11 @@ model User {
   maritalStatus String?
   bloodGroup  String?
   address     String?
+  state       String?
+  district    String?
+  block       String?
+  village     String?
+  landmark    String?
   emergencyContactName  String?
   emergencyContactPhone String?
   aadharNumber String?
@@ -1187,6 +1197,19 @@ model CompOffCredit {
 
   @@unique([userId, workedDate])
   @@index([userId, status])
+}
+
+model Holiday {
+  id          String   @id @default(uuid())
+  dateKey     String   @unique // YYYY-MM-DD in IST
+  name        String
+  description String?
+  type        String   @default("PUBLIC") // PUBLIC, RESTRICTED, OPTIONAL
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([dateKey, active])
 }
 
 model IncidentResourceNeed {

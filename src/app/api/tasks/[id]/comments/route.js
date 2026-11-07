@@ -26,7 +26,7 @@ export async function GET(req, { params }) {
 
     const comments = await prisma.taskComment.findMany({
       where: { taskId: id },
-      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } } },
+      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true, displayName: true, rank: true } } } } },
       orderBy: { createdAt: "asc" },
     });
 
@@ -55,7 +55,7 @@ export async function POST(req, { params }) {
 
     const comment = await prisma.taskComment.create({
       data: { taskId: id, authorId: user.id, text },
-      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true } } } } },
+      include: { author: { select: { id: true, name: true, avatar: true, role: { select: { name: true, displayName: true, rank: true } } } } },
     });
 
     const recipients = [];

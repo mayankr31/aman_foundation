@@ -8,10 +8,13 @@ import {
   validateEmail,
   validateMobile,
   validateDateNotFuture,
+  validateRequired,
   firstError,
   normalizeMobileForSave,
   normalizeEmailForSave,
+  normalizePersonName,
 } from "@/lib/validation";
+import { generateStudentId } from "@/lib/studentId";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -111,8 +114,23 @@ export async function POST(req) {
       fellowId
     } = body;
 
-    if (!name || !studentId || !grade || !gradeGroup) {
-      return NextResponse.json({ error: "Name, Student ID, Grade, and Grade Group are required" }, { status: 400 });
+    const requiredMessage = firstError([
+      validateRequired(name, "Full name"),
+      validateRequired(schoolId, "Partner school"),
+      validateRequired(dob, "Date of birth"),
+      validateRequired(gender, "Gender"),
+      validateRequired(grade, "Grade"),
+      validateRequired(gradeGroup, "Grade group"),
+      validateRequired(district, "District"),
+      validateRequired(primaryLanguage, "Primary language"),
+      validateRequired(fatherName, "Father's name"),
+      validateRequired(fatherMobile, "Father's mobile"),
+      validateRequired(motherName, "Mother's name"),
+      validateRequired(address, "Address"),
+      validateRequired(enrolmentDate, "Enrolment date"),
+    ]);
+    if (requiredMessage) {
+      return NextResponse.json({ error: requiredMessage }, { status: 400 });
     }
 
     const validationMessage = firstError([
@@ -121,22 +139,24 @@ export async function POST(req) {
       enrolmentDate ? validateDateNotFuture(enrolmentDate, { label: "Enrolment date" }) : null,
       validateMobile(phone),
       validateMobile(guardianPhone),
-      validateMobile(fatherMobile),
+      validateMobile(fatherMobile, { required: true }),
       validateMobile(motherMobile),
       validateEmail(email),
       validatePersonName(guardianName),
-      validatePersonName(fatherName),
-      validatePersonName(motherName),
+      validatePersonName(fatherName, { required: true }),
+      validatePersonName(motherName, { required: true }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
     let resolvedFellowId = fellowId;
+    const cleanName = normalizePersonName(name);
+    const cleanDob = new Date(dob);
 
     if (isPm) {
       const managed = await getManagedSchoolIds(user.id);
-      if (!schoolId || !managed.includes(schoolId)) {
+      if (!managed.includes(schoolId)) {
         return NextResponse.json(
           { error: "Forbidden: You can only add students to your assigned schools" },
           { status: 403 }
@@ -148,9 +168,6 @@ export async function POST(req) {
       const fellowProfileId = await getFellowIdByUserId(user.id);
       if (!fellowProfileId) {
         return NextResponse.json({ error: "Forbidden: Fellow profile not found" }, { status: 403 });
-      }
-      if (!schoolId) {
-        return NextResponse.json({ error: "Please select one of your assigned schools" }, { status: 400 });
       }
       const isAssigned = await prisma.fellowSchool.findFirst({
         where: { fellowId: fellowProfileId, schoolId },
@@ -165,32 +182,80 @@ export async function POST(req) {
       resolvedFellowId = fellowProfileId;
     }
 
-    const student = await prisma.student.create({
-      data: {
-        studentId,
-        name: name.trim(),
-        dob: dob ? new Date(dob) : null,
-        gender,
-        email: normalizeEmailForSave(email),
-        phone: normalizeMobileForSave(phone),
-        address,
-        grade,
-        gradeGroup,
-        district,
-        attendance: attendance ? parseFloat(attendance) : 0.0,
-        guardianName,
-        guardianPhone: normalizeMobileForSave(guardianPhone),
-        guardianRelation,
-        fatherName,
-        fatherMobile: normalizeMobileForSave(fatherMobile),
-        motherName,
-        motherMobile: normalizeMobileForSave(motherMobile),
-        enrolmentDate: enrolmentDate ? new Date(enrolmentDate) : null,
-        primaryLanguage,
+    // Guard against accidental rapid double-submits, which used to create many
+    // copies when the browser generated a fresh Student ID for each request.
+    const recentDuplicate = await prisma.student.findFirst({
+      where: {
+        name: { equals: cleanName, mode: "insensitive" },
         schoolId,
-        fellowId: resolvedFellowId
-      }
+        dob: cleanDob,
+        createdAt: { gte: new Date(Date.now() - 2 * 60 * 1000) },
+      },
+      select: { id: true },
     });
+    if (recentDuplicate) {
+      return NextResponse.json(
+        { error: "This student was already added moments ago. Refresh the list before adding again." },
+        { status: 409 }
+      );
+    }
+
+    const providedStudentId = studentId ? String(studentId).trim() : "";
+    if (providedStudentId) {
+      const existing = await prisma.student.findUnique({
+        where: { studentId: providedStudentId },
+        select: { id: true },
+      });
+      if (existing) {
+        return NextResponse.json({ error: "A student with this Student ID already exists" }, { status: 409 });
+      }
+    }
+
+    let student = null;
+    for (let attempt = 0; attempt < 3 && !student; attempt += 1) {
+      const resolvedStudentId = providedStudentId || (await generateStudentId());
+      try {
+        student = await prisma.student.create({
+          data: {
+            studentId: resolvedStudentId,
+            name: cleanName,
+            dob: cleanDob,
+            gender,
+            email: normalizeEmailForSave(email),
+            phone: normalizeMobileForSave(phone),
+            address: String(address).trim(),
+            grade,
+            gradeGroup,
+            district: String(district).trim(),
+            attendance: attendance ? parseFloat(attendance) : 0.0,
+            guardianName: normalizePersonName(guardianName) || null,
+            guardianPhone: normalizeMobileForSave(guardianPhone),
+            guardianRelation: String(guardianRelation || "").trim() || null,
+            fatherName: normalizePersonName(fatherName),
+            fatherMobile: normalizeMobileForSave(fatherMobile),
+            motherName: normalizePersonName(motherName),
+            motherMobile: normalizeMobileForSave(motherMobile),
+            enrolmentDate: new Date(enrolmentDate),
+            primaryLanguage: String(primaryLanguage).trim(),
+            schoolId,
+            fellowId: resolvedFellowId
+          }
+        });
+      } catch (err) {
+        if (err.code === "P2002" && !providedStudentId) continue;
+        if (err.code === "P2002") {
+          return NextResponse.json({ error: "A student with this Student ID already exists" }, { status: 409 });
+        }
+        throw err;
+      }
+    }
+
+    if (!student) {
+      return NextResponse.json(
+        { error: "Could not generate a unique Student ID. Please try again." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ success: true, data: student }, { status: 201 });
   } catch (error) {

@@ -17,7 +17,7 @@ export const HR_PAGE_LINKS = [
   },
   {
     key: "leaves",
-    label: "Leave Requests",
+    label: "Leave Management",
     href: "/hr/leaves",
     icon: "event_note",
     page: "leaves",

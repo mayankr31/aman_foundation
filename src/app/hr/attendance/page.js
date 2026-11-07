@@ -199,6 +199,16 @@ export default function HrAttendanceLogs() {
                                 Early in {metrics.earlyHours}
                               </span>
                             )}
+                            {metrics?.lateInSeconds > 0 && (
+                              <span className="text-[10px] font-semibold text-rose-600">
+                                Late in {metrics.lateInHours}
+                              </span>
+                            )}
+                            {metrics?.earlyOutSeconds > 0 && (
+                              <span className="text-[10px] font-semibold text-orange-600">
+                                Early out {metrics.earlyOutHours}
+                              </span>
+                            )}
                             {metrics?.lateSeconds > 0 && (
                               <span className="text-[10px] font-semibold text-indigo-600">
                                 Late out {metrics.lateHours}

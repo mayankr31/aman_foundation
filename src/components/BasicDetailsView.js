@@ -34,7 +34,7 @@ function ReportingSection({ manager, directReports }) {
             <div className="mt-2 min-w-0">
               <p className="text-sm font-semibold text-on-surface break-words">{manager.name}</p>
               <p className="text-xs text-on-surface-variant mt-1 break-words">
-                {formatRoleLabel(manager.role?.name)}
+                {formatRoleLabel(manager.role)}
               </p>
             </div>
           ) : (
@@ -44,13 +44,13 @@ function ReportingSection({ manager, directReports }) {
 
         <div className="min-w-0 rounded-lg border border-outline-variant/20 bg-surface-container-low/40 p-4 lg:col-span-2">
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Direct Reports</p>
+            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">People Reporting to You</p>
             <span className="text-xs font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full shrink-0">
               {reports.length}
             </span>
           </div>
           {reports.length === 0 ? (
-            <p className="text-sm text-on-surface-variant italic mt-2">No direct reports</p>
+            <p className="text-sm text-on-surface-variant italic mt-2">No one reports to you</p>
           ) : (
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
               {reports.map((report) => (
@@ -61,7 +61,7 @@ function ReportingSection({ manager, directReports }) {
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-on-surface break-words">{report.name}</p>
                     <p className="text-xs text-on-surface-variant mt-0.5 break-words">
-                      {formatRoleLabel(report.role?.name)}
+                      {formatRoleLabel(report.role)}
                     </p>
                   </div>
                   {report.status && (
@@ -99,7 +99,7 @@ export default function BasicDetailsView({ person }) {
           <Row label="Username" value={person.username} />
           <Row label="Employee ID" value={person.employeeId} />
           <Row label="Department" value={person.department} />
-          <Row label="Role" value={formatRoleLabel(person.role?.name)} />
+          <Row label="Role" value={formatRoleLabel(person.role)} />
           <Row label="Date of Joining" value={formatDate(person.dateOfJoining)} />
           <Row label="Status" value={person.status} />
           {person.status === "INACTIVE" && (
@@ -136,6 +136,11 @@ export default function BasicDetailsView({ person }) {
         <Row label="Date of Birth" value={formatDate(person.dob)} />
         <Row label="Marital Status" value={person.maritalStatus} />
         <Row label="Blood Group" value={person.bloodGroup} />
+        <Row label="State" value={person.state} />
+        <Row label="District" value={person.district} />
+        <Row label="Block" value={person.block} />
+        <Row label="City / Village" value={person.village} />
+        <Row label="Nearby Landmark" value={person.landmark} />
         <div className="sm:col-span-2 min-w-0">
           <Row label="Address" value={person.address} />
         </div>

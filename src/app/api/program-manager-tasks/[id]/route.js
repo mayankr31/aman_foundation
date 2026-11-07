@@ -39,7 +39,7 @@ export async function PATCH(request, { params }) {
       where: { id: taskId },
       data: dataToUpdate,
       include: {
-        assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+        assignee: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
         comments: { include: { author: { select: { id: true, name: true, role: true } } }, orderBy: { createdAt: "asc" } },
         documents: true,
       },

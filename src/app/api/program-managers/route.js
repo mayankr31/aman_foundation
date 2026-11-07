@@ -29,7 +29,7 @@ export async function GET(req) {
         department: true,
         avatar: true,
         createdAt: true,
-        role: { select: { name: true } },
+        role: { select: { name: true, displayName: true, rank: true } },
         _count: {
           select: {
             managedSchools: true,

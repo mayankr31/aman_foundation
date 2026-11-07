@@ -34,7 +34,7 @@ export default function ReimbursementSummary({ reimbursement }) {
           <p className="text-sm text-on-surface-variant mt-1">
             {reimbursement.user?.name || "Staff member"}
             {reimbursement.user?.department ? ` · ${reimbursement.user.department}` : ""}
-            {reimbursement.user?.role?.name ? ` · ${formatRoleLabel(reimbursement.user.role.name)}` : ""}
+            {reimbursement.user?.role?.name ? ` · ${formatRoleLabel(reimbursement.user.role)}` : ""}
           </p>
         </div>
         <div className="text-left sm:text-right">

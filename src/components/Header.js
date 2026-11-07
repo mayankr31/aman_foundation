@@ -96,8 +96,8 @@ export default function Header({ onMenuToggle }) {
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                   {user?.email || "no-email@amanfoundation.org"}
                 </p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#1a7a5e] dark:text-teal-400 mt-1.5">
-                  {formatRoleLabel(user?.roleName)}
+                <p className="text-[10px] font-bold tracking-widest text-[#1a7a5e] dark:text-teal-400 mt-1.5">
+                  {user?.roleDisplayName || formatRoleLabel(user?.roleName)}
                 </p>
               </div>
               <div className="p-2">

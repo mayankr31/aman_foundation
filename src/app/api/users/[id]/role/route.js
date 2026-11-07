@@ -38,13 +38,14 @@ export async function PATCH(req, context) {
         where: { id },
         select: {
           id: true,
+          role: { select: { name: true, displayName: true, rank: true } },
           managerId: true,
-          manager: { select: { role: { select: { name: true } } } },
+          manager: { select: { role: { select: { name: true, displayName: true, rank: true } } } },
         },
       }),
       prisma.role.findUnique({
         where: { id: roleId },
-        select: { id: true, name: true },
+        select: { id: true, name: true, displayName: true, rank: true },
       }),
     ]);
 
@@ -64,7 +65,7 @@ export async function PATCH(req, context) {
       data.managerId = null;
     } else if (
       target.managerId &&
-      !isManagerRoleAllowed(role.name, target.manager?.role?.name)
+      !isManagerRoleAllowed(role, target.manager?.role)
     ) {
       data.managerId = null;
     }
@@ -76,7 +77,7 @@ export async function PATCH(req, context) {
         id: true,
         roleId: true,
         managerId: true,
-        role: { select: { id: true, name: true } },
+        role: { select: { id: true, name: true, displayName: true, rank: true } },
       },
     });
 

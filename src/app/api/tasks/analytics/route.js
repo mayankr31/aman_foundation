@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { getISTDateKey } from "@/lib/time";
+import { getISTDateKey, istDayStart, istDayEnd } from "@/lib/time";
 import { buildTaskAnalyticsWhere } from "@/lib/taskScope";
 
 export const dynamic = "force-dynamic";
@@ -28,12 +28,36 @@ export async function GET(req) {
     const from = searchParams.get("from");
     const to = searchParams.get("to");
     const assigneeId = searchParams.get("assigneeId");
+    const deadline = searchParams.get("deadline");
 
     const scoped = await buildTaskAnalyticsWhere(user, { from, to, assigneeId });
     if (scoped.forbidden) {
       return NextResponse.json({ error: "Forbidden: Outside your team" }, { status: 403 });
     }
     const where = scoped.where;
+
+    // Deadline-calendar drill-down: return just the tasks due on one IST day.
+    if (deadline && /^\d{4}-\d{2}-\d{2}$/.test(deadline)) {
+      const dayStart = istDayStart(deadline);
+      const dayEnd = istDayEnd(deadline);
+      const dayTasks = await prisma.task.findMany({
+        where: { ...where, deadline: { gte: dayStart, lte: dayEnd } },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          priority: true,
+          plannedDate: true,
+          deadline: true,
+          assignee: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
+        },
+        orderBy: [{ status: "asc" }, { priority: "desc" }, { createdAt: "asc" }],
+      });
+      return NextResponse.json({
+        success: true,
+        data: { date: deadline, tasks: dayTasks },
+      });
+    }
 
     const tasks = await prisma.task.findMany({
       where,
@@ -43,9 +67,10 @@ export async function GET(req) {
         status: true,
         priority: true,
         createdAt: true,
+        plannedDate: true,
         deadline: true,
         completionDate: true,
-        assignee: { select: { id: true, name: true, role: { select: { name: true } } } },
+        assignee: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
       },
       orderBy: { createdAt: "desc" },
       take: 10000,
@@ -68,9 +93,50 @@ export async function GET(req) {
     const completedByDay = {};
     const dueByDay = {};
 
+    const todayByStatus = {};
+    const todayByPriority = {};
+    const todayByAssignee = {};
+    let todayTotal = 0;
+    let todayCompleted = 0;
+    let todayPending = 0;
+    let todayOverdue = 0;
+
     for (const task of tasks) {
       byStatus[task.status] = (byStatus[task.status] || 0) + 1;
       byPriority[task.priority] = (byPriority[task.priority] || 0) + 1;
+
+      const isTodayTask =
+        (task.plannedDate && keyForDate(task.plannedDate) === today) ||
+        (task.deadline && keyForDate(task.deadline) === today);
+
+      if (isTodayTask) {
+        todayTotal += 1;
+        todayByStatus[task.status] = (todayByStatus[task.status] || 0) + 1;
+        todayByPriority[task.priority] = (todayByPriority[task.priority] || 0) + 1;
+        if (task.status === "Completed") todayCompleted += 1;
+        else if (task.status !== "Cancelled") todayPending += 1;
+        if (
+          task.status !== "Completed" &&
+          task.status !== "Cancelled" &&
+          task.deadline &&
+          new Date(task.deadline) < now
+        ) {
+          todayOverdue += 1;
+        }
+
+        const key = task.assignee?.id || "unassigned";
+        if (!todayByAssignee[key]) {
+          todayByAssignee[key] = {
+            id: task.assignee?.id || null,
+            name: task.assignee?.name || "Unassigned",
+            role: task.assignee?.role?.name || null,
+            total: 0,
+            completed: 0,
+          };
+        }
+        todayByAssignee[key].total += 1;
+        if (task.status === "Completed") todayByAssignee[key].completed += 1;
+      }
 
       if (task.status === "Completed") counts.completed += 1;
       else if (task.status !== "Cancelled") counts.pending += 1;
@@ -124,6 +190,13 @@ export async function GET(req) {
       }))
       .sort((a, b) => b.total - a.total);
 
+    const todayAssignees = Object.values(todayByAssignee)
+      .map((row) => ({
+        ...row,
+        completionRate: row.total ? Math.round((row.completed / row.total) * 100) : 0,
+      }))
+      .sort((a, b) => b.total - a.total);
+
     return NextResponse.json({
       success: true,
       data: {
@@ -133,6 +206,18 @@ export async function GET(req) {
         trend,
         calendar: dueByDay,
         assignees,
+        today: {
+          date: today,
+          counts: {
+            total: todayTotal,
+            completed: todayCompleted,
+            pending: todayPending,
+            overdue: todayOverdue,
+          },
+          byStatus: todayByStatus,
+          byPriority: todayByPriority,
+          assignees: todayAssignees,
+        },
         scope: {
           isAdmin: user.role.name === "ADMIN",
           teamSize: Array.isArray(scoped.teamIds) ? scoped.teamIds.length : null,

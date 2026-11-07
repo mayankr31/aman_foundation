@@ -1,6 +1,31 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { buildRoleCode, formatRoleLabel } from "@/lib/roles";
+import { DEFAULT_CUSTOM_ROLE_RANK } from "@/lib/roleHierarchy";
+
+function parseRank(value) {
+  if (value === undefined || value === null || value === "") {
+    return { rank: DEFAULT_CUSTOM_ROLE_RANK };
+  }
+  const rank = Number(value);
+  if (!Number.isInteger(rank) || rank < 0) {
+    return { error: "Seniority must be a whole number of 0 or higher" };
+  }
+  return { rank };
+}
+
+async function findDuplicateLabel(displayName, excludeId) {
+  const roles = await prisma.role.findMany({
+    select: { id: true, name: true, displayName: true },
+  });
+  const target = displayName.toLowerCase();
+  return roles.find(
+    (role) =>
+      role.id !== excludeId &&
+      formatRoleLabel(role).toLowerCase() === target
+  );
+}
 
 // Public GET to load roles for register dropdown
 export async function GET(req) {
@@ -13,6 +38,8 @@ export async function GET(req) {
       select: {
         id: true,
         name: true,
+        displayName: true,
+        rank: true,
         description: true,
         displayInRegister: true,
       },
@@ -39,21 +66,46 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { name, description, displayInRegister } = body;
+    // `name` is accepted for backwards compatibility, but it now means the
+    // display label. The internal stable code is generated below.
+    const displayName = String(body.displayName ?? body.name ?? "").trim();
+    const description =
+      body.description === undefined || body.description === null
+        ? null
+        : String(body.description).trim() || null;
+    const { rank, error: rankError } = parseRank(body.rank);
 
-    if (!name) {
+    if (!displayName) {
       return NextResponse.json({ error: "Role name is required" }, { status: 400 });
     }
+    if (displayName.length > 80) {
+      return NextResponse.json(
+        { error: "Role name must be 80 characters or fewer" },
+        { status: 400 }
+      );
+    }
+    if (rankError) {
+      return NextResponse.json({ error: rankError }, { status: 400 });
+    }
 
-    // Convert name to uppercase uppercase tracking e.g. "PROGRAM_MANAGER"
-    const uppercaseName = name.trim().toUpperCase().replace(/[\s-]/g, "_");
+    if (await findDuplicateLabel(displayName)) {
+      return NextResponse.json({ error: "Role already exists" }, { status: 409 });
+    }
+
+    const existingRoles = await prisma.role.findMany({ select: { name: true } });
+    const internalName = buildRoleCode(
+      displayName,
+      existingRoles.map((role) => role.name)
+    );
 
     const newRole = await prisma.$transaction(async (tx) => {
       const role = await tx.role.create({
         data: {
-          name: uppercaseName,
+          name: internalName,
+          displayName,
+          rank,
           description,
-          displayInRegister: displayInRegister ?? true,
+          displayInRegister: body.displayInRegister ?? true,
         },
       });
 

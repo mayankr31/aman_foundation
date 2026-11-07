@@ -88,7 +88,7 @@ export async function POST(req) {
         email: true,
         status: true,
         roleId: true,
-        role: { select: { name: true } },
+        role: { select: { name: true, displayName: true, rank: true } },
       }
     });
 
@@ -99,7 +99,7 @@ export async function POST(req) {
       await notifyUsers(admins, {
         type: NOTIFICATION_TYPES.USER_REGISTERED,
         title: "New User Awaiting Approval",
-        message: `${newUser.name} (${formatRoleLabel(newUser.role?.name)}) has registered with ${newUser.email} and is waiting for approval.`,
+        message: `${newUser.name} (${formatRoleLabel(newUser.role)}) has registered with ${newUser.email} and is waiting for approval.`,
         link: "/admin?tab=approvals",
         actorId: newUser.id,
         dedupeKey: `user-registered:${newUser.id}`,

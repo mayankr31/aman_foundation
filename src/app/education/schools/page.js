@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -44,10 +46,13 @@ function Modal({ title, onClose, children }) {
 }
 
 export default function SchoolsModule() {
-  const { token } = useAuth();
+  const { token, canDeleteRecords } = useAuth();
+  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [schools, setSchools] = useState([]);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
  
   // Form states
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,6 +117,28 @@ export default function SchoolsModule() {
     } catch (err) {
       console.error("Failed to add school:", err);
       alert("Failed to add school. Please try again.");
+    }
+  };
+
+  const handleDeleteSchool = async () => {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/schools/${deleteTarget.id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete school");
+      }
+      setSchools((prev) => prev.filter((s) => s.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      toast.success("School deleted successfully");
+    } catch (err) {
+      alert(err.message || "Failed to delete school");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -298,11 +325,14 @@ export default function SchoolsModule() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedSchools.map((s, index) => (
-            <Link
-              key={index}
-              href={`/education/schools/${s.id}`}
-              className="bg-surface-container-lowest p-6 rounded-[1rem] hover:shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] transition-all duration-300 flex flex-col group cursor-pointer"
+            <div
+              key={s.id || index}
+              className="bg-surface-container-lowest p-6 rounded-[1rem] hover:shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] transition-all duration-300 flex flex-col group"
             >
+              <Link
+                href={`/education/schools/${s.id}`}
+                className="flex flex-col flex-1 cursor-pointer"
+              >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
@@ -346,7 +376,20 @@ export default function SchoolsModule() {
                   <p className="font-headline text-xl text-on-surface">{s.programs ?? 0}</p>
                 </div>
               </div>
-            </Link>
+              </Link>
+              {canDeleteRecords && (
+                <div className="mt-4 flex justify-end border-t border-surface-variant/60 pt-3">
+                  <button
+                    type="button"
+                    onClick={() => setDeleteTarget(s)}
+                    className="text-error text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 hover:opacity-80 transition-opacity cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">delete</span>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           ))}
           {filteredSchools.length === 0 && (
             <p className="text-center col-span-full py-12 text-sm text-on-surface-variant">
@@ -445,6 +488,14 @@ export default function SchoolsModule() {
           </form>
         </Modal>
       )}
+
+      <ConfirmDeleteModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteSchool}
+        title="Delete School"
+        message={`Are you sure you want to permanently delete ${deleteTarget?.name || "this school"}? Students and fellows will be unassigned from this school. This cannot be undone.`}
+      />
       </div>
     </div>
   );

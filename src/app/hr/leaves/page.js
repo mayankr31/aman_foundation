@@ -9,6 +9,7 @@ import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
 import OnLeaveToday from "@/components/OnLeaveToday";
+import HolidayManagerModal from "@/components/holidays/HolidayManagerModal";
 import {
   POLICY_FLAGS,
   QUOTA_PERIODS,
@@ -94,6 +95,7 @@ export default function LeaveWorkflow() {
   const [showAddType, setShowAddType] = useState(false);
   const [newPolicyType, setNewPolicyType] = useState(emptyPolicyType());
   const [creatingType, setCreatingType] = useState(false);
+  const [showHolidays, setShowHolidays] = useState(false);
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -103,6 +105,9 @@ export default function LeaveWorkflow() {
 
   const canReview = [...POLICY_ADMIN_ROLES, "HR", ...PROGRAM_ROLES].includes(currentUser?.roleName);
   const canManagePolicy = POLICY_ADMIN_ROLES.includes(currentUser?.roleName);
+  const canManageHolidays = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(
+    currentUser?.roleName
+  );
   const { pageItems: pagedLeaves, currentPage, setCurrentPage } = usePagination(leaves, 10);
 
   const fetchLeaves = async () => {
@@ -342,7 +347,7 @@ export default function LeaveWorkflow() {
             {canReview ? "Administration Module" : "Self Service"}
           </p>
           <h2 className="page-title text-on-surface">
-            {canReview ? "Human Resources & Personnel" : "My Leave Requests"}
+            {canReview ? "Leave Management" : "My Leaves"}
           </h2>
         </div>
       </div>
@@ -361,6 +366,13 @@ export default function LeaveWorkflow() {
                 Apply for Leave
               </Link>
             )}
+            <button
+              type="button"
+              onClick={() => setShowHolidays(true)}
+              className="text-xs font-bold bg-sky-50 text-sky-700 border border-sky-200 px-3 py-1.5 rounded-full hover:bg-sky-100 transition-colors"
+            >
+              {canManageHolidays ? "Manage Holidays" : "Holiday Calendar"}
+            </button>
             {canManagePolicy && (
               <button
                 onClick={openPolicy}
@@ -396,7 +408,7 @@ export default function LeaveWorkflow() {
                 return (
                   <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
                     <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
-                    <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{formatRoleLabel(leave.user?.role?.name)}</td>
+                    <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{formatRoleLabel(leave.user?.role)}</td>
                     <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">
                       <div>{leave.type}</div>
                       <div className="flex flex-wrap gap-1 mt-1">
@@ -768,6 +780,13 @@ export default function LeaveWorkflow() {
           </div>
         </div>
       )}
+
+      <HolidayManagerModal
+        open={showHolidays}
+        onClose={() => setShowHolidays(false)}
+        canManage={canManageHolidays}
+        token={token}
+      />
     </div>
   );
 }

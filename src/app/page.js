@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import AttendanceModal from "@/components/AttendanceModal";
+import HolidayBanner from "@/components/dashboard/HolidayBanner";
 import AttendanceTimer from "@/components/AttendanceTimer";
 import { getISTDateKey } from "@/lib/time";
 import SectionCard from "@/components/dashboard/SectionCard";
@@ -17,9 +18,10 @@ export default function Dashboard() {
   const [todayAttendance, setTodayAttendance] = useState(null);
 
   const role = user?.roleName;
+  const userId = user?.id;
 
   const fetchTodayAttendance = useCallback(async () => {
-    if (!token || !user) return null;
+    if (!token || !userId) return null;
 
     try {
       const res = await fetch("/api/attendance?self=1", {
@@ -31,14 +33,14 @@ export default function Dashboard() {
       const today = getISTDateKey();
       return (
         (json.data || []).find(
-          (entry) => entry.userId === user.id && entry.logdate === today
+          (entry) => entry.userId === userId && entry.logdate === today
         ) || null
       );
     } catch (err) {
       console.error("Failed to load today's attendance:", err);
       return null;
     }
-  }, [token, user]);
+  }, [token, userId]);
 
   const loadTodayAttendance = useCallback(async () => {
     const log = await fetchTodayAttendance();
@@ -140,6 +142,8 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      <HolidayBanner />
 
       <TaskAnalytics />
 

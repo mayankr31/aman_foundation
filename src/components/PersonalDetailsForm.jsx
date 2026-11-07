@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
-import { QUALIFICATIONS } from "@/lib/organization";
+import { QUALIFICATIONS, getDepartmentOptions } from "@/lib/organization";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
+import { formatRoleLabel } from "@/lib/roles";
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
 import {
@@ -17,6 +20,8 @@ import {
   validatePersonName,
   validateRequired,
   validateDateNotFuture,
+  validateDateOrder,
+  isBlank,
   firstError,
   toMobileInput,
   toAadhaarInput,
@@ -40,6 +45,16 @@ function buildInitial(person = {}) {
     email: person.email || "",
     mobile: toMobileInput(person.mobile || person.phone || ""),
     address: person.address || "",
+    state: person.state || "",
+    district: person.district || "",
+    block: person.block || "",
+    village: person.village || "",
+    landmark: person.landmark || "",
+    department: person.department || "",
+    managerId: person.managerId || "",
+    dateOfJoining: toDateInput(person.dateOfJoining),
+    dateOfLeaving: toDateInput(person.dateOfLeaving),
+    resignationReason: person.resignationReason || "",
     gender: person.gender || "",
     dob: toDateInput(person.dob),
     avatar: person.avatar || "",
@@ -64,6 +79,12 @@ export default function PersonalDetailsForm({
   onCancel,
   avatarUploadUrl = null,
   onAvatarUpdated,
+  showEmployment = false,
+  canEditDepartment = false,
+  canEditReporting = false,
+  canEditExit = false,
+  managerOptions = [],
+  readOnlyManagerName = "",
 }) {
   const { token } = useAuth();
   const toast = useToast();
@@ -81,6 +102,32 @@ export default function PersonalDetailsForm({
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+  const stateOptions = withCurrentOption(
+    INDIA_STATES.map((state) => state.name),
+    form.state
+  );
+  const districtOptions = withCurrentOption(
+    getDistrictsForState(form.state),
+    form.district
+  );
+  const departmentChoices = (() => {
+    const { suggested, others } = getDepartmentOptions(person?.role?.name, form.department);
+    return [...suggested, ...others];
+  })();
+  const managerChoices = [...managerOptions];
+  if (
+    form.managerId &&
+    !managerChoices.some((manager) => manager.id === form.managerId)
+  ) {
+    managerChoices.unshift({
+      id: form.managerId,
+      name: person?.manager?.name
+        ? `${person.manager.name} (current)`
+        : "Current manager",
+      role: person?.manager?.role || null,
+    });
+  }
 
   const handleAvatarChange = async (event) => {
     const file = event.target.files?.[0];
@@ -121,7 +168,10 @@ export default function PersonalDetailsForm({
       validateEmail(form.email, { required: true }),
       validateMobile(form.mobile, { required: true }),
       validateDateNotFuture(form.dob, { required: true, label: "Date of birth" }),
-      validateRequired(form.address, "Address"),
+      validateRequired(form.state, "State"),
+      validateRequired(form.district, "District"),
+      validateRequired(form.block, "Block"),
+      validateRequired(form.village, "City / Village"),
       validateRequired(form.gender, "Gender"),
       validateRequired(form.maritalStatus, "Marital status"),
       validateRequired(form.bloodGroup, "Blood group"),
@@ -137,6 +187,30 @@ export default function PersonalDetailsForm({
       validateRequired(form.bankName, "Bank name"),
       validateBankAccount(form.bankAccountNo, { required: true }),
       validateIfsc(form.bankIfsc, { required: true }),
+      showEmployment && canEditDepartment
+        ? validateRequired(form.department, "Department")
+        : null,
+      showEmployment
+        ? validateDateNotFuture(form.dateOfJoining, {
+            required: true,
+            label: "Date of joining",
+          })
+        : null,
+      showEmployment && canEditExit
+        ? validateDateNotFuture(form.dateOfLeaving, { label: "Date of leaving" })
+        : null,
+      showEmployment && canEditExit && !isBlank(form.dateOfLeaving)
+        ? validateRequired(form.resignationReason, "Reason for leaving")
+        : null,
+      showEmployment && canEditExit && isBlank(form.dateOfLeaving) && !isBlank(form.resignationReason)
+        ? "Date of leaving is required when a reason is provided."
+        : null,
+      showEmployment && canEditExit
+        ? validateDateOrder(form.dateOfJoining, form.dateOfLeaving, {
+            startLabel: "Date of joining",
+            endLabel: "Date of leaving",
+          })
+        : null,
     ]);
 
     if (validationMessage) {
@@ -146,7 +220,10 @@ export default function PersonalDetailsForm({
 
     setSubmitting(true);
     try {
-      await onSubmit({ ...form });
+      await onSubmit({
+        ...form,
+        address: composeProfileAddress(form),
+      });
     } catch (err) {
       // The parent surfaces the API error through a toast.
       console.error("Personal details save failed:", err);
@@ -242,6 +319,90 @@ export default function PersonalDetailsForm({
         </div>
       </section>
 
+      {showEmployment && (
+        <section>
+          <h3 className="font-headline font-bold text-base text-on-surface mb-4">Employment</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Employee ID</span>
+              <div className="px-4 py-2 border rounded-lg border-outline-variant bg-surface-container text-on-surface text-sm">
+                {person?.employeeId || "—"}
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Role</span>
+              <div className="px-4 py-2 border rounded-lg border-outline-variant bg-surface-container text-on-surface text-sm">
+                {formatRoleLabel(person?.role)}
+              </div>
+            </div>
+            {canEditDepartment ? (
+              select("Department", "department", departmentChoices, true)
+            ) : (
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Department</span>
+                <div className="px-4 py-2 border rounded-lg border-outline-variant bg-surface-container text-on-surface text-sm">
+                  {form.department || "—"}
+                </div>
+              </div>
+            )}
+
+            {canEditReporting ? (
+              <div className="flex flex-col gap-1">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+                  Reports To
+                </label>
+                <select
+                  value={form.managerId ?? ""}
+                  onChange={(event) => setField("managerId", event.target.value)}
+                  className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-sm"
+                >
+                  <option value="">No manager / top level</option>
+                  {managerChoices.map((manager) => (
+                    <option key={manager.id} value={manager.id}>
+                      {manager.name}
+                      {manager.role?.name ? ` (${manager.role.name.replaceAll("_", " ")})` : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Reports To</span>
+                <div className="px-4 py-2 border rounded-lg border-outline-variant bg-surface-container text-on-surface text-sm">
+                  {readOnlyManagerName || "No manager / top level"}
+                </div>
+              </div>
+            )}
+
+            {input("Date of Joining", "dateOfJoining", {
+              type: "date",
+              required: true,
+              max: new Date().toISOString().slice(0, 10),
+            })}
+
+            {canEditExit && (
+              <>
+                {input("Date of Leaving", "dateOfLeaving", {
+                  type: "date",
+                  max: new Date().toISOString().slice(0, 10),
+                })}
+                <div className="flex flex-col gap-1 md:col-span-2">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+                    Reason for Leaving
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={form.resignationReason}
+                    onChange={(event) => setField("resignationReason", event.target.value)}
+                    className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+      )}
+
       <section>
         <h3 className="font-headline font-bold text-base text-on-surface mb-4">Personal</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -264,16 +425,44 @@ export default function PersonalDetailsForm({
           {select("Gender", "gender", ["Male", "Female", "Other"], true)}
           {select("Marital Status", "maritalStatus", ["Single", "Married", "Divorced", "Widowed"], true)}
           {select("Blood Group", "bloodGroup", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], true)}
-          <div className="flex flex-col gap-1 md:col-span-2">
+          <div className="flex flex-col gap-1">
             <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">
-              Address<span className="text-error ml-0.5">*</span>
+              State<span className="text-error ml-0.5">*</span>
             </label>
-            <textarea
-              rows={3}
-              value={form.address}
-              onChange={(event) => setField("address", event.target.value)}
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-sm"
-            />
+            <select
+              value={form.state}
+              onChange={(event) => {
+                const value = event.target.value;
+                setForm((prev) => ({ ...prev, state: value, district: "" }));
+              }}
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-sm"
+            >
+              <option value="">Select state</option>
+              {stateOptions.map((state) => (
+                <option key={state} value={state}>{state}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+              District<span className="text-error ml-0.5">*</span>
+            </label>
+            <select
+              value={form.district}
+              onChange={(event) => setField("district", event.target.value)}
+              disabled={!form.state}
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent dark:bg-slate-900 text-on-surface text-sm disabled:opacity-60"
+            >
+              <option value="">{form.state ? "Select district" : "Select state first"}</option>
+              {districtOptions.map((district) => (
+                <option key={district} value={district}>{district}</option>
+              ))}
+            </select>
+          </div>
+          {input("Block", "block", { required: true, maxLength: 80 })}
+          {input("City / Village", "village", { required: true, maxLength: 80 })}
+          <div className="md:col-span-2">
+            {input("Nearby Landmark (optional)", "landmark", { maxLength: 120 })}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Highest Qualification<span className="text-error ml-0.5">*</span></label>

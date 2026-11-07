@@ -192,7 +192,7 @@ const HR_LINKS = [
   },
   {
     key: "hr.leaves",
-    label: "Leave Requests",
+    label: "Leave Management",
     href: "/hr/leaves",
     icon: "event_note",
     page: "leaves",
@@ -247,7 +247,7 @@ const SELF_SERVICE_LINKS = [
   },
   {
     key: "self.leave-requests",
-    label: "Leave Requests",
+    label: "Leave Management",
     href: "/hr/leaves",
     icon: "event_note",
     page: "leaves",

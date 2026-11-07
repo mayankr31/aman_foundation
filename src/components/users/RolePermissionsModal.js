@@ -226,7 +226,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
               <ShieldCheck size={20} />
             </div>
             <div className="min-w-0">
-              <h3 className={`text-xl font-bold tracking-tight truncate ${theme.textWhite}`}>{formatRoleLabel(role?.name)}</h3>
+              <h3 className={`text-xl font-bold tracking-tight truncate ${theme.textWhite}`}>{formatRoleLabel(role)}</h3>
               <p className={`text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>Edit Role Permissions</p>
             </div>
           </div>

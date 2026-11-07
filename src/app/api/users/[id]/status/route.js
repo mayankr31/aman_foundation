@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { generateEmployeeId } from "@/lib/employeeId";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { getMissingProfileFields } from "@/lib/profileCompleteness";
 
 export async function PATCH(req, context) {
   try {
@@ -42,7 +44,7 @@ export async function PATCH(req, context) {
         email: true,
         employeeId: true,
         fellow: { select: { id: true } },
-        role: { select: { name: true } }
+        role: { select: { name: true, displayName: true, rank: true } }
       },
     });
 
@@ -64,7 +66,7 @@ export async function PATCH(req, context) {
           status: true,
           employeeId: true,
           inactiveSince: true,
-          role: { select: { name: true } }
+          role: { select: { name: true, displayName: true, rank: true } }
         }
       });
 
@@ -97,6 +99,28 @@ export async function PATCH(req, context) {
 
       return updated;
     });
+
+    if (status === "ACTIVE") {
+      const fullUser = await prisma.user.findUnique({
+        where: { id },
+        include: { fellow: true },
+      });
+      const missing = getMissingProfileFields(fullUser);
+      if (missing.length > 0) {
+        try {
+          await notifyUsers([id], {
+            type: NOTIFICATION_TYPES.PROFILE_INCOMPLETE,
+            title: "Complete your personal details",
+            message:
+              "Your account is approved. Please fill in your mandatory personal details to finish setting up your profile.",
+            link: "/profile?tab=personal-details&edit=1",
+            dedupeKey: `profile-incomplete:${id}`,
+          });
+        } catch (notifyError) {
+          console.error("Profile completion notification failed:", notifyError);
+        }
+      }
+    }
 
     return NextResponse.json({ success: true, data: updatedUser });
   } catch (error) {

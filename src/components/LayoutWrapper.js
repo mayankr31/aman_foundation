@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 export default function LayoutWrapper({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { token, isInitializing, can } = useAuth();
+  const { token, isInitializing, can, user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,6 +39,18 @@ export default function LayoutWrapper({ children }) {
       router.push("/");
     }
   }, [token, isInitializing, isAuthPage, pathname, isAllowed]);
+
+  // After approval, prompt the user once per browser session to complete their
+  // mandatory personal details.
+  useEffect(() => {
+    if (isInitializing || !token || isAuthPage) return;
+    if (!user?.profileIncomplete || pathname === "/profile") return;
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("profile-completion-prompted") === "1") return;
+
+    sessionStorage.setItem("profile-completion-prompted", "1");
+    router.push("/profile?tab=personal-details&edit=1&complete=1");
+  }, [isInitializing, token, isAuthPage, user, pathname, router]);
 
   // Any full-screen overlay (modal, drawer, lightbox, full-page form) uses
   // `fixed inset-0`. While one exists, lock scrolling on the page behind it.

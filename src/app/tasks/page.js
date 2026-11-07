@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { formatDate, formatDateTime } from "@/lib/date";
 import DateInput from "@/components/ui/DateInput";
+import Pagination from "@/components/ui/Pagination";
+import usePagination from "@/lib/usePagination";
 import FilePreviewLink from "@/components/files/FilePreviewLink";
 import { getISTDateKey } from "@/lib/time";
 import { validateDateOrder } from "@/lib/validation";
@@ -395,11 +397,15 @@ function TasksPageContent() {
   const canWrite = can("tasks", "WRITE");
   const userId = user?.id;
 
+  const {
+    currentPage,
+    setCurrentPage,
+    pageItems: pagedTasks,
+  } = usePagination(tasks, 15);
+
   useEffect(() => {
-    if (isAdmin) {
-      setView((prev) => (prev === "mine" ? "all" : prev));
-    }
-  }, [isAdmin]);
+    setCurrentPage(1);
+  }, [view, statusFilter, priorityFilter, setCurrentPage]);
 
   const loadTasks = useCallback(async () => {
     if (!token) return;
@@ -568,7 +574,12 @@ function TasksPageContent() {
 
       <div className="flex flex-wrap gap-2">
         {[
-          ...(isAdmin ? [{ key: "all", label: "All Tasks" }] : [{ key: "mine", label: "My Tasks" }]),
+          ...(isAdmin
+            ? [
+                { key: "all", label: "All Tasks" },
+                { key: "mine", label: "My Tasks" },
+              ]
+            : [{ key: "mine", label: "My Tasks" }]),
           ...(!isAdmin && hasTeam ? [{ key: "team", label: "Team Tasks" }] : []),
           { key: "assigned-by-me", label: "Assigned by Me" },
         ].map((tab) => (
@@ -604,7 +615,7 @@ function TasksPageContent() {
           </div>
         ) : (
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {tasks.map((task) => {
+            {pagedTasks.map((task) => {
               const isOverdue = task.status !== "Completed" && task.status !== "Cancelled" && task.deadline && new Date(task.deadline) < new Date();
               return (
                 <button
@@ -643,6 +654,14 @@ function TasksPageContent() {
             })}
           </div>
         )}
+        {!loading && tasks.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalItems={tasks.length}
+            itemsPerPage={15}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
 
       {showCreate && (
@@ -669,7 +688,7 @@ function TasksPageContent() {
                     {assignables.some((person) => person.id !== user.id) && (
                       <optgroup label="People under you">
                         {assignables.filter((person) => person.id !== user.id).map((person) => (
-                          <option key={person.id} value={person.id}>{person.name} ({formatRoleLabel(person.role?.name)})</option>
+                          <option key={person.id} value={person.id}>{person.name} ({formatRoleLabel(person.role)})</option>
                         ))}
                       </optgroup>
                     )}

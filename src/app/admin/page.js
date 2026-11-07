@@ -4,7 +4,7 @@
 import React, { Suspense, useState, useEffect, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X, LayoutDashboard, UserCog } from 'lucide-react';
+import { UserCheck, UserX, Loader2, Users as UsersIcon, CheckCircle2, ShieldAlert, ArrowRight, Shield, Users, Search, Plus, Trash2, UserPlus, KeyRound, GitBranch, X, LayoutDashboard, UserCog, Pencil } from 'lucide-react';
 import { useAuth } from '@/lib/useAuth';
 import { useToast } from '@/context/ToastContext';
 import UserPermissionsModal from '@/components/users/UserPermissionsModal';
@@ -18,7 +18,7 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import Pagination from '@/components/ui/Pagination';
 import { DEPARTMENTS, getDefaultDepartment, getSuggestedDepartments } from '@/lib/organization';
 import { formatRoleLabel } from '@/lib/roles';
-import { getManagerCandidates } from '@/lib/roleHierarchy';
+import { getManagerCandidates, getRoleRank } from '@/lib/roleHierarchy';
 
 const ADMIN_TABS = ['users', 'deactivated', 'approvals', 'roles'];
 
@@ -73,6 +73,7 @@ function AdminPageContent() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [dashboardTarget, setDashboardTarget] = useState(null);
   const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
+  const [editingRole, setEditingRole] = useState(null);
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [editRoleUser, setEditRoleUser] = useState(null);
   const [resetPasswordUser, setResetPasswordUser] = useState(null);
@@ -227,6 +228,18 @@ function AdminPageContent() {
     setDeleteModalOpen(true);
   };
 
+  const handleRoleSaved = (savedRole) => {
+    if (!savedRole?.id) return;
+    setRoles((prev) => {
+      const exists = prev.some((role) => role.id === savedRole.id);
+      return exists
+        ? prev.map((role) => (role.id === savedRole.id ? savedRole : role))
+        : [...prev, savedRole];
+    });
+    // Re-sync users so role chips and Reports To labels show the new name/rank.
+    fetchUsers(true);
+  };
+
   const handleConfirmDeleteRole = async () => {
     if (!deleteItemId) return;
 
@@ -324,7 +337,7 @@ function AdminPageContent() {
   }
 
   const managerChoices = managerUser
-    ? getManagerCandidates(users, managerUser.role?.name, { excludeUserId: managerUser.id })
+    ? getManagerCandidates(users, managerUser.role, { excludeUserId: managerUser.id })
     : [];
   const currentManagerUser = managerUser?.managerId
     ? users.find((u) => u.id === managerUser.managerId)
@@ -349,7 +362,10 @@ function AdminPageContent() {
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
           {activeTab === 'roles' && (
             <button
-              onClick={() => setIsAddRoleOpen(true)}
+              onClick={() => {
+                setEditingRole(null);
+                setIsAddRoleOpen(true);
+              }}
               className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
             >
               <Plus size={14} /> Add Role
@@ -519,8 +535,8 @@ function AdminPageContent() {
                             <td data-label="Email" className="py-4 px-3 align-middle text-slate-500 break-words overflow-hidden">{item.email}</td>
                             <td data-label="Mobile" className="py-4 px-3 align-middle text-slate-500 overflow-hidden">{item.mobile || '—'}</td>
                             <td data-label="Role" className="py-4 px-3 align-middle font-semibold dark:text-gray-300 text-slate-700 overflow-hidden">
-                              <span className="inline-block max-w-full px-2 py-1 rounded bg-slate-100 dark:bg-white/5 uppercase tracking-wide text-[10px] truncate align-middle">
-                                {formatRoleLabel(item.role?.name)}
+                              <span className="inline-block max-w-full px-2 py-1 rounded bg-slate-100 dark:bg-white/5 tracking-wide text-[10px] truncate align-middle">
+                                {formatRoleLabel(item.role)}
                               </span>
                             </td>
                             <td data-label="Status" className="py-4 px-3 align-middle overflow-hidden">
@@ -703,20 +719,25 @@ function AdminPageContent() {
                     className="p-6 rounded-3xl border dark:border-white/5 border-slate-200 bg-white dark:bg-[#0d1320] flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div>
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                      <div className="flex justify-between items-center mb-4 gap-2">
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center">
                           <Shield size={20} />
                         </div>
-                        <span className={`px-2.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
-                          roleItem.displayInRegister
-                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                            : 'bg-slate-500/10 text-slate-500'
-                        }`}>
-                          {roleItem.displayInRegister ? 'Register Visible' : 'Hidden Role'}
-                        </span>
+                        <div className="flex flex-wrap items-center justify-end gap-1.5">
+                          <span className="px-2.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-500/10 text-slate-500">
+                            Rank {getRoleRank(roleItem)}
+                          </span>
+                          <span className={`px-2.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                            roleItem.displayInRegister
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                              : 'bg-slate-500/10 text-slate-500'
+                          }`}>
+                            {roleItem.displayInRegister ? 'Register Visible' : 'Hidden Role'}
+                          </span>
+                        </div>
                       </div>
                       <h3 className="text-base font-extrabold dark:text-white text-slate-800">
-                        {formatRoleLabel(roleItem.name)}
+                        {formatRoleLabel(roleItem)}
                       </h3>
                       <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
                         {roleItem.description || 'Provides default capability profile inside system apps.'}
@@ -724,6 +745,13 @@ function AdminPageContent() {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mt-6">
+                      <button
+                        onClick={() => setEditingRole(roleItem)}
+                        className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 border border-sky-500/10 transition-colors"
+                      >
+                        <Pencil size={12} />
+                        Edit
+                      </button>
                       <button
                         onClick={() => setDashboardTarget({ scope: 'role', entity: roleItem })}
                         className="flex-grow py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/10 transition-colors"
@@ -775,13 +803,20 @@ function AdminPageContent() {
         token={token}
       />
 
-      <AddRoleModal
-        isOpen={isAddRoleOpen}
-        onClose={() => setIsAddRoleOpen(false)}
-        isDarkMode={isDarkMode}
-        token={token}
-        onRoleAdded={(newRole) => setRoles(prev => [...prev, newRole])}
-      />
+      {(isAddRoleOpen || Boolean(editingRole)) && (
+        <AddRoleModal
+          key={editingRole?.id || 'new-role'}
+          isOpen
+          onClose={() => {
+            setIsAddRoleOpen(false);
+            setEditingRole(null);
+          }}
+          isDarkMode={isDarkMode}
+          token={token}
+          role={editingRole}
+          onSaved={handleRoleSaved}
+        />
+      )}
 
       <CreateUserModal
         isOpen={isCreateUserOpen}
@@ -848,17 +883,17 @@ function AdminPageContent() {
               <option value="">No manager / top level</option>
               {currentManagerMissing && currentManagerUser && (
                 <option value={currentManagerUser.id}>
-                  {currentManagerUser.name} ({formatRoleLabel(currentManagerUser.role?.name)}) — current
+                  {currentManagerUser.name} ({formatRoleLabel(currentManagerUser.role)}) — current
                 </option>
               )}
               {managerChoices.map((manager) => (
                 <option key={manager.id} value={manager.id}>
-                  {manager.name} ({formatRoleLabel(manager.role?.name)})
+                  {manager.name} ({formatRoleLabel(manager.role)})
                 </option>
               ))}
             </select>
             <p className="mt-2 text-[11px] text-slate-400">
-              Only roles senior to {formatRoleLabel(managerUser.role?.name)} are listed.
+              Only roles senior to {formatRoleLabel(managerUser.role)} are listed.
             </p>
 
             <div className="flex justify-end gap-2 mt-6">

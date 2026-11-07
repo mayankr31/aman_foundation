@@ -3,7 +3,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { canDeleteRecords as canDeleteRecordsForUser } from "@/lib/roles";
+import { canDeleteRecords as canDeleteRecordsForUser, formatRoleLabel } from "@/lib/roles";
 
 const AuthContext = createContext(null);
 
@@ -22,7 +22,12 @@ const decodeData = (encodedData) => {
 
 function samePermissions(a, b) {
   try {
-    return JSON.stringify(a || {}) === JSON.stringify(b || {});
+    const normalize = (permissions) =>
+      Object.keys(permissions || {})
+        .sort()
+        .map((key) => `${key}:${permissions[key]?.read ? 1 : 0}${permissions[key]?.write ? 1 : 0}`)
+        .join("|");
+    return normalize(a) === normalize(b);
   } catch {
     return false;
   }
@@ -65,14 +70,28 @@ export function AuthProvider({ children }) {
         if (!json.success || !mountedRef.current) return null;
 
         const next = {
-          ...(decodeData(localStorage.getItem("user") || "") || {}),
           roleId: json.data.roleId,
           roleName: json.data.roleName,
+          roleDisplayName: json.data.roleDisplayName || null,
           permissions: json.data.permissions || {},
         };
         versionRef.current = json.data.version || null;
         setUser((prev) => {
-          const merged = { ...(prev || {}), ...next };
+          if (
+            prev &&
+            prev.permissions &&
+            prev.roleId === next.roleId &&
+            prev.roleName === next.roleName &&
+            (prev.roleDisplayName || null) === next.roleDisplayName &&
+            samePermissions(prev.permissions, next.permissions)
+          ) {
+            return prev;
+          }
+          const base =
+            prev ||
+            decodeData(localStorage.getItem("user") || "") ||
+            {};
+          const merged = { ...base, ...next };
           localStorage.setItem("user", encodeData(merged));
           return merged;
         });
@@ -124,11 +143,14 @@ export function AuthProvider({ children }) {
             email: json.data.email,
             roleId: json.data.roleId,
             roleName: json.data.role.name,
+            roleDisplayName: formatRoleLabel(json.data.role),
             name: json.data.name,
             avatar: json.data.avatar || json.data.fellow?.avatar || null,
             fellowId: json.data.fellow?.id || null,
             fellowName: json.data.fellow?.name || null,
             managerId: json.data.managerId || null,
+            profileIncomplete: Boolean(json.data.profileIncomplete),
+            missingProfileFields: json.data.missingProfileFields || [],
             permissions: json.data.permissions || {},
           };
           persistUser(freshUser);
@@ -175,6 +197,9 @@ export function AuthProvider({ children }) {
   }, [pathname, token, refreshPermissions]);
 
   const login = (userData, authToken) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("profile-completion-prompted");
+    }
     setUser(userData);
     setToken(authToken);
     localStorage.setItem("token", authToken);

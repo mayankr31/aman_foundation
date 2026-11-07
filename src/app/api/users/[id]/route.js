@@ -26,6 +26,7 @@ import {
   normalizeBankAccountForSave,
   normalizeEmailForSave,
 } from "@/lib/validation";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
 
 const PERSONAL_FIELDS = [
   "name",
@@ -36,6 +37,11 @@ const PERSONAL_FIELDS = [
   "maritalStatus",
   "bloodGroup",
   "address",
+  "state",
+  "district",
+  "block",
+  "village",
+  "landmark",
   "emergencyContactName",
   "emergencyContactPhone",
   "aadharNumber",
@@ -79,9 +85,9 @@ export async function GET(req, context) {
       where: { id },
       include: {
         role: true,
-        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+        manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
         directReports: {
-          select: { id: true, name: true, employeeId: true, status: true, role: { select: { name: true } } },
+          select: { id: true, name: true, employeeId: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
         },
         fellow: {
           select: {
@@ -202,7 +208,7 @@ export async function PATCH(req, context) {
       where: { id },
       select: {
         id: true,
-        role: { select: { name: true } },
+        role: { select: { name: true, displayName: true, rank: true } },
         managerId: true,
         dateOfJoining: true,
         status: true,
@@ -215,6 +221,16 @@ export async function PATCH(req, context) {
     const body = await req.json();
     const canManageExit = EXIT_MANAGER_ROLES.includes(currentUser.role.name);
 
+    const hasStructuredAddress =
+      body.state !== undefined ||
+      body.district !== undefined ||
+      body.block !== undefined ||
+      body.village !== undefined ||
+      body.landmark !== undefined;
+    const composedAddress = hasStructuredAddress
+      ? composeProfileAddress(body)
+      : undefined;
+
     const validationMessage = firstError([
       body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
       body.email !== undefined ? validateEmail(body.email, { required: true }) : null,
@@ -223,7 +239,13 @@ export async function PATCH(req, context) {
       body.gender !== undefined ? validateRequired(body.gender, "Gender") : null,
       body.maritalStatus !== undefined ? validateRequired(body.maritalStatus, "Marital status") : null,
       body.bloodGroup !== undefined ? validateRequired(body.bloodGroup, "Blood group") : null,
-      body.address !== undefined ? validateRequired(body.address, "Address") : null,
+      body.address !== undefined && !hasStructuredAddress
+        ? validateRequired(body.address, "Address")
+        : null,
+      hasStructuredAddress ? validateRequired(body.state, "State") : null,
+      hasStructuredAddress ? validateRequired(body.district, "District") : null,
+      hasStructuredAddress ? validateRequired(body.block, "Block") : null,
+      hasStructuredAddress ? validateRequired(body.village, "City / Village") : null,
       body.emergencyContactName !== undefined
         ? validatePersonName(body.emergencyContactName, { required: true })
         : null,
@@ -263,6 +285,7 @@ export async function PATCH(req, context) {
     for (const field of PERSONAL_FIELDS) {
       if (body[field] !== undefined) data[field] = body[field];
     }
+    if (composedAddress !== undefined) data.address = composedAddress || null;
     if (body.email !== undefined) data.email = normalizeEmailForSave(body.email);
     if (body.mobile !== undefined) data.mobile = normalizeMobileForSave(body.mobile);
     if (body.emergencyContactPhone !== undefined) data.emergencyContactPhone = normalizeMobileForSave(body.emergencyContactPhone);
@@ -329,7 +352,7 @@ export async function PATCH(req, context) {
         if (managerId) {
           const manager = await prisma.user.findUnique({
             where: { id: managerId },
-            select: { id: true, status: true, role: { select: { name: true } } },
+            select: { id: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
           });
           if (!manager) {
             return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
@@ -337,7 +360,7 @@ export async function PATCH(req, context) {
           if (manager.status !== "ACTIVE") {
             return NextResponse.json({ error: "Selected manager is not active" }, { status: 400 });
           }
-          if (!isManagerRoleAllowed(target.role?.name, manager.role?.name)) {
+          if (!isManagerRoleAllowed(target.role, manager.role)) {
             return NextResponse.json(
               { error: "Selected manager must be senior to this employee" },
               { status: 400 }
@@ -369,6 +392,11 @@ export async function PATCH(req, context) {
         maritalStatus: true,
         bloodGroup: true,
         address: true,
+        state: true,
+        district: true,
+        block: true,
+        village: true,
+        landmark: true,
         emergencyContactName: true,
         emergencyContactPhone: true,
         aadharNumber: true,
@@ -387,8 +415,8 @@ export async function PATCH(req, context) {
         avatar: true,
         status: true,
         managerId: true,
-        manager: { select: { id: true, name: true, role: { select: { name: true } } } },
-        role: { select: { name: true } }
+        manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
+        role: { select: { name: true, displayName: true, rank: true } }
       }
     });
 

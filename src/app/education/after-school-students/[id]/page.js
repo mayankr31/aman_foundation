@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import { sortSubjectOptions, deriveSession } from "@/data/assessmentOptions";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import PhotoLightbox from "@/components/PhotoLightbox";
@@ -82,7 +84,9 @@ function Modal({ title, onClose, children }) {
 // ─── Main Component ─────────────────────────────────────────────────────────────
 export default function AfterSchoolStudentProfileDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const { user, token, isInitializing, canDeleteRecords } = useAuth();
+  const toast = useToast();
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -90,6 +94,7 @@ export default function AfterSchoolStudentProfileDetail() {
   const [editPhoto, setEditPhoto] = useState(null);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const [modal, setModal] = useState(null); // 'edit' | 'centre' | 'assessment_form' | 'transition'
+  const [showDeleteStudent, setShowDeleteStudent] = useState(false);
   const [centres, setCentres] = useState([]);
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [learningAssessments, setLearningAssessments] = useState([]);
@@ -138,7 +143,6 @@ export default function AfterSchoolStudentProfileDetail() {
         setTransitions(json.data.transitions || []);
         setEditForm({
           name: json.data.name || "",
-          studentId: json.data.studentId || "",
           dob: json.data.dob ? json.data.dob.split("T")[0] : "",
           gender: json.data.gender || "",
           email: json.data.email || "",
@@ -343,6 +347,27 @@ export default function AfterSchoolStudentProfileDetail() {
       }
       else alert(json.error || "Failed to save");
     } finally { setSaving(false); }
+  }
+
+  async function handleDeleteStudent() {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const targetId = student?.id || id;
+      const res = await fetch(`/api/after-school-students/${targetId}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete student");
+      }
+      toast.success("Student deleted successfully");
+      router.push("/education/after-school-students");
+    } catch (err) {
+      alert(err.message || "Failed to delete student");
+      setSaving(false);
+    }
   }
 
   async function handlePhotoUpload(e) {
@@ -590,6 +615,16 @@ export default function AfterSchoolStudentProfileDetail() {
             <span className="material-symbols-outlined text-[18px]">school</span>
             Manage Centre
           </button>
+          {canDeleteRecords && (
+            <button
+              onClick={() => setShowDeleteStudent(true)}
+              disabled={saving}
+              className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border border-error/20 disabled:opacity-50"
+            >
+              <span className="material-symbols-outlined text-[18px]">delete</span>
+              Delete Student
+            </button>
+          )}
         </div>
       </header>
 
@@ -1051,23 +1086,22 @@ export default function AfterSchoolStudentProfileDetail() {
                 )}
               </div>
               <InputField label="Full Name" name="name" value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} required transform={toPersonNameInput} maxLength={60} />
-              <InputField label="Student ID" name="studentId" value={editForm.studentId} onChange={e => setEditForm(f => ({ ...f, studentId: e.target.value }))} />
-              <InputField label="Date of Birth" name="dob" type="date" value={editForm.dob} onChange={e => setEditForm(f => ({ ...f, dob: e.target.value }))} max={new Date().toISOString().slice(0, 10)} />
-              <InputField label="Gender" name="gender" value={editForm.gender} onChange={e => setEditForm(f => ({ ...f, gender: e.target.value }))} options={["", "Male", "Female", "Other"]} />
-              <InputField label="Grade" name="grade" value={editForm.grade} onChange={e => setEditForm(f => ({ ...f, grade: e.target.value }))} />
-              <InputField label="Grade Group" name="gradeGroup" value={editForm.gradeGroup} onChange={e => setEditForm(f => ({ ...f, gradeGroup: e.target.value }))} options={["", "Primary", "Middle", "Secondary", "Senior Secondary"]} />
-              <InputField label="District" name="district" value={editForm.district} onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))} />
-              <InputField label="Primary Language" name="primaryLanguage" value={editForm.primaryLanguage} onChange={e => setEditForm(f => ({ ...f, primaryLanguage: e.target.value }))} />
+              <InputField label="Date of Birth" name="dob" type="date" value={editForm.dob} onChange={e => setEditForm(f => ({ ...f, dob: e.target.value }))} required max={new Date().toISOString().slice(0, 10)} />
+              <InputField label="Gender" name="gender" value={editForm.gender} onChange={e => setEditForm(f => ({ ...f, gender: e.target.value }))} required options={["", "Male", "Female", "Other"]} />
+              <InputField label="Grade" name="grade" value={editForm.grade} onChange={e => setEditForm(f => ({ ...f, grade: e.target.value }))} required />
+              <InputField label="Grade Group" name="gradeGroup" value={editForm.gradeGroup} onChange={e => setEditForm(f => ({ ...f, gradeGroup: e.target.value }))} required options={["", "Primary", "Middle", "Secondary", "Senior Secondary"]} />
+              <InputField label="District" name="district" value={editForm.district} onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))} required />
+              <InputField label="Primary Language" name="primaryLanguage" value={editForm.primaryLanguage} onChange={e => setEditForm(f => ({ ...f, primaryLanguage: e.target.value }))} required />
               <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} autoComplete="email" />
               <InputField label="Guardian Name" name="guardianName" value={editForm.guardianName} onChange={e => setEditForm(f => ({ ...f, guardianName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
               <InputField label="Guardian Relation" name="guardianRelation" value={editForm.guardianRelation} onChange={e => setEditForm(f => ({ ...f, guardianRelation: e.target.value }))} />
               <InputField label="Guardian Phone" name="guardianPhone" value={editForm.guardianPhone} onChange={e => setEditForm(f => ({ ...f, guardianPhone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-              <InputField label="Father's Name" name="fatherName" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
-              <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-              <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
+              <InputField label="Father's Name" name="fatherName" value={editForm.fatherName} onChange={e => setEditForm(f => ({ ...f, fatherName: e.target.value }))} required transform={toPersonNameInput} maxLength={60} />
+              <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} required type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
+              <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} required transform={toPersonNameInput} maxLength={60} />
               <InputField label="Mother's Mobile" name="motherMobile" value={editForm.motherMobile} onChange={e => setEditForm(f => ({ ...f, motherMobile: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-              <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} />
-              <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} max={new Date().toISOString().slice(0, 10)} />
+              <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} required />
+              <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} required max={new Date().toISOString().slice(0, 10)} />
 
             </div>
             <div className="flex justify-end gap-3 pt-4">
@@ -1324,6 +1358,14 @@ export default function AfterSchoolStudentProfileDetail() {
           </form>
         </Modal>
       )}
+
+      <ConfirmDeleteModal
+        isOpen={showDeleteStudent}
+        onClose={() => setShowDeleteStudent(false)}
+        onConfirm={handleDeleteStudent}
+        title="Delete Student"
+        message={`Are you sure you want to permanently delete ${student.name} and all of their records? This cannot be undone.`}
+      />
 
       <PhotoLightbox src={lightboxPhoto} alt="Student photo" onClose={() => setLightboxPhoto(null)} />
 

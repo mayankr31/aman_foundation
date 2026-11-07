@@ -85,7 +85,7 @@ export default function TeamCheckInSection({
   const isManager = Boolean(memberManagerId && currentUser?.id === memberManagerId);
   const canManageFields = isAdmin || isManager;
   const canEditAny = isOwner || canManageFields;
-  const canCreate = isOwner && canRoleHaveTeamCheckIn(memberRole);
+  const canCreate = isOwner && canRoleHaveTeamCheckIn(memberRole?.name || memberRole);
 
   const load = useCallback(async () => {
     if (!token || !userId) return;

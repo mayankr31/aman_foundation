@@ -123,6 +123,8 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.RoleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  displayName: 'displayName',
+  rank: 'rank',
   description: 'description',
   displayInRegister: 'displayInRegister',
   createdAt: 'createdAt',
@@ -145,6 +147,11 @@ exports.Prisma.UserScalarFieldEnum = {
   maritalStatus: 'maritalStatus',
   bloodGroup: 'bloodGroup',
   address: 'address',
+  state: 'state',
+  district: 'district',
+  block: 'block',
+  village: 'village',
+  landmark: 'landmark',
   emergencyContactName: 'emergencyContactName',
   emergencyContactPhone: 'emergencyContactPhone',
   aadharNumber: 'aadharNumber',
@@ -934,6 +941,17 @@ exports.Prisma.CompOffCreditScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.HolidayScalarFieldEnum = {
+  id: 'id',
+  dateKey: 'dateKey',
+  name: 'name',
+  description: 'description',
+  type: 'type',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.IncidentResourceNeedScalarFieldEnum = {
   id: 'id',
   incidentId: 'incidentId',
@@ -1599,6 +1617,7 @@ exports.Prisma.ModelName = {
   Leave: 'Leave',
   LeaveTypeConfig: 'LeaveTypeConfig',
   CompOffCredit: 'CompOffCredit',
+  Holiday: 'Holiday',
   IncidentResourceNeed: 'IncidentResourceNeed',
   ReliefDistribution: 'ReliefDistribution',
   ReliefDistributionItem: 'ReliefDistributionItem',

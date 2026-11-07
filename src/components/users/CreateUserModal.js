@@ -33,7 +33,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
   const assignableRoles = roles.filter((r) => r.name !== 'ADMIN');
   const selectedRole = roles.find((r) => r.id === roleId);
   const suggestedDepartments = getSuggestedDepartments(selectedRole?.name);
-  const managerChoices = getManagerCandidates(managers, selectedRole?.name);
+  const managerChoices = getManagerCandidates(managers, selectedRole);
 
   const handleRoleChange = (nextRoleId) => {
     const nextRole = roles.find((r) => r.id === nextRoleId);
@@ -217,7 +217,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
               <option value="" disabled>Select a role</option>
               {assignableRoles.map((r) => (
                 <option key={r.id} value={r.id}>
-                  {formatRoleLabel(r.name)}
+                  {formatRoleLabel(r)}
                 </option>
               ))}
             </select>
@@ -258,7 +258,7 @@ export default function CreateUserModal({ isOpen, onClose, isDarkMode, token, ro
               <option value="">No manager / top level</option>
               {managerChoices.map((manager) => (
                 <option key={manager.id} value={manager.id}>
-                  {manager.name} ({formatRoleLabel(manager.role?.name)})
+                  {manager.name} ({formatRoleLabel(manager.role)})
                 </option>
               ))}
             </select>

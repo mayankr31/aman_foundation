@@ -77,7 +77,7 @@ export default function HrEmployeeManagement() {
         u.email?.toLowerCase().includes(search) ||
         u.employeeId?.toLowerCase().includes(search) ||
         u.role?.name?.toLowerCase().includes(search) ||
-        formatRoleLabel(u.role?.name).toLowerCase().includes(search);
+        formatRoleLabel(u.role).toLowerCase().includes(search);
       
       const dept = u.department || 'Unassigned';
       const matchesDept = directoryDept === "All" || dept === directoryDept;
@@ -190,7 +190,7 @@ export default function HrEmployeeManagement() {
                       </td>
                       <td data-label="Email" className="py-4 px-4 text-xs text-on-surface-variant break-words">{emp.email}</td>
                       <td data-label="Department" className="py-4 px-4 text-on-surface-variant break-words">{emp.department || "Unassigned"}</td>
-                      <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{formatRoleLabel(emp.role?.name)}</td>
+                      <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words">{formatRoleLabel(emp.role)}</td>
                       <td data-label="Reports To" className="py-4 px-4 text-xs text-slate-500 break-words">{emp.manager?.name || "—"}</td>
                     </tr>
                     );

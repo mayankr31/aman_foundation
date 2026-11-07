@@ -11,6 +11,7 @@ import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStat
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import StudentDataView from "@/components/StudentDataView";
 import DateInput from "@/components/ui/DateInput";
 import { formatRoleLabel } from "@/lib/roles";
@@ -77,6 +78,7 @@ export default function SchoolProfileDetail() {
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showDeleteSchool, setShowDeleteSchool] = useState(false);
   const { pageItems: pagedEnrolledStudents, currentPage: studentsPage, setCurrentPage: setStudentsPage } = usePagination(school?.students || [], 10);
   const [modal, setModal] = useState(null); // 'edit' | 'students' | 'fellows' | 'programs' | 'attendance' | 'managers'
 
@@ -242,6 +244,26 @@ export default function SchoolProfileDetail() {
     } finally { setSaving(false); }
   }
 
+  async function handleDeleteSchool() {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/schools/${school?.id || id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete school");
+      }
+      toast.success("School deleted successfully");
+      router.push("/education/schools");
+    } catch (err) {
+      toast.error(err.message || "Failed to delete school");
+      setSaving(false);
+    }
+  }
+
   async function handlePhotoUpload(e) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -373,6 +395,7 @@ export default function SchoolProfileDetail() {
   const assignedPrograms = school.programs || [];
   const assignedManagers = school.programManagers || [];
   const isAdmin = user?.roleName === "ADMIN";
+  const canManageFellows = isAdmin || PROGRAM_ROLES.includes(user?.roleName);
   const canManageStaff =
     isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
   const { totalEnrolled = 0, genderRatio = {} } = school;
@@ -451,6 +474,12 @@ export default function SchoolProfileDetail() {
             <button onClick={() => setModal("edit")}
               className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
               <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile
+            </button>
+          )}
+          {isAdmin && (
+            <button onClick={() => setShowDeleteSchool(true)} disabled={saving}
+              className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer border border-error/20 disabled:opacity-50">
+              <span className="material-symbols-outlined text-[18px]">delete</span> Delete School
             </button>
           )}
           <button className="bg-gradient-to-br from-primary to-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer">
@@ -746,10 +775,12 @@ export default function SchoolProfileDetail() {
                 <span className="material-symbols-outlined text-primary">people</span>
                 Fellows ({assignedFellows.length})
               </h3>
-              <button onClick={() => { setModal("fellows"); setSearchQ(""); }}
-                className="bg-primary/10 text-primary p-1.5 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer">
-                <span className="material-symbols-outlined text-[16px]">edit</span>
-              </button>
+              {canManageFellows && (
+                <button onClick={() => { setModal("fellows"); setSearchQ(""); }}
+                  className="bg-primary/10 text-primary p-1.5 rounded-full text-sm hover:bg-primary/20 transition-colors cursor-pointer">
+                  <span className="material-symbols-outlined text-[16px]">edit</span>
+                </button>
+              )}
             </div>
             {assignedFellows.length === 0 ? (
               <p className="text-sm text-on-surface-variant text-center py-4">No fellows assigned yet.</p>
@@ -768,9 +799,11 @@ export default function SchoolProfileDetail() {
                         <p className="text-xs text-on-surface-variant truncate max-w-[180px]">{fs.fellow?.email || ""}</p>
                       </div>
                     </div>
-                    <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error shrink-0">
-                      <span className="material-symbols-outlined text-[14px]">remove_circle</span>
-                    </button>
+                    {canManageFellows && (
+                      <button onClick={() => handleRemoveFellow(fs.fellowId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error shrink-0">
+                        <span className="material-symbols-outlined text-[14px]">remove_circle</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -806,7 +839,7 @@ export default function SchoolProfileDetail() {
                         <p className="text-xs text-on-surface-variant truncate max-w-[180px]">{pm.user?.email || ""}</p>
                         {pm.user?.role?.name && (
                           <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
-                            {formatRoleLabel(pm.user.role.name)}
+                            {formatRoleLabel(pm.user.role)}
                           </span>
                         )}
                       </div>
@@ -1238,7 +1271,7 @@ export default function SchoolProfileDetail() {
                     <p className="text-xs text-on-surface-variant">{m.email}</p>
                     {m.role?.name && (
                       <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase tracking-wide">
-                        {formatRoleLabel(m.role.name)}
+                        {formatRoleLabel(m.role)}
                       </span>
                     )}
                   </div>
@@ -1254,6 +1287,14 @@ export default function SchoolProfileDetail() {
           </div>
         </Modal>
       )}
+
+      <ConfirmDeleteModal
+        isOpen={showDeleteSchool}
+        onClose={() => setShowDeleteSchool(false)}
+        onConfirm={handleDeleteSchool}
+        title="Delete School"
+        message={`Are you sure you want to permanently delete ${school.name}? Students and fellows will be unassigned from this school. This cannot be undone.`}
+      />
 
       <PhotoLightbox src={lightboxPhoto} alt="School photo" onClose={() => setLightboxPhoto(null)} />
     </div>

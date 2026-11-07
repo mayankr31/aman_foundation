@@ -1,30 +1,44 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import crypto from "crypto";
 import { checkPermission } from "@/lib/permissions";
 import { getISTDateKey } from "@/lib/time";
+import { saveUploadedFile } from "@/lib/uploadStorage";
 
-const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "lesson-plans");
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-async function ensureUploadDir() {
-  try {
-    await mkdir(UPLOAD_DIR, { recursive: true });
-  } catch {}
+const LESSON_PLAN_FOLDER = "attendance-lesson-plans";
+
+async function canWriteLessonPlan(user) {
+  if (await checkPermission(user, "dashboard", "self-attendance", "WRITE")) return true;
+  // Fellows are the primary lesson-plan users; allow their education write
+  // permission as a fallback so a stale/missing self-attendance grant does not
+  // silently block document uploads.
+  if (user?.role?.name === "FELLOW") {
+    return checkPermission(user, "dashboard", "education", "WRITE");
+  }
+  return false;
 }
 
-async function saveFile(file) {
-  if (!file || file.size === 0) return null;
-  await ensureUploadDir();
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const ext = file.name.split(".").pop() || "pdf";
-  const filename = `${crypto.randomUUID()}.${ext}`;
-  const filePath = join(UPLOAD_DIR, filename);
-  await writeFile(filePath, buffer);
-  return `/uploads/lesson-plans/${filename}`;
+function collectLessonPlanFiles(formData) {
+  const files = [];
+  const seen = new Set();
+
+  for (const file of formData.getAll("files")) {
+    if (file && typeof file !== "string" && file.size > 0) files.push(file);
+  }
+
+  for (const key of formData.keys()) {
+    if (!key.startsWith("file_") || seen.has(key)) continue;
+    seen.add(key);
+    const file = formData.get(key);
+    if (file && typeof file !== "string" && file.size > 0) {
+      files.push(file);
+    }
+  }
+
+  return files;
 }
 
 export async function POST(req) {
@@ -32,7 +46,7 @@ export async function POST(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "self-attendance", "WRITE"))) {
+    if (!(await canWriteLessonPlan(user))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
     }
 
@@ -79,13 +93,9 @@ export async function POST(req) {
       : (Array.isArray(log.lessonPlanFiles) ? log.lessonPlanFiles : []);
 
     const uploadedFiles = [];
-    const fileKeys = [...formData.keys()].filter(k => k.startsWith("file_"));
-    for (const key of fileKeys) {
-      const file = formData.get(key);
-      if (file && file.size > 0 && file.name) {
-        const url = await saveFile(file);
-        if (url) uploadedFiles.push(url);
-      }
+    for (const file of collectLessonPlanFiles(formData)) {
+      const url = await saveUploadedFile(file, { folder: LESSON_PLAN_FOLDER });
+      if (url) uploadedFiles.push(url);
     }
 
     const allFiles = [...existingFiles, ...uploadedFiles];
@@ -104,7 +114,17 @@ export async function POST(req) {
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error("Lesson plan upload error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error:
+          error?.status === 400
+            ? error.message
+            : error?.message?.startsWith("Upload directory is not writable")
+              ? "The server's upload folder is not writable. Please contact the administrator."
+              : "Could not save the lesson plan document. Please try again.",
+      },
+      { status: error?.status === 400 ? 400 : 500 }
+    );
   }
 }
 
@@ -113,7 +133,7 @@ export async function DELETE(req) {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
 
-    if (!(await checkPermission(user, "dashboard", "self-attendance", "WRITE"))) {
+    if (!(await canWriteLessonPlan(user))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for attendance" }, { status: 403 });
     }
 

@@ -1,7 +1,6 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate, formatDateTime } from "@/lib/date";
 import { formatISTTime, getISTDateKey } from "@/lib/time";
@@ -19,10 +18,12 @@ import {
   normalizeTaskTimeSlot,
 } from "@/lib/taskSlots";
 import {
+  REQUIRED_ACCURACY_METERS,
   formatCoordinates,
   getBestPosition,
   hasAccuracy,
   isApproximateAccuracy,
+  isPreciseAccuracy,
 } from "@/lib/geolocation";
 import AttendanceTimer from "@/components/AttendanceTimer";
 import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
@@ -112,6 +113,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
   const isFellow = user?.roleName === "FELLOW";
   const canWrite = can("self-attendance", "WRITE");
+  const canEditLessonPlan = canWrite || (isFellow && can("education", "WRITE"));
   const tasksBase = "/api/tasks";
   const taskItemBase = "/api/tasks";
 
@@ -143,12 +145,17 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const [isCheckingIn, setIsCheckingIn] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [selfieMode, setSelfieMode] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [locationStatus, setLocationStatus] = useState("idle");
+  const [locationMessage, setLocationMessage] = useState("");
+  const [holiday, setHoliday] = useState(null);
 
   const [lessonPlanText, setLessonPlanText] = useState("");
   const [lessonPlanFiles, setLessonPlanFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploadingLP, setIsUploadingLP] = useState(false);
   const [isTeachingDay, setIsTeachingDay] = useState(true);
+  const hasLoadedRef = useRef(false);
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -156,8 +163,83 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const fetchTodayLogAndTasks = async () => {
-    setIsLoading(true);
+  const fetchTodayHoliday = async () => {
+    try {
+      const res = await fetch("/api/holidays/today", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok) setHoliday(data.data || null);
+    } catch {
+      setHoliday(null);
+    }
+  };
+
+  /**
+   * Collects a location within REQUIRED_ACCURACY_METERS. Coarse fixes are
+   * retried automatically; callers must not proceed without a precise fix.
+   */
+  const acquirePreciseLocation = async ({ retries = 1 } = {}) => {
+    setLocationStatus("locating");
+    setLocationMessage("Getting your precise location...");
+
+    let best = null;
+    let lastError = null;
+
+    for (let attempt = 0; attempt <= retries; attempt += 1) {
+      if (attempt > 0) {
+        setLocationMessage("Location is not precise enough. Trying again...");
+      }
+      const { position, error } = await getBestPosition({
+        timeoutMs: 15000,
+        desiredAccuracy: REQUIRED_ACCURACY_METERS,
+      });
+
+      if (position) {
+        best = position;
+        if (isPreciseAccuracy(position.accuracy)) break;
+      }
+      if (error) lastError = error;
+      if (error === "denied" || error === "unsupported") break;
+    }
+
+    if (best && isPreciseAccuracy(best.accuracy)) {
+      const precise = {
+        lat: best.lat,
+        lng: best.lng,
+        accuracy: best.accuracy,
+      };
+      setLocation(precise);
+      setLocationStatus("precise");
+      setLocationMessage(`Precise location captured (±${Math.round(best.accuracy)} m).`);
+      return precise;
+    }
+
+    setLocation(null);
+    if (lastError === "denied") {
+      setLocationStatus("denied");
+      setLocationMessage(
+        "Location access is blocked. Enable location/GPS for this site and tap Retry."
+      );
+    } else if (lastError === "unsupported") {
+      setLocationStatus("unsupported");
+      setLocationMessage("This device or browser does not support location.");
+    } else if (best) {
+      setLocationStatus("poor");
+      setLocationMessage(
+        `Location is not precise enough (±${Math.round(best.accuracy)} m). Move to an open area with GPS on and retry.`
+      );
+    } else {
+      setLocationStatus("unavailable");
+      setLocationMessage(
+        "Could not get your location. Turn on location/GPS and tap Retry."
+      );
+    }
+    return null;
+  };
+
+  const fetchTodayLogAndTasks = async ({ showSpinner = false } = {}) => {
+    if (showSpinner) setIsLoading(true);
     try {
       const today = getISTDateKey();
 
@@ -192,17 +274,29 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       triggerToast("Error fetching attendance data");
     } finally {
       setIsLoading(false);
+      hasLoadedRef.current = true;
     }
   };
 
   useEffect(() => {
-    if (isOpen && token && user) {
-      fetchTodayLogAndTasks();
-      setCheckoutMode(false);
-      setNewTaskSlot(defaultTaskTimeSlot());
+    if (!isOpen) {
+      hasLoadedRef.current = false;
+      return;
+    }
+    if (isOpen && token && user?.id) {
+      const initialLoad = !hasLoadedRef.current;
+      fetchTodayLogAndTasks({ showSpinner: initialLoad });
+      fetchTodayHoliday();
+      if (initialLoad) {
+        setCheckoutMode(false);
+        setNewTaskSlot(defaultTaskTimeSlot());
+        setLocation(null);
+        setLocationStatus("idle");
+        setLocationMessage("Location is required to check in or check out.");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, token, user]);
+  }, [isOpen, token, user?.id]);
 
   const uploadSelfie = async (selfieBlob) => {
     if (!selfieBlob) return null;
@@ -224,27 +318,26 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   };
 
   const performCheckIn = async (selfieBlob = null) => {
-    if (isFellow && tasks.length === 0) {
+    if (tasks.length === 0) {
       triggerToast("Add at least one task for today before checking in.");
       return;
     }
+
+    const precisePosition =
+      location && isPreciseAccuracy(location.accuracy)
+        ? location
+        : await acquirePreciseLocation();
+    if (!precisePosition) {
+      triggerToast("Precise location is required to check in. Turn on location/GPS and retry.");
+      return;
+    }
+
     setIsCheckingIn(true);
     const now = new Date();
     const timeString = formatISTTime(now);
     const dateString = getISTDateKey(now);
 
     const selfieUrl = await uploadSelfie(selfieBlob);
-
-    let lat = null;
-    let lng = null;
-    let accuracy = null;
-
-    const { position } = await getBestPosition();
-    if (position) {
-      lat = position.lat;
-      lng = position.lng;
-      accuracy = position.accuracy;
-    }
 
     try {
       const res = await fetch('/api/attendance', {
@@ -258,9 +351,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           intimelog: timeString,
           workstatus: `Logged in at ${timeString}`,
           logininfo: navigator.userAgent,
-          checkInLat: lat,
-          checkInLng: lng,
-          checkInAccuracy: accuracy,
+          checkInLat: precisePosition.lat,
+          checkInLng: precisePosition.lng,
+          checkInAccuracy: precisePosition.accuracy,
           checkInSelfie: selfieUrl,
           isTeachingDay: isFellow ? isTeachingDay : null
         })
@@ -271,13 +364,11 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         onStatusChange?.(data.data);
         if (selfieBlob && !selfieUrl) {
           triggerToast("Checked in, but the selfie could not be uploaded.");
-        } else if (!position) {
-          triggerToast("Checked in, but location could not be captured.");
-        } else if (isApproximateAccuracy(accuracy)) {
-          triggerToast(`Checked in. Location is approximate (±${Math.round(accuracy)} m).`);
         } else {
           triggerToast("Checked in successfully!");
         }
+      } else {
+        triggerToast(data.error || "Check in failed");
       }
     } catch (e) {
       triggerToast("Check in failed");
@@ -288,20 +379,19 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
   const performCheckOut = async (selfieBlob = null) => {
     if (!currentLog) return;
+
+    const precisePosition =
+      location && isPreciseAccuracy(location.accuracy)
+        ? location
+        : await acquirePreciseLocation();
+    if (!precisePosition) {
+      triggerToast("Precise location is required to check out. Turn on location/GPS and retry.");
+      return;
+    }
+
     setIsCheckingOut(true);
 
     const selfieUrl = await uploadSelfie(selfieBlob);
-
-    let lat = null;
-    let lng = null;
-    let accuracy = null;
-
-    const { position } = await getBestPosition();
-    if (position) {
-      lat = position.lat;
-      lng = position.lng;
-      accuracy = position.accuracy;
-    }
 
     try {
       const res = await fetch('/api/attendance', {
@@ -315,9 +405,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           checkout: true,
           workstatus: "Checked out",
           logoutinfo: navigator.userAgent,
-          checkOutLat: lat,
-          checkOutLng: lng,
-          checkOutAccuracy: accuracy,
+          checkOutLat: precisePosition.lat,
+          checkOutLng: precisePosition.lng,
+          checkOutAccuracy: precisePosition.accuracy,
           checkOutSelfie: selfieUrl
         })
       });
@@ -328,13 +418,11 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         onStatusChange?.(data.data);
         if (selfieBlob && !selfieUrl) {
           triggerToast("Checked out, but the selfie could not be uploaded.");
-        } else if (!position) {
-          triggerToast("Checked out, but location could not be captured.");
-        } else if (isApproximateAccuracy(accuracy)) {
-          triggerToast(`Checked out. Location is approximate (±${Math.round(accuracy)} m).`);
         } else {
           triggerToast("Checked out successfully!");
         }
+      } else {
+        triggerToast(data.error || "Check out failed");
       }
     } catch (e) {
       triggerToast("Check out failed");
@@ -360,6 +448,25 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       await performCheckOut(null);
     } else {
       await performCheckIn(null);
+    }
+  };
+
+  const handleStartSelfie = async (mode) => {
+    const precise =
+      location && isPreciseAccuracy(location.accuracy)
+        ? location
+        : await acquirePreciseLocation();
+    if (!precise) {
+      triggerToast("Precise location is required. Turn on location/GPS and retry.");
+      return;
+    }
+    setSelfieMode(mode);
+  };
+
+  const handleInitiateCheckout = () => {
+    setCheckoutMode(true);
+    if (!location || !isPreciseAccuracy(location.accuracy)) {
+      acquirePreciseLocation();
     }
   };
 
@@ -449,8 +556,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       formData.append("logdate", getISTDateKey());
       formData.append("lessonPlanText", lessonPlanText);
       formData.append("isTeachingDay", String(isTeachingDay));
-      selectedFiles.forEach((file, idx) => {
-        formData.append(`file_${idx}`, file);
+      selectedFiles.forEach((file) => {
+        formData.append("files", file);
       });
 
       const res = await fetch("/api/attendance/lesson-plan", {
@@ -465,6 +572,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
         setLessonPlanFiles(Array.isArray(data.data.lessonPlanFiles) ? data.data.lessonPlanFiles : []);
         setSelectedFiles([]);
         triggerToast("Lesson plan saved!");
+      } else {
+        triggerToast(data.error || "Failed to save lesson plan");
       }
     } catch (e) {
       triggerToast("Failed to save lesson plan");
@@ -573,6 +682,14 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               </div>
             </div>
 
+            {locationStatus !== "precise" && (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
+                {locationStatus === "locating"
+                  ? "Getting your precise location..."
+                  : "Precise location is required before checkout. Turn on location/GPS and tap Confirm Check Out to retry."}
+              </div>
+            )}
+
             <div className="flex justify-end gap-4 mt-8 pt-4 border-t">
               <button
                 onClick={() => setCheckoutMode(false)}
@@ -581,12 +698,18 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 Back
               </button>
               <button
-                onClick={() => setSelfieMode("check-out")}
-                disabled={isCheckingOut}
+                onClick={() => handleStartSelfie("check-out")}
+                disabled={isCheckingOut || locationStatus === "locating"}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20 flex justify-center items-center gap-2"
               >
-                {isCheckingOut && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
-                {isCheckingOut ? "Checking out..." : "Confirm Check Out"}
+                {(isCheckingOut || locationStatus === "locating") && (
+                  <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                )}
+                {isCheckingOut
+                  ? "Checking out..."
+                  : locationStatus === "locating"
+                    ? "Getting location..."
+                    : "Confirm Check Out"}
               </button>
             </div>
           </div>
@@ -604,6 +727,37 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 <div className="flex justify-between items-center py-2 border-b border-surface-container gap-3">
                   <span className="text-on-surface-variant font-medium text-sm">Office Hours</span>
                   <span className="font-semibold text-on-surface text-xs text-right">{SHIFT_LABEL}</span>
+                </div>
+                <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
+                  <span className="text-on-surface-variant font-medium text-sm">Location</span>
+                  <div className="text-right min-w-0">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                        locationStatus === "precise"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : locationStatus === "locating"
+                            ? "bg-amber-100 text-amber-800"
+                            : "bg-rose-100 text-rose-800"
+                      }`}
+                    >
+                      {locationStatus === "precise"
+                        ? `Precise ±${Math.round(Number(location?.accuracy || 0))} m`
+                        : locationStatus === "locating"
+                          ? "Locating..."
+                          : "Required"}
+                    </span>
+                    <p className="mt-1 text-[10px] text-slate-500 break-words max-w-[190px]">
+                      {locationMessage || "Location is required to check in or check out."}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => acquirePreciseLocation()}
+                      disabled={locationStatus === "locating"}
+                      className="mt-1 text-[10px] font-bold text-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {locationStatus === "locating" ? "Locating..." : "Refresh location"}
+                    </button>
+                  </div>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-surface-container">
                   <span className="text-on-surface-variant font-medium text-sm">Check-in Time</span>
@@ -711,12 +865,20 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               {isCheckedIn && extraMetrics && (
                 <div className="mb-4">
                   <p className="mb-2 text-center text-[10px] font-medium text-slate-500">
-                    Early In = checked in before {SHIFT_START_LABEL} · Late Out = checked out after {SHIFT_END_LABEL}
+                    Early/Late In vs {SHIFT_START_LABEL} · Early/Late Out vs {SHIFT_END_LABEL}
                   </p>
-                  <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-center">
                     <div className="rounded-lg bg-amber-50 border border-amber-100 px-2 py-2">
                       <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700">Early In</p>
                       <p className="text-xs font-bold text-amber-800 tabular-nums">{extraMetrics.earlyHours}</p>
+                    </div>
+                    <div className="rounded-lg bg-rose-50 border border-rose-100 px-2 py-2">
+                      <p className="text-[9px] font-bold uppercase tracking-wider text-rose-700">Late In</p>
+                      <p className="text-xs font-bold text-rose-800 tabular-nums">{extraMetrics.lateInHours}</p>
+                    </div>
+                    <div className="rounded-lg bg-orange-50 border border-orange-100 px-2 py-2">
+                      <p className="text-[9px] font-bold uppercase tracking-wider text-orange-700">Early Out</p>
+                      <p className="text-xs font-bold text-orange-800 tabular-nums">{extraMetrics.earlyOutHours}</p>
                     </div>
                     <div className="rounded-lg bg-indigo-50 border border-indigo-100 px-2 py-2">
                       <p className="text-[9px] font-bold uppercase tracking-wider text-indigo-700">Late Out</p>
@@ -732,25 +894,37 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 </div>
               )}
 
+              {holiday && (
+                <div className="mb-3 rounded-lg border border-sky-100 bg-sky-50 px-3 py-2 text-center text-[11px] font-semibold text-sky-800">
+                  Today is a holiday: {holiday.name}
+                </div>
+              )}
+
               {!isCheckedIn ? (
                 <>
-                  {isFellow && canWrite && tasks.length === 0 && (
+                  {canWrite && tasks.length === 0 && (
                     <p className="mb-2 text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 text-center">
                       Add at least one task for today to enable check-in.
                     </p>
                   )}
                   <button
-                    onClick={() => setSelfieMode("check-in")}
-                    disabled={!canWrite || isCheckingIn || (isFellow && tasks.length === 0)}
+                    onClick={() => handleStartSelfie("check-in")}
+                    disabled={!canWrite || isCheckingIn || tasks.length === 0 || locationStatus === "locating"}
                     className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-600/20 flex justify-center items-center gap-2"
                   >
-                    {isCheckingIn && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
-                    {isCheckingIn ? "Checking in..." : "Check In"}
+                    {isCheckingIn || locationStatus === "locating" ? (
+                      <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                    ) : null}
+                    {isCheckingIn
+                      ? "Checking in..."
+                      : locationStatus === "locating"
+                        ? "Getting location..."
+                        : "Check In"}
                   </button>
                 </>
               ) : !isCheckedOut ? (
                 <button
-                  onClick={() => setCheckoutMode(true)}
+                  onClick={handleInitiateCheckout}
                   disabled={!canWrite}
                   className="w-full py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20"
                 >
@@ -909,7 +1083,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                       onChange={(e) => setLessonPlanText(e.target.value)}
                       placeholder="Write your daily lesson plan here..."
                       rows={4}
-                      disabled={!canWrite}
+                      disabled={!canEditLessonPlan}
                       className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface resize-none disabled:opacity-60"
                     />
                   </div>
@@ -917,18 +1091,18 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <div>
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">Upload Files</label>
                     <div className="flex items-center gap-3 flex-wrap">
-                      {canWrite && (
-                      <label className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold cursor-pointer transition-colors shadow-md shadow-blue-600/20">
-                        <span className="material-symbols-outlined text-[18px]">upload_file</span>
-                        Choose Files
+                      {canEditLessonPlan && (
                         <input
                           type="file"
                           multiple
-                          className="hidden"
-                          onChange={(e) => setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)])}
+                          accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png,.webp"
+                          onChange={(e) => {
+                            setSelectedFiles([...selectedFiles, ...Array.from(e.target.files || [])]);
+                            e.target.value = "";
+                          }}
+                          className="w-full max-w-full px-3 py-2 border rounded-lg border-outline-variant bg-transparent text-on-surface text-xs file:mr-3 file:rounded-full file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-[11px] file:font-semibold file:text-white hover:file:bg-blue-700 cursor-pointer"
                         />
-                      </label>
-                    )}
+                      )}
                     </div>
 
                     {selectedFiles.length > 0 && (
@@ -937,7 +1111,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                           <div key={`new-${idx}`} className="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg">
                             <span className="material-symbols-outlined text-[14px]">description</span>
                             <span className="flex-1 truncate">{file.name}</span>
-                            <button onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))} className={`text-red-500 hover:text-red-700 ${canWrite ? "" : "hidden"}`}>
+                            <button onClick={() => setSelectedFiles(selectedFiles.filter((_, i) => i !== idx))} className={`text-red-500 hover:text-red-700 ${canEditLessonPlan ? "" : "hidden"}`}>
                               <span className="material-symbols-outlined text-[14px]">close</span>
                             </button>
                           </div>
@@ -959,7 +1133,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                               >
                                 {fileUrl.split("/").pop()}
                               </FilePreviewLink>
-                              <button onClick={() => handleRemoveFile(idx)} className={`text-red-500 hover:text-red-700 ${canWrite ? "" : "hidden"}`}>
+                              <button onClick={() => handleRemoveFile(idx)} className={`text-red-500 hover:text-red-700 ${canEditLessonPlan ? "" : "hidden"}`}>
                                 <span className="material-symbols-outlined text-[14px]">delete</span>
                               </button>
                             </div>
@@ -969,7 +1143,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                     )}
                   </div>
 
-                  {canWrite && (
+                  {canEditLessonPlan && (
                     <div className="flex justify-end">
                       <button
                         onClick={handleSaveLessonPlan}

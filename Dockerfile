@@ -47,7 +47,7 @@ RUN npm run build
 
 # ─── Stage 4: Runner (production image) ──────────────────────────────────────
 FROM node:22-alpine AS runner
-RUN apk add --no-cache libc6-compat openssl
+RUN apk add --no-cache libc6-compat openssl su-exec
 
 WORKDIR /app
 
@@ -71,10 +71,16 @@ RUN mkdir -p /app/public/uploads && chown -R nextjs:nodejs /app/public
 COPY --from=builder --chown=nextjs:nodejs /app/generated ./generated
 COPY --from=deps /app/prisma ./prisma
 
-USER nextjs
+# Repair ownership of the persistent uploads volume on every start. Docker only
+# initializes a named volume once, so a volume created before the chown fix can
+# still be root-owned. The entrypoint fixes it and then drops to nextjs.
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \
+    chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "server.js"]

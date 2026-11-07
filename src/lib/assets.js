@@ -8,7 +8,7 @@ export const ASSET_USER_SELECT = {
   avatar: true,
   employeeId: true,
   department: true,
-  role: { select: { name: true } },
+  role: { select: { name: true, displayName: true, rank: true } },
 };
 
 export const ASSET_INCLUDE = {

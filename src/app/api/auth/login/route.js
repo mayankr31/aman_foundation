@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
 import { getEffectivePermissions } from "@/lib/permissions";
+import { getMissingProfileFields } from "@/lib/profileCompleteness";
+import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { formatRoleLabel } from "@/lib/roles";
 
 export async function POST(req) {
   try {
@@ -68,6 +71,23 @@ export async function POST(req) {
     });
 
     const permissions = await getEffectivePermissions(user);
+    const missingProfileFields = getMissingProfileFields(user);
+    const profileIncomplete = missingProfileFields.length > 0;
+
+    if (profileIncomplete) {
+      try {
+        await notifyUsers([user.id], {
+          type: NOTIFICATION_TYPES.PROFILE_INCOMPLETE,
+          title: "Complete your personal details",
+          message:
+            "Please fill in your mandatory personal details to finish setting up your profile.",
+          link: "/profile?tab=personal-details&edit=1",
+          dedupeKey: `profile-incomplete:${user.id}`,
+        });
+      } catch (notifyError) {
+        console.error("Profile completion notification failed:", notifyError);
+      }
+    }
 
     return NextResponse.json({
       success: true,
@@ -79,9 +99,13 @@ export async function POST(req) {
           email: user.email,
           roleId: user.roleId,
           roleName: user.role.name,
+          roleDisplayName: formatRoleLabel(user.role),
           name: user.name,
           fellowId: user.fellow?.id || null,
           fellowName: user.fellow?.name || null,
+          managerId: user.managerId || null,
+          profileIncomplete,
+          missingProfileFields,
           permissions,
         }
       }

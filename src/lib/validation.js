@@ -49,11 +49,17 @@ export const toRationCardInput = (value) =>
     .replace(/[^A-Z0-9-]/g, "")
     .slice(0, 20);
 
+// Allow any whitespace while typing (mobile keyboards can send non-breaking
+// spaces), then normalise it to a single regular space. Trimming is deliberately
+// left out so a trailing space does not disappear mid-word.
 export const toPersonNameInput = (value) =>
   String(value ?? "")
-    .replace(/[^A-Za-z .'-]/g, "")
-    .replace(/\s{2,}/g, " ")
+    .replace(/[^A-Za-z\s.'-]/g, "")
+    .replace(/\s+/g, " ")
     .slice(0, 60);
+
+export const normalizePersonName = (value) =>
+  trimText(value).replace(/\s+/g, " ");
 
 export const toAmountInput = (value) => {
   const raw = String(value ?? "").replace(/[^0-9.]/g, "");
@@ -139,7 +145,8 @@ export function validateEmail(value, { required = false } = {}) {
 
 export function validatePersonName(value, { required = false } = {}) {
   if (isBlank(value)) return required ? "Name is required." : null;
-  if (!PERSON_NAME_REGEX.test(trimText(value))) {
+  const normalized = trimText(value).replace(/\s+/g, " ");
+  if (!PERSON_NAME_REGEX.test(normalized)) {
     return "Use letters only (spaces, dots, apostrophes and hyphens allowed).";
   }
   return null;

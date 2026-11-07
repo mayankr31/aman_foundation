@@ -187,7 +187,7 @@ export function AssetFormModal({ open, asset, assignableUsers = [], onClose, onS
               <option value="">Select employee</option>
               {assignableUsers.map((person) => (
                 <option key={person.id} value={person.id}>
-                  {person.name} ({formatRoleLabel(person.role?.name)}{person.employeeId ? ` · ${person.employeeId}` : ""})
+                  {person.name} ({formatRoleLabel(person.role)}{person.employeeId ? ` · ${person.employeeId}` : ""})
                 </option>
               ))}
             </select>
@@ -287,7 +287,7 @@ export function AssetAssignModal({ open, asset, assignableUsers = [], onClose, o
             <option value="">Select employee</option>
             {assignableUsers.map((person) => (
               <option key={person.id} value={person.id}>
-                {person.name} ({formatRoleLabel(person.role?.name)}{person.employeeId ? ` · ${person.employeeId}` : ""})
+                {person.name} ({formatRoleLabel(person.role)}{person.employeeId ? ` · ${person.employeeId}` : ""})
               </option>
             ))}
           </select>
@@ -430,7 +430,7 @@ export function AssetHistoryModal({ open, asset, onClose }) {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <p className="text-xs font-bold text-on-surface">
                       {assignment.user?.name || "Employee"}
-                      <span className="font-normal text-on-surface-variant"> · {formatRoleLabel(assignment.user?.role?.name)}</span>
+                      <span className="font-normal text-on-surface-variant"> · {formatRoleLabel(assignment.user?.role)}</span>
                     </p>
                     <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full w-fit ${assignment.returnedAt ? "bg-slate-100 text-slate-600" : "bg-emerald-100 text-emerald-700"}`}>
                       {assignment.returnedAt ? "Returned" : "Current"}

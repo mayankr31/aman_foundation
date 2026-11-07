@@ -34,7 +34,7 @@ export async function GET(req, context) {
         address: true,
         avatar: true,
         createdAt: true,
-        role: { select: { name: true } },
+        role: { select: { name: true, displayName: true, rank: true } },
         managedSchools: {
           include: { school: { select: { id: true, name: true, location: true } } },
         },

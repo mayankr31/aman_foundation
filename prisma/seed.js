@@ -69,9 +69,15 @@ async function main() {
   console.log("Seeding roles and permissions...");
   const adminRole = await prisma.role.upsert({
     where: { name: "ADMIN" },
-    update: { description: "Executive Director with complete platform control" },
+    update: {
+      displayName: "Executive Director",
+      rank: 1000,
+      description: "Executive Director with complete platform control",
+    },
     create: {
       name: "ADMIN",
+      displayName: "Executive Director",
+      rank: 1000,
       description: "Executive Director with complete platform control",
       displayInRegister: false,
     },
@@ -79,9 +85,11 @@ async function main() {
 
   const pmRole = await prisma.role.upsert({
     where: { name: "PROGRAM_MANAGER" },
-    update: {},
+    update: { displayName: "Program Manager", rank: 50 },
     create: {
       name: "PROGRAM_MANAGER",
+      displayName: "Program Manager",
+      rank: 50,
       description: "Program Manager supervising Education, Livelihood, or Disaster Relief hubs",
       displayInRegister: true,
     },
@@ -89,9 +97,11 @@ async function main() {
 
   const fellowRole = await prisma.role.upsert({
     where: { name: "FELLOW" },
-    update: {},
+    update: { displayName: "Fellow", rank: 10 },
     create: {
       name: "FELLOW",
+      displayName: "Fellow",
+      rank: 10,
       description: "Educational Fellow assigned to partner schools and students",
       displayInRegister: true,
     },

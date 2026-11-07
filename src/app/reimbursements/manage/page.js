@@ -450,7 +450,7 @@ export default function ReimbursementManagementPage() {
                   <p className="text-sm text-on-surface-variant mt-1">
                     {claim.user?.name || "Staff member"}
                     {claim.user?.department ? ` · ${claim.user.department}` : ""}
-                    {claim.user?.role?.name ? ` · ${formatRoleLabel(claim.user.role.name)}` : ""}
+                    {claim.user?.role?.name ? ` · ${formatRoleLabel(claim.user.role)}` : ""}
                   </p>
                   <p className="text-xs text-on-surface-variant mt-1">
                     Submitted {formatDate(claim.createdAt)} · {claim.items?.length || 0} expense line{(claim.items?.length || 0) === 1 ? "" : "s"}

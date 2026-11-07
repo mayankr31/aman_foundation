@@ -15,26 +15,38 @@ const PROGRAM_STAFF_ROLES = [
 const NEW_ROLES = [
   {
     name: "ACCOUNTANT",
+    displayName: "Accountant",
+    rank: 10,
     description: "Handles financial records, ledgers and reimbursements across programs",
   },
   {
     name: "PROGRAM_COORDINATOR",
+    displayName: "Program Coordinator",
+    rank: 40,
     description: "Coordinates program delivery across assigned schools, centres and livelihood programs",
   },
   {
     name: "FIELD_EXECUTIVE",
+    displayName: "Field Executive",
+    rank: 30,
     description: "Field-level execution and data collection for assigned schools and programs",
   },
   {
     name: "PROGRAM_DIRECTOR",
+    displayName: "Program Director",
+    rank: 70,
     description: "Directs program strategy and oversees assigned program portfolio",
   },
   {
     name: "PROGRAM_LEAD",
+    displayName: "Program Lead",
+    rank: 60,
     description: "Leads a program vertical and supervises assigned schools/centres/programs",
   },
   {
     name: "CLASS_ASSISTANT",
+    displayName: "Class Assistant",
+    rank: 20,
     description: "Assists classroom delivery and student tracking in assigned schools",
   },
 ];
@@ -128,9 +140,16 @@ async function main() {
   for (const role of NEW_ROLES) {
     await prisma.role.upsert({
       where: { name: role.name },
-      update: { description: role.description, displayInRegister: true },
+      update: {
+        displayName: role.displayName,
+        rank: role.rank,
+        description: role.description,
+        displayInRegister: true,
+      },
       create: {
         name: role.name,
+        displayName: role.displayName,
+        rank: role.rank,
         description: role.description,
         displayInRegister: true,
       },

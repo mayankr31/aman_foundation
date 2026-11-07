@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
+import { useToast } from "@/context/ToastContext";
 import { extractMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -44,10 +46,13 @@ function Modal({ title, onClose, children }) {
 }
 
 export default function AfterSchoolCentresModule() {
-  const { token } = useAuth();
+  const { token, canDeleteRecords } = useAuth();
+  const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [centres, setCentres] = useState([]);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
  
   // Form states
   const [currentPage, setCurrentPage] = useState(1);
@@ -115,6 +120,28 @@ export default function AfterSchoolCentresModule() {
     } catch (err) {
       console.error("Failed to add centre:", err);
       alert("Failed to add centre. Please try again.");
+    }
+  };
+
+  const handleDeleteCentre = async () => {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/after-school-centres/${deleteTarget.id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to delete centre");
+      }
+      setCentres((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+      setDeleteTarget(null);
+      toast.success("After school centre deleted successfully");
+    } catch (err) {
+      alert(err.message || "Failed to delete centre");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -301,11 +328,14 @@ export default function AfterSchoolCentresModule() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedCentres.map((c, index) => (
-            <Link
-              key={index}
-              href={`/education/after-school-centres/${c.id}`}
-              className="bg-surface-container-lowest p-6 rounded-[1rem] hover:shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] transition-all duration-300 flex flex-col group cursor-pointer"
+            <div
+              key={c.id || index}
+              className="bg-surface-container-lowest p-6 rounded-[1rem] hover:shadow-[0_8px_24px_-10px_rgba(0,104,87,0.08)] transition-all duration-300 flex flex-col group"
             >
+              <Link
+                href={`/education/after-school-centres/${c.id}`}
+                className="flex flex-col flex-1 cursor-pointer"
+              >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 rounded-xl bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
@@ -370,7 +400,20 @@ export default function AfterSchoolCentresModule() {
                   );
                 })()}
               </div>
-            </Link>
+              </Link>
+              {canDeleteRecords && (
+                <div className="mt-4 flex justify-end border-t border-surface-variant/60 pt-3">
+                  <button
+                    type="button"
+                    onClick={() => setDeleteTarget(c)}
+                    className="text-error text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1 hover:opacity-80 transition-opacity cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">delete</span>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           ))}
           {filteredCentres.length === 0 && (
             <p className="text-center col-span-full py-12 text-sm text-on-surface-variant">
@@ -469,6 +512,14 @@ export default function AfterSchoolCentresModule() {
           </form>
         </Modal>
       )}
+
+      <ConfirmDeleteModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteCentre}
+        title="Delete After School Centre"
+        message={`Are you sure you want to permanently delete ${deleteTarget?.name || "this centre"}? Students and fellows will be unassigned from this centre. This cannot be undone.`}
+      />
       </div>
     </div>
   );

@@ -9,6 +9,12 @@
 
 export const APPROXIMATE_ACCURACY_METERS = 500;
 
+/**
+ * Maximum accuracy (metres) accepted for attendance check-in/check-out.
+ * Locations worse than this are treated as not precise enough.
+ */
+export const REQUIRED_ACCURACY_METERS = 500;
+
 export function hasAccuracy(value) {
   return (
     value !== null &&
@@ -20,6 +26,15 @@ export function hasAccuracy(value) {
 
 export function isApproximateAccuracy(accuracy) {
   return hasAccuracy(accuracy) && Number(accuracy) > APPROXIMATE_ACCURACY_METERS;
+}
+
+/** A location is precise enough for attendance when it is within the limit. */
+export function isPreciseAccuracy(accuracy) {
+  return (
+    hasAccuracy(accuracy) &&
+    Number(accuracy) >= 0 &&
+    Number(accuracy) <= REQUIRED_ACCURACY_METERS
+  );
 }
 
 /** Human-readable coordinate label, e.g. `28.59827, 77.34032 · ±24 m`. */

@@ -3,6 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isFellowManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessUser, isSubordinate } from "@/lib/hierarchy";
+import { isManagerRoleAllowed } from "@/lib/roleHierarchy";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
 import {
   validatePersonName,
   validateEmail,
@@ -14,7 +17,9 @@ import {
   validateIfsc,
   validateRequired,
   validateDateNotFuture,
+  validateDateOrder,
   firstError,
+  isBlank,
   normalizeMobileForSave,
   normalizeAadhaarForSave,
   normalizePanForSave,
@@ -40,6 +45,12 @@ const FELLOW_DETAIL_INCLUDE = {
       maritalStatus: true,
       bloodGroup: true,
       address: true,
+      state: true,
+      district: true,
+      block: true,
+      village: true,
+      landmark: true,
+      managerId: true,
       emergencyContactName: true,
       emergencyContactPhone: true,
       aadharNumber: true,
@@ -57,10 +68,10 @@ const FELLOW_DETAIL_INCLUDE = {
       inactiveSince: true,
       status: true,
       avatar: true,
-      role: { select: { name: true } },
-      manager: { select: { id: true, name: true, role: { select: { name: true } } } },
+      role: { select: { name: true, displayName: true, rank: true } },
+      manager: { select: { id: true, name: true, role: { select: { name: true, displayName: true, rank: true } } } },
       directReports: {
-        select: { id: true, name: true, employeeId: true, status: true, role: { select: { name: true } } },
+        select: { id: true, name: true, employeeId: true, status: true, role: { select: { name: true, displayName: true, rank: true } } },
       },
     },
   },
@@ -91,6 +102,34 @@ async function resolveFellowId(id) {
   return fellow ? fellow.id : null;
 }
 
+/**
+ * Admins, HR, assigned program staff and the fellow's direct manager/senior
+ * may open/edit a fellow profile (subject to education permission).
+ */
+async function canAccessFellowProfile(user, fellowId, action = "READ") {
+  if (!(await checkPermission(user, "dashboard", "education", action))) return false;
+  if (isAdmin(user) || user.role?.name === "HR") return true;
+
+  if (PROGRAM_ROLES.includes(user.role?.name) && (await isFellowManaged(user.id, fellowId))) {
+    return true;
+  }
+
+  const fellow = await prisma.fellow.findUnique({
+    where: { id: fellowId },
+    select: { userId: true },
+  });
+  if (!fellow?.userId) return false;
+
+  const target = await prisma.user.findUnique({
+    where: { id: fellow.userId },
+    select: { managerId: true },
+  });
+  if (target?.managerId === user.id) return true;
+  if (await isSubordinate(user.id, fellow.userId)) return true;
+
+  return canAccessUser(user, fellow.userId);
+}
+
 export async function GET(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
@@ -107,8 +146,8 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
+    if (!(await canAccessFellowProfile(user, fellowId, "READ"))) {
+      return NextResponse.json({ error: "Forbidden: You cannot access this fellow" }, { status: 403 });
     }
 
     const fellow = await prisma.fellow.findUnique({
@@ -132,10 +171,6 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (!isAdmin(user) && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const fellowId = await resolveFellowId(id);
 
@@ -143,15 +178,21 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
+    if (!(await canAccessFellowProfile(user, fellowId, "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: You cannot edit this fellow" }, { status: 403 });
     }
 
     const body = await req.json();
 
     const target = await prisma.fellow.findUnique({
       where: { id: fellowId },
-      select: { id: true, userId: true },
+      select: {
+        id: true,
+        userId: true,
+        dateOfJoining: true,
+        managerId: true,
+        user: { select: { role: { select: { name: true } } } },
+      },
     });
 
     if (!target) {
@@ -160,11 +201,25 @@ export async function PATCH(req, context) {
 
     const mobile = body.mobile !== undefined ? body.mobile : body.phone;
 
+    const hasStructuredAddress =
+      body.state !== undefined ||
+      body.district !== undefined ||
+      body.block !== undefined ||
+      body.village !== undefined ||
+      body.landmark !== undefined;
+    const composedAddress = hasStructuredAddress ? composeProfileAddress(body) : undefined;
+
     const validationMessage = firstError([
       body.name !== undefined ? validatePersonName(body.name, { required: true }) : null,
       body.email !== undefined ? validateEmail(body.email, { required: true }) : null,
       mobile !== undefined ? validateMobile(mobile, { required: true }) : null,
-      body.address !== undefined ? validateRequired(body.address, "Address") : null,
+      body.address !== undefined && !hasStructuredAddress
+        ? validateRequired(body.address, "Address")
+        : null,
+      hasStructuredAddress ? validateRequired(body.state, "State") : null,
+      hasStructuredAddress ? validateRequired(body.district, "District") : null,
+      hasStructuredAddress ? validateRequired(body.block, "Block") : null,
+      hasStructuredAddress ? validateRequired(body.village, "City / Village") : null,
       body.gender !== undefined ? validateRequired(body.gender, "Gender") : null,
       body.dob !== undefined ? validateDateNotFuture(body.dob, { required: true, label: "Date of birth" }) : null,
       body.maritalStatus !== undefined ? validateRequired(body.maritalStatus, "Marital status") : null,
@@ -187,20 +242,70 @@ export async function PATCH(req, context) {
       body.bankName !== undefined ? validateRequired(body.bankName, "Bank name") : null,
       body.bankAccountNo !== undefined ? validateBankAccount(body.bankAccountNo, { required: true }) : null,
       body.bankIfsc !== undefined ? validateIfsc(body.bankIfsc, { required: true }) : null,
+      body.department !== undefined ? validateRequired(body.department, "Department") : null,
       body.dateOfJoining !== undefined && body.dateOfJoining
         ? validateDateNotFuture(body.dateOfJoining, { label: "Date of joining" })
         : null,
+      body.dateOfLeaving !== undefined
+        ? validateDateNotFuture(body.dateOfLeaving, { label: "Date of leaving" })
+        : null,
+      !isBlank(body.dateOfLeaving) ? validateRequired(body.resignationReason, "Reason for leaving") : null,
+      isBlank(body.dateOfLeaving) && !isBlank(body.resignationReason)
+        ? "Date of leaving is required when a reason is provided."
+        : null,
+      validateDateOrder(
+        body.dateOfJoining !== undefined ? parseDate(body.dateOfJoining) : target.dateOfJoining,
+        body.dateOfLeaving !== undefined ? parseDate(body.dateOfLeaving) : undefined,
+        { startLabel: "Date of joining", endLabel: "Date of leaving" }
+      ),
     ]);
 
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
+    let nextManagerId;
+    if (body.managerId !== undefined) {
+      nextManagerId = body.managerId || null;
+      const managerChanged = (target.managerId || null) !== nextManagerId;
+      if (nextManagerId && target.userId && nextManagerId === target.userId) {
+        return NextResponse.json({ error: "A user cannot report to themselves" }, { status: 400 });
+      }
+      if (nextManagerId && managerChanged) {
+        const manager = await prisma.user.findUnique({
+          where: { id: nextManagerId },
+          select: { id: true, status: true, role: { select: { name: true } } },
+        });
+        if (!manager) {
+          return NextResponse.json({ error: "Selected manager not found" }, { status: 404 });
+        }
+        if (manager.status !== "ACTIVE") {
+          return NextResponse.json({ error: "Selected manager is not active" }, { status: 400 });
+        }
+        if (
+          target.user?.role?.name &&
+          !isManagerRoleAllowed(target.user.role.name, manager.role?.name)
+        ) {
+          return NextResponse.json(
+            { error: "Selected manager must be senior to this fellow" },
+            { status: 400 }
+          );
+        }
+        if (target.userId && (await isSubordinate(nextManagerId, target.userId))) {
+          return NextResponse.json(
+            { error: "That reporting line would create a loop" },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     const fellowData = {};
     if (body.name !== undefined) fellowData.name = String(body.name).trim();
     if (body.email !== undefined) fellowData.email = body.email ? normalizeEmailForSave(body.email) : null;
     if (mobile !== undefined) fellowData.phone = mobile ? normalizeMobileForSave(mobile) : null;
-    if (body.address !== undefined) fellowData.address = body.address;
+    if (composedAddress !== undefined) fellowData.address = composedAddress || null;
+    else if (body.address !== undefined) fellowData.address = body.address;
     if (body.gender !== undefined) fellowData.gender = body.gender;
     if (body.dob !== undefined) fellowData.dob = parseDate(body.dob);
     if (body.avatar !== undefined) fellowData.avatar = body.avatar;
@@ -215,7 +320,14 @@ export async function PATCH(req, context) {
     if (body.name !== undefined) userData.name = String(body.name).trim();
     if (body.email !== undefined) userData.email = body.email ? normalizeEmailForSave(body.email) : null;
     if (mobile !== undefined) userData.mobile = mobile ? normalizeMobileForSave(mobile) : null;
-    if (body.address !== undefined) userData.address = body.address;
+    if (composedAddress !== undefined) userData.address = composedAddress || null;
+    else if (body.address !== undefined) userData.address = body.address;
+    if (body.state !== undefined) userData.state = body.state;
+    if (body.district !== undefined) userData.district = body.district;
+    if (body.block !== undefined) userData.block = body.block;
+    if (body.village !== undefined) userData.village = body.village;
+    if (body.landmark !== undefined) userData.landmark = body.landmark;
+    if (body.department !== undefined) userData.department = String(body.department).trim();
     if (body.gender !== undefined) userData.gender = body.gender;
     if (body.dob !== undefined) userData.dob = parseDate(body.dob);
     if (body.avatar !== undefined) userData.avatar = body.avatar;
@@ -251,6 +363,20 @@ export async function PATCH(req, context) {
       userData.bankIfsc = body.bankIfsc ? normalizeIfscForSave(body.bankIfsc) : null;
     }
     if (body.dateOfJoining !== undefined) userData.dateOfJoining = parseDate(body.dateOfJoining);
+    if (body.dateOfLeaving !== undefined) {
+      const leavingDate = parseDate(body.dateOfLeaving);
+      userData.dateOfLeaving = leavingDate;
+      if (leavingDate) {
+        userData.status = "INACTIVE";
+        userData.inactiveSince = leavingDate;
+      }
+    }
+    if (body.resignationReason !== undefined) {
+      userData.resignationReason = isBlank(body.resignationReason)
+        ? null
+        : String(body.resignationReason).trim();
+    }
+    if (nextManagerId !== undefined) userData.managerId = nextManagerId;
 
     const updatedFellow = await prisma.$transaction(async (tx) => {
       if (Object.keys(fellowData).length > 0) {

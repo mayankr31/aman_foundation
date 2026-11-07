@@ -12,7 +12,7 @@ const USER_SELECT = {
   name: true,
   email: true,
   avatar: true,
-  role: { select: { name: true } },
+  role: { select: { name: true, displayName: true, rank: true } },
 };
 
 export async function GET(req) {
