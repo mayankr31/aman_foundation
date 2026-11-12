@@ -100,6 +100,8 @@ export function getBestPosition({
     const onError = (error) => {
       // Permission denied cannot improve by waiting.
       if (error?.code === 1) finish("denied");
+      // Timeout: stop waiting, but keep the best coarse fix collected so far.
+      if (error?.code === 3) finish(best ? null : "timeout");
     };
 
     try {

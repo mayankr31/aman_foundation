@@ -11,7 +11,6 @@ import {
   istDayEnd,
 } from "@/lib/time";
 import { parseLegacyTime } from "@/lib/attendanceMetrics";
-import { REQUIRED_ACCURACY_METERS } from "@/lib/geolocation";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +46,7 @@ function sanitizeSelfieUrl(value) {
   return /^\/(?:api\/)?uploads\/attendance-selfies\/[A-Za-z0-9._-]+$/.test(url) ? url : null;
 }
 
-function validatePreciseLocation(latValue, lngValue, accuracyValue, label) {
+function validateLocation(latValue, lngValue, accuracyValue, label) {
   const lat = sanitizeLatitude(latValue);
   const lng = sanitizeLongitude(lngValue);
   const accuracy = sanitizeAccuracy(accuracyValue);
@@ -56,12 +55,7 @@ function validatePreciseLocation(latValue, lngValue, accuracyValue, label) {
     return { error: `${label} location is required. Turn on location/GPS and try again.` };
   }
   if (accuracy === null) {
-    return { error: `${label} location accuracy could not be verified. Turn on precise location and try again.` };
-  }
-  if (accuracy > REQUIRED_ACCURACY_METERS) {
-    return {
-      error: `${label} location is not precise enough (±${Math.round(accuracy)} m). Move to an open area with GPS enabled and retry.`,
-    };
+    return { error: `${label} location accuracy could not be verified. Turn on location/GPS and try again.` };
   }
 
   return { lat, lng, accuracy };
@@ -237,7 +231,7 @@ export async function POST(req) {
       );
     }
 
-    const location = validatePreciseLocation(
+    const location = validateLocation(
       body.checkInLat,
       body.checkInLng,
       body.checkInAccuracy,
@@ -311,7 +305,7 @@ export async function PATCH(req) {
     let checkoutLocation = null;
 
     if (needsLocation) {
-      checkoutLocation = validatePreciseLocation(
+      checkoutLocation = validateLocation(
         body.checkOutLat,
         body.checkOutLng,
         body.checkOutAccuracy,

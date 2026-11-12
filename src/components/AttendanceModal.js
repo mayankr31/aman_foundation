@@ -19,13 +19,12 @@ import {
 } from "@/lib/taskSlots";
 import {
   REQUIRED_ACCURACY_METERS,
-  formatCoordinates,
   getBestPosition,
   hasAccuracy,
-  isApproximateAccuracy,
   isPreciseAccuracy,
 } from "@/lib/geolocation";
 import AttendanceTimer from "@/components/AttendanceTimer";
+import AttendanceLocation from "@/components/AttendanceLocation";
 import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
 import FilePreviewLink from "@/components/files/FilePreviewLink";
 import FilePreviewImage from "@/components/files/FilePreviewImage";
@@ -176,59 +175,44 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   };
 
   /**
-   * Collects a location within REQUIRED_ACCURACY_METERS. Coarse fixes are
-   * retried automatically; callers must not proceed without a precise fix.
+   * Collects the best available location within one high-accuracy window.
+   * Precise fixes are preferred, but a coarse fix is kept as an approximate
+   * fallback so users are never stuck retrying. Callers still require some
+   * coordinates before check-in/check-out can proceed.
    */
-  const acquirePreciseLocation = async ({ retries = 1 } = {}) => {
+  const acquireLocation = async () => {
     setLocationStatus("locating");
     setLocationMessage("Getting your precise location...");
 
-    let best = null;
-    let lastError = null;
+    const { position, error } = await getBestPosition({
+      timeoutMs: 12000,
+      desiredAccuracy: REQUIRED_ACCURACY_METERS,
+    });
 
-    for (let attempt = 0; attempt <= retries; attempt += 1) {
-      if (attempt > 0) {
-        setLocationMessage("Location is not precise enough. Trying again...");
+    if (position) {
+      if (isPreciseAccuracy(position.accuracy)) {
+        setLocation(position);
+        setLocationStatus("precise");
+        setLocationMessage(`Precise location captured (±${Math.round(position.accuracy)} m).`);
+      } else {
+        setLocation(position);
+        setLocationStatus("approximate");
+        setLocationMessage(
+          `Approximate location (±${Math.round(position.accuracy)} m). Tap the action again to use it, or tap Refresh location to improve it.`
+        );
       }
-      const { position, error } = await getBestPosition({
-        timeoutMs: 15000,
-        desiredAccuracy: REQUIRED_ACCURACY_METERS,
-      });
-
-      if (position) {
-        best = position;
-        if (isPreciseAccuracy(position.accuracy)) break;
-      }
-      if (error) lastError = error;
-      if (error === "denied" || error === "unsupported") break;
-    }
-
-    if (best && isPreciseAccuracy(best.accuracy)) {
-      const precise = {
-        lat: best.lat,
-        lng: best.lng,
-        accuracy: best.accuracy,
-      };
-      setLocation(precise);
-      setLocationStatus("precise");
-      setLocationMessage(`Precise location captured (±${Math.round(best.accuracy)} m).`);
-      return precise;
+      return position;
     }
 
     setLocation(null);
-    if (lastError === "denied") {
+    if (error === "denied") {
       setLocationStatus("denied");
       setLocationMessage(
         "Location access is blocked. Enable location/GPS for this site and tap Retry."
       );
-    } else if (lastError === "unsupported") {
+    } else if (error === "unsupported") {
       setLocationStatus("unsupported");
       setLocationMessage("This device or browser does not support location.");
-    } else if (best) {
-      setLocationStatus("poor");
-      setLocationMessage(
-        `Location is not precise enough (±${Math.round(best.accuracy)} m). Move to an open area with GPS on and retry.`
-      );
     } else {
       setLocationStatus("unavailable");
       setLocationMessage(
@@ -323,12 +307,12 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
       return;
     }
 
-    const precisePosition =
-      location && isPreciseAccuracy(location.accuracy)
+    const attendanceLocation =
+      location && hasAccuracy(location.accuracy)
         ? location
-        : await acquirePreciseLocation();
-    if (!precisePosition) {
-      triggerToast("Precise location is required to check in. Turn on location/GPS and retry.");
+        : await acquireLocation();
+    if (!attendanceLocation) {
+      triggerToast("Location is required to check in. Turn on location/GPS and retry.");
       return;
     }
 
@@ -351,9 +335,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           intimelog: timeString,
           workstatus: `Logged in at ${timeString}`,
           logininfo: navigator.userAgent,
-          checkInLat: precisePosition.lat,
-          checkInLng: precisePosition.lng,
-          checkInAccuracy: precisePosition.accuracy,
+          checkInLat: attendanceLocation.lat,
+          checkInLng: attendanceLocation.lng,
+          checkInAccuracy: attendanceLocation.accuracy,
           checkInSelfie: selfieUrl,
           isTeachingDay: isFellow ? isTeachingDay : null
         })
@@ -380,12 +364,12 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const performCheckOut = async (selfieBlob = null) => {
     if (!currentLog) return;
 
-    const precisePosition =
-      location && isPreciseAccuracy(location.accuracy)
+    const attendanceLocation =
+      location && hasAccuracy(location.accuracy)
         ? location
-        : await acquirePreciseLocation();
-    if (!precisePosition) {
-      triggerToast("Precise location is required to check out. Turn on location/GPS and retry.");
+        : await acquireLocation();
+    if (!attendanceLocation) {
+      triggerToast("Location is required to check out. Turn on location/GPS and retry.");
       return;
     }
 
@@ -405,9 +389,9 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           checkout: true,
           workstatus: "Checked out",
           logoutinfo: navigator.userAgent,
-          checkOutLat: precisePosition.lat,
-          checkOutLng: precisePosition.lng,
-          checkOutAccuracy: precisePosition.accuracy,
+          checkOutLat: attendanceLocation.lat,
+          checkOutLng: attendanceLocation.lng,
+          checkOutAccuracy: attendanceLocation.accuracy,
           checkOutSelfie: selfieUrl
         })
       });
@@ -452,12 +436,17 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   };
 
   const handleStartSelfie = async (mode) => {
-    const precise =
-      location && isPreciseAccuracy(location.accuracy)
-        ? location
-        : await acquirePreciseLocation();
-    if (!precise) {
-      triggerToast("Precise location is required. Turn on location/GPS and retry.");
+    const hadLocation = Boolean(location && hasAccuracy(location.accuracy));
+    const currentLocation = hadLocation ? location : await acquireLocation();
+    if (!currentLocation) {
+      triggerToast("Location is required. Turn on location/GPS and retry.");
+      return;
+    }
+    if (!hadLocation && !isPreciseAccuracy(currentLocation.accuracy)) {
+      const actionLabel = mode === "check-out" ? "Check Out" : "Check In";
+      triggerToast(
+        `Approximate location (±${Math.round(currentLocation.accuracy)} m). Tap ${actionLabel} again to use it, or tap Refresh location.`
+      );
       return;
     }
     setSelfieMode(mode);
@@ -465,8 +454,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
   const handleInitiateCheckout = () => {
     setCheckoutMode(true);
-    if (!location || !isPreciseAccuracy(location.accuracy)) {
-      acquirePreciseLocation();
+    if (!location || !hasAccuracy(location.accuracy)) {
+      acquireLocation();
     }
   };
 
@@ -682,11 +671,62 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               </div>
             </div>
 
+            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  Your location
+                </span>
+                <span
+                  className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                    locationStatus === "precise"
+                      ? "bg-emerald-100 text-emerald-800"
+                      : locationStatus === "locating" || locationStatus === "approximate"
+                        ? "bg-amber-100 text-amber-800"
+                        : "bg-rose-100 text-rose-800"
+                  }`}
+                >
+                  {locationStatus === "precise"
+                    ? `Precise ±${Math.round(Number(location?.accuracy || 0))} m`
+                    : locationStatus === "approximate"
+                      ? `Approximate ±${Math.round(Number(location?.accuracy || 0))} m`
+                      : locationStatus === "locating"
+                        ? "Locating..."
+                        : "Not captured"}
+                </span>
+              </div>
+              {location && hasAccuracy(location.accuracy) ? (
+                <AttendanceLocation
+                  lat={location.lat}
+                  lng={location.lng}
+                  accuracy={location.accuracy}
+                  className="mt-1"
+                  loadingLabel="Getting address..."
+                />
+              ) : (
+                <p className="mt-1 text-[10px] text-slate-500">
+                  {locationMessage || "Location is required before checkout."}
+                </p>
+              )}
+            </div>
+
             {locationStatus !== "precise" && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
-                {locationStatus === "locating"
-                  ? "Getting your precise location..."
-                  : "Precise location is required before checkout. Turn on location/GPS and tap Confirm Check Out to retry."}
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
+                <span>
+                  {locationStatus === "locating"
+                    ? "Getting your precise location..."
+                    : locationStatus === "approximate"
+                      ? `Approximate location (±${Math.round(Number(location?.accuracy || 0))} m). Tap Confirm Check Out to use it, or refresh the location.`
+                      : "Location is required before checkout. Turn on location/GPS and tap Confirm Check Out to retry."}
+                </span>
+                {locationStatus !== "locating" && (
+                  <button
+                    type="button"
+                    onClick={() => acquireLocation()}
+                    className="shrink-0 text-[11px] font-bold underline hover:no-underline"
+                  >
+                    Refresh location
+                  </button>
+                )}
               </div>
             )}
 
@@ -699,7 +739,12 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
               </button>
               <button
                 onClick={() => handleStartSelfie("check-out")}
-                disabled={isCheckingOut || locationStatus === "locating"}
+                disabled={
+                  isCheckingOut ||
+                  locationStatus === "locating" ||
+                  !location ||
+                  !hasAccuracy(location.accuracy)
+                }
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-red-600/20 flex justify-center items-center gap-2"
               >
                 {(isCheckingOut || locationStatus === "locating") && (
@@ -728,30 +773,42 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <span className="text-on-surface-variant font-medium text-sm">Office Hours</span>
                   <span className="font-semibold text-on-surface text-xs text-right">{SHIFT_LABEL}</span>
                 </div>
-                <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
-                  <span className="text-on-surface-variant font-medium text-sm">Location</span>
-                  <div className="text-right min-w-0">
+                <div className="py-2 border-b border-surface-container">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-on-surface-variant font-medium text-sm">Location</span>
                     <span
                       className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
                         locationStatus === "precise"
                           ? "bg-emerald-100 text-emerald-800"
-                          : locationStatus === "locating"
+                          : locationStatus === "locating" || locationStatus === "approximate"
                             ? "bg-amber-100 text-amber-800"
                             : "bg-rose-100 text-rose-800"
                       }`}
                     >
                       {locationStatus === "precise"
                         ? `Precise ±${Math.round(Number(location?.accuracy || 0))} m`
-                        : locationStatus === "locating"
-                          ? "Locating..."
-                          : "Required"}
+                        : locationStatus === "approximate"
+                          ? `Approximate ±${Math.round(Number(location?.accuracy || 0))} m`
+                          : locationStatus === "locating"
+                            ? "Locating..."
+                            : "Required"}
                     </span>
-                    <p className="mt-1 text-[10px] text-slate-500 break-words max-w-[190px]">
+                  </div>
+                  <div className="mt-1 min-w-0">
+                    {location && hasAccuracy(location.accuracy) && (
+                      <AttendanceLocation
+                        lat={location.lat}
+                        lng={location.lng}
+                        accuracy={location.accuracy}
+                        loadingLabel="Getting address..."
+                      />
+                    )}
+                    <p className="mt-1 text-[10px] text-slate-500 break-words">
                       {locationMessage || "Location is required to check in or check out."}
                     </p>
                     <button
                       type="button"
-                      onClick={() => acquirePreciseLocation()}
+                      onClick={() => acquireLocation()}
                       disabled={locationStatus === "locating"}
                       className="mt-1 text-[10px] font-bold text-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -768,41 +825,25 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                   <span className="font-semibold text-rose-600 text-sm">{currentLog?.outtimelog || "--:--"}</span>
                 </div>
                 {currentLog?.checkInLat != null && currentLog?.checkInLng != null && (
-                  <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
+                  <div className="py-2 border-b border-surface-container">
                     <span className="text-on-surface-variant font-medium text-sm">Check-in Location</span>
-                    <div className="text-right min-w-0">
-                      {isApproximateAccuracy(currentLog.checkInAccuracy) ? (
-                        <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
-                          Approximate (±{Math.round(Number(currentLog.checkInAccuracy))} m)
-                        </span>
-                      ) : hasAccuracy(currentLog.checkInAccuracy) ? (
-                        <span className="text-[11px] font-semibold text-slate-500">Recorded</span>
-                      ) : (
-                        <span className="text-[11px] font-semibold text-slate-400">Accuracy unknown</span>
-                      )}
-                      <p className="mt-1 break-all text-[10px] text-slate-400">
-                        {formatCoordinates(currentLog.checkInLat, currentLog.checkInLng, currentLog.checkInAccuracy)}
-                      </p>
-                    </div>
+                    <AttendanceLocation
+                      lat={currentLog.checkInLat}
+                      lng={currentLog.checkInLng}
+                      accuracy={currentLog.checkInAccuracy}
+                      className="mt-1"
+                    />
                   </div>
                 )}
                 {currentLog?.checkOutLat != null && currentLog?.checkOutLng != null && (
-                  <div className="flex items-start justify-between gap-3 py-2 border-b border-surface-container">
+                  <div className="py-2 border-b border-surface-container">
                     <span className="text-on-surface-variant font-medium text-sm">Check-out Location</span>
-                    <div className="text-right min-w-0">
-                      {isApproximateAccuracy(currentLog.checkOutAccuracy) ? (
-                        <span className="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800">
-                          Approximate (±{Math.round(Number(currentLog.checkOutAccuracy))} m)
-                        </span>
-                      ) : hasAccuracy(currentLog.checkOutAccuracy) ? (
-                        <span className="text-[11px] font-semibold text-slate-500">Recorded</span>
-                      ) : (
-                        <span className="text-[11px] font-semibold text-slate-400">Accuracy unknown</span>
-                      )}
-                      <p className="mt-1 break-all text-[10px] text-slate-400">
-                        {formatCoordinates(currentLog.checkOutLat, currentLog.checkOutLng, currentLog.checkOutAccuracy)}
-                      </p>
-                    </div>
+                    <AttendanceLocation
+                      lat={currentLog.checkOutLat}
+                      lng={currentLog.checkOutLng}
+                      accuracy={currentLog.checkOutAccuracy}
+                      className="mt-1"
+                    />
                   </div>
                 )}
                 {currentLog?.checkInSelfie && (
