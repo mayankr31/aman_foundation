@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import DateInput from "@/components/ui/DateInput";
+import YesNoToggle from "@/components/ui/YesNoToggle";
 import useBodyScrollLock from "@/lib/useBodyScrollLock";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, DEFAULT_PRIMARY_INCOME } from "@/lib/incomeCategories";
@@ -50,6 +51,10 @@ export const emptyAddForm = {
   householdSize: "4",
   emergencyContact: "",
   tier: "Tier 2",
+  hasAadhar: "no",
+  hasPanCard: "no",
+  hasVoterId: "no",
+  hasRationCard: "no",
   aadhar: "",
   panCard: "",
   voterId: "",
@@ -124,6 +129,22 @@ export default function AddBeneficiaryModal({
     });
   };
 
+  // Tracks whether the household actually has a given identity proof. Choosing
+  // "No" clears any previously typed value so it is not submitted.
+  const updateProof = (flagKey, valueKey, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [flagKey]: value,
+      ...(value === "no" ? { [valueKey]: "" } : {}),
+    }));
+    setErrors((prev) => {
+      if (!prev[valueKey]) return prev;
+      const next = { ...prev };
+      delete next[valueKey];
+      return next;
+    });
+  };
+
   const validateForm = () => {
     const validationErrors = {};
 
@@ -148,7 +169,6 @@ export default function AddBeneficiaryModal({
       ["landmark", "Nearby landmark"],
       ["primaryIncomeType", "Primary income category"],
       ["tier", "Socio-economic tier"],
-      ["bankName", "Bank name"],
       ["programId", "Livelihood program"],
     ];
 
@@ -165,12 +185,12 @@ export default function AddBeneficiaryModal({
     const validators = [
       ["mobNumber", validateMobile(form.mobNumber, { required: true })],
       ["emergencyContact", validateMobile(form.emergencyContact, { required: true })],
-      ["aadhar", validateAadhaar(form.aadhar, { required: true })],
-      ["panCard", validatePan(form.panCard, { required: true })],
-      ["voterId", validateVoterId(form.voterId, { required: true })],
-      ["rationCard", validateRationCard(form.rationCard, { required: true })],
-      ["bankAccountNo", validateBankAccount(form.bankAccountNo, { required: true })],
-      ["bankIfsc", validateIfsc(form.bankIfsc, { required: true })],
+      ["aadhar", validateAadhaar(form.aadhar, { required: form.hasAadhar === "yes" })],
+      ["panCard", validatePan(form.panCard, { required: form.hasPanCard === "yes" })],
+      ["voterId", validateVoterId(form.voterId, { required: form.hasVoterId === "yes" })],
+      ["rationCard", validateRationCard(form.rationCard, { required: form.hasRationCard === "yes" })],
+      ["bankAccountNo", validateBankAccount(form.bankAccountNo)],
+      ["bankIfsc", validateIfsc(form.bankIfsc)],
       ["monthlyIncome", validateAmount(form.monthlyIncome, { required: true, min: 0 })],
       ["householdSize", validateInteger(form.householdSize, { required: true, min: 1, max: 20 })],
     ];
@@ -255,10 +275,10 @@ export default function AddBeneficiaryModal({
           annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
           monthlyIncome: monthlyIncomeValue,
           tier: form.tier,
-          aadhar: form.aadhar || null,
-          panCard: form.panCard || null,
-          voterId: form.voterId || null,
-          rationCard: form.rationCard || null,
+          aadhar: form.hasAadhar === "yes" ? form.aadhar || null : null,
+          panCard: form.hasPanCard === "yes" ? form.panCard || null : null,
+          voterId: form.hasVoterId === "yes" ? form.voterId || null : null,
+          rationCard: form.hasRationCard === "yes" ? form.rationCard || null : null,
           bankName: form.bankName || null,
           bankAccountNo: form.bankAccountNo || null,
           bankIfsc: form.bankIfsc || null,
@@ -379,7 +399,8 @@ export default function AddBeneficiaryModal({
         {step === "details" && (
           <form onSubmit={handleNext} noValidate className="space-y-4 text-sm">
             <p className="text-[11px] font-semibold text-on-surface-variant">
-              All fields in this step are required.
+              Basic details are required. Identity proofs and bank details are optional — select
+              <span className="font-bold"> Yes</span> only for the documents the beneficiary has.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
@@ -673,80 +694,131 @@ export default function AddBeneficiaryModal({
 
             <div className="pt-2">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Proofs</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>Aadhar Number</RequiredLabel></label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    required
-                    maxLength={12}
-                    pattern="[0-9]{12}"
-                    title="Aadhaar must be exactly 12 digits."
-                    placeholder="e.g. 123456789012"
-                    className={fieldClass("aadhar")}
-                    value={form.aadhar}
-                    onChange={(e) => updateField("aadhar", toAadhaarInput(e.target.value))}
-                  />
-                  {fieldError("aadhar")}
-                  <span className="text-[10px] text-on-surface-variant">12 digits, numbers only.</span>
+              <p className="text-[10px] text-on-surface-variant mb-3">
+                Tell us whether the beneficiary has each document. Details are only required when you select Yes.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label className={labelClass}>Aadhar Number</label>
+                    <YesNoToggle
+                      label="Does the beneficiary have an Aadhaar card?"
+                      value={form.hasAadhar}
+                      onChange={(value) => updateProof("hasAadhar", "aadhar", value)}
+                    />
+                  </div>
+                  {form.hasAadhar === "yes" ? (
+                    <>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={12}
+                        pattern="[0-9]{12}"
+                        title="Aadhaar must be exactly 12 digits."
+                        placeholder="e.g. 123456789012"
+                        className={fieldClass("aadhar")}
+                        value={form.aadhar}
+                        onChange={(e) => updateField("aadhar", toAadhaarInput(e.target.value))}
+                      />
+                      {fieldError("aadhar")}
+                      <span className="text-[10px] text-on-surface-variant">12 digits, numbers only.</span>
+                    </>
+                  ) : (
+                    <p className="text-[10px] text-on-surface-variant italic">No Aadhaar card available.</p>
+                  )}
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>PAN Card</RequiredLabel></label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={10}
-                    pattern="[A-Z]{5}[0-9]{4}[A-Z]"
-                    title="PAN must be in the format ABCDE1234F."
-                    placeholder="e.g. ABCDE1234F"
-                    className={fieldClass("panCard")}
-                    value={form.panCard}
-                    onChange={(e) => updateField("panCard", toPanInput(e.target.value))}
-                  />
-                  {fieldError("panCard")}
+                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label className={labelClass}>PAN Card</label>
+                    <YesNoToggle
+                      label="Does the beneficiary have a PAN card?"
+                      value={form.hasPanCard}
+                      onChange={(value) => updateProof("hasPanCard", "panCard", value)}
+                    />
+                  </div>
+                  {form.hasPanCard === "yes" ? (
+                    <>
+                      <input
+                        type="text"
+                        maxLength={10}
+                        pattern="[A-Z]{5}[0-9]{4}[A-Z]"
+                        title="PAN must be in the format ABCDE1234F."
+                        placeholder="e.g. ABCDE1234F"
+                        className={fieldClass("panCard")}
+                        value={form.panCard}
+                        onChange={(e) => updateField("panCard", toPanInput(e.target.value))}
+                      />
+                      {fieldError("panCard")}
+                    </>
+                  ) : (
+                    <p className="text-[10px] text-on-surface-variant italic">No PAN card available.</p>
+                  )}
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>Voter ID</RequiredLabel></label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={10}
-                    pattern="[A-Z]{3}[0-9]{7}"
-                    title="Voter ID must be 3 letters followed by 7 digits."
-                    placeholder="e.g. ABC1234567"
-                    className={fieldClass("voterId")}
-                    value={form.voterId}
-                    onChange={(e) => updateField("voterId", toVoterIdInput(e.target.value))}
-                  />
-                  {fieldError("voterId")}
+                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label className={labelClass}>Voter ID</label>
+                    <YesNoToggle
+                      label="Does the beneficiary have a Voter ID?"
+                      value={form.hasVoterId}
+                      onChange={(value) => updateProof("hasVoterId", "voterId", value)}
+                    />
+                  </div>
+                  {form.hasVoterId === "yes" ? (
+                    <>
+                      <input
+                        type="text"
+                        maxLength={10}
+                        pattern="[A-Z]{3}[0-9]{7}"
+                        title="Voter ID must be 3 letters followed by 7 digits."
+                        placeholder="e.g. ABC1234567"
+                        className={fieldClass("voterId")}
+                        value={form.voterId}
+                        onChange={(e) => updateField("voterId", toVoterIdInput(e.target.value))}
+                      />
+                      {fieldError("voterId")}
+                    </>
+                  ) : (
+                    <p className="text-[10px] text-on-surface-variant italic">No Voter ID available.</p>
+                  )}
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>Ration Card</RequiredLabel></label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={20}
-                    pattern="[A-Z0-9][A-Z0-9-]{5,19}"
-                    title="Ration card must be 6 to 20 letters, digits or hyphens."
-                    placeholder="e.g. SFY-AS-4029"
-                    className={fieldClass("rationCard")}
-                    value={form.rationCard}
-                    onChange={(e) => updateField("rationCard", toRationCardInput(e.target.value))}
-                  />
-                  {fieldError("rationCard")}
+                <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <label className={labelClass}>Ration Card</label>
+                    <YesNoToggle
+                      label="Does the beneficiary have a Ration Card?"
+                      value={form.hasRationCard}
+                      onChange={(value) => updateProof("hasRationCard", "rationCard", value)}
+                    />
+                  </div>
+                  {form.hasRationCard === "yes" ? (
+                    <>
+                      <input
+                        type="text"
+                        maxLength={20}
+                        pattern="[A-Z0-9][A-Z0-9-]{5,19}"
+                        title="Ration card must be 6 to 20 letters, digits or hyphens."
+                        placeholder="e.g. SFY-AS-4029"
+                        className={fieldClass("rationCard")}
+                        value={form.rationCard}
+                        onChange={(e) => updateField("rationCard", toRationCardInput(e.target.value))}
+                      />
+                      {fieldError("rationCard")}
+                    </>
+                  ) : (
+                    <p className="text-[10px] text-on-surface-variant italic">No Ration Card available.</p>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="pt-2">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Bank Details</h4>
+              <p className="text-[10px] text-on-surface-variant mb-3">Optional. Add these later from the beneficiary profile if not available now.</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>Bank Name</RequiredLabel></label>
+                  <label className={labelClass}>Bank Name</label>
                   <input
                     type="text"
-                    required
                     placeholder="e.g. State Bank of India"
                     className={fieldClass("bankName")}
                     value={form.bankName}
@@ -755,11 +827,10 @@ export default function AddBeneficiaryModal({
                   {fieldError("bankName")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>Account Number</RequiredLabel></label>
+                  <label className={labelClass}>Account Number</label>
                   <input
                     type="text"
                     inputMode="numeric"
-                    required
                     maxLength={18}
                     pattern="[0-9]{9,18}"
                     title="Bank account number must be 9 to 18 digits."
@@ -771,10 +842,9 @@ export default function AddBeneficiaryModal({
                   {fieldError("bankAccountNo")}
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}><RequiredLabel>IFSC Code</RequiredLabel></label>
+                  <label className={labelClass}>IFSC Code</label>
                   <input
                     type="text"
-                    required
                     maxLength={11}
                     pattern="[A-Z]{4}0[A-Z0-9]{6}"
                     title="IFSC must be in the format SBIN0007421."

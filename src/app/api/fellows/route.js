@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedSchoolIds, getManagedCentreIds } from "@/lib/scope";
+import { getSubordinateUserIds } from "@/lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -17,15 +18,18 @@ export async function GET(req) {
 
     let where;
     if (PROGRAM_ROLES.includes(user.role.name)) {
-      const [schoolIds, centreIds] = await Promise.all([
+      const [schoolIds, centreIds, subordinateIds] = await Promise.all([
         getManagedSchoolIds(user.id),
         getManagedCentreIds(user.id),
+        getSubordinateUserIds(user.id),
       ]);
       const or = [];
       if (schoolIds.length) or.push({ schools: { some: { schoolId: { in: schoolIds } } } });
       if (centreIds.length) or.push({ afterSchoolCentres: { some: { centreId: { in: centreIds } } } });
-      where = { OR: or };
-      if (!or.length) where = { id: { in: [] } };
+      // Fellows who report to this user appear in the list even when their
+      // school/centre is outside the viewer's managed assignments.
+      if (subordinateIds.length) or.push({ userId: { in: subordinateIds } });
+      where = or.length ? { OR: or } : { id: { in: [] } };
     }
 
     const fellows = await prisma.fellow.findMany({

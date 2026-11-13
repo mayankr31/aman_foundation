@@ -12,6 +12,7 @@ import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiar
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import DateInput from "@/components/ui/DateInput";
+import YesNoToggle from "@/components/ui/YesNoToggle";
 import Avatar from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/date";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption, normalizeStateName } from "@/lib/indiaLocations";
@@ -181,6 +182,10 @@ function BeneficiaryProfileDetailContent() {
   const [tier, setTier] = useState("Tier 2");
   
   // ID proofs
+  const [hasAadhar, setHasAadhar] = useState("no");
+  const [hasPanCard, setHasPanCard] = useState("no");
+  const [hasVoterId, setHasVoterId] = useState("no");
+  const [hasRationCard, setHasRationCard] = useState("no");
   const [aadhar, setAadhar] = useState("");
   const [panCard, setPanCard] = useState("");
   const [voterId, setVoterId] = useState("");
@@ -280,6 +285,10 @@ function BeneficiaryProfileDetailContent() {
         setMonthlyIncome(b.monthlyIncome ?? "");
         setTier(b.tier || "Tier 2");
 
+        setHasAadhar(b.aadhar ? "yes" : "no");
+        setHasPanCard(b.panCard ? "yes" : "no");
+        setHasVoterId(b.voterId ? "yes" : "no");
+        setHasRationCard(b.rationCard ? "yes" : "no");
         setAadhar(toAadhaarInput(b.aadhar || ""));
         setPanCard(toPanInput(b.panCard || ""));
         setVoterId(toVoterIdInput(b.voterId || ""));
@@ -496,10 +505,10 @@ function BeneficiaryProfileDetailContent() {
       dob ? validateDateNotFuture(dob, { label: "Date of birth" }) : null,
       validateMobile(mobNumber),
       validateMobile(emergencyContact),
-      validateAadhaar(aadhar),
-      validatePan(panCard),
-      validateVoterId(voterId),
-      validateRationCard(rationCard),
+      validateAadhaar(aadhar, { required: hasAadhar === "yes" }),
+      validatePan(panCard, { required: hasPanCard === "yes" }),
+      validateVoterId(voterId, { required: hasVoterId === "yes" }),
+      validateRationCard(rationCard, { required: hasRationCard === "yes" }),
       validateBankAccount(bankAccountNo),
       validateIfsc(bankIfsc),
       validateAmount(monthlyIncome, { min: 0 }),
@@ -547,10 +556,10 @@ function BeneficiaryProfileDetailContent() {
         annualIncome: monthlyIncomeValue !== null ? monthlyIncomeValue * 12 : null,
         monthlyIncome: monthlyIncomeValue,
         tier,
-        aadhar,
-        panCard,
-        voterId,
-        rationCard,
+        aadhar: hasAadhar === "yes" ? aadhar : "",
+        panCard: hasPanCard === "yes" ? panCard : "",
+        voterId: hasVoterId === "yes" ? voterId : "",
+        rationCard: hasRationCard === "yes" ? rationCard : "",
         bankName,
         bankAccountNo,
         bankIfsc,
@@ -1075,6 +1084,15 @@ function BeneficiaryProfileDetailContent() {
       ? beneficiary.monthlyIncome * 12
       : beneficiary.annualIncome;
 
+  const missingIdProofs = [
+    { label: "Aadhaar", value: beneficiary.aadhar },
+    { label: "PAN Card", value: beneficiary.panCard },
+    { label: "Voter ID", value: beneficiary.voterId },
+    { label: "Ration Card", value: beneficiary.rationCard },
+  ]
+    .filter((proof) => !proof.value || String(proof.value).trim() === "")
+    .map((proof) => proof.label);
+
   const currentYear = new Date().getFullYear();
   const incomeYears = [
     ...new Set(
@@ -1296,6 +1314,30 @@ function BeneficiaryProfileDetailContent() {
                   <p className="text-on-surface font-bold">{beneficiary.monthlyIncome ? `₹${beneficiary.monthlyIncome.toLocaleString()}` : "N/A"}</p>
                 </div>
               </div>
+
+              {canBrowseDirectory && missingIdProofs.length > 0 && (
+                <div className="mt-5 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 font-sans">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
+                    <div className="flex min-w-0 items-start gap-2">
+                      <span className="material-symbols-outlined text-error text-[18px] shrink-0">report</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-error">Missing identity proofs</p>
+                        <p className="text-xs text-on-surface-variant mt-0.5 break-words">
+                          {missingIdProofs.join(", ")}
+                        </p>
+                      </div>
+                    </div>
+                    {canWrite && (
+                      <Link
+                        href={`/beneficiaries/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
+                        className="shrink-0 self-end text-[11px] font-bold text-primary hover:underline sm:ml-auto sm:self-auto"
+                      >
+                        Add details
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
 
             </div>
           </div>
@@ -2638,18 +2680,18 @@ function BeneficiaryProfileDetailContent() {
 
       {/* master edit profile modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full p-6 shadow-2xl flex flex-col max-h-[90vh] font-sans border border-outline-variant/10 text-on-surface">
+        <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 rounded-xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl flex flex-col max-h-[90vh] font-sans border border-outline-variant/10 text-on-surface">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center border-b border-surface-container-high pb-4 mb-4">
-              <div>
-                <h3 className="text-xl font-bold text-on-surface">Edit Master Beneficiary Profile</h3>
+            <div className="flex justify-between items-start gap-3 border-b border-surface-container-high pb-4 mb-4">
+              <div className="min-w-0">
+                <h3 className="text-lg sm:text-xl font-bold text-on-surface">Edit Master Beneficiary Profile</h3>
                 <p className="text-xs text-on-surface-variant">Update demographic info, bank accounts, identities, and nested items.</p>
               </div>
               <button
                 onClick={() => setShowEditModal(false)}
-                className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
+                className="p-1.5 shrink-0 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer border-none bg-transparent"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
@@ -2790,26 +2832,84 @@ function BeneficiaryProfileDetailContent() {
               {editTab === "IDBank" && (
                 <div className="space-y-4 text-xs">
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide">Identity Proofs</h4>
+                  <p className="text-[10px] text-on-surface-variant">Select Yes only for documents the beneficiary has. Details are required when Yes is selected.</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Aadhar Number</label>
-                      <input type="text" inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Aadhaar must be exactly 12 digits." placeholder="123456789012" value={aadhar} onChange={e => setAadhar(toAadhaarInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <div className="self-start">
+                        <YesNoToggle
+                          label="Does the beneficiary have an Aadhaar card?"
+                          value={hasAadhar}
+                          onChange={(value) => {
+                            setHasAadhar(value);
+                            if (value === "no") setAadhar("");
+                          }}
+                        />
+                      </div>
+                      {hasAadhar === "yes" ? (
+                        <input type="text" inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Aadhaar must be exactly 12 digits." placeholder="123456789012" value={aadhar} onChange={e => setAadhar(toAadhaarInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      ) : (
+                        <p className="text-[10px] text-on-surface-variant italic">No Aadhaar card available.</p>
+                      )}
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">PAN Card</label>
-                      <input type="text" maxLength={10} pattern="[A-Z]{5}[0-9]{4}[A-Z]" title="PAN must be in the format ABCDE1234F." placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(toPanInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <div className="self-start">
+                        <YesNoToggle
+                          label="Does the beneficiary have a PAN card?"
+                          value={hasPanCard}
+                          onChange={(value) => {
+                            setHasPanCard(value);
+                            if (value === "no") setPanCard("");
+                          }}
+                        />
+                      </div>
+                      {hasPanCard === "yes" ? (
+                        <input type="text" maxLength={10} pattern="[A-Z]{5}[0-9]{4}[A-Z]" title="PAN must be in the format ABCDE1234F." placeholder="ABCDE1234F" value={panCard} onChange={e => setPanCard(toPanInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      ) : (
+                        <p className="text-[10px] text-on-surface-variant italic">No PAN card available.</p>
+                      )}
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Voter ID</label>
-                      <input type="text" maxLength={10} pattern="[A-Z]{3}[0-9]{7}" title="Voter ID must be 3 letters followed by 7 digits." placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(toVoterIdInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <div className="self-start">
+                        <YesNoToggle
+                          label="Does the beneficiary have a Voter ID?"
+                          value={hasVoterId}
+                          onChange={(value) => {
+                            setHasVoterId(value);
+                            if (value === "no") setVoterId("");
+                          }}
+                        />
+                      </div>
+                      {hasVoterId === "yes" ? (
+                        <input type="text" maxLength={10} pattern="[A-Z]{3}[0-9]{7}" title="Voter ID must be 3 letters followed by 7 digits." placeholder="ABC1234567" value={voterId} onChange={e => setVoterId(toVoterIdInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      ) : (
+                        <p className="text-[10px] text-on-surface-variant italic">No Voter ID available.</p>
+                      )}
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Ration Card (SFY)</label>
-                      <input type="text" maxLength={20} pattern="[A-Z0-9][A-Z0-9-]{5,19}" title="Ration card must be 6 to 20 letters, digits or hyphens." placeholder="RC-AS-XXXX" value={rationCard} onChange={e => setRationCard(toRationCardInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      <div className="self-start">
+                        <YesNoToggle
+                          label="Does the beneficiary have a Ration Card?"
+                          value={hasRationCard}
+                          onChange={(value) => {
+                            setHasRationCard(value);
+                            if (value === "no") setRationCard("");
+                          }}
+                        />
+                      </div>
+                      {hasRationCard === "yes" ? (
+                        <input type="text" maxLength={20} pattern="[A-Z0-9][A-Z0-9-]{5,19}" title="Ration card must be 6 to 20 letters, digits or hyphens." placeholder="RC-AS-XXXX" value={rationCard} onChange={e => setRationCard(toRationCardInput(e.target.value))} className="px-3 py-2 border rounded bg-transparent border-outline-variant text-on-surface" />
+                      ) : (
+                        <p className="text-[10px] text-on-surface-variant italic">No Ration Card available.</p>
+                      )}
                     </div>
                   </div>
 
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide border-t border-surface-container-high pt-4">Bank Details</h4>
+                  <p className="text-[10px] text-on-surface-variant">Optional. Leave blank if the beneficiary does not have a bank account.</p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Bank Name</label>
@@ -2982,18 +3082,18 @@ function BeneficiaryProfileDetailContent() {
             </form>
 
             {/* Modal Actions */}
-            <div className="flex justify-end gap-3 border-t border-surface-container-high pt-4 mt-4 text-xs font-sans">
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3 border-t border-surface-container-high pt-4 mt-4 text-xs font-sans">
               <button
                 type="button"
                 onClick={() => setShowEditModal(false)}
-                className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
+                className="w-full sm:w-auto px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-50 transition-colors cursor-pointer font-bold uppercase tracking-wider"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleUpdateProfile}
-                className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
+                className="w-full sm:w-auto px-4 py-2 rounded-full bg-primary text-white hover:bg-primary/95 transition-colors cursor-pointer border-none font-bold uppercase tracking-wider shadow-glow"
               >
                 Save Profile Updates
               </button>
