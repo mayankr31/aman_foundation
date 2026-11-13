@@ -676,23 +676,33 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">
                   Your location
                 </span>
-                <span
-                  className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                    locationStatus === "precise"
-                      ? "bg-emerald-100 text-emerald-800"
-                      : locationStatus === "locating" || locationStatus === "approximate"
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-rose-100 text-rose-800"
-                  }`}
-                >
-                  {locationStatus === "precise"
-                    ? `Precise ±${Math.round(Number(location?.accuracy || 0))} m`
-                    : locationStatus === "approximate"
-                      ? `Approximate ±${Math.round(Number(location?.accuracy || 0))} m`
-                      : locationStatus === "locating"
-                        ? "Locating..."
-                        : "Not captured"}
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                      locationStatus === "precise"
+                        ? "bg-emerald-100 text-emerald-800"
+                        : locationStatus === "locating" || locationStatus === "approximate"
+                          ? "bg-amber-100 text-amber-800"
+                          : "bg-rose-100 text-rose-800"
+                    }`}
+                  >
+                    {locationStatus === "precise"
+                      ? `Precise ±${Math.round(Number(location?.accuracy || 0))} m`
+                      : locationStatus === "approximate"
+                        ? `Approximate ±${Math.round(Number(location?.accuracy || 0))} m`
+                        : locationStatus === "locating"
+                          ? "Locating..."
+                          : "Not captured"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => acquireLocation()}
+                    disabled={locationStatus === "locating"}
+                    className="text-[10px] font-bold text-primary hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {locationStatus === "locating" ? "Locating..." : "Refresh location"}
+                  </button>
+                </div>
               </div>
               {location && hasAccuracy(location.accuracy) ? (
                 <AttendanceLocation
@@ -710,23 +720,12 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
             </div>
 
             {locationStatus !== "precise" && (
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
-                <span>
-                  {locationStatus === "locating"
-                    ? "Getting your precise location..."
-                    : locationStatus === "approximate"
-                      ? `Approximate location (±${Math.round(Number(location?.accuracy || 0))} m). Tap Confirm Check Out to use it, or refresh the location.`
-                      : "Location is required before checkout. Turn on location/GPS and tap Confirm Check Out to retry."}
-                </span>
-                {locationStatus !== "locating" && (
-                  <button
-                    type="button"
-                    onClick={() => acquireLocation()}
-                    className="shrink-0 text-[11px] font-bold underline hover:no-underline"
-                  >
-                    Refresh location
-                  </button>
-                )}
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">
+                {locationStatus === "locating"
+                  ? "Getting your precise location..."
+                  : locationStatus === "approximate"
+                    ? `Approximate location (±${Math.round(Number(location?.accuracy || 0))} m). Tap Confirm Check Out to use it, or refresh the location.`
+                    : "Location is required before checkout. Turn on location/GPS and tap Confirm Check Out to retry."}
               </div>
             )}
 
