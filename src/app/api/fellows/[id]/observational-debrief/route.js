@@ -9,7 +9,7 @@ import { checkPermission } from "@/lib/permissions";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
-const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "coaching");
+const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "observational-debrief");
 
 async function ensureUploadDir() {
   try {
@@ -26,7 +26,7 @@ async function saveFile(file) {
   const filename = `${crypto.randomUUID()}.${ext}`;
   const filePath = join(UPLOAD_DIR, filename);
   await writeFile(filePath, buffer);
-  return `/uploads/coaching/${filename}`;
+  return `/uploads/observational-debrief/${filename}`;
 }
 
 async function resolveFellowId(id) {
@@ -64,7 +64,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    const records = await prisma.coachingRecord.findMany({
+    const debriefRecords = await prisma.coachingRecord.findMany({
       where: { fellowId },
       orderBy: { date: "desc" },
       include: {
@@ -74,9 +74,9 @@ export async function GET(req, context) {
       }
     });
 
-    return NextResponse.json({ success: true, data: records });
+    return NextResponse.json({ success: true, data: debriefRecords });
   } catch (error) {
-    console.error("Fetch coaching records error:", error);
+    console.error("Fetch observational debrief records error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -113,7 +113,7 @@ export async function POST(req, context) {
 
     const fileUrl = await saveFile(file);
 
-    const record = await prisma.coachingRecord.create({
+    const debriefRecord = await prisma.coachingRecord.create({
       data: {
         fellowId,
         heading,
@@ -132,16 +132,16 @@ export async function POST(req, context) {
 
     const fellowUserId = await getFellowUserId(fellowId);
     await notifyUsers([fellowUserId], {
-      type: NOTIFICATION_TYPES.COACHING_ADDED,
-      title: "Coaching & Classroom Observation Added",
-      message: `"${record.heading}" has been added to your coaching & classroom observation records.`,
-      link: `/profile?tab=coaching-observation`,
+      type: NOTIFICATION_TYPES.OBSERVATIONAL_DEBRIEF_ADDED,
+      title: "Observational Debrief Conversation Added",
+      message: `"${debriefRecord.heading}" has been added to your observational debrief conversation records.`,
+      link: `/profile?tab=observational-debrief`,
       actorId: user.id,
     });
 
-    return NextResponse.json({ success: true, data: record }, { status: 201 });
+    return NextResponse.json({ success: true, data: debriefRecord }, { status: 201 });
   } catch (error) {
-    console.error("Create coaching record error:", error);
+    console.error("Create observational debrief record error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -184,7 +184,7 @@ export async function DELETE(req, context) {
 
     return NextResponse.json({ success: true, message: "Record deleted successfully" });
   } catch (error) {
-    console.error("Delete coaching record error:", error);
+    console.error("Delete observational debrief record error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

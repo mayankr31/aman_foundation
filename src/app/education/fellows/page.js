@@ -60,7 +60,7 @@ export default function FellowsModule() {
       "District / Location": f.location || "",
       "Assigned Schools": (f.schools || []).map((s) => s.name).join(", "),
       "Assigned Students": f.studentCount ?? 0,
-      "Goal Sheets": f.goalSheetCount ?? 0,
+      "LDJC": f.ldjcCount ?? 0,
       "Progress (%)": f.progress ?? 0,
       "Evaluation Rating": f.evaluationRating ?? "",
       "Joined Date": formatDate(f.createdAt, ""),
@@ -99,7 +99,7 @@ export default function FellowsModule() {
       {/* Header Section */}
       <div className="mb-6">
         <h2 className="page-title text-on-surface mb-3">
-          Fellows Progress Tracking
+          Fellows
         </h2>
         <p className="page-description">
           Monitor individual literacy goals and progress across all active educational districts near Kalgachia, Assam.

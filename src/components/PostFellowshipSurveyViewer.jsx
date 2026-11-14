@@ -73,7 +73,7 @@ function Q7Section({ responses }) {
   );
 }
 
-export default function LookBeyondSurveyViewer({ survey, onClose }) {
+export default function PostFellowshipSurveyViewer({ survey, onClose }) {
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -100,7 +100,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
     return (
       <div className="pl-3 border-l-2 border-surface-container">
         <p className="text-sm font-semibold text-on-surface mb-2">
-          8. Which opportunities created by Teach For India have you accessed?
+          8. Which of the following opportunities created by Aman Foundation have you accessed in your post-Fellowship exploration and search? (Select all that apply)
         </p>
         <div className="space-y-3">
           {selected.map((key) => {
@@ -108,11 +108,11 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
             return (
               <div key={key} className="pl-3 border-l-2 border-surface-container py-1">
                 <p className="text-sm text-on-surface font-medium">{Q8_LABELS[key] || key}</p>
-                {rating && <p className="text-sm text-on-surface-variant">Rating: {rating}</p>}
+                {rating && <p className="text-sm text-on-surface-variant">How helpful was this?: {rating}</p>}
                 {key === "depth_tracks" && responses.q8_depth_track_choice && (
                   <div className="mt-1">
                     <p className="text-sm text-on-surface-variant">
-                      Track: {responses.q8_depth_track_choice}
+                      Please choose the track that you accessed: {responses.q8_depth_track_choice}
                       {responses.q8_depth_track_choice === "Others" && responses.q8_depth_track_other
                         ? ` - ${responses.q8_depth_track_other}`
                         : ""}
@@ -121,7 +121,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
                 )}
                 {key === "internship" && responses.q8_internship_org && (
                   <p className="text-sm text-on-surface-variant mt-1">
-                    Organisation: {responses.q8_internship_org}
+                    Please can you name the organisation you did your apprenticeship/internship with?: {responses.q8_internship_org}
                   </p>
                 )}
               </div>
@@ -153,7 +153,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
   // Section 1
   const section1Children = [];
   if (hasValue(responses.q1)) {
-    const q1Label = `1. Which statement best describes your current thinking around your plans right after the Fellowship?`;
+    const q1Label = `1. Which statement, out of the following, best describes your current thinking around your plans right after the Fellowship?`;
     const q1Value = Q1_LABELS[responses.q1] || responses.q1;
     section1Children.push(renderSimple(q1Label, q1Value));
 
@@ -162,7 +162,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
         section1Children.push(renderSimple("What course(s) are you aspiring to get into?", responses.q1_study_course));
       }
       if (hasValue(responses.q1_study_other)) {
-        section1Children.push(renderSimple("Other (specified)", responses.q1_study_other));
+        section1Children.push(renderSimple("Please specify", responses.q1_study_other));
       }
     }
     if (responses.q1 === "b") {
@@ -170,7 +170,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
         section1Children.push(renderSimple("What course(s) are you aspiring to get into?", responses.q1_exam_course));
       }
       if (hasValue(responses.q1_exam_other)) {
-        section1Children.push(renderSimple("Others (specified)", responses.q1_exam_other));
+        section1Children.push(renderSimple("Please specify", responses.q1_exam_other));
       }
     }
     if (responses.q1 === "f") {
@@ -178,7 +178,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
         section1Children.push(renderSimple("What do you plan on doing during your break?", responses.q1_break_plan));
       }
       if (hasValue(responses.q1_break_other)) {
-        section1Children.push(renderSimple("Other (specified)", responses.q1_break_other));
+        section1Children.push(renderSimple("Please specify", responses.q1_break_other));
       }
     }
     if (responses.q1 === "g") {
@@ -195,27 +195,27 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
   const section2Children = [];
   if (hasValue(responses.q2)) {
     section2Children.push(
-      renderSimple("2. Evolving idea of role as Alum towards educational equity", responses.q2)
+      renderSimple("2. I have an evolving idea of the role I will play as an Alum of Aman Foundation towards educational equity", responses.q2)
     );
   }
   if (hasValue(responses.q3)) {
     section2Children.push(
-      renderSimple("3. Fellowship experience is helping grow capabilities for personal and professional development", responses.q3)
+      renderSimple("3. I believe the Fellowship experience is helping me grow the capabilities I need (e.g., knowledge, skills, mindsets, etc.) to develop personally and professionally", responses.q3)
     );
   }
   if (hasValue(responses.q4)) {
     section2Children.push(
-      renderSimple("4. Familiar with TFI's 3 prioritized puzzle pieces", responses.q4)
+      renderSimple("4. I am familiar with and understand Aman Foundation's 3 prioritized puzzle pieces (Transformational Schools, Enablers of Transformation Outcomes, Policy and Governance)", responses.q4)
     );
   }
   if (hasValue(responses.q5)) {
     section2Children.push(
-      renderSimple("5. Aware of types of roles and organizations within 3 puzzle pieces", responses.q5)
+      renderSimple("5. I am aware of the types of roles and organizations within Aman Foundation's 3 prioritized puzzle pieces", responses.q5)
     );
   }
   if (hasValue(responses.q6)) {
     section2Children.push(
-      renderSimple("6. Aware of how strengths align with opportunities within 3 puzzle pieces", responses.q6)
+      renderSimple("6. I am aware of how my strengths align or do not align with the types of opportunities available within Aman Foundation's 3 prioritized puzzle pieces", responses.q6)
     );
   }
   section2Children.push(<Q7Section key="q7" responses={responses} />);
@@ -232,24 +232,24 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
     const btcpLabel = "9. Have you done a Be The Change Project (BTCP)?";
     section3Children.push(renderSimple(btcpLabel, responses.q9_btcp === "yes" ? "Yes" : "No"));
     if (responses.q9_btcp === "yes" && hasValue(responses.q9_btcp_stage)) {
-      section3Children.push(renderSimple("BTCP Stage", responses.q9_btcp_stage));
+      section3Children.push(renderSimple("Which stage of your BTCP are you on?", responses.q9_btcp_stage));
     }
     if (responses.q9_btcp === "yes" && hasValue(responses.q9_btcp_rating)) {
-      section3Children.push(renderSimple("BTCP Experience", responses.q9_btcp_rating));
+      section3Children.push(renderSimple("Please select the option that best describes your experience:", responses.q9_btcp_rating));
     }
     if (responses.q9_btcp === "no" && hasValue(responses.q9_btcp_reason)) {
-      section3Children.push(renderSimple("Reason for not doing BTCP", responses.q9_btcp_reason));
+      section3Children.push(renderSimple("Please share the reason for not doing the BTCP", responses.q9_btcp_reason));
     }
   }
 
   if (hasValue(responses.q10)) {
-    section3Children.push(renderSimple("10. Other opportunities accessed", responses.q10));
+    section3Children.push(renderSimple("10. If you have accessed any other opportunities or created some for yourself that helped with your post-Fellowship exploration and search, please mention them below.", responses.q10));
   }
   if (hasValue(responses.q11)) {
-    section3Children.push(renderSimple("11. Post-Fellowship support is high quality and suited to my needs", responses.q11));
+    section3Children.push(renderSimple("11. The support offered by Aman Foundation towards post-Fellowship is of high quality and is suited to my needs", responses.q11));
   }
   if (hasValue(responses.q12)) {
-    section3Children.push(renderSimple("12. Recommendations to strengthen support", responses.q12));
+    section3Children.push(renderSimple("12. With respect to your post-Fellowship plans, please share any recommendations to strengthen the quality or type of support that Aman Foundation can offer to Fellows", responses.q12));
   }
 
   if (section3Children.length > 0) {
@@ -264,7 +264,7 @@ export default function LookBeyondSurveyViewer({ survey, onClose }) {
       >
         <div className="flex justify-between items-center gap-3 sticky top-0 bg-white dark:bg-slate-900 pb-4 border-b border-outline-variant/20 z-10">
           <div className="min-w-0">
-            <h3 className="text-lg font-bold text-on-surface break-words">Look Beyond Survey Responses</h3>
+            <h3 className="text-lg font-bold text-on-surface break-words">Post Fellowship Survey Responses</h3>
             <p className="text-xs text-on-surface-variant mt-0.5">
               Submitted on {formatDate(survey.surveyDate)}
             </p>

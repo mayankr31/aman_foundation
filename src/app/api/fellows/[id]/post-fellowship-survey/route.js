@@ -53,13 +53,13 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const surveys = await prisma.lookBeyondSurvey.findMany({
+    const postFellowshipSurveys = await prisma.lookBeyondSurvey.findMany({
       where: { fellowId },
       orderBy: { surveyDate: "desc" },
     });
-    return NextResponse.json({ success: true, data: surveys });
+    return NextResponse.json({ success: true, data: postFellowshipSurveys });
   } catch (err) {
-    console.error("Failed to fetch look beyond surveys:", err);
+    console.error("Failed to fetch post fellowship surveys:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
@@ -110,17 +110,17 @@ export async function POST(req, { params }) {
     if (user.id === fellow.userId) {
       const reviewers = await getReviewerUserIdsForFellow(fellowId);
       await notifyUsers(reviewers, {
-        type: NOTIFICATION_TYPES.LOOK_BEYOND_SUBMITTED,
-        title: "Look Beyond Survey Submitted",
-        message: `${fellow.name || "A fellow"} has submitted their Look Beyond survey.`,
-        link: `/education/fellows/${fellowId}?tab=look-beyond-survey`,
+        type: NOTIFICATION_TYPES.POST_FELLOWSHIP_SURVEY_SUBMITTED,
+        title: "Post Fellowship Survey Submitted",
+        message: `${fellow.name || "A fellow"} has submitted their Post Fellowship survey.`,
+        link: `/education/fellows/${fellowId}?tab=post-fellowship-survey`,
         actorId: user.id,
       });
     }
 
     return NextResponse.json({ success: true, data: newSurvey });
   } catch (err) {
-    console.error("Failed to create look beyond survey:", err);
+    console.error("Failed to create post fellowship survey:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

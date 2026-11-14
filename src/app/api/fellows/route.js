@@ -58,7 +58,7 @@ export async function GET(req) {
         evaluationRating: f.evaluationRating,
         createdAt: f.createdAt,
         studentCount: f._count?.students ?? 0,
-        goalSheetCount: f._count?.goalSheets ?? 0,
+        ldjcCount: f._count?.goalSheets ?? 0,
         milestones: [
           { done: true, text: "Placement Setup" },
           { done: false, text: "Pending Review" }

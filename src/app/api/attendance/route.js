@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { getHierarchyScopedUserIds } from "@/lib/hierarchy";
-import { dailyTaskWhere } from "@/lib/tasks";
+import { todayOwnTaskWhere } from "@/lib/tasks";
 import {
   formatISTTime,
   formatWorkHours,
@@ -222,13 +222,30 @@ export async function POST(req) {
       return NextResponse.json({ success: true, data: existing });
     }
 
-    // Every role must plan at least one task for the day before checking in.
-    const taskCount = await prisma.task.count({ where: dailyTaskWhere(user.id, today) });
+    // Every role must plan at least one task for the current day before
+    // checking in. Carry-forward tasks from previous days do not count.
+    const taskCount = await prisma.task.count({ where: todayOwnTaskWhere(user.id, today) });
     if (taskCount === 0) {
       return NextResponse.json(
         { error: "Add at least one task for today before checking in." },
         { status: 400 }
       );
+    }
+
+    // Fellows must record lesson-plan notes before checking in on a teaching day.
+    const isFellow = user.role.name === "FELLOW";
+    const isTeachingDay =
+      typeof body.isTeachingDay === "boolean"
+        ? body.isTeachingDay
+        : existing?.isTeachingDay !== false;
+    if (isFellow && isTeachingDay) {
+      const lessonPlan = String(body.lessonPlanText ?? existing?.lessonPlanText ?? "").trim();
+      if (!lessonPlan) {
+        return NextResponse.json(
+          { error: "Add lesson plan notes before checking in on a teaching day." },
+          { status: 400 }
+        );
+      }
     }
 
     const location = validateLocation(

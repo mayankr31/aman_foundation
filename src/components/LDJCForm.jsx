@@ -2,38 +2,37 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  QUESTIONS,
-  SECTIONS,
-  TITLES,
-  TITLE_CATEGORIES,
-  LEVELS,
-  RATING_OPTIONS,
-  getDefaultResponses,
-} from "@/data/goalSheetConstants";
+  LDJC_QUESTIONS,
+  LDJC_SECTIONS,
+  LDJC_TITLE_CATEGORIES,
+  LDJC_LEVELS,
+  LDJC_RATING_OPTIONS,
+  getDefaultLdjcResponses,
+} from "@/data/ldjcConstants";
 import { useToast } from "@/context/ToastContext";
 import { formatDate } from "@/lib/date";
 
-export default function GoalSheetForm({
+export default function LDJCForm({
   fellowId,
-  sheetData,
+  ldjcData,
   isManager = false,
   token,
   onClose,
   onSave,
 }) {
   const toast = useToast();
-  const isNew = !sheetData;
+  const isNew = !ldjcData;
   const [responses, setResponses] = useState(() => {
-    if (sheetData?.responses && typeof sheetData.responses === "object") {
-      const defaults = getDefaultResponses();
-      return { ...defaults, ...sheetData.responses };
+    if (ldjcData?.responses && typeof ldjcData.responses === "object") {
+      const defaults = getDefaultLdjcResponses();
+      return { ...defaults, ...ldjcData.responses };
     }
-    return getDefaultResponses();
+    return getDefaultLdjcResponses();
   });
   const [portfolioLink, setPortfolioLink] = useState(
-    sheetData?.portfolioLink || ""
+    ldjcData?.portfolioLink || ""
   );
-  const [status, setStatus] = useState(sheetData?.status || "SUBMITTED");
+  const [status, setStatus] = useState(ldjcData?.status || "SUBMITTED");
   const [saving, setSaving] = useState(false);
 
   // For title+level sections, we keep track of selected title-level pairs
@@ -76,7 +75,7 @@ export default function GoalSheetForm({
     } else {
       updateSection(questionId, sectionKey, [
         ...current,
-        { title, level: LEVELS[0] },
+        { title, level: LDJC_LEVELS[0] },
       ]);
     }
   };
@@ -96,8 +95,8 @@ export default function GoalSheetForm({
     setSaving(true);
     try {
       const url = isNew
-        ? `/api/fellows/${fellowId}/goal-sheets`
-        : `/api/fellows/${fellowId}/goal-sheets/${sheetData.id}`;
+        ? `/api/fellows/${fellowId}/ldjc`
+        : `/api/fellows/${fellowId}/ldjc/${ldjcData.id}`;
 
       const method = isNew ? "POST" : "PATCH";
 
@@ -123,13 +122,13 @@ export default function GoalSheetForm({
       const json = await res.json();
       if (json.success) {
         setStatus(newStatus);
-        toast.success("Goal sheet saved successfully!");
+        toast.success("LDJC saved successfully!");
         if (onSave) onSave(json.data);
       } else {
         toast.error(json.error || "Failed to save");
       }
     } catch (err) {
-      console.error("Save goal sheet error:", err);
+      console.error("Save LDJC error:", err);
       toast.error("An error occurred while saving");
     }
     setSaving(false);
@@ -139,7 +138,7 @@ export default function GoalSheetForm({
     setSaving(true);
     try {
       const res = await fetch(
-        `/api/fellows/${fellowId}/goal-sheets/${sheetData.id}`,
+        `/api/fellows/${fellowId}/ldjc/${ldjcData.id}`,
         {
           method: "PATCH",
           headers: {
@@ -176,11 +175,14 @@ export default function GoalSheetForm({
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-950 border-b border-outline-variant/20 px-6 py-4 flex items-center justify-between shadow-sm">
         <div>
           <h2 className="font-headline font-bold text-xl text-on-surface">
-            Goal Sheet
+            LDJC
           </h2>
-          {sheetData?.date && (
+          <p className="text-sm text-on-surface-variant mt-0.5">
+            Leadership Development Journey Conversation
+          </p>
+          {ldjcData?.date && (
             <p className="text-sm text-on-surface-variant mt-0.5">
-              {formatDate(sheetData.date)}
+              {formatDate(ldjcData.date)}
             </p>
           )}
           <span
@@ -203,7 +205,7 @@ export default function GoalSheetForm({
 
       {/* Form body */}
       <div className="max-w-4xl mx-auto px-6 py-8 space-y-10 font-sans">
-        {QUESTIONS.map((question) => {
+        {LDJC_QUESTIONS.map((question) => {
           const isReadOnly =
             isManager
               ? !isManagerField(question)
@@ -230,7 +232,7 @@ export default function GoalSheetForm({
                 {question.sections.map((section) => (
                   <div key={section.key}>
                     <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2">
-                      {SECTIONS[section.key]}
+                      {LDJC_SECTIONS[section.key]}
                     </label>
                     {section.type === "titles" ? (
                       <TitlesSelector
@@ -271,7 +273,7 @@ export default function GoalSheetForm({
                         <option value="">
                           Select rating...
                         </option>
-                        {RATING_OPTIONS.map((opt) => (
+                        {LDJC_RATING_OPTIONS.map((opt) => (
                           <option key={opt} value={opt}>
                             {opt}
                           </option>
@@ -304,7 +306,7 @@ export default function GoalSheetForm({
                 {/* Y2 section (always shown) */}
                 <div key="y2Fellow">
                   <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-2 whitespace-pre-line">
-                    {SECTIONS.y2Fellow}
+                    {LDJC_SECTIONS.y2Fellow}
                   </label>
                   <textarea
                     value={getSectionValue(question.id, "y2Fellow")}
@@ -385,7 +387,7 @@ export default function GoalSheetForm({
 function TitlesSelector({ selected = [], onToggle, onLevelChange, readOnly }) {
   return (
     <div className="space-y-4">
-      {Object.entries(TITLE_CATEGORIES).map(([category, { label, count }]) => (
+      {Object.entries(LDJC_TITLE_CATEGORIES).map(([category, { label, count }]) => (
         <div key={category}>
           <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-2">
             {label}
@@ -418,7 +420,7 @@ function TitlesSelector({ selected = [], onToggle, onLevelChange, readOnly }) {
                         readOnly ? "opacity-60 cursor-not-allowed" : ""
                       }`}
                     >
-                      {LEVELS.map((level) => (
+                      {LDJC_LEVELS.map((level) => (
                         <option key={level} value={level}>
                           {level}
                         </option>

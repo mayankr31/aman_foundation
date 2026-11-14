@@ -12,11 +12,12 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/date";
+import { toMobileInput, toPersonNameInput, toAadhaarInput } from "@/lib/validation";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 // ─── Small helpers ─────────────────────────────────────────────────────────────
-import { toMobileInput, toPersonNameInput } from "@/lib/validation";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -31,11 +32,16 @@ function InputField({ label, name, value, onChange, type = "text", required = fa
           name={name}
           value={value}
           onChange={handleChange}
+          required={required}
           aria-invalid={Boolean(error)}
           className={inputClasses}
           {...rest}
         >
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
+          {options.map((o, index) => {
+            const optValue = typeof o === "string" ? o : o.value;
+            const optLabel = typeof o === "string" ? o : o.label;
+            return <option key={`${optValue}-${index}`} value={optValue}>{optLabel}</option>;
+          })}
         </select>
       ) : type === "date" ? (
         <DateInput
@@ -147,6 +153,11 @@ export default function AfterSchoolStudentProfileDetail() {
           gender: json.data.gender || "",
           email: json.data.email || "",
           address: json.data.address || "",
+          state: json.data.state || "",
+          block: json.data.block || "",
+          village: json.data.village || "",
+          landmark: json.data.landmark || "",
+          aadharNumber: json.data.aadharNumber || "",
           grade: json.data.grade || "",
           gradeGroup: json.data.gradeGroup || "",
           district: json.data.district || "",
@@ -555,6 +566,14 @@ export default function AfterSchoolStudentProfileDetail() {
   const filteredHomeworkRecords = homeworkRecords.filter(h => inDateRange(h.date));
 
   const isAdminOrManager = user && (user.roleName === "ADMIN" || PROGRAM_ROLES.includes(user.roleName));
+  const stateOptions = withCurrentOption(
+    INDIA_STATES.map((state) => state.name),
+    editForm.state
+  );
+  const districtOptions = withCurrentOption(
+    getDistrictsForState(editForm.state),
+    editForm.district
+  );
 
   return (
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -684,7 +703,16 @@ export default function AfterSchoolStudentProfileDetail() {
                 ["Mother's Mobile", student.motherMobile || "—"],
                 ["Enrolment Date", formatDate(student.enrolmentDate)],
                 ["Primary Language", student.primaryLanguage || "—"],
-                ["Home Location", `${student.address || "—"}, ${student.district || "—"}`],
+                ["Grade", student.grade || "—"],
+                ["Grade Group", student.gradeGroup || "—"],
+                ["Assigned Fellow", student.fellow?.name || "—"],
+                ["Home Location", student.address || "—"],
+                ["State", student.state || "—"],
+                ["District", student.district || "—"],
+                ["Block", student.block || "—"],
+                ["City / Village", student.village || "—"],
+                ["Nearby Landmark", student.landmark || "—"],
+                ["Aadhaar Number", student.aadharNumber || "—"],
                 ["Email", student.email || "—"],
               ].map(([label, val]) => (
                 <div key={label} className="border-b border-surface-container pb-3">
@@ -1090,8 +1118,31 @@ export default function AfterSchoolStudentProfileDetail() {
               <InputField label="Gender" name="gender" value={editForm.gender} onChange={e => setEditForm(f => ({ ...f, gender: e.target.value }))} required options={["", "Male", "Female", "Other"]} />
               <InputField label="Grade" name="grade" value={editForm.grade} onChange={e => setEditForm(f => ({ ...f, grade: e.target.value }))} required />
               <InputField label="Grade Group" name="gradeGroup" value={editForm.gradeGroup} onChange={e => setEditForm(f => ({ ...f, gradeGroup: e.target.value }))} required options={["", "Primary", "Middle", "Secondary", "Senior Secondary"]} />
-              <InputField label="District" name="district" value={editForm.district} onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))} required />
+              <InputField
+                label="State"
+                name="state"
+                value={editForm.state}
+                onChange={e => setEditForm(f => ({ ...f, state: e.target.value, district: "" }))}
+                required
+                options={[{ value: "", label: "Select state..." }, ...stateOptions.map((state) => ({ value: state, label: state }))]}
+              />
+              <InputField
+                label="District"
+                name="district"
+                value={editForm.district}
+                onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))}
+                required
+                disabled={!editForm.state}
+                options={[
+                  { value: "", label: editForm.state ? "Select district..." : "Select state first" },
+                  ...districtOptions.map((district) => ({ value: district, label: district })),
+                ]}
+              />
+              <InputField label="Block" name="block" value={editForm.block} onChange={e => setEditForm(f => ({ ...f, block: e.target.value }))} required maxLength={80} />
+              <InputField label="City / Village" name="village" value={editForm.village} onChange={e => setEditForm(f => ({ ...f, village: e.target.value }))} required maxLength={80} />
+              <InputField label="Nearby Landmark (optional)" name="landmark" value={editForm.landmark} onChange={e => setEditForm(f => ({ ...f, landmark: e.target.value }))} maxLength={120} />
               <InputField label="Primary Language" name="primaryLanguage" value={editForm.primaryLanguage} onChange={e => setEditForm(f => ({ ...f, primaryLanguage: e.target.value }))} required />
+              <InputField label="Aadhaar Number (optional)" name="aadharNumber" value={editForm.aadharNumber} onChange={e => setEditForm(f => ({ ...f, aadharNumber: toAadhaarInput(e.target.value) }))} inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Enter exactly 12 digits." hint="Optional. 12 digits, numbers only." />
               <InputField label="Email" name="email" type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} autoComplete="email" />
               <InputField label="Guardian Name" name="guardianName" value={editForm.guardianName} onChange={e => setEditForm(f => ({ ...f, guardianName: e.target.value }))} transform={toPersonNameInput} maxLength={60} />
               <InputField label="Guardian Relation" name="guardianRelation" value={editForm.guardianRelation} onChange={e => setEditForm(f => ({ ...f, guardianRelation: e.target.value }))} />
@@ -1100,7 +1151,6 @@ export default function AfterSchoolStudentProfileDetail() {
               <InputField label="Father's Mobile" name="fatherMobile" value={editForm.fatherMobile} onChange={e => setEditForm(f => ({ ...f, fatherMobile: e.target.value }))} required type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Mother's Name" name="motherName" value={editForm.motherName} onChange={e => setEditForm(f => ({ ...f, motherName: e.target.value }))} required transform={toPersonNameInput} maxLength={60} />
               <InputField label="Mother's Mobile" name="motherMobile" value={editForm.motherMobile} onChange={e => setEditForm(f => ({ ...f, motherMobile: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-              <InputField label="Address" name="address" value={editForm.address} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} required />
               <InputField label="Enrolment Date" name="enrolmentDate" type="date" value={editForm.enrolmentDate} onChange={e => setEditForm(f => ({ ...f, enrolmentDate: e.target.value }))} required max={new Date().toISOString().slice(0, 10)} />
 
             </div>

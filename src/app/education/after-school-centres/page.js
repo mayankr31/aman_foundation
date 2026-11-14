@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
-import { extractMapEmbedUrl } from "@/lib/mapUrl";
+import { extractMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
@@ -502,6 +502,9 @@ export default function AfterSchoolCentresModule() {
                 placeholder='Paste the embed URL, or the full <iframe src="..."> code'
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
               <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
+              {addForm.mapUrl && !isValidMapEmbedUrl(addForm.mapUrl) && (
+                <p className="text-[11px] font-medium text-error">Only valid Google Maps embed URLs will be shown on the centre page.</p>
+              )}
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>

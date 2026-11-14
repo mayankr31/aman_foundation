@@ -155,7 +155,11 @@ export async function GET(req, context) {
       include: FELLOW_DETAIL_INCLUDE
     });
 
-    return NextResponse.json({ success: true, data: fellow });
+    const { goalSheets, ...fellowProfile } = fellow;
+    return NextResponse.json({
+      success: true,
+      data: { ...fellowProfile, ldjcRecords: goalSheets },
+    });
   } catch (error) {
     console.error("Fetch fellow detail error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -440,7 +444,7 @@ export async function DELETE(req, context) {
       // 2. Remove school assignments (M2M)
       await tx.fellowSchool.deleteMany({ where: { fellowId } });
 
-      // 3. Delete goal sheets
+      // 3. Delete LDJC records
       await tx.goalSheet.deleteMany({
         where: { fellowId }
       });

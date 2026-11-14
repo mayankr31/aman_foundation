@@ -205,7 +205,7 @@ function SectionLabel({ children }) {
   );
 }
 
-export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
+export default function PostFellowshipSurveyForm({ onSubmit, onCancel }) {
   const [responses, setResponses] = useState(INITIAL_RESPONSES);
   const [surveyDate, setSurveyDate] = useState(getISTDate());
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -344,7 +344,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
     <form onSubmit={handleSubmit} className="space-y-8 font-sans">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-2">
         <div>
-          <h2 className="text-2xl font-headline font-black text-on-surface">Look Beyond Survey</h2>
+          <h2 className="text-2xl font-headline font-black text-on-surface">Post Fellowship Survey</h2>
           <p className="text-sm text-on-surface-variant mt-1">Please take a few minutes to share your post-Fellowship plans and reflections.</p>
         </div>
         <div className="flex items-center gap-2">
@@ -498,7 +498,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
       <div className="grid grid-cols-1 gap-5">
         <div>
           <Dropdown
-            label="2. I have an evolving idea of the role I will play as an Alum of Teach For India towards educational equity"
+            label="2. I have an evolving idea of the role I will play as an Alum of Aman Foundation towards educational equity"
             value={responses.q2}
             onChange={(v) => update("q2", v)}
             options={LIKERT_OPTIONS}
@@ -522,7 +522,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
       <div className="grid grid-cols-1 gap-5">
         <div>
           <Dropdown
-            label="4. I am familiar with and understand Teach For India's 3 prioritized puzzle pieces (Transformational Schools, Enablers of Transformation Outcomes, Policy and Governance)"
+            label="4. I am familiar with and understand Aman Foundation's 3 prioritized puzzle pieces (Transformational Schools, Enablers of Transformation Outcomes, Policy and Governance)"
             value={responses.q4}
             onChange={(v) => update("q4", v)}
             options={EXTENT_OPTIONS}
@@ -532,7 +532,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
         </div>
         <div>
           <Dropdown
-            label="5. I am aware of the types of roles and organizations within Teach For India's 3 prioritized puzzle pieces"
+            label="5. I am aware of the types of roles and organizations within Aman Foundation's 3 prioritized puzzle pieces"
             value={responses.q5}
             onChange={(v) => update("q5", v)}
             options={EXTENT_OPTIONS}
@@ -542,7 +542,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
         </div>
         <div>
           <Dropdown
-            label="6. I am aware of how my strengths align or do not align with the types of opportunities available within Teach For India's 3 prioritized puzzle pieces"
+            label="6. I am aware of how my strengths align or do not align with the types of opportunities available within Aman Foundation's 3 prioritized puzzle pieces"
             value={responses.q6}
             onChange={(v) => update("q6", v)}
             options={EXTENT_OPTIONS}
@@ -646,7 +646,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
 
       <div className="space-y-4">
         <p className="text-sm font-semibold text-on-surface">
-          8. Which of the following opportunities created by Teach For India have you accessed in your post-Fellowship exploration and search? (Select all that apply)
+          8. Which of the following opportunities created by Aman Foundation have you accessed in your post-Fellowship exploration and search? (Select all that apply)
         </p>
         {Q8_OPPORTUNITIES.map((opp) => (
           <div key={opp.key} className="space-y-3">
@@ -800,7 +800,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
 
       <div>
         <Dropdown
-          label="11. The support offered by Teach For India towards post-Fellowship is of high quality and is suited to my needs"
+          label="11. The support offered by Aman Foundation towards post-Fellowship is of high quality and is suited to my needs"
           value={responses.q11}
           onChange={(v) => update("q11", v)}
           options={LIKERT_OPTIONS}
@@ -810,7 +810,7 @@ export default function LookBeyondSurveyForm({ onSubmit, onCancel }) {
       </div>
 
       <TextInput
-        label="12. With respect to your post-Fellowship plans, please share any recommendations to strengthen the quality or type of support that Teach For India can offer to Fellows"
+        label="12. With respect to your post-Fellowship plans, please share any recommendations to strengthen the quality or type of support that Aman Foundation can offer to Fellows"
         value={responses.q12}
         onChange={(v) => update("q12", v)}
         placeholder="Please share your recommendations..."

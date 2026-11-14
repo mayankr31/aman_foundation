@@ -1,4 +1,4 @@
-export const TITLE_CATEGORIES = {
+export const LDJC_TITLE_CATEGORIES = {
   C: { label: "Connect", count: 5 },
   E: { label: "Envision", count: 5 },
   P: { label: "Plan", count: 5 },
@@ -6,9 +6,9 @@ export const TITLE_CATEGORIES = {
   R: { label: "Reflect", count: 5 },
 };
 
-export const TITLES = (() => {
+export const LDJC_TITLES = (() => {
   const result = [];
-  for (const [category, { count }] of Object.entries(TITLE_CATEGORIES)) {
+  for (const [category, { count }] of Object.entries(LDJC_TITLE_CATEGORIES)) {
     for (let i = 1; i <= count; i++) {
       result.push(`${category}${i}`);
     }
@@ -16,16 +16,16 @@ export const TITLES = (() => {
   return result;
 })();
 
-export const LEVELS = ["Novice", "Beginner", "Proficient", "Advanced"];
+export const LDJC_LEVELS = ["Novice", "Beginner", "Proficient", "Advanced"];
 
-export const RATING_OPTIONS = [
+export const LDJC_RATING_OPTIONS = [
   "Additional Support Required",
   "Some progress meet but additional support required",
   "Expected progress made",
   "Significant progress made",
 ];
 
-export const SECTIONS = {
+export const LDJC_SECTIONS = {
   leadingClassroom: "Leading the classroom",
   leadingMyself: "Leading myself",
   visitingHomes: "Visiting Homes and Communities",
@@ -40,10 +40,10 @@ export const SECTIONS = {
  * - type: "rating" = dropdown rating
  *
  * For sections like "leadingMyself" that are soms titles and soms text,
- * the type is set on the section level in the QUESTIONS array.
+ * the type is set on the section level in the LDJC_QUESTIONS array.
  */
 
-export const QUESTIONS = [
+export const LDJC_QUESTIONS = [
   // Q1: Where am I starting the year?
   {
     id: "Q1",
@@ -193,9 +193,9 @@ export const QUESTIONS = [
   },
 ];
 
-export function getDefaultResponses() {
+export function getDefaultLdjcResponses() {
   const obj = {};
-  for (const q of QUESTIONS) {
+  for (const q of LDJC_QUESTIONS) {
     obj[q.id] = {};
     for (const s of q.sections) {
       if (s.type === "titles") {

@@ -7,7 +7,8 @@ import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import { deriveAcademicStatus, getAcademicStatusClass, PERFORMANCE_FILTERS } from "@/lib/academicStatus";
 import { formatDate } from "@/lib/date";
-import { toMobileInput, toPersonNameInput } from "@/lib/validation";
+import { toMobileInput, toPersonNameInput, toAadhaarInput } from "@/lib/validation";
+import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import DateInput from "@/components/ui/DateInput";
 import Avatar from "@/components/ui/Avatar";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
@@ -16,9 +17,14 @@ const EMPTY_STUDENT_FORM = {
   name: "",
   dob: "",
   gender: "",
-  grade: "Grade 8",
-  gradeGroup: "Middle",
+  grade: "Grade 1",
+  gradeGroup: "Primary",
+  state: "",
   district: "",
+  block: "",
+  village: "",
+  landmark: "",
+  aadharNumber: "",
   primaryLanguage: "",
   email: "",
   guardianName: "",
@@ -28,7 +34,6 @@ const EMPTY_STUDENT_FORM = {
   fatherMobile: "",
   motherName: "",
   motherMobile: "",
-  address: "",
   enrolmentDate: "",
   schoolId: "",
 };
@@ -45,7 +50,7 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
     <div className="flex flex-col gap-1">
       <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">{label}{required && <span className="text-error ml-0.5">*</span>}</label>
       {options ? (
-        <select name={name} value={value} onChange={(e) => onChange(name, e.target.value)} required={required} className={inputClasses}>
+        <select name={name} value={value} onChange={(e) => onChange(name, e.target.value)} required={required} className={inputClasses} {...rest}>
           {options.map((o, index) => {
             const optValue = typeof o === "string" ? o : o.value;
             const optLabel = typeof o === "string" ? o : o.label;
@@ -108,6 +113,15 @@ export default function StudentsModule() {
   const handleNewStudentChange = (name, value) => {
     setNewStudentForm((f) => ({ ...f, [name]: value }));
   };
+
+  const stateOptions = withCurrentOption(
+    INDIA_STATES.map((state) => state.name),
+    newStudentForm.state
+  );
+  const districtOptions = withCurrentOption(
+    getDistrictsForState(newStudentForm.state),
+    newStudentForm.district
+  );
 
   useEffect(() => {
     async function loadData() {
@@ -667,8 +681,31 @@ export default function StudentsModule() {
                 <FormField label="Gender" name="gender" value={newStudentForm.gender} onChange={handleNewStudentChange} required options={["", "Male", "Female", "Other"]} />
                 <FormField label="Grade" name="grade" value={newStudentForm.grade} onChange={handleNewStudentChange} required options={Array.from({ length: 10 }, (_, i) => `Grade ${i + 1}`)} />
                 <FormField label="Grade Group" name="gradeGroup" value={newStudentForm.gradeGroup} onChange={handleNewStudentChange} required options={["Primary", "Middle", "Secondary", "Senior Secondary"]} />
-                <FormField label="District" name="district" value={newStudentForm.district} onChange={handleNewStudentChange} required placeholder="e.g. Kalgachia" />
+                <FormField
+                  label="State"
+                  name="state"
+                  value={newStudentForm.state}
+                  onChange={(name, value) => setNewStudentForm((f) => ({ ...f, state: value, district: "" }))}
+                  required
+                  options={[{ value: "", label: "Select state..." }, ...stateOptions.map((state) => ({ value: state, label: state }))]}
+                />
+                <FormField
+                  label="District"
+                  name="district"
+                  value={newStudentForm.district}
+                  onChange={handleNewStudentChange}
+                  required
+                  disabled={!newStudentForm.state}
+                  options={[
+                    { value: "", label: newStudentForm.state ? "Select district..." : "Select state first" },
+                    ...districtOptions.map((district) => ({ value: district, label: district })),
+                  ]}
+                />
+                <FormField label="Block" name="block" value={newStudentForm.block} onChange={handleNewStudentChange} required placeholder="e.g. Kalgachia" maxLength={80} />
+                <FormField label="City / Village" name="village" value={newStudentForm.village} onChange={handleNewStudentChange} required placeholder="e.g. Bartary" maxLength={80} />
+                <FormField label="Nearby Landmark (optional)" name="landmark" value={newStudentForm.landmark} onChange={handleNewStudentChange} placeholder="e.g. Near the community hall" maxLength={120} />
                 <FormField label="Primary Language" name="primaryLanguage" value={newStudentForm.primaryLanguage} onChange={handleNewStudentChange} required placeholder="e.g. Hindi" />
+                <FormField label="Aadhaar Number (optional)" name="aadharNumber" value={newStudentForm.aadharNumber} onChange={handleNewStudentChange} transform={toAadhaarInput} inputMode="numeric" maxLength={12} pattern="[0-9]{12}" title="Enter exactly 12 digits." hint="Optional. 12 digits, numbers only." />
                 <FormField label="Guardian Name" name="guardianName" value={newStudentForm.guardianName} onChange={handleNewStudentChange} transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Guardian Relation" name="guardianRelation" value={newStudentForm.guardianRelation} onChange={handleNewStudentChange} placeholder="e.g. Father" />
                 <FormField label="Guardian Phone" name="guardianPhone" value={newStudentForm.guardianPhone} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
@@ -677,9 +714,6 @@ export default function StudentsModule() {
                 <FormField label="Father's Mobile" name="fatherMobile" value={newStudentForm.fatherMobile} onChange={handleNewStudentChange} required type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
                 <FormField label="Mother's Name" name="motherName" value={newStudentForm.motherName} onChange={handleNewStudentChange} required transform={toPersonNameInput} maxLength={60} />
                 <FormField label="Mother's Mobile" name="motherMobile" value={newStudentForm.motherMobile} onChange={handleNewStudentChange} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
-                <div className="md:col-span-2">
-                  <FormField label="Address" name="address" value={newStudentForm.address} onChange={handleNewStudentChange} required placeholder="Village / Town, Post Office" />
-                </div>
                 <FormField label="Enrolment Date" name="enrolmentDate" type="date" value={newStudentForm.enrolmentDate} onChange={handleNewStudentChange} required max={new Date().toISOString().slice(0, 10)} />
                 <div className="md:col-span-2 flex justify-end gap-3 pt-2">
                   <button

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getDefaultResponses } from "@/data/goalSheetConstants";
+import { getDefaultLdjcResponses } from "@/data/ldjcConstants";
 import {
   notifyUsers,
   getReviewerUserIdsForFellow,
@@ -35,14 +35,14 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    const goalSheets = await prisma.goalSheet.findMany({
+    const ldjcRecords = await prisma.goalSheet.findMany({
       where: { fellowId },
       orderBy: { date: "desc" },
     });
 
-    return NextResponse.json({ success: true, data: goalSheets });
+    return NextResponse.json({ success: true, data: ldjcRecords });
   } catch (err) {
-    console.error("Fetch goal sheets error:", err);
+    console.error("Fetch LDJC records error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -66,7 +66,7 @@ export async function POST(req, context) {
 
     if (user.role.name !== "ADMIN" && user.id !== fellow?.userId) {
       return NextResponse.json(
-        { error: "Forbidden: You cannot create goal sheets for this fellow" },
+        { error: "Forbidden: You cannot create LDJC entries for this fellow" },
         { status: 403 }
       );
     }
@@ -78,31 +78,31 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Date is required" }, { status: 400 });
     }
 
-    const goalSheet = await prisma.goalSheet.create({
+    const ldjcRecord = await prisma.goalSheet.create({
       data: {
         fellowId,
         date: new Date(date),
         status: status || "SUBMITTED",
         portfolioLink: portfolioLink || null,
-        responses: responses || getDefaultResponses(),
+        responses: responses || getDefaultLdjcResponses(),
       },
     });
 
-    // Notify reviewers only when the fellow submits their own goal sheet.
+    // Notify reviewers only when the fellow submits their own LDJC.
     if (user.id === fellow?.userId) {
       const reviewers = await getReviewerUserIdsForFellow(fellowId);
       await notifyUsers(reviewers, {
-        type: NOTIFICATION_TYPES.GOAL_SHEET_SUBMITTED,
-        title: "Goal Sheet Submitted",
-        message: `${fellow?.name || "A fellow"} has submitted their goal sheet. It's time for review.`,
-        link: `/education/fellows/${fellowId}?tab=goals`,
+        type: NOTIFICATION_TYPES.LDJC_SUBMITTED,
+        title: "LDJC Submitted",
+        message: `${fellow?.name || "A fellow"} has submitted their LDJC. It's time for review.`,
+        link: `/education/fellows/${fellowId}?tab=ldjc`,
         actorId: user.id,
       });
     }
 
-    return NextResponse.json({ success: true, data: goalSheet }, { status: 201 });
+    return NextResponse.json({ success: true, data: ldjcRecord }, { status: 201 });
   } catch (err) {
-    console.error("Create goal sheet error:", err);
+    console.error("Create LDJC error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -7,13 +7,16 @@ import {
   validatePersonName,
   validateEmail,
   validateMobile,
+  validateAadhaar,
   validateDateNotFuture,
   validateRequired,
   firstError,
   normalizeMobileForSave,
   normalizeEmailForSave,
   normalizePersonName,
+  normalizeAadhaarForSave,
 } from "@/lib/validation";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -182,6 +185,18 @@ export async function PATCH(req, context) {
 
     const body = await req.json();
     const isFullEdit = body.name !== undefined;
+    const composedAddress =
+      body.state !== undefined ||
+      body.block !== undefined ||
+      body.village !== undefined ||
+      body.district !== undefined
+        ? composeProfileAddress({
+            state: body.state,
+            block: body.block,
+            village: body.village,
+            district: body.district,
+          })
+        : undefined;
 
     if (isFullEdit) {
       const requiredMessage = firstError([
@@ -190,12 +205,15 @@ export async function PATCH(req, context) {
         validateRequired(body.gender, "Gender"),
         validateRequired(body.grade, "Grade"),
         validateRequired(body.gradeGroup, "Grade group"),
+        validateRequired(body.state, "State"),
         validateRequired(body.district, "District"),
+        validateRequired(body.block, "Block"),
+        validateRequired(body.village, "City / Village"),
         validateRequired(body.primaryLanguage, "Primary language"),
         validateRequired(body.fatherName, "Father's name"),
         validateRequired(body.fatherMobile, "Father's mobile"),
         validateRequired(body.motherName, "Mother's name"),
-        validateRequired(body.address, "Address"),
+        validateRequired(composedAddress || body.address, "Address"),
         validateRequired(body.enrolmentDate, "Enrolment date"),
       ]);
       if (requiredMessage) {
@@ -215,6 +233,7 @@ export async function PATCH(req, context) {
       validatePersonName(body.guardianName),
       validatePersonName(body.fatherName, { required: isFullEdit }),
       validatePersonName(body.motherName, { required: isFullEdit }),
+      body.aadharNumber !== undefined ? validateAadhaar(body.aadharNumber, { required: false }) : null,
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -249,7 +268,19 @@ export async function PATCH(req, context) {
         gender: body.gender,
         email: body.email !== undefined ? normalizeEmailForSave(body.email) : undefined,
         phone: body.phone !== undefined ? normalizeMobileForSave(body.phone) : undefined,
-        address: body.address !== undefined ? String(body.address).trim() : undefined,
+        address:
+          composedAddress !== undefined
+            ? composedAddress
+            : body.address !== undefined
+              ? String(body.address).trim()
+              : undefined,
+        state: body.state !== undefined ? String(body.state).trim() : undefined,
+        block: body.block !== undefined ? String(body.block).trim() : undefined,
+        village: body.village !== undefined ? String(body.village).trim() : undefined,
+        landmark:
+          body.landmark !== undefined ? String(body.landmark).trim() || null : undefined,
+        aadharNumber:
+          body.aadharNumber !== undefined ? normalizeAadhaarForSave(body.aadharNumber) : undefined,
         grade: body.grade,
         gradeGroup: body.gradeGroup,
         district: body.district !== undefined ? String(body.district).trim() : undefined,

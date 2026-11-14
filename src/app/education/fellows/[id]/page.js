@@ -6,7 +6,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
-import GoalSheetForm from "@/components/GoalSheetForm";
+import LDJCForm from "@/components/LDJCForm";
 import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
@@ -14,7 +14,7 @@ import { formatDate } from "@/lib/date";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
-import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
+import PostFellowshipSurveyViewer from "@/components/PostFellowshipSurveyViewer";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import FilePreviewLink from "@/components/files/FilePreviewLink";
@@ -24,7 +24,7 @@ import BasicDetailsView from "@/components/BasicDetailsView";
 import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import AssignmentsSection from "@/components/AssignmentsSection";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
-import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
+import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
 import dynamic from "next/dynamic";
 
@@ -57,14 +57,14 @@ function FellowProfileDetailContent() {
   const [showPersonalDetailsForm, setShowPersonalDetailsForm] = useState(false);
   const [managers, setManagers] = useState([]);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
-  const [goalSheets, setGoalSheets] = useState([]);
-  const [coachingRecords, setCoachingRecords] = useState([]);
-  const { pageItems: pagedGoalSheets, currentPage: goalSheetsPage, setCurrentPage: setGoalSheetsPage } = usePagination(goalSheets, 10);
-  const { pageItems: pagedCoaching, currentPage: coachingPage, setCurrentPage: setCoachingPage } = usePagination(coachingRecords, 10);
+  const [ldjcRecords, setLdjcRecords] = useState([]);
+  const [debriefRecords, setDebriefRecords] = useState([]);
+  const { pageItems: pagedLdjc, currentPage: ldjcPage, setCurrentPage: setLdjcPage } = usePagination(ldjcRecords, 10);
+  const { pageItems: pagedDebrief, currentPage: debriefPage, setCurrentPage: setDebriefPage } = usePagination(debriefRecords, 10);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
-  const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
+  const [postFellowshipSurveys, setPostFellowshipSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
-  const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
+  const [viewingPostFellowship, setViewingPostFellowship] = useState(null);
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Personal Details";
   const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
     activeTab,
@@ -72,23 +72,23 @@ function FellowProfileDetailContent() {
   );
   const [showPDFModal, setShowPDFModal] = useState(false);
 
-  // Goal Sheet states
-  const [showGoalSheetForm, setShowGoalSheetForm] = useState(false);
-  const [editingGoalSheet, setEditingGoalSheet] = useState(null);
-  const [reviewingGoalSheet, setReviewingGoalSheet] = useState(null);
+  // LDJC states
+  const [showLdjcForm, setShowLdjcForm] = useState(false);
+  const [editingLdjc, setEditingLdjc] = useState(null);
+  const [reviewingLdjc, setReviewingLdjc] = useState(null);
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [deleteItemType, setDeleteItemType] = useState(""); // "goalSheet" | "pmReflection"
+  const [deleteItemType, setDeleteItemType] = useState(""); // "ldjc" | "pmReflection"
 
-  // Coaching & Classroom Observation modal states
-  const [showAddCoachingModal, setShowAddCoachingModal] = useState(false);
-  const [newCoachingHeading, setNewCoachingHeading] = useState("");
-  const [newCoachingDate, setNewCoachingDate] = useState("");
-  const [newCoachingFeedback, setNewCoachingFeedback] = useState("");
-  const [newCoachingObservation, setNewCoachingObservation] = useState("");
-  const [newCoachingFile, setNewCoachingFile] = useState(null);
+  // Observational debrief conversation modal states
+  const [showAddDebriefModal, setShowAddDebriefModal] = useState(false);
+  const [newDebriefHeading, setNewDebriefHeading] = useState("");
+  const [newDebriefDate, setNewDebriefDate] = useState("");
+  const [newDebriefFeedback, setNewDebriefFeedback] = useState("");
+  const [newDebriefObservation, setNewDebriefObservation] = useState("");
+  const [newDebriefFile, setNewDebriefFile] = useState(null);
 
   // Redirection check: Fellows can only view their profile under /profile, not here
   useEffect(() => {
@@ -106,7 +106,7 @@ function FellowProfileDetailContent() {
         const json = await res.json();
         if (json.success) {
           setFellow(json.data);
-          setGoalSheets(json.data.goalSheets || []);
+          setLdjcRecords(json.data.ldjcRecords || []);
         }
       } catch (err) {
         console.error("Failed to load fellow detail:", err);
@@ -134,21 +134,21 @@ function FellowProfileDetailContent() {
   }, [token, user]);
 
   useEffect(() => {
-    async function loadCoachingRecords() {
+    async function loadDebriefRecords() {
       try {
-        const res = await fetch(`/api/fellows/${id}/coaching`, {
+        const res = await fetch(`/api/fellows/${id}/observational-debrief`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
         const json = await res.json();
         if (json.success) {
-          setCoachingRecords(json.data || []);
+          setDebriefRecords(json.data || []);
         }
       } catch (err) {
-        console.error("Failed to load coaching records:", err);
+        console.error("Failed to load observational debrief records:", err);
       }
     }
-    if (activeTab === "Coaching & Classroom Observation" && token && id) {
-      loadCoachingRecords();
+    if (activeTab === "Observational Debrief Conversation" && token && id) {
+      loadDebriefRecords();
     }
   }, [activeTab, token, id]);
 
@@ -172,71 +172,71 @@ function FellowProfileDetailContent() {
   }, [activeTab, token, id]);
 
   useEffect(() => {
-    async function loadLookBeyondSurveys() {
+    async function loadPostFellowshipSurveys() {
       try {
-        const res = await fetch(`/api/fellows/${id}/look-beyond`, {
+        const res = await fetch(`/api/fellows/${id}/post-fellowship-survey`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
         const json = await res.json();
         if (json.success) {
-          setLookBeyondSurveys(json.data || []);
+          setPostFellowshipSurveys(json.data || []);
         }
       } catch (err) {
-        console.error("Failed to load look beyond surveys:", err);
+        console.error("Failed to load post fellowship surveys:", err);
       }
     }
-    if (activeTab === "Look Beyond Survey" && token && id) {
-      loadLookBeyondSurveys();
+    if (activeTab === "Post Fellowship Survey" && token && id) {
+      loadPostFellowshipSurveys();
     }
   }, [activeTab, token, id]);
 
-  const handleAddCoachingRecord = async (e) => {
+  const handleAddDebriefRecord = async (e) => {
     e.preventDefault();
-    if (!newCoachingHeading || !newCoachingDate) return;
+    if (!newDebriefHeading || !newDebriefDate) return;
 
     try {
       const formData = new FormData();
-      formData.append("heading", newCoachingHeading);
-      formData.append("date", newCoachingDate);
-      formData.append("feedback", newCoachingFeedback);
-      formData.append("observationNotes", newCoachingObservation);
-      if (newCoachingFile) {
-        formData.append("file", newCoachingFile);
+      formData.append("heading", newDebriefHeading);
+      formData.append("date", newDebriefDate);
+      formData.append("feedback", newDebriefFeedback);
+      formData.append("observationNotes", newDebriefObservation);
+      if (newDebriefFile) {
+        formData.append("file", newDebriefFile);
       }
 
-      const res = await fetch(`/api/fellows/${id}/coaching`, {
+      const res = await fetch(`/api/fellows/${id}/observational-debrief`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData
       });
       const json = await res.json();
       if (json.success) {
-        setCoachingRecords(prev => [json.data, ...prev]);
-        setNewCoachingHeading("");
-        setNewCoachingDate("");
-        setNewCoachingFeedback("");
-        setNewCoachingObservation("");
-        setNewCoachingFile(null);
-        setShowAddCoachingModal(false);
-        toast.success("Coaching record added!");
+        setDebriefRecords(prev => [json.data, ...prev]);
+        setNewDebriefHeading("");
+        setNewDebriefDate("");
+        setNewDebriefFeedback("");
+        setNewDebriefObservation("");
+        setNewDebriefFile(null);
+        setShowAddDebriefModal(false);
+        toast.success("Observational debrief conversation record added!");
       } else {
         toast.error(json.error || "Failed to add record");
       }
     } catch (err) {
-      console.error("Failed to add coaching record:", err);
+      console.error("Failed to add observational debrief record:", err);
       toast.error("An error occurred");
     }
   };
 
-  const handleDeleteCoachingRecord = async (recordId) => {
+  const handleDeleteDebriefRecord = async (recordId) => {
     try {
-      const res = await fetch(`/api/fellows/${id}/coaching?recordId=${recordId}`, {
+      const res = await fetch(`/api/fellows/${id}/observational-debrief?recordId=${recordId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
       const json = await res.json();
       if (json.success) {
-        setCoachingRecords(prev => prev.filter(r => r.id !== recordId));
+        setDebriefRecords(prev => prev.filter(r => r.id !== recordId));
         toast.success("Record deleted");
       } else {
         toast.error(json.error || "Failed to delete record");
@@ -248,11 +248,11 @@ function FellowProfileDetailContent() {
   };
 
   const handleDeleteSurvey = async (surveyType, surveyId) => {
-    if (!window.confirm(`Delete this ${surveyType === "engagement" ? "engagement" : "look beyond"} survey?`)) return;
+    if (!window.confirm(`Delete this ${surveyType === "engagement" ? "engagement" : "post fellowship"} survey?`)) return;
     const endpoint =
       surveyType === "engagement"
         ? `/api/fellows/${id}/engagement-surveys/${surveyId}`
-        : `/api/fellows/${id}/look-beyond/${surveyId}`;
+        : `/api/fellows/${id}/post-fellowship-survey/${surveyId}`;
     try {
       const res = await fetch(endpoint, {
         method: "DELETE",
@@ -265,7 +265,7 @@ function FellowProfileDetailContent() {
       if (surveyType === "engagement") {
         setEngagementSurveys((prev) => prev.filter((survey) => survey.id !== surveyId));
       } else {
-        setLookBeyondSurveys((prev) => prev.filter((survey) => survey.id !== surveyId));
+        setPostFellowshipSurveys((prev) => prev.filter((survey) => survey.id !== surveyId));
       }
       toast.success("Survey deleted");
     } catch (err) {
@@ -273,42 +273,42 @@ function FellowProfileDetailContent() {
     }
   };
 
-  const handleGoalSheetSaved = (updatedSheet) => {
-    setGoalSheets((prev) => {
-      const idx = prev.findIndex((s) => s.id === updatedSheet.id);
+  const handleLdjcSaved = (updatedLdjc) => {
+    setLdjcRecords((prev) => {
+      const idx = prev.findIndex((s) => s.id === updatedLdjc.id);
       if (idx >= 0) {
         const copy = [...prev];
-        copy[idx] = updatedSheet;
+        copy[idx] = updatedLdjc;
         return copy;
       }
-      return [updatedSheet, ...prev];
+      return [updatedLdjc, ...prev];
     });
   };
 
-  const handleDeleteGoalSheet = (sheetId) => {
-    setDeleteItemId(sheetId);
-    setDeleteItemType("goalSheet");
+  const handleDeleteLdjc = (ldjcId) => {
+    setDeleteItemId(ldjcId);
+    setDeleteItemType("ldjc");
     setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
     if (!deleteItemId) return;
 
-    if (deleteItemType === "goalSheet") {
+    if (deleteItemType === "ldjc") {
       try {
-        const res = await fetch(`/api/fellows/${id}/goal-sheets/${deleteItemId}`, {
+        const res = await fetch(`/api/fellows/${id}/ldjc/${deleteItemId}`, {
           method: "DELETE",
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
         const json = await res.json();
         if (json.success) {
-          setGoalSheets((prev) => prev.filter((s) => s.id !== deleteItemId));
-          toast.success("Goal sheet deleted successfully!");
+          setLdjcRecords((prev) => prev.filter((s) => s.id !== deleteItemId));
+          toast.success("LDJC deleted successfully!");
         } else {
-          toast.error(json.error || "Failed to delete goal sheet");
+          toast.error(json.error || "Failed to delete LDJC");
         }
       } catch (err) {
-        console.error("Failed to delete goal sheet:", err);
+        console.error("Failed to delete LDJC:", err);
         toast.error("An error occurred");
       }
     }
@@ -392,7 +392,7 @@ function FellowProfileDetailContent() {
             arrow_back
           </span>
           <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-            Back to Fellows Tracker
+            Back to Fellows
           </span>
         </Link>
       ) : (
@@ -557,43 +557,43 @@ function FellowProfileDetailContent() {
           {activeTab === "Monthly Planner" && (
             <MonthlyPlanner fellowId={fellow.id} />
           )}
-          {activeTab === "Goals" && (
+          {activeTab === "LDJC" && (
             <div className="space-y-6">
               <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
-                <h3 className="section-title text-on-surface">Goal Sheets</h3>
+                <h3 className="section-title text-on-surface">LDJC (Leadership Development Journey Conversation)</h3>
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
-                      setEditingGoalSheet(null);
-                      setReviewingGoalSheet(null);
-                      setShowGoalSheetForm(true);
+                      setEditingLdjc(null);
+                      setReviewingLdjc(null);
+                      setShowLdjcForm(true);
                     }}
                     className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[16px]">add</span>
-                    Create New Goal Sheet
+                    Create New LDJC
                   </button>
                 </div>
               </div>
 
-              {goalSheets.length === 0 ? (
+              {ldjcRecords.length === 0 ? (
                 <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                  No goal sheets have been created yet. Click &quot;Create New Goal Sheet&quot; to start.
+                  No LDJC entries have been created yet. Click &quot;Create New LDJC&quot; to start.
                 </div>
               ) : (
-                pagedGoalSheets.map((sheet) => (
+                pagedLdjc.map((sheet) => (
                   <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
                     <div className="flex flex-wrap justify-between items-start gap-3">
                       <button
                         onClick={() => {
-                          setEditingGoalSheet(sheet);
-                          setReviewingGoalSheet(sheet);
-                          setShowGoalSheetForm(true);
+                          setEditingLdjc(sheet);
+                          setReviewingLdjc(sheet);
+                          setShowLdjcForm(true);
                         }}
                         className="text-left flex-1 cursor-pointer"
                       >
                         <h3 className="section-title text-on-surface flex items-center gap-2">
-                          Goal Sheet
+                          LDJC
                           <span className="text-xs font-normal text-on-surface-variant">
                             {formatDate(sheet.date)}
                           </span>
@@ -618,9 +618,9 @@ function FellowProfileDetailContent() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setReviewingGoalSheet(sheet);
-                              setEditingGoalSheet(sheet);
-                              setShowGoalSheetForm(true);
+                              setReviewingLdjc(sheet);
+                              setEditingLdjc(sheet);
+                              setShowLdjcForm(true);
                             }}
                             className="text-xs text-primary font-semibold hover:underline cursor-pointer whitespace-nowrap"
                           >
@@ -629,9 +629,9 @@ function FellowProfileDetailContent() {
                         )}
                         {canDeleteRecords && (
                           <button
-                            onClick={() => handleDeleteGoalSheet(sheet.id)}
+                            onClick={() => handleDeleteLdjc(sheet.id)}
                             className="text-on-surface-variant hover:text-red-600 transition-colors cursor-pointer"
-                            title="Delete goal sheet"
+                            title="Delete LDJC"
                           >
                             <span className="material-symbols-outlined text-[18px]">delete</span>
                           </button>
@@ -641,17 +641,17 @@ function FellowProfileDetailContent() {
                   </div>
                 ))
               )}
-              <Pagination currentPage={goalSheetsPage} totalItems={goalSheets.length} itemsPerPage={10} onPageChange={setGoalSheetsPage} />
+              <Pagination currentPage={ldjcPage} totalItems={ldjcRecords.length} itemsPerPage={10} onPageChange={setLdjcPage} />
             </div>
           )}
 
-          {activeTab === "Coaching & Classroom Observation" && (
+          {activeTab === "Observational Debrief Conversation" && (
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
-                <h3 className="section-title text-on-surface">Coaching & Classroom Observation Records</h3>
+                <h3 className="section-title text-on-surface">Observational Debrief Conversation Records</h3>
                 {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
                   <button
-                    onClick={() => setShowAddCoachingModal(true)}
+                    onClick={() => setShowAddDebriefModal(true)}
                     className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[16px]">add</span>
@@ -660,12 +660,12 @@ function FellowProfileDetailContent() {
                 )}
               </div>
               <div className="space-y-6">
-                {coachingRecords.length === 0 ? (
+                {debriefRecords.length === 0 ? (
                   <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                    No coaching or classroom observation records available yet.
+                    No observational debrief conversation records available yet.
                   </div>
                 ) : (
-                  pagedCoaching.map((record) => (
+                  pagedDebrief.map((record) => (
                     <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
                       <div className="flex justify-between items-start mb-3">
                         <div>
@@ -676,7 +676,7 @@ function FellowProfileDetailContent() {
                         </div>
                         {canDeleteRecords && (
                           <button
-                            onClick={() => handleDeleteCoachingRecord(record.id)}
+                            onClick={() => handleDeleteDebriefRecord(record.id)}
                             className="text-on-surface-variant hover:text-red-600 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                             title="Delete record"
                           >
@@ -728,7 +728,7 @@ function FellowProfileDetailContent() {
                     </div>
                   ))
                 )}
-                <Pagination currentPage={coachingPage} totalItems={coachingRecords.length} itemsPerPage={10} onPageChange={setCoachingPage} />
+                <Pagination currentPage={debriefPage} totalItems={debriefRecords.length} itemsPerPage={10} onPageChange={setDebriefPage} />
               </div>
             </div>
           )}
@@ -783,34 +783,34 @@ function FellowProfileDetailContent() {
             </div>
           )}
 
-          {activeTab === "Look Beyond Survey" && (
+          {activeTab === "Post Fellowship Survey" && (
             <div className="space-y-6">
-              <h3 className="section-title text-on-surface">Look Beyond Survey</h3>
+              <h3 className="section-title text-on-surface">Post Fellowship Survey</h3>
 
-              {lookBeyondSurveys.length === 0 ? (
+              {postFellowshipSurveys.length === 0 ? (
                 <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                  No Look Beyond surveys submitted yet.
+                  No Post Fellowship surveys submitted yet.
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {lookBeyondSurveys.map((survey) => (
+                  {postFellowshipSurveys.map((survey) => (
                     <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center">
                       <div>
-                        <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
+                        <p className="font-semibold text-on-surface text-sm">Post Fellowship Survey</p>
                         <p className="text-xs text-on-surface-variant mt-1">
                           {formatDate(survey.surveyDate)}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => exportLookBeyondSurveyPdf(survey, fellow.name)}
+                          onClick={() => exportPostFellowshipSurveyPdf(survey, fellow.name)}
                           className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                           title="Export as PDF"
                         >
                           <span className="material-symbols-outlined text-[22px]">download</span>
                         </button>
                         <button
-                          onClick={() => setViewingLookBeyond(survey)}
+                          onClick={() => setViewingPostFellowship(survey)}
                           className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                           title="View Responses"
                         >
@@ -818,7 +818,7 @@ function FellowProfileDetailContent() {
                         </button>
                         {canDeleteRecords && (
                           <button
-                            onClick={() => handleDeleteSurvey("look-beyond", survey.id)}
+                            onClick={() => handleDeleteSurvey("post-fellowship", survey.id)}
                             className="inline-flex items-center justify-center min-w-9 min-h-9 p-2 hover:bg-error-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-error"
                             title="Delete survey"
                           >
@@ -843,53 +843,53 @@ function FellowProfileDetailContent() {
 
       </div>
 
-      {/* Goal Sheet Form Modal */}
-      {showGoalSheetForm && (
-        <GoalSheetForm
+      {/* LDJC Form Modal */}
+      {showLdjcForm && (
+        <LDJCForm
           fellowId={fellow.id}
-          sheetData={editingGoalSheet}
+          ldjcData={editingLdjc}
           isManager={
-            reviewingGoalSheet
+            reviewingLdjc
               ? true
               : false
           }
           token={token}
           onClose={() => {
-            setShowGoalSheetForm(false);
-            setEditingGoalSheet(null);
-            setReviewingGoalSheet(null);
+            setShowLdjcForm(false);
+            setEditingLdjc(null);
+            setReviewingLdjc(null);
           }}
-          onSave={(updatedSheet) => {
-            handleGoalSheetSaved(updatedSheet);
-            setShowGoalSheetForm(false);
-            setEditingGoalSheet(null);
-            setReviewingGoalSheet(null);
+          onSave={(updatedLdjc) => {
+            handleLdjcSaved(updatedLdjc);
+            setShowLdjcForm(false);
+            setEditingLdjc(null);
+            setReviewingLdjc(null);
           }}
         />
       )}
 
-      {/* Add Coaching & Classroom Observation Record Modal */}
-      {showAddCoachingModal && (
+      {/* Add Observational Debrief Conversation Record Modal */}
+      {showAddDebriefModal && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-6 font-sans max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-on-surface">Add Coaching & Classroom Observation Record</h3>
+              <h3 className="text-lg font-bold text-on-surface">Add Observational Debrief Conversation Record</h3>
               <button
-                onClick={() => setShowAddCoachingModal(false)}
+                onClick={() => setShowAddDebriefModal(false)}
                 className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[18px]">close</span>
               </button>
             </div>
-            <form onSubmit={handleAddCoachingRecord} className="space-y-4 text-sm">
+            <form onSubmit={handleAddDebriefRecord} className="space-y-4 text-sm">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Heading / Title</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Classroom Observation Q2"
-                  value={newCoachingHeading}
-                  onChange={(e) => setNewCoachingHeading(e.target.value)}
+                  placeholder="e.g. Observational Debrief Conversation Q2"
+                  value={newDebriefHeading}
+                  onChange={(e) => setNewDebriefHeading(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -897,8 +897,8 @@ function FellowProfileDetailContent() {
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date</label>
                 <DateInput
                   required
-                  value={newCoachingDate}
-                  onChange={(e) => setNewCoachingDate(e.target.value)}
+                  value={newDebriefDate}
+                  onChange={(e) => setNewDebriefDate(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -907,8 +907,8 @@ function FellowProfileDetailContent() {
                 <textarea
                   rows={3}
                   placeholder="Provide feedback about the training..."
-                  value={newCoachingFeedback}
-                  onChange={(e) => setNewCoachingFeedback(e.target.value)}
+                  value={newDebriefFeedback}
+                  onChange={(e) => setNewDebriefFeedback(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -917,8 +917,8 @@ function FellowProfileDetailContent() {
                 <textarea
                   rows={3}
                   placeholder="Record your observations..."
-                  value={newCoachingObservation}
-                  onChange={(e) => setNewCoachingObservation(e.target.value)}
+                  value={newDebriefObservation}
+                  onChange={(e) => setNewDebriefObservation(e.target.value)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface"
                 />
               </div>
@@ -926,14 +926,14 @@ function FellowProfileDetailContent() {
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Upload Document (optional)</label>
                 <input
                   type="file"
-                  onChange={(e) => setNewCoachingFile(e.target.files?.[0] || null)}
+                  onChange={(e) => setNewDebriefFile(e.target.files?.[0] || null)}
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface text-xs"
                 />
               </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"
-                  onClick={() => setShowAddCoachingModal(false)}
+                  onClick={() => setShowAddDebriefModal(false)}
                   className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   Cancel
@@ -997,8 +997,8 @@ function FellowProfileDetailContent() {
           setDeleteItemType("");
         }}
         onConfirm={handleConfirmDelete}
-        title="Delete Goal Sheet"
-        message="Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
+        title="Delete LDJC"
+        message="Are you sure you want to delete this LDJC entry? This action is permanent and cannot be undone."
       />
 
       {showPDFModal && (
@@ -1017,10 +1017,10 @@ function FellowProfileDetailContent() {
         />
       )}
 
-      {viewingLookBeyond && (
-        <LookBeyondSurveyViewer
-          survey={viewingLookBeyond}
-          onClose={() => setViewingLookBeyond(null)}
+      {viewingPostFellowship && (
+        <PostFellowshipSurveyViewer
+          survey={viewingPostFellowship}
+          onClose={() => setViewingPostFellowship(null)}
         />
       )}
 

@@ -31,23 +31,23 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const { id, sheetId } = await context.params;
+    const { id, ldjcId } = await context.params;
     const fellowId = await resolveFellowId(id);
     if (!fellowId) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    const goalSheet = await prisma.goalSheet.findFirst({
-      where: { id: sheetId, fellowId },
+    const ldjcRecord = await prisma.goalSheet.findFirst({
+      where: { id: ldjcId, fellowId },
     });
 
-    if (!goalSheet) {
-      return NextResponse.json({ error: "Goal sheet not found" }, { status: 404 });
+    if (!ldjcRecord) {
+      return NextResponse.json({ error: "LDJC not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: goalSheet });
+    return NextResponse.json({ success: true, data: ldjcRecord });
   } catch (err) {
-    console.error("Fetch goal sheet error:", err);
+    console.error("Fetch LDJC error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -61,18 +61,18 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const { id, sheetId } = await context.params;
+    const { id, ldjcId } = await context.params;
     const fellowId = await resolveFellowId(id);
     if (!fellowId) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    const goalSheet = await prisma.goalSheet.findFirst({
-      where: { id: sheetId, fellowId },
+    const ldjcRecord = await prisma.goalSheet.findFirst({
+      where: { id: ldjcId, fellowId },
     });
 
-    if (!goalSheet) {
-      return NextResponse.json({ error: "Goal sheet not found" }, { status: 404 });
+    if (!ldjcRecord) {
+      return NextResponse.json({ error: "LDJC not found" }, { status: 404 });
     }
 
     const body = await req.json();
@@ -88,20 +88,20 @@ export async function PATCH(req, context) {
       }
 
       const updated = await prisma.goalSheet.update({
-        where: { id: sheetId },
+        where: { id: ldjcId },
         data: {
-          responses: responses || goalSheet.responses,
+          responses: responses || ldjcRecord.responses,
           status: "REVIEWED",
         },
       });
 
-      // Notify the fellow that their goal sheet has been reviewed.
+      // Notify the fellow that their LDJC has been reviewed.
       const fellowUserId = await getFellowUserId(fellowId);
       await notifyUsers([fellowUserId], {
-        type: NOTIFICATION_TYPES.GOAL_SHEET_REVIEWED,
-        title: "Goal Sheet Reviewed",
-        message: `${user.name || "Your manager"} has reviewed your goal sheet.`,
-        link: `/profile?tab=goals`,
+        type: NOTIFICATION_TYPES.LDJC_REVIEWED,
+        title: "LDJC Reviewed",
+        message: `${user.name || "Your manager"} has reviewed your LDJC.`,
+        link: `/profile?tab=ldjc`,
         actorId: user.id,
       });
 
@@ -112,7 +112,7 @@ export async function PATCH(req, context) {
     const fellow = await prisma.fellow.findUnique({ where: { id: fellowId } });
     if (user.role.name !== "ADMIN" && user.id !== fellow?.userId) {
       return NextResponse.json(
-        { error: "Forbidden: You cannot modify this goal sheet" },
+        { error: "Forbidden: You cannot modify this LDJC" },
         { status: 403 }
       );
     }
@@ -123,25 +123,25 @@ export async function PATCH(req, context) {
     if (portfolioLink !== undefined) updateData.portfolioLink = portfolioLink;
 
     const updated = await prisma.goalSheet.update({
-      where: { id: sheetId },
+      where: { id: ldjcId },
       data: updateData,
     });
 
-    // Notify reviewers when the fellow edits their own goal sheet.
+    // Notify reviewers when the fellow edits their own LDJC.
     if (user.id === fellow?.userId) {
       const reviewers = await getReviewerUserIdsForFellow(fellowId);
       await notifyUsers(reviewers, {
-        type: NOTIFICATION_TYPES.GOAL_SHEET_SUBMITTED,
-        title: "Goal Sheet Updated",
-        message: `${fellow?.name || "A fellow"} has updated their goal sheet. It's time for review.`,
-        link: `/education/fellows/${fellowId}?tab=goals`,
+        type: NOTIFICATION_TYPES.LDJC_SUBMITTED,
+        title: "LDJC Updated",
+        message: `${fellow?.name || "A fellow"} has updated their LDJC. It's time for review.`,
+        link: `/education/fellows/${fellowId}?tab=ldjc`,
         actorId: user.id,
       });
     }
 
     return NextResponse.json({ success: true, data: updated });
   } catch (err) {
-    console.error("Update goal sheet error:", err);
+    console.error("Update LDJC error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -162,7 +162,7 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const { id, sheetId } = await context.params;
+    const { id, ldjcId } = await context.params;
     const fellowId = await resolveFellowId(id);
     if (!fellowId) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
@@ -172,18 +172,18 @@ export async function DELETE(req, context) {
 
     if (user.role.name !== "ADMIN" && user.id !== fellow?.userId) {
       return NextResponse.json(
-        { error: "Forbidden: You cannot delete goal sheets for this fellow" },
+        { error: "Forbidden: You cannot delete LDJC entries for this fellow" },
         { status: 403 }
       );
     }
 
     await prisma.goalSheet.delete({
-      where: { id: sheetId },
+      where: { id: ldjcId },
     });
 
-    return NextResponse.json({ success: true, message: "Goal sheet deleted successfully" });
+    return NextResponse.json({ success: true, message: "LDJC deleted successfully" });
   } catch (err) {
-    console.error("Delete goal sheet error:", err);
+    console.error("Delete LDJC error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -160,7 +160,7 @@ export async function DELETE(req, context) {
           data: { fellowId: null }
         });
         
-        // Delete fellow (cascades to GoalSheet, etc. in db)
+        // Delete fellow (cascades to LDJC, etc. in db)
         await tx.fellow.delete({
           where: { id: fellowId }
         });

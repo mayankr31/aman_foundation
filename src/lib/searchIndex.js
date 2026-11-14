@@ -6,7 +6,7 @@ import { BENEFICIARY_TABS } from "@/lib/beneficiaryTabs";
 // Entry shape:
 //   id       - stable unique id
 //   label    - primary display text
-//   path     - breadcrumb segments, e.g. ["Education", "Fellows", "Goals"]
+//   path     - breadcrumb segments, e.g. ["Education", "Fellows", "LDJC"]
 //   keywords - extra search terms / synonyms
 //   href     - string, or ({ user, roleName }) => string
 //   page     - permission page key (PAGE_KEYS) or null for open routes
@@ -18,10 +18,10 @@ const FELLOW_PROFILE_PATH = (label) => ["Education", "Fellows", "Fellow Profile"
 const FELLOW_TAB_KEYWORDS = {
   "personal-details": ["personal", "profile", "basic details", "contact", "address"],
   "monthly-planner": ["planner", "monthly plan", "schedule", "calendar"],
-  goals: ["goal", "goal sheet", "goals sheet", "target", "targets", "objectives"],
-  "coaching-observation": ["coaching", "observation", "classroom", "classroom observation"],
+  ldjc: ["ldjc", "leadership development journey conversation", "goal", "goal sheet", "target", "targets", "objectives"],
+  "observational-debrief": ["observational debrief", "debrief", "coaching", "observation", "classroom", "classroom observation"],
   "engagement-survey": ["survey", "engagement", "student survey"],
-  "look-beyond-survey": ["survey", "look beyond", "survey"],
+  "post-fellowship-survey": ["post fellowship survey", "post-fellowship", "survey", "look beyond"],
   "individual-feedback": ["feedback", "individual feedback", "tracking"],
 };
 

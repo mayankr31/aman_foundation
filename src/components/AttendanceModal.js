@@ -17,6 +17,7 @@ import {
   defaultTaskTimeSlot,
   normalizeTaskTimeSlot,
 } from "@/lib/taskSlots";
+import { isTaskCarriedForward, isTaskForDate } from "@/lib/dailyTasks";
 import {
   REQUIRED_ACCURACY_METERS,
   getBestPosition,
@@ -154,6 +155,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploadingLP, setIsUploadingLP] = useState(false);
   const [isTeachingDay, setIsTeachingDay] = useState(true);
+  const [lessonPlanError, setLessonPlanError] = useState("");
   const hasLoadedRef = useRef(false);
 
   const triggerToast = (msg) => {
@@ -302,10 +304,19 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   };
 
   const performCheckIn = async (selfieBlob = null) => {
-    if (tasks.length === 0) {
+    const todayKey = getISTDateKey();
+    const hasTodayTask = tasks.some((task) => isTaskForDate(task, todayKey));
+    if (!hasTodayTask) {
       triggerToast("Add at least one task for today before checking in.");
       return;
     }
+
+    if (isFellow && isTeachingDay && !lessonPlanText.trim()) {
+      setLessonPlanError("Lesson plan notes are required on a teaching day.");
+      triggerToast("Add lesson plan notes before checking in on a teaching day.");
+      return;
+    }
+    setLessonPlanError("");
 
     const attendanceLocation =
       location && hasAccuracy(location.accuracy)
@@ -339,7 +350,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
           checkInLng: attendanceLocation.lng,
           checkInAccuracy: attendanceLocation.accuracy,
           checkInSelfie: selfieUrl,
-          isTeachingDay: isFellow ? isTeachingDay : null
+          isTeachingDay: isFellow ? isTeachingDay : null,
+          ...(isFellow && isTeachingDay ? { lessonPlanText: lessonPlanText.trim() } : {})
         })
       });
       const data = await res.json();
@@ -516,6 +528,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const handleTeachingDayChange = async (next) => {
     if (!canWrite || next === isTeachingDay) return;
     setIsTeachingDay(next);
+    if (!next) setLessonPlanError("");
     if (!currentLog) return;
     try {
       const res = await fetch("/api/attendance", {
@@ -593,6 +606,8 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
   const isCheckedIn = !!currentLog?.intimelog;
   const isCheckedOut = !!currentLog?.outtimelog;
   
+  const todayKey = getISTDateKey();
+  const todayTasks = tasks.filter((task) => isTaskForDate(task, todayKey));
   const completedTasks = tasks.filter(t => t.status === "Completed").length;
   const pendingTasks = tasks.length - completedTasks;
   const extraMetrics = computeAttendanceMetrics(currentLog);
@@ -600,8 +615,6 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
     slot,
     tasks: tasks.filter((task) => normalizeTaskTimeSlot(task.timeSlot) === slot),
   }));
-
-  const todayKey = getISTDateKey();
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-4 overflow-y-auto">
@@ -942,14 +955,19 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
 
               {!isCheckedIn ? (
                 <>
-                  {canWrite && tasks.length === 0 && (
+                  {canWrite && todayTasks.length === 0 && (
                     <p className="mb-2 text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 text-center">
-                      Add at least one task for today to enable check-in.
+                      Add at least one task for today to enable check-in. Carried-forward tasks do not count.
+                    </p>
+                  )}
+                  {isFellow && isTeachingDay && !lessonPlanText.trim() && (
+                    <p className="mb-2 text-[11px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2 text-center">
+                      Lesson plan notes are required before check-in on a teaching day.
                     </p>
                   )}
                   <button
                     onClick={() => handleStartSelfie("check-in")}
-                    disabled={!canWrite || isCheckingIn || tasks.length === 0 || locationStatus === "locating"}
+                    disabled={!canWrite || isCheckingIn || todayTasks.length === 0 || locationStatus === "locating"}
                     className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors cursor-pointer shadow-md shadow-emerald-600/20 flex justify-center items-center gap-2"
                   >
                     {isCheckingIn || locationStatus === "locating" ? (
@@ -1022,9 +1040,7 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                         </span>
                       </div>
                       {group.tasks.map((task) => {
-                        const taskDate = task.plannedDate || task.deadline;
-                        const taskDateKey = taskDate ? getISTDateKey(new Date(taskDate)) : null;
-                        const isCarriedForward = taskDateKey && taskDateKey < todayKey;
+                        const isCarriedForward = isTaskCarriedForward(task, todayKey);
                         return (
                           <div key={task.id} className="min-w-0 flex flex-col p-3 bg-surface-container rounded-lg border border-slate-200 transition-colors group">
                             <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -1117,15 +1133,25 @@ export default function AttendanceModal({ isOpen, onClose, onStatusChange }) {
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Lesson Plan Notes</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">
+                      Lesson Plan Notes
+                      {isTeachingDay && <span className="text-error ml-0.5">*</span>}
+                    </label>
                     <textarea
                       value={lessonPlanText}
-                      onChange={(e) => setLessonPlanText(e.target.value)}
+                      onChange={(e) => {
+                        setLessonPlanText(e.target.value);
+                        if (e.target.value.trim()) setLessonPlanError("");
+                      }}
                       placeholder="Write your daily lesson plan here..."
                       rows={4}
                       disabled={!canEditLessonPlan}
-                      className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-sm text-on-surface resize-none disabled:opacity-60"
+                      aria-invalid={Boolean(lessonPlanError)}
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface resize-none disabled:opacity-60 ${lessonPlanError ? "border-error" : "border-outline-variant"}`}
                     />
+                    {lessonPlanError && (
+                      <span className="text-[11px] font-medium text-error">{lessonPlanError}</span>
+                    )}
                   </div>
 
                   <div>

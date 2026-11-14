@@ -99,6 +99,24 @@ export function dailyTaskWhere(userId, dateKey = getISTDateKey()) {
   };
 }
 
+/**
+ * Tasks actually planned for the given day. Used for the check-in gate so a
+ * carry-forward task alone cannot satisfy "add at least one task for today".
+ * Mirrors the client rule of planned date first, then deadline fallback.
+ */
+export function todayOwnTaskWhere(userId, dateKey = getISTDateKey()) {
+  const start = istDayStart(dateKey);
+  const end = istDayEnd(dateKey);
+  return {
+    assigneeId: userId,
+    status: { not: "Cancelled" },
+    OR: [
+      { plannedDate: { gte: start, lte: end } },
+      { plannedDate: null, deadline: { gte: start, lte: end } },
+    ],
+  };
+}
+
 export async function notifyTaskEvent(userIds, payload) {
   await notifyUsers(userIds, payload);
 }

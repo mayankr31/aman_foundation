@@ -31985,6 +31985,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string | null
     gradeGroup: string | null
     district: string | null
@@ -32017,6 +32022,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string | null
     gradeGroup: string | null
     district: string | null
@@ -32049,6 +32059,11 @@ export namespace Prisma {
     email: number
     phone: number
     address: number
+    state: number
+    block: number
+    village: number
+    landmark: number
+    aadharNumber: number
     grade: number
     gradeGroup: number
     district: number
@@ -32091,6 +32106,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -32123,6 +32143,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -32155,6 +32180,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -32274,6 +32304,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string
     gradeGroup: string
     district: string | null
@@ -32325,6 +32360,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -32366,6 +32406,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -32401,6 +32446,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -32436,6 +32486,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -32458,7 +32513,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "state" | "block" | "village" | "landmark" | "aadharNumber" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "schoolId" | "fellowId" | "beneficiaryId" | "isMigrated" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     school?: boolean | Student$schoolArgs<ExtArgs>
     fellow?: boolean | Student$fellowArgs<ExtArgs>
@@ -32503,6 +32558,11 @@ export namespace Prisma {
       email: string | null
       phone: string | null
       address: string | null
+      state: string | null
+      block: string | null
+      village: string | null
+      landmark: string | null
+      aadharNumber: string | null
       grade: string
       gradeGroup: string
       district: string | null
@@ -32963,6 +33023,11 @@ export namespace Prisma {
     readonly email: FieldRef<"Student", 'String'>
     readonly phone: FieldRef<"Student", 'String'>
     readonly address: FieldRef<"Student", 'String'>
+    readonly state: FieldRef<"Student", 'String'>
+    readonly block: FieldRef<"Student", 'String'>
+    readonly village: FieldRef<"Student", 'String'>
+    readonly landmark: FieldRef<"Student", 'String'>
+    readonly aadharNumber: FieldRef<"Student", 'String'>
     readonly grade: FieldRef<"Student", 'String'>
     readonly gradeGroup: FieldRef<"Student", 'String'>
     readonly district: FieldRef<"Student", 'String'>
@@ -123037,6 +123102,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string | null
     gradeGroup: string | null
     district: string | null
@@ -123067,6 +123137,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string | null
     gradeGroup: string | null
     district: string | null
@@ -123097,6 +123172,11 @@ export namespace Prisma {
     email: number
     phone: number
     address: number
+    state: number
+    block: number
+    village: number
+    landmark: number
+    aadharNumber: number
     grade: number
     gradeGroup: number
     district: number
@@ -123137,6 +123217,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -123167,6 +123252,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -123197,6 +123287,11 @@ export namespace Prisma {
     email?: true
     phone?: true
     address?: true
+    state?: true
+    block?: true
+    village?: true
+    landmark?: true
+    aadharNumber?: true
     grade?: true
     gradeGroup?: true
     district?: true
@@ -123314,6 +123409,11 @@ export namespace Prisma {
     email: string | null
     phone: string | null
     address: string | null
+    state: string | null
+    block: string | null
+    village: string | null
+    landmark: string | null
+    aadharNumber: string | null
     grade: string | null
     gradeGroup: string | null
     district: string | null
@@ -123363,6 +123463,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -123401,6 +123506,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -123433,6 +123543,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -123465,6 +123580,11 @@ export namespace Prisma {
     email?: boolean
     phone?: boolean
     address?: boolean
+    state?: boolean
+    block?: boolean
+    village?: boolean
+    landmark?: boolean
+    aadharNumber?: boolean
     grade?: boolean
     gradeGroup?: boolean
     district?: boolean
@@ -123485,7 +123605,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
+  export type AfterSchoolStudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "name" | "photoUrl" | "dob" | "gender" | "email" | "phone" | "address" | "state" | "block" | "village" | "landmark" | "aadharNumber" | "grade" | "gradeGroup" | "district" | "attendance" | "guardianName" | "guardianPhone" | "guardianRelation" | "fatherName" | "fatherMobile" | "motherName" | "motherMobile" | "enrolmentDate" | "primaryLanguage" | "status" | "centreId" | "fellowId" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolStudent"]>
   export type AfterSchoolStudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     centre?: boolean | AfterSchoolStudent$centreArgs<ExtArgs>
     fellow?: boolean | AfterSchoolStudent$fellowArgs<ExtArgs>
@@ -123526,6 +123646,11 @@ export namespace Prisma {
       email: string | null
       phone: string | null
       address: string | null
+      state: string | null
+      block: string | null
+      village: string | null
+      landmark: string | null
+      aadharNumber: string | null
       grade: string | null
       gradeGroup: string | null
       district: string | null
@@ -123983,6 +124108,11 @@ export namespace Prisma {
     readonly email: FieldRef<"AfterSchoolStudent", 'String'>
     readonly phone: FieldRef<"AfterSchoolStudent", 'String'>
     readonly address: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly state: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly block: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly village: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly landmark: FieldRef<"AfterSchoolStudent", 'String'>
+    readonly aadharNumber: FieldRef<"AfterSchoolStudent", 'String'>
     readonly grade: FieldRef<"AfterSchoolStudent", 'String'>
     readonly gradeGroup: FieldRef<"AfterSchoolStudent", 'String'>
     readonly district: FieldRef<"AfterSchoolStudent", 'String'>
@@ -138448,6 +138578,11 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
+    state: 'state',
+    block: 'block',
+    village: 'village',
+    landmark: 'landmark',
+    aadharNumber: 'aadharNumber',
     grade: 'grade',
     gradeGroup: 'gradeGroup',
     district: 'district',
@@ -139654,6 +139789,11 @@ export namespace Prisma {
     email: 'email',
     phone: 'phone',
     address: 'address',
+    state: 'state',
+    block: 'block',
+    village: 'village',
+    landmark: 'landmark',
+    aadharNumber: 'aadharNumber',
     grade: 'grade',
     gradeGroup: 'gradeGroup',
     district: 'district',
@@ -141652,6 +141792,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     phone?: StringNullableFilter<"Student"> | string | null
     address?: StringNullableFilter<"Student"> | string | null
+    state?: StringNullableFilter<"Student"> | string | null
+    block?: StringNullableFilter<"Student"> | string | null
+    village?: StringNullableFilter<"Student"> | string | null
+    landmark?: StringNullableFilter<"Student"> | string | null
+    aadharNumber?: StringNullableFilter<"Student"> | string | null
     grade?: StringFilter<"Student"> | string
     gradeGroup?: StringFilter<"Student"> | string
     district?: StringNullableFilter<"Student"> | string | null
@@ -141692,6 +141837,11 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrderInput | SortOrder
@@ -141735,6 +141885,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     phone?: StringNullableFilter<"Student"> | string | null
     address?: StringNullableFilter<"Student"> | string | null
+    state?: StringNullableFilter<"Student"> | string | null
+    block?: StringNullableFilter<"Student"> | string | null
+    village?: StringNullableFilter<"Student"> | string | null
+    landmark?: StringNullableFilter<"Student"> | string | null
+    aadharNumber?: StringNullableFilter<"Student"> | string | null
     grade?: StringFilter<"Student"> | string
     gradeGroup?: StringFilter<"Student"> | string
     district?: StringNullableFilter<"Student"> | string | null
@@ -141775,6 +141930,11 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrderInput | SortOrder
@@ -141815,6 +141975,11 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Student"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Student"> | string | null
     address?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    state?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    block?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    village?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    landmark?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    aadharNumber?: StringNullableWithAggregatesFilter<"Student"> | string | null
     grade?: StringWithAggregatesFilter<"Student"> | string
     gradeGroup?: StringWithAggregatesFilter<"Student"> | string
     district?: StringNullableWithAggregatesFilter<"Student"> | string | null
@@ -148052,6 +148217,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     phone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     address?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    state?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    block?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    village?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    landmark?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    aadharNumber?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     grade?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     gradeGroup?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     district?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -148089,6 +148259,11 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
     gradeGroup?: SortOrderInput | SortOrder
     district?: SortOrderInput | SortOrder
@@ -148129,6 +148304,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     phone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     address?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    state?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    block?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    village?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    landmark?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    aadharNumber?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     grade?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     gradeGroup?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     district?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -148166,6 +148346,11 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    block?: SortOrderInput | SortOrder
+    village?: SortOrderInput | SortOrder
+    landmark?: SortOrderInput | SortOrder
+    aadharNumber?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
     gradeGroup?: SortOrderInput | SortOrder
     district?: SortOrderInput | SortOrder
@@ -148204,6 +148389,11 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     phone?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     address?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    state?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    block?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    village?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    landmark?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
+    aadharNumber?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     grade?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     gradeGroup?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
     district?: StringNullableWithAggregatesFilter<"AfterSchoolStudent"> | string | null
@@ -150944,6 +151134,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -150981,6 +151176,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -151018,6 +151218,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -151055,6 +151260,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -151092,6 +151302,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -151124,6 +151339,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -151153,6 +151373,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -157908,6 +158133,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -157943,6 +158173,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -157978,6 +158213,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158013,6 +158253,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158048,6 +158293,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -158078,6 +158328,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158106,6 +158361,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -160744,6 +161004,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -160780,6 +161045,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -160812,6 +161082,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -164711,6 +164986,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -164745,6 +165025,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -164775,6 +165060,11 @@ export namespace Prisma {
     email?: SortOrder
     phone?: SortOrder
     address?: SortOrder
+    state?: SortOrder
+    block?: SortOrder
+    village?: SortOrder
+    landmark?: SortOrder
+    aadharNumber?: SortOrder
     grade?: SortOrder
     gradeGroup?: SortOrder
     district?: SortOrder
@@ -179672,6 +179962,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -179708,6 +180003,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -179939,6 +180239,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"Student"> | string | null
     phone?: StringNullableFilter<"Student"> | string | null
     address?: StringNullableFilter<"Student"> | string | null
+    state?: StringNullableFilter<"Student"> | string | null
+    block?: StringNullableFilter<"Student"> | string | null
+    village?: StringNullableFilter<"Student"> | string | null
+    landmark?: StringNullableFilter<"Student"> | string | null
+    aadharNumber?: StringNullableFilter<"Student"> | string | null
     grade?: StringFilter<"Student"> | string
     gradeGroup?: StringFilter<"Student"> | string
     district?: StringNullableFilter<"Student"> | string | null
@@ -180295,6 +180600,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -180331,6 +180641,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -180755,6 +181070,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -180789,6 +181109,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -181409,6 +181734,11 @@ export namespace Prisma {
     email?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     phone?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     address?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    state?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    block?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    village?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    landmark?: StringNullableFilter<"AfterSchoolStudent"> | string | null
+    aadharNumber?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     grade?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     gradeGroup?: StringNullableFilter<"AfterSchoolStudent"> | string | null
     district?: StringNullableFilter<"AfterSchoolStudent"> | string | null
@@ -183547,6 +183877,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -183583,6 +183918,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -183663,6 +184003,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -183699,6 +184044,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -183824,6 +184174,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -183860,6 +184215,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -183967,6 +184327,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184003,6 +184368,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184100,6 +184470,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -184136,6 +184511,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -184243,6 +184623,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184279,6 +184664,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184376,6 +184766,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -184412,6 +184807,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -184464,6 +184864,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -184500,6 +184905,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -190672,6 +191082,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -190708,6 +191123,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -203192,6 +203612,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -203228,6 +203653,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -203500,6 +203930,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -203536,6 +203971,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -204293,6 +204733,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -204327,6 +204772,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -205588,6 +206038,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -205622,6 +206077,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -205700,6 +206160,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205734,6 +206199,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -205857,6 +206327,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -205891,6 +206366,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -205990,6 +206470,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206024,6 +206509,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206113,6 +206603,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206147,6 +206642,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206246,6 +206746,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206280,6 +206785,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206369,6 +206879,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206403,6 +206918,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206453,6 +206973,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206487,6 +207012,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206521,6 +207051,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206555,6 +207090,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -206771,6 +207311,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -206805,6 +207350,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211212,6 +211762,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -211302,6 +211857,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211338,6 +211898,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211374,6 +211939,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211542,6 +212112,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -211702,6 +212277,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -211778,6 +212358,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211814,6 +212399,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -211850,6 +212440,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -212278,6 +212873,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -212312,6 +212912,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -212346,6 +212951,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -212978,6 +213588,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade: string
     gradeGroup: string
     district?: string | null
@@ -213208,6 +213823,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -213244,6 +213864,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -213280,6 +213905,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: StringFieldUpdateOperationsInput | string
     gradeGroup?: StringFieldUpdateOperationsInput | string
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -214844,6 +215474,11 @@ export namespace Prisma {
     email?: string | null
     phone?: string | null
     address?: string | null
+    state?: string | null
+    block?: string | null
+    village?: string | null
+    landmark?: string | null
+    aadharNumber?: string | null
     grade?: string | null
     gradeGroup?: string | null
     district?: string | null
@@ -214932,6 +215567,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -214966,6 +215606,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null
@@ -215000,6 +215645,11 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    block?: NullableStringFieldUpdateOperationsInput | string | null
+    village?: NullableStringFieldUpdateOperationsInput | string | null
+    landmark?: NullableStringFieldUpdateOperationsInput | string | null
+    aadharNumber?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableStringFieldUpdateOperationsInput | string | null
     gradeGroup?: NullableStringFieldUpdateOperationsInput | string | null
     district?: NullableStringFieldUpdateOperationsInput | string | null

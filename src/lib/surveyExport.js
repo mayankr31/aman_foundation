@@ -147,7 +147,7 @@ export async function exportEngagementSurveyPdf(survey, fellowName) {
   doc.save(`engagement_survey_${safeFileName(fellowName)}_${toIsoDate(survey.surveyDate)}.pdf`);
 }
 
-// ─── Look Beyond Survey ────────────────────────────────────────────────────────
+// ─── Post Fellowship Survey ────────────────────────────────────────────────────
 
 const Q1_LABELS = {
   a: "I would like to study",
@@ -189,27 +189,27 @@ const PATHWAY_GROUP_LABELS = {
   u_unsure: "Unsure",
 };
 
-function buildLookBeyondSections(responses) {
+function buildPostFellowshipSections(responses) {
   const sections = [];
 
   // Section 1: Post-Fellowship Plans
   const section1 = [];
   if (hasValue(responses.q1)) {
     section1.push([
-      "1. Which statement best describes your current thinking around your plans right after the Fellowship?",
+      "1. Which statement, out of the following, best describes your current thinking around your plans right after the Fellowship?",
       Q1_LABELS[responses.q1] || responses.q1,
     ]);
     if (responses.q1 === "a") {
       if (hasValue(responses.q1_study_course)) section1.push(["What course(s) are you aspiring to get into?", responses.q1_study_course]);
-      if (hasValue(responses.q1_study_other)) section1.push(["Other (specified)", responses.q1_study_other]);
+      if (hasValue(responses.q1_study_other)) section1.push(["Please specify", responses.q1_study_other]);
     }
     if (responses.q1 === "b") {
       if (hasValue(responses.q1_exam_course)) section1.push(["What course(s) are you aspiring to get into?", responses.q1_exam_course]);
-      if (hasValue(responses.q1_exam_other)) section1.push(["Others (specified)", responses.q1_exam_other]);
+      if (hasValue(responses.q1_exam_other)) section1.push(["Please specify", responses.q1_exam_other]);
     }
     if (responses.q1 === "f") {
       if (hasValue(responses.q1_break_plan)) section1.push(["What do you plan on doing during your break?", responses.q1_break_plan]);
-      if (hasValue(responses.q1_break_other)) section1.push(["Other (specified)", responses.q1_break_other]);
+      if (hasValue(responses.q1_break_other)) section1.push(["Please specify", responses.q1_break_other]);
     }
     if (responses.q1 === "g" && hasValue(responses.q1_unsure_reason)) {
       section1.push(["What is making you unsure?", responses.q1_unsure_reason]);
@@ -222,11 +222,11 @@ function buildLookBeyondSections(responses) {
   const push2 = (q, v) => {
     if (hasValue(v)) section2.push([q, v]);
   };
-  push2("2. Evolving idea of role as Alum towards educational equity", responses.q2);
-  push2("3. Fellowship experience is helping grow capabilities for personal and professional development", responses.q3);
-  push2("4. Familiar with TFI's 3 prioritized puzzle pieces", responses.q4);
-  push2("5. Aware of types of roles and organizations within 3 puzzle pieces", responses.q5);
-  push2("6. Aware of how strengths align with opportunities within 3 puzzle pieces", responses.q6);
+  push2("2. I have an evolving idea of the role I will play as an Alum of Aman Foundation towards educational equity", responses.q2);
+  push2("3. I believe the Fellowship experience is helping me grow the capabilities I need (e.g., knowledge, skills, mindsets, etc.) to develop personally and professionally", responses.q3);
+  push2("4. I am familiar with and understand Aman Foundation's 3 prioritized puzzle pieces (Transformational Schools, Enablers of Transformation Outcomes, Policy and Governance)", responses.q4);
+  push2("5. I am aware of the types of roles and organizations within Aman Foundation's 3 prioritized puzzle pieces", responses.q5);
+  push2("6. I am aware of how my strengths align or do not align with the types of opportunities available within Aman Foundation's 3 prioritized puzzle pieces", responses.q6);
 
   const ranked = responses.q7_ranked || [];
   if (ranked.length > 0) {
@@ -261,40 +261,40 @@ function buildLookBeyondSections(responses) {
     if (key === "internship" && responses.q8_internship_org) {
       answer += ` — Organisation: ${responses.q8_internship_org}`;
     }
-    section3.push(["8. Which opportunities created by Teach For India have you accessed?", answer]);
+    section3.push(["8. Which of the following opportunities created by Aman Foundation have you accessed in your post-Fellowship exploration and search? (Select all that apply)", answer]);
   });
 
   if (hasValue(responses.q9_btcp)) {
     section3.push(["9. Have you done a Be The Change Project (BTCP)?", responses.q9_btcp === "yes" ? "Yes" : "No"]);
     if (responses.q9_btcp === "yes") {
-      if (hasValue(responses.q9_btcp_stage)) section3.push(["BTCP Stage", responses.q9_btcp_stage]);
-      if (hasValue(responses.q9_btcp_rating)) section3.push(["BTCP Experience", responses.q9_btcp_rating]);
+      if (hasValue(responses.q9_btcp_stage)) section3.push(["Which stage of your BTCP are you on?", responses.q9_btcp_stage]);
+      if (hasValue(responses.q9_btcp_rating)) section3.push(["Please select the option that best describes your experience:", responses.q9_btcp_rating]);
     }
     if (responses.q9_btcp === "no" && hasValue(responses.q9_btcp_reason)) {
-      section3.push(["Reason for not doing BTCP", responses.q9_btcp_reason]);
+      section3.push(["Please share the reason for not doing the BTCP", responses.q9_btcp_reason]);
     }
   }
-  if (hasValue(responses.q10)) section3.push(["10. Other opportunities accessed", responses.q10]);
-  if (hasValue(responses.q11)) section3.push(["11. Post-Fellowship support is high quality and suited to my needs", responses.q11]);
-  if (hasValue(responses.q12)) section3.push(["12. Recommendations to strengthen support", responses.q12]);
+  if (hasValue(responses.q10)) section3.push(["10. If you have accessed any other opportunities or created some for yourself that helped with your post-Fellowship exploration and search, please mention them below.", responses.q10]);
+  if (hasValue(responses.q11)) section3.push(["11. The support offered by Aman Foundation towards post-Fellowship is of high quality and is suited to my needs", responses.q11]);
+  if (hasValue(responses.q12)) section3.push(["12. With respect to your post-Fellowship plans, please share any recommendations to strengthen the quality or type of support that Aman Foundation can offer to Fellows", responses.q12]);
   if (section3.length) sections.push({ title: "Section 3: Support and Opportunities", rows: section3 });
 
   return sections;
 }
 
-export async function exportLookBeyondSurveyPdf(survey, fellowName) {
+export async function exportPostFellowshipSurveyPdf(survey, fellowName) {
   const { JsPDF, autoTable } = await loadPdf();
   const doc = new JsPDF();
   const responses = survey?.responses || {};
 
   doc.setFontSize(16);
-  doc.text("Look Beyond Survey", 14, 18);
+  doc.text("Post Fellowship Survey", 14, 18);
   doc.setFontSize(10);
   doc.text(`Fellow: ${fellowName || "—"}`, 14, 26);
   doc.text(`Submitted on: ${formatDate(survey.surveyDate)}`, 14, 32);
 
   const body = [];
-  buildLookBeyondSections(responses).forEach((section) => {
+  buildPostFellowshipSections(responses).forEach((section) => {
     body.push([{ content: section.title, colSpan: 2, styles: SECTION_HEADER_STYLE }]);
     section.rows.forEach((row) => body.push(row));
   });
@@ -309,5 +309,5 @@ export async function exportLookBeyondSurveyPdf(survey, fellowName) {
     columnStyles: { 0: { cellWidth: 95 } },
   });
 
-  doc.save(`look_beyond_survey_${safeFileName(fellowName)}_${toIsoDate(survey.surveyDate)}.pdf`);
+  doc.save(`post_fellowship_survey_${safeFileName(fellowName)}_${toIsoDate(survey.surveyDate)}.pdf`);
 }

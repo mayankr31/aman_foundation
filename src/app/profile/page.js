@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
 import { getStaffProfileTabs, DEFAULT_STAFF_PROFILE_TAB } from "@/lib/profileTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
-import GoalSheetForm from "@/components/GoalSheetForm";
+import LDJCForm from "@/components/LDJCForm";
 import { useToast } from "@/context/ToastContext";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import AssignmentsSection from "@/components/AssignmentsSection";
@@ -16,8 +16,8 @@ import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import EngagementSurveyForm from "@/components/EngagementSurveyForm";
 import EngagementSurveyViewer from "@/components/EngagementSurveyViewer";
-import LookBeyondSurveyForm from "@/components/LookBeyondSurveyForm";
-import LookBeyondSurveyViewer from "@/components/LookBeyondSurveyViewer";
+import PostFellowshipSurveyForm from "@/components/PostFellowshipSurveyForm";
+import PostFellowshipSurveyViewer from "@/components/PostFellowshipSurveyViewer";
 import { formatDate } from "@/lib/date";
 import IndividualFeedbackView from "@/components/IndividualFeedbackView";
 import BasicDetailsView from "@/components/BasicDetailsView";
@@ -25,7 +25,7 @@ import PhotoLightbox from "@/components/PhotoLightbox";
 import FilePreviewLink from "@/components/files/FilePreviewLink";
 import FilePreviewImage from "@/components/files/FilePreviewImage";
 import Avatar from "@/components/ui/Avatar";
-import { exportEngagementSurveyPdf, exportLookBeyondSurveyPdf } from "@/lib/surveyExport";
+import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
 import { formatRoleLabel } from "@/lib/roles";
 import { getMissingProfileFields } from "@/lib/profileCompleteness";
 import dynamic from "next/dynamic";
@@ -59,12 +59,16 @@ function ProfilePageContent() {
     () => searchParams.get("edit") === "1" || searchParams.get("complete") === "1"
   );
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
 
   // Fellow specific dashboard states
-  const [goalSheets, setGoalSheets] = useState([]);
-  const [coachingRecords, setCoachingRecords] = useState([]);
+  const [ldjcRecords, setLdjcRecords] = useState([]);
+  const [debriefRecords, setDebriefRecords] = useState([]);
   const [engagementSurveys, setEngagementSurveys] = useState([]);
-  const [lookBeyondSurveys, setLookBeyondSurveys] = useState([]);
+  const [postFellowshipSurveys, setPostFellowshipSurveys] = useState([]);
   const isFellow = Boolean(profile?.fellow);
   const requestedTabSlug = searchParams.get("tab");
   const staffTabs = getStaffProfileTabs(profile?.role?.name);
@@ -80,13 +84,13 @@ function ProfilePageContent() {
   );
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [showEngagementForm, setShowEngagementForm] = useState(false);
-  const [showLookBeyondForm, setShowLookBeyondForm] = useState(false);
+  const [showPostFellowshipForm, setShowPostFellowshipForm] = useState(false);
   const [viewingSurvey, setViewingSurvey] = useState(null);
-  const [viewingLookBeyond, setViewingLookBeyond] = useState(null);
+  const [viewingPostFellowship, setViewingPostFellowship] = useState(null);
 
-  // Goal Sheet states
-  const [showGoalSheetForm, setShowGoalSheetForm] = useState(false);
-  const [editingGoalSheet, setEditingGoalSheet] = useState(null);
+  // LDJC states
+  const [showLdjcForm, setShowLdjcForm] = useState(false);
+  const [editingLdjc, setEditingLdjc] = useState(null);
 
   // Delete modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -110,7 +114,7 @@ function ProfilePageContent() {
             });
             const detailJson = await detailRes.json();
             if (detailJson.success) {
-              setGoalSheets(detailJson.data.goalSheets || []);
+              setLdjcRecords(detailJson.data.ldjcRecords || []);
             }
           }
         }
@@ -130,22 +134,22 @@ function ProfilePageContent() {
   }, [token, isInitializing]);
 
   useEffect(() => {
-    async function loadCoachingRecords() {
+    async function loadDebriefRecords() {
       if (!profile?.fellow?.id || !token) return;
       try {
-        const res = await fetch(`/api/fellows/${profile.fellow.id}/coaching`, {
+        const res = await fetch(`/api/fellows/${profile.fellow.id}/observational-debrief`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const json = await res.json();
         if (json.success) {
-          setCoachingRecords(json.data || []);
+          setDebriefRecords(json.data || []);
         }
       } catch (err) {
-        console.error("Failed to load coaching records:", err);
+        console.error("Failed to load observational debrief records:", err);
       }
     }
-    if (activeTab === "Coaching & Classroom Observation") {
-      loadCoachingRecords();
+    if (activeTab === "Observational Debrief Conversation") {
+      loadDebriefRecords();
     }
   }, [activeTab, token, profile]);
 
@@ -170,22 +174,22 @@ function ProfilePageContent() {
   }, [activeTab, token, profile]);
 
   useEffect(() => {
-    async function loadLookBeyondSurveys() {
+    async function loadPostFellowshipSurveys() {
       if (!profile?.fellow?.id || !token) return;
       try {
-        const res = await fetch(`/api/fellows/${profile.fellow.id}/look-beyond`, {
+        const res = await fetch(`/api/fellows/${profile.fellow.id}/post-fellowship-survey`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const json = await res.json();
         if (json.success) {
-          setLookBeyondSurveys(json.data || []);
+          setPostFellowshipSurveys(json.data || []);
         }
       } catch (err) {
-        console.error("Failed to load look beyond surveys:", err);
+        console.error("Failed to load post fellowship surveys:", err);
       }
     }
-    if (activeTab === "Look Beyond Survey") {
-      loadLookBeyondSurveys();
+    if (activeTab === "Post Fellowship Survey") {
+      loadPostFellowshipSurveys();
     }
   }, [activeTab, token, profile]);
 
@@ -213,9 +217,9 @@ function ProfilePageContent() {
     }
   };
 
-  const handleSubmitLookBeyond = async (surveyDate, responses) => {
+  const handleSubmitPostFellowship = async (surveyDate, responses) => {
     try {
-      const res = await fetch(`/api/fellows/${profile.fellow.id}/look-beyond`, {
+      const res = await fetch(`/api/fellows/${profile.fellow.id}/post-fellowship-survey`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -225,14 +229,14 @@ function ProfilePageContent() {
       });
       const json = await res.json();
       if (json.success) {
-        setLookBeyondSurveys((prev) => [json.data, ...prev]);
-        setShowLookBeyondForm(false);
-        toast.success("Look Beyond survey submitted successfully!");
+        setPostFellowshipSurveys((prev) => [json.data, ...prev]);
+        setShowPostFellowshipForm(false);
+        toast.success("Post Fellowship survey submitted successfully!");
       } else {
         toast.error(json.error || "Failed to submit survey");
       }
     } catch (err) {
-      console.error("Failed to submit look beyond survey:", err);
+      console.error("Failed to submit post fellowship survey:", err);
       toast.error("An error occurred while submitting the survey.");
     }
   };
@@ -287,20 +291,73 @@ function ProfilePageContent() {
     }
   };
 
-  const handleGoalSheetSaved = (updatedSheet) => {
-    setGoalSheets((prev) => {
-      const idx = prev.findIndex((s) => s.id === updatedSheet.id);
+  const closePasswordForm = () => {
+    setShowPasswordForm(false);
+    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    setPasswordError("");
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setPasswordError("");
+
+    const { currentPassword, newPassword, confirmPassword } = passwordForm;
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("All password fields are required.");
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError("New password must be at least 8 characters long.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New password and confirm password do not match.");
+      return;
+    }
+    if (newPassword === currentPassword) {
+      setPasswordError("New password must be different from your current password.");
+      return;
+    }
+
+    setPasswordSaving(true);
+    try {
+      const res = await fetch("/api/users/profile/password", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(passwordForm),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        setPasswordError(json.error || "Failed to change password.");
+        return;
+      }
+      toast.success(json.message || "Password changed successfully!");
+      closePasswordForm();
+    } catch (err) {
+      console.error("Change password error:", err);
+      setPasswordError("An error occurred while changing your password.");
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
+  const handleLdjcSaved = (updatedLdjc) => {
+    setLdjcRecords((prev) => {
+      const idx = prev.findIndex((s) => s.id === updatedLdjc.id);
       if (idx >= 0) {
         const copy = [...prev];
-        copy[idx] = updatedSheet;
+        copy[idx] = updatedLdjc;
         return copy;
       }
-      return [updatedSheet, ...prev];
+      return [updatedLdjc, ...prev];
     });
   };
 
-  const handleDeleteGoalSheet = (sheetId) => {
-    setDeleteItemId(sheetId);
+  const handleDeleteLdjc = (ldjcId) => {
+    setDeleteItemId(ldjcId);
     setDeleteModalOpen(true);
   };
 
@@ -308,20 +365,20 @@ function ProfilePageContent() {
     if (!deleteItemId) return;
     try {
       const fellowId = profile.fellow.id;
-      const res = await fetch(`/api/fellows/${fellowId}/goal-sheets/${deleteItemId}`, {
+      const res = await fetch(`/api/fellows/${fellowId}/ldjc/${deleteItemId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
       const json = await res.json();
       if (json.success) {
-        setGoalSheets((prev) => prev.filter((s) => s.id !== deleteItemId));
-        toast.success("Goal sheet deleted successfully!");
+        setLdjcRecords((prev) => prev.filter((s) => s.id !== deleteItemId));
+        toast.success("LDJC deleted successfully!");
       } else {
-        toast.error(json.error || "Failed to delete goal sheet");
+        toast.error(json.error || "Failed to delete LDJC");
       }
     } catch (err) {
       console.error(err);
-      toast.error("An error occurred while deleting the goal sheet.");
+      toast.error("An error occurred while deleting the LDJC.");
     }
     setDeleteModalOpen(false);
     setDeleteItemId(null);
@@ -501,22 +558,31 @@ function ProfilePageContent() {
                 )}
               </div>
             </div>
-            <button
-              onClick={() => setShowPersonalDetailsForm(true)}
-              className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2 cursor-pointer shadow-lg shadow-primary/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
-            >
-              <span className="material-symbols-outlined text-[18px]">edit</span>
-              Edit Profile
-            </button>
-            {profile.role?.name === "FELLOW" && (
+            <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row flex-wrap gap-3 shrink-0 self-center md:self-start mt-4 md:mt-0">
               <button
-                onClick={() => setShowPDFModal(true)}
-                className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20 shrink-0 self-center md:self-start mt-4 md:mt-0"
+                onClick={() => setShowPersonalDetailsForm(true)}
+                className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-primary/20"
               >
-                <span className="material-symbols-outlined text-[18px]">book</span>
-                Learning Framework
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+                Edit Profile
               </button>
-            )}
+              <button
+                onClick={() => setShowPasswordForm(true)}
+                className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/20"
+              >
+                <span className="material-symbols-outlined text-[18px]">lock_reset</span>
+                Change Password
+              </button>
+              {profile.role?.name === "FELLOW" && (
+                <button
+                  onClick={() => setShowPDFModal(true)}
+                  className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2 cursor-pointer border border-outline-variant/20"
+                >
+                  <span className="material-symbols-outlined text-[18px]">book</span>
+                  Learning Framework
+                </button>
+              )}
+            </div>
           </div>
 
 
@@ -715,39 +781,39 @@ function ProfilePageContent() {
                   canEditLivelihoodPrograms={currentUser?.roleName === "ADMIN"}
                 />
               )}
-              {activeTab === "Goals" && (
+              {activeTab === "LDJC" && (
                 <div className="space-y-6">
                   <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
-                    <h3 className="font-headline font-bold text-xl text-on-surface">Goal Sheets</h3>
+                    <h3 className="font-headline font-bold text-xl text-on-surface">LDJC (Leadership Development Journey Conversation)</h3>
                     <button
                       onClick={() => {
-                        setEditingGoalSheet(null);
-                        setShowGoalSheetForm(true);
+                        setEditingLdjc(null);
+                        setShowLdjcForm(true);
                       }}
                       className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[16px]">add</span>
-                      Create New Goal Sheet
+                      Create New LDJC
                     </button>
                   </div>
 
-                  {goalSheets.length === 0 ? (
+                  {ldjcRecords.length === 0 ? (
                     <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                      No goal sheets yet. Click "Create New Goal Sheet" to start.
+                      No LDJC entries yet. Click &quot;Create New LDJC&quot; to start.
                     </div>
                   ) : (
-                    goalSheets.map((sheet) => (
+                    ldjcRecords.map((sheet) => (
                       <div key={sheet.id} className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 relative group hover:border-primary/30 transition-colors">
                         <div className="flex flex-wrap justify-between items-start gap-3">
                           <button
                             onClick={() => {
-                              setEditingGoalSheet(sheet);
-                              setShowGoalSheetForm(true);
+                              setEditingLdjc(sheet);
+                              setShowLdjcForm(true);
                             }}
                             className="text-left flex-1 cursor-pointer"
                           >
                             <h3 className="font-headline font-bold text-lg text-on-surface flex items-center gap-2">
-                              Goal Sheet
+                              LDJC
                               <span className="text-xs font-normal text-on-surface-variant">
                                 {formatDate(sheet.date)}
                               </span>
@@ -770,9 +836,9 @@ function ProfilePageContent() {
                             </span>
                             {canDeleteRecords && (
                               <button
-                                onClick={() => handleDeleteGoalSheet(sheet.id)}
+                                onClick={() => handleDeleteLdjc(sheet.id)}
                                 className="text-on-surface-variant hover:text-red-600 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity cursor-pointer"
-                                title="Delete goal sheet"
+                                title="Delete LDJC"
                               >
                                 <span className="material-symbols-outlined text-[18px]">delete</span>
                               </button>
@@ -785,18 +851,18 @@ function ProfilePageContent() {
                 </div>
               )}
 
-              {activeTab === "Coaching & Classroom Observation" && (
+              {activeTab === "Observational Debrief Conversation" && (
                 <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-headline font-bold text-xl text-on-surface">Coaching & Classroom Observation Records</h3>
+                    <h3 className="font-headline font-bold text-xl text-on-surface">Observational Debrief Conversation Records</h3>
                   </div>
                   <div className="space-y-6">
-                    {coachingRecords.length === 0 ? (
+                    {debriefRecords.length === 0 ? (
                       <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                        No coaching or classroom observation records available yet.
+                        No observational debrief conversation records available yet.
                       </div>
                     ) : (
-                      coachingRecords.map((record) => (
+                      debriefRecords.map((record) => (
                         <div key={record.id} className="p-5 border border-surface-container rounded-lg relative group font-sans">
                           <div className="flex justify-between items-start mb-3">
                             <div>
@@ -915,52 +981,52 @@ function ProfilePageContent() {
                 </div>
               )}
 
-              {activeTab === "Look Beyond Survey" && (
+              {activeTab === "Post Fellowship Survey" && (
                 <div className="space-y-6">
-                  {showLookBeyondForm ? (
+                  {showPostFellowshipForm ? (
                     <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10">
-                      <LookBeyondSurveyForm
-                        onSubmit={handleSubmitLookBeyond}
-                        onCancel={() => setShowLookBeyondForm(false)}
+                      <PostFellowshipSurveyForm
+                        onSubmit={handleSubmitPostFellowship}
+                        onCancel={() => setShowPostFellowshipForm(false)}
                       />
                     </div>
                   ) : (
                     <>
                       <div className="flex flex-wrap justify-between items-center gap-3">
-                        <h3 className="font-headline font-bold text-xl text-on-surface">Look Beyond Survey</h3>
+                        <h3 className="font-headline font-bold text-xl text-on-surface">Post Fellowship Survey</h3>
                         <button
-                          onClick={() => setShowLookBeyondForm(true)}
+                          onClick={() => setShowPostFellowshipForm(true)}
                           className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
                         >
                           <span className="material-symbols-outlined text-[16px]">add</span>
-                          Fill Look Beyond Survey
+                          Fill Post Fellowship Survey
                         </button>
                       </div>
 
-                      {lookBeyondSurveys.length === 0 ? (
+                      {postFellowshipSurveys.length === 0 ? (
                         <div className="bg-surface-container-lowest rounded-xl p-8 text-center border border-outline-variant/10 text-on-surface-variant">
-                          No Look Beyond surveys submitted yet. Click &ldquo;Fill Look Beyond Survey&rdquo; to complete your first survey.
+                          No Post Fellowship surveys submitted yet. Click &ldquo;Fill Post Fellowship Survey&rdquo; to complete your first survey.
                         </div>
                       ) : (
                         <div className="space-y-4">
-                          {lookBeyondSurveys.map((survey) => (
+                          {postFellowshipSurveys.map((survey) => (
                             <div key={survey.id} className="bg-surface-container-lowest rounded-xl p-5 shadow-ambient border border-outline-variant/10 flex justify-between items-center gap-3">
                               <div className="min-w-0">
-                                <p className="font-semibold text-on-surface text-sm">Look Beyond Survey</p>
+                                <p className="font-semibold text-on-surface text-sm">Post Fellowship Survey</p>
                                 <p className="text-xs text-on-surface-variant mt-1">
                                   {formatDate(survey.surveyDate)}
                                 </p>
                               </div>
                               <div className="flex items-center gap-1">
                                 <button
-                                  onClick={() => exportLookBeyondSurveyPdf(survey, profile.fellow?.name)}
+                                  onClick={() => exportPostFellowshipSurveyPdf(survey, profile.fellow?.name)}
                                   className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                                   title="Export as PDF"
                                 >
                                   <span className="material-symbols-outlined text-[22px]">download</span>
                                 </button>
                                 <button
-                                  onClick={() => setViewingLookBeyond(survey)}
+                                  onClick={() => setViewingPostFellowship(survey)}
                                   className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                                   title="View Responses"
                                 >
@@ -986,21 +1052,21 @@ function ProfilePageContent() {
 
           </div>
 
-          {/* Goal Sheet Form Modal */}
-          {showGoalSheetForm && (
-            <GoalSheetForm
+          {/* LDJC Form Modal */}
+          {showLdjcForm && (
+            <LDJCForm
               fellowId={profile.fellow.id}
-              sheetData={editingGoalSheet}
+              ldjcData={editingLdjc}
               isManager={false}
               token={token}
               onClose={() => {
-                setShowGoalSheetForm(false);
-                setEditingGoalSheet(null);
+                setShowLdjcForm(false);
+                setEditingLdjc(null);
               }}
-              onSave={(updatedSheet) => {
-                handleGoalSheetSaved(updatedSheet);
-                setShowGoalSheetForm(false);
-                setEditingGoalSheet(null);
+              onSave={(updatedLdjc) => {
+                handleLdjcSaved(updatedLdjc);
+                setShowLdjcForm(false);
+                setEditingLdjc(null);
               }}
             />
           )}
@@ -1048,6 +1114,91 @@ function ProfilePageContent() {
         </div>
       )}
 
+      {showPasswordForm && (
+        <div className="fixed inset-0 bg-black/50 z-[110] flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-surface-container-lowest rounded-t-2xl sm:rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 z-10 bg-surface-container-lowest flex items-start justify-between gap-4 p-4 sm:p-6 border-b border-surface-container">
+              <div className="min-w-0">
+                <h3 className="text-lg font-bold text-on-surface">Change Password</h3>
+                <p className="text-xs text-on-surface-variant mt-1 truncate">{profile.email}</p>
+              </div>
+              <button
+                type="button"
+                onClick={closePasswordForm}
+                className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                aria-label="Close change password dialog"
+              >
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+            <form onSubmit={handleChangePassword} className="p-4 sm:p-6 space-y-4">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="current-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
+                  Current Password<span className="text-error ml-0.5">*</span>
+                </label>
+                <input
+                  id="current-password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={passwordForm.currentPassword}
+                  onChange={(e) => setPasswordForm((f) => ({ ...f, currentPassword: e.target.value }))}
+                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="new-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
+                  New Password<span className="text-error ml-0.5">*</span>
+                </label>
+                <input
+                  id="new-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
+                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                />
+                <span className="text-[11px] text-on-surface-variant">At least 8 characters.</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="confirm-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
+                  Confirm Password<span className="text-error ml-0.5">*</span>
+                </label>
+                <input
+                  id="confirm-password"
+                  type="password"
+                  autoComplete="new-password"
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) => setPasswordForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              {passwordError && (
+                <p className="text-[11px] font-medium text-error rounded-lg border border-error/20 bg-error/5 px-3 py-2">
+                  {passwordError}
+                </p>
+              )}
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={closePasswordForm}
+                  disabled={passwordSaving}
+                  className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={passwordSaving}
+                  className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:bg-primary-container transition-colors cursor-pointer text-sm disabled:opacity-50"
+                >
+                  {passwordSaving ? "Saving..." : "Change Password"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <ConfirmDeleteModal
         isOpen={deleteModalOpen}
         onClose={() => {
@@ -1055,8 +1206,8 @@ function ProfilePageContent() {
           setDeleteItemId(null);
         }}
         onConfirm={handleConfirmDelete}
-        title="Delete Goal Sheet"
-        message="Are you sure you want to delete this goal sheet? This action is permanent and cannot be undone."
+        title="Delete LDJC"
+        message="Are you sure you want to delete this LDJC entry? This action is permanent and cannot be undone."
       />
 
       {showPDFModal && (
@@ -1075,10 +1226,10 @@ function ProfilePageContent() {
         />
       )}
 
-      {viewingLookBeyond && (
-        <LookBeyondSurveyViewer
-          survey={viewingLookBeyond}
-          onClose={() => setViewingLookBeyond(null)}
+      {viewingPostFellowship && (
+        <PostFellowshipSurveyViewer
+          survey={viewingPostFellowship}
+          onClose={() => setViewingPostFellowship(null)}
         />
       )}
 

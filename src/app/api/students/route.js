@@ -7,13 +7,16 @@ import {
   validatePersonName,
   validateEmail,
   validateMobile,
+  validateAadhaar,
   validateDateNotFuture,
   validateRequired,
   firstError,
   normalizeMobileForSave,
   normalizeEmailForSave,
   normalizePersonName,
+  normalizeAadhaarForSave,
 } from "@/lib/validation";
+import { composeProfileAddress } from "@/lib/profileCompleteness";
 import { generateStudentId } from "@/lib/studentId";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -97,6 +100,11 @@ export async function POST(req) {
       email,
       phone,
       address,
+      state,
+      block,
+      village,
+      landmark,
+      aadharNumber,
       grade,
       gradeGroup,
       district,
@@ -114,6 +122,8 @@ export async function POST(req) {
       fellowId
     } = body;
 
+    const composedAddress = composeProfileAddress({ state, district, block, village }) || String(address || "").trim();
+
     const requiredMessage = firstError([
       validateRequired(name, "Full name"),
       validateRequired(schoolId, "Partner school"),
@@ -121,12 +131,15 @@ export async function POST(req) {
       validateRequired(gender, "Gender"),
       validateRequired(grade, "Grade"),
       validateRequired(gradeGroup, "Grade group"),
+      validateRequired(state, "State"),
       validateRequired(district, "District"),
+      validateRequired(block, "Block"),
+      validateRequired(village, "City / Village"),
       validateRequired(primaryLanguage, "Primary language"),
       validateRequired(fatherName, "Father's name"),
       validateRequired(fatherMobile, "Father's mobile"),
       validateRequired(motherName, "Mother's name"),
-      validateRequired(address, "Address"),
+      validateRequired(composedAddress, "Address"),
       validateRequired(enrolmentDate, "Enrolment date"),
     ]);
     if (requiredMessage) {
@@ -145,6 +158,7 @@ export async function POST(req) {
       validatePersonName(guardianName),
       validatePersonName(fatherName, { required: true }),
       validatePersonName(motherName, { required: true }),
+      validateAadhaar(aadharNumber, { required: false }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -223,7 +237,12 @@ export async function POST(req) {
             gender,
             email: normalizeEmailForSave(email),
             phone: normalizeMobileForSave(phone),
-            address: String(address).trim(),
+            address: composedAddress,
+            state: String(state).trim(),
+            block: String(block).trim(),
+            village: String(village).trim(),
+            landmark: String(landmark || "").trim() || null,
+            aadharNumber: normalizeAadhaarForSave(aadharNumber) || null,
             grade,
             gradeGroup,
             district: String(district).trim(),

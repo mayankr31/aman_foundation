@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
-import { extractMapEmbedUrl } from "@/lib/mapUrl";
+import { extractMapEmbedUrl, getSafeMapEmbedUrl, isValidMapEmbedUrl } from "@/lib/mapUrl";
 import { toMobileInput, toPersonNameInput, digitsOnly } from "@/lib/validation";
 import { deriveAcademicStatus, getAcademicStatusClass } from "@/lib/academicStatus";
 import Pagination from "@/components/ui/Pagination";
@@ -395,6 +395,7 @@ export default function SchoolProfileDetail() {
   const assignedPrograms = school.programs || [];
   const assignedManagers = school.programManagers || [];
   const isAdmin = user?.roleName === "ADMIN";
+  const safeMapUrl = getSafeMapEmbedUrl(school.mapUrl);
   const canManageFellows = isAdmin || PROGRAM_ROLES.includes(user?.roleName);
   const canManageStaff =
     isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
@@ -495,10 +496,10 @@ export default function SchoolProfileDetail() {
         <div className="lg:col-span-8 space-y-8">
 
           {/* Map */}
-          {school.mapUrl && (
+          {safeMapUrl && (
             <div className="bg-surface-container-lowest rounded-xl p-2 shadow-ambient border border-outline-variant/10">
               <div className="relative w-full h-[280px] rounded-lg overflow-hidden bg-surface-container-low">
-                <iframe src={extractMapEmbedUrl(school.mapUrl)} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full"></iframe>
+                <iframe src={safeMapUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full"></iframe>
               </div>
             </div>
           )}
@@ -1152,6 +1153,9 @@ export default function SchoolProfileDetail() {
                 placeholder='Paste the embed URL, or the full <iframe src="..."> code'
                 className="px-3 py-2 border border-outline-variant rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary" />
               <p className="text-[11px] text-on-surface-variant">In Google Maps, click Share &rarr; Embed a map, copy the iframe, and paste it here. The URL is extracted automatically.</p>
+              {editForm.mapUrl && !isValidMapEmbedUrl(editForm.mapUrl) && (
+                <p className="text-[11px] font-medium text-error">Only valid Google Maps embed URLs will be shown on the school page.</p>
+              )}
             </div>
             <div className="flex justify-end gap-3 pt-4">
               <button type="button" onClick={() => setModal(null)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm">Cancel</button>

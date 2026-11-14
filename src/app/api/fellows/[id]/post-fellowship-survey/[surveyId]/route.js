@@ -39,9 +39,9 @@ export async function DELETE(req, { params }) {
     }
 
     await prisma.lookBeyondSurvey.delete({ where: { id: surveyId } });
-    return NextResponse.json({ success: true, message: "Look Beyond survey deleted" });
+    return NextResponse.json({ success: true, message: "Post Fellowship survey deleted" });
   } catch (err) {
-    console.error("Failed to delete Look Beyond survey:", err);
+    console.error("Failed to delete Post Fellowship survey:", err);
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

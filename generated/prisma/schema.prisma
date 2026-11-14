@@ -412,6 +412,11 @@ model Student {
   email            String?
   phone            String?
   address          String?
+  state            String?
+  block            String?
+  village          String?
+  landmark         String?
+  aadharNumber     String?
   grade            String
   gradeGroup       String
   district         String?
@@ -1734,6 +1739,11 @@ model AfterSchoolStudent {
   email            String?
   phone            String?
   address          String?
+  state            String?
+  block            String?
+  village          String?
+  landmark         String?
+  aadharNumber     String?
   grade            String?
   gradeGroup       String?
   district         String?
