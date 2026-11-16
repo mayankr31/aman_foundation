@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { dateKeyToUTCDate, getISTDateKey } from "@/lib/time";
-import { getReportingScopeUserIds } from "@/lib/hierarchy";
 import {
   getAdminUserIds,
   notifyUsers,
@@ -100,38 +99,26 @@ export async function ensureBirthdayNotifications(now = new Date()) {
   }
 }
 
-export async function getTodayBirthdays(user) {
-  const scope = await getReportingScopeUserIds(user, { includeSelf: false });
-  if (Array.isArray(scope) && scope.length === 0) {
-    return { items: [], hasTeam: false };
-  }
-
-  const matches = await findTodayBirthdays(scope);
+export async function getTodayBirthdays() {
+  // Organisation-wide: every active employee can see today's birthdays.
+  const matches = await findTodayBirthdays(null);
   const items = matches.map((person) => {
     const copy = { ...person };
     delete copy.dob;
     return copy;
   });
-  return { items, hasTeam: scope === null || scope.length > 0 };
+  return { items, hasTeam: true };
 }
 
 export async function getTodayLeaves(user) {
-  const scope = await getReportingScopeUserIds(user, {
-    includeSelf: false,
-    activeOnly: true,
-  });
-  if (Array.isArray(scope) && scope.length === 0) {
-    return { items: [], hasTeam: false };
-  }
-
+  // Organisation-wide: every active employee can see who is on leave today.
   const todayKey = getISTDateKey();
   const todayDate = dateKeyToUTCDate(todayKey);
-  if (!todayDate) return { items: [], hasTeam: false };
+  if (!todayDate) return { items: [], hasTeam: true };
 
   const leaves = await prisma.leave.findMany({
     where: {
       status: "APPROVED",
-      ...(Array.isArray(scope) ? { userId: { in: scope } } : {}),
       user: { status: "ACTIVE" },
       OR: [
         { startDate: { lte: todayDate }, endDate: { gte: todayDate } },
@@ -155,7 +142,7 @@ export async function getTodayLeaves(user) {
 
   const byUser = new Map();
   for (const leave of leaves) {
-    if (leave.userId === user.id) continue;
+    if (leave.userId === user?.id) continue;
 
     const legacy = parseLegacyLeaveRange(leave.dates);
     const startDate = leave.startDate ? parseDateOnly(leave.startDate) : legacy.startDate;
@@ -185,18 +172,18 @@ export async function getTodayLeaves(user) {
     String(a.user?.name || "").localeCompare(String(b.user?.name || ""))
   );
 
-  return { items, hasTeam: scope === null || scope.length > 0 };
+  return { items, hasTeam: true };
 }
 
 export async function getTeamToday(user) {
   const [birthdays, leaves] = await Promise.all([
-    getTodayBirthdays(user),
+    getTodayBirthdays(),
     getTodayLeaves(user),
   ]);
 
   return {
     date: getISTDateKey(),
-    hasTeam: birthdays.hasTeam || leaves.hasTeam,
+    hasTeam: true,
     birthdays: birthdays.items,
     onLeave: leaves.items,
   };

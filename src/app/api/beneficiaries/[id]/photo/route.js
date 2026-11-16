@@ -2,11 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canEditBeneficiary } from "@/lib/beneficiaryAccess";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "beneficiary-photos");
 
@@ -67,18 +66,14 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+    }
+
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
     const formData = await req.formData();

@@ -39,11 +39,11 @@ export async function GET(req, { params }) {
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     if (!(await canViewBeneficiary(user, beneficiaryId))) {
-      return NextResponse.json({ error: "Forbidden: You do not have access to this beneficiary" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: You do not have access to this participant" }, { status: 403 });
     }
 
     const migrationRecords = await prisma.migrationRecord.findMany({
@@ -75,7 +75,7 @@ export async function POST(req, { params }) {
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     const body = await req.json();
@@ -129,7 +129,7 @@ export async function PUT(req, { params }) {
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     const body = await req.json();
@@ -205,7 +205,7 @@ export async function DELETE(req, { params }) {
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     const body = await req.json();

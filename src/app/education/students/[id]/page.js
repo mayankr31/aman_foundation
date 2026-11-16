@@ -1173,7 +1173,7 @@ export default function StudentProfileDetail() {
                 <p className="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-2">Family</p>
                 {student.beneficiary ? (
                   <div className="flex items-center justify-between">
-                    <Link href={`/beneficiaries/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
+                    <Link href={`/participants/${student.beneficiary.id}`} className="font-semibold text-primary text-sm hover:underline">
                       {student.beneficiary.name}
                     </Link>
                     <button onClick={() => handleUnlinkBeneficiary()}
@@ -1565,7 +1565,7 @@ export default function StudentProfileDetail() {
       {modal === "linkBeneficiary" && (
         <Modal title="Link Parents" onClose={() => setModal(null)}>
           <p className="text-sm text-on-surface-variant mb-4">
-            Search and select an existing beneficiary, or add parents&apos; details.
+            Search and select an existing participant, or add parents&apos; details.
           </p>
           <button
             onClick={() => setModal("addBeneficiary")}
@@ -1574,7 +1574,7 @@ export default function StudentProfileDetail() {
             <span className="material-symbols-outlined text-[18px]">person_add</span>
             Add Parents Details
           </button>
-          <input type="text" placeholder="Search beneficiaries..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
+          <input type="text" placeholder="Search participants..." value={searchQ} onChange={e => setSearchQ(e.target.value)}
             className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
           <div className="space-y-2 max-h-72 overflow-y-auto">
             {beneficiaries
@@ -1603,7 +1603,7 @@ export default function StudentProfileDetail() {
               b.village?.toLowerCase().includes(searchQ.toLowerCase())
             ).length === 0 && (
               <p className="text-sm text-on-surface-variant text-center py-6">
-                No beneficiaries found. Use Add Parents Details to create one.
+                No participants found. Use Add Parents Details to create one.
               </p>
             )}
           </div>

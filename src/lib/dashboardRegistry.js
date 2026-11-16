@@ -26,7 +26,7 @@ export const KPI_DEFINITIONS = [
   { key: "fellows", label: "Fellows", icon: "badge", tone: "sky", group: "education" },
   {
     key: "beneficiaries",
-    label: "Beneficiaries",
+    label: "Participants",
     icon: "volunteer_activism",
     tone: "amber",
     group: "livelihood",
@@ -149,8 +149,8 @@ const LIVELIHOOD_LINKS = [
   },
   {
     key: "livelihood.beneficiaries",
-    label: "Beneficiaries",
-    href: "/beneficiaries",
+    label: "Participants",
+    href: "/participants",
     kpiKey: "beneficiaries",
     icon: "volunteer_activism",
     page: "livelihood",

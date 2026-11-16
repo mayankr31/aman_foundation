@@ -14,13 +14,14 @@ import CreateUserModal from '@/components/users/CreateUserModal';
 import EditRoleModal from '@/components/users/EditRoleModal';
 import ResetPasswordModal from '@/components/users/ResetPasswordModal';
 import DashboardConfigModal from '@/components/users/DashboardConfigModal';
+import SurveyTemplatesPanel from '@/components/surveys/SurveyTemplatesPanel';
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import Pagination from '@/components/ui/Pagination';
 import { DEPARTMENTS, getDefaultDepartment, getSuggestedDepartments } from '@/lib/organization';
 import { formatRoleLabel } from '@/lib/roles';
 import { getManagerCandidates, getRoleRank } from '@/lib/roleHierarchy';
 
-const ADMIN_TABS = ['users', 'deactivated', 'approvals', 'roles'];
+const ADMIN_TABS = ['users', 'deactivated', 'approvals', 'roles', 'surveys'];
 
 export default function AdminPage() {
   return (
@@ -372,7 +373,7 @@ function AdminPageContent() {
             </button>
           )}
 
-          {activeTab !== 'roles' && (
+          {activeTab !== 'roles' && activeTab !== 'surveys' && (
             <button
               onClick={() => setIsCreateUserOpen(true)}
               className="px-4 py-2 rounded-full bg-primary hover:bg-primary-container text-white text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 hover:scale-105 active:scale-100 shadow-[0_4px_12px_rgba(26,122,94,0.2)]"
@@ -419,6 +420,7 @@ function AdminPageContent() {
           <option value="deactivated">Deactivated</option>
           <option value="approvals">Approvals Queue</option>
           <option value="roles">Role Switches</option>
+          <option value="surveys">Survey Templates</option>
         </select>
       </div>
 
@@ -467,6 +469,17 @@ function AdminPageContent() {
         >
           <Shield size={14} />
           Role Switches
+        </button>
+        <button
+          onClick={() => selectTab('surveys')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap shrink-0 transition-all flex items-center gap-2 ${
+            activeTab === 'surveys'
+              ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white'
+          }`}
+        >
+          <span className="material-symbols-outlined text-[16px]">assignment</span>
+          Survey Templates
         </button>
       </div>
 
@@ -782,6 +795,8 @@ function AdminPageContent() {
               })}
             </div>
           )}
+
+          {activeTab === 'surveys' && <SurveyTemplatesPanel token={token} />}
 
         </div>
       )}

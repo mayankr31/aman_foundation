@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canEditSchool } from "@/lib/schoolAccess";
 import {
   validateEmail,
   validateMobile,
@@ -120,15 +121,15 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const schoolId = await resolveSchoolId(id);
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (!(await canEditSchool(user, schoolId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
     }
 
     const body = await req.json();

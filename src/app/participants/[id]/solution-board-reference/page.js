@@ -109,9 +109,9 @@ export default function SolutionBoardReferencePage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full font-sans">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
+      <Link href={`/participants/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-        Back to Beneficiary Profile
+        Back to Participant Profile
       </Link>
 
       <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden mb-8">
@@ -240,7 +240,7 @@ export default function SolutionBoardReferencePage() {
             </div>
             <p className="mt-4 text-sm text-on-surface-variant">
               Use one row per priority gap. To complete and save this plan for the household, use the{" "}
-              <Link href={`/beneficiaries/${id}/solution-plan`} className="text-primary font-semibold hover:underline">
+              <Link href={`/participants/${id}/solution-plan`} className="text-primary font-semibold hover:underline">
                 Create Solution Plan
               </Link>{" "}
               page.

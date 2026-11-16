@@ -48,7 +48,7 @@ export default function OnLeaveToday({ className = "" }) {
         </div>
         {state.data.length === 0 ? (
           <p className="text-xs text-amber-800/80 dark:text-amber-300/80">
-            No team members are on leave today.
+            No one is on leave today.
           </p>
         ) : (
           <div className="flex flex-wrap gap-2 min-w-0">

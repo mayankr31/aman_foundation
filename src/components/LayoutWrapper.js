@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
-import { getPageForPath, isBeneficiaryProfilePath } from "@/lib/routePermissions";
+import { getPageForPath, isParticipantProfilePath } from "@/lib/routePermissions";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { Loader2 } from "lucide-react";
@@ -21,12 +21,12 @@ export default function LayoutWrapper({ children }) {
     pathname === "/forgot-password" ||
     pathname === "/reset-password";
   const requiredPage = getPageForPath(pathname);
-  // A fellow linking a student to a beneficiary must be able to open that
-  // beneficiary profile even without Livelihood page access. The API enforces
-  // that the beneficiary is actually linked to one of their students.
-  const canViewLinkedBeneficiary =
-    isBeneficiaryProfilePath(pathname) && can("education");
-  const isAllowed = !requiredPage || can(requiredPage) || canViewLinkedBeneficiary;
+  // A fellow linking a student to a participant must be able to open that
+  // participant profile even without Livelihood page access. The API enforces
+  // that the participant is actually linked to one of their students.
+  const canViewLinkedParticipant =
+    isParticipantProfilePath(pathname) && can("education");
+  const isAllowed = !requiredPage || can(requiredPage) || canViewLinkedParticipant;
 
   useEffect(() => {
     if (isInitializing) return;

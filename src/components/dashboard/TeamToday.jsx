@@ -45,7 +45,7 @@ export default function TeamToday() {
     };
   }, [token]);
 
-  if (loading || !data || !data.hasTeam) return null;
+  if (loading || !data) return null;
 
   const birthdays = data.birthdays || [];
   const onLeave = data.onLeave || [];
@@ -54,7 +54,7 @@ export default function TeamToday() {
     <section className="space-y-4">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-on-surface tracking-tight">Team Today</h2>
+          <h2 className="text-xl font-bold text-on-surface tracking-tight">Today at Aman Foundation</h2>
           <p className="text-xs text-on-surface-variant mt-1">{formatDate(data?.date || new Date())}</p>
         </div>
       </div>
@@ -108,7 +108,7 @@ export default function TeamToday() {
           {loading ? (
             <p className="text-xs text-on-surface-variant py-3">Loading...</p>
           ) : onLeave.length === 0 ? (
-            <p className="text-xs text-on-surface-variant py-3">No team members are on leave today.</p>
+            <p className="text-xs text-on-surface-variant py-3">No one is on leave today.</p>
           ) : (
             <div className="space-y-2">
               {onLeave.map((leave) => (

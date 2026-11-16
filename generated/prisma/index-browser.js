@@ -1478,6 +1478,16 @@ exports.Prisma.TeamCheckInPromiseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SurveyTemplateScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  title: 'title',
+  config: 'config',
+  updatedBy: 'updatedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.InstitutionStudentDataNoteScalarFieldEnum = {
   id: 'id',
   scopeType: 'scopeType',
@@ -1671,6 +1681,7 @@ exports.Prisma.ModelName = {
   FellowStudentDataNote: 'FellowStudentDataNote',
   TeamCheckIn: 'TeamCheckIn',
   TeamCheckInPromise: 'TeamCheckInPromise',
+  SurveyTemplate: 'SurveyTemplate',
   InstitutionStudentDataNote: 'InstitutionStudentDataNote'
 };
 

@@ -167,7 +167,7 @@ export default function SolutionPlanPage() {
       const data = await res.json();
       if (data.success) {
         toast.success(editingPlanId ? "Solution Plan updated successfully!" : "Solution Plan saved successfully!");
-        router.push(`/beneficiaries/${id}`);
+        router.push(`/participants/${id}`);
       } else {
         toast.error("Error saving solution plan: " + data.error);
       }
@@ -189,9 +189,9 @@ export default function SolutionPlanPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full font-sans">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
+      <Link href={`/participants/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-        Back to Beneficiary Profile
+        Back to Participant Profile
       </Link>
 
       <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden mb-8">

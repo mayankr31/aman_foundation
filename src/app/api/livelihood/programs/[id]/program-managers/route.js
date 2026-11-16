@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin, isLivelihoodProgramManaged } from "@/lib/scope";
+import { isAdmin } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
-import { canAssignPerson } from "@/lib/hierarchy";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -58,15 +57,10 @@ export async function POST(req, { params }) {
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
 
     if (!isAdmin(user)) {
-      if (!(await isLivelihoodProgramManaged(user.id, programId))) {
-        return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
-      }
-      if (!(await canAssignPerson(user, userId))) {
-        return NextResponse.json(
-          { error: "Forbidden: You can only assign people who report to you" },
-          { status: 403 }
-        );
-      }
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can assign staff to programs" },
+        { status: 403 }
+      );
     }
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
@@ -116,15 +110,10 @@ export async function DELETE(req, { params }) {
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
 
     if (!isAdmin(user)) {
-      if (!(await isLivelihoodProgramManaged(user.id, programId))) {
-        return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
-      }
-      if (!(await canAssignPerson(user, userId))) {
-        return NextResponse.json(
-          { error: "Forbidden: You can only unassign people who report to you" },
-          { status: 403 }
-        );
-      }
+      return NextResponse.json(
+        { error: "Forbidden: Only the Executive Director can remove staff from programs" },
+        { status: 403 }
+      );
     }
 
     const existing = await prisma.programManagerLivelihoodProgram.findFirst({

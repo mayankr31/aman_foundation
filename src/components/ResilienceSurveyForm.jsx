@@ -319,7 +319,7 @@ export default function ResilienceSurveyForm({
       {PROFILE_LOCKED_IDS.some((x) => locked.has(x)) && (
         <div className="text-xs font-sans text-on-surface-variant bg-primary-container/10 border border-primary/20 rounded-lg p-3 flex gap-2 items-start">
           <span className="material-symbols-outlined text-primary text-[16px] shrink-0">info</span>
-          <span>Location and respondent details are sourced from the beneficiary profile. To change them, use <strong>Edit Profile → Personal</strong>.</span>
+          <span>Location and respondent details are sourced from the participant profile. To change them, use <strong>Edit Profile → Personal</strong>.</span>
         </div>
       )}
       {renderInputQuestion("B.1", "Date", "date")}

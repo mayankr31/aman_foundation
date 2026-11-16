@@ -17,7 +17,14 @@ export async function GET(req) {
     }
 
     let where;
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    const { searchParams } = new URL(req.url);
+    // Livelihood program managers can assign any fellow to a program, even
+    // when they do not manage the fellow's school/centre.
+    const allFellows =
+      searchParams.get("all") === "1" &&
+      (user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name));
+
+    if (PROGRAM_ROLES.includes(user.role.name) && !allFellows) {
       const [schoolIds, centreIds, subordinateIds] = await Promise.all([
         getManagedSchoolIds(user.id),
         getManagedCentreIds(user.id),

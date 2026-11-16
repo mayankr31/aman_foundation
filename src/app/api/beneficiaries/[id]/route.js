@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { hasLivelihoodRead, isLinkedBeneficiaryViewer } from "@/lib/beneficiaryAccess";
+import { hasLivelihoodRead, isLinkedBeneficiaryViewer, canEditBeneficiary } from "@/lib/beneficiaryAccess";
 import { createLivestockWithGeneratedTag } from "@/lib/livestockTag";
 import {
   validatePersonName,
@@ -25,16 +25,6 @@ import {
   normalizeBankAccountForSave,
   normalizeIfscForSave,
 } from "@/lib/validation";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-async function canPmAccessBeneficiary(userId, beneficiaryId) {
-  const row = await prisma.beneficiaryLivelihood.findFirst({
-    where: { beneficiaryId, program: { programManagers: { some: { userId } } } },
-    select: { id: true },
-  });
-  return !!row;
-}
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -79,13 +69,13 @@ export async function GET(req, { params }) {
 
     if (!beneficiaryId) {
       console.log("GET beneficiary not found in DB for name/id:", id);
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     const fullAccess = await hasLivelihoodRead(user);
     if (!fullAccess && !(await isLinkedBeneficiaryViewer(user, beneficiaryId))) {
       return NextResponse.json(
-        { error: "Forbidden: This beneficiary is not linked to one of your students" },
+        { error: "Forbidden: This participant is not linked to one of your students" },
         { status: 403 }
       );
     }
@@ -155,7 +145,8 @@ export async function GET(req, { params }) {
       });
     }
 
-    return NextResponse.json({ success: true, data: beneficiary });
+    const editable = await canEditBeneficiary(user, beneficiaryId);
+    return NextResponse.json({ success: true, data: { ...beneficiary, editable } });
   } catch (error) {
     console.error("Fetch beneficiary detail error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -171,26 +162,15 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
-    if (
-      PROGRAM_ROLES.includes(user.role.name) &&
-      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
-    ) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -343,26 +323,11 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
-    }
-
-    if (
-      PROGRAM_ROLES.includes(user.role.name) &&
-      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
-    ) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     await prisma.$transaction(async (tx) => {
@@ -399,7 +364,7 @@ export async function DELETE(req, { params }) {
       });
     });
 
-    return NextResponse.json({ success: true, message: "Beneficiary profile deleted successfully" });
+    return NextResponse.json({ success: true, message: "Participant profile deleted successfully" });
   } catch (error) {
     console.error("Delete beneficiary error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

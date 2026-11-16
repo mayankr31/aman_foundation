@@ -141,7 +141,7 @@ export default function BeneficiaryMasterDirectory() {
             Livelihood Database
           </span>
           <h2 className="page-title text-on-surface">
-            Beneficiaries Master Registry
+            Participants Master Registry
           </h2>
           <p className="text-on-surface-variant mt-2 max-w-2xl text-sm">
             Central master registry connecting all livelihood programs in Kalgachia, Assam. Monitor socio-economic growth, documents, and resilience indexes.
@@ -166,7 +166,7 @@ export default function BeneficiaryMasterDirectory() {
             className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-semibold text-sm cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm">person_add</span>
-            Add Beneficiary
+            Add Participant
           </button>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function BeneficiaryMasterDirectory() {
         <div className="bg-surface-container-lowest rounded-xl p-6 relative overflow-hidden shadow-[0_8px_24px_rgba(25,28,29,0.04)] border border-outline-variant/10">
           <div className="relative z-10 flex flex-col gap-2">
             <span className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">
-              Total Beneficiaries
+              Total Participants
             </span>
             <span className="text-3xl font-black text-on-surface tracking-tighter">{beneficiaries.length}</span>
             <span className="text-xs text-on-surface-variant font-medium mt-1">Unified profiles logged</span>
@@ -251,7 +251,7 @@ export default function BeneficiaryMasterDirectory() {
           <table className="mobile-card-table w-full text-left border-collapse min-w-[800px] table-fixed font-sans">
             <thead>
               <tr className="text-xs uppercase tracking-widest text-on-surface-variant font-bold border-b border-surface-container">
-                <th className="w-[22%] px-6 py-4">Beneficiary Name</th>
+                <th className="w-[22%] px-6 py-4">Participant Name</th>
                 <th className="w-[20%] px-6 py-4">District / Location</th>
                 <th className="w-[14%] px-6 py-4">Social Economic Tier</th>
                 <th className="w-[22%] px-6 py-4">Program Linkage</th>
@@ -263,7 +263,7 @@ export default function BeneficiaryMasterDirectory() {
               {paginatedBeneficiaries.map((b, index) => (
                 <tr
                   key={b.id}
-                  onClick={() => router.push(`/beneficiaries/${encodeURIComponent(b.id)}`)}
+                  onClick={() => router.push(`/participants/${encodeURIComponent(b.id)}`)}
                   className={`hover:bg-surface-container-low/50 transition-colors cursor-pointer ${
                     index > 0 ? "border-t border-surface-container-low" : ""
                   }`}
@@ -320,7 +320,7 @@ export default function BeneficiaryMasterDirectory() {
                   </td>
                   <td data-label="Actions" className="px-6 py-5 text-right">
                     <Link
-                      href={`/beneficiaries/${encodeURIComponent(b.id)}`}
+                      href={`/participants/${encodeURIComponent(b.id)}`}
                       onClick={(e) => e.stopPropagation()}
                       className="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-full text-xs font-bold transition-all inline-block hover:underline cursor-pointer"
                     >
@@ -332,7 +332,7 @@ export default function BeneficiaryMasterDirectory() {
               {filteredBeneficiaries.length === 0 && (
                 <tr>
                   <td colSpan="6" className="text-center py-12 text-slate-400 text-xs font-sans">
-                    No beneficiary records match the selected filters.
+                    No participant records match the selected filters.
                   </td>
                 </tr>
               )}
@@ -342,7 +342,7 @@ export default function BeneficiaryMasterDirectory() {
         <Pagination currentPage={safePage} totalItems={filteredBeneficiaries.length} itemsPerPage={ITEMS_PER_PAGE} onPageChange={setCurrentPage} />
       </div>
 
-      {/* Add Beneficiary Modal */}
+      {/* Add Participant Modal */}
       {showAddModal && (
         <AddBeneficiaryModal
           onClose={() => setShowAddModal(false)}

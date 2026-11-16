@@ -90,7 +90,7 @@ export default function LivelihoodHub() {
           href="/livelihood/farm"
           icon="agriculture"
           title="Farm Programs"
-          description="Cultivation-based initiatives: sugarcane, maize, rice, and other crops. Track land allocation, crop stages, yields, and revenue per beneficiary."
+          description="Cultivation-based initiatives: sugarcane, maize, rice, and other crops. Track land allocation, crop stages, yields, and revenue per participant."
           actionLabel="Manage Farm Programs"
           tone="emerald"
         />
@@ -105,9 +105,9 @@ export default function LivelihoodHub() {
         />
 
         <HubCard
-          href="/beneficiaries"
+          href="/participants"
           icon="diversity_3"
-          title="Beneficiary Master"
+          title="Participant Master"
           description="Central database for all program participants. View complete profiles, program history, resilience scoring, and cross-module engagement data."
           actionLabel="Open Registry"
           tone="primary"

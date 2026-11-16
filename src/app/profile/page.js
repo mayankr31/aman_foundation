@@ -26,6 +26,7 @@ import FilePreviewLink from "@/components/files/FilePreviewLink";
 import FilePreviewImage from "@/components/files/FilePreviewImage";
 import Avatar from "@/components/ui/Avatar";
 import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
+import { useSurveyTemplate } from "@/lib/useSurveyTemplate";
 import { formatRoleLabel } from "@/lib/roles";
 import { getMissingProfileFields } from "@/lib/profileCompleteness";
 import dynamic from "next/dynamic";
@@ -63,6 +64,11 @@ function ProfilePageContent() {
   const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [passwordError, setPasswordError] = useState("");
   const [passwordSaving, setPasswordSaving] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { template: engagementSurveyTemplate } = useSurveyTemplate("ENGAGEMENT");
+  const { template: postFellowshipSurveyTemplate } = useSurveyTemplate("POST_FELLOWSHIP");
 
   // Fellow specific dashboard states
   const [ldjcRecords, setLdjcRecords] = useState([]);
@@ -295,6 +301,9 @@ function ProfilePageContent() {
     setShowPasswordForm(false);
     setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     setPasswordError("");
+    setShowCurrentPassword(false);
+    setShowNewPassword(false);
+    setShowConfirmPassword(false);
   };
 
   const handleChangePassword = async (e) => {
@@ -927,6 +936,7 @@ function ProfilePageContent() {
                       <EngagementSurveyForm
                         onSubmit={handleSubmitEngagementSurvey}
                         onCancel={() => setShowEngagementForm(false)}
+                        template={engagementSurveyTemplate}
                       />
                     </div>
                   ) : (
@@ -958,7 +968,7 @@ function ProfilePageContent() {
                               </div>
                               <div className="flex items-center gap-1">
                                 <button
-                                  onClick={() => exportEngagementSurveyPdf(survey, profile.fellow?.name)}
+                                  onClick={() => exportEngagementSurveyPdf(survey, profile.fellow?.name, engagementSurveyTemplate)}
                                   className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                                   title="Export as PDF"
                                 >
@@ -988,6 +998,7 @@ function ProfilePageContent() {
                       <PostFellowshipSurveyForm
                         onSubmit={handleSubmitPostFellowship}
                         onCancel={() => setShowPostFellowshipForm(false)}
+                        template={postFellowshipSurveyTemplate}
                       />
                     </div>
                   ) : (
@@ -1019,7 +1030,7 @@ function ProfilePageContent() {
                               </div>
                               <div className="flex items-center gap-1">
                                 <button
-                                  onClick={() => exportPostFellowshipSurveyPdf(survey, profile.fellow?.name)}
+                                  onClick={() => exportPostFellowshipSurveyPdf(survey, profile.fellow?.name, postFellowshipSurveyTemplate)}
                                   className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                                   title="Export as PDF"
                                 >
@@ -1136,41 +1147,77 @@ function ProfilePageContent() {
                 <label htmlFor="current-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
                   Current Password<span className="text-error ml-0.5">*</span>
                 </label>
-                <input
-                  id="current-password"
-                  type="password"
-                  autoComplete="current-password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) => setPasswordForm((f) => ({ ...f, currentPassword: e.target.value }))}
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    id="current-password"
+                    type={showCurrentPassword ? "text" : "password"}
+                    autoComplete="current-password"
+                    value={passwordForm.currentPassword}
+                    onChange={(e) => setPasswordForm((f) => ({ ...f, currentPassword: e.target.value }))}
+                    className="w-full px-4 py-2 pr-11 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowCurrentPassword((visible) => !visible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-on-surface-variant hover:text-on-surface cursor-pointer"
+                    aria-label={showCurrentPassword ? "Hide current password" : "Show current password"}
+                  >
+                    <span className="material-symbols-outlined text-[19px]">
+                      {showCurrentPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="new-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
                   New Password<span className="text-error ml-0.5">*</span>
                 </label>
-                <input
-                  id="new-password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={passwordForm.newPassword}
-                  onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    id="new-password"
+                    type={showNewPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    value={passwordForm.newPassword}
+                    onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
+                    className="w-full px-4 py-2 pr-11 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((visible) => !visible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-on-surface-variant hover:text-on-surface cursor-pointer"
+                    aria-label={showNewPassword ? "Hide new password" : "Show new password"}
+                  >
+                    <span className="material-symbols-outlined text-[19px]">
+                      {showNewPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </button>
+                </div>
                 <span className="text-[11px] text-on-surface-variant">At least 8 characters.</span>
               </div>
               <div className="flex flex-col gap-1">
                 <label htmlFor="confirm-password" className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">
                   Confirm Password<span className="text-error ml-0.5">*</span>
                 </label>
-                <input
-                  id="confirm-password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) => setPasswordForm((f) => ({ ...f, confirmPassword: e.target.value }))}
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
-                />
+                <div className="relative">
+                  <input
+                    id="confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) => setPasswordForm((f) => ({ ...f, confirmPassword: e.target.value }))}
+                    className="w-full px-4 py-2 pr-11 border border-outline-variant rounded-lg bg-transparent text-on-surface text-sm focus:outline-none focus:border-primary"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((visible) => !visible)}
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-on-surface-variant hover:text-on-surface cursor-pointer"
+                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  >
+                    <span className="material-symbols-outlined text-[19px]">
+                      {showConfirmPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </button>
+                </div>
               </div>
               {passwordError && (
                 <p className="text-[11px] font-medium text-error rounded-lg border border-error/20 bg-error/5 px-3 py-2">
@@ -1223,6 +1270,7 @@ function ProfilePageContent() {
         <EngagementSurveyViewer
           survey={viewingSurvey}
           onClose={() => setViewingSurvey(null)}
+          template={engagementSurveyTemplate}
         />
       )}
 
@@ -1230,6 +1278,7 @@ function ProfilePageContent() {
         <PostFellowshipSurveyViewer
           survey={viewingPostFellowship}
           onClose={() => setViewingPostFellowship(null)}
+          template={postFellowshipSurveyTemplate}
         />
       )}
 

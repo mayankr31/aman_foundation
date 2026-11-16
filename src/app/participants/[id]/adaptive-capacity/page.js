@@ -167,7 +167,7 @@ export default function AdaptiveCapacitySurveyPage() {
       const data = await res.json();
       if (data.success) {
         toast.success("Adaptive Capacity Assessment submitted successfully!");
-        router.push(`/beneficiaries/${id}`);
+        router.push(`/participants/${id}`);
       } else {
         toast.error("Error submitting survey: " + data.error);
       }
@@ -189,9 +189,9 @@ export default function AdaptiveCapacitySurveyPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto w-full">
-      <Link href={`/beneficiaries/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-sans font-bold text-sm">
+      <Link href={`/participants/${id}`} className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity mb-4 w-fit font-sans font-bold text-sm">
         <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-        Back to Beneficiary Profile
+        Back to Participant Profile
       </Link>
 
       <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden mb-8">
@@ -205,7 +205,7 @@ export default function AdaptiveCapacitySurveyPage() {
         {/* Survey Details Header */}
         <div className="bg-surface-container-lowest p-6 border-b border-surface-container-highest grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-on-surface-variant font-bold">Member ID (Beneficiary ID)</p>
+            <p className="text-sm text-on-surface-variant font-bold">Member ID (Participant ID)</p>
             <p className="text-on-surface font-medium">{id}</p>
           </div>
           <div>

@@ -132,7 +132,7 @@ export default function GoatRearing() {
         });
         const json = await res.json();
         if (!json.success) {
-          alert(json.error || "Failed to create new beneficiary");
+          alert(json.error || "Failed to create new participant");
           return;
         }
         benId = json.data.id;
@@ -374,7 +374,7 @@ export default function GoatRearing() {
             Goat Rearing Distribution &amp; Health
           </h2>
           <p className="page-description mt-2">
-            Monitoring livelihood impact through livestock distribution metrics, health tracking, and return on investment for rural beneficiaries.
+            Monitoring livelihood impact through livestock distribution metrics, health tracking, and return on investment for rural participants.
           </p>
         </div>
         <div className="flex flex-wrap gap-3 shrink-0 font-sans">
@@ -401,7 +401,7 @@ export default function GoatRearing() {
           <div className="bg-surface-container-lowest rounded-lg p-6 pt-8 pl-8 shadow-ambient relative overflow-hidden group border border-outline-variant/10">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
             <span className="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant mb-4 block font-bold">
-              Total Beneficiaries
+              Total Participants
             </span>
             <div className="flex items-baseline gap-3">
               <span className="stat-value text-primary">{beneficiaryCount.toLocaleString()}</span>

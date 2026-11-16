@@ -11,6 +11,7 @@ import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import EditProgramModal from "@/components/EditProgramModal";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -45,6 +46,7 @@ export default function ProgramDetail() {
 
   // Delete program
   const [showDeleteProgram, setShowDeleteProgram] = useState(false);
+  const [showEditProgram, setShowEditProgram] = useState(false);
 
   // Event modal
   const [showEventModal, setShowEventModal] = useState(false);
@@ -117,9 +119,9 @@ export default function ProgramDetail() {
         setShowEnrollModal(false);
         setSelectedBenId(""); setEnrollNotes(""); setEnrollAttrs({});
         setRefreshTrigger((p) => p + 1);
-        alert("Beneficiary enrolled successfully");
+        alert("Participant enrolled successfully");
       } else {
-        alert(json.error || "Failed to enroll beneficiary");
+        alert(json.error || "Failed to enroll participant");
       }
     } catch (err) {
       console.error("Enroll error:", err);
@@ -225,7 +227,7 @@ export default function ProgramDetail() {
     setSearchFellowQ("");
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch("/api/fellows", { headers });
+      const res = await fetch("/api/fellows?all=1", { headers });
       const json = await res.json();
       if (json.success) setAllFellows(json.data);
     } catch (err) {
@@ -448,6 +450,14 @@ export default function ProgramDetail() {
           <p className="page-description mt-2">{program.description || "No description"}</p>
         </div>
         <div className="flex flex-wrap gap-3 shrink-0">
+          {(isAdmin || canManagePeople) && (
+            <button
+              onClick={() => setShowEditProgram(true)}
+              className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-xs font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
+            >
+              <span className="material-symbols-outlined text-sm">edit</span>Edit Program
+            </button>
+          )}
           {canDeleteRecords && (
             <button
               onClick={() => setShowDeleteProgram(true)}
@@ -460,7 +470,7 @@ export default function ProgramDetail() {
             onClick={openEnrollModal}
             className="bg-primary text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg active:scale-95 cursor-pointer border-none"
           >
-            <span className="material-symbols-outlined text-sm">person_add</span>Add Beneficiary
+            <span className="material-symbols-outlined text-sm">person_add</span>Add Participant
           </button>
         </div>
       </div>
@@ -503,7 +513,7 @@ export default function ProgramDetail() {
             <span className="material-symbols-outlined text-primary">supervisor_account</span>
             Assigned Staff ({assignedManagers.length})
           </h3>
-          {canManagePeople && (
+          {isAdmin && (
             <button
               onClick={openManagerModal}
               className="text-primary hover:bg-primary/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer border-none bg-transparent"
@@ -530,7 +540,7 @@ export default function ProgramDetail() {
                     </span>
                   )}
                 </div>
-                {canManagePeople && (
+                {isAdmin && (
                   <button onClick={() => handleRemoveManager(pm.userId)} className="p-1 hover:bg-error-container rounded-full cursor-pointer text-error border-none bg-transparent">
                     <span className="material-symbols-outlined text-[14px]">close</span>
                   </button>
@@ -584,7 +594,7 @@ export default function ProgramDetail() {
       {/* Beneficiaries Table */}
       <div className="bg-surface-container-lowest rounded-lg shadow-ambient border border-outline-variant/10 overflow-hidden">
         <div className="p-6 border-b border-outline-variant/10">
-          <h3 className="text-lg font-bold text-on-surface">Enrolled Beneficiaries</h3>
+          <h3 className="text-lg font-bold text-on-surface">Enrolled Participants</h3>
         </div>
         <div className="max-h-[55vh] overflow-auto pr-1">
           <table className="mobile-card-table w-full min-w-[760px] table-fixed text-sm font-sans">
@@ -603,7 +613,7 @@ export default function ProgramDetail() {
               {assignments.length === 0 ? (
                 <tr>
                   <td colSpan={4 + (config?.tableColumns?.length || 0)} className="px-6 py-12 text-center text-sm text-slate-400 italic">
-                    No beneficiaries enrolled yet. Click &ldquo;Add Beneficiary&rdquo; to get started.
+                    No participants enrolled yet. Click &ldquo;Add Participant&rdquo; to get started.
                   </td>
                 </tr>
               ) : (
@@ -655,7 +665,7 @@ export default function ProgramDetail() {
                           <button onClick={() => { setDeleteAssignId(assign.id); setDeleteAssignName(b.name || "Unknown"); }} className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent" title="Remove">
                             <span className="material-symbols-outlined text-sm">close</span>
                           </button>
-                          <Link href={`/beneficiaries/${b.id}`} className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-on-surface transition-colors" title="View profile">
+                          <Link href={`/participants/${b.id}`} className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-on-surface transition-colors" title="View profile">
                             <span className="material-symbols-outlined text-sm">open_in_new</span>
                           </Link>
                         </div>
@@ -719,16 +729,16 @@ export default function ProgramDetail() {
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4" onClick={() => setShowEnrollModal(false)}>
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 shadow-2xl space-y-6 font-sans border border-outline-variant/10 text-on-surface" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold">Enroll Beneficiary — {program.name}</h3>
+              <h3 className="text-lg font-bold">Enroll Participant — {program.name}</h3>
               <button onClick={() => setShowEnrollModal(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full cursor-pointer border-none bg-transparent">
                 <span className="material-symbols-outlined font-bold">close</span>
               </button>
             </div>
             <form onSubmit={handleEnroll} className="space-y-4 text-sm">
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Beneficiary</label>
+                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Participant</label>
                 <select value={selectedBenId} onChange={(e) => setSelectedBenId(e.target.value)} required className="px-4 py-2 border rounded-lg focus:outline-none focus:border-primary border-outline-variant bg-transparent text-on-surface font-sans">
-                  <option value="">Select beneficiary...</option>
+                  <option value="">Select participant...</option>
                   {unenrolledBens.map((b) => (
                     <option key={b.id} value={b.id}>{b.name} ({b.enrolmentId})</option>
                   ))}
@@ -811,6 +821,15 @@ export default function ProgramDetail() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Program */}
+      {showEditProgram && program && (
+        <EditProgramModal
+          program={program}
+          onClose={() => setShowEditProgram(false)}
+          onSaved={() => setRefreshTrigger((p) => p + 1)}
+        />
       )}
 
       {/* Delete Program Confirmation */}
@@ -925,7 +944,7 @@ export default function ProgramDetail() {
               </button>
             </div>
             <div className="p-6">
-              <p className="text-sm text-on-surface-variant mb-4">Assign or remove staff for this program. Assigned staff can manage the beneficiaries enrolled in it.</p>
+              <p className="text-sm text-on-surface-variant mb-4">Assign or remove staff for this program. Assigned staff can manage the participants enrolled in it.</p>
               <input type="text" placeholder="Search staff..." value={searchManagerQ} onChange={(e) => setSearchManagerQ(e.target.value)}
                 className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
               <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -971,7 +990,7 @@ export default function ProgramDetail() {
               </button>
             </div>
             <div className="p-6">
-              <p className="text-sm text-on-surface-variant mb-4">Assign or remove Fellows for this program. Fellows can view the program and its beneficiaries.</p>
+              <p className="text-sm text-on-surface-variant mb-4">Assign or remove Fellows for this program. Fellows can view the program and its participants.</p>
               <input type="text" placeholder="Search fellows..." value={searchFellowQ} onChange={(e) => setSearchFellowQ(e.target.value)}
                 className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-surface text-sm text-on-surface focus:outline-none focus:border-primary mb-4" />
               <div className="space-y-2 max-h-96 overflow-y-auto">

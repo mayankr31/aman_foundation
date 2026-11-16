@@ -46,7 +46,7 @@ export async function POST(req, { params }) {
       where: { id: beneficiaryId },
     });
     if (!beneficiary) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     // Check for existing assignment (upsert)

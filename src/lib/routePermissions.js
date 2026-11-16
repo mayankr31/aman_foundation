@@ -30,6 +30,7 @@ export const ROUTE_PERMISSION_MAP = [
   ["/education", "education"],
   ["/fellow-observations", "fellow-observations"],
   ["/livelihood", "livelihood"],
+  ["/participants", "livelihood"],
   ["/beneficiaries", "livelihood"],
   ["/disaster-relief", "disaster-relief"],
   ["/travel/manage", "travel-management"],
@@ -45,11 +46,13 @@ export const ROUTE_PERMISSION_MAP = [
 // Routes that are always accessible to any authenticated user.
 const OPEN_PATHS = ["/", "/profile"];
 
-/** `/beneficiaries/<id>` (and its sub-pages) can also be opened by education users. */
-export function isBeneficiaryProfilePath(pathname) {
+/** `/participants/<id>` (and its sub-pages) can also be opened by education users. */
+export function isParticipantProfilePath(pathname) {
   if (!pathname) return false;
-  if (pathname === "/beneficiaries" || pathname === "/beneficiaries/") return false;
-  return pathname.startsWith("/beneficiaries/");
+  const profileRoots = ["/participants", "/beneficiaries"];
+  return profileRoots.some(
+    (root) => pathname !== root && pathname !== `${root}/` && pathname.startsWith(`${root}/`)
+  );
 }
 
 export function getPageForPath(pathname) {

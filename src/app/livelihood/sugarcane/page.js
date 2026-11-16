@@ -142,7 +142,7 @@ export default function SugarcaneCultivation() {
         });
         const json = await res.json();
         if (!json.success) {
-          alert(json.error || "Failed to create new beneficiary");
+          alert(json.error || "Failed to create new participant");
           return;
         }
         benId = json.data.id;
@@ -546,7 +546,7 @@ export default function SugarcaneCultivation() {
           <div className="mb-6">
             <h3 className="text-lg font-bold text-on-surface">Sugarcane Programs Overview</h3>
             <p className="text-sm text-on-surface-variant mt-1">
-              High-level distribution schemes mapping allotted land parcels, yield targets, and beneficiary participation.
+              High-level distribution schemes mapping allotted land parcels, yield targets, and participant involvement.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans">

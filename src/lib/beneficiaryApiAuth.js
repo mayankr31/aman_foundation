@@ -13,13 +13,13 @@ export async function requireBeneficiaryAccess(req, beneficiaryId, action = "REA
 
   const allowed =
     action === "WRITE"
-      ? await canEditBeneficiary(user)
+      ? await canEditBeneficiary(user, beneficiaryId)
       : await canViewBeneficiary(user, beneficiaryId);
 
   if (!allowed) {
     return {
       error: NextResponse.json(
-        { success: false, error: "Forbidden: You do not have access to this beneficiary" },
+        { success: false, error: "Forbidden: You do not have access to this participant" },
         { status: 403 }
       ),
     };

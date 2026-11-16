@@ -47,7 +47,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
         "/livelihood/farm",
         "/livelihood/non-farm",
         "/livelihood/programs",
-        "/beneficiaries",
+        "/participants",
       ].some(path => pathname.startsWith(path))
     ) {
       setLivelihoodOpen(true);
@@ -389,11 +389,11 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                     Non-Farm Programs
                   </Link>
                   <Link
-                    className={sublinkClass(pathname === "/beneficiaries")}
-                    href="/beneficiaries"
+                    className={sublinkClass(pathname === "/participants")}
+                    href="/participants"
                     onClick={onClose}
                   >
-                    Beneficiaries
+                    Participants
                   </Link>
                 </div>
               )}

@@ -221,7 +221,7 @@ function buildKpiConfig(role) {
       { key: "fellows", label: "Fellows", icon: "badge", tone: "sky" },
       { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
       { key: "nonFarmPrograms", label: "Non-Farm Programs", icon: "pets", tone: "amber" },
-      { key: "beneficiaries", label: "Beneficiaries", icon: "volunteer_activism", tone: "amber" },
+      { key: "beneficiaries", label: "Participants", icon: "volunteer_activism", tone: "amber" },
     ];
   }
 
@@ -231,7 +231,7 @@ function buildKpiConfig(role) {
     { key: "afterSchoolStudents", label: "After School Students", icon: "escalator_warning", tone: "emerald" },
     { key: "afterSchools", label: "After Schools", icon: "cottage", tone: "emerald" },
     { key: "fellows", label: "Fellows", icon: "badge", tone: "sky" },
-    { key: "beneficiaries", label: "Beneficiaries", icon: "volunteer_activism", tone: "amber" },
+    { key: "beneficiaries", label: "Participants", icon: "volunteer_activism", tone: "amber" },
     { key: "farmPrograms", label: "Farm Programs", icon: "agriculture", tone: "amber" },
     { key: "nonFarmPrograms", label: "Non-Farm Programs", icon: "pets", tone: "amber" },
   ];

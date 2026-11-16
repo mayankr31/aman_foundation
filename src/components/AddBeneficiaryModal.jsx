@@ -82,7 +82,7 @@ export default function AddBeneficiaryModal({
   title,
 }) {
   const { token } = useAuth();
-  const heading = title || (studentId ? "Add Parents Details" : "Add New Beneficiary");
+  const heading = title || (studentId ? "Add Parents Details" : "Add New Participant");
   const toast = useToast();
 
   // Keep the page behind the modal from scrolling while it is open.
@@ -290,7 +290,7 @@ export default function AddBeneficiaryModal({
       const json = await res.json();
 
       if (!json.success) {
-        toast.error(json.error || "Failed to register beneficiary");
+        toast.error(json.error || "Failed to register participant");
         return;
       }
 
@@ -307,12 +307,12 @@ export default function AddBeneficiaryModal({
         const surveyJson = await surveyRes.json();
 
         if (surveyJson.success) {
-          toast.success(`Registered new beneficiary: ${form.name.trim()}`);
+          toast.success(`Registered new participant: ${form.name.trim()}`);
         } else {
-          toast.error("Beneficiary created, but KYR form could not be saved.");
+          toast.error("Participant created, but KYR form could not be saved.");
         }
       } else if (surveyPayload) {
-        toast.success(`Registered new beneficiary: ${form.name.trim()}`);
+        toast.success(`Registered new participant: ${form.name.trim()}`);
       } else {
         toast.success(
           studentId
@@ -325,7 +325,7 @@ export default function AddBeneficiaryModal({
       onClose?.();
     } catch (err) {
       console.error("Failed to add beneficiary:", err);
-      toast.error("Failed to add beneficiary. Please try again.");
+      toast.error("Failed to add participant. Please try again.");
     }
   };
 
@@ -400,7 +400,7 @@ export default function AddBeneficiaryModal({
           <form onSubmit={handleNext} noValidate className="space-y-4 text-sm">
             <p className="text-[11px] font-semibold text-on-surface-variant">
               Basic details are required. Identity proofs and bank details are optional — select
-              <span className="font-bold"> Yes</span> only for the documents the beneficiary has.
+              <span className="font-bold"> Yes</span> only for the documents the participant has.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
@@ -695,14 +695,14 @@ export default function AddBeneficiaryModal({
             <div className="pt-2">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Identity Proofs</h4>
               <p className="text-[10px] text-on-surface-variant mb-3">
-                Tell us whether the beneficiary has each document. Details are only required when you select Yes.
+                Tell us whether the participant has each document. Details are only required when you select Yes.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5 rounded-xl border border-surface-container-high p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className={labelClass}>Aadhar Number</label>
                     <YesNoToggle
-                      label="Does the beneficiary have an Aadhaar card?"
+                      label="Does the participant have an Aadhaar card?"
                       value={form.hasAadhar}
                       onChange={(value) => updateProof("hasAadhar", "aadhar", value)}
                     />
@@ -731,7 +731,7 @@ export default function AddBeneficiaryModal({
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className={labelClass}>PAN Card</label>
                     <YesNoToggle
-                      label="Does the beneficiary have a PAN card?"
+                      label="Does the participant have a PAN card?"
                       value={form.hasPanCard}
                       onChange={(value) => updateProof("hasPanCard", "panCard", value)}
                     />
@@ -758,7 +758,7 @@ export default function AddBeneficiaryModal({
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className={labelClass}>Voter ID</label>
                     <YesNoToggle
-                      label="Does the beneficiary have a Voter ID?"
+                      label="Does the participant have a Voter ID?"
                       value={form.hasVoterId}
                       onChange={(value) => updateProof("hasVoterId", "voterId", value)}
                     />
@@ -785,7 +785,7 @@ export default function AddBeneficiaryModal({
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className={labelClass}>Ration Card</label>
                     <YesNoToggle
-                      label="Does the beneficiary have a Ration Card?"
+                      label="Does the participant have a Ration Card?"
                       value={form.hasRationCard}
                       onChange={(value) => updateProof("hasRationCard", "rationCard", value)}
                     />
@@ -813,7 +813,7 @@ export default function AddBeneficiaryModal({
 
             <div className="pt-2">
               <h4 className="text-xs font-bold text-primary uppercase tracking-wide mb-2">Bank Details</h4>
-              <p className="text-[10px] text-on-surface-variant mb-3">Optional. Add these later from the beneficiary profile if not available now.</p>
+              <p className="text-[10px] text-on-surface-variant mb-3">Optional. Add these later from the participant profile if not available now.</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className={labelClass}>Bank Name</label>
@@ -886,7 +886,7 @@ export default function AddBeneficiaryModal({
                 <p data-add-error className="text-[11px] font-semibold text-error mt-1">{errors.programId}</p>
               )}
               <p className="text-xs text-on-surface-variant italic mt-2">
-                The beneficiary will be assigned to this program.
+                The participant will be assigned to this program.
               </p>
             </div>
 

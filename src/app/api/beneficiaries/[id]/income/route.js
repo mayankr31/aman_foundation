@@ -2,17 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { canViewBeneficiary } from "@/lib/beneficiaryAccess";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-async function canPmAccessBeneficiary(userId, beneficiaryId) {
-  const row = await prisma.beneficiaryLivelihood.findFirst({
-    where: { beneficiaryId, program: { programManagers: { some: { userId } } } },
-    select: { id: true },
-  });
-  return !!row;
-}
+import { canEditBeneficiary, canViewBeneficiary } from "@/lib/beneficiaryAccess";
 
 async function resolveBeneficiaryId(id) {
   if (!id || id === "undefined" || id === "null") return null;
@@ -61,11 +51,11 @@ export async function GET(req, { params }) {
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
     if (!(await canViewBeneficiary(user, beneficiaryId))) {
-      return NextResponse.json({ error: "Forbidden: You do not have access to this beneficiary" }, { status: 403 });
+      return NextResponse.json({ error: "Forbidden: You do not have access to this participant" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);
@@ -101,23 +91,15 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    const allowedRoles = ["ADMIN", "FELLOW", ...PROGRAM_ROLES];
-    if (!allowedRoles.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access required" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
-    if (
-      PROGRAM_ROLES.includes(user.role.name) &&
-      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
-    ) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -177,23 +159,15 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    const allowedRoles = ["ADMIN", "FELLOW", ...PROGRAM_ROLES];
-    if (!allowedRoles.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access required" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
-    if (
-      PROGRAM_ROLES.includes(user.role.name) &&
-      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
-    ) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -274,23 +248,15 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    const allowedRoles = ["ADMIN", "FELLOW", ...PROGRAM_ROLES];
-    if (!allowedRoles.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access required" }, { status: 403 });
-    }
-
     const { id } = await params;
     const beneficiaryId = await resolveBeneficiaryId(id);
 
     if (!beneficiaryId) {
-      return NextResponse.json({ error: "Beneficiary not found" }, { status: 404 });
+      return NextResponse.json({ error: "Participant not found" }, { status: 404 });
     }
 
-    if (
-      PROGRAM_ROLES.includes(user.role.name) &&
-      !(await canPmAccessBeneficiary(user.id, beneficiaryId))
-    ) {
-      return NextResponse.json({ error: "Forbidden: You are not assigned to this beneficiary's program" }, { status: 403 });
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
     const body = await req.json();

@@ -5,11 +5,14 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useLivelihoodTypes } from "@/lib/useLivelihoodTypes";
 import LivelihoodTypesModal from "@/components/LivelihoodTypesModal";
+import EditProgramModal from "@/components/EditProgramModal";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 
+const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
 export default function FarmPrograms() {
-  const { token, canDeleteRecords } = useAuth();
+  const { token, canDeleteRecords, user } = useAuth();
   const { getTypeConfig, getTypesByCategory, refresh: refreshTypes } = useLivelihoodTypes(token);
   const [programs, setPrograms] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -27,6 +30,11 @@ export default function FarmPrograms() {
   // Delete confirmation
   const [deleteId, setDeleteId] = useState(null);
   const [deleteName, setDeleteName] = useState("");
+
+  // Edit program
+  const [editProgram, setEditProgram] = useState(null);
+
+  const canEditPrograms = canDeleteRecords || PROGRAM_ROLES.includes(user?.roleName);
 
   const farmTypes = getTypesByCategory("FARM");
 
@@ -154,15 +162,24 @@ export default function FarmPrograms() {
               const config = getTypeConfig(prog.type);
               return (
                 <div key={prog.id} className="p-5 border border-surface-container-high rounded-xl bg-surface-container-low/20 space-y-4 hover:bg-surface-container-low transition-colors relative group">
-                  {canDeleteRecords && (
+                  {canEditPrograms && (
                     <div className="absolute top-3 right-3 flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                       <button
-                        onClick={(e) => { e.preventDefault(); setDeleteId(prog.id); setDeleteName(prog.name); }}
-                        className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
-                        title="Delete program"
+                        onClick={(e) => { e.preventDefault(); setEditProgram(prog); }}
+                        className="p-1.5 rounded-full hover:bg-primary/10 text-slate-400 hover:text-primary transition-colors cursor-pointer border-none bg-transparent"
+                        title="Edit program"
                       >
-                        <span className="material-symbols-outlined text-sm">delete</span>
+                        <span className="material-symbols-outlined text-sm">edit</span>
                       </button>
+                      {canDeleteRecords && (
+                        <button
+                          onClick={(e) => { e.preventDefault(); setDeleteId(prog.id); setDeleteName(prog.name); }}
+                          className="p-1.5 rounded-full hover:bg-red-100 text-slate-400 hover:text-red-600 transition-colors cursor-pointer border-none bg-transparent"
+                          title="Delete program"
+                        >
+                          <span className="material-symbols-outlined text-sm">delete</span>
+                        </button>
+                      )}
                     </div>
                   )}
                   <Link href={`/livelihood/programs/${prog.id}`} className="no-underline text-left block">
@@ -236,13 +253,21 @@ export default function FarmPrograms() {
         <div className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4" onClick={() => { setDeleteId(null); setDeleteName(""); }}>
           <div className="bg-white dark:bg-slate-900 rounded-xl max-w-sm w-full p-4 sm:p-6 shadow-2xl space-y-4 font-sans border border-outline-variant/10 text-on-surface max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold text-on-surface">Delete Program</h3>
-            <p className="text-sm text-on-surface-variant">Are you sure you want to delete <strong>{deleteName}</strong>? This will permanently remove all associated beneficiary assignments and events.</p>
+            <p className="text-sm text-on-surface-variant">Are you sure you want to delete <strong>{deleteName}</strong>? This will permanently remove all associated participant assignments and events.</p>
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => { setDeleteId(null); setDeleteName(""); }} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-slate-100 transition-colors cursor-pointer bg-transparent">Cancel</button>
               <button onClick={handleDelete} className="px-4 py-2 rounded-full bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors cursor-pointer border-none">Delete</button>
             </div>
           </div>
         </div>
+      )}
+
+      {editProgram && (
+        <EditProgramModal
+          program={editProgram}
+          onClose={() => setEditProgram(null)}
+          onSaved={() => setRefreshTrigger((p) => p + 1)}
+        />
       )}
 
       {showTypesModal && (

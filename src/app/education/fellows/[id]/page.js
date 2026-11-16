@@ -25,6 +25,7 @@ import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import AssignmentsSection from "@/components/AssignmentsSection";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
+import { useSurveyTemplate } from "@/lib/useSurveyTemplate";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
 import dynamic from "next/dynamic";
 
@@ -65,6 +66,8 @@ function FellowProfileDetailContent() {
   const [postFellowshipSurveys, setPostFellowshipSurveys] = useState([]);
   const [viewingSurvey, setViewingSurvey] = useState(null);
   const [viewingPostFellowship, setViewingPostFellowship] = useState(null);
+  const { template: engagementSurveyTemplate } = useSurveyTemplate("ENGAGEMENT");
+  const { template: postFellowshipSurveyTemplate } = useSurveyTemplate("POST_FELLOWSHIP");
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Personal Details";
   const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
     activeTab,
@@ -753,7 +756,7 @@ function FellowProfileDetailContent() {
                       </div>
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => exportEngagementSurveyPdf(survey, fellow.name)}
+                          onClick={() => exportEngagementSurveyPdf(survey, fellow.name, engagementSurveyTemplate)}
                           className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                           title="Export as PDF"
                         >
@@ -803,7 +806,7 @@ function FellowProfileDetailContent() {
                       </div>
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => exportPostFellowshipSurveyPdf(survey, fellow.name)}
+                          onClick={() => exportPostFellowshipSurveyPdf(survey, fellow.name, postFellowshipSurveyTemplate)}
                           className="p-2 hover:bg-surface-container rounded-full transition-colors cursor-pointer text-on-surface-variant hover:text-primary"
                           title="Export as PDF"
                         >
@@ -1014,6 +1017,7 @@ function FellowProfileDetailContent() {
         <EngagementSurveyViewer
           survey={viewingSurvey}
           onClose={() => setViewingSurvey(null)}
+          template={engagementSurveyTemplate}
         />
       )}
 
@@ -1021,6 +1025,7 @@ function FellowProfileDetailContent() {
         <PostFellowshipSurveyViewer
           survey={viewingPostFellowship}
           onClose={() => setViewingPostFellowship(null)}
+          template={postFellowshipSurveyTemplate}
         />
       )}
 

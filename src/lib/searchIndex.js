@@ -55,11 +55,11 @@ const BENEFICIARY_TAB_KEYWORDS = {
 const BENEFICIARY_TAB_ENTRIES = BENEFICIARY_TABS.map((tab) => ({
   id: `beneficiary-tab-${tab.slug}`,
   label: tab.label,
-  path: ["Livelihood", "Beneficiaries", "Beneficiary Profile", tab.label],
+  path: ["Livelihood", "Participants", "Participant Profile", tab.label],
   keywords: [tab.label, ...(BENEFICIARY_TAB_KEYWORDS[tab.slug] || [])],
-  href: "/beneficiaries",
+  href: "/participants",
   page: "livelihood",
-  group: "Beneficiary Profile",
+  group: "Participant Profile",
   icon: "menu_book",
 }));
 
@@ -186,12 +186,12 @@ const MODAL_ENTRIES = [
   ...modalTabs({
     idPrefix: "beneficiary-edit",
     labels: ["Personal & Income", "IDs & Bank Details", "Family Registry", "Livestock Inventory", "Programs"],
-    path: ["Livelihood", "Beneficiaries", "Beneficiary Profile", "Edit Beneficiary"],
-    href: "/beneficiaries",
+    path: ["Livelihood", "Participants", "Participant Profile", "Edit Participant"],
+    href: "/participants",
     page: "livelihood",
-    group: "Beneficiary Profile",
+    group: "Participant Profile",
     icon: "edit",
-    keywords: ["edit beneficiary", "edit profile"],
+    keywords: ["edit participant", "edit profile"],
   }),
   // School manage modals
   ...modalTabs({
@@ -271,11 +271,11 @@ export const SEARCH_ENTRIES = [
   // ── Livelihood ────────────────────────────────────────────────────
   { id: "farm-programs", label: "Farm Programs", path: ["Livelihood", "Farm Programs"], keywords: ["farm", "cultivation", "sugarcane", "maize", "rice", "programs"], href: "/livelihood/farm", page: "livelihood", group: "Livelihood", icon: "agriculture" },
   { id: "non-farm-programs", label: "Non-Farm Programs", path: ["Livelihood", "Non-Farm Programs"], keywords: ["non farm", "non-farm", "livestock", "goat", "fish", "poultry", "programs"], href: "/livelihood/non-farm", page: "livelihood", group: "Livelihood", icon: "pets" },
-  { id: "beneficiaries", label: "Beneficiaries", path: ["Livelihood", "Beneficiaries"], keywords: ["beneficiaries", "beneficiary", "families", "master registry"], href: "/beneficiaries", page: "livelihood", group: "Livelihood", icon: "diversity_3" },
-  { id: "beneficiary-profile-hub", label: "Beneficiary Profile", path: ["Livelihood", "Beneficiaries", "Beneficiary Profile"], keywords: ["beneficiary profile", "beneficiary detail", "family profile"], href: "/beneficiaries", page: "livelihood", group: "Beneficiary Profile", icon: "badge" },
-  { id: "beneficiary-solution-plan", label: "Solution Plan", path: ["Livelihood", "Beneficiaries", "Beneficiary Profile", "Solution Board & Planning", "Solution Plan"], keywords: ["solution plan", "plan", "create plan", "edit plan"], href: "/beneficiaries", page: "livelihood", group: "Beneficiary Profile", icon: "checklist" },
-  { id: "beneficiary-solution-board-ref", label: "Resilience Solution Board", path: ["Livelihood", "Beneficiaries", "Beneficiary Profile", "Solution Board & Planning", "Resilience Solution Board"], keywords: ["solution board", "reference", "resilience board"], href: "/beneficiaries", page: "livelihood", group: "Beneficiary Profile", icon: "dashboard_customize" },
-  { id: "beneficiary-survey-responses", label: "Survey Responses", path: ["Livelihood", "Beneficiaries", "Beneficiary Profile", "Survey Responses"], keywords: ["survey response", "responses", "kyr response", "capacity response"], href: "/beneficiaries", page: "livelihood", group: "Beneficiary Profile", icon: "fact_check" },
+  { id: "beneficiaries", label: "Participants", path: ["Livelihood", "Participants"], keywords: ["participants", "participant", "families", "master registry"], href: "/participants", page: "livelihood", group: "Livelihood", icon: "diversity_3" },
+  { id: "beneficiary-profile-hub", label: "Participant Profile", path: ["Livelihood", "Participants", "Participant Profile"], keywords: ["participant profile", "participant detail", "family profile"], href: "/participants", page: "livelihood", group: "Participant Profile", icon: "badge" },
+  { id: "beneficiary-solution-plan", label: "Solution Plan", path: ["Livelihood", "Participants", "Participant Profile", "Solution Board & Planning", "Solution Plan"], keywords: ["solution plan", "plan", "create plan", "edit plan"], href: "/participants", page: "livelihood", group: "Participant Profile", icon: "checklist" },
+  { id: "beneficiary-solution-board-ref", label: "Resilience Solution Board", path: ["Livelihood", "Participants", "Participant Profile", "Solution Board & Planning", "Resilience Solution Board"], keywords: ["solution board", "reference", "resilience board"], href: "/participants", page: "livelihood", group: "Participant Profile", icon: "dashboard_customize" },
+  { id: "beneficiary-survey-responses", label: "Survey Responses", path: ["Livelihood", "Participants", "Participant Profile", "Survey Responses"], keywords: ["survey response", "responses", "kyr response", "capacity response"], href: "/participants", page: "livelihood", group: "Participant Profile", icon: "fact_check" },
   { id: "farm-program-events", label: "Log Farm Program Event", path: ["Livelihood", "Farm Programs", "Program", "Log Event"], keywords: ["event", "events", "log event", "farm event", "activity"], href: "/livelihood/farm", page: "livelihood", group: "Livelihood", icon: "event" },
   { id: "non-farm-program-events", label: "Log Non-Farm Program Event", path: ["Livelihood", "Non-Farm Programs", "Program", "Log Event"], keywords: ["event", "events", "log event", "non farm event", "activity"], href: "/livelihood/non-farm", page: "livelihood", group: "Livelihood", icon: "event" },
   { id: "pta-program-events", label: "PTA Events & Meetings", path: ["Education", "PTA & Programs", "Events"], keywords: ["event", "events", "meeting", "pta event", "log event"], href: "/education/pta", page: "education", group: "Education", icon: "event" },
@@ -315,7 +315,7 @@ export const SEARCH_GROUPS = [
   "After School Centre Profile",
   "Fellow Observations",
   "Livelihood",
-  "Beneficiary Profile",
+  "Participant Profile",
   "HR",
   "Disaster Relief",
   "Admin",

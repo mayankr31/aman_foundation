@@ -9,6 +9,7 @@ import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import { formatRoleLabel } from "@/lib/roles";
 import OnLeaveToday from "@/components/OnLeaveToday";
+import LeaveDetailsModal from "@/components/LeaveDetailsModal";
 import HolidayManagerModal from "@/components/holidays/HolidayManagerModal";
 import {
   POLICY_FLAGS,
@@ -87,6 +88,7 @@ export default function LeaveWorkflow() {
   const [rejectingLeaveId, setRejectingLeaveId] = useState(null);
   const [rejectionReasonText, setRejectionReasonText] = useState("");
   const [isSubmittingRejection, setIsSubmittingRejection] = useState(false);
+  const [viewingLeave, setViewingLeave] = useState(null);
 
   const [showPolicy, setShowPolicy] = useState(false);
   const [policyConfigs, setPolicyConfigs] = useState([]);
@@ -406,7 +408,19 @@ export default function LeaveWorkflow() {
                   (flag) => flag !== POLICY_FLAGS.MEDICAL_CERTIFICATE_REQUIRED
                 );
                 return (
-                  <tr key={leave.id} className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 transition-colors">
+                  <tr
+                    key={leave.id}
+                    onClick={() => setViewingLeave(leave)}
+                    onKeyDown={(event) => {
+                      if (event.target !== event.currentTarget) return;
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setViewingLeave(leave);
+                      }
+                    }}
+                    tabIndex={0}
+                    className="border-b border-surface-container last:border-none hover:bg-surface-container-low/50 focus:bg-surface-container-low/50 focus:outline-none cursor-pointer transition-colors"
+                  >
                     <td data-label="" className="py-4 px-4 font-bold text-on-surface break-words align-top">{leave.user?.name || "Unknown"}</td>
                     <td data-label="Role" className="py-4 px-4 text-xs font-semibold text-slate-500 break-words align-top">{formatRoleLabel(leave.user?.role)}</td>
                     <td data-label="Type" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">
@@ -435,7 +449,19 @@ export default function LeaveWorkflow() {
                       </div>
                     </td>
                     <td data-label="Dates" className="py-4 px-4 font-mono text-xs break-words align-top">{formatStoredDates(leave.dates)}</td>
-                    <td data-label="Reason" className="py-4 px-4 text-xs text-on-surface-variant break-words align-top">{leave.reason}</td>
+                    <td data-label="Reason" className="py-4 px-4 align-top">
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setViewingLeave(leave);
+                        }}
+                        title={leave.reason || "No reason provided"}
+                        className="block w-full max-w-full truncate text-left text-xs text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                      >
+                        {leave.reason || "—"}
+                      </button>
+                    </td>
                     <td data-label="Status" className="py-4 px-4">
                       <div className="flex flex-col gap-1.5 items-start">
                         <span className={`px-2 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
@@ -446,24 +472,43 @@ export default function LeaveWorkflow() {
                           {leave.status}
                         </span>
                         {leave.status === "REJECTED" && leave.rejectionReason && (
-                          <span className="text-[10px] text-rose-600 dark:text-rose-400 font-medium bg-rose-50 dark:bg-rose-900/10 px-2 py-1 rounded-lg border border-rose-100 dark:border-rose-900/30 max-w-[150px] break-words">
+                          <span
+                            className="text-[10px] text-rose-600 dark:text-rose-400 font-medium bg-rose-50 dark:bg-rose-900/10 px-2 py-1 rounded-lg border border-rose-100 dark:border-rose-900/30 max-w-[150px] line-clamp-2 overflow-hidden"
+                            title={leave.rejectionReason}
+                          >
                             <span className="font-bold">Reason:</span> {leave.rejectionReason}
                           </span>
                         )}
                       </div>
                     </td>
                     <td data-label="Actions" className="py-4 px-4 flex gap-2">
+                      <button
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setViewingLeave(leave);
+                        }}
+                        className="px-3 py-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 rounded-lg text-xs font-bold transition-colors"
+                        title="View leave details"
+                      >
+                        View
+                      </button>
                       {canWrite && leave.status === "PENDING" && leave.userId !== currentUser?.id && (
                         <>
                           <button
-                            onClick={() => handleUpdateStatus(leave.id, "APPROVED")}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleUpdateStatus(leave.id, "APPROVED");
+                            }}
                             className="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40 rounded-lg text-xs font-bold transition-colors"
                             title="Approve"
                           >
                             Approve
                           </button>
                           <button
-                            onClick={() => handleRejectClick(leave.id)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleRejectClick(leave.id);
+                            }}
                             className="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-900/40 rounded-lg text-xs font-bold transition-colors"
                             title="Reject"
                           >
@@ -739,6 +784,10 @@ export default function LeaveWorkflow() {
             </div>
           </div>
         </div>
+      )}
+
+      {viewingLeave && (
+        <LeaveDetailsModal leave={viewingLeave} onClose={() => setViewingLeave(null)} />
       )}
 
       {showToast && (

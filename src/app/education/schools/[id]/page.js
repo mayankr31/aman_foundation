@@ -399,6 +399,8 @@ export default function SchoolProfileDetail() {
   const canManageFellows = isAdmin || PROGRAM_ROLES.includes(user?.roleName);
   const canManageStaff =
     isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
+  const isAssignedFellow = assignedFellows.some((f) => f.fellow?.userId === user?.id);
+  const canEditSchoolProfile = isAdmin || isAssignedFellow || canManageStaff;
   const { totalEnrolled = 0, genderRatio = {} } = school;
   const maleCount = genderRatio.male || 0;
   const femaleCount = genderRatio.female || 0;
@@ -437,7 +439,7 @@ export default function SchoolProfileDetail() {
                 {school.name[0]}
               </div>
             )}
-            {isAdmin && (
+            {canEditSchoolProfile && (
               <label className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center cursor-pointer shadow-lg hover:bg-primary-container transition-colors" title={school.img ? "Replace image" : "Upload image"}>
                 <span className="material-symbols-outlined text-[18px]">{uploadingPhoto ? "hourglass_top" : "photo_camera"}</span>
                 <input ref={photoInputRef} type="file" accept="image/*" className="hidden" disabled={uploadingPhoto} onChange={handlePhotoUpload} />
@@ -471,7 +473,7 @@ export default function SchoolProfileDetail() {
           </div>
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
-          {isAdmin && (
+          {canEditSchoolProfile && (
             <button onClick={() => setModal("edit")}
               className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20">
               <span className="material-symbols-outlined text-[18px]">edit</span> Edit Profile

@@ -540,6 +540,11 @@ export type TeamCheckIn = $Result.DefaultSelection<Prisma.$TeamCheckInPayload>
  */
 export type TeamCheckInPromise = $Result.DefaultSelection<Prisma.$TeamCheckInPromisePayload>
 /**
+ * Model SurveyTemplate
+ * 
+ */
+export type SurveyTemplate = $Result.DefaultSelection<Prisma.$SurveyTemplatePayload>
+/**
  * Model InstitutionStudentDataNote
  * 
  */
@@ -1816,6 +1821,16 @@ export class PrismaClient<
   get teamCheckInPromise(): Prisma.TeamCheckInPromiseDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.surveyTemplate`: Exposes CRUD operations for the **SurveyTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SurveyTemplates
+    * const surveyTemplates = await prisma.surveyTemplate.findMany()
+    * ```
+    */
+  get surveyTemplate(): Prisma.SurveyTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.institutionStudentDataNote`: Exposes CRUD operations for the **InstitutionStudentDataNote** model.
     * Example usage:
     * ```ts
@@ -2363,6 +2378,7 @@ export namespace Prisma {
     FellowStudentDataNote: 'FellowStudentDataNote',
     TeamCheckIn: 'TeamCheckIn',
     TeamCheckInPromise: 'TeamCheckInPromise',
+    SurveyTemplate: 'SurveyTemplate',
     InstitutionStudentDataNote: 'InstitutionStudentDataNote'
   };
 
@@ -2379,7 +2395,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "institutionStudentDataNote"
+      modelProps: "role" | "user" | "verificationToken" | "dashboardConfig" | "notification" | "permission" | "rolePermission" | "userPermission" | "school" | "fellow" | "goalSheet" | "pMReflection" | "fellowPerformance" | "performanceRatingCategory" | "fellowReview" | "student" | "studentAttendanceLog" | "studentAttendanceDayLog" | "learningAssessment" | "studentHomework" | "studentTransition" | "migrationRecord" | "incomeRecord" | "fellowSchool" | "program" | "programManagerSchool" | "programManagerAfterSchoolCentre" | "programManagerLivelihoodProgram" | "programManagerTask" | "programManagerTaskComment" | "task" | "taskComment" | "taskDocument" | "asset" | "assetAssignment" | "schoolProgram" | "programEvent" | "beneficiary" | "familyMember" | "livestock" | "livestockHealthLog" | "scheme" | "schemeEnrollment" | "beneficiaryGoatRearing" | "goatRearingProgram" | "goatRearingEvent" | "beneficiarySugarcane" | "sugarcaneProgram" | "livelihoodProgram" | "livelihoodType" | "beneficiaryLivelihood" | "livelihoodEvent" | "fellowLivelihoodProgram" | "disasterIncident" | "helpProvider" | "resourceItem" | "inventoryLedger" | "attendanceLog" | "leave" | "leaveTypeConfig" | "compOffCredit" | "holiday" | "incidentResourceNeed" | "reliefDistribution" | "reliefDistributionItem" | "fellowTask" | "fellowTaskComment" | "resilienceSurvey" | "adaptiveCapacitySurvey" | "absorptiveCapacitySurvey" | "transformativeCapacitySurvey" | "vulnerabilitySurvey" | "solutionPlan" | "coachingRecord" | "engagementSurvey" | "lookBeyondSurvey" | "individualFeedback" | "travelRequest" | "travelExpense" | "reimbursement" | "reimbursementItem" | "fLNCategory" | "fLNQuestion" | "sELQuestion" | "subjectAssessmentTemplate" | "assessmentForm" | "enrollmentResponse" | "subjectAssessmentResponse" | "fLNResponse" | "sELResponse" | "afterSchoolCentre" | "fellowAfterSchoolCentre" | "afterSchoolCentreProgram" | "afterSchoolStudent" | "afterSchoolStudentAttendanceLog" | "afterSchoolStudentAttendanceDayLog" | "afterSchoolLearningAssessment" | "afterSchoolHomework" | "afterSchoolStudentTransition" | "afterSchoolAssessmentForm" | "afterSchoolSubjectAssessmentResponse" | "afterSchoolFLNResponse" | "fellowStudentDataNote" | "teamCheckIn" | "teamCheckInPromise" | "surveyTemplate" | "institutionStudentDataNote"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -10153,6 +10169,80 @@ export namespace Prisma {
           }
         }
       }
+      SurveyTemplate: {
+        payload: Prisma.$SurveyTemplatePayload<ExtArgs>
+        fields: Prisma.SurveyTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SurveyTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SurveyTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.SurveyTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SurveyTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.SurveyTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.SurveyTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.SurveyTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SurveyTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.SurveyTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          update: {
+            args: Prisma.SurveyTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.SurveyTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SurveyTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SurveyTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.SurveyTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SurveyTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.SurveyTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSurveyTemplate>
+          }
+          groupBy: {
+            args: Prisma.SurveyTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SurveyTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SurveyTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<SurveyTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
       InstitutionStudentDataNote: {
         payload: Prisma.$InstitutionStudentDataNotePayload<ExtArgs>
         fields: Prisma.InstitutionStudentDataNoteFieldRefs
@@ -10440,6 +10530,7 @@ export namespace Prisma {
     fellowStudentDataNote?: FellowStudentDataNoteOmit
     teamCheckIn?: TeamCheckInOmit
     teamCheckInPromise?: TeamCheckInPromiseOmit
+    surveyTemplate?: SurveyTemplateOmit
     institutionStudentDataNote?: InstitutionStudentDataNoteOmit
   }
 
@@ -137224,6 +137315,1028 @@ export namespace Prisma {
 
 
   /**
+   * Model SurveyTemplate
+   */
+
+  export type AggregateSurveyTemplate = {
+    _count: SurveyTemplateCountAggregateOutputType | null
+    _min: SurveyTemplateMinAggregateOutputType | null
+    _max: SurveyTemplateMaxAggregateOutputType | null
+  }
+
+  export type SurveyTemplateMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    title: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SurveyTemplateMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    title: string | null
+    updatedBy: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SurveyTemplateCountAggregateOutputType = {
+    id: number
+    key: number
+    title: number
+    config: number
+    updatedBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SurveyTemplateMinAggregateInputType = {
+    id?: true
+    key?: true
+    title?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SurveyTemplateMaxAggregateInputType = {
+    id?: true
+    key?: true
+    title?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SurveyTemplateCountAggregateInputType = {
+    id?: true
+    key?: true
+    title?: true
+    config?: true
+    updatedBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SurveyTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SurveyTemplate to aggregate.
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SurveyTemplates to fetch.
+     */
+    orderBy?: SurveyTemplateOrderByWithRelationInput | SurveyTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SurveyTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SurveyTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SurveyTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SurveyTemplates
+    **/
+    _count?: true | SurveyTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SurveyTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SurveyTemplateMaxAggregateInputType
+  }
+
+  export type GetSurveyTemplateAggregateType<T extends SurveyTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateSurveyTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSurveyTemplate[P]>
+      : GetScalarType<T[P], AggregateSurveyTemplate[P]>
+  }
+
+
+
+
+  export type SurveyTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SurveyTemplateWhereInput
+    orderBy?: SurveyTemplateOrderByWithAggregationInput | SurveyTemplateOrderByWithAggregationInput[]
+    by: SurveyTemplateScalarFieldEnum[] | SurveyTemplateScalarFieldEnum
+    having?: SurveyTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SurveyTemplateCountAggregateInputType | true
+    _min?: SurveyTemplateMinAggregateInputType
+    _max?: SurveyTemplateMaxAggregateInputType
+  }
+
+  export type SurveyTemplateGroupByOutputType = {
+    id: string
+    key: string
+    title: string
+    config: JsonValue
+    updatedBy: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SurveyTemplateCountAggregateOutputType | null
+    _min: SurveyTemplateMinAggregateOutputType | null
+    _max: SurveyTemplateMaxAggregateOutputType | null
+  }
+
+  type GetSurveyTemplateGroupByPayload<T extends SurveyTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SurveyTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SurveyTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SurveyTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], SurveyTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SurveyTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    title?: boolean
+    config?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["surveyTemplate"]>
+
+  export type SurveyTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    title?: boolean
+    config?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["surveyTemplate"]>
+
+  export type SurveyTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    title?: boolean
+    config?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["surveyTemplate"]>
+
+  export type SurveyTemplateSelectScalar = {
+    id?: boolean
+    key?: boolean
+    title?: boolean
+    config?: boolean
+    updatedBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SurveyTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "title" | "config" | "updatedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["surveyTemplate"]>
+
+  export type $SurveyTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SurveyTemplate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      title: string
+      config: Prisma.JsonValue
+      updatedBy: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["surveyTemplate"]>
+    composites: {}
+  }
+
+  type SurveyTemplateGetPayload<S extends boolean | null | undefined | SurveyTemplateDefaultArgs> = $Result.GetResult<Prisma.$SurveyTemplatePayload, S>
+
+  type SurveyTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SurveyTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SurveyTemplateCountAggregateInputType | true
+    }
+
+  export interface SurveyTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SurveyTemplate'], meta: { name: 'SurveyTemplate' } }
+    /**
+     * Find zero or one SurveyTemplate that matches the filter.
+     * @param {SurveyTemplateFindUniqueArgs} args - Arguments to find a SurveyTemplate
+     * @example
+     * // Get one SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SurveyTemplateFindUniqueArgs>(args: SelectSubset<T, SurveyTemplateFindUniqueArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SurveyTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SurveyTemplateFindUniqueOrThrowArgs} args - Arguments to find a SurveyTemplate
+     * @example
+     * // Get one SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SurveyTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, SurveyTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SurveyTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateFindFirstArgs} args - Arguments to find a SurveyTemplate
+     * @example
+     * // Get one SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SurveyTemplateFindFirstArgs>(args?: SelectSubset<T, SurveyTemplateFindFirstArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SurveyTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateFindFirstOrThrowArgs} args - Arguments to find a SurveyTemplate
+     * @example
+     * // Get one SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SurveyTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, SurveyTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SurveyTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SurveyTemplates
+     * const surveyTemplates = await prisma.surveyTemplate.findMany()
+     * 
+     * // Get first 10 SurveyTemplates
+     * const surveyTemplates = await prisma.surveyTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const surveyTemplateWithIdOnly = await prisma.surveyTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SurveyTemplateFindManyArgs>(args?: SelectSubset<T, SurveyTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SurveyTemplate.
+     * @param {SurveyTemplateCreateArgs} args - Arguments to create a SurveyTemplate.
+     * @example
+     * // Create one SurveyTemplate
+     * const SurveyTemplate = await prisma.surveyTemplate.create({
+     *   data: {
+     *     // ... data to create a SurveyTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends SurveyTemplateCreateArgs>(args: SelectSubset<T, SurveyTemplateCreateArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SurveyTemplates.
+     * @param {SurveyTemplateCreateManyArgs} args - Arguments to create many SurveyTemplates.
+     * @example
+     * // Create many SurveyTemplates
+     * const surveyTemplate = await prisma.surveyTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SurveyTemplateCreateManyArgs>(args?: SelectSubset<T, SurveyTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SurveyTemplates and returns the data saved in the database.
+     * @param {SurveyTemplateCreateManyAndReturnArgs} args - Arguments to create many SurveyTemplates.
+     * @example
+     * // Create many SurveyTemplates
+     * const surveyTemplate = await prisma.surveyTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SurveyTemplates and only return the `id`
+     * const surveyTemplateWithIdOnly = await prisma.surveyTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SurveyTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, SurveyTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SurveyTemplate.
+     * @param {SurveyTemplateDeleteArgs} args - Arguments to delete one SurveyTemplate.
+     * @example
+     * // Delete one SurveyTemplate
+     * const SurveyTemplate = await prisma.surveyTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one SurveyTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SurveyTemplateDeleteArgs>(args: SelectSubset<T, SurveyTemplateDeleteArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SurveyTemplate.
+     * @param {SurveyTemplateUpdateArgs} args - Arguments to update one SurveyTemplate.
+     * @example
+     * // Update one SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SurveyTemplateUpdateArgs>(args: SelectSubset<T, SurveyTemplateUpdateArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SurveyTemplates.
+     * @param {SurveyTemplateDeleteManyArgs} args - Arguments to filter SurveyTemplates to delete.
+     * @example
+     * // Delete a few SurveyTemplates
+     * const { count } = await prisma.surveyTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SurveyTemplateDeleteManyArgs>(args?: SelectSubset<T, SurveyTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SurveyTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SurveyTemplates
+     * const surveyTemplate = await prisma.surveyTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SurveyTemplateUpdateManyArgs>(args: SelectSubset<T, SurveyTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SurveyTemplates and returns the data updated in the database.
+     * @param {SurveyTemplateUpdateManyAndReturnArgs} args - Arguments to update many SurveyTemplates.
+     * @example
+     * // Update many SurveyTemplates
+     * const surveyTemplate = await prisma.surveyTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SurveyTemplates and only return the `id`
+     * const surveyTemplateWithIdOnly = await prisma.surveyTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SurveyTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, SurveyTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SurveyTemplate.
+     * @param {SurveyTemplateUpsertArgs} args - Arguments to update or create a SurveyTemplate.
+     * @example
+     * // Update or create a SurveyTemplate
+     * const surveyTemplate = await prisma.surveyTemplate.upsert({
+     *   create: {
+     *     // ... data to create a SurveyTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SurveyTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SurveyTemplateUpsertArgs>(args: SelectSubset<T, SurveyTemplateUpsertArgs<ExtArgs>>): Prisma__SurveyTemplateClient<$Result.GetResult<Prisma.$SurveyTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SurveyTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateCountArgs} args - Arguments to filter SurveyTemplates to count.
+     * @example
+     * // Count the number of SurveyTemplates
+     * const count = await prisma.surveyTemplate.count({
+     *   where: {
+     *     // ... the filter for the SurveyTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends SurveyTemplateCountArgs>(
+      args?: Subset<T, SurveyTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SurveyTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SurveyTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SurveyTemplateAggregateArgs>(args: Subset<T, SurveyTemplateAggregateArgs>): Prisma.PrismaPromise<GetSurveyTemplateAggregateType<T>>
+
+    /**
+     * Group by SurveyTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SurveyTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SurveyTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SurveyTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: SurveyTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SurveyTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSurveyTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SurveyTemplate model
+   */
+  readonly fields: SurveyTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SurveyTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SurveyTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SurveyTemplate model
+   */
+  interface SurveyTemplateFieldRefs {
+    readonly id: FieldRef<"SurveyTemplate", 'String'>
+    readonly key: FieldRef<"SurveyTemplate", 'String'>
+    readonly title: FieldRef<"SurveyTemplate", 'String'>
+    readonly config: FieldRef<"SurveyTemplate", 'Json'>
+    readonly updatedBy: FieldRef<"SurveyTemplate", 'String'>
+    readonly createdAt: FieldRef<"SurveyTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"SurveyTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SurveyTemplate findUnique
+   */
+  export type SurveyTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which SurveyTemplate to fetch.
+     */
+    where: SurveyTemplateWhereUniqueInput
+  }
+
+  /**
+   * SurveyTemplate findUniqueOrThrow
+   */
+  export type SurveyTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which SurveyTemplate to fetch.
+     */
+    where: SurveyTemplateWhereUniqueInput
+  }
+
+  /**
+   * SurveyTemplate findFirst
+   */
+  export type SurveyTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which SurveyTemplate to fetch.
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SurveyTemplates to fetch.
+     */
+    orderBy?: SurveyTemplateOrderByWithRelationInput | SurveyTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SurveyTemplates.
+     */
+    cursor?: SurveyTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SurveyTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SurveyTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SurveyTemplates.
+     */
+    distinct?: SurveyTemplateScalarFieldEnum | SurveyTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SurveyTemplate findFirstOrThrow
+   */
+  export type SurveyTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which SurveyTemplate to fetch.
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SurveyTemplates to fetch.
+     */
+    orderBy?: SurveyTemplateOrderByWithRelationInput | SurveyTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SurveyTemplates.
+     */
+    cursor?: SurveyTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SurveyTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SurveyTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SurveyTemplates.
+     */
+    distinct?: SurveyTemplateScalarFieldEnum | SurveyTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SurveyTemplate findMany
+   */
+  export type SurveyTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter, which SurveyTemplates to fetch.
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SurveyTemplates to fetch.
+     */
+    orderBy?: SurveyTemplateOrderByWithRelationInput | SurveyTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SurveyTemplates.
+     */
+    cursor?: SurveyTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SurveyTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SurveyTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SurveyTemplates.
+     */
+    distinct?: SurveyTemplateScalarFieldEnum | SurveyTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * SurveyTemplate create
+   */
+  export type SurveyTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SurveyTemplate.
+     */
+    data: XOR<SurveyTemplateCreateInput, SurveyTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * SurveyTemplate createMany
+   */
+  export type SurveyTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SurveyTemplates.
+     */
+    data: SurveyTemplateCreateManyInput | SurveyTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SurveyTemplate createManyAndReturn
+   */
+  export type SurveyTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many SurveyTemplates.
+     */
+    data: SurveyTemplateCreateManyInput | SurveyTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SurveyTemplate update
+   */
+  export type SurveyTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SurveyTemplate.
+     */
+    data: XOR<SurveyTemplateUpdateInput, SurveyTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which SurveyTemplate to update.
+     */
+    where: SurveyTemplateWhereUniqueInput
+  }
+
+  /**
+   * SurveyTemplate updateMany
+   */
+  export type SurveyTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SurveyTemplates.
+     */
+    data: XOR<SurveyTemplateUpdateManyMutationInput, SurveyTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which SurveyTemplates to update
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * Limit how many SurveyTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SurveyTemplate updateManyAndReturn
+   */
+  export type SurveyTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update SurveyTemplates.
+     */
+    data: XOR<SurveyTemplateUpdateManyMutationInput, SurveyTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which SurveyTemplates to update
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * Limit how many SurveyTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SurveyTemplate upsert
+   */
+  export type SurveyTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SurveyTemplate to update in case it exists.
+     */
+    where: SurveyTemplateWhereUniqueInput
+    /**
+     * In case the SurveyTemplate found by the `where` argument doesn't exist, create a new SurveyTemplate with this data.
+     */
+    create: XOR<SurveyTemplateCreateInput, SurveyTemplateUncheckedCreateInput>
+    /**
+     * In case the SurveyTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SurveyTemplateUpdateInput, SurveyTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * SurveyTemplate delete
+   */
+  export type SurveyTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+    /**
+     * Filter which SurveyTemplate to delete.
+     */
+    where: SurveyTemplateWhereUniqueInput
+  }
+
+  /**
+   * SurveyTemplate deleteMany
+   */
+  export type SurveyTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SurveyTemplates to delete
+     */
+    where?: SurveyTemplateWhereInput
+    /**
+     * Limit how many SurveyTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SurveyTemplate without action
+   */
+  export type SurveyTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SurveyTemplate
+     */
+    select?: SurveyTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SurveyTemplate
+     */
+    omit?: SurveyTemplateOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model InstitutionStudentDataNote
    */
 
@@ -139973,6 +141086,19 @@ export namespace Prisma {
   };
 
   export type TeamCheckInPromiseScalarFieldEnum = (typeof TeamCheckInPromiseScalarFieldEnum)[keyof typeof TeamCheckInPromiseScalarFieldEnum]
+
+
+  export const SurveyTemplateScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    title: 'title',
+    config: 'config',
+    updatedBy: 'updatedBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SurveyTemplateScalarFieldEnum = (typeof SurveyTemplateScalarFieldEnum)[keyof typeof SurveyTemplateScalarFieldEnum]
 
 
   export const InstitutionStudentDataNoteScalarFieldEnum: {
@@ -149247,6 +150373,68 @@ export namespace Prisma {
     order?: IntWithAggregatesFilter<"TeamCheckInPromise"> | number
     createdAt?: DateTimeWithAggregatesFilter<"TeamCheckInPromise"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TeamCheckInPromise"> | Date | string
+  }
+
+  export type SurveyTemplateWhereInput = {
+    AND?: SurveyTemplateWhereInput | SurveyTemplateWhereInput[]
+    OR?: SurveyTemplateWhereInput[]
+    NOT?: SurveyTemplateWhereInput | SurveyTemplateWhereInput[]
+    id?: StringFilter<"SurveyTemplate"> | string
+    key?: StringFilter<"SurveyTemplate"> | string
+    title?: StringFilter<"SurveyTemplate"> | string
+    config?: JsonFilter<"SurveyTemplate">
+    updatedBy?: StringNullableFilter<"SurveyTemplate"> | string | null
+    createdAt?: DateTimeFilter<"SurveyTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"SurveyTemplate"> | Date | string
+  }
+
+  export type SurveyTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    title?: SortOrder
+    config?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SurveyTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: SurveyTemplateWhereInput | SurveyTemplateWhereInput[]
+    OR?: SurveyTemplateWhereInput[]
+    NOT?: SurveyTemplateWhereInput | SurveyTemplateWhereInput[]
+    title?: StringFilter<"SurveyTemplate"> | string
+    config?: JsonFilter<"SurveyTemplate">
+    updatedBy?: StringNullableFilter<"SurveyTemplate"> | string | null
+    createdAt?: DateTimeFilter<"SurveyTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"SurveyTemplate"> | Date | string
+  }, "id" | "key">
+
+  export type SurveyTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    title?: SortOrder
+    config?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SurveyTemplateCountOrderByAggregateInput
+    _max?: SurveyTemplateMaxOrderByAggregateInput
+    _min?: SurveyTemplateMinOrderByAggregateInput
+  }
+
+  export type SurveyTemplateScalarWhereWithAggregatesInput = {
+    AND?: SurveyTemplateScalarWhereWithAggregatesInput | SurveyTemplateScalarWhereWithAggregatesInput[]
+    OR?: SurveyTemplateScalarWhereWithAggregatesInput[]
+    NOT?: SurveyTemplateScalarWhereWithAggregatesInput | SurveyTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SurveyTemplate"> | string
+    key?: StringWithAggregatesFilter<"SurveyTemplate"> | string
+    title?: StringWithAggregatesFilter<"SurveyTemplate"> | string
+    config?: JsonWithAggregatesFilter<"SurveyTemplate">
+    updatedBy?: StringNullableWithAggregatesFilter<"SurveyTemplate"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SurveyTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SurveyTemplate"> | Date | string
   }
 
   export type InstitutionStudentDataNoteWhereInput = {
@@ -159259,6 +160447,76 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SurveyTemplateCreateInput = {
+    id?: string
+    key: string
+    title: string
+    config: JsonNullValueInput | InputJsonValue
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SurveyTemplateUncheckedCreateInput = {
+    id?: string
+    key: string
+    title: string
+    config: JsonNullValueInput | InputJsonValue
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SurveyTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    config?: JsonNullValueInput | InputJsonValue
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SurveyTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    config?: JsonNullValueInput | InputJsonValue
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SurveyTemplateCreateManyInput = {
+    id?: string
+    key: string
+    title: string
+    config: JsonNullValueInput | InputJsonValue
+    updatedBy?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SurveyTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    config?: JsonNullValueInput | InputJsonValue
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SurveyTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    config?: JsonNullValueInput | InputJsonValue
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type InstitutionStudentDataNoteCreateInput = {
     id?: string
     scopeType: string
@@ -165563,6 +166821,34 @@ export namespace Prisma {
 
   export type TeamCheckInPromiseSumOrderByAggregateInput = {
     order?: SortOrder
+  }
+
+  export type SurveyTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    title?: SortOrder
+    config?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SurveyTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    title?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SurveyTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    title?: SortOrder
+    updatedBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type InstitutionStudentDataNoteScopeTypeScopeIdSessionPhaseSectionKeySourceCompoundUniqueInput = {

@@ -147,6 +147,7 @@ function BeneficiaryProfileDetailContent() {
   const toast = useToast();
   const activeTab = labelFromSlug(searchParams.get("tab")) || "Program History";
   const [beneficiary, setBeneficiary] = useState(null);
+  const canEditParticipant = canWrite && beneficiary?.editable !== false;
   const [loading, setLoading] = useState(true);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
   const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
@@ -637,10 +638,10 @@ function BeneficiaryProfileDetailContent() {
       });
       const json = await res.json();
       if (json.success) {
-        toast.success("Beneficiary deleted successfully.");
-        window.location.href = "/beneficiaries";
+        toast.success("Participant deleted successfully.");
+        window.location.href = "/participants";
       } else {
-        alert(json.error || "Failed to delete beneficiary");
+        alert(json.error || "Failed to delete participant");
       }
     } catch (err) {
       console.error("Delete beneficiary error:", err);
@@ -956,7 +957,7 @@ function BeneficiaryProfileDetailContent() {
   }
 
   if (!beneficiary) {
-    return <div className="p-8 text-center text-on-surface-variant font-medium">Beneficiary not found</div>;
+    return <div className="p-8 text-center text-on-surface-variant font-medium">Participant not found</div>;
   }
 
   const resolveSelection = (list, selectedId) => {
@@ -1077,8 +1078,8 @@ function BeneficiaryProfileDetailContent() {
   const locationSuffix = locationLabel ? ` from ${locationLabel}` : "";
   const profileDescription =
     programCount > 0
-      ? `Rural development and livelihood beneficiary${locationSuffix}. Enrolled in ${programCount} micro-development program${programCount === 1 ? "" : "s"}.`
-      : `Rural development and livelihood beneficiary${locationSuffix}, registered in the livelihood master registry.`;
+      ? `Rural development and livelihood participant${locationSuffix}. Enrolled in ${programCount} micro-development program${programCount === 1 ? "" : "s"}.`
+      : `Rural development and livelihood participant${locationSuffix}, registered in the livelihood master registry.`;
   const profileAnnualIncome =
     beneficiary.monthlyIncome != null
       ? beneficiary.monthlyIncome * 12
@@ -1139,14 +1140,14 @@ function BeneficiaryProfileDetailContent() {
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
       {/* Back link */}
       <Link
-        href={canBrowseDirectory ? "/beneficiaries" : "/education/students"}
+        href={canBrowseDirectory ? "/participants" : "/education/students"}
         className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors mb-4 group w-fit"
       >
         <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform tracking-normal font-bold">
           arrow_back
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest font-sans">
-          {canBrowseDirectory ? "Back to Beneficiaries Directory" : "Back to Students"}
+          {canBrowseDirectory ? "Back to Participants Directory" : "Back to Students"}
         </span>
       </Link>
 
@@ -1157,11 +1158,11 @@ function BeneficiaryProfileDetailContent() {
             {canBrowseDirectory ? "Livelihood Management" : "Family Profile"}
           </p>
           <h1 className="page-title text-on-surface">
-            Beneficiary Profile File
+            Participant Profile File
           </h1>
         </div>
         <div className="flex gap-3 font-sans flex-wrap">
-          {canWrite && (
+          {canEditParticipant && (
             <button
               onClick={() => setShowConfirmMigrate(true)}
               className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
@@ -1172,7 +1173,7 @@ function BeneficiaryProfileDetailContent() {
               {beneficiary.isMigrated ? "Unmark Migrated" : "Mark Migrated"}
             </button>
           )}
-          {canWrite && (
+          {canEditParticipant && (
             <button
               onClick={() => setShowEditModal(true)}
               className="bg-surface-container text-on-surface px-4 py-2 rounded-full text-body-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2 cursor-pointer border border-outline-variant/20"
@@ -1185,7 +1186,7 @@ function BeneficiaryProfileDetailContent() {
             <span className="material-symbols-outlined text-[18px]">download</span>
             Export Data
           </button>
-          {canWrite && canDeleteRecords && (
+          {canEditParticipant && canDeleteRecords && (
             <button
               onClick={() => setShowConfirmDelete(true)}
               className="bg-error-container text-on-error-container px-4 py-2 rounded-full text-body-md font-medium hover:bg-error-container/80 transition-colors flex items-center gap-2 cursor-pointer border border-error/20"
@@ -1223,7 +1224,7 @@ function BeneficiaryProfileDetailContent() {
                   onClick={() => setLightboxPhoto(beneficiary.photoUrl)}
                 />
               </div>
-              {canWrite && (
+              {canEditParticipant && (
                 <button
                   type="button"
                   onClick={() => photoInputRef.current?.click()}
@@ -1327,9 +1328,9 @@ function BeneficiaryProfileDetailContent() {
                         </p>
                       </div>
                     </div>
-                    {canWrite && (
+                    {canEditParticipant && (
                       <Link
-                        href={`/beneficiaries/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
+                        href={`/participants/${id}?tab=${slugFromLabel("ID Proofs & Bank Details")}`}
                         className="shrink-0 self-end text-[11px] font-bold text-primary hover:underline sm:ml-auto sm:self-auto"
                       >
                         Add details
@@ -1454,7 +1455,7 @@ function BeneficiaryProfileDetailContent() {
               </div>
             )}
 
-            {canWrite && (
+            {canEditParticipant && (
               <button
                 onClick={handleCalculateResilience}
                 disabled={resilienceScoreComputed === null || isCalculatingResilience}
@@ -1475,7 +1476,7 @@ function BeneficiaryProfileDetailContent() {
           <select
             id="beneficiary-tab"
             value={activeTab}
-            onChange={(e) => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(e.target.value)}`, { scroll: false })}
+            onChange={(e) => router.replace(`/participants/${id}?tab=${slugFromLabel(e.target.value)}`, { scroll: false })}
             className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
           >
             {visibleTabs.map(({ label: tab }) => (
@@ -1499,7 +1500,7 @@ function BeneficiaryProfileDetailContent() {
               <button
                 key={tab}
                 ref={isActive ? setActiveTabRef : null}
-                onClick={() => router.replace(`/beneficiaries/${id}?tab=${slugFromLabel(tab)}`, { scroll: false })}
+                onClick={() => router.replace(`/participants/${id}?tab=${slugFromLabel(tab)}`, { scroll: false })}
                 className={`px-3 sm:px-5 py-2.5 sm:py-3 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
                   isActive ? "border-primary text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface hover:border-surface-container-highest"
                 }`}
@@ -1518,7 +1519,7 @@ function BeneficiaryProfileDetailContent() {
                 <span className="material-symbols-outlined text-primary shrink-0">info</span>
                 <div>
                   <p className="font-bold text-primary mb-1">How Program History is Added</p>
-                  <p>Program enrollment history is generated dynamically from the beneficiary&apos;s database linkage. You can assign or remove programs by clicking <strong>Edit Profile</strong> above and opening the <strong>Programs</strong> tab.</p>
+                  <p>Program enrollment history is generated dynamically from the participant&apos;s database linkage. You can assign or remove programs by clicking <strong>Edit Profile</strong> above and opening the <strong>Programs</strong> tab.</p>
                 </div>
               </div>
 
@@ -1532,7 +1533,7 @@ function BeneficiaryProfileDetailContent() {
                 {(!beneficiary.livelihoodDetails || beneficiary.livelihoodDetails.length === 0) &&
                  (!beneficiary.goatRearingDetails || beneficiary.goatRearingDetails.length === 0) &&
                  (!beneficiary.sugarcaneDetails || beneficiary.sugarcaneDetails.length === 0) ? (
-                  <p className="text-sm text-on-surface-variant italic">No program enrollments found. Enroll this beneficiary through a program detail page.</p>
+                  <p className="text-sm text-on-surface-variant italic">No program enrollments found. Enroll this participant through a program detail page.</p>
                 ) : (
                   <div className="space-y-6">
                     {/* New Unified Livelihood Details */}
@@ -1674,7 +1675,7 @@ function BeneficiaryProfileDetailContent() {
                       </div>
                     ))
                   ) : (
-                    <p className="col-span-1 md:col-span-2 text-sm text-on-surface-variant italic">No livestock assets allocated to this beneficiary.</p>
+                    <p className="col-span-1 md:col-span-2 text-sm text-on-surface-variant italic">No livestock assets allocated to this participant.</p>
                   )}
                 </div>
               </div>
@@ -1694,9 +1695,9 @@ function BeneficiaryProfileDetailContent() {
                   </p>
                 </div>
                 {/* Set SHOW_TAKE_KYR_BUTTON to true to re-enable the survey entry point. */}
-                {SHOW_TAKE_KYR_BUTTON && canWrite && (
+                {SHOW_TAKE_KYR_BUTTON && canEditParticipant && (
                   <Link
-                    href={`/beneficiaries/${id}/kyr-survey`}
+                    href={`/participants/${id}/kyr-survey`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
@@ -1737,11 +1738,11 @@ function BeneficiaryProfileDetailContent() {
                       </div>
                       
                       <div className="pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
-                        <Link href={`/beneficiaries/${id}/responses/kyr/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                        <Link href={`/participants/${id}/responses/kyr/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
-                        {canWrite && (
+                        {canEditParticipant && (
                           <button
                             type="button"
                             onClick={() => setEditingSurvey(survey)}
@@ -1766,7 +1767,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No surveys have been taken for this beneficiary yet.
+                    No surveys have been taken for this participant yet.
                   </p>
                 )}
               </div>
@@ -1785,9 +1786,9 @@ function BeneficiaryProfileDetailContent() {
                     Assess the household's ability to adapt to new situations.
                   </p>
                 </div>
-                {canWrite && (
+                {canEditParticipant && (
                   <Link
-                    href={`/beneficiaries/${id}/adaptive-capacity`}
+                    href={`/participants/${id}/adaptive-capacity`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
@@ -1811,7 +1812,7 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
-                        <Link href={`/beneficiaries/${id}/responses/adaptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                        <Link href={`/participants/${id}/responses/adaptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
@@ -1826,7 +1827,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No adaptive capacity surveys have been taken for this beneficiary yet.
+                    No adaptive capacity surveys have been taken for this participant yet.
                   </p>
                 )}
               </div>
@@ -1845,9 +1846,9 @@ function BeneficiaryProfileDetailContent() {
                     Assess the household's ability to absorb shocks and disasters.
                   </p>
                 </div>
-                {canWrite && (
+                {canEditParticipant && (
                   <Link
-                    href={`/beneficiaries/${id}/absorptive-capacity`}
+                    href={`/participants/${id}/absorptive-capacity`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
@@ -1871,7 +1872,7 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
-                        <Link href={`/beneficiaries/${id}/responses/absorptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                        <Link href={`/participants/${id}/responses/absorptive/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
@@ -1886,7 +1887,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No absorptive capacity surveys have been taken for this beneficiary yet.
+                    No absorptive capacity surveys have been taken for this participant yet.
                   </p>
                 )}
               </div>
@@ -1905,9 +1906,9 @@ function BeneficiaryProfileDetailContent() {
                     Assess systemic changes and access to markets, services, and opportunities.
                   </p>
                 </div>
-                {canWrite && (
+                {canEditParticipant && (
                   <Link
-                    href={`/beneficiaries/${id}/transformative-capacity`}
+                    href={`/participants/${id}/transformative-capacity`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
@@ -1931,7 +1932,7 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
-                        <Link href={`/beneficiaries/${id}/responses/transformative/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                        <Link href={`/participants/${id}/responses/transformative/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
@@ -1946,7 +1947,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No transformative capacity surveys have been taken for this beneficiary yet.
+                    No transformative capacity surveys have been taken for this participant yet.
                   </p>
                 )}
               </div>
@@ -1965,9 +1966,9 @@ function BeneficiaryProfileDetailContent() {
                     Assess the shocks, hardships, and effects faced by the household.
                   </p>
                 </div>
-                {canWrite && (
+                {canEditParticipant && (
                   <Link
-                    href={`/beneficiaries/${id}/vulnerability`}
+                    href={`/participants/${id}/vulnerability`}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
                   >
                     <span className="material-symbols-outlined text-[18px]">add</span>
@@ -1987,7 +1988,7 @@ function BeneficiaryProfileDetailContent() {
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">
-                        <Link href={`/beneficiaries/${id}/responses/vulnerability/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                        <Link href={`/participants/${id}/responses/vulnerability/${survey.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-[14px]">visibility</span>
                           View Full Response
                         </Link>
@@ -2002,7 +2003,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No vulnerability surveys have been taken for this beneficiary yet.
+                    No vulnerability surveys have been taken for this participant yet.
                   </p>
                 )}
               </div>
@@ -2023,15 +2024,15 @@ function BeneficiaryProfileDetailContent() {
                 </div>
                 <div className="flex flex-col gap-3 min-w-[200px]">
                   <Link
-                    href={`/beneficiaries/${id}/solution-board-reference`}
+                    href={`/participants/${id}/solution-board-reference`}
                     className="w-full bg-surface-container-highest text-on-surface border border-outline-variant/30 px-4 py-2 rounded-full text-sm font-semibold hover:bg-surface-container-highest/80 transition-colors flex items-center justify-center gap-2 text-center"
                   >
                     <span className="material-symbols-outlined text-[18px]">menu_book</span>
                     View Reference Board
                   </Link>
-                  {canWrite && (
+                  {canEditParticipant && (
                     <Link
-                      href={`/beneficiaries/${id}/solution-plan`}
+                      href={`/participants/${id}/solution-plan`}
                       className="w-full gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-glow text-center"
                     >
                       <span className="material-symbols-outlined text-[18px]">add</span>
@@ -2064,12 +2065,12 @@ function BeneficiaryProfileDetailContent() {
                           </div>
                         </div>
                         <div className="mt-4 pt-4 border-t border-surface-container-highest flex items-center gap-4 flex-wrap">
-                          <Link href={`/beneficiaries/${id}/responses/solution-plan/${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          <Link href={`/participants/${id}/responses/solution-plan/${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                             <span className="material-symbols-outlined text-[14px]">visibility</span>
                             View Full Plan
                           </Link>
-                          {canWrite && (
-                            <Link href={`/beneficiaries/${id}/solution-plan?planId=${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
+                          {canEditParticipant && (
+                            <Link href={`/participants/${id}/solution-plan?planId=${plan.id}`} className="text-primary hover:underline text-xs font-bold outline-none flex items-center gap-1 w-fit">
                               <span className="material-symbols-outlined text-[14px]">edit</span>
                               Edit Plan
                             </Link>
@@ -2085,9 +2086,9 @@ function BeneficiaryProfileDetailContent() {
                     ))
                   ) : (
                     <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                      {canWrite
-                        ? 'No solution plans have been created for this beneficiary yet. Click "Create Solution Plan" to get started.'
-                        : "No solution plans have been created for this beneficiary yet."}
+                      {canEditParticipant
+                        ? 'No solution plans have been created for this participant yet. Click "Create Solution Plan" to get started.'
+                        : "No solution plans have been created for this participant yet."}
                     </p>
                   )}
                 </div>
@@ -2120,7 +2121,7 @@ function BeneficiaryProfileDetailContent() {
                       ))}
                     </select>
                   </label>
-                  {canWrite && (
+                  {canEditParticipant && (
                     <button
                       onClick={() => handleOpenIncomeForm()}
                       className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
@@ -2214,7 +2215,7 @@ function BeneficiaryProfileDetailContent() {
                             <p className="text-xs text-on-surface-variant mt-2 italic">&quot;{record.notes}&quot;</p>
                           )}
                         </div>
-                        {canWrite && (
+                        {canEditParticipant && (
                           <div className="flex items-center gap-2 shrink-0">
                             <button
                               onClick={() => handleOpenIncomeForm(record)}
@@ -2256,7 +2257,7 @@ function BeneficiaryProfileDetailContent() {
                     Track seasonal and permanent migration patterns for this household.
                   </p>
                 </div>
-                {canWrite && (
+                {canEditParticipant && (
                   <button
                     onClick={() => handleOpenMigrationForm()}
                     className="gradient-primary bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2 cursor-pointer shadow-glow whitespace-nowrap"
@@ -2302,7 +2303,7 @@ function BeneficiaryProfileDetailContent() {
                           <p className="text-xs text-on-surface-variant mt-2 italic">"{record.notes}"</p>
                         )}
                       </div>
-                      {canWrite && (
+                      {canEditParticipant && (
                         <div className="flex items-center gap-2 shrink-0">
                           <button
                             onClick={() => handleOpenMigrationForm(record)}
@@ -2324,7 +2325,7 @@ function BeneficiaryProfileDetailContent() {
                   ))
                 ) : (
                   <p className="text-sm text-on-surface-variant italic p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                    No migration records found for this beneficiary.
+                    No migration records found for this participant.
                   </p>
                 )}
               </div>
@@ -2338,7 +2339,7 @@ function BeneficiaryProfileDetailContent() {
                   <span className="material-symbols-outlined text-primary">group</span>
                   Family Members &amp; Household Registry
                 </h3>
-                {canWrite && (
+                {canEditParticipant && (
                   <button
                     onClick={() => { setShowEditModal(true); setEditTab("Family"); }}
                     className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
@@ -2385,7 +2386,7 @@ function BeneficiaryProfileDetailContent() {
                     <span className="material-symbols-outlined text-primary text-[18px]">school</span>
                     Linked Students
                   </h4>
-                  {canWrite && (
+                  {canEditParticipant && (
                     <button
                       onClick={() => { setStudentSearch(""); setShowLinkStudentModal(true); handleStudentSearch(""); }}
                       className="px-3 py-1.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1"
@@ -2419,7 +2420,7 @@ function BeneficiaryProfileDetailContent() {
                             <span>Grade: {student.grade || "N/A"}</span>
                           </div>
                         </div>
-                        {canWrite && (
+                        {canEditParticipant && (
                           <button
                             onClick={() => handleUnlinkStudent(student.id)}
                             className="px-2.5 py-1 bg-error-container/20 text-on-error-container hover:bg-error-container/40 transition-colors rounded text-[10px] font-bold uppercase tracking-wider cursor-pointer border-none flex items-center gap-1 shrink-0"
@@ -2432,7 +2433,7 @@ function BeneficiaryProfileDetailContent() {
                     ))
                   ) : (
                     <p className="text-xs text-on-surface-variant italic p-3 border border-dashed border-surface-container-highest rounded-lg bg-surface-container-low/10 text-center">
-                      {canWrite
+                      {canEditParticipant
                         ? 'No students linked to this household yet. Click "Link Student" to connect a student record.'
                         : "No students linked to this household yet."}
                     </p>
@@ -2533,7 +2534,7 @@ function BeneficiaryProfileDetailContent() {
                   Household Socio-Economic Impact Summary
                 </h3>
                 <p className="text-sm text-on-surface-variant leading-relaxed mt-2">
-                  Calculated from this beneficiary&apos;s active Farm and Non-Farm program assignments, recorded program values, and capacity surveys.
+                  Calculated from this participant&apos;s active Farm and Non-Farm program assignments, recorded program values, and capacity surveys.
                 </p>
 
                 <div className="mt-4 bg-secondary-container/10 border border-secondary/20 rounded-xl p-4 text-xs text-on-surface-variant flex gap-3 items-start leading-relaxed">
@@ -2668,7 +2669,7 @@ function BeneficiaryProfileDetailContent() {
                   <span className="material-symbols-outlined text-3xl text-on-surface-variant">insights</span>
                   <p className="font-bold text-on-surface mt-2">No livelihood programs assigned yet</p>
                   <p className="text-xs text-on-surface-variant mt-1 max-w-md mx-auto">
-                    Enroll this beneficiary from a Farm or Non-Farm program page to start tracking real impact metrics.
+                    Enroll this participant from a Farm or Non-Farm program page to start tracking real impact metrics.
                   </p>
                 </div>
               )}
@@ -2686,7 +2687,7 @@ function BeneficiaryProfileDetailContent() {
             {/* Modal Header */}
             <div className="flex justify-between items-start gap-3 border-b border-surface-container-high pb-4 mb-4">
               <div className="min-w-0">
-                <h3 className="text-lg sm:text-xl font-bold text-on-surface">Edit Master Beneficiary Profile</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-on-surface">Edit Master Participant Profile</h3>
                 <p className="text-xs text-on-surface-variant">Update demographic info, bank accounts, identities, and nested items.</p>
               </div>
               <button
@@ -2832,13 +2833,13 @@ function BeneficiaryProfileDetailContent() {
               {editTab === "IDBank" && (
                 <div className="space-y-4 text-xs">
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide">Identity Proofs</h4>
-                  <p className="text-[10px] text-on-surface-variant">Select Yes only for documents the beneficiary has. Details are required when Yes is selected.</p>
+                  <p className="text-[10px] text-on-surface-variant">Select Yes only for documents the participant has. Details are required when Yes is selected.</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex flex-col gap-2 rounded-xl border border-surface-container-high p-3">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Aadhar Number</label>
                       <div className="self-start">
                         <YesNoToggle
-                          label="Does the beneficiary have an Aadhaar card?"
+                          label="Does the participant have an Aadhaar card?"
                           value={hasAadhar}
                           onChange={(value) => {
                             setHasAadhar(value);
@@ -2856,7 +2857,7 @@ function BeneficiaryProfileDetailContent() {
                       <label className="font-semibold uppercase tracking-wider text-slate-400">PAN Card</label>
                       <div className="self-start">
                         <YesNoToggle
-                          label="Does the beneficiary have a PAN card?"
+                          label="Does the participant have a PAN card?"
                           value={hasPanCard}
                           onChange={(value) => {
                             setHasPanCard(value);
@@ -2874,7 +2875,7 @@ function BeneficiaryProfileDetailContent() {
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Voter ID</label>
                       <div className="self-start">
                         <YesNoToggle
-                          label="Does the beneficiary have a Voter ID?"
+                          label="Does the participant have a Voter ID?"
                           value={hasVoterId}
                           onChange={(value) => {
                             setHasVoterId(value);
@@ -2892,7 +2893,7 @@ function BeneficiaryProfileDetailContent() {
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Ration Card (SFY)</label>
                       <div className="self-start">
                         <YesNoToggle
-                          label="Does the beneficiary have a Ration Card?"
+                          label="Does the participant have a Ration Card?"
                           value={hasRationCard}
                           onChange={(value) => {
                             setHasRationCard(value);
@@ -2909,7 +2910,7 @@ function BeneficiaryProfileDetailContent() {
                   </div>
 
                   <h4 className="font-bold text-sm text-primary uppercase tracking-wide border-t border-surface-container-high pt-4">Bank Details</h4>
-                  <p className="text-[10px] text-on-surface-variant">Optional. Leave blank if the beneficiary does not have a bank account.</p>
+                  <p className="text-[10px] text-on-surface-variant">Optional. Leave blank if the participant does not have a bank account.</p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1">
                       <label className="font-semibold uppercase tracking-wider text-slate-400">Bank Name</label>
@@ -3482,14 +3483,14 @@ function BeneficiaryProfileDetailContent() {
       )}
 
       {/* Photo Lightbox */}
-      <PhotoLightbox src={lightboxPhoto} alt="Beneficiary photo" onClose={() => setLightboxPhoto(null)} />
+      <PhotoLightbox src={lightboxPhoto} alt="Participant photo" onClose={() => setLightboxPhoto(null)} />
 
       <ConfirmActionModal
         isOpen={showConfirmMigrate}
         onClose={() => setShowConfirmMigrate(false)}
         onConfirm={handleToggleMigrated}
         title={beneficiary?.isMigrated ? "Unmark as Migrated" : "Mark as Migrated"}
-        message={beneficiary?.isMigrated ? "Are you sure you want to unmark this beneficiary as migrated?" : "Are you sure you want to mark this beneficiary as migrated?"}
+        message={beneficiary?.isMigrated ? "Are you sure you want to unmark this participant as migrated?" : "Are you sure you want to mark this participant as migrated?"}
         confirmText={beneficiary?.isMigrated ? "Unmark" : "Mark as Migrated"}
         variant="primary"
       />
@@ -3498,8 +3499,8 @@ function BeneficiaryProfileDetailContent() {
         isOpen={showConfirmDelete}
         onClose={() => setShowConfirmDelete(false)}
         onConfirm={handleDeleteBeneficiary}
-        title="Delete Beneficiary"
-        message="Are you sure you want to permanently delete this beneficiary? All associated records (income, family, livestock, surveys) will be removed. This action cannot be undone."
+        title="Delete Participant"
+        message="Are you sure you want to permanently delete this participant? All associated records (income, family, livestock, surveys) will be removed. This action cannot be undone."
         confirmText="Delete"
         variant="danger"
       />

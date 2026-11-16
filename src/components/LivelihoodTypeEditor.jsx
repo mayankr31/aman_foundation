@@ -178,7 +178,7 @@ export default function LivelihoodTypeEditor({ category, token, initial, onCance
       {/* Enrollment Fields */}
       <Section
         title="Enrollment Fields"
-        hint="Fields captured when a beneficiary is enrolled."
+        hint="Fields captured when a participant is enrolled."
         onAdd={() => setFields((p) => [...p, { name: "", label: "", type: "text", step: "", unit: "", optionsText: "" }])}
         addLabel="Add Field"
       >
@@ -260,7 +260,7 @@ export default function LivelihoodTypeEditor({ category, token, initial, onCance
       {/* Table Columns */}
       <Section
         title="Table Columns"
-        hint="Columns shown in the enrolled beneficiaries table."
+        hint="Columns shown in the enrolled participants table."
         onAdd={() => setColumns((p) => [...p, { key: "", label: "", type: "text", unit: "" }])}
         addLabel="Add Column"
       >

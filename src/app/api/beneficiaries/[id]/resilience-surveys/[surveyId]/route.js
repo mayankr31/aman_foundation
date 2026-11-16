@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+import { canEditBeneficiary } from "@/lib/beneficiaryAccess";
 
 export async function PATCH(req, { params }) {
   try {
@@ -14,19 +13,16 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const { id: beneficiaryId, surveyId } = await params;
+
+    if (!(await canEditBeneficiary(user, beneficiaryId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this participant's program" }, { status: 403 });
     }
 
-    const { surveyId } = await params;
     const body = await req.json();
     const { responses, scores } = body;
 
-    const existing = await prisma.resilienceSurvey.findUnique({ where: { id: surveyId } });
+    const existing = await prisma.resilienceSurvey.findFirst({ where: { id: surveyId, beneficiaryId } });
     if (!existing) {
       return NextResponse.json({ error: "Survey not found" }, { status: 404 });
     }
@@ -74,14 +70,6 @@ export async function DELETE(req, { params }) {
 
     if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const { surveyId } = await params;
