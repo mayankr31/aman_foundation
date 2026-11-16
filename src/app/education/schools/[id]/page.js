@@ -127,6 +127,8 @@ export default function SchoolProfileDetail() {
           location: s.location || "",
           status: s.status || "Active",
           mapUrl: s.mapUrl || "",
+          totalStudents: s.totalStudents ?? "",
+          totalTeachers: s.totalTeachers ?? "",
         });
       }
     } catch (err) { console.error("Failed to load school:", err); }
@@ -406,6 +408,8 @@ export default function SchoolProfileDetail() {
   const femaleCount = genderRatio.female || 0;
   const malePercent = totalEnrolled > 0 ? Math.round((maleCount / totalEnrolled) * 100) : 0;
   const femalePercent = totalEnrolled > 0 ? Math.round((femaleCount / totalEnrolled) * 100) : 0;
+  const reachPercent =
+    school.totalStudents > 0 ? Math.round((totalEnrolled / school.totalStudents) * 100) : null;
 
   const schoolStudentIds = new Set(enrolledStudents.map(s => s.id));
   const schoolFellowIds = new Set(assignedFellows.map(f => f.fellowId));
@@ -467,6 +471,11 @@ export default function SchoolProfileDetail() {
                 <div className="min-w-0 break-all"><span className="font-bold text-on-surface">Email:</span> {school.email || "—"}</div>
                 <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
                 <div><span className="font-bold text-on-surface">Phone:</span> {school.phone || "—"}</div>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <div><span className="font-bold text-on-surface">Total Students:</span> {school.totalStudents ?? "—"}</div>
+                <span className="w-1 h-1 bg-surface-container-highest rounded-full self-center"></span>
+                <div><span className="font-bold text-on-surface">Teachers:</span> {school.totalTeachers ?? "—"}</div>
               </div>
               {school.address && <div className="break-words"><span className="font-bold text-on-surface">Address:</span> {school.address}</div>}
             </div>
@@ -713,9 +722,23 @@ export default function SchoolProfileDetail() {
             <h3 className="section-title text-on-surface mb-6">School Metrics</h3>
             <div className="space-y-4 font-sans text-sm">
               <div className="flex justify-between py-2 border-b border-surface-container">
-                <span className="text-on-surface-variant font-medium">Total Enrolled</span>
+                <span className="text-on-surface-variant font-medium">Aman Students</span>
                 <span className="font-bold text-on-surface">{totalEnrolled} Students</span>
               </div>
+              <div className="flex justify-between py-2 border-b border-surface-container">
+                <span className="text-on-surface-variant font-medium">School Students</span>
+                <span className="font-bold text-on-surface">{school.totalStudents ?? "—"}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-surface-container">
+                <span className="text-on-surface-variant font-medium">Total Teachers</span>
+                <span className="font-bold text-on-surface">{school.totalTeachers ?? "—"}</span>
+              </div>
+              {reachPercent !== null && (
+                <div className="flex justify-between py-2 border-b border-surface-container">
+                  <span className="text-on-surface-variant font-medium">Aman Reach</span>
+                  <span className="font-bold text-primary">{reachPercent}%</span>
+                </div>
+              )}
               <div className="flex justify-between py-2 border-b border-surface-container">
                 <span className="text-on-surface-variant font-medium">Active Fellows</span>
                 <span className="font-bold text-primary">{assignedFellows.length}</span>
@@ -1143,6 +1166,8 @@ export default function SchoolProfileDetail() {
               <InputField label="Phone" name="phone" value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Location/City" name="location" value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} />
               <InputField label="Status" name="status" value={editForm.status} onChange={e => setEditForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
+              <InputField label="Total Students (School)" name="totalStudents" value={editForm.totalStudents} onChange={e => setEditForm(f => ({ ...f, totalStudents: e.target.value }))} inputMode="numeric" maxLength={6} transform={digitsOnly} hint={`Full school strength. Aman Foundation currently works with ${totalEnrolled} students here.`} />
+              <InputField label="Total Teachers" name="totalTeachers" value={editForm.totalTeachers} onChange={e => setEditForm(f => ({ ...f, totalTeachers: e.target.value }))} inputMode="numeric" maxLength={5} transform={digitsOnly} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

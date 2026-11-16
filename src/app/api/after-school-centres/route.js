@@ -6,10 +6,14 @@ import { getFellowIdByUserId } from "@/lib/scope";
 import {
   validateEmail,
   validateMobile,
+  validateInteger,
   firstError,
   normalizeEmailForSave,
   normalizeMobileForSave,
 } from "@/lib/validation";
+
+const toNullableInt = (value) =>
+  value === undefined || value === null || String(value).trim() === "" ? null : Number(value);
 
 export async function GET(req) {
   try {
@@ -87,7 +91,8 @@ export async function POST(req) {
       status,
       mapUrl,
       img,
-      goal
+      totalStudents,
+      totalTeachers
     } = body;
 
     if (!name) {
@@ -97,6 +102,8 @@ export async function POST(req) {
     const validationMessage = firstError([
       validateEmail(email),
       validateMobile(phone),
+      validateInteger(totalStudents, { min: 0, max: 100000 }),
+      validateInteger(totalTeachers, { min: 0, max: 100000 }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -114,7 +121,8 @@ export async function POST(req) {
           status: status || "Active",
           mapUrl,
           img,
-          goal: goal ? parseInt(goal) : 80
+          totalStudents: toNullableInt(totalStudents),
+          totalTeachers: toNullableInt(totalTeachers)
         }
       });
 

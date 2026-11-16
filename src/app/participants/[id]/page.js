@@ -11,6 +11,7 @@ import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } 
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import { buildKyrProfilePrefill } from "@/lib/kyrFormSchema";
 import DateInput from "@/components/ui/DateInput";
 import YesNoToggle from "@/components/ui/YesNoToggle";
 import Avatar from "@/components/ui/Avatar";
@@ -985,38 +986,7 @@ function BeneficiaryProfileDetailContent() {
   const strokeDashoffset = score !== null ? 251.2 - (score / 100) * 251.2 : 251.2;
 
   // Basic-detail fields that must be locked (read-only) in the KYR form.
-  const getProfileKyrFields = () => {
-    const pairs = [
-      ["B.3", beneficiary.state],
-      ["B.4", beneficiary.district],
-      ["B.5", beneficiary.block],
-      ["B.6", beneficiary.ward],
-      ["B.7", beneficiary.village],
-      ["B.8", beneficiary.name],
-      ["B.9", beneficiary.gender],
-      ["B.10", beneficiary.householdSize != null ? String(beneficiary.householdSize) : ""],
-      ["B.14", beneficiary.primaryIncomeType],
-      ["B.16_Min", beneficiary.monthlyIncome != null ? String(beneficiary.monthlyIncome) : ""],
-      ["B.16_Max", beneficiary.monthlyIncome != null ? String(beneficiary.monthlyIncome) : ""],
-      ["B.18", beneficiary.caste],
-    ];
-    const prefill = {};
-    const locks = [];
-    pairs.forEach(([key, value]) => {
-      if (value !== undefined && value !== null && String(value).trim() !== "") {
-        prefill[key] = value;
-      }
-    });
-    pairs.forEach(([key, value]) => {
-      if (key === "B.16_Min" || key === "B.16_Max") return;
-      if (value !== undefined && value !== null && String(value).trim() !== "") {
-        locks.push(key);
-      }
-    });
-    if (prefill["B.16_Min"]) locks.push("B.16");
-    return { prefill, locks };
-  };
-  const kyrProfileFields = getProfileKyrFields();
+  const kyrProfileFields = buildKyrProfilePrefill(beneficiary);
 
   const impact = computeBeneficiaryImpact(beneficiary, getTypeConfig);
   const recordedCapacityCount = 3 - missingCapacityTypes.length;
@@ -1710,31 +1680,11 @@ function BeneficiaryProfileDetailContent() {
                 {surveys && surveys.length > 0 ? (
                   surveys.map((survey) => (
                     <div key={survey.id} className="p-4 border border-surface-container-highest rounded-lg bg-surface-container-low/20 flex flex-col gap-4 font-sans">
-                      <div className="flex flex-col sm:flex-row justify-between gap-4">
-                        <div>
-                          <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
-                          <p className="text-xs text-on-surface-variant mt-1">
-                            Overall Score: <span className="font-bold text-primary">{survey.overallScore}%</span>
-                          </p>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                          <div>
-                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Financial</p>
-                            <p className="text-on-surface font-semibold">{survey.financialResilienceScore}%</p>
-                          </div>
-                          <div>
-                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Health</p>
-                            <p className="text-on-surface font-semibold">{survey.healthResilienceScore}%</p>
-                          </div>
-                          <div>
-                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Social</p>
-                            <p className="text-on-surface font-semibold">{survey.socialConnectednessScore}%</p>
-                          </div>
-                          <div>
-                            <p className="text-slate-400 font-bold uppercase tracking-wider text-[9px]">Mindset</p>
-                            <p className="text-on-surface font-semibold">{survey.disasterMindsetScore}%</p>
-                          </div>
-                        </div>
+                      <div>
+                        <p className="font-bold text-on-surface">Survey Date: {formatDate(survey.surveyDate)}</p>
+                        <p className="text-xs text-on-surface-variant mt-1">
+                          Overall Score: <span className="font-bold text-primary">{survey.overallScore}%</span>
+                        </p>
                       </div>
                       
                       <div className="pt-4 border-t border-surface-container-highest flex flex-wrap items-center gap-4">

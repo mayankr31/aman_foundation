@@ -254,6 +254,8 @@ exports.Prisma.SchoolScalarFieldEnum = {
   mapUrl: 'mapUrl',
   img: 'img',
   goal: 'goal',
+  totalStudents: 'totalStudents',
+  totalTeachers: 'totalTeachers',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1299,6 +1301,8 @@ exports.Prisma.AfterSchoolCentreScalarFieldEnum = {
   location: 'location',
   status: 'status',
   goal: 'goal',
+  totalStudents: 'totalStudents',
+  totalTeachers: 'totalTeachers',
   img: 'img',
   mapUrl: 'mapUrl',
   createdAt: 'createdAt',

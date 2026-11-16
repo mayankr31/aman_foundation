@@ -60,7 +60,7 @@ export default function ResponseViewerClient({ surveyType, surveyData, beneficia
       </div>
 
       <div className="pt-2">
-        {surveyType === 'kyr' && <KyrReadOnlyView responses={surveyData.responses} />}
+        {surveyType === 'kyr' && <KyrReadOnlyView responses={surveyData.responses} survey={surveyData} />}
         {(surveyType === 'adaptive' || surveyType === 'absorptive' || surveyType === 'transformative') && 
           <CapacityReadOnlyView type={surveyType} responses={surveyData.responses} />
         }

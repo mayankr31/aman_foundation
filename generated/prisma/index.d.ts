@@ -23213,10 +23213,14 @@ export namespace Prisma {
 
   export type SchoolAvgAggregateOutputType = {
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
   }
 
   export type SchoolSumAggregateOutputType = {
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
   }
 
   export type SchoolMinAggregateOutputType = {
@@ -23234,6 +23238,8 @@ export namespace Prisma {
     mapUrl: string | null
     img: string | null
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23253,6 +23259,8 @@ export namespace Prisma {
     mapUrl: string | null
     img: string | null
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -23272,6 +23280,8 @@ export namespace Prisma {
     mapUrl: number
     img: number
     goal: number
+    totalStudents: number
+    totalTeachers: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -23280,10 +23290,14 @@ export namespace Prisma {
 
   export type SchoolAvgAggregateInputType = {
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
   }
 
   export type SchoolSumAggregateInputType = {
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
   }
 
   export type SchoolMinAggregateInputType = {
@@ -23301,6 +23315,8 @@ export namespace Prisma {
     mapUrl?: true
     img?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23320,6 +23336,8 @@ export namespace Prisma {
     mapUrl?: true
     img?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -23339,6 +23357,8 @@ export namespace Prisma {
     mapUrl?: true
     img?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -23445,6 +23465,8 @@ export namespace Prisma {
     mapUrl: string | null
     img: string | null
     goal: number
+    totalStudents: number | null
+    totalTeachers: number | null
     createdAt: Date
     updatedAt: Date
     _count: SchoolCountAggregateOutputType | null
@@ -23483,6 +23505,8 @@ export namespace Prisma {
     mapUrl?: boolean
     img?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     fellows?: boolean | School$fellowsArgs<ExtArgs>
@@ -23510,6 +23534,8 @@ export namespace Prisma {
     mapUrl?: boolean
     img?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["school"]>
@@ -23529,6 +23555,8 @@ export namespace Prisma {
     mapUrl?: boolean
     img?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["school"]>
@@ -23548,11 +23576,13 @@ export namespace Prisma {
     mapUrl?: boolean
     img?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "principalName" | "udiseCode" | "email" | "phone" | "address" | "location" | "status" | "latitude" | "longitude" | "mapUrl" | "img" | "goal" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
+  export type SchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "principalName" | "udiseCode" | "email" | "phone" | "address" | "location" | "status" | "latitude" | "longitude" | "mapUrl" | "img" | "goal" | "totalStudents" | "totalTeachers" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
   export type SchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fellows?: boolean | School$fellowsArgs<ExtArgs>
     students?: boolean | School$studentsArgs<ExtArgs>
@@ -23592,6 +23622,8 @@ export namespace Prisma {
       mapUrl: string | null
       img: string | null
       goal: number
+      totalStudents: number | null
+      totalTeachers: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["school"]>
@@ -24038,6 +24070,8 @@ export namespace Prisma {
     readonly mapUrl: FieldRef<"School", 'String'>
     readonly img: FieldRef<"School", 'String'>
     readonly goal: FieldRef<"School", 'Int'>
+    readonly totalStudents: FieldRef<"School", 'Int'>
+    readonly totalTeachers: FieldRef<"School", 'Int'>
     readonly createdAt: FieldRef<"School", 'DateTime'>
     readonly updatedAt: FieldRef<"School", 'DateTime'>
   }
@@ -119693,10 +119727,14 @@ export namespace Prisma {
 
   export type AfterSchoolCentreAvgAggregateOutputType = {
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
   }
 
   export type AfterSchoolCentreSumAggregateOutputType = {
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
   }
 
   export type AfterSchoolCentreMinAggregateOutputType = {
@@ -119709,6 +119747,8 @@ export namespace Prisma {
     location: string | null
     status: string | null
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
     img: string | null
     mapUrl: string | null
     createdAt: Date | null
@@ -119725,6 +119765,8 @@ export namespace Prisma {
     location: string | null
     status: string | null
     goal: number | null
+    totalStudents: number | null
+    totalTeachers: number | null
     img: string | null
     mapUrl: string | null
     createdAt: Date | null
@@ -119741,6 +119783,8 @@ export namespace Prisma {
     location: number
     status: number
     goal: number
+    totalStudents: number
+    totalTeachers: number
     img: number
     mapUrl: number
     createdAt: number
@@ -119751,10 +119795,14 @@ export namespace Prisma {
 
   export type AfterSchoolCentreAvgAggregateInputType = {
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
   }
 
   export type AfterSchoolCentreSumAggregateInputType = {
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
   }
 
   export type AfterSchoolCentreMinAggregateInputType = {
@@ -119767,6 +119815,8 @@ export namespace Prisma {
     location?: true
     status?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     img?: true
     mapUrl?: true
     createdAt?: true
@@ -119783,6 +119833,8 @@ export namespace Prisma {
     location?: true
     status?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     img?: true
     mapUrl?: true
     createdAt?: true
@@ -119799,6 +119851,8 @@ export namespace Prisma {
     location?: true
     status?: true
     goal?: true
+    totalStudents?: true
+    totalTeachers?: true
     img?: true
     mapUrl?: true
     createdAt?: true
@@ -119902,6 +119956,8 @@ export namespace Prisma {
     location: string | null
     status: string
     goal: number
+    totalStudents: number | null
+    totalTeachers: number | null
     img: string | null
     mapUrl: string | null
     createdAt: Date
@@ -119937,6 +119993,8 @@ export namespace Prisma {
     location?: boolean
     status?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     img?: boolean
     mapUrl?: boolean
     createdAt?: boolean
@@ -119961,6 +120019,8 @@ export namespace Prisma {
     location?: boolean
     status?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     img?: boolean
     mapUrl?: boolean
     createdAt?: boolean
@@ -119977,6 +120037,8 @@ export namespace Prisma {
     location?: boolean
     status?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     img?: boolean
     mapUrl?: boolean
     createdAt?: boolean
@@ -119993,13 +120055,15 @@ export namespace Prisma {
     location?: boolean
     status?: boolean
     goal?: boolean
+    totalStudents?: boolean
+    totalTeachers?: boolean
     img?: boolean
     mapUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AfterSchoolCentreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "coordinatorName" | "phone" | "email" | "address" | "location" | "status" | "goal" | "img" | "mapUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolCentre"]>
+  export type AfterSchoolCentreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "coordinatorName" | "phone" | "email" | "address" | "location" | "status" | "goal" | "totalStudents" | "totalTeachers" | "img" | "mapUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["afterSchoolCentre"]>
   export type AfterSchoolCentreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fellows?: boolean | AfterSchoolCentre$fellowsArgs<ExtArgs>
     students?: boolean | AfterSchoolCentre$studentsArgs<ExtArgs>
@@ -120034,6 +120098,8 @@ export namespace Prisma {
       location: string | null
       status: string
       goal: number
+      totalStudents: number | null
+      totalTeachers: number | null
       img: string | null
       mapUrl: string | null
       createdAt: Date
@@ -120477,6 +120543,8 @@ export namespace Prisma {
     readonly location: FieldRef<"AfterSchoolCentre", 'String'>
     readonly status: FieldRef<"AfterSchoolCentre", 'String'>
     readonly goal: FieldRef<"AfterSchoolCentre", 'Int'>
+    readonly totalStudents: FieldRef<"AfterSchoolCentre", 'Int'>
+    readonly totalTeachers: FieldRef<"AfterSchoolCentre", 'Int'>
     readonly img: FieldRef<"AfterSchoolCentre", 'String'>
     readonly mapUrl: FieldRef<"AfterSchoolCentre", 'String'>
     readonly createdAt: FieldRef<"AfterSchoolCentre", 'DateTime'>
@@ -139573,6 +139641,8 @@ export namespace Prisma {
     mapUrl: 'mapUrl',
     img: 'img',
     goal: 'goal',
+    totalStudents: 'totalStudents',
+    totalTeachers: 'totalTeachers',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -140864,6 +140934,8 @@ export namespace Prisma {
     location: 'location',
     status: 'status',
     goal: 'goal',
+    totalStudents: 'totalStudents',
+    totalTeachers: 'totalTeachers',
     img: 'img',
     mapUrl: 'mapUrl',
     createdAt: 'createdAt',
@@ -142226,6 +142298,8 @@ export namespace Prisma {
     mapUrl?: StringNullableFilter<"School"> | string | null
     img?: StringNullableFilter<"School"> | string | null
     goal?: IntFilter<"School"> | number
+    totalStudents?: IntNullableFilter<"School"> | number | null
+    totalTeachers?: IntNullableFilter<"School"> | number | null
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
     fellows?: FellowSchoolListRelationFilter
@@ -142252,6 +142326,8 @@ export namespace Prisma {
     mapUrl?: SortOrderInput | SortOrder
     img?: SortOrderInput | SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrderInput | SortOrder
+    totalTeachers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     fellows?: FellowSchoolOrderByRelationAggregateInput
@@ -142281,6 +142357,8 @@ export namespace Prisma {
     mapUrl?: StringNullableFilter<"School"> | string | null
     img?: StringNullableFilter<"School"> | string | null
     goal?: IntFilter<"School"> | number
+    totalStudents?: IntNullableFilter<"School"> | number | null
+    totalTeachers?: IntNullableFilter<"School"> | number | null
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
     fellows?: FellowSchoolListRelationFilter
@@ -142307,6 +142385,8 @@ export namespace Prisma {
     mapUrl?: SortOrderInput | SortOrder
     img?: SortOrderInput | SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrderInput | SortOrder
+    totalTeachers?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SchoolCountOrderByAggregateInput
@@ -142334,6 +142414,8 @@ export namespace Prisma {
     mapUrl?: StringNullableWithAggregatesFilter<"School"> | string | null
     img?: StringNullableWithAggregatesFilter<"School"> | string | null
     goal?: IntWithAggregatesFilter<"School"> | number
+    totalStudents?: IntNullableWithAggregatesFilter<"School"> | number | null
+    totalTeachers?: IntNullableWithAggregatesFilter<"School"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"School"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"School"> | Date | string
   }
@@ -149125,6 +149207,8 @@ export namespace Prisma {
     location?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     status?: StringFilter<"AfterSchoolCentre"> | string
     goal?: IntFilter<"AfterSchoolCentre"> | number
+    totalStudents?: IntNullableFilter<"AfterSchoolCentre"> | number | null
+    totalTeachers?: IntNullableFilter<"AfterSchoolCentre"> | number | null
     img?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     mapUrl?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     createdAt?: DateTimeFilter<"AfterSchoolCentre"> | Date | string
@@ -149148,6 +149232,8 @@ export namespace Prisma {
     location?: SortOrderInput | SortOrder
     status?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrderInput | SortOrder
+    totalTeachers?: SortOrderInput | SortOrder
     img?: SortOrderInput | SortOrder
     mapUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -149174,6 +149260,8 @@ export namespace Prisma {
     location?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     status?: StringFilter<"AfterSchoolCentre"> | string
     goal?: IntFilter<"AfterSchoolCentre"> | number
+    totalStudents?: IntNullableFilter<"AfterSchoolCentre"> | number | null
+    totalTeachers?: IntNullableFilter<"AfterSchoolCentre"> | number | null
     img?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     mapUrl?: StringNullableFilter<"AfterSchoolCentre"> | string | null
     createdAt?: DateTimeFilter<"AfterSchoolCentre"> | Date | string
@@ -149197,6 +149285,8 @@ export namespace Prisma {
     location?: SortOrderInput | SortOrder
     status?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrderInput | SortOrder
+    totalTeachers?: SortOrderInput | SortOrder
     img?: SortOrderInput | SortOrder
     mapUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -149221,6 +149311,8 @@ export namespace Prisma {
     location?: StringNullableWithAggregatesFilter<"AfterSchoolCentre"> | string | null
     status?: StringWithAggregatesFilter<"AfterSchoolCentre"> | string
     goal?: IntWithAggregatesFilter<"AfterSchoolCentre"> | number
+    totalStudents?: IntNullableWithAggregatesFilter<"AfterSchoolCentre"> | number | null
+    totalTeachers?: IntNullableWithAggregatesFilter<"AfterSchoolCentre"> | number | null
     img?: StringNullableWithAggregatesFilter<"AfterSchoolCentre"> | string | null
     mapUrl?: StringNullableWithAggregatesFilter<"AfterSchoolCentre"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"AfterSchoolCentre"> | Date | string
@@ -151524,6 +151616,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -151550,6 +151644,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -151576,6 +151672,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -151602,6 +151700,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -151628,6 +151728,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -151647,6 +151749,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -151666,6 +151770,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -159094,6 +159200,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -159117,6 +159225,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -159140,6 +159250,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -159163,6 +159275,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -159186,6 +159300,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -159202,6 +159318,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -159218,6 +159336,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -161679,12 +161799,16 @@ export namespace Prisma {
     mapUrl?: SortOrder
     img?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SchoolAvgOrderByAggregateInput = {
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
   }
 
   export type SchoolMaxOrderByAggregateInput = {
@@ -161702,6 +161826,8 @@ export namespace Prisma {
     mapUrl?: SortOrder
     img?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -161721,12 +161847,16 @@ export namespace Prisma {
     mapUrl?: SortOrder
     img?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SchoolSumOrderByAggregateInput = {
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -166114,6 +166244,8 @@ export namespace Prisma {
     location?: SortOrder
     status?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     img?: SortOrder
     mapUrl?: SortOrder
     createdAt?: SortOrder
@@ -166122,6 +166254,8 @@ export namespace Prisma {
 
   export type AfterSchoolCentreAvgOrderByAggregateInput = {
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
   }
 
   export type AfterSchoolCentreMaxOrderByAggregateInput = {
@@ -166134,6 +166268,8 @@ export namespace Prisma {
     location?: SortOrder
     status?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     img?: SortOrder
     mapUrl?: SortOrder
     createdAt?: SortOrder
@@ -166150,6 +166286,8 @@ export namespace Prisma {
     location?: SortOrder
     status?: SortOrder
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
     img?: SortOrder
     mapUrl?: SortOrder
     createdAt?: SortOrder
@@ -166158,6 +166296,8 @@ export namespace Prisma {
 
   export type AfterSchoolCentreSumOrderByAggregateInput = {
     goal?: SortOrder
+    totalStudents?: SortOrder
+    totalTeachers?: SortOrder
   }
 
   export type FellowAfterSchoolCentreFellowIdCentreIdCompoundUniqueInput = {
@@ -184421,6 +184561,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -184446,6 +184588,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -184823,6 +184967,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -184848,6 +184994,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -185552,6 +185700,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -185577,6 +185727,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -185711,6 +185863,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -185736,6 +185890,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -185848,6 +186004,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -185873,6 +186031,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -186007,6 +186167,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -186032,6 +186194,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -186738,6 +186902,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     students?: StudentCreateNestedManyWithoutSchoolInput
@@ -186763,6 +186929,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     students?: StudentUncheckedCreateNestedManyWithoutSchoolInput
@@ -186879,6 +187047,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: StudentUpdateManyWithoutSchoolNestedInput
@@ -186904,6 +187074,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     students?: StudentUncheckedUpdateManyWithoutSchoolNestedInput
@@ -187244,6 +187416,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -187269,6 +187443,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -187487,6 +187663,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -187512,6 +187690,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -187703,6 +187883,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -187725,6 +187907,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -187940,6 +188124,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -187962,6 +188148,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -192039,6 +192227,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -192064,6 +192254,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -192140,6 +192332,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -192165,6 +192359,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -205059,6 +205255,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolCreateNestedManyWithoutSchoolInput
@@ -205084,6 +205282,8 @@ export namespace Prisma {
     mapUrl?: string | null
     img?: string | null
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     fellows?: FellowSchoolUncheckedCreateNestedManyWithoutSchoolInput
@@ -205389,6 +205589,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUpdateManyWithoutSchoolNestedInput
@@ -205414,6 +205616,8 @@ export namespace Prisma {
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fellows?: FellowSchoolUncheckedUpdateManyWithoutSchoolNestedInput
@@ -206450,6 +206654,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -206472,6 +206678,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -206585,6 +206793,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -206607,6 +206817,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -206629,6 +206841,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -206651,6 +206865,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -206724,6 +206940,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -206746,6 +206964,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -206809,6 +207029,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -206831,6 +207053,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -207096,6 +207320,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -207118,6 +207344,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -207696,6 +207924,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -207718,6 +207948,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -207845,6 +208077,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -207867,6 +208101,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -207972,6 +208208,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -207994,6 +208232,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -208121,6 +208361,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -208143,6 +208385,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -208489,6 +208733,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -208511,6 +208757,8 @@ export namespace Prisma {
     location?: string | null
     status?: string
     goal?: number
+    totalStudents?: number | null
+    totalTeachers?: number | null
     img?: string | null
     mapUrl?: string | null
     createdAt?: Date | string
@@ -208761,6 +209009,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -208783,6 +209033,8 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     goal?: IntFieldUpdateOperationsInput | number
+    totalStudents?: NullableIntFieldUpdateOperationsInput | number | null
+    totalTeachers?: NullableIntFieldUpdateOperationsInput | number | null
     img?: NullableStringFieldUpdateOperationsInput | string | null
     mapUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

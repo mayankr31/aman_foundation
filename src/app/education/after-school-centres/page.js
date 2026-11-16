@@ -65,7 +65,8 @@ export default function AfterSchoolCentresModule() {
     location: "",
     status: "Active",
     mapUrl: "",
-    goal: 80,
+    totalStudents: "",
+    totalTeachers: "",
   };
   const [addForm, setAddForm] = useState(initialAddForm);
 
@@ -100,10 +101,7 @@ export default function AfterSchoolCentresModule() {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
-        body: JSON.stringify({
-          ...addForm,
-          goal: parseInt(addForm.goal)
-        })
+        body: JSON.stringify(addForm)
       });
       const json = await res.json();
       if (json.success) {
@@ -159,8 +157,9 @@ export default function AfterSchoolCentresModule() {
       "Location": c.location || "",
       "Address": c.address || "",
       "Status": c.status || "",
-      "Enrollment Goal": c.goal ?? "",
-      "Enrolled": c.enrolled ?? 0,
+      "Aman Students": c.enrolled ?? 0,
+      "Centre Students": c.totalStudents ?? "",
+      "Total Teachers": c.totalTeachers ?? "",
       "Programs": c.programs ?? 0,
       "Map URL": c.mapUrl || "",
     }));
@@ -239,7 +238,7 @@ export default function AfterSchoolCentresModule() {
         <div className="bg-surface-container-low rounded-[1rem] p-6 border border-outline-variant/10">
           <div className="flex items-center gap-2 mb-2">
             <span className="material-symbols-outlined text-primary text-[20px]">groups</span>
-            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Active Students</p>
+            <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant">Aman Students</p>
           </div>
           <p className="stat-value text-primary">
             {centres.reduce((acc, c) => acc + (c.enrolled ?? 0), 0).toLocaleString()}
@@ -368,9 +367,21 @@ export default function AfterSchoolCentresModule() {
               <div className="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-surface-variant">
                 <div>
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
-                    Enrolled
+                    Aman Students
                   </p>
                   <p className="font-headline text-xl text-on-surface">{c.enrolled ?? 0}</p>
+                </div>
+                <div>
+                  <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
+                    Centre Students
+                  </p>
+                  <p className="font-headline text-xl text-on-surface">{c.totalStudents ?? "—"}</p>
+                </div>
+                <div>
+                  <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
+                    Teachers
+                  </p>
+                  <p className="font-headline text-xl text-on-surface">{c.totalTeachers ?? "—"}</p>
                 </div>
                 <div>
                   <p className="font-label text-[0.65rem] uppercase tracking-[0.05em] text-on-surface-variant mb-1">
@@ -378,27 +389,6 @@ export default function AfterSchoolCentresModule() {
                   </p>
                   <p className="font-headline text-xl text-on-surface">{c.programs}</p>
                 </div>
-              </div>
-              <div className="mt-auto">
-                {(() => {
-                  const enrolled = c.enrolled ?? 0;
-                  const goal = c.goal || 0;
-                  const progress = goal > 0 ? Math.min(100, Math.round((enrolled / goal) * 100)) : 0;
-                  const color = progress >= 80 ? "bg-primary shadow-[0_0_4px_rgba(0,104,87,0.4)]" : progress >= 40 ? "bg-secondary" : "bg-error";
-                  return (
-                    <>
-                      <div className="flex justify-between font-label text-xs uppercase tracking-widest text-on-surface-variant mb-2">
-                        <span>Enrollment Goal</span>
-                        <span className={progress >= 80 ? "text-primary" : progress >= 40 ? "text-secondary" : "text-error"}>
-                          {enrolled} / {goal}
-                        </span>
-                      </div>
-                      <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                        <div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }}></div>
-                      </div>
-                    </>
-                  );
-                })()}
               </div>
               </Link>
               {canDeleteRecords && (
@@ -489,7 +479,8 @@ export default function AfterSchoolCentresModule() {
               <InputField label="Phone" name="phone" value={addForm.phone} onChange={e => setAddForm(f => ({ ...f, phone: e.target.value }))} type="tel" transform={toMobileInput} inputMode="numeric" maxLength={10} pattern="[0-9]{10}" title="Enter exactly 10 digits, without +91 or spaces." hint="10 digits, numbers only (no +91)." />
               <InputField label="Location/City" name="location" value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))} required />
               <InputField label="Status" name="status" value={addForm.status} onChange={e => setAddForm(f => ({ ...f, status: e.target.value }))} options={["Active", "Inactive", "Under Review"]} />
-              <InputField label="Enrolment Goal" name="goal" type="number" min="0" step="1" value={addForm.goal} onChange={e => setAddForm(f => ({ ...f, goal: digitsOnly(e.target.value) }))} />
+              <InputField label="Total Students (Centre)" name="totalStudents" value={addForm.totalStudents} onChange={e => setAddForm(f => ({ ...f, totalStudents: e.target.value }))} inputMode="numeric" maxLength={6} transform={digitsOnly} hint="Full centre strength, including students outside Aman Foundation." />
+              <InputField label="Total Teachers" name="totalTeachers" value={addForm.totalTeachers} onChange={e => setAddForm(f => ({ ...f, totalTeachers: e.target.value }))} inputMode="numeric" maxLength={5} transform={digitsOnly} />
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Address</label>

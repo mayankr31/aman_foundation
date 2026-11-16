@@ -6,12 +6,16 @@ import { getFellowIdByUserId } from "@/lib/scope";
 import {
   validateEmail,
   validateMobile,
+  validateInteger,
   firstError,
   normalizeEmailForSave,
   normalizeMobileForSave,
 } from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+const toNullableInt = (value) =>
+  value === undefined || value === null || String(value).trim() === "" ? null : Number(value);
 
 export async function GET(req) {
   try {
@@ -95,7 +99,9 @@ export async function POST(req) {
       latitude,
       longitude,
       mapUrl,
-      img
+      img,
+      totalStudents,
+      totalTeachers
     } = body;
 
     if (!name) {
@@ -105,6 +111,8 @@ export async function POST(req) {
     const validationMessage = firstError([
       validateEmail(email),
       validateMobile(phone),
+      validateInteger(totalStudents, { min: 0, max: 100000 }),
+      validateInteger(totalTeachers, { min: 0, max: 100000 }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -124,7 +132,9 @@ export async function POST(req) {
           latitude,
           longitude,
           mapUrl,
-          img
+          img,
+          totalStudents: toNullableInt(totalStudents),
+          totalTeachers: toNullableInt(totalTeachers)
         }
       });
 

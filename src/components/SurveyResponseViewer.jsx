@@ -1,5 +1,5 @@
 import React from 'react';
-import kyrDict from '@/lib/kyrDictionary.json';
+import { getKyrQuestionText } from '@/lib/kyrFormSchema';
 import { getCapacityQuestionText, getCapacityOptionLabel } from '@/lib/capacityDictionaries';
 import { formatDate } from '@/lib/date';
 
@@ -110,8 +110,8 @@ export default function SurveyResponseViewer({ type, responses, planData }) {
         
         if (type === 'kyr') {
           // Check for sub-questions or exact match
-          questionText = kyrDict[key] || kyrDict[key.split('_')[0]] || key;
-          if (key === 'B.1') {
+          questionText = getKyrQuestionText(key) || getKyrQuestionText(key.split('_')[0]) || key;
+          if (key === 'B1_Date') {
             formattedVal = formatDate(val, renderValue(val));
           }
         } else if (['adaptive', 'absorptive', 'transformative'].includes(type)) {

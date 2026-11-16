@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import { buildKyrProfilePrefill, KYR_PROFILE_QUESTION_IDS } from "@/lib/kyrFormSchema";
 import DateInput from "@/components/ui/DateInput";
 import YesNoToggle from "@/components/ui/YesNoToggle";
 import useBodyScrollLock from "@/lib/useBodyScrollLock";
@@ -339,21 +340,9 @@ export default function AddBeneficiaryModal({
     createBeneficiary(null);
   };
 
-  const kyrPrefill = {
-    "B.3": form.state,
-    "B.4": form.district,
-    "B.5": form.block,
-    "B.6": form.ward,
-    "B.7": form.village,
-    "B.8": form.name,
-    "B.9": form.gender,
-    "B.10": form.householdSize,
-    "B.14": form.primaryIncomeType === "Other" ? form.primaryIncomeOther : form.primaryIncomeType,
-    "B.16_Min": form.monthlyIncome,
-    "B.16_Max": form.monthlyIncome,
-    "B.18": form.caste,
-  };
-  const kyrHidden = ["B.3", "B.4", "B.5", "B.6", "B.7", "B.8", "B.9", "B.10", "B.14", "B.16", "B.18"];
+  const kyrProfileFields = buildKyrProfilePrefill(form);
+  const kyrPrefill = kyrProfileFields.prefill;
+  const kyrHidden = KYR_PROFILE_QUESTION_IDS;
 
   const inputClass =
     "w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-primary border-outline-variant bg-transparent text-on-surface text-base sm:text-sm";

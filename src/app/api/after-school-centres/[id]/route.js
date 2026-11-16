@@ -5,12 +5,19 @@ import { checkPermission } from "@/lib/permissions";
 import {
   validateEmail,
   validateMobile,
+  validateInteger,
   firstError,
   normalizeEmailForSave,
   normalizeMobileForSave,
 } from "@/lib/validation";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+const toOptionalInt = (value) => {
+  if (value === undefined) return undefined;
+  if (value === null || String(value).trim() === "") return null;
+  return Number(value);
+};
 
 async function resolveCentreId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -139,6 +146,8 @@ export async function PATCH(req, context) {
     const validationMessage = firstError([
       validateEmail(body.email),
       validateMobile(body.phone),
+      validateInteger(body.totalStudents, { min: 0, max: 100000 }),
+      validateInteger(body.totalTeachers, { min: 0, max: 100000 }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
@@ -156,7 +165,8 @@ export async function PATCH(req, context) {
         status: body.status,
         mapUrl: body.mapUrl,
         img: body.img,
-        goal: body.goal !== undefined ? parseInt(body.goal) : undefined
+        totalStudents: toOptionalInt(body.totalStudents),
+        totalTeachers: toOptionalInt(body.totalTeachers)
       }
     });
 

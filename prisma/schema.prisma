@@ -272,6 +272,8 @@ model School {
   mapUrl        String?
   img           String?
   goal          Int             @default(80)
+  totalStudents Int?
+  totalTeachers Int?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
@@ -1692,6 +1694,8 @@ model AfterSchoolCentre {
   location        String?
   status          String              @default("Active")
   goal            Int                 @default(80)
+  totalStudents   Int?
+  totalTeachers   Int?
   img             String?
   mapUrl          String?
   createdAt       DateTime            @default(now())

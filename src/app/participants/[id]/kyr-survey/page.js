@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import { useBeneficiaryWriteGuard } from "@/lib/useBeneficiaryWriteGuard";
 import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
+import { buildKyrProfilePrefill } from "@/lib/kyrFormSchema";
 
 export default function KYRSurveyPage() {
   const { id } = useParams();
@@ -28,37 +29,7 @@ export default function KYRSurveyPage() {
         const res = await fetch(`/api/beneficiaries/${id}`, { headers });
         const json = await res.json();
         if (json.success && json.data) {
-          const b = json.data;
-          const pairs = [
-            ["B.3", b.state],
-            ["B.4", b.district],
-            ["B.5", b.block],
-            ["B.6", b.ward],
-            ["B.7", b.village],
-            ["B.8", b.name],
-            ["B.9", b.gender],
-            ["B.10", b.householdSize != null ? String(b.householdSize) : ""],
-            ["B.14", b.primaryIncomeType],
-            ["B.16_Min", b.monthlyIncome != null ? String(b.monthlyIncome) : ""],
-            ["B.16_Max", b.monthlyIncome != null ? String(b.monthlyIncome) : ""],
-            ["B.18", b.caste],
-          ];
-          const nextPrefill = {};
-          const locks = [];
-          pairs.forEach(([key, value]) => {
-            if (value !== undefined && value !== null && String(value).trim() !== "") {
-              nextPrefill[key] = value;
-            }
-          });
-          pairs.forEach(([key, value]) => {
-            if (key === "B.16_Min" || key === "B.16_Max") return;
-            if (value !== undefined && value !== null && String(value).trim() !== "") {
-              locks.push(key);
-            }
-          });
-          if (nextPrefill["B.16_Min"]) {
-            locks.push("B.16");
-          }
+          const { prefill: nextPrefill, locks } = buildKyrProfilePrefill(json.data);
           setPrefill(nextPrefill);
           setLockQuestionIds(locks);
         }

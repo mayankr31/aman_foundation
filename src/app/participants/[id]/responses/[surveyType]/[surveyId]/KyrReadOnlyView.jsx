@@ -1,102 +1,162 @@
 "use client";
 
-import kyrDict from '@/lib/kyrDictionary.json';
+import { KYR_SECTIONS, KYR_SCORECARD } from "@/lib/kyrFormSchema";
+import { computeKyrScores } from "@/lib/kyrSurveyScores";
+import { formatDate } from "@/lib/date";
 
-const sectionTitles = {
-  A: "Consent",
-  B: "Respondent's Details",
-  C: "Current Life Situation",
-  D: "Planning",
-  E: "Disaster Preparedness",
-  F: "Disaster Belief",
-  G: "Disaster Mindset",
-  H: "Financial Resilience",
-  I: "Health Resilience",
-  J: "Social Connect",
-  K: "Social Protection",
-  L: "Disaster Awareness",
-  M: "Vulnerability Assessment"
-};
+const EMPTY = "Not answered";
 
-export default function KyrReadOnlyView({ responses }) {
+function isEmpty(value) {
+  if (value === null || value === undefined) return true;
+  if (Array.isArray(value)) return value.length === 0;
+  return String(value).trim() === "";
+}
+
+function primitive(value) {
+  if (isEmpty(value)) return EMPTY;
+  return String(value);
+}
+
+function questionHasAnswer(question, responses) {
+  const value = responses[question.id];
+  if (question.type === "checkbox") return Array.isArray(value) && value.length > 0;
+  if (question.type === "grid" || question.type === "gridMulti") {
+    return Object.values(value || {}).some((entry) =>
+      Array.isArray(entry) ? entry.length > 0 : !isEmpty(entry)
+    );
+  }
+  if (question.type === "composite" || question.type === "amountRange") {
+    return (question.fields || []).some((field) => !isEmpty(responses[field.key]));
+  }
+  return !isEmpty(value);
+}
+
+function AnswerBlock({ question, responses }) {
+  const value = responses[question.id];
+
+  if (question.type === "composite" || question.type === "amountRange") {
+    return (
+      <ul className="space-y-1.5 w-full">
+        {question.fields.map((field) => {
+          const fieldValue = responses[field.key];
+          const display =
+            field.type === "date" && !isEmpty(fieldValue)
+              ? formatDate(fieldValue, String(fieldValue))
+              : primitive(fieldValue);
+          return (
+            <li
+              key={field.key}
+              className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 border-b border-surface-container-highest last:border-0 pb-1.5 last:pb-0"
+            >
+              <span className="font-bold text-on-surface text-xs min-w-[120px]">
+                {field.label}:
+              </span>
+              <span className="text-on-surface-variant break-words min-w-0">{display}</span>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  if (question.type === "grid") {
+    const entries = Object.entries(value || {}).filter(([, answer]) => !isEmpty(answer));
+    if (!entries.length) return <span>{EMPTY}</span>;
+    return (
+      <ul className="space-y-1.5 w-full">
+        {entries.map(([row, answer]) => (
+          <li
+            key={row}
+            className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 border-b border-surface-container-highest last:border-0 pb-1.5 last:pb-0"
+          >
+            <span className="font-bold text-on-surface text-xs min-w-[120px]">{row}:</span>
+            <span className="text-on-surface-variant break-words min-w-0">{answer}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (question.type === "gridMulti") {
+    const entries = Object.entries(value || {}).filter(
+      ([, answers]) => Array.isArray(answers) && answers.length > 0
+    );
+    if (!entries.length) return <span>{EMPTY}</span>;
+    return (
+      <ul className="space-y-1.5 w-full">
+        {entries.map(([row, answers]) => (
+          <li
+            key={row}
+            className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 border-b border-surface-container-highest last:border-0 pb-1.5 last:pb-0"
+          >
+            <span className="font-bold text-on-surface text-xs min-w-[120px]">{row}:</span>
+            <span className="text-on-surface-variant break-words min-w-0">
+              {answers.join(", ")}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  if (question.type === "checkbox") {
+    if (!Array.isArray(value) || value.length === 0) return <span>{EMPTY}</span>;
+    let text = value.join(", ");
+    if (question.otherField && value.includes(question.otherOption)) {
+      const other = responses[question.otherField];
+      if (!isEmpty(other)) text = `${text} (${other})`;
+    }
+    return <span>{text}</span>;
+  }
+
+  if (question.type === "radio" && question.otherField && value === question.otherOption) {
+    const other = responses[question.otherField];
+    if (!isEmpty(other)) return <span>{`${value} (${other})`}</span>;
+  }
+
+  return <span>{primitive(value)}</span>;
+}
+
+export default function KyrReadOnlyView({ responses, survey }) {
   if (!responses) return <div>No responses recorded.</div>;
 
-  const renderValue = (val) => {
-    if (val === null || val === undefined || val === "") return "N/A";
-    if (Array.isArray(val)) return val.join(", ");
-    if (typeof val === 'object') {
-      return (
-        <ul className="space-y-1.5 w-full">
-          {Object.entries(val).map(([k, v]) => (
-            <li key={k} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-2 border-b border-surface-container-highest last:border-0 pb-1.5 last:pb-0">
-              <span className="font-bold text-on-surface text-xs min-w-[120px]">{k}:</span>
-              <span className="text-on-surface-variant break-words min-w-0">{Array.isArray(v) ? v.join(", ") : String(v)}</span>
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return String(val);
-  };
-
-  // Group responses by section prefix
-  const groupedResponses = {};
-  
-  Object.keys(kyrDict).forEach(key => {
-    // some keys are B.16_Min, we want just 'B'
-    const prefixMatch = key.match(/^([A-Z])/);
-    if (prefixMatch) {
-      const prefix = prefixMatch[1];
-      if (!groupedResponses[prefix]) groupedResponses[prefix] = [];
-      
-      const val = responses[key] !== undefined ? responses[key] : (
-        // Grid questions have answers like responses['B.16'] = { "row1": "col1" }
-        // But our dict keys might just be 'B.16'
-        responses[key]
-      );
-
-      groupedResponses[prefix].push({
-        key,
-        text: kyrDict[key],
-        val: val
-      });
-    }
-  });
-
-  // Also catch any responses not in dictionary
-  Object.keys(responses).forEach(key => {
-    if (key === 'vulnerabilityNote' || key === 'facilitator') return;
-    if (!kyrDict[key] && !kyrDict[key.split('_')[0]]) {
-      const prefixMatch = key.match(/^([A-Z])/);
-      const prefix = prefixMatch ? prefixMatch[1] : 'Other';
-      if (!groupedResponses[prefix]) groupedResponses[prefix] = [];
-      groupedResponses[prefix].push({
-        key,
-        text: key,
-        val: responses[key]
-      });
-    }
-  });
+  const computedScores = computeKyrScores(responses);
+  const scores = KYR_SCORECARD.map((item) => ({
+    ...item,
+    value:
+      survey && survey[item.key] !== undefined && survey[item.key] !== null
+        ? survey[item.key]
+        : computedScores[item.key],
+  }));
+  const overall =
+    survey && survey.overallScore !== undefined && survey.overallScore !== null
+      ? survey.overallScore
+      : computedScores.overallScore;
 
   return (
-    <div className="font-sans space-y-12">
-      {Object.keys(sectionTitles).map(prefix => {
-        const questions = groupedResponses[prefix];
-        if (!questions || questions.length === 0) return null;
+    <div className="font-sans space-y-10">
+      {KYR_SECTIONS.map((section) => {
+        const hasAnyAnswer = section.questions.some((question) =>
+          questionHasAnswer(question, responses)
+        );
+        if (!hasAnyAnswer) return null;
 
         return (
-          <div key={prefix} className="space-y-6">
+          <div key={section.id} className="space-y-4">
             <h3 className="text-xl font-bold font-headline border-b border-surface-container-highest pb-2">
-              Section {prefix} - {sectionTitles[prefix]}
+              Section {section.id} - {section.title}
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {questions.map((q) => (
-                <div key={q.key} className="p-4 bg-surface-container-lowest rounded-lg border border-surface-container-highest flex flex-col justify-between">
+              {section.questions.map((question) => (
+                <div
+                  key={question.id}
+                  className="p-4 bg-surface-container-lowest rounded-lg border border-surface-container-highest flex flex-col justify-between"
+                >
                   <p className="text-sm font-semibold text-on-surface mb-3 leading-relaxed">
-                    {q.key}. {q.text}
+                    {question.displayId || question.id}. {question.text}
                   </p>
                   <div className="bg-surface-container-low p-3 rounded text-sm text-on-surface-variant font-medium mt-auto">
-                    {renderValue(q.val)}
+                    <AnswerBlock question={question} responses={responses} />
                   </div>
                 </div>
               ))}
@@ -104,6 +164,39 @@ export default function KyrReadOnlyView({ responses }) {
           </div>
         );
       })}
+
+      <div className="space-y-3">
+        <h3 className="text-xl font-bold font-headline border-b border-surface-container-highest pb-2">
+          Your Family&apos;s Resilience Scorecard
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm border-collapse min-w-[420px]">
+            <thead>
+              <tr className="text-xs uppercase tracking-wider text-on-surface-variant border-b border-surface-container-highest">
+                <th className="p-2">Sn</th>
+                <th className="p-2">Indicator</th>
+                <th className="p-2 text-right">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scores.map((item, index) => (
+                <tr key={item.key} className="border-b border-surface-container-high last:border-0">
+                  <td className="p-2 text-on-surface-variant">{index + 1}</td>
+                  <td className="p-2 font-semibold text-on-surface">{item.label}</td>
+                  <td className="p-2 text-right font-bold text-primary">{Number(item.value) || 0}%</td>
+                </tr>
+              ))}
+              <tr className="bg-surface-container-low">
+                <td className="p-2" />
+                <td className="p-2 font-bold text-on-surface">Overall Resilience Score</td>
+                <td className="p-2 text-right text-lg font-bold text-primary">
+                  {Number(overall) || 0}%
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
