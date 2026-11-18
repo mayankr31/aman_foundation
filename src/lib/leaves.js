@@ -68,29 +68,13 @@ function annualQuotaPeriod(quotaPeriod) {
 }
 
 /**
- * Computes the current leave policy balances for a user. Annual/calendar quotas
- * count approved and pending requests. Event-based and unlimited types show
- * usage for the selected financial year but do not carry an annual balance.
+ * Computes the current leave policy balances from already-loaded records.
+ * Annual/calendar quotas count approved and pending requests. Event-based and
+ * unlimited types show usage for the selected financial year but do not carry
+ * an annual balance.
  */
-export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStart()) {
-  const [configs, leaves, credits, user] = await Promise.all([
-    ensureLeaveConfigs(),
-    prisma.leave.findMany({
-      where: { userId, status: { in: ["APPROVED", "PENDING"] } },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.compOffCredit.findMany({
-      where: { userId },
-      orderBy: { workedDate: "desc" },
-    }),
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { dateOfJoining: true },
-    }),
-  ]);
-
+function computeLeaveSummary({ configs, leaves, credits, dateOfJoining, fyStart, calendarYear }) {
   const fyRange = getFinancialYearRange(fyStart);
-  const calendarYear = new Date().getUTCFullYear();
   const configByKey = new Map(configs.map((config) => [config.key, config]));
   const types = {};
 
@@ -119,7 +103,7 @@ export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStar
     };
 
     if (config.minServiceDays != null) {
-      const serviceDays = getServiceDays(user?.dateOfJoining, new Date());
+      const serviceDays = getServiceDays(dateOfJoining, new Date());
       types[config.key].serviceDays = serviceDays;
       types[config.key].eligible = serviceDays != null && serviceDays >= config.minServiceDays;
     }
@@ -193,6 +177,107 @@ export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStar
       credits: compOff,
     },
   };
+}
+
+/** Computes the leave balances for a single user. */
+export async function getUserLeaveSummary(userId, fyStart = getFinancialYearStart()) {
+  const [configs, leaves, credits, user] = await Promise.all([
+    ensureLeaveConfigs(),
+    prisma.leave.findMany({
+      where: { userId, status: { in: ["APPROVED", "PENDING"] } },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.compOffCredit.findMany({
+      where: { userId },
+      orderBy: { workedDate: "desc" },
+    }),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { dateOfJoining: true },
+    }),
+  ]);
+
+  return computeLeaveSummary({
+    configs,
+    leaves,
+    credits,
+    dateOfJoining: user?.dateOfJoining,
+    fyStart,
+    calendarYear: new Date().getUTCFullYear(),
+  });
+}
+
+/**
+ * Batch version of getUserLeaveSummary. Loads the policy, leaves, credits and
+ * joining dates once so a team-wide balance table does not run N+1 queries.
+ * Returns the annual leave-type columns plus a map keyed by user id.
+ */
+export async function getLeaveSummariesForUsers(userIds, fyStart = getFinancialYearStart()) {
+  const ids = [...new Set((userIds || []).filter(Boolean))];
+  const fyLabel = `FY ${fyStart}-${String(fyStart + 1).slice(-2)}`;
+
+  if (!ids.length) {
+    return { fyStart, fyLabel, columns: [], summaries: {} };
+  }
+
+  const [configs, leaves, credits, users] = await Promise.all([
+    ensureLeaveConfigs(),
+    prisma.leave.findMany({
+      where: { userId: { in: ids }, status: { in: ["APPROVED", "PENDING"] } },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.compOffCredit.findMany({
+      where: { userId: { in: ids } },
+      orderBy: { workedDate: "desc" },
+    }),
+    prisma.user.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, dateOfJoining: true },
+    }),
+  ]);
+
+  const leavesByUser = new Map();
+  for (const leave of leaves) {
+    if (!leavesByUser.has(leave.userId)) leavesByUser.set(leave.userId, []);
+    leavesByUser.get(leave.userId).push(leave);
+  }
+
+  const creditsByUser = new Map();
+  for (const credit of credits) {
+    if (!creditsByUser.has(credit.userId)) creditsByUser.set(credit.userId, []);
+    creditsByUser.get(credit.userId).push(credit);
+  }
+
+  const joiningByUser = new Map(users.map((entry) => [entry.id, entry.dateOfJoining]));
+  const calendarYear = new Date().getUTCFullYear();
+  const summaries = {};
+
+  for (const id of ids) {
+    summaries[id] = computeLeaveSummary({
+      configs,
+      leaves: leavesByUser.get(id) || [],
+      credits: creditsByUser.get(id) || [],
+      dateOfJoining: joiningByUser.get(id),
+      fyStart,
+      calendarYear,
+    });
+  }
+
+  const columns = configs
+    .filter((config) => config.active && config.key !== "COMP_OFF" && config.systemType !== "COMP_OFF")
+    .filter((config) =>
+      [QUOTA_PERIODS.FINANCIAL_YEAR, QUOTA_PERIODS.CALENDAR_YEAR].includes(
+        config.quotaPeriod || QUOTA_PERIODS.FINANCIAL_YEAR
+      )
+    )
+    .map((config) => ({
+      key: config.key,
+      name: config.name,
+      code: config.code || null,
+      paid: config.paid !== false,
+    }));
+
+  return { fyStart, fyLabel, columns, summaries };
 }
 
 /**

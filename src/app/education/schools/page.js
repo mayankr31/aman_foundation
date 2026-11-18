@@ -46,7 +46,7 @@ function Modal({ title, onClose, children }) {
 }
 
 export default function SchoolsModule() {
-  const { token, canDeleteRecords } = useAuth();
+  const { token, canDeleteRecords, can } = useAuth();
   const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
@@ -288,6 +288,7 @@ export default function SchoolsModule() {
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export Data</span>
           </button>
+          {can("education", "WRITE") && (
           <button
             onClick={() => setShowAddModal(true)}
             className="flex-1 md:flex-none px-4 py-2 rounded-full bg-primary text-on-primary hover:opacity-90 transition-opacity font-label text-sm uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)] cursor-pointer"
@@ -295,6 +296,7 @@ export default function SchoolsModule() {
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="whitespace-nowrap">Add School</span>
           </button>
+          )}
         </div>
       </div>
 

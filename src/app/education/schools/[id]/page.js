@@ -70,7 +70,7 @@ function Modal({ title, onClose, children }) {
 export default function SchoolProfileDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { token, isInitializing, user } = useAuth();
+  const { token, isInitializing, user, can } = useAuth();
   const toast = useToast();
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [lightboxPhoto, setLightboxPhoto] = useState(null);
@@ -401,8 +401,7 @@ export default function SchoolProfileDetail() {
   const canManageFellows = isAdmin || PROGRAM_ROLES.includes(user?.roleName);
   const canManageStaff =
     isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
-  const isAssignedFellow = assignedFellows.some((f) => f.fellow?.userId === user?.id);
-  const canEditSchoolProfile = isAdmin || isAssignedFellow || canManageStaff;
+  const canEditSchoolProfile = can("education", "WRITE");
   const { totalEnrolled = 0, genderRatio = {} } = school;
   const maleCount = genderRatio.male || 0;
   const femaleCount = genderRatio.female || 0;
@@ -522,10 +521,12 @@ export default function SchoolProfileDetail() {
                 <span className="material-symbols-outlined text-primary">campaign</span>
                 Active Program Participation
               </h3>
+              {canEditSchoolProfile && (
               <button onClick={() => { setModal("programs"); setSearchQ(""); }}
                 className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
                 <span className="material-symbols-outlined text-[16px]">add</span> Manage Programs
               </button>
+              )}
             </div>
             {assignedPrograms.length === 0 ? (
               <p className="text-center py-8 text-on-surface-variant font-sans text-sm">No programs linked. Click "Manage Programs" to add one.</p>
@@ -651,10 +652,12 @@ export default function SchoolProfileDetail() {
                 Enrolled Students ({totalEnrolled})
               </h3>
               <div className="flex gap-2">
+                {canEditSchoolProfile && (
                 <button onClick={() => { setModal("students"); setSearchQ(""); }}
                   className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer">
                   <span className="material-symbols-outlined text-[16px]">manage_accounts</span> Manage Students
                 </button>
+                )}
               </div>
             </div>
             {enrolledStudents.length === 0 ? (
@@ -893,7 +896,7 @@ export default function SchoolProfileDetail() {
           schoolName={school.name}
           token={token}
           source="school"
-          canEditNotes={isAdmin || PROGRAM_ROLES.includes(user?.roleName) || user?.roleName === "FELLOW"}
+          canEditNotes={canEditSchoolProfile}
         />
       </div>
 
@@ -1145,9 +1148,11 @@ export default function SchoolProfileDetail() {
 
               <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/20">
                 <button type="button" disabled={saving} onClick={() => setAttendanceReviewMode(false)} className="px-4 py-2 rounded-full border border-outline-variant text-on-surface hover:bg-surface-container transition-colors cursor-pointer text-sm disabled:opacity-50">Back</button>
+                {canEditSchoolProfile && (
                 <button type="button" disabled={saving} onClick={handleConfirmAttendance} className="px-4 py-2 rounded-full bg-primary text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer text-sm disabled:opacity-50">
                   {saving ? "Saving..." : (isEditingAttendance ? "Update Attendance" : "Mark Attendance")}
                 </button>
+                )}
               </div>
             </div>
           )}

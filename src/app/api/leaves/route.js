@@ -99,6 +99,24 @@ export async function POST(req) {
       if (!compOffWorkedDate) {
         return NextResponse.json({ error: "Select the date you worked on a non-working day" }, { status: 400 });
       }
+
+      // Comp-off is earned only by working a weekly off (Sunday) or a public
+      // holiday. The credit itself is created when attendance is checked in.
+      const workedDateKey = compOffWorkedDate.toISOString().slice(0, 10);
+      const isWeeklyOff = compOffWorkedDate.getUTCDay() === 0;
+      const publicHoliday = isWeeklyOff
+        ? null
+        : await prisma.holiday.findFirst({
+            where: { dateKey: workedDateKey, active: true, type: "PUBLIC" },
+            select: { id: true },
+          });
+      if (!isWeeklyOff && !publicHoliday) {
+        return NextResponse.json(
+          { error: "Comp-off can only be claimed for a Sunday or public holiday you worked." },
+          { status: 400 }
+        );
+      }
+
       if (compOffWorkedDate >= startDate) {
         return NextResponse.json({ error: "The comp-off leave date must be after the worked date" }, { status: 400 });
       }
@@ -113,30 +131,29 @@ export async function POST(req) {
       const existingCredit = await prisma.compOffCredit.findUnique({
         where: { userId_workedDate: { userId: user.id, workedDate: compOffWorkedDate } },
       });
-      if (existingCredit && new Date(existingCredit.expiresAt) < new Date()) {
+      if (!existingCredit) {
+        return NextResponse.json(
+          {
+            error:
+              "No comp-off credit found for that day. Comp-off is granted automatically when you check in on a Sunday or public holiday.",
+          },
+          { status: 400 }
+        );
+      }
+      if (new Date(existingCredit.expiresAt) < new Date()) {
         return NextResponse.json({ error: "This comp-off credit has expired" }, { status: 400 });
       }
-      if (existingCredit && existingCredit.status !== "Available") {
+      if (existingCredit.status !== "Available") {
         return NextResponse.json({ error: "This comp-off has already been used or reserved" }, { status: 400 });
       }
-      if (existingCredit && Number(existingCredit.days) < days) {
+      if (Number(existingCredit.days) < days) {
         return NextResponse.json({ error: "Requested days exceed the available comp-off credit" }, { status: 400 });
       }
 
-      const credit = existingCredit
-        ? await prisma.compOffCredit.update({
-            where: { id: existingCredit.id },
-            data: { status: "Reserved" },
-          })
-        : await prisma.compOffCredit.create({
-            data: {
-              userId: user.id,
-              workedDate: compOffWorkedDate,
-              days: days,
-              expiresAt: expiry,
-              status: "Reserved",
-            },
-          });
+      const credit = await prisma.compOffCredit.update({
+        where: { id: existingCredit.id },
+        data: { status: "Reserved" },
+      });
       compOffCreditId = credit.id;
     } else {
       const validation = await validateLeaveQuota({ userId: user.id, leaveTypeKey, startDate, endDate });

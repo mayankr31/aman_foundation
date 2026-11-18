@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessStudent } from "@/lib/scope";
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -30,6 +31,10 @@ export async function GET(req, context) {
 
     if (!studentId) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     const logs = await prisma.studentAttendanceLog.findMany({
@@ -63,15 +68,15 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const studentId = await resolveStudentId(id);
 
     if (!studentId) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -165,15 +170,15 @@ export async function PUT(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const studentId = await resolveStudentId(id);
 
     if (!studentId) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -259,6 +264,10 @@ export async function DELETE(req, context) {
 
     if (!studentId) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     const body = await req.json();

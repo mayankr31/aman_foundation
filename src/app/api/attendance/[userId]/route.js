@@ -39,7 +39,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const [logs, tasks] = await Promise.all([
+    const [logs, tasks, leaves, holidays] = await Promise.all([
       prisma.attendanceLog.findMany({
         where: { userId, intimelog: { not: null } },
         orderBy: { createdAt: "desc" },
@@ -56,6 +56,25 @@ export async function GET(req, context) {
           completionDate: true,
           timeSlot: true,
         },
+      }),
+      prisma.leave.findMany({
+        where: { userId, status: "APPROVED" },
+        select: {
+          id: true,
+          type: true,
+          leaveTypeKey: true,
+          startDate: true,
+          endDate: true,
+          dates: true,
+          days: true,
+          reason: true,
+        },
+        orderBy: { startDate: "desc" },
+      }),
+      prisma.holiday.findMany({
+        where: { active: true },
+        select: { id: true, dateKey: true, name: true, type: true },
+        orderBy: { dateKey: "asc" },
       }),
     ]);
 
@@ -83,7 +102,13 @@ export async function GET(req, context) {
       };
     });
 
-    return NextResponse.json({ success: true, user: targetUser, data: logsWithTasks });
+    return NextResponse.json({
+      success: true,
+      user: targetUser,
+      data: logsWithTasks,
+      leaves,
+      holidays,
+    });
   } catch (error) {
     console.error("Fetch user attendance error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -18,8 +18,6 @@ import { formatDate } from "@/lib/date";
 import { toMobileInput, toPersonNameInput, toAadhaarInput } from "@/lib/validation";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 // ─── Small helpers ─────────────────────────────────────────────────────────────
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `w-full px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
@@ -94,7 +92,7 @@ function Modal({ title, onClose, children }) {
 export default function StudentProfileDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { user, token, isInitializing, canDeleteRecords } = useAuth();
+  const { user, token, isInitializing, canDeleteRecords, can } = useAuth();
   const toast = useToast();
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -635,7 +633,7 @@ export default function StudentProfileDetail() {
   const filteredLearningAssessments = learningAssessments.filter(a => inDateRange(a.date));
   const filteredHomeworkRecords = homeworkRecords.filter(h => inDateRange(h.date));
 
-  const isAdminOrManager = user && (user.roleName === "ADMIN" || PROGRAM_ROLES.includes(user.roleName));
+  const canEditStudent = can("education", "WRITE");
   const stateOptions = withCurrentOption(
     INDIA_STATES.map((state) => state.name),
     editForm.state
@@ -695,6 +693,8 @@ export default function StudentProfileDetail() {
           </div>
         </div>
         <div className="flex gap-3 relative z-10 shrink-0 self-end lg:self-start flex-wrap">
+          {canEditStudent && (
+          <>
           <button
             onClick={() => setShowConfirmMigrate(true)}
             disabled={saving}
@@ -719,6 +719,8 @@ export default function StudentProfileDetail() {
             <span className="material-symbols-outlined text-[18px]">school</span>
             Manage School
           </button>
+          </>
+          )}
           {canDeleteRecords && (
             <button
               onClick={() => setShowDeleteStudent(true)}
@@ -814,7 +816,7 @@ export default function StudentProfileDetail() {
                 <span className="material-symbols-outlined text-primary">analytics</span>
                 Academic Assessments
               </h3>
-              {isAdminOrManager && (
+              {canEditStudent && (
                 <button
                   onClick={() => { loadTemplates(); setModal("assessment_templates"); }}
                   className="bg-surface-container text-on-surface px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-1.5 cursor-pointer border border-outline-variant/20"
@@ -848,6 +850,7 @@ export default function StudentProfileDetail() {
                 </select>
               </div>
               <div className="flex gap-2 ml-auto">
+                {canEditStudent && (
                 <button
                   onClick={() => { loadTemplates().then(() => openNewAssessmentForm()); }}
                   className="bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-semibold hover:bg-primary/20 transition-colors flex items-center gap-1.5 cursor-pointer"
@@ -855,6 +858,7 @@ export default function StudentProfileDetail() {
                   <span className="material-symbols-outlined text-[16px]">add</span>
                   New Assessment
                 </button>
+                )}
               </div>
             </div>
 
@@ -890,7 +894,7 @@ export default function StudentProfileDetail() {
                         <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity items-center">
                           <button
                             onClick={() => { loadTemplates().then(() => openEditAssessmentForm(form)); }}
-                            className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant"
+                            className={`p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant ${canEditStudent ? "" : "hidden"}`}
                           >
                             <span className="material-symbols-outlined text-[14px]">edit</span>
                           </button>
@@ -1008,6 +1012,7 @@ export default function StudentProfileDetail() {
                 <span className="material-symbols-outlined text-primary">trending_up</span>
                 School Transition History
               </h3>
+              {canEditStudent && (
               <button
                 onClick={() => {
                   const now = new Date();
@@ -1019,6 +1024,7 @@ export default function StudentProfileDetail() {
                 <span className="material-symbols-outlined text-[14px]">add</span>
                 Add
               </button>
+              )}
             </div>
             {transitions.length === 0 ? (
               <p className="text-center py-4 text-on-surface-variant text-xs">No transition records yet.</p>
@@ -1054,7 +1060,7 @@ export default function StudentProfileDetail() {
                       </div>
                       <div className="flex gap-1 ml-2 shrink-0">
                         <button onClick={() => { setEditTransitionId(t.id); setTransitionForm({ academicYear: t.academicYear || "", month: t.month || "", status: t.status, description: t.description || "", location: t.location || "" }); setModal("transition"); }}
-                          className="p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant">
+                          className={`p-1 hover:bg-surface-container rounded-full cursor-pointer text-on-surface-variant ${canEditStudent ? "" : "hidden"}`}>
                           <span className="material-symbols-outlined text-[14px]">edit</span>
                         </button>
                         {canDeleteRecords && (

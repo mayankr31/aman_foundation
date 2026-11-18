@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { getFellowIdByUserId } from "@/lib/scope";
+import { getFellowIdByUserId, isProgramManager } from "@/lib/scope";
 import {
   validateEmail,
   validateMobile,
@@ -66,11 +66,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isAdmin = user.role.name === "ADMIN";
     const isFellow = user.role.name === "FELLOW";
-    if (!isAdmin && !isFellow) {
-      return NextResponse.json({ error: "Forbidden: Admin or Fellow access only" }, { status: 403 });
-    }
+    const isPm = isProgramManager(user);
 
     let fellowProfileId = null;
     if (isFellow) {
@@ -126,11 +123,15 @@ export async function POST(req) {
         }
       });
 
-      // Fellows are scoped to their assigned centres, so link the creator
-      // immediately; otherwise the centre would be invisible to them.
+      // Field-scoped creators are limited to their assigned centres, so link
+      // the new centre immediately; otherwise it would be invisible to them.
       if (fellowProfileId) {
         await tx.fellowAfterSchoolCentre.create({
           data: { fellowId: fellowProfileId, centreId: created.id }
+        });
+      } else if (isPm) {
+        await tx.programManagerAfterSchoolCentre.create({
+          data: { userId: user.id, centreId: created.id }
         });
       }
 

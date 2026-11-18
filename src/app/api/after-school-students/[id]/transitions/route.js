@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessAfterSchoolStudent } from "@/lib/scope";
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -31,6 +32,10 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "After school student not found" }, { status: 404 });
     }
 
+    if (!(await canAccessAfterSchoolStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
+    }
+
     const transitions = await prisma.afterSchoolStudentTransition.findMany({
       where: { studentId },
       orderBy: { createdAt: "desc" }
@@ -53,15 +58,15 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const studentId = await resolveStudentId(id);
 
     if (!studentId) {
       return NextResponse.json({ error: "After school student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessAfterSchoolStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -102,15 +107,15 @@ export async function PUT(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const studentId = await resolveStudentId(id);
 
     if (!studentId) {
       return NextResponse.json({ error: "After school student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessAfterSchoolStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
     }
 
     const body = await req.json();
@@ -165,6 +170,10 @@ export async function DELETE(req, context) {
 
     if (!studentId) {
       return NextResponse.json({ error: "After school student not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessAfterSchoolStudent(user, studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
     }
 
     const body = await req.json();

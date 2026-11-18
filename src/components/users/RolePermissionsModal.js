@@ -246,7 +246,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
             </p>
             <div className={`border-t ${theme.borderLight} my-4`} />
             <div className="max-h-[50vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
-              <table className="mobile-card-table w-full min-w-[420px]">
+              <table className={`mobile-card-table w-full min-w-[420px] ${isDarkMode ? 'mobile-card-table-dark' : ''}`}>
                 <thead className={`sticky top-0 ${theme.bg} z-10`}>
                   <tr className={`text-left text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>
                     <th className="py-3 pr-4">Page / Feature</th>

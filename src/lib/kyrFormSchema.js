@@ -419,7 +419,7 @@ export const KYR_SECTIONS = [
           "Co-operative banks",
           "Private banks",
         ],
-        cols: ["> 100K", "10K - 100K", "< 10K", "Don't Know"],
+        cols: ["> 100K", "10K - 100K", "< 10K", "No loan / N.A.", "Don't Know"],
       },
       {
         id: "H6",

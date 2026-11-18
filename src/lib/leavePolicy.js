@@ -52,6 +52,20 @@ export function daysInclusive(startDate, endDate) {
   return Math.max(0, Math.floor(ms / 86400000) + 1);
 }
 
+/** Expands an inclusive date range into UTC YYYY-MM-DD keys. */
+export function getDateKeysInRange(startDate, endDate) {
+  const start = parseDateOnly(startDate);
+  const end = parseDateOnly(endDate);
+  if (!start || !end || end < start) return [];
+  const keys = [];
+  const cursor = new Date(start.getTime());
+  while (cursor <= end && keys.length < 4000) {
+    keys.push(cursor.toISOString().slice(0, 10));
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  return keys;
+}
+
 export function addDays(date, days) {
   if (!date) return null;
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + Number(days || 0)));

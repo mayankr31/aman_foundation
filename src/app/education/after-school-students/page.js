@@ -92,7 +92,7 @@ function FormField({ label, name, value, onChange, type = "text", required = fal
 
 export default function AfterSchoolStudentsModule() {
   const router = useRouter();
-  const { token, user, canDeleteRecords } = useAuth();
+  const { token, user, canDeleteRecords, can } = useAuth();
   const toast = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [gradeFilter, setGradeFilter] = useState("All Grades");
@@ -387,6 +387,7 @@ export default function AfterSchoolStudentsModule() {
             <span className="material-symbols-outlined text-[18px]">download</span>
             <span className="whitespace-nowrap">Export</span>
           </button>
+          {can("education", "WRITE") && (
           <button
             onClick={() => setShowAddModal(true)}
             className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary hover:opacity-90 transition-all font-label text-sm uppercase tracking-widest flex-shrink-0 cursor-pointer shadow-[0_8px_24px_-10px_rgba(0,104,87,0.4)]"
@@ -394,6 +395,7 @@ export default function AfterSchoolStudentsModule() {
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="whitespace-nowrap">Add Student</span>
           </button>
+          )}
         </div>
       </div>
 

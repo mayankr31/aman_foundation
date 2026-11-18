@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessCentre } from "@/lib/scope";
 import {
   validateEmail,
   validateMobile,
@@ -130,15 +131,15 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden: Admin access only" }, { status: 403 });
-    }
-
     const { id } = await context.params;
     const centreId = await resolveCentreId(id);
 
     if (!centreId) {
       return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessCentre(user, centreId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
     }
 
     const body = await req.json();

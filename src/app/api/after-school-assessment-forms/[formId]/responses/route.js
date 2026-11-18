@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
+import { checkPermission } from "@/lib/permissions";
+import { canAccessAfterSchoolStudent } from "@/lib/scope";
 
 export async function PUT(req, context) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
+
+    if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
+      return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
+    }
 
     const { formId } = await context.params;
     const { isEnrolledInSchool, reasonNotEnrolled, subjectResponses, flnScores } = await req.json();
@@ -13,6 +19,10 @@ export async function PUT(req, context) {
     const existing = await prisma.afterSchoolAssessmentForm.findUnique({ where: { id: formId } });
     if (!existing) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessAfterSchoolStudent(user, existing.studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
     }
 
     await prisma.$transaction(async (tx) => {

@@ -84,12 +84,8 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isAdmin = user.role.name === "ADMIN";
     const isPm = PROGRAM_ROLES.includes(user.role.name);
     const isFellow = user.role.name === "FELLOW";
-    if (!isAdmin && !isPm && !isFellow) {
-      return NextResponse.json({ error: "Forbidden: Admin, Program Manager or Fellow access only" }, { status: 403 });
-    }
 
     const body = await req.json();
     const {

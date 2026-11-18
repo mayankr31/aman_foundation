@@ -15,6 +15,7 @@ import {
   POLICY_FLAGS,
   QUOTA_PERIODS,
   QUOTA_PERIOD_OPTIONS,
+  getFinancialYearStart,
   getPolicyFlagLabel,
 } from "@/lib/leavePolicy";
 
@@ -98,6 +99,15 @@ export default function LeaveWorkflow() {
   const [newPolicyType, setNewPolicyType] = useState(emptyPolicyType());
   const [creatingType, setCreatingType] = useState(false);
   const [showHolidays, setShowHolidays] = useState(false);
+  const [showBalances, setShowBalances] = useState(false);
+
+  const currentFyStart = getFinancialYearStart();
+  const fiscalYearOptions = [currentFyStart, currentFyStart - 1, currentFyStart - 2];
+  const [balanceFyStart, setBalanceFyStart] = useState(currentFyStart);
+  const [balances, setBalances] = useState(null);
+  const [balancesLoading, setBalancesLoading] = useState(false);
+  const [balancesError, setBalancesError] = useState("");
+  const [balanceSearch, setBalanceSearch] = useState("");
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -111,6 +121,15 @@ export default function LeaveWorkflow() {
     currentUser?.roleName
   );
   const { pageItems: pagedLeaves, currentPage, setCurrentPage } = usePagination(leaves, 10);
+
+  const balanceColumns = balances?.columns || [];
+  const balanceQuery = balanceSearch.trim().toLowerCase();
+  const balanceRows = (balances?.rows || []).filter(({ user }) => {
+    if (!balanceQuery) return true;
+    return `${user.name || ""} ${formatRoleLabel(user.role)} ${user.department || ""}`
+      .toLowerCase()
+      .includes(balanceQuery);
+  });
 
   const fetchLeaves = async () => {
     setIsLoading(true);
@@ -135,6 +154,31 @@ export default function LeaveWorkflow() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
+
+  const fetchBalances = async (fy) => {
+    setBalancesLoading(true);
+    setBalancesError("");
+    try {
+      const res = await fetch(`/api/leaves/balances?fy=${fy}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Unable to load leave balances");
+      setBalances(data.data || null);
+    } catch (err) {
+      console.error(err);
+      setBalancesError(err.message || "Unable to load leave balances");
+    } finally {
+      setBalancesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token && canReview && showBalances) {
+      fetchBalances(balanceFyStart);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, canReview, showBalances, balanceFyStart]);
 
   const fetchPolicy = async () => {
     try {
@@ -356,6 +400,148 @@ export default function LeaveWorkflow() {
 
       {canReview && <OnLeaveToday className="mb-6" />}
 
+      {canReview && showBalances && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4">
+          <div className="bg-surface-container-lowest rounded-2xl sm:rounded-[2rem] shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-hidden flex flex-col">
+            <div className="flex items-start justify-between gap-3 border-b border-outline-variant/10 px-4 sm:px-6 py-4">
+              <div>
+                <h3 className="text-xl font-headline font-bold text-on-surface">Staff Leave Balances</h3>
+                <p className="text-[11px] text-on-surface-variant mt-1">
+                  Approved requests count as taken. Pending requests reduce the available balance.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowBalances(false)}
+                className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface"
+                aria-label="Close staff leave balances"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <div className="px-4 sm:px-6 py-4 overflow-y-auto flex-1 min-h-0">
+              <div className="flex flex-wrap items-center gap-2 justify-end mb-4">
+              <input
+                type="search"
+                value={balanceSearch}
+                onChange={(event) => setBalanceSearch(event.target.value)}
+                placeholder="Search employee or role"
+                className="w-full sm:w-52 px-3 py-1.5 text-xs rounded-full border border-outline-variant bg-transparent focus:outline-none focus:border-primary"
+              />
+              <select
+                value={balanceFyStart}
+                onChange={(event) => setBalanceFyStart(Number(event.target.value))}
+                className="px-3 py-1.5 text-xs font-bold rounded-full border border-outline-variant bg-transparent focus:outline-none focus:border-primary"
+              >
+                {fiscalYearOptions.map((fy) => (
+                  <option key={fy} value={fy}>
+                    FY {fy}-{String(fy + 1).slice(-2)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+          {balancesError && (
+            <div className="flex items-center justify-between gap-3 bg-rose-50 text-rose-700 text-xs px-3 py-2 rounded-lg mb-3">
+              <span>{balancesError}</span>
+              <button
+                type="button"
+                onClick={() => fetchBalances(balanceFyStart)}
+                className="font-bold underline"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {balancesLoading && !balances ? (
+            <p className="text-sm text-on-surface-variant py-6 text-center">Loading leave balances…</p>
+          ) : balanceRows.length === 0 ? (
+            <p className="text-sm text-on-surface-variant py-6 text-center">
+              {balances
+                ? balanceQuery
+                  ? "No employees match this search."
+                  : "No team members report to you."
+                : "No leave balance data available."}
+            </p>
+          ) : (
+            <div className="w-full overflow-x-auto">
+              <table className="mobile-card-table w-full min-w-[860px] text-left border-collapse font-sans text-sm">
+                <thead>
+                  <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
+                    <th className="py-3 px-4">Employee</th>
+                    <th className="py-3 px-4">Role</th>
+                    {balanceColumns.map((column) => (
+                      <th key={column.key} className="py-3 px-4 whitespace-nowrap">
+                        {column.name}
+                      </th>
+                    ))}
+                    <th className="py-3 px-4 whitespace-nowrap">Comp Off</th>
+                    <th className="py-3 px-4 whitespace-nowrap">Paid Leave Available</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {balanceRows.map((row) => (
+                    <tr key={row.user.id} className="border-b border-surface-container/70 last:border-0">
+                      <td data-label="" className="py-4 px-4 align-top">
+                        <div className="font-semibold text-on-surface">{row.user.name}</div>
+                        <div className="text-[10px] text-on-surface-variant">{row.user.department || "—"}</div>
+                      </td>
+                      <td data-label="Role" className="py-4 px-4 align-top text-xs text-on-surface-variant">
+                        {formatRoleLabel(row.user.role)}
+                      </td>
+                      {balanceColumns.map((column) => {
+                        const type = row.types[column.key];
+                        const available = type?.available;
+                        const used = type?.used || 0;
+                        const pending = type?.pending || 0;
+                        return (
+                          <td key={column.key} data-label={column.name} className="py-4 px-4 align-top">
+                            {available == null ? (
+                              <span className="text-xs text-on-surface-variant">
+                                {used ? `${used} taken` : "—"}
+                              </span>
+                            ) : (
+                              <div className="flex flex-col gap-0.5">
+                                <span className="text-sm font-bold text-on-surface">{available} left</span>
+                                <span className="text-[10px] text-on-surface-variant">
+                                  {used} taken{pending > 0 ? ` · ${pending} pending` : ""}
+                                </span>
+                              </div>
+                            )}
+                          </td>
+                        );
+                      })}
+                      <td data-label="Comp Off" className="py-4 px-4 align-top">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-bold text-on-surface">
+                            {row.compOff.available} available
+                          </span>
+                          {row.compOff.used > 0 && (
+                            <span className="text-[10px] text-on-surface-variant">
+                              {row.compOff.used} used
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td data-label="Paid Leave Available" className="py-4 px-4 align-top">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-sm font-bold text-primary">{row.totals.paidAvailable} left</span>
+                          <span className="text-[10px] text-on-surface-variant">{row.totals.paidUsed} taken</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-6 shadow-ambient border border-outline-variant/10 min-h-[450px]">
         <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
           <h3 className="font-headline font-bold text-xl text-on-surface">Leave Requests</h3>
@@ -367,6 +553,15 @@ export default function LeaveWorkflow() {
               >
                 Apply for Leave
               </Link>
+            )}
+            {canReview && (
+              <button
+                type="button"
+                onClick={() => setShowBalances(true)}
+                className="text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-full hover:bg-indigo-100 transition-colors"
+              >
+                Staff Leave Balances
+              </button>
             )}
             <button
               type="button"

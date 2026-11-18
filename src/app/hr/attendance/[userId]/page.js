@@ -15,8 +15,21 @@ import {
   TASK_TIME_SLOT_LABELS,
   normalizeTaskTimeSlot,
 } from "@/lib/taskSlots";
+import {
+  getDateKeysInRange,
+  parseDateOnly,
+  parseLegacyLeaveRange,
+} from "@/lib/leavePolicy";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+
+// Formats a stored date-only value without letting the local timezone shift
+// the day (leave dates are stored at UTC midnight).
+function formatDateOnly(value) {
+  if (!value) return "";
+  const parsed = parseDateOnly(value);
+  return formatDate(parsed ? parsed.toISOString().slice(0, 10) : value);
+}
 
 // Status colors
 const statusColors = {
@@ -34,10 +47,13 @@ export default function UserAttendanceDetails({ params }) {
   
   const [userData, setUserData] = useState(null);
   const [attendanceData, setAttendanceData] = useState([]);
+  const [leaveData, setLeaveData] = useState([]);
+  const [holidayData, setHolidayData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedLeave, setSelectedLeave] = useState(null);
 
   useEffect(() => {
     if (token && userId) {
@@ -55,6 +71,8 @@ export default function UserAttendanceDetails({ params }) {
       if (res.ok) {
         setUserData(data.user);
         setAttendanceData(data.data || []);
+        setLeaveData(data.leaves || []);
+        setHolidayData(data.holidays || []);
       }
     } catch (e) {
       console.error(e);
@@ -94,13 +112,38 @@ export default function UserAttendanceDetails({ params }) {
     return processed;
   }, [attendanceData]);
 
+  const leaveByDate = useMemo(() => {
+    const map = {};
+    for (const leave of leaveData) {
+      const start = parseDateOnly(leave.startDate);
+      const end = parseDateOnly(leave.endDate) || start;
+      let keys = start && end ? getDateKeysInRange(start, end) : [];
+      if (!keys.length) {
+        const legacy = parseLegacyLeaveRange(leave.dates);
+        keys = getDateKeysInRange(legacy.startDate, legacy.endDate);
+      }
+      for (const key of keys) {
+        if (!map[key]) map[key] = leave;
+      }
+    }
+    return map;
+  }, [leaveData]);
+
+  const holidayByDate = useMemo(() => {
+    const map = {};
+    for (const holiday of holidayData) {
+      if (holiday.dateKey) map[holiday.dateKey] = holiday;
+    }
+    return map;
+  }, [holidayData]);
+
   // Analytics for current month
   const analytics = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     
-    let loggedDays = 0, absentDays = 0, leaveDays = 0, holidayDays = 0;
+    let loggedDays = 0, absentDays = 0, leaveDays = 0, holidayDays = 0, weeklyOffDays = 0;
     let totalInMins = 0, inCount = 0;
     let totalOutMins = 0, outCount = 0;
     let tasksCompleted = 0, tasksTotal = 0;
@@ -152,14 +195,16 @@ export default function UserAttendanceDetails({ params }) {
       } else {
         const dateObj = new Date(year, month, day);
         const isWeekend = dateObj.getDay() === 0;
-        if (isWeekend) {
-          holidayDays++; // Count weekends as holidays
-        } else if (day < calculationLimitDay) {
-          // If it's a past weekday with no data, it's an absent day
-          absentDays++;
-        } else if (day === calculationLimitDay) {
-          // If it's today, we might consider it absent if the day is mostly over
-          // but for simplicity, we count it as absent if no log exists today.
+        const holiday = holidayByDate[dateKey1];
+        const leave = leaveByDate[dateKey1];
+        if (holiday) {
+          holidayDays++;
+        } else if (isWeekend) {
+          weeklyOffDays++;
+        } else if (leave) {
+          leaveDays++;
+        } else if (day <= calculationLimitDay) {
+          // Past weekdays (and today) with no log are treated as absent.
           absentDays++;
         }
       }
@@ -176,7 +221,7 @@ export default function UserAttendanceDetails({ params }) {
       return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${mod}`;
     };
 
-    const denominator = daysInMonth - holidayDays - leaveDays;
+    const denominator = daysInMonth - holidayDays - weeklyOffDays - leaveDays;
     const attendancePercentage = denominator > 0 ? Math.round((loggedDays / denominator) * 100) : 0;
 
     return {
@@ -185,6 +230,7 @@ export default function UserAttendanceDetails({ params }) {
       absentDays,
       leaveDays,
       holidayDays,
+      weeklyOffDays,
       tasksCompleted,
       tasksTotal,
       extraSeconds,
@@ -193,7 +239,7 @@ export default function UserAttendanceDetails({ params }) {
       averageCheckInTime: formatAvg(totalInMins, inCount),
       averageCheckOutTime: formatAvg(totalOutMins, outCount)
     };
-  }, [processedData, currentDate]);
+  }, [processedData, currentDate, leaveByDate, holidayByDate]);
 
   // Exports
   const exportCSV = () => {
@@ -235,7 +281,17 @@ export default function UserAttendanceDetails({ params }) {
           `"${tasks.replace(/"/g, '""')}"`
         ]);
       } else {
-        rows.push([dateKey1, 'No Data', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
+        const holiday = holidayByDate[dateKey1];
+        const leave = leaveByDate[dateKey1];
+        const isWeekend = new Date(year, month, day).getDay() === 0;
+        const status = holiday
+          ? `Holiday: ${holiday.name}`
+          : isWeekend
+          ? 'Weekly Off'
+          : leave
+          ? `Leave: ${leave.type}`
+          : 'No Data';
+        rows.push([dateKey1, status, 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', '']);
       }
     }
     
@@ -391,7 +447,7 @@ export default function UserAttendanceDetails({ params }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg">
             <p className="text-xs font-semibold text-slate-500 uppercase">Average Check-in</p>
             <p className="text-lg font-bold text-slate-800">{analytics.averageCheckInTime}</p>
@@ -404,9 +460,20 @@ export default function UserAttendanceDetails({ params }) {
             <p className="text-xs font-semibold text-slate-500 uppercase">Tasks Completed</p>
             <p className="text-lg font-bold text-slate-800">{analytics.tasksCompleted} / {analytics.tasksTotal}</p>
           </div>
-          <div className="bg-slate-50 border border-slate-100 p-4 rounded-lg">
-            <p className="text-xs font-semibold text-slate-500 uppercase">Leave / Weekly Off</p>
-            <p className="text-lg font-bold text-slate-800">{analytics.leaveDays + analytics.holidayDays}</p>
+          <div className="bg-amber-50/60 border border-amber-100 p-4 rounded-lg">
+            <p className="text-xs font-semibold text-amber-700 uppercase">Leaves Taken</p>
+            <p className="text-lg font-bold text-amber-800">{analytics.leaveDays}</p>
+            <p className="text-[10px] text-amber-700/80 mt-0.5">Approved leave days</p>
+          </div>
+          <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg">
+            <p className="text-xs font-semibold text-slate-500 uppercase">Weekly Off</p>
+            <p className="text-lg font-bold text-slate-700">{analytics.weeklyOffDays}</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Sundays not worked</p>
+          </div>
+          <div className="bg-violet-50/60 border border-violet-100 p-4 rounded-lg">
+            <p className="text-xs font-semibold text-violet-700 uppercase">Holidays</p>
+            <p className="text-lg font-bold text-violet-800">{analytics.holidayDays}</p>
+            <p className="text-[10px] text-violet-700/80 mt-0.5">Holidays not worked</p>
           </div>
         </div>
       </div>
@@ -457,24 +524,66 @@ export default function UserAttendanceDetails({ params }) {
               
               const dateObj = new Date(yyyy, currentDate.getMonth(), day);
               const isWeekend = dateObj.getDay() === 0;
-              const colorClass = dayData ? (statusColors[dayData.status] || statusColors.default) : (isWeekend ? statusColors.holiday : statusColors.default);
+              const holiday = holidayByDate[dateKey1] || null;
+              const leave = leaveByDate[dateKey1] || null;
+              const colorClass = dayData
+                ? (statusColors[dayData.status] || statusColors.default)
+                : holiday
+                ? statusColors.holiday
+                : isWeekend
+                ? statusColors.holiday
+                : leave
+                ? statusColors.leave
+                : statusColors.default;
 
               return (
                 <div
                   key={day}
-                  onClick={() => dayData && setSelectedDate(dayData)}
-                  className={`h-14 sm:h-28 border-r border-b border-gray-100 p-1 sm:p-2 relative flex flex-col group ${colorClass} ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''} ${dayData ? 'cursor-pointer hover:opacity-90' : ''}`}
+                  onClick={() => {
+                    if (dayData) setSelectedDate(dayData);
+                    else if (leave && !holiday && !isWeekend) setSelectedLeave(leave);
+                  }}
+                  title={!dayData && holiday ? holiday.name : undefined}
+                  className={`h-14 sm:h-28 border-r border-b border-gray-100 p-1 sm:p-2 relative flex flex-col group ${colorClass} ${isToday ? 'ring-2 ring-inset ring-blue-500' : ''} ${dayData || (leave && !holiday && !isWeekend) ? 'cursor-pointer hover:opacity-90' : ''}`}
                 >
                   <span className={`text-[11px] sm:text-sm font-semibold self-center sm:self-end mb-0.5 sm:mb-1 ${isToday ? 'text-blue-600' : 'text-slate-600'}`}>
                     {day}
                   </span>
-                  
-                  {!dayData && isWeekend && (
+
+                  {!dayData && holiday && (
+                    <div className="hidden sm:flex flex-col gap-1 mt-auto items-center justify-center h-full opacity-90">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-violet-700">
+                        Holiday
+                      </span>
+                      <span className="text-[10px] font-medium text-slate-600 text-center leading-tight line-clamp-2">
+                        {holiday.name}
+                      </span>
+                    </div>
+                  )}
+
+                  {!dayData && !holiday && isWeekend && (
                     <div className="hidden sm:flex flex-col gap-1 mt-auto items-center justify-center h-full opacity-50">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                         Weekly Off
                       </span>
                     </div>
+                  )}
+
+                  {!dayData && !holiday && !isWeekend && leave && (
+                    <div className="hidden sm:flex flex-col gap-1 mt-auto">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-white/60 px-1.5 py-0.5 rounded w-fit">
+                        Leave
+                      </span>
+                      <span className="text-[10px] font-medium text-amber-900/80 truncate">{leave.type}</span>
+                    </div>
+                  )}
+
+                  {!dayData && (
+                    <span
+                      className={`sm:hidden absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ${
+                        holiday ? 'bg-violet-500' : leave ? 'bg-amber-500' : ''
+                      }`}
+                    />
                   )}
 
                   {dayData && (
@@ -519,6 +628,62 @@ export default function UserAttendanceDetails({ params }) {
           </div>
         </div>
       </div>
+
+      {selectedLeave && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4"
+          onClick={() => setSelectedLeave(null)}
+        >
+          <div
+            className="bg-white rounded-xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex justify-between items-start border-b border-gray-100 pb-4 gap-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Approved Leave</p>
+                <h3 className="text-lg font-bold text-gray-900">{selectedLeave.type || "Leave"}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedLeave(null)}
+                className="p-1 rounded-full hover:bg-gray-100 text-gray-500 cursor-pointer"
+                aria-label="Close leave details"
+              >
+                <span className="material-symbols-outlined text-lg">close</span>
+              </button>
+            </div>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between gap-4">
+                <span className="text-gray-500">Dates</span>
+                <span className="font-semibold text-gray-800 text-right">
+                  {selectedLeave.startDate ? formatDateOnly(selectedLeave.startDate) : selectedLeave.dates}
+                  {selectedLeave.startDate &&
+                  selectedLeave.endDate &&
+                  new Date(selectedLeave.startDate).toDateString() !==
+                    new Date(selectedLeave.endDate).toDateString()
+                    ? ` – ${formatDateOnly(selectedLeave.endDate)}`
+                    : ""}
+                </span>
+              </div>
+              {selectedLeave.days ? (
+                <div className="flex justify-between gap-4">
+                  <span className="text-gray-500">Days</span>
+                  <span className="font-semibold text-gray-800">{selectedLeave.days}</span>
+                </div>
+              ) : null}
+              {selectedLeave.reason ? (
+                <div>
+                  <p className="text-gray-500 mb-1">Reason</p>
+                  <p className="text-gray-800 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 break-words">
+                    {selectedLeave.reason}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedDate && (
         <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">

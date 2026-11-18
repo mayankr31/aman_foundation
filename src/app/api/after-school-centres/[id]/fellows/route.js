@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin, isCentreManaged } from "@/lib/scope";
+import { isAdmin, isCentreManaged, canAccessCentre } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -33,6 +33,10 @@ export async function GET(req, context) {
 
     if (!centreId) {
       return NextResponse.json({ error: "After school centre not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessCentre(user, centreId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this centre" }, { status: 403 });
     }
 
     const fellowCentres = await prisma.fellowAfterSchoolCentre.findMany({

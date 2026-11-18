@@ -221,6 +221,23 @@ iframe {
     padding: 0.75rem 0 !important;
   }
 
+  /* Card-table variant for modals that use the dark admin surface. Rows keep
+     the modal background and hairline borders, matching how the desktop table
+     looks, instead of the light card fill used on light pages. */
+  table.mobile-card-table.mobile-card-table-dark tbody tr {
+    background: #151e2d;
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+  }
+
+  table.mobile-card-table.mobile-card-table-dark tbody td::before {
+    color: #6b7280;
+  }
+
+  table.mobile-card-table.mobile-card-table-dark tbody td[data-label="Actions"] {
+    border-top-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
   /* Long tab strips wrap instead of creating a horizontal scroll region. */
   .tabs-mobile-wrap {
     flex-wrap: wrap;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { isAdmin, isSchoolManaged } from "@/lib/scope";
+import { isAdmin, isSchoolManaged, canAccessSchool } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 import { canAssignPerson } from "@/lib/hierarchy";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
@@ -32,6 +32,10 @@ export async function GET(req, context) {
     const { id } = await context.params;
     const schoolId = await resolveSchoolId(id);
     if (!schoolId) return NextResponse.json({ error: "School not found" }, { status: 404 });
+
+    if (!(await canAccessSchool(user, schoolId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
+    }
 
     const rows = await prisma.programManagerSchool.findMany({
       where: { schoolId },

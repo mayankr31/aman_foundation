@@ -11,6 +11,7 @@ import {
   istDayEnd,
 } from "@/lib/time";
 import { parseLegacyTime } from "@/lib/attendanceMetrics";
+import { accrueCompOffForWorkedDate } from "@/lib/compOff";
 
 export const dynamic = "force-dynamic";
 
@@ -285,6 +286,14 @@ export async function POST(req) {
     const log = existing
       ? await prisma.attendanceLog.update({ where: { id: existing.id }, data: logData })
       : await prisma.attendanceLog.create({ data: { userId: user.id, ...logData } });
+
+    // Working a weekly off or public holiday earns one comp-off credit. This
+    // must never block a check-in, so failures are only logged.
+    try {
+      await accrueCompOffForWorkedDate({ userId: user.id, dateKey: logdate });
+    } catch (compOffError) {
+      console.error("Comp-off accrual error:", compOffError);
+    }
 
     return NextResponse.json({ success: true, data: log });
   } catch (error) {

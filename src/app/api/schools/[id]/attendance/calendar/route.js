@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessSchool } from "@/lib/scope";
 
 async function resolveSchoolId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -27,6 +28,10 @@ export async function GET(req, context) {
 
     if (!schoolId) {
       return NextResponse.json({ error: "School not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessSchool(user, schoolId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
     }
 
     const { searchParams } = new URL(req.url);

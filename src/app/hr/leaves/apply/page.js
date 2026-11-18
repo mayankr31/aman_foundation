@@ -22,6 +22,11 @@ function formatStoredDates(value) {
   return String(value || "").replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (match) => formatDate(match));
 }
 
+function toDateKey(value) {
+  const parsed = parseDateOnly(value);
+  return parsed ? parsed.toISOString().slice(0, 10) : "";
+}
+
 function emptyLeave() {
   return {
     type: "",
@@ -42,6 +47,7 @@ export default function LeaveApplication() {
   const [leaves, setLeaves] = useState([]);
   const [configs, setConfigs] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [holidayDateKeys, setHolidayDateKeys] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isApplying, setIsApplying] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -60,14 +66,28 @@ export default function LeaveApplication() {
   const fetchLeaves = async () => {
     setIsLoading(true);
     try {
-      const [res, configRes, summaryRes] = await Promise.all([
+      const holidayYear = new Date().getFullYear();
+      const [res, configRes, summaryRes, holidayRes, prevHolidayRes] = await Promise.all([
         fetch("/api/leaves", { headers: { Authorization: `Bearer ${token}` } }),
         fetch("/api/leaves/config", { headers: { Authorization: `Bearer ${token}` } }),
         fetch("/api/leaves/summary", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`/api/holidays?year=${holidayYear}`, { headers: { Authorization: `Bearer ${token}` } }),
+        fetch(`/api/holidays?year=${holidayYear - 1}`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
       const data = await res.json();
       const configData = await configRes.json();
       const summaryData = await summaryRes.json();
+      const holidayData = holidayRes.ok ? await holidayRes.json() : null;
+      const prevHolidayData = prevHolidayRes.ok ? await prevHolidayRes.json() : null;
+
+      const holidayKeys = [
+        ...(holidayData?.data || []),
+        ...(prevHolidayData?.data || []),
+      ]
+        .filter((holiday) => holiday.type === "PUBLIC")
+        .map((holiday) => holiday.dateKey)
+        .filter(Boolean);
+      setHolidayDateKeys([...new Set(holidayKeys)]);
 
       if (res.ok) {
         const myLeaves = (data.data || []).filter((leave) => leave.userId === currentUser?.id);
@@ -99,10 +119,22 @@ export default function LeaveApplication() {
 
   const selectedConfig = configs.find((config) => config.key === newLeave.leaveTypeKey) || null;
   const selectedType = selectedConfig ? summary?.types?.[selectedConfig.key] : null;
+  const isCompOffSelected =
+    selectedConfig?.systemType === "COMP_OFF" || selectedConfig?.key === "COMP_OFF";
   const startDate = parseDateOnly(newLeave.isMultiple ? newLeave.fromDate : newLeave.singleDate);
   const endDate = parseDateOnly(newLeave.isMultiple ? newLeave.toDate : newLeave.singleDate);
   const requestedDays =
     startDate && endDate && endDate >= startDate ? daysInclusive(startDate, endDate) : 0;
+  const leaveStartKey = startDate ? startDate.toISOString().slice(0, 10) : "";
+  const holidayKeySet = new Set(holidayDateKeys);
+  const availableCompOffCredits = (summary?.compOff?.credits || []).filter((credit) => {
+    if (credit.status !== "Available") return false;
+    const workedKey = toDateKey(credit.workedDate);
+    if (!workedKey) return false;
+    if (leaveStartKey && workedKey >= leaveStartKey) return false;
+    const workedDate = parseDateOnly(credit.workedDate);
+    return !!workedDate && (workedDate.getUTCDay() === 0 || holidayKeySet.has(workedKey));
+  });
   const policyWarnings = selectedConfig
     ? getPolicyWarnings(selectedConfig, {
         days: requestedDays,
@@ -149,9 +181,16 @@ export default function LeaveApplication() {
         return;
       }
     }
-    if (selectedConfig.systemType === "COMP_OFF" || selectedConfig.key === "COMP_OFF") {
+    if (isCompOffSelected) {
       if (!newLeave.compOffWorkedDate) {
-        triggerToast("Select the date you worked on a non-working day.");
+        triggerToast("Select the comp-off credit you want to use.");
+        return;
+      }
+      const creditIsEligible = availableCompOffCredits.some(
+        (credit) => toDateKey(credit.workedDate) === newLeave.compOffWorkedDate
+      );
+      if (!creditIsEligible) {
+        triggerToast("No comp-off credit is available for that day.");
         return;
       }
     }
@@ -447,19 +486,37 @@ export default function LeaveApplication() {
                 )}
               </div>
 
-              {(selectedConfig?.systemType === "COMP_OFF" || selectedConfig?.key === "COMP_OFF") && (
+              {isCompOffSelected && (
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
                     Worked On (Non-Working Day)
                   </label>
-                  <DateInput
-                    value={newLeave.compOffWorkedDate}
-                    max={newLeave.isMultiple ? newLeave.fromDate : newLeave.singleDate}
-                    onChange={(event) => setNewLeave({ ...newLeave, compOffWorkedDate: event.target.value })}
-                    className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
-                  />
+                  {availableCompOffCredits.length > 0 ? (
+                    <select
+                      value={newLeave.compOffWorkedDate}
+                      onChange={(event) =>
+                        setNewLeave({ ...newLeave, compOffWorkedDate: event.target.value })
+                      }
+                      className="w-full px-4 py-3 border border-outline-variant rounded-xl focus:outline-none focus:border-primary bg-transparent text-sm text-on-surface"
+                    >
+                      <option value="">Select a worked day</option>
+                      {availableCompOffCredits.map((credit) => (
+                        <option key={credit.id} value={toDateKey(credit.workedDate)}>
+                          {formatDate(credit.workedDate)} · expires {formatDate(credit.expiresAt)}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-800">
+                      No comp-off credit is available
+                      {leaveStartKey ? " before the selected leave date" : ""}. Comp-off is
+                      granted automatically when you check in on a Sunday or public holiday.
+                    </div>
+                  )}
                   <p className="text-[10px] text-on-surface-variant">
-                    Compensatory leave must be availed within {selectedConfig.validityDays || 90} days of the worked date. Your approver will verify the official duty.
+                    {availableCompOffCredits.length > 0
+                      ? "Pick the day you worked on a weekly off or public holiday. Your approver verifies official duty."
+                      : `Compensatory leave must be availed within ${selectedConfig.validityDays || 90} days of the worked date.`}
                   </p>
                 </div>
               )}
@@ -553,8 +610,8 @@ export default function LeaveApplication() {
               <button onClick={() => setIsApplying(false)} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
               <button
                 onClick={handleApplyLeave}
-                disabled={isSubmitting}
-                className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-transform flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                disabled={isSubmitting || (isCompOffSelected && availableCompOffCredits.length === 0)}
+                className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-transform flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? "Submitting..." : "Submit Request"}
               </button>

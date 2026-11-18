@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessStudent } from "@/lib/scope";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -43,6 +44,10 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
     }
 
+    if (!(await canAccessStudent(user, form.studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
+    }
+
     return NextResponse.json({ success: true, data: form });
   } catch (error) {
     console.error("Fetch assessment form error:", error);
@@ -58,16 +63,16 @@ export async function PUT(req, context) {
     if (!(await checkPermission(user, "dashboard", "education", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
-    if (!canManageTemplates(user)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
-
     const { formId } = await context.params;
     const { assessmentType, date, isEnrolledInSchool, reasonNotEnrolled } = await req.json();
 
     const existing = await prisma.AssessmentForm.findUnique({ where: { id: formId } });
     if (!existing) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, existing.studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     const updated = await prisma.AssessmentForm.update({

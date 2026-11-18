@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
+import { canAccessStudent } from "@/lib/scope";
 
 export async function PUT(req, context) {
   try {
@@ -18,6 +19,10 @@ export async function PUT(req, context) {
     const existing = await prisma.AssessmentForm.findUnique({ where: { id: formId } });
     if (!existing) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
+    }
+
+    if (!(await canAccessStudent(user, existing.studentId))) {
+      return NextResponse.json({ error: "Forbidden: You are not assigned to this student's school" }, { status: 403 });
     }
 
     await prisma.$transaction(async (tx) => {
