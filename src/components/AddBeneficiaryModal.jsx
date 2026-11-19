@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { useToast } from "@/context/ToastContext";
 import ResilienceSurveyForm from "@/components/ResilienceSurveyForm";
 import { buildKyrProfilePrefill, KYR_PROFILE_QUESTION_IDS } from "@/lib/kyrFormSchema";
 import DateInput from "@/components/ui/DateInput";
 import YesNoToggle from "@/components/ui/YesNoToggle";
+import Avatar from "@/components/ui/Avatar";
+import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
 import useBodyScrollLock from "@/lib/useBodyScrollLock";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import { PRIMARY_INCOME_CATEGORIES, DEFAULT_PRIMARY_INCOME } from "@/lib/incomeCategories";
@@ -82,9 +84,10 @@ export default function AddBeneficiaryModal({
   allPrograms = false,
   title,
 }) {
-  const { token } = useAuth();
+  const { token, can } = useAuth();
   const heading = title || (studentId ? "Add Parents Details" : "Add New Participant");
   const toast = useToast();
+  const canUploadPhoto = can("livelihood", "WRITE");
 
   // Keep the page behind the modal from scrolling while it is open.
   useBodyScrollLock(true);
@@ -93,6 +96,50 @@ export default function AddBeneficiaryModal({
   const [form, setForm] = useState(emptyAddForm);
   const [errors, setErrors] = useState({});
   const [livelihoodPrograms, setLivelihoodPrograms] = useState([]);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const photoInputRef = useRef(null);
+  const photoPreviewRef = useRef("");
+
+  const setSelectedPhoto = (file) => {
+    if (photoPreviewRef.current) {
+      URL.revokeObjectURL(photoPreviewRef.current);
+      photoPreviewRef.current = "";
+    }
+    if (!file) {
+      setPhotoFile(null);
+      setPhotoPreview("");
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    photoPreviewRef.current = previewUrl;
+    setPhotoFile(file);
+    setPhotoPreview(previewUrl);
+  };
+
+  useEffect(
+    () => () => {
+      if (photoPreviewRef.current) URL.revokeObjectURL(photoPreviewRef.current);
+    },
+    []
+  );
+
+  const handlePhotoSelect = (event) => {
+    const file = event.target.files?.[0];
+    if (file) setSelectedPhoto(file);
+    event.target.value = "";
+  };
+
+  const handleCameraPhoto = (blob) => {
+    if (!blob) return;
+    const file = new File([blob], `participant-photo-${Date.now()}.jpg`, {
+      type: "image/jpeg",
+    });
+    setSelectedPhoto(file);
+    setShowCamera(false);
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -295,6 +342,32 @@ export default function AddBeneficiaryModal({
         return;
       }
 
+      let uploadedPhotoUrl = null;
+      let photoUploadFailed = false;
+      if (photoFile && canUploadPhoto) {
+        setUploadingPhoto(true);
+        try {
+          const body = new FormData();
+          body.append("photo", photoFile, photoFile.name || "participant-photo.jpg");
+          const photoRes = await fetch(`/api/beneficiaries/${json.data.id}/photo`, {
+            method: "POST",
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+            body,
+          });
+          const photoJson = await photoRes.json();
+          if (photoRes.ok && photoJson.success) {
+            uploadedPhotoUrl = photoJson.data?.photoUrl || null;
+          } else {
+            photoUploadFailed = true;
+          }
+        } catch (err) {
+          console.error("Participant photo upload failed:", err);
+          photoUploadFailed = true;
+        } finally {
+          setUploadingPhoto(false);
+        }
+      }
+
       if (surveyPayload && !studentId) {
         // Keep the existing beneficiary-directory flow: create, then save the KYR form.
         const surveyRes = await fetch(`/api/beneficiaries/${json.data.id}/resilience-surveys`, {
@@ -322,7 +395,16 @@ export default function AddBeneficiaryModal({
         );
       }
 
-      onCreated?.(json.data);
+      if (photoUploadFailed) {
+        toast.error(
+          "Participant saved, but the profile photo could not be uploaded. You can add it later from their profile."
+        );
+      }
+
+      const created = uploadedPhotoUrl
+        ? { ...json.data, photoUrl: uploadedPhotoUrl }
+        : json.data;
+      onCreated?.(created);
       onClose?.();
     } catch (err) {
       console.error("Failed to add beneficiary:", err);
@@ -391,6 +473,70 @@ export default function AddBeneficiaryModal({
               Basic details are required. Identity proofs and bank details are optional — select
               <span className="font-bold"> Yes</span> only for the documents the participant has.
             </p>
+
+            {canUploadPhoto && (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border border-outline-variant/30 bg-surface-container/30 p-3">
+                <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden border-2 border-surface shadow-sm bg-primary/10 text-primary flex items-center justify-center">
+                  <Avatar
+                    src={photoPreview}
+                    name={form.name || "Participant"}
+                    className="w-full h-full object-cover"
+                    fallbackClassName="text-lg font-bold"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-on-surface uppercase tracking-wider">
+                    Profile Photo{" "}
+                    <span className="font-medium normal-case tracking-normal text-on-surface-variant">
+                      (optional)
+                    </span>
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => photoInputRef.current?.click()}
+                      disabled={uploadingPhoto}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-outline-variant px-3 py-1.5 text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      <span className="material-symbols-outlined text-[16px] text-primary">upload</span>
+                      Upload Photo
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowCamera(true)}
+                      disabled={uploadingPhoto}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-container transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">photo_camera</span>
+                      Take Photo
+                    </button>
+                    {photoFile && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedPhoto(null)}
+                        disabled={uploadingPhoto}
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors cursor-pointer disabled:opacity-60"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  {photoFile && (
+                    <p className="mt-1.5 truncate text-[10px] text-on-surface-variant">
+                      {photoFile.name || "Camera photo selected"}
+                    </p>
+                  )}
+                </div>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhotoSelect}
+                />
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className={labelClass}><RequiredLabel>Full Name</RequiredLabel></label>
@@ -915,6 +1061,19 @@ export default function AddBeneficiaryModal({
           />
         )}
       </div>
+
+      <SelfieCaptureModal
+        open={showCamera}
+        title="Participant photo"
+        description="Take a photo of the participant, or close this to upload one from the device."
+        facingMode="environment"
+        mirror={false}
+        captureLabel="Capture Photo"
+        useLabel="Use Photo"
+        showSkip={false}
+        onClose={() => setShowCamera(false)}
+        onUse={handleCameraPhoto}
+      />
     </div>
   );
 }

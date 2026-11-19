@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const MAX_OUTPUT_SIZE = 720;
 
-function drawSquareImage(source, sourceWidth, sourceHeight) {
+function drawSquareImage(source, sourceWidth, sourceHeight, mirror = true) {
   const side = Math.min(sourceWidth, sourceHeight);
   const outputSize = Math.min(side, MAX_OUTPUT_SIZE);
   const canvas = document.createElement("canvas");
@@ -15,9 +15,11 @@ function drawSquareImage(source, sourceWidth, sourceHeight) {
   const context = canvas.getContext("2d");
   if (!context) return null;
 
-  // Selfie previews are mirrored, so mirror the captured image to match.
-  context.translate(outputSize, 0);
-  context.scale(-1, 1);
+  if (mirror) {
+    // Selfie previews are mirrored, so mirror the captured image to match.
+    context.translate(outputSize, 0);
+    context.scale(-1, 1);
+  }
   context.drawImage(
     source,
     (sourceWidth - side) / 2,
@@ -46,6 +48,15 @@ export default function SelfieCaptureModal({
   onClose,
   onSkip,
   onUse,
+  title: titleProp,
+  description = "Optional — take a selfie now or skip.",
+  facingMode = "user",
+  mirror = true,
+  captureLabel = "Capture Selfie",
+  useLabel = "Use Selfie",
+  skipLabel = "Skip for now",
+  busyLabel = "Saving...",
+  showSkip = true,
 }) {
   const [status, setStatus] = useState("starting");
   const [errorMessage, setErrorMessage] = useState("");
@@ -92,7 +103,7 @@ export default function SelfieCaptureModal({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: "user",
+          facingMode,
           width: { ideal: 1280 },
           height: { ideal: 1280 },
         },
@@ -108,7 +119,7 @@ export default function SelfieCaptureModal({
           : "Could not start the camera. Please try again."
       );
     }
-  }, [clearPreview, stopStream]);
+  }, [clearPreview, stopStream, facingMode]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -138,7 +149,7 @@ export default function SelfieCaptureModal({
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            facingMode: "user",
+            facingMode,
             width: { ideal: 1280 },
             height: { ideal: 1280 },
           },
@@ -168,7 +179,7 @@ export default function SelfieCaptureModal({
       cancelled = true;
       stopStream();
     };
-  }, [open, clearPreview, stopStream]);
+  }, [open, clearPreview, stopStream, facingMode]);
 
   useEffect(() => {
     if (status === "ready" && videoRef.current && streamRef.current) {
@@ -203,7 +214,7 @@ export default function SelfieCaptureModal({
       return;
     }
 
-    const canvas = drawSquareImage(video, video.videoWidth, video.videoHeight);
+    const canvas = drawSquareImage(video, video.videoWidth, video.videoHeight, mirror);
     if (!canvas) {
       setErrorMessage("Could not capture the photo. Please try again.");
       return;
@@ -223,7 +234,8 @@ export default function SelfieCaptureModal({
     startCamera();
   };
 
-  const title = mode === "check-out" ? "Check-out selfie" : "Check-in selfie";
+  const title =
+    titleProp || (mode === "check-out" ? "Check-out selfie" : "Check-in selfie");
 
   return (
     <div className="fixed inset-0 z-[350] flex items-center justify-center overflow-y-auto overscroll-contain bg-black/70 p-4 py-6">
@@ -232,7 +244,7 @@ export default function SelfieCaptureModal({
           <div>
             <h3 className="text-lg font-bold text-slate-900">{title}</h3>
             <p className="mt-0.5 text-[11px] font-medium text-slate-500">
-              Optional — take a selfie now or skip.
+              {description}
             </p>
           </div>
           <button
@@ -266,7 +278,7 @@ export default function SelfieCaptureModal({
                 autoPlay
                 playsInline
                 muted
-                className="h-full w-full -scale-x-100 object-cover"
+                className={`h-full w-full object-cover ${mirror ? "-scale-x-100" : ""}`}
               />
             )}
 
@@ -301,7 +313,7 @@ export default function SelfieCaptureModal({
                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <span className="material-symbols-outlined text-lg">photo_camera</span>
-                Capture Selfie
+                {captureLabel}
               </button>
             )}
 
@@ -328,19 +340,21 @@ export default function SelfieCaptureModal({
                   ) : (
                     <span className="material-symbols-outlined text-lg">check</span>
                   )}
-                  {busy ? "Saving..." : "Use Selfie"}
+                  {busy ? busyLabel : useLabel}
                 </button>
               </div>
             )}
 
-            <button
-              type="button"
-              onClick={onSkip || onClose}
-              disabled={busy}
-              className="w-full rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Skip for now
-            </button>
+            {showSkip && (
+              <button
+                type="button"
+                onClick={onSkip || onClose}
+                disabled={busy}
+                className="w-full rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {skipLabel}
+              </button>
+            )}
           </div>
         </div>
       </div>

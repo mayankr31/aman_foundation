@@ -5,6 +5,8 @@ import { canAccessUser } from "../../../../lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 import {
+  addDays,
+  daysInclusive,
   ensureLeaveConfigs,
   parseDateOnly,
   parseLegacyLeaveRange,
@@ -83,14 +85,215 @@ export async function PUT(req, { params }) {
     }
 
     const isApprover = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
+    const isOwner = existing.userId === user.id;
+    const isReviewRequest = body.status !== undefined || body.rejectionReason !== undefined;
+
     if (!isApprover) {
-      if (PROGRAM_ROLES.includes(user.role?.name)) {
-        if (existing.userId === user.id || !(await isPmTeamMember(user, existing.userId))) {
-          return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
+      if (isReviewRequest) {
+        if (PROGRAM_ROLES.includes(user.role?.name)) {
+          if (isOwner || !(await isPmTeamMember(user, existing.userId))) {
+            return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
+          }
+        } else {
+          return NextResponse.json({ error: "Forbidden: You cannot approve or reject leaves" }, { status: 403 });
         }
-      } else {
-        return NextResponse.json({ error: "Forbidden: You cannot approve or reject leaves" }, { status: 403 });
+      } else if (isOwner) {
+        if (existing.status !== "PENDING") {
+          return NextResponse.json(
+            { error: "Only pending leave requests can be edited" },
+            { status: 403 }
+          );
+        }
+      } else if (
+        !PROGRAM_ROLES.includes(user.role?.name) ||
+        !(await isPmTeamMember(user, existing.userId))
+      ) {
+        return NextResponse.json({ error: "Forbidden: You cannot edit this leave request" }, { status: 403 });
       }
+    }
+
+    // Applicants can revise their own request while it is still pending. This
+    // re-runs the same policy checks as a new request so balances stay accurate.
+    if (isOwner && !isReviewRequest && existing.status === "PENDING") {
+      const configs = await ensureLeaveConfigs();
+      const nextTypeKey =
+        body.leaveTypeKey ||
+        existing.leaveTypeKey ||
+        typeKeyFromName(body.type ?? existing.type, configs);
+      const config = configs.find((item) => item.key === nextTypeKey);
+      if (!config) {
+        return NextResponse.json({ error: "Please select a valid leave type" }, { status: 400 });
+      }
+      if (!config.active) {
+        return NextResponse.json({ error: "This leave type is no longer available" }, { status: 400 });
+      }
+
+      const legacyExistingRange = parseLegacyLeaveRange(existing.dates);
+      const providedRange = body.dates !== undefined ? parseLegacyLeaveRange(body.dates) : { startDate: null, endDate: null };
+      const startDate =
+        parseDateOnly(body.startDate ?? body.singleDate) ||
+        providedRange.startDate ||
+        parseDateOnly(existing.startDate) ||
+        legacyExistingRange.startDate;
+      const endDate =
+        parseDateOnly(body.endDate ?? body.singleDate) ||
+        providedRange.endDate ||
+        parseDateOnly(existing.endDate) ||
+        legacyExistingRange.endDate ||
+        startDate;
+      if (!startDate || !endDate || endDate < startDate) {
+        return NextResponse.json({ error: "Please select valid leave dates" }, { status: 400 });
+      }
+
+      const holidayName =
+        body.holidayName !== undefined
+          ? String(body.holidayName || "").trim()
+          : String(existing.holidayName || "").trim();
+      if (config.holidayNameRequired && !holidayName) {
+        return NextResponse.json({ error: "Enter the name of the approved holiday" }, { status: 400 });
+      }
+
+      const days = daysInclusive(startDate, endDate);
+      if (!days) {
+        return NextResponse.json({ error: "Please select valid leave dates" }, { status: 400 });
+      }
+
+      let compOffWorkedDate = null;
+      let compOffCreditId = null;
+      let policyFlags = [];
+      const isCompOff = nextTypeKey === "COMP_OFF" || config.systemType === "COMP_OFF";
+
+      if (isCompOff) {
+        const providedWorkedDate =
+          body.compOffWorkedDate !== undefined ? body.compOffWorkedDate : existing.compOffWorkedDate;
+        compOffWorkedDate = parseDateOnly(providedWorkedDate);
+        if (!compOffWorkedDate) {
+          return NextResponse.json(
+            { error: "Select the date you worked on a non-working day" },
+            { status: 400 }
+          );
+        }
+
+        const workedDateKey = compOffWorkedDate.toISOString().slice(0, 10);
+        const isWeeklyOff = compOffWorkedDate.getUTCDay() === 0;
+        const publicHoliday = isWeeklyOff
+          ? null
+          : await prisma.holiday.findFirst({
+              where: { dateKey: workedDateKey, active: true, type: "PUBLIC" },
+              select: { id: true },
+            });
+        if (!isWeeklyOff && !publicHoliday) {
+          return NextResponse.json(
+            { error: "Comp-off can only be claimed for a Sunday or public holiday you worked." },
+            { status: 400 }
+          );
+        }
+
+        if (compOffWorkedDate >= startDate) {
+          return NextResponse.json(
+            { error: "The comp-off leave date must be after the worked date" },
+            { status: 400 }
+          );
+        }
+        const expiry = addDays(compOffWorkedDate, Number(config.validityDays || 90));
+        if (startDate > expiry) {
+          return NextResponse.json(
+            {
+              error: `Compensatory leave must be availed within ${Number(
+                config.validityDays || 90
+              )} days of the worked date`,
+            },
+            { status: 400 }
+          );
+        }
+
+        const credit = await prisma.compOffCredit.findUnique({
+          where: {
+            userId_workedDate: { userId: existing.userId, workedDate: compOffWorkedDate },
+          },
+        });
+        if (!credit) {
+          return NextResponse.json(
+            {
+              error:
+                "No comp-off credit found for that day. Comp-off is granted automatically when you check in on a Sunday or public holiday.",
+            },
+            { status: 400 }
+          );
+        }
+        if (new Date(credit.expiresAt) < new Date()) {
+          return NextResponse.json({ error: "This comp-off credit has expired" }, { status: 400 });
+        }
+        const keepsExistingCredit = existing.compOffCreditId === credit.id;
+        if (!keepsExistingCredit && credit.status !== "Available") {
+          return NextResponse.json(
+            { error: "This comp-off has already been used or reserved" },
+            { status: 400 }
+          );
+        }
+        if (keepsExistingCredit && !["Available", "Reserved"].includes(credit.status)) {
+          return NextResponse.json({ error: "This comp-off is no longer available" }, { status: 400 });
+        }
+        if (Number(credit.days) < days) {
+          return NextResponse.json(
+            { error: "Requested days exceed the available comp-off credit" },
+            { status: 400 }
+          );
+        }
+        compOffCreditId = credit.id;
+      } else {
+        const validation = await validateLeaveQuota({
+          userId: existing.userId,
+          leaveTypeKey: nextTypeKey,
+          startDate,
+          endDate,
+          excludeLeaveId: existing.id,
+        });
+        if (!validation.ok) {
+          return NextResponse.json({ error: validation.error }, { status: 400 });
+        }
+        policyFlags = validation.warnings || [];
+      }
+
+      const dates =
+        body.dates ||
+        `${startDate.toISOString().slice(0, 10)} to ${endDate.toISOString().slice(0, 10)}`;
+
+      const leave = await prisma.$transaction(async (tx) => {
+        if (existing.compOffCreditId && existing.compOffCreditId !== compOffCreditId) {
+          await tx.compOffCredit.updateMany({
+            where: { id: existing.compOffCreditId, status: "Reserved" },
+            data: { status: "Available" },
+          });
+        }
+        if (compOffCreditId) {
+          await tx.compOffCredit.update({
+            where: { id: compOffCreditId },
+            data: { status: "Reserved" },
+          });
+        }
+
+        return tx.leave.update({
+          where: { id },
+          data: {
+            type: config.name,
+            leaveTypeKey: nextTypeKey,
+            startDate,
+            endDate,
+            days,
+            dates,
+            reason: body.reason !== undefined ? body.reason : existing.reason,
+            holidayName: holidayName || null,
+            compOffWorkedDate,
+            compOffCreditId,
+            medicalCertificateRequired: policyFlags.includes("MEDICAL_CERTIFICATE_REQUIRED"),
+            policyFlags,
+          },
+          include: { compOffCredit: true },
+        });
+      });
+
+      return NextResponse.json({ success: true, data: leave });
     }
 
     const nextStatus = body.status !== undefined ? body.status : existing.status;
@@ -198,13 +401,6 @@ export async function DELETE(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
     if (error) return error;
-    if (user.role?.name !== "ADMIN") {
-      return NextResponse.json(
-        { error: "Forbidden: Only the Executive Director can delete records" },
-        { status: 403 }
-      );
-    }
-
 
     if (!(await checkPermission(user, "dashboard", "leaves", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for leaves" }, { status: 403 });
@@ -225,6 +421,12 @@ export async function DELETE(req, { params }) {
     }
     if (!isOwner && !isAdmin && !isPmTeam) {
       return NextResponse.json({ error: "Forbidden: You cannot delete this leave request" }, { status: 403 });
+    }
+    if (!isAdmin && existing.status !== "PENDING") {
+      return NextResponse.json(
+        { error: "Only pending leave requests can be deleted" },
+        { status: 403 }
+      );
     }
 
     await prisma.$transaction(async (tx) => {

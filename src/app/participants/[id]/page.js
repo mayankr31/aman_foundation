@@ -6,6 +6,8 @@ import { Suspense, useState, useEffect, useRef } from "react";
 import { useAuth } from "@/lib/useAuth";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import PhotoLightbox from "@/components/PhotoLightbox";
+import PhotoSourceModal from "@/components/PhotoSourceModal";
+import SelfieCaptureModal from "@/components/attendance/SelfieCaptureModal";
 import { useToast } from "@/context/ToastContext";
 import { computeCapacityScore, computeCapacityTotalScore, getCapacityMaxScore } from "@/lib/capacityDictionaries";
 import { BENEFICIARY_TABS, labelFromSlug, slugFromLabel } from "@/lib/beneficiaryTabs";
@@ -217,6 +219,8 @@ function BeneficiaryProfileDetailContent() {
 
   // Profile photo
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [showPhotoSource, setShowPhotoSource] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const photoInputRef = useRef(null);
 
   // Resilience score calculation selections (null = use latest submission)
@@ -471,13 +475,12 @@ function BeneficiaryProfileDetailContent() {
     }
   };
 
-  const handlePhotoUpload = async (e) => {
-    const file = e.target.files?.[0];
+  const uploadPhoto = async (file) => {
     if (!file) return;
     setUploadingPhoto(true);
     try {
       const fd = new FormData();
-      fd.append("photo", file);
+      fd.append("photo", file, file.name || "profile-photo.jpg");
       const res = await fetch(`/api/beneficiaries/${beneficiary?.id || id}/photo`, {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -495,8 +498,20 @@ function BeneficiaryProfileDetailContent() {
       toast.error("Failed to upload photo.");
     } finally {
       setUploadingPhoto(false);
-      if (photoInputRef.current) photoInputRef.current.value = "";
     }
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadPhoto(file);
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  };
+
+  const handleCameraPhoto = async (blob) => {
+    if (!blob) return;
+    await uploadPhoto(blob);
+    setShowCamera(false);
   };
 
   const handleUpdateProfile = async (e) => {
@@ -1197,7 +1212,7 @@ function BeneficiaryProfileDetailContent() {
               {canEditParticipant && (
                 <button
                   type="button"
-                  onClick={() => photoInputRef.current?.click()}
+                  onClick={() => setShowPhotoSource(true)}
                   disabled={uploadingPhoto}
                   title={beneficiary.photoUrl ? "Replace photo" : "Add photo"}
                   className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md border border-surface cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-50"
@@ -3431,6 +3446,30 @@ function BeneficiaryProfileDetailContent() {
           </div>
         </div>
       )}
+
+      <PhotoSourceModal
+        open={showPhotoSource}
+        onClose={() => setShowPhotoSource(false)}
+        onUpload={() => photoInputRef.current?.click()}
+        onCapture={() => setShowCamera(true)}
+        busy={uploadingPhoto}
+        title={beneficiary.photoUrl ? "Replace profile photo" : "Add profile photo"}
+      />
+
+      <SelfieCaptureModal
+        open={showCamera}
+        title="Profile photo"
+        description="Take a photo of the participant, or close this to upload one from the device."
+        facingMode="environment"
+        mirror={false}
+        captureLabel="Capture Photo"
+        useLabel="Use Photo"
+        busyLabel="Uploading..."
+        showSkip={false}
+        busy={uploadingPhoto}
+        onClose={() => setShowCamera(false)}
+        onUse={handleCameraPhoto}
+      />
 
       {/* Photo Lightbox */}
       <PhotoLightbox src={lightboxPhoto} alt="Participant photo" onClose={() => setLightboxPhoto(null)} />

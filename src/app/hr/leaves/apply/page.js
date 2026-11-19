@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
+import ConfirmActionModal from "@/components/ConfirmActionModal";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
 import DateInput from "@/components/ui/DateInput";
@@ -16,6 +17,7 @@ import {
   getMaxEndDateForMonths,
   getPolicyWarnings,
   parseDateOnly,
+  parseLegacyLeaveRange,
 } from "@/lib/leavePolicy";
 
 function formatStoredDates(value) {
@@ -52,6 +54,9 @@ export default function LeaveApplication() {
   const [isApplying, setIsApplying] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newLeave, setNewLeave] = useState(emptyLeave());
+  const [editingLeave, setEditingLeave] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -117,6 +122,74 @@ export default function LeaveApplication() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+  const defaultLeaveForm = () => {
+    const firstConfig = configs[0];
+    return firstConfig
+      ? { ...emptyLeave(), leaveTypeKey: firstConfig.key, type: firstConfig.name }
+      : emptyLeave();
+  };
+
+  const leaveToForm = (leave) => {
+    const config =
+      configs.find((item) => item.key === leave.leaveTypeKey) ||
+      configs.find((item) => item.name === leave.type) ||
+      null;
+    const fallbackRange = parseLegacyLeaveRange(leave.dates);
+    const start = parseDateOnly(leave.startDate) || fallbackRange.startDate;
+    const end = parseDateOnly(leave.endDate) || fallbackRange.endDate || start;
+    const isMultiple = Boolean(start && end && start.getTime() !== end.getTime());
+
+    return {
+      type: config?.name || leave.type || "",
+      leaveTypeKey: config?.key || leave.leaveTypeKey || "",
+      isMultiple,
+      singleDate: !isMultiple && start ? toDateKey(start) : "",
+      fromDate: isMultiple && start ? toDateKey(start) : "",
+      toDate: isMultiple && end ? toDateKey(end) : "",
+      compOffWorkedDate: leave.compOffWorkedDate ? toDateKey(leave.compOffWorkedDate) : "",
+      holidayName: leave.holidayName || "",
+      reason: leave.reason || "",
+    };
+  };
+
+  const openApplyForm = () => {
+    setEditingLeave(null);
+    setNewLeave(defaultLeaveForm());
+    setIsApplying(true);
+  };
+
+  const openEditForm = (leave) => {
+    setEditingLeave(leave);
+    setNewLeave(leaveToForm(leave));
+    setIsApplying(true);
+  };
+
+  const closeApplyForm = () => {
+    setIsApplying(false);
+    setEditingLeave(null);
+  };
+
+  const handleDeleteLeave = async (leave) => {
+    if (!leave) return;
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/leaves/${leave.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete leave request");
+      triggerToast("Leave request deleted successfully.");
+      if (editingLeave?.id === leave.id) closeApplyForm();
+      fetchLeaves();
+    } catch (err) {
+      triggerToast(err.message || "Failed to delete leave request");
+    } finally {
+      setIsDeleting(false);
+      setDeleteTarget(null);
+    }
+  };
+
   const selectedConfig = configs.find((config) => config.key === newLeave.leaveTypeKey) || null;
   const selectedType = selectedConfig ? summary?.types?.[selectedConfig.key] : null;
   const isCompOffSelected =
@@ -128,7 +201,11 @@ export default function LeaveApplication() {
   const leaveStartKey = startDate ? startDate.toISOString().slice(0, 10) : "";
   const holidayKeySet = new Set(holidayDateKeys);
   const availableCompOffCredits = (summary?.compOff?.credits || []).filter((credit) => {
-    if (credit.status !== "Available") return false;
+    const isCurrentReservation =
+      editingLeave?.compOffCreditId &&
+      credit.id === editingLeave.compOffCreditId &&
+      credit.status === "Reserved";
+    if (credit.status !== "Available" && !isCurrentReservation) return false;
     const workedKey = toDateKey(credit.workedDate);
     if (!workedKey) return false;
     if (leaveStartKey && workedKey >= leaveStartKey) return false;
@@ -244,8 +321,9 @@ export default function LeaveApplication() {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/leaves", {
-        method: "POST",
+      const isEditing = Boolean(editingLeave);
+      const res = await fetch(isEditing ? `/api/leaves/${editingLeave.id}` : "/api/leaves", {
+        method: isEditing ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           type: selectedConfig.name,
@@ -260,20 +338,22 @@ export default function LeaveApplication() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to submit leave");
-      triggerToast(
-        medicalCertificateRequired
-          ? "Leave request submitted. Remember to submit the medical certificate at the office."
-          : "Leave request submitted successfully!"
-      );
+      if (!res.ok) {
+        throw new Error(data.error || (isEditing ? "Failed to update leave" : "Failed to submit leave"));
+      }
+      if (isEditing) {
+        triggerToast("Leave request updated successfully!");
+      } else {
+        triggerToast(
+          medicalCertificateRequired
+            ? "Leave request submitted. Remember to submit the medical certificate at the office."
+            : "Leave request submitted successfully!"
+        );
+      }
       fetchLeaves();
       setIsApplying(false);
-      const firstConfig = configs[0];
-      setNewLeave(
-        firstConfig
-          ? { ...emptyLeave(), leaveTypeKey: firstConfig.key, type: firstConfig.name }
-          : emptyLeave()
-      );
+      setEditingLeave(null);
+      setNewLeave(defaultLeaveForm());
     } catch (err) {
       triggerToast(err.message || "Failed to submit leave request");
     } finally {
@@ -296,7 +376,7 @@ export default function LeaveApplication() {
         </div>
         {canWrite && (
           <button
-            onClick={() => setIsApplying(true)}
+            onClick={openApplyForm}
             className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full font-semibold transition-colors flex items-center gap-2 text-sm shadow-md cursor-pointer w-fit"
           >
             <span className="material-symbols-outlined text-sm">add</span>
@@ -403,13 +483,14 @@ export default function LeaveApplication() {
         </div>
 
         <div className="w-full overflow-x-auto">
-          <table className="mobile-card-table w-full min-w-[640px] table-fixed text-left border-collapse font-sans text-sm">
+          <table className="mobile-card-table w-full min-w-[760px] table-fixed text-left border-collapse font-sans text-sm">
             <thead>
               <tr className="border-b border-surface-container text-on-surface-variant font-semibold">
-                <th className="w-[22%] py-3 px-4">Leave Type</th>
-                <th className="w-[26%] py-3 px-4">Requested Dates</th>
-                <th className="w-[34%] py-3 px-4">Reason</th>
-                <th className="w-[18%] py-3 px-4">Status</th>
+                <th className="w-[20%] py-3 px-4">Leave Type</th>
+                <th className="w-[24%] py-3 px-4">Requested Dates</th>
+                <th className="w-[26%] py-3 px-4">Reason</th>
+                <th className="w-[16%] py-3 px-4">Status</th>
+                <th className="w-[14%] py-3 px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -442,11 +523,33 @@ export default function LeaveApplication() {
                       )}
                     </div>
                   </td>
+                  <td data-label="Actions" className="py-4 px-4 align-top">
+                    {leave.status === "PENDING" && leave.userId === currentUser?.id ? (
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <button
+                          type="button"
+                          onClick={() => openEditForm(leave)}
+                          className="px-3 py-1.5 bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleteTarget(leave)}
+                          className="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-900/40 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-on-surface-variant">—</span>
+                    )}
+                  </td>
                 </tr>
               ))}
               {leaves.length === 0 && !isLoading && (
                 <tr>
-                  <td colSpan="4" className="py-8 text-center text-on-surface-variant">No leave requests found.</td>
+                  <td colSpan="5" className="py-8 text-center text-on-surface-variant">No leave requests found.</td>
                 </tr>
               )}
             </tbody>
@@ -459,8 +562,10 @@ export default function LeaveApplication() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-surface-container-lowest rounded-2xl sm:rounded-[2rem] shadow-2xl w-full max-w-xl p-4 sm:p-8 relative max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6 sm:mb-8 border-b border-outline-variant/10 pb-4">
-              <h3 className="text-xl sm:text-2xl font-headline font-bold text-on-surface">Apply for Leave</h3>
-              <button onClick={() => setIsApplying(false)} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">
+              <h3 className="text-xl sm:text-2xl font-headline font-bold text-on-surface">
+                {editingLeave ? "Edit Leave Request" : "Apply for Leave"}
+              </h3>
+              <button onClick={closeApplyForm} className="p-2 rounded-full hover:bg-surface-container transition-colors cursor-pointer text-on-surface-variant hover:text-on-surface">
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
@@ -607,18 +712,38 @@ export default function LeaveApplication() {
             </div>
 
             <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 sm:justify-end pt-4 border-t border-outline-variant/10">
-              <button onClick={() => setIsApplying(false)} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
+              <button onClick={closeApplyForm} className="px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer">Cancel</button>
               <button
                 onClick={handleApplyLeave}
                 disabled={isSubmitting || (isCompOffSelected && availableCompOffCredits.length === 0)}
                 className="px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-container transition-transform flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+                {isSubmitting
+                  ? editingLeave
+                    ? "Saving..."
+                    : "Submitting..."
+                  : editingLeave
+                    ? "Save Changes"
+                    : "Submit Request"}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      <ConfirmActionModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={() => handleDeleteLeave(deleteTarget)}
+        title="Delete Leave Request"
+        message={
+          deleteTarget
+            ? `Delete your ${deleteTarget.type || "leave"} request for ${formatStoredDates(deleteTarget.dates)}? This cannot be undone.`
+            : "Delete this leave request? This cannot be undone."
+        }
+        confirmText={isDeleting ? "Deleting..." : "Delete"}
+        variant="danger"
+      />
 
       {showToast && (
         <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 bg-slate-900 text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-2 text-xs font-semibold z-[200]">
