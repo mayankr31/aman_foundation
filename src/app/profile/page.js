@@ -429,7 +429,7 @@ function ProfilePageContent() {
   const managedPrograms = (profile.managedLivelihoodPrograms || []).map((m) => m.program);
   const canEditAssignments = isFellow
     ? currentUser?.roleName === "ADMIN" ||
-      (PROGRAM_ROLES.includes(currentUser?.roleName) && can("education", "WRITE"))
+      (PROGRAM_ROLES.includes(currentUser?.roleName) && can("education-fellows", "WRITE"))
     : currentUser?.roleName === "ADMIN" && PROGRAM_ROLES.includes(profile.role?.name);
   const personalDob = profile.fellow?.dob || profile.dob;
   const personalGender = profile.fellow?.gender || profile.gender;

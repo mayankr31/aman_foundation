@@ -563,7 +563,7 @@ export default function AfterSchoolStudentProfileDetail() {
   const filteredLearningAssessments = learningAssessments.filter(a => inDateRange(a.date));
   const filteredHomeworkRecords = homeworkRecords.filter(h => inDateRange(h.date));
 
-  const canEditStudent = can("education", "WRITE");
+  const canEditStudent = can("education-after-school-students", "WRITE");
   const stateOptions = withCurrentOption(
     INDIA_STATES.map((state) => state.name),
     editForm.state

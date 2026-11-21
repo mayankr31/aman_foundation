@@ -19,9 +19,25 @@ export const FELLOW_TABS = [
 
 export const DEFAULT_TAB_SLUG = "personal-details";
 
+export const LEAVE_DETAILS_TAB = {
+  label: "Leave Details",
+  slug: "leave-details",
+  icon: "beach_access",
+};
+
+// Extra tab shown on the admin/HR fellow detail page only. The fellow's own
+// /profile workspace keeps using FELLOW_TABS above.
+export const FELLOW_DETAIL_TABS = [...FELLOW_TABS, LEAVE_DETAILS_TAB];
+
 export function labelFromSlug(slug) {
   if (!slug) return null;
   const tab = FELLOW_TABS.find((t) => t.slug === slug);
+  return tab ? tab.label : null;
+}
+
+export function labelFromDetailSlug(slug) {
+  if (!slug) return null;
+  const tab = FELLOW_DETAIL_TABS.find((t) => t.slug === slug);
   return tab ? tab.label : null;
 }
 

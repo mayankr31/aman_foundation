@@ -3,9 +3,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { X, Loader2, Save, ShieldCheck } from 'lucide-react';
+import { X, Loader2, Save, ShieldCheck, Search } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { formatRoleLabel } from '@/lib/roles';
+import { PERMISSION_GROUPS_WITH_PAGES } from '@/lib/permissionCatalog';
 
 export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode, token }) {
   const toast = useToast();
@@ -13,6 +14,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [localState, setLocalState] = useState({});
+  const [query, setQuery] = useState('');
 
   const theme = {
     bg: isDarkMode ? 'bg-[#151e2d]' : 'bg-white',
@@ -25,6 +27,9 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
     borderLight: isDarkMode ? 'border-white/5' : 'border-gray-100',
     toggleOn: 'bg-[#1a7a5e]',
     toggleOff: isDarkMode ? 'bg-white/10' : 'bg-gray-200',
+    select: isDarkMode
+      ? 'bg-[#0d1320] text-white border-white/10'
+      : 'bg-white text-gray-900 border-gray-200',
   };
 
   const fetchData = async () => {
@@ -76,19 +81,34 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
     setLocalState(state);
   };
 
-  const pages = useMemo(() => {
-    const pageMap = {};
+  const permsByPage = useMemo(() => {
+    const map = {};
     allPermissions.forEach(p => {
-      if (!pageMap[p.page]) {
-        pageMap[p.page] = {};
-      }
-      pageMap[p.page][p.action] = p;
+      if (!map[p.page]) map[p.page] = {};
+      map[p.page][p.action] = p;
     });
-    return Object.keys(pageMap).sort().map(page => ({
-      name: page,
-      permissions: pageMap[page],
-    }));
+    return map;
   }, [allPermissions]);
+
+  const groups = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return PERMISSION_GROUPS_WITH_PAGES.map((group) => ({
+      ...group,
+      pages: group.pages.filter((page) => {
+        if (!permsByPage[page.key]) return false;
+        if (!needle) return true;
+        return (
+          page.label.toLowerCase().includes(needle) ||
+          group.label.toLowerCase().includes(needle)
+        );
+      }),
+    })).filter((group) => group.pages.length > 0);
+  }, [permsByPage, query]);
+
+  const visibleCount = useMemo(
+    () => groups.reduce((total, group) => total + group.pages.length, 0),
+    [groups]
+  );
 
   const allReadEnabled = useMemo(() => {
     const readPerms = allPermissions.filter(p => p.action === 'READ');
@@ -180,6 +200,58 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
     });
   };
 
+  const groupReadEnabled = (pageKeys) =>
+    pageKeys.some(key => permsByPage[key]?.READ) &&
+    pageKeys.every(key => {
+      const perm = permsByPage[key]?.READ;
+      return !perm || localState[perm.id]?.hasPermission === true;
+    });
+
+  const groupWriteEnabled = (pageKeys) =>
+    pageKeys.some(key => permsByPage[key]?.WRITE) &&
+    pageKeys.every(key => {
+      const perm = permsByPage[key]?.WRITE;
+      return !perm || localState[perm.id]?.hasPermission === true;
+    });
+
+  const handleToggleGroup = (pageKeys, action) => {
+    const currentlyEnabled = action === 'READ' ? groupReadEnabled(pageKeys) : groupWriteEnabled(pageKeys);
+    const newValue = !currentlyEnabled;
+
+    setLocalState(prev => {
+      const newState = { ...prev };
+      pageKeys.forEach(key => {
+        const readPerm = permsByPage[key]?.READ;
+        const writePerm = permsByPage[key]?.WRITE;
+
+        if (action === 'READ') {
+          if (readPerm) {
+            newState[readPerm.id] = { hasPermission: newValue, changed: true };
+          }
+          if (!newValue && writePerm) {
+            newState[writePerm.id] = {
+              ...(newState[writePerm.id] || {}),
+              hasPermission: false,
+              changed: true,
+            };
+          }
+        } else {
+          if (writePerm) {
+            newState[writePerm.id] = { hasPermission: newValue, changed: true };
+          }
+          if (newValue && readPerm) {
+            newState[readPerm.id] = {
+              ...(newState[readPerm.id] || {}),
+              hasPermission: true,
+              changed: true,
+            };
+          }
+        }
+      });
+      return newState;
+    });
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -244,12 +316,24 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
             <p className={`text-xs mb-3 ${theme.textMuted}`}>
               READ controls page access. WRITE controls create, edit, delete, approve and upload actions. A WRITE grant automatically includes READ.
             </p>
+
+            <div className="relative mb-3">
+              <Search size={14} className={`absolute left-3 top-1/2 -translate-y-1/2 ${theme.textMuted}`} />
+              <input
+                type="text"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search pages..."
+                className={`w-full pl-9 pr-3 py-2 rounded-xl text-xs border ${theme.select} focus:outline-none focus:ring-2 focus:ring-[#1a7a5e]/30`}
+              />
+            </div>
+
             <div className={`border-t ${theme.borderLight} my-4`} />
             <div className="max-h-[50vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
-              <table className={`mobile-card-table w-full min-w-[420px] ${isDarkMode ? 'mobile-card-table-dark' : ''}`}>
+              <table className={`mobile-card-table w-full min-w-[460px] ${isDarkMode ? 'mobile-card-table-dark' : ''}`}>
                 <thead className={`sticky top-0 ${theme.bg} z-10`}>
                   <tr className={`text-left text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>
-                    <th className="py-3 pr-4">Page / Feature</th>
+                    <th className="py-3 pr-4">Page</th>
                     <th className="py-3 px-4 text-center">
                       <div className="flex flex-col items-center gap-1">
                         <span>READ</span>
@@ -258,6 +342,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
                           className={`w-8 h-4 rounded-full relative transition-colors ${
                             allReadEnabled ? theme.toggleOn : theme.toggleOff
                           }`}
+                          title="Toggle READ for all pages"
                         >
                           <div
                             className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${
@@ -275,6 +360,7 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
                           className={`w-8 h-4 rounded-full relative transition-colors ${
                             allWriteEnabled ? theme.toggleOn : theme.toggleOff
                           }`}
+                          title="Toggle WRITE for all pages"
                         >
                           <div
                             className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${
@@ -287,53 +373,91 @@ export default function RolePermissionsModal({ isOpen, onClose, role, isDarkMode
                   </tr>
                 </thead>
                 <tbody>
-                  {pages.map(({ name, permissions }) => {
-                    const readPerm = permissions.READ;
-                    const writePerm = permissions.WRITE;
-                    const readState = readPerm ? localState[readPerm.id] : null;
-                    const writeState = writePerm ? localState[writePerm.id] : null;
+                  {groups.map((group) => {
+                    const pageKeys = group.pages.map((page) => page.key);
+                    const readOn = groupReadEnabled(pageKeys);
+                    const writeOn = groupWriteEnabled(pageKeys);
 
                     return (
-                      <tr key={name} className={`border-t ${theme.borderLight}`}>
-                        <td data-label="" className={`py-4 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
-                          {name.replace(/_/g, ' ')}
-                        </td>
-                        <td data-label="Read" className="py-4 px-4 text-center">
-                          {readPerm && (
-                            <button
-                              onClick={() => handleToggle(readPerm.id, 'READ', readState?.hasPermission)}
-                              className={`w-10 h-6 rounded-full relative transition-colors ${
-                                readState?.hasPermission ? theme.toggleOn : theme.toggleOff
-                              }`}
-                            >
-                              <div
-                                className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                                  readState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
-                                }`}
-                              />
-                            </button>
-                          )}
-                        </td>
-                        <td data-label="Write" className="py-4 pl-4 text-center">
-                          {writePerm && (
-                            <button
-                              onClick={() => handleToggle(writePerm.id, 'WRITE', writeState?.hasPermission)}
-                              disabled={readState?.hasPermission === false}
-                              className={`w-10 h-6 rounded-full relative transition-colors ${
-                                writeState?.hasPermission ? theme.toggleOn : theme.toggleOff
-                              } ${readState?.hasPermission === false ? 'opacity-30 cursor-not-allowed' : ''}`}
-                            >
-                              <div
-                                className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                                  writeState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
-                                }`}
-                              />
-                            </button>
-                          )}
-                        </td>
-                      </tr>
+                      <React.Fragment key={group.id}>
+                        <tr className={`${isDarkMode ? 'bg-white/[0.03]' : 'bg-gray-50'}`}>
+                          <td colSpan={3} className={`py-2 pr-4 ${theme.textLight}`}>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="text-[10px] font-black uppercase tracking-widest">{group.label}</span>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleToggleGroup(pageKeys, 'READ')}
+                                  className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${theme.border} ${readOn ? 'bg-[#1a7a5e] text-white border-[#1a7a5e]' : theme.textMuted}`}
+                                >
+                                  Read all
+                                </button>
+                                <button
+                                  onClick={() => handleToggleGroup(pageKeys, 'WRITE')}
+                                  className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${theme.border} ${writeOn ? 'bg-[#1a7a5e] text-white border-[#1a7a5e]' : theme.textMuted}`}
+                                >
+                                  Write all
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        {group.pages.map((page) => {
+                          const readPerm = permsByPage[page.key]?.READ;
+                          const writePerm = permsByPage[page.key]?.WRITE;
+                          const readState = readPerm ? localState[readPerm.id] : null;
+                          const writeState = writePerm ? localState[writePerm.id] : null;
+
+                          return (
+                            <tr key={page.key} className={`border-t ${theme.borderLight}`}>
+                              <td data-label="" className={`py-3 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
+                                {page.label}
+                              </td>
+                              <td data-label="Read" className="py-3 px-4 text-center">
+                                {readPerm && (
+                                  <button
+                                    onClick={() => handleToggle(readPerm.id, 'READ', readState?.hasPermission)}
+                                    className={`w-10 h-6 rounded-full relative transition-colors ${
+                                      readState?.hasPermission ? theme.toggleOn : theme.toggleOff
+                                    }`}
+                                  >
+                                    <div
+                                      className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                                        readState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
+                                      }`}
+                                    />
+                                  </button>
+                                )}
+                              </td>
+                              <td data-label="Write" className="py-3 pl-4 text-center">
+                                {writePerm && (
+                                  <button
+                                    onClick={() => handleToggle(writePerm.id, 'WRITE', writeState?.hasPermission)}
+                                    disabled={readState?.hasPermission === false}
+                                    className={`w-10 h-6 rounded-full relative transition-colors ${
+                                      writeState?.hasPermission ? theme.toggleOn : theme.toggleOff
+                                    } ${readState?.hasPermission === false ? 'opacity-30 cursor-not-allowed' : ''}`}
+                                  >
+                                    <div
+                                      className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                                        writeState?.hasPermission ? 'translate-x-5' : 'translate-x-1'
+                                      }`}
+                                    />
+                                  </button>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </React.Fragment>
                     );
                   })}
+                  {visibleCount === 0 && (
+                    <tr>
+                      <td colSpan={3} className={`py-10 text-center text-xs ${theme.textMuted}`}>
+                        No pages match your search.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

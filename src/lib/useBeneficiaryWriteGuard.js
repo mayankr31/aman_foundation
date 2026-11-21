@@ -13,7 +13,7 @@ export function useBeneficiaryWriteGuard(beneficiaryId, tabSlug) {
   const router = useRouter();
   const { user, token, isInitializing, can } = useAuth();
   const permissionsReady = Boolean(user?.permissions);
-  const canEdit = permissionsReady && can("livelihood", "WRITE");
+  const canEdit = permissionsReady && can("participants", "WRITE");
   const [scopeAllowed, setScopeAllowed] = useState(true);
 
   useEffect(() => {

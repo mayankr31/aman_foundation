@@ -1,4 +1,8 @@
 import { prisma } from "../src/lib/prisma.js";
+import {
+  EDITABLE_PAGE_KEYS,
+  COLLECTION_PAGES,
+} from "../src/lib/permissionCatalog.js";
 
 // Roles that behave like PROGRAM_MANAGER for now. Kept as a plain list so
 // access can be tailored per-role/per-API later.
@@ -51,38 +55,38 @@ const NEW_ROLES = [
   },
 ];
 
+// Non-navigable feature keys that still resolve permissions.
+const EXTRA_PAGES = ["dashboard", "self-attendance", "task-analytics"];
+
 // Granular page keys used by the permission system. `app` is always
 // "dashboard" (legacy convention), the `page` string is what matters.
-const ALL_PAGES = [
-  "dashboard",
-  "education",
-  "fellow-observations",
-  "livelihood",
-  "disaster-relief",
-  "employees",
-  "leaves",
-  "travel",
-  "travel-management",
-  "reimbursements",
-  "reimbursement-management",
-  "attendance",
-  "self-attendance",
-  "tasks",
-  "task-analytics",
-  "assets",
-  "admin",
-];
+const ALL_PAGES = [...EXTRA_PAGES, ...EDITABLE_PAGE_KEYS];
+
+const EDUCATION_PAGES = COLLECTION_PAGES.education;
+const OBSERVATION_PAGES = COLLECTION_PAGES["fellow-observations"];
+const LIVELIHOOD_PAGES = COLLECTION_PAGES.livelihood;
 
 const ACTIONS = ["READ", "WRITE"];
 
 // Per-role page grants.
 const ROLE_PAGES = {
   ADMIN: ALL_PAGES,
-  FELLOW: ["dashboard", "education", "leaves", "travel", "reimbursements", "attendance", "self-attendance", "tasks", "task-analytics", "assets"],
+  FELLOW: [
+    "dashboard",
+    ...EDUCATION_PAGES,
+    "leaves",
+    "travel",
+    "reimbursements",
+    "attendance",
+    "self-attendance",
+    "tasks",
+    "task-analytics",
+    "assets",
+  ],
   HR: [
     "dashboard",
-    "education",
-    "livelihood",
+    ...EDUCATION_PAGES,
+    ...LIVELIHOOD_PAGES,
     "disaster-relief",
     "employees",
     "leaves",
@@ -104,9 +108,9 @@ const READ_ONLY_PAGES = {
 // Program staff (PROGRAM_MANAGER + the 6 new roles) get the same set.
 const PROGRAM_STAFF_PAGES = [
   "dashboard",
-  "education",
-  "fellow-observations",
-  "livelihood",
+  ...EDUCATION_PAGES,
+  ...OBSERVATION_PAGES,
+  ...LIVELIHOOD_PAGES,
   "disaster-relief",
   "employees",
   "leaves",
@@ -233,7 +237,7 @@ async function main() {
   const fellowRole = await prisma.role.findUnique({ where: { name: "FELLOW" } });
   if (fellowRole) {
     const livelihoodPermissions = await prisma.permission.findMany({
-      where: { page: "livelihood" },
+      where: { page: { in: LIVELIHOOD_PAGES } },
       select: { id: true },
     });
     await prisma.rolePermission.deleteMany({

@@ -19,9 +19,9 @@ export async function POST(req) {
     const { firstName, lastName, email, password, mobile, roleId } = body;
 
     // Basic validation
-    if (!firstName || !lastName || !email || !password || !roleId) {
+    if (!firstName || !lastName || !email || !password || !roleId || !mobile) {
       return NextResponse.json(
-        { error: "First name, last name, email, password, and roleId are required" },
+        { error: "First name, last name, email, mobile, password, and roleId are required" },
         { status: 400 }
       );
     }
@@ -31,7 +31,7 @@ export async function POST(req) {
       validatePersonName(lastName, { required: true }),
       validateEmail(email, { required: true }),
       validatePassword(password, { required: true }),
-      validateMobile(mobile),
+      validateMobile(mobile, { required: true }),
     ]);
     if (validationMessage) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });

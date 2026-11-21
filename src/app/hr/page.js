@@ -89,7 +89,7 @@ export default function HrEmployeeManagement() {
   const { pageItems: pagedEmployees, currentPage, setCurrentPage } = usePagination(filteredEmployees, 10);
 
   const handleRowClick = (user) => {
-    if (user.fellow?.id && can("education")) {
+    if (user.fellow?.id && can("education-fellows")) {
       router.push(`/education/fellows/${user.fellow.id}`);
       return;
     }

@@ -177,12 +177,15 @@ export async function PATCH(req, context) {
     if (action === "APPROVE") {
       if (!canApproveVerifiedReimbursement(user)) {
         return NextResponse.json(
-          { error: "Only the Executive Director (Admin) can approve verified claims." },
+          { error: "Only the Executive Director (Admin) can approve claims." },
           { status: 403 }
         );
       }
-      if (existing.status !== "VERIFIED") {
-        return NextResponse.json({ error: "Only verified claims can be approved." }, { status: 400 });
+      if (existing.status !== "PENDING" && existing.status !== "VERIFIED") {
+        return NextResponse.json(
+          { error: "Only pending or verified claims can be approved." },
+          { status: 400 }
+        );
       }
 
       const approvedItems = buildApprovedItems(existing.items, body.items);
@@ -190,6 +193,11 @@ export async function PATCH(req, context) {
       if (totalApproved <= 0) {
         return NextResponse.json({ error: "The approved amount must be greater than zero." }, { status: 400 });
       }
+
+      // The Executive Director may approve a pending claim directly. Record the
+      // combined verification + approval so the audit trail stays complete.
+      const directApproval = existing.status === "PENDING";
+      const now = new Date();
 
       await prisma.$transaction([
         ...approvedItems.map((item) =>
@@ -204,8 +212,16 @@ export async function PATCH(req, context) {
             status: "APPROVED",
             totalApproved,
             approvedBy: user.id,
-            approvedAt: new Date(),
+            approvedAt: now,
             rejectionReason: null,
+            ...(directApproval
+              ? {
+                  verifiedBy: user.id,
+                  verifiedAt: now,
+                  verificationNotes:
+                    existing.verificationNotes || "Approved directly by the Executive Director.",
+                }
+              : {}),
           },
         }),
       ]);

@@ -10,6 +10,7 @@ import AssignmentsSection from "@/components/AssignmentsSection";
 import MonthlyPlanner from "@/components/MonthlyPlanner";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import TeamCheckInSection from "@/components/TeamCheckInSection";
+import LeaveSummaryPanel from "@/components/leaves/LeaveSummaryPanel";
 import { DEFAULT_EMPLOYEE_DETAIL_TAB, getEmployeeDetailTabs } from "@/lib/profileTabs";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { formatDate } from "@/lib/date";
@@ -99,6 +100,7 @@ function HrEmployeeProfileContent() {
   const searchParams = useSearchParams();
   const { token, user: currentUser, can } = useAuth();
   const canWrite = can("employees", "WRITE");
+  const canViewLeaves = can("leaves", "READ");
   const canWriteTasks = can("tasks", "WRITE") || currentUser?.roleName === "ADMIN";
   const isAdmin = currentUser?.roleName === "ADMIN";
   const canManageExit = EXIT_MANAGER_ROLES.includes(currentUser?.roleName);
@@ -122,7 +124,9 @@ function HrEmployeeProfileContent() {
     (employee?.id && currentUser?.id === employee.id) ||
     (employee?.managerId && currentUser?.id === employee.managerId);
   const employeeTabs = getEmployeeDetailTabs(employee?.role?.name).filter(
-    (tab) => tab.slug !== "team-checkin" || canViewTeamCheckIn
+    (tab) =>
+      (tab.slug !== "team-checkin" || canViewTeamCheckIn) &&
+      (tab.slug !== "leave-details" || canViewLeaves)
   );
   const activeTab =
     employeeTabs.find((tab) => tab.slug === requestedTabSlug)?.label ||
@@ -140,7 +144,7 @@ function HrEmployeeProfileContent() {
   }, [token, id]);
 
   useEffect(() => {
-    if (employee?.fellow?.id && can("education")) {
+    if (employee?.fellow?.id && can("education-fellows")) {
       router.replace(`/education/fellows/${employee.fellow.id}`);
     }
   }, [employee, router, can]);
@@ -790,6 +794,10 @@ function HrEmployeeProfileContent() {
                 programs={managedPrograms}
                 canEdit={canEditAssignments}
               />
+            )}
+
+            {activeTab === "Leave Details" && (
+              <LeaveSummaryPanel userId={employee.id} />
             )}
 
             {activeTab === "Team CheckIn" && (

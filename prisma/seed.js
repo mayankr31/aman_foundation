@@ -1,5 +1,6 @@
 import { prisma } from "../src/lib/prisma.js";
 import bcrypt from "bcryptjs";
+import { EDITABLE_PAGE_KEYS } from "../src/lib/permissionCatalog.js";
 
 async function main() {
   console.log("Starting comprehensive seeding...");
@@ -107,7 +108,7 @@ async function main() {
     },
   });
 
-  const pages = ["dashboard", "education", "livelihood", "disaster-relief", "hr", "admin"];
+  const pages = ["dashboard", "self-attendance", "task-analytics", ...EDITABLE_PAGE_KEYS];
   const actions = ["READ", "WRITE"];
   const createdPermissions = [];
 

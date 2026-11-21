@@ -7,12 +7,18 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { FELLOW_TABS } from "@/lib/fellowTabs";
 import { getHrPageLinks } from "@/lib/hrTabs";
+import { COLLECTION_PAGES } from "@/lib/permissionCatalog";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCollapse }) {
   const pathname = usePathname();
   const { user, logout, can } = useAuth();
+
+  const canAnyPage = (keys) => keys.some((key) => can(key));
+  const canEducation = canAnyPage(COLLECTION_PAGES.education);
+  const canObservations = canAnyPage(COLLECTION_PAGES["fellow-observations"]);
+  const canLivelihood = canAnyPage(COLLECTION_PAGES.livelihood);
 
   // Dropdown states
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -22,17 +28,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
 
   // Auto-expand active folder on path change
   useEffect(() => {
-    if (
-      [
-        "/education",
-        "/education/fellows",
-        "/education/students",
-        "/education/schools",
-        "/education/pta",
-        "/education/after-school-students",
-        "/education/after-school-centres",
-      ].some(path => pathname === path)
-    ) {
+    if (pathname.startsWith("/education")) {
       setEduOpen(true);
     }
     if (pathname.startsWith("/profile")) {
@@ -41,15 +37,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
     if (pathname.startsWith("/fellow-observations")) {
       setObservationsOpen(true);
     }
-    if (
-      [
-        "/livelihood",
-        "/livelihood/farm",
-        "/livelihood/non-farm",
-        "/livelihood/programs",
-        "/participants",
-      ].some(path => pathname.startsWith(path))
-    ) {
+    if (pathname.startsWith("/livelihood") || pathname.startsWith("/participants") || pathname.startsWith("/beneficiaries")) {
       setLivelihoodOpen(true);
     }
   }, [pathname]);
@@ -208,7 +196,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Education Submenu */}
-          {can("education") && (
+          {canEducation && (
           <div className="flex flex-col gap-1">
             <button
               onClick={() => handleFolderToggle(eduOpen, setEduOpen)}
@@ -234,7 +222,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
 
             {eduOpen && !collapsed && (
               <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
-                {user?.roleName !== "FELLOW" && (
+                {user?.roleName !== "FELLOW" && can("education-hub") && (
                   <Link
                     className={sublinkClass(pathname === "/education")}
                     href="/education"
@@ -243,7 +231,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                     Hub Overview
                   </Link>
                 )}
-                {user?.roleName !== "FELLOW" && (
+                {user?.roleName !== "FELLOW" && can("education-fellows") && (
                   <Link
                     className={sublinkClass(pathname === "/education/fellows")}
                     href="/education/fellows"
@@ -252,35 +240,43 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
                     Fellows
                   </Link>
                 )}
-                <Link
-                  className={sublinkClass(pathname === "/education/students")}
-                  href="/education/students"
-                  onClick={onClose}
-                >
-                  Students
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/education/schools")}
-                  href="/education/schools"
-                  onClick={onClose}
-                >
-                  Schools
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/education/after-school-students")}
-                  href="/education/after-school-students"
-                  onClick={onClose}
-                >
-                  After School Students
-                </Link>
-                <Link
-                  className={sublinkClass(pathname === "/education/after-school-centres")}
-                  href="/education/after-school-centres"
-                  onClick={onClose}
-                >
-                  After School Centres
-                </Link>
-                {user?.roleName !== "FELLOW" && (
+                {can("education-students") && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/students")}
+                    href="/education/students"
+                    onClick={onClose}
+                  >
+                    Students
+                  </Link>
+                )}
+                {can("education-schools") && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/schools")}
+                    href="/education/schools"
+                    onClick={onClose}
+                  >
+                    Schools
+                  </Link>
+                )}
+                {can("education-after-school-students") && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/after-school-students")}
+                    href="/education/after-school-students"
+                    onClick={onClose}
+                  >
+                    After School Students
+                  </Link>
+                )}
+                {can("education-after-school-centres") && (
+                  <Link
+                    className={sublinkClass(pathname === "/education/after-school-centres")}
+                    href="/education/after-school-centres"
+                    onClick={onClose}
+                  >
+                    After School Centres
+                  </Link>
+                )}
+                {user?.roleName !== "FELLOW" && can("education-pta") && (
                   <Link
                     className={sublinkClass(pathname === "/education/pta")}
                     href="/education/pta"
@@ -295,7 +291,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Fellow Observations Submenu */}
-          {can("fellow-observations") && (
+          {canObservations && (
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => handleFolderToggle(observationsOpen, setObservationsOpen)}
@@ -321,27 +317,31 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
 
               {observationsOpen && !collapsed && (
                 <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
-                  <Link
-                    className={sublinkClass(pathname === "/fellow-observations/pm-reflection")}
-                    href="/fellow-observations/pm-reflection"
-                    onClick={onClose}
-                  >
-                    PM Reflection
-                  </Link>
-                  <Link
-                    className={sublinkClass(pathname === "/fellow-observations/fellow-performance")}
-                    href="/fellow-observations/fellow-performance"
-                    onClick={onClose}
-                  >
-                    Fellow Performance
-                  </Link>
+                  {can("fellow-observations-pm-reflection") && (
+                    <Link
+                      className={sublinkClass(pathname === "/fellow-observations/pm-reflection")}
+                      href="/fellow-observations/pm-reflection"
+                      onClick={onClose}
+                    >
+                      PM Reflection
+                    </Link>
+                  )}
+                  {can("fellow-observations-fellow-performance") && (
+                    <Link
+                      className={sublinkClass(pathname === "/fellow-observations/fellow-performance")}
+                      href="/fellow-observations/fellow-performance"
+                      onClick={onClose}
+                    >
+                      Fellow Performance
+                    </Link>
+                  )}
                 </div>
               )}
             </div>
           )}
 
           {/* Livelihood Submenu */}
-          {can("livelihood") && (
+          {canLivelihood && (
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => handleFolderToggle(livelihoodOpen, setLivelihoodOpen)}
@@ -367,34 +367,42 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
 
               {livelihoodOpen && !collapsed && (
                 <div className="ml-8 mt-1 flex flex-col gap-1 border-l-2 border-primary-container pl-2 transition-all duration-300">
-                  <Link
-                    className={sublinkClass(pathname === "/livelihood")}
-                    href="/livelihood"
-                    onClick={onClose}
-                  >
-                    Hub Overview
-                  </Link>
-                  <Link
-                    className={sublinkClass(pathname === "/livelihood/farm")}
-                    href="/livelihood/farm"
-                    onClick={onClose}
-                  >
-                    Farm Programs
-                  </Link>
-                  <Link
-                    className={sublinkClass(pathname === "/livelihood/non-farm")}
-                    href="/livelihood/non-farm"
-                    onClick={onClose}
-                  >
-                    Non-Farm Programs
-                  </Link>
-                  <Link
-                    className={sublinkClass(pathname === "/participants")}
-                    href="/participants"
-                    onClick={onClose}
-                  >
-                    Participants
-                  </Link>
+                  {can("livelihood-hub") && (
+                    <Link
+                      className={sublinkClass(pathname === "/livelihood")}
+                      href="/livelihood"
+                      onClick={onClose}
+                    >
+                      Hub Overview
+                    </Link>
+                  )}
+                  {can("livelihood-farm") && (
+                    <Link
+                      className={sublinkClass(pathname === "/livelihood/farm")}
+                      href="/livelihood/farm"
+                      onClick={onClose}
+                    >
+                      Farm Programs
+                    </Link>
+                  )}
+                  {can("livelihood-non-farm") && (
+                    <Link
+                      className={sublinkClass(pathname === "/livelihood/non-farm")}
+                      href="/livelihood/non-farm"
+                      onClick={onClose}
+                    >
+                      Non-Farm Programs
+                    </Link>
+                  )}
+                  {can("participants") && (
+                    <Link
+                      className={sublinkClass(pathname === "/participants")}
+                      href="/participants"
+                      onClick={onClose}
+                    >
+                      Participants
+                    </Link>
+                  )}
                 </div>
               )}
             </div>

@@ -2,46 +2,13 @@
 // Keep this file free of server-only imports so it can be used in client
 // components (Sidebar, LayoutWrapper) as well as server helpers.
 
-export const PAGE_KEYS = [
-  "dashboard",
-  "education",
-  "fellow-observations",
-  "livelihood",
-  "disaster-relief",
-  "employees",
-  "leaves",
-  "travel",
-  "travel-management",
-  "reimbursements",
-  "reimbursement-management",
-  "attendance",
-  "self-attendance",
-  "tasks",
-  "task-analytics",
-  "assets",
-  "admin",
-];
+import {
+  PAGE_KEYS,
+  ROUTE_PERMISSION_MAP,
+  expandPageKeys,
+} from "@/lib/permissionCatalog";
 
-// Ordered [pathPrefix, pageKey]. More specific prefixes first.
-export const ROUTE_PERMISSION_MAP = [
-  ["/admin", "admin"],
-  ["/assets", "assets"],
-  ["/tasks", "tasks"],
-  ["/education", "education"],
-  ["/fellow-observations", "fellow-observations"],
-  ["/livelihood", "livelihood"],
-  ["/participants", "livelihood"],
-  ["/beneficiaries", "livelihood"],
-  ["/disaster-relief", "disaster-relief"],
-  ["/travel/manage", "travel-management"],
-  ["/travel", "travel"],
-  ["/reimbursements/manage", "reimbursement-management"],
-  ["/reimbursements", "reimbursements"],
-  ["/hr/attendance", "attendance"],
-  ["/attendance", "attendance"],
-  ["/hr/leaves", "leaves"],
-  ["/hr", "employees"],
-];
+export { PAGE_KEYS, ROUTE_PERMISSION_MAP, expandPageKeys };
 
 // Routes that are always accessible to any authenticated user.
 const OPEN_PATHS = ["/", "/profile"];

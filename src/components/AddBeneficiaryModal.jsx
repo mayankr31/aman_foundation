@@ -87,7 +87,7 @@ export default function AddBeneficiaryModal({
   const { token, can } = useAuth();
   const heading = title || (studentId ? "Add Parents Details" : "Add New Participant");
   const toast = useToast();
-  const canUploadPhoto = can("livelihood", "WRITE");
+  const canUploadPhoto = can("participants", "WRITE");
 
   // Keep the page behind the modal from scrolling while it is open.
   useBodyScrollLock(true);

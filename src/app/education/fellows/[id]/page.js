@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import { useAuth } from "@/lib/useAuth";
-import { FELLOW_TABS, labelFromSlug } from "@/lib/fellowTabs";
+import { FELLOW_DETAIL_TABS, labelFromDetailSlug } from "@/lib/fellowTabs";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import LDJCForm from "@/components/LDJCForm";
 import Pagination from "@/components/ui/Pagination";
@@ -23,10 +23,12 @@ import Avatar from "@/components/ui/Avatar";
 import BasicDetailsView from "@/components/BasicDetailsView";
 import PersonalDetailsForm from "@/components/PersonalDetailsForm";
 import AssignmentsSection from "@/components/AssignmentsSection";
+import LeaveSummaryPanel from "@/components/leaves/LeaveSummaryPanel";
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
 import { useSurveyTemplate } from "@/lib/useSurveyTemplate";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
+import { ASSIGNMENT_ROLES } from "@/lib/roles";
 import dynamic from "next/dynamic";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -68,7 +70,13 @@ function FellowProfileDetailContent() {
   const [viewingPostFellowship, setViewingPostFellowship] = useState(null);
   const { template: engagementSurveyTemplate } = useSurveyTemplate("ENGAGEMENT");
   const { template: postFellowshipSurveyTemplate } = useSurveyTemplate("POST_FELLOWSHIP");
-  const activeTab = labelFromSlug(searchParams.get("tab")) || "Personal Details";
+  const canViewLeaves = can("leaves", "READ");
+  const requestedTab = labelFromDetailSlug(searchParams.get("tab")) || "Personal Details";
+  const activeTab =
+    requestedTab === "Leave Details" && !canViewLeaves ? "Personal Details" : requestedTab;
+  const fellowTabs = FELLOW_DETAIL_TABS.filter(
+    (tab) => tab.slug !== "leave-details" || canViewLeaves
+  );
   const { containerRef: tabsContainerRef, setActiveRef: setActiveTabRef } = useAutoScrollActiveTab(
     activeTab,
     !isInitializing && !loading && Boolean(fellow)
@@ -377,11 +385,11 @@ function FellowProfileDetailContent() {
   const canEditPersonalDetails =
     user?.roleName === "ADMIN" ||
     user?.roleName === "HR" ||
-    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE")) ||
-    (can("education", "WRITE") && fellowUser.managerId === user?.id);
+    (PROGRAM_ROLES.includes(user?.roleName) && can("education-fellows", "WRITE")) ||
+    (can("education-fellows", "WRITE") && fellowUser.managerId === user?.id);
   const canEditAssignments =
     user?.roleName === "ADMIN" ||
-    (PROGRAM_ROLES.includes(user?.roleName) && can("education", "WRITE"));
+    (ASSIGNMENT_ROLES.includes(user?.roleName) && can("education-fellows", "WRITE"));
 
   return (
     <div className="p-4 sm:p-6 md:p-10 pb-24 overflow-x-hidden max-w-7xl mx-auto w-full">
@@ -493,10 +501,10 @@ function FellowProfileDetailContent() {
         <select
           id="fellow-tab"
           value={activeTab}
-          onChange={(e) => router.replace(`/education/fellows/${id}?tab=${FELLOW_TABS.find((t) => t.label === e.target.value)?.slug || ""}`, { scroll: false })}
+          onChange={(e) => router.replace(`/education/fellows/${id}?tab=${FELLOW_DETAIL_TABS.find((t) => t.label === e.target.value)?.slug || ""}`, { scroll: false })}
           className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm font-semibold text-on-surface outline-none focus:border-primary"
         >
-          {FELLOW_TABS.map((tab) => (
+          {fellowTabs.map((tab) => (
             <option key={tab.slug} value={tab.label}>{tab.label}</option>
           ))}
         </select>
@@ -504,7 +512,7 @@ function FellowProfileDetailContent() {
 
       {/* Tabs */}
       <div ref={tabsContainerRef} className="hidden md:flex border-b border-surface-container-highest mb-8 overflow-x-auto no-scrollbar font-sans">
-        {FELLOW_TABS.map((tab) => {
+        {fellowTabs.map((tab) => {
           const isActive = activeTab === tab.label;
           return (
             <button
@@ -559,6 +567,9 @@ function FellowProfileDetailContent() {
           )}
           {activeTab === "Monthly Planner" && (
             <MonthlyPlanner fellowId={fellow.id} />
+          )}
+          {activeTab === "Leave Details" && (
+            <LeaveSummaryPanel userId={fellow.userId || fellowUser.id} />
           )}
           {activeTab === "LDJC" && (
             <div className="space-y-6">

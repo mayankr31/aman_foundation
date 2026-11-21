@@ -71,7 +71,7 @@ const EDUCATION_LINKS = [
     href: "/education/students",
     kpiKey: "students",
     icon: "groups",
-    page: "education",
+    page: "education-students",
   },
   {
     key: "education.schools",
@@ -79,7 +79,7 @@ const EDUCATION_LINKS = [
     href: "/education/schools",
     kpiKey: "schools",
     icon: "school",
-    page: "education",
+    page: "education-schools",
   },
   {
     key: "education.after-school-students",
@@ -87,7 +87,7 @@ const EDUCATION_LINKS = [
     href: "/education/after-school-students",
     kpiKey: "afterSchoolStudents",
     icon: "escalator_warning",
-    page: "education",
+    page: "education-after-school-students",
   },
   {
     key: "education.after-school-centres",
@@ -95,14 +95,14 @@ const EDUCATION_LINKS = [
     href: "/education/after-school-centres",
     kpiKey: "afterSchools",
     icon: "cottage",
-    page: "education",
+    page: "education-after-school-centres",
   },
   {
     key: "education.pta",
     label: "PTA & Programs",
     href: "/education/pta",
     icon: "event",
-    page: "education",
+    page: "education-pta",
   },
   {
     key: "education.fellows",
@@ -110,7 +110,7 @@ const EDUCATION_LINKS = [
     href: "/education/fellows",
     kpiKey: "fellows",
     icon: "badge",
-    page: "education",
+    page: "education-fellows",
   },
   // Observation tools stay in the Education card, but keep their stable keys
   // and permission so existing saved dashboard configs keep working.
@@ -119,14 +119,14 @@ const EDUCATION_LINKS = [
     label: "PM Reflection",
     href: "/fellow-observations/pm-reflection",
     icon: "rate_review",
-    page: "fellow-observations",
+    page: "fellow-observations-pm-reflection",
   },
   {
     key: "observations.fellow-performance",
     label: "Fellow Performance",
     href: "/fellow-observations/fellow-performance",
     icon: "monitoring",
-    page: "fellow-observations",
+    page: "fellow-observations-fellow-performance",
   },
 ];
 
@@ -137,7 +137,7 @@ const LIVELIHOOD_LINKS = [
     href: "/livelihood/farm",
     kpiKey: "farmPrograms",
     icon: "agriculture",
-    page: "livelihood",
+    page: "livelihood-farm",
   },
   {
     key: "livelihood.non-farm",
@@ -145,7 +145,7 @@ const LIVELIHOOD_LINKS = [
     href: "/livelihood/non-farm",
     kpiKey: "nonFarmPrograms",
     icon: "pets",
-    page: "livelihood",
+    page: "livelihood-non-farm",
   },
   {
     key: "livelihood.beneficiaries",
@@ -153,7 +153,7 @@ const LIVELIHOOD_LINKS = [
     href: "/participants",
     kpiKey: "beneficiaries",
     icon: "volunteer_activism",
-    page: "livelihood",
+    page: "participants",
   },
 ];
 

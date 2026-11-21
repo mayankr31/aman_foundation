@@ -141,8 +141,8 @@ function BeneficiaryProfileDetailContent() {
 
   const { token, user, isInitializing, can, canDeleteRecords } = useAuth();
   const permissionsReady = Boolean(user?.permissions);
-  const canWrite = permissionsReady && can("livelihood", "WRITE");
-  const canBrowseDirectory = permissionsReady && can("livelihood", "READ");
+  const canWrite = permissionsReady && can("participants", "WRITE");
+  const canBrowseDirectory = permissionsReady && can("participants", "READ");
   const visibleTabs = canBrowseDirectory
     ? BENEFICIARY_TABS
     : BENEFICIARY_TABS.filter(({ slug }) => slug !== "id-proofs-bank-details");

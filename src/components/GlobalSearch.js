@@ -53,7 +53,7 @@ export default function GlobalSearch() {
                   path: ["Livelihood", category, p.name],
                   keywords: [p.name, p.description || "", "program", category],
                   href: `/livelihood/programs/${p.id}`,
-                  page: "livelihood",
+                  page: p.category === "FARM" ? "livelihood-farm" : "livelihood-non-farm",
                   group: category,
                   icon: p.category === "FARM" ? "agriculture" : "pets",
                 });
@@ -63,7 +63,7 @@ export default function GlobalSearch() {
         );
       }
 
-      if (canPage("education")) {
+      if (canPage("education-pta")) {
         tasks.push(
           fetch("/api/programs", { headers })
             .then((r) => (r.ok ? r.json() : null))
@@ -75,7 +75,7 @@ export default function GlobalSearch() {
                   path: ["Education", "PTA & Programs", "Programs", p.title],
                   keywords: [p.title, p.description || "", "pta program"],
                   href: `/education/pta/program/${p.id}`,
-                  page: "education",
+                  page: "education-pta",
                   group: "PTA Programs",
                   icon: "handshake",
                 });
@@ -94,7 +94,7 @@ export default function GlobalSearch() {
                   path: ["Education", "PTA & Programs", "Events", ev.title],
                   keywords: [ev.title, ev.description || "", ev.location || "", "pta event meeting"],
                   href: `/education/pta/event/${ev.id}`,
-                  page: "education",
+                  page: "education-pta",
                   group: "PTA Events",
                   icon: "event",
                 });

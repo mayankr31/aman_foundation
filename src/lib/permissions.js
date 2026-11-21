@@ -1,9 +1,20 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { authenticateUser } from "@/lib/auth";
-import { PAGE_KEYS, ROUTE_PERMISSION_MAP, getPageForPath } from "@/lib/routePermissions";
+import {
+  PAGE_KEYS,
+  ROUTE_PERMISSION_MAP,
+  getPageForPath,
+  expandPageKeys,
+} from "@/lib/routePermissions";
+import { COLLECTION_PAGES } from "@/lib/permissionCatalog";
 
 export { PAGE_KEYS, ROUTE_PERMISSION_MAP, getPageForPath };
+
+/** Groups resolve to "allowed if any child page is allowed". */
+function pagesForPermission(page) {
+  return expandPageKeys(page);
+}
 
 function roleGrants(rolePerms, action) {
   if (rolePerms.some((p) => p.action === action)) return true;
@@ -48,29 +59,57 @@ export async function checkPermission(user, app, page, action) {
   // ADMIN is a true superadmin and bypasses all page/user overrides.
   if (user.role?.name === "ADMIN") return true;
 
+  const pages = pagesForPermission(page);
+  if (pages.length === 0) return false;
+
   try {
     const [userPermissions, rolePermissions] = await Promise.all([
       prisma.userPermission.findMany({
-        where: { userId: user.id, permission: { app, page } },
+        where: { userId: user.id, permission: { app, page: { in: pages } } },
         include: { permission: true },
       }),
       prisma.rolePermission.findMany({
-        where: { roleId: user.roleId, permission: { app, page } },
+        where: { roleId: user.roleId, permission: { app, page: { in: pages } } },
         include: { permission: true },
       }),
     ]);
 
-    const userOverrides = {};
+    const overridesByPage = {};
     for (const up of userPermissions) {
-      userOverrides[up.permission.action] = up.type;
+      const key = up.permission.page;
+      if (!overridesByPage[key]) overridesByPage[key] = {};
+      overridesByPage[key][up.permission.action] = up.type;
     }
-    const rolePerms = rolePermissions.map((rp) => rp.permission);
 
-    return resolveAction(action, userOverrides, rolePerms);
+    const rolePermsByPage = {};
+    for (const rp of rolePermissions) {
+      const key = rp.permission.page;
+      if (!rolePermsByPage[key]) rolePermsByPage[key] = [];
+      rolePermsByPage[key].push(rp.permission);
+    }
+
+    return pages.some((key) =>
+      resolveAction(action, overridesByPage[key] || {}, rolePermsByPage[key] || [])
+    );
   } catch (error) {
     console.error("Permission check error:", error);
     return false;
   }
+}
+
+/**
+ * Adds the computed collection aggregates (education, livelihood,
+ * fellow-observations) to an effective permission map. Aggregates are no
+ * longer stored in the database; they are derived from their child pages.
+ */
+function addCollectionAggregates(result) {
+  for (const [collection, children] of Object.entries(COLLECTION_PAGES)) {
+    result[collection] = {
+      read: children.some((child) => result[child]?.read),
+      write: children.some((child) => result[child]?.write),
+    };
+  }
+  return result;
 }
 
 /**
@@ -91,7 +130,7 @@ export async function getEffectivePermissions(user) {
       for (const page of pages) {
         result[page] = { read: true, write: true };
       }
-      return result;
+      return addCollectionAggregates(result);
     }
 
     const [rolePerms, userPerms] = await Promise.all([
@@ -129,7 +168,7 @@ export async function getEffectivePermissions(user) {
       };
     }
 
-    return result;
+    return addCollectionAggregates(result);
   } catch (error) {
     console.error("Get effective permissions error:", error);
     return result;

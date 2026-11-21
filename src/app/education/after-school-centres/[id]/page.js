@@ -13,7 +13,7 @@ import usePagination from "@/lib/usePagination";
 import StudentDataView from "@/components/StudentDataView";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import DateInput from "@/components/ui/DateInput";
-import { formatRoleLabel } from "@/lib/roles";
+import { formatRoleLabel, ASSIGNMENT_ROLES } from "@/lib/roles";
 import { formatDate } from "@/lib/date";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
@@ -368,11 +368,13 @@ export default function AfterSchoolCentreProfileDetail() {
   const assignedPrograms = centre.programs || [];
   const assignedManagers = centre.programManagers || [];
   const isAdmin = user?.roleName === "ADMIN";
+  const isClassAssistant = user?.roleName === "CLASS_ASSISTANT";
   const safeMapUrl = getSafeMapEmbedUrl(centre.mapUrl);
-  const canManageFellows = isAdmin || PROGRAM_ROLES.includes(user?.roleName);
+  const canManageFellows = isAdmin || ASSIGNMENT_ROLES.includes(user?.roleName);
   const canManageStaff =
-    isAdmin || assignedManagers.some((manager) => manager.userId === user?.id);
-  const canEditCentre = can("education", "WRITE");
+    !isClassAssistant &&
+    (isAdmin || assignedManagers.some((manager) => manager.userId === user?.id));
+  const canEditCentre = can("education-after-school-centres", "WRITE");
   const { totalEnrolled = 0, genderRatio = {} } = centre;
   const maleCount = genderRatio.male || 0;
   const femaleCount = genderRatio.female || 0;

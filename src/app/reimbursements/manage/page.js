@@ -311,12 +311,18 @@ export default function ReimbursementManagementPage() {
     ? (selected.items || []).reduce((sum, item) => sum + (Number.parseFloat(lineAmounts[item.id]) || 0), 0)
     : 0;
 
+  // The Executive Director (ADMIN) approves claims directly, so the separate
+  // "Verify & Send to ED" step is only shown to other reviewers.
   const canVerifySelected =
     Boolean(selected) &&
     canAct &&
+    !isAdmin &&
     selected.status === "PENDING" &&
     selected.userId !== user?.id;
-  const canApproveSelected = Boolean(selected) && isAdmin && selected.status === "VERIFIED";
+  const canApproveSelected =
+    Boolean(selected) &&
+    isAdmin &&
+    (selected.status === "PENDING" || selected.status === "VERIFIED");
   const canReimburseSelected =
     Boolean(selected) &&
     canAct &&
@@ -324,6 +330,9 @@ export default function ReimbursementManagementPage() {
     selected.status === "APPROVED";
 
   const claimActionMeta = (claim) => {
+    if (claim.status === "PENDING" && isAdmin) {
+      return { label: "Approve Claim", icon: "approval" };
+    }
     if (claim.status === "PENDING" && canAct && claim.userId !== user?.id) {
       return { label: "Verify Claim", icon: "rate_review" };
     }
@@ -352,14 +361,16 @@ export default function ReimbursementManagementPage() {
         </p>
         <h1 className="page-title text-on-surface">Reimbursement Management</h1>
         <p className="text-sm text-on-surface-variant mt-1">
-          Verify claims and send them to the Executive Director, track approval, and record payments.
+          {isAdmin
+            ? "Approve pending claims directly, track approvals, and record payments."
+            : "Verify claims and send them to the Executive Director, track approval, and record payments."}
         </p>
       </div>
 
       <div className="rounded-lg border border-outline-variant/40 bg-surface-container-low/30 p-3 mb-6 text-xs text-on-surface-variant">
-        Claims move from Pending → Verified → Approved → Reimbursed. A manager or accountant verifies
-        the details, the Executive Director approves, and the Executive Director or Accountant records
-        the payment.
+        {isAdmin
+          ? "As the Executive Director you can approve a pending claim directly, or wait for a manager to verify it first. Approved claims are then paid by you or the Accountant."
+          : "Claims move from Pending → Verified → Approved → Reimbursed. A manager or accountant verifies the details, the Executive Director approves, and the Executive Director or Accountant records the payment."}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
@@ -524,7 +535,7 @@ export default function ReimbursementManagementPage() {
             <div className="overflow-y-auto px-4 sm:px-6 py-5 space-y-5">
               <ReimbursementSummary reimbursement={selected} />
 
-              {selected.status === "PENDING" && !canVerifySelected && (
+              {selected.status === "PENDING" && !isAdmin && !canVerifySelected && (
                 <div className="rounded-lg border border-outline-variant bg-surface-container-low/20 p-3 text-xs text-on-surface-variant">
                   {selected.userId === user?.id
                     ? "You cannot verify your own claim. A manager or accountant will review it."
@@ -699,7 +710,11 @@ export default function ReimbursementManagementPage() {
                     <div className="space-y-3">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
                         <h4 className="text-sm font-bold text-on-surface">Approved Amounts</h4>
-                        <p className="text-xs text-on-surface-variant">Verified amounts are prefilled. Adjust if needed — this becomes the final approved amount.</p>
+                        <p className="text-xs text-on-surface-variant">
+                          {selected.status === "PENDING"
+                            ? "Enter the approved amount for each line. Approving directly skips the verification step."
+                            : "Verified amounts are prefilled. Adjust if needed — this becomes the final approved amount."}
+                        </p>
                       </div>
 
                       <div className="space-y-2">
@@ -759,7 +774,7 @@ export default function ReimbursementManagementPage() {
                         rows={3}
                         value={rejectionReason}
                         onChange={(event) => setRejectionReason(event.target.value)}
-                        placeholder="Explain why this verified claim is being rejected..."
+                        placeholder="Explain why this claim is being rejected..."
                         className="w-full px-3 py-2 border rounded-lg bg-transparent border-outline-variant text-on-surface text-sm outline-none focus:border-primary resize-none"
                       />
                       <div className="flex justify-end gap-2">

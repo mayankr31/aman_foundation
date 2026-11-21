@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/context/ToastContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { validateEmail, validatePersonName } from '@/lib/validation';
+import { validateEmail, validatePersonName, validateMobile, toMobileInput } from '@/lib/validation';
 import { formatRoleLabel } from '@/lib/roles';
 import '../globals_auth.css';
 
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
   const [roleId, setRoleId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,6 +27,7 @@ export default function RegisterPage() {
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [mobileError, setMobileError] = useState('');
   const [roleError, setRoleError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
@@ -99,6 +101,7 @@ export default function RegisterPage() {
     setFirstNameError('');
     setLastNameError('');
     setEmailError('');
+    setMobileError('');
     setRoleError('');
     setPasswordError('');
     setConfirmPasswordError('');
@@ -124,6 +127,13 @@ export default function RegisterPage() {
       isValid = false;
     } else if (validateEmail(email)) {
       setEmailError('Please enter a valid email address');
+      isValid = false;
+    }
+    if (!mobile.trim()) {
+      setMobileError('Mobile number is required');
+      isValid = false;
+    } else if (validateMobile(mobile, { required: true })) {
+      setMobileError('Enter a valid 10-digit mobile number');
       isValid = false;
     }
     if (!roleId) {
@@ -162,6 +172,7 @@ export default function RegisterPage() {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim().toLowerCase(),
+          mobile: mobile.trim(),
           password,
           roleId,
         })
@@ -325,6 +336,32 @@ export default function RegisterPage() {
                   {emailError && <span className="input-error-icon !flex">!</span>}
                 </div>
                 <span className="field-error">{emailError}</span>
+              </div>
+
+              {/* Mobile Number */}
+              <div className="form-group">
+                <label htmlFor="regMobile">Mobile Number</label>
+                <div className="input-wrapper">
+                  <span className="input-icon">
+                    <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none">
+                      <rect x="5.5" y="2.5" width="9" height="15" rx="2" stroke="currentColor" stroke-width="1.4"/>
+                      <path d="M8.5 15.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <input
+                    type="tel"
+                    id="regMobile"
+                    placeholder="10-digit mobile number"
+                    value={mobile}
+                    onChange={(e) => setMobile(toMobileInput(e.target.value))}
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    maxLength={10}
+                    style={{ borderColor: mobileError ? '#ff5252' : '' }}
+                  />
+                  {mobileError && <span className="input-error-icon !flex">!</span>}
+                </div>
+                <span className="field-error">{mobileError}</span>
               </div>
 
               {/* Role / Department Dynamic Selection */}

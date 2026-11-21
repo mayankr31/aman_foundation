@@ -3,9 +3,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { X, Loader2, Save, ShieldAlert, RotateCcw } from 'lucide-react';
+import { X, Loader2, Save, ShieldAlert, RotateCcw, Search } from 'lucide-react';
 import { useToast } from '@/context/ToastContext';
 import { useAuth } from '@/lib/useAuth';
+import { PERMISSION_GROUPS_WITH_PAGES } from '@/lib/permissionCatalog';
 
 export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode, token }) {
   const toast = useToast();
@@ -16,6 +17,7 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
   const [saving, setSaving] = useState(false);
   const [localState, setLocalState] = useState({});
   const [initialState, setInitialState] = useState({});
+  const [query, setQuery] = useState('');
 
   const theme = {
     bg: isDarkMode ? 'bg-[#151e2d]' : 'bg-white',
@@ -79,17 +81,34 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
 
   const rolePermIds = useMemo(() => new Set((rolePermissions || []).map((p) => p.id)), [rolePermissions]);
 
-  const pages = useMemo(() => {
-    const pageMap = {};
+  const permsByPage = useMemo(() => {
+    const map = {};
     allPermissions.forEach((p) => {
-      if (!pageMap[p.page]) pageMap[p.page] = {};
-      pageMap[p.page][p.action] = p;
+      if (!map[p.page]) map[p.page] = {};
+      map[p.page][p.action] = p;
     });
-    return Object.keys(pageMap).sort().map((page) => ({
-      name: page,
-      permissions: pageMap[page],
-    }));
+    return map;
   }, [allPermissions]);
+
+  const groups = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return PERMISSION_GROUPS_WITH_PAGES.map((group) => ({
+      ...group,
+      pages: group.pages.filter((page) => {
+        if (!permsByPage[page.key]) return false;
+        if (!needle) return true;
+        return (
+          page.label.toLowerCase().includes(needle) ||
+          group.label.toLowerCase().includes(needle)
+        );
+      }),
+    })).filter((group) => group.pages.length > 0);
+  }, [permsByPage, query]);
+
+  const visibleCount = useMemo(
+    () => groups.reduce((total, group) => total + group.pages.length, 0),
+    [groups]
+  );
 
   const handleChange = (permId, value) => {
     const permission = allPermissions.find((p) => p.id === permId);
@@ -126,11 +145,23 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
     return false;
   };
 
-  const handleResetPage = (pagePermissions) => {
+  const handleResetPage = (permissions) => {
     setLocalState((prev) => {
       const next = { ...prev };
-      Object.values(pagePermissions).forEach((p) => {
+      Object.values(permissions).forEach((p) => {
         next[p.id] = 'inherit';
+      });
+      return next;
+    });
+  };
+
+  const handleResetGroup = (pageKeys) => {
+    setLocalState((prev) => {
+      const next = { ...prev };
+      pageKeys.forEach((key) => {
+        Object.values(permsByPage[key] || {}).forEach((p) => {
+          next[p.id] = 'inherit';
+        });
       });
       return next;
     });
@@ -224,86 +255,123 @@ export default function UserPermissionsModal({ isOpen, onClose, user, isDarkMode
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-              <p className={`text-xs ${theme.textMuted}`}>
-                Switches show the effective permission. Changing a switch creates an explicit override; <strong>Reset</strong> returns that permission to the role default. READ controls page access; WRITE controls create, edit, delete, approve and upload actions.
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3">
+              <p className={`text-xs flex-1 ${theme.textMuted}`}>
+                Switches show the effective permission for each individual page. Changing a switch creates an explicit override; <strong>Reset</strong> returns that page to the role default. READ controls page access; WRITE controls create, edit, delete, approve and upload actions.
               </p>
               <button
                 onClick={handleResetAll}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 border ${theme.border} ${theme.textLight} hover:bg-black/5 dark:hover:bg-white/5`}
+                className={`shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 border ${theme.border} ${theme.textLight} hover:bg-black/5 dark:hover:bg-white/5`}
               >
                 <RotateCcw size={12} /> Reset all to role
               </button>
+            </div>
+
+            <div className="relative mb-3">
+              <Search size={14} className={`absolute left-3 top-1/2 -translate-y-1/2 ${theme.textMuted}`} />
+              <input
+                type="text"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search pages..."
+                className={`w-full pl-9 pr-3 py-2 rounded-xl text-xs border ${theme.select} focus:outline-none focus:ring-2 focus:ring-[#1a7a5e]/30`}
+              />
             </div>
 
             <div className="max-h-[55vh] overflow-y-auto overflow-x-auto pr-2 custom-scrollbar">
               <table className={`mobile-card-table w-full min-w-[620px] ${isDarkMode ? 'mobile-card-table-dark' : ''}`}>
                 <thead className={`sticky top-0 ${theme.bg} z-10`}>
                   <tr className={`text-left text-[10px] font-black uppercase tracking-widest ${theme.textMuted}`}>
-                    <th className="py-3 pr-4">Page / Feature</th>
+                    <th className="py-3 pr-4">Page</th>
                     <th className="py-3 px-4 text-center">READ</th>
                     <th className="py-3 px-4 text-center">WRITE</th>
                     <th className="py-3 pl-4 text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {pages.map(({ name, permissions }) => {
-                    const renderCell = (perm) => {
-                      if (!perm) return null;
-                      const value = localState[perm.id] || 'inherit';
-                      const inheritedAllowed = roleAllows(perm);
-                      const isOn = value === 'allow' || (value === 'inherit' && inheritedAllowed);
-
-                      return (
-                        <div className="flex flex-col items-center gap-1.5">
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={isOn}
-                            onClick={() => handleChange(perm.id, isOn ? 'deny' : 'allow')}
-                            className={`w-11 h-6 p-0 rounded-full relative shrink-0 transition-colors ${
-                              isOn ? 'bg-[#1a7a5e]' : isDarkMode ? 'bg-white/15' : 'bg-gray-200'
-                            }`}
-                            title={isOn ? 'Allowed — click to deny' : 'Denied — click to allow'}
-                          >
-                            <span
-                              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-                                isOn ? 'translate-x-5' : 'translate-x-0'
-                              }`}
-                            />
-                          </button>
-                          {value !== 'inherit' && (
+                  {groups.map((group) => (
+                    <React.Fragment key={group.id}>
+                      <tr className={`${isDarkMode ? 'bg-white/[0.03]' : 'bg-gray-50'}`}>
+                        <td colSpan={4} className={`py-2 pr-4 text-[10px] font-black uppercase tracking-widest ${theme.textLight}`}>
+                          <div className="flex items-center justify-between gap-2">
+                            <span>{group.label}</span>
                             <button
-                              type="button"
-                              onClick={() => handleChange(perm.id, 'inherit')}
+                              onClick={() => handleResetGroup(group.pages.map((page) => page.key))}
                               className={`text-[9px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
-                              title="Reset to role permissions"
                             >
-                              Reset
+                              Reset group
                             </button>
-                          )}
-                        </div>
-                      );
-                    };
-
-                    return (
-                      <tr key={name} className={`border-t ${theme.borderLight}`}>
-                        <td data-label="" className={`py-4 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
-                          {name.replace(/_/g, ' ')}
-                        </td>
-                        <td data-label="Read" className="py-4 px-4 text-center">{renderCell(permissions.READ)}</td>
-                        <td data-label="Write" className="py-4 px-4 text-center">{renderCell(permissions.WRITE)}</td>
-                        <td data-label="Actions" className="py-4 pl-4 text-center">
-                          <button
-                            onClick={() => handleResetPage(permissions)}
-                            className={`text-[10px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
-                          >
-                            Reset page
-                          </button>
+                          </div>
                         </td>
                       </tr>
-                    );
-                  })}
+                      {group.pages.map((page) => {
+                        const permissions = permsByPage[page.key] || {};
+
+                        const renderCell = (perm) => {
+                          if (!perm) return null;
+                          const value = localState[perm.id] || 'inherit';
+                          const inheritedAllowed = roleAllows(perm);
+                          const isOn = value === 'allow' || (value === 'inherit' && inheritedAllowed);
+
+                          return (
+                            <div className="flex flex-col items-center gap-1.5">
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={isOn}
+                                onClick={() => handleChange(perm.id, isOn ? 'deny' : 'allow')}
+                                className={`w-11 h-6 p-0 rounded-full relative shrink-0 transition-colors ${
+                                  isOn ? 'bg-[#1a7a5e]' : isDarkMode ? 'bg-white/15' : 'bg-gray-200'
+                                }`}
+                                title={isOn ? 'Allowed — click to deny' : 'Denied — click to allow'}
+                              >
+                                <span
+                                  className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                                    isOn ? 'translate-x-5' : 'translate-x-0'
+                                  }`}
+                                />
+                              </button>
+                              {value !== 'inherit' && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleChange(perm.id, 'inherit')}
+                                  className={`text-[9px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
+                                  title="Reset to role permissions"
+                                >
+                                  Reset
+                                </button>
+                              )}
+                            </div>
+                          );
+                        };
+
+                        return (
+                          <tr key={page.key} className={`border-t ${theme.borderLight}`}>
+                            <td data-label="" className={`py-3 pr-4 font-semibold text-xs tracking-wider uppercase ${theme.textWhite}`}>
+                              {page.label}
+                            </td>
+                            <td data-label="Read" className="py-3 px-4 text-center">{renderCell(permissions.READ)}</td>
+                            <td data-label="Write" className="py-3 px-4 text-center">{renderCell(permissions.WRITE)}</td>
+                            <td data-label="Actions" className="py-3 pl-4 text-center">
+                              <button
+                                onClick={() => handleResetPage(permissions)}
+                                className={`text-[10px] font-bold uppercase tracking-wider ${theme.textMuted} hover:text-[#1a7a5e]`}
+                              >
+                                Reset page
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </React.Fragment>
+                  ))}
+                  {visibleCount === 0 && (
+                    <tr>
+                      <td colSpan={4} className={`py-10 text-center text-xs ${theme.textMuted}`}>
+                        No pages match your search.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

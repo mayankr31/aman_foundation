@@ -1,4 +1,4 @@
-import { FELLOW_TABS } from "@/lib/fellowTabs";
+import { FELLOW_TABS, LEAVE_DETAILS_TAB } from "@/lib/fellowTabs";
 import { canRoleHaveTeamCheckIn } from "@/lib/teamCheckIn";
 
 // Profile tabs for roles that do not have a fellow workspace.
@@ -22,6 +22,7 @@ export const EMPLOYEE_DETAIL_TABS = [
   { label: "Personal Details", slug: "personal-details", icon: "badge" },
   { label: "Monthly Planner", slug: "monthly-planner", icon: "calendar_month" },
   { label: "Assignments", slug: "assignments", icon: "assignment_ind" },
+  LEAVE_DETAILS_TAB,
 ];
 
 export const DEFAULT_EMPLOYEE_DETAIL_TAB = "Personal Details";

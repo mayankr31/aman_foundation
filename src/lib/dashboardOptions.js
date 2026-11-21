@@ -8,6 +8,7 @@ import {
   getDashboardKpiConfig,
   getDefaultLinkKeys,
 } from "@/lib/dashboardSections";
+import { expandPageKeys } from "@/lib/permissionCatalog";
 
 /** Hub-page permission that owns each KPI group. */
 const KPI_GROUP_PAGE = {
@@ -98,12 +99,14 @@ export async function getRoleDashboardOptions(role) {
   const can =
     role.name === "ADMIN"
       ? () => true
-      : (page) =>
-          rolePermissions.some(
+      : (page) => {
+          const pages = expandPageKeys(page);
+          return rolePermissions.some(
             (rp) =>
-              rp.permission.page === page &&
+              pages.includes(rp.permission.page) &&
               (rp.permission.action === "READ" || rp.permission.action === "WRITE")
           );
+        };
 
   const config = await prisma.dashboardConfig.findUnique({
     where: { roleId: role.id },

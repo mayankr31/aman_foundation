@@ -16,6 +16,19 @@ const ROLE_LABELS = {
 };
 
 /**
+ * Roles allowed to assign or remove staff and fellows on schools and
+ * after-school centres. Class Assistants are deliberately excluded.
+ */
+export const ASSIGNMENT_ROLES = [
+  "PROGRAM_MANAGER",
+  "ACCOUNTANT",
+  "PROGRAM_COORDINATOR",
+  "FIELD_EXECUTIVE",
+  "PROGRAM_DIRECTOR",
+  "PROGRAM_LEAD",
+];
+
+/**
  * True only for the Executive Director (the ADMIN role).
  * Used to gate destructive record deletion across the app.
  */

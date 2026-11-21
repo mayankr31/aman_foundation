@@ -5,6 +5,7 @@ import { isAdmin, isSchoolManaged, canAccessSchool } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 import { canAssignPerson } from "@/lib/hierarchy";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
+import { ASSIGNMENT_ROLES } from "@/lib/roles";
 
 const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
@@ -73,6 +74,12 @@ export async function POST(req, context) {
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
 
     if (!isAdmin(user)) {
+      if (!ASSIGNMENT_ROLES.includes(user.role.name)) {
+        return NextResponse.json(
+          { error: "Forbidden: Class Assistants cannot assign staff to schools" },
+          { status: 403 }
+        );
+      }
       if (!(await isSchoolManaged(user.id, schoolId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
       }
@@ -138,6 +145,12 @@ export async function DELETE(req, context) {
     if (!userId) return NextResponse.json({ error: "userId is required" }, { status: 400 });
 
     if (!isAdmin(user)) {
+      if (!ASSIGNMENT_ROLES.includes(user.role.name)) {
+        return NextResponse.json(
+          { error: "Forbidden: Class Assistants cannot manage staff in schools" },
+          { status: 403 }
+        );
+      }
       if (!(await isSchoolManaged(user.id, schoolId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this school" }, { status: 403 });
       }
