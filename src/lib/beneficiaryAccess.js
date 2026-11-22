@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { checkPermission } from "@/lib/permissions";
-import { PROGRAM_ROLES } from "@/lib/scope";
+import { isFieldScopedRole } from "@/lib/scope";
 
 /** True when the user can read the Livelihood pages (full participant profile). */
 export async function hasLivelihoodRead(user) {
@@ -58,15 +58,17 @@ export async function canManageBeneficiaryInPrograms(userId, beneficiaryId) {
 }
 
 /**
- * Write access requires Livelihood WRITE. Admins may edit any participant;
- * other program staff may edit only participants enrolled in a program they
- * manage. Fellows (and other linked education users) stay read-only.
+ * Write access requires Livelihood WRITE. Admins may edit any participant.
+ * Unrestricted roles are limited only by their page permission. Field-scoped
+ * roles (program staff and fellows) may edit only participants enrolled in a
+ * program they manage; participants with no program enrollment remain editable
+ * so the creation and KYR flow keeps working.
  */
 export async function canEditBeneficiary(user, beneficiaryId) {
   if (!user?.id) return false;
   if (user.role?.name === "ADMIN") return true;
   if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) return false;
-  if (!PROGRAM_ROLES.includes(user.role?.name)) return false;
   if (!beneficiaryId) return false;
+  if (!isFieldScopedRole(user)) return true;
   return canManageBeneficiaryInPrograms(user.id, beneficiaryId);
 }

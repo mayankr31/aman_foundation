@@ -10,7 +10,9 @@ import AddBeneficiaryModal from "@/components/AddBeneficiaryModal";
 
 export default function BeneficiaryMasterDirectory() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, user, can } = useAuth();
+  const permissionsReady = Boolean(user?.permissions);
+  const canAddParticipant = permissionsReady && can("livelihood", "WRITE");
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("All Tiers");
   const [programFilter, setProgramFilter] = useState("All Programs");
@@ -161,13 +163,15 @@ export default function BeneficiaryMasterDirectory() {
             />
           </div>
 
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-semibold text-sm cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-sm">person_add</span>
-            Add Participant
-          </button>
+          {canAddParticipant && (
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-full hover:shadow-[0_8px_24px_rgba(0,104,87,0.2)] transition-all font-semibold text-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-sm">person_add</span>
+              Add Participant
+            </button>
+          )}
         </div>
       </div>
 

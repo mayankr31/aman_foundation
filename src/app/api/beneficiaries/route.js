@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
-import { getManagedSchoolIds, isLivelihoodProgramManaged } from "@/lib/scope";
+import { getManagedSchoolIds, isFieldScopedRole, isLivelihoodProgramManaged } from "@/lib/scope";
 import { buildResilienceSurveyCreateData } from "@/lib/resilienceSurvey";
 import { checkPermission } from "@/lib/permissions";
 import { computeCapacityScore } from "@/lib/capacityDictionaries";
@@ -156,13 +156,13 @@ async function canLinkStudent(user, studentId) {
     return Boolean(assigned);
   }
 
-  if (PROGRAM_ROLES.includes(user.role.name)) {
-    if (!student.schoolId) return false;
-    const managed = await getManagedSchoolIds(user.id);
-    return managed.includes(student.schoolId);
-  }
+  // Field-scoped program staff may link students from schools they manage;
+  // unrestricted roles are governed solely by their page permissions.
+  if (!isFieldScopedRole(user)) return true;
+  if (!student.schoolId) return false;
 
-  return false;
+  const managed = await getManagedSchoolIds(user.id);
+  return managed.includes(student.schoolId);
 }
 
 export async function POST(req) {
@@ -207,23 +207,17 @@ export async function POST(req) {
       resilienceSurvey,
     } = body;
 
-    // A fellow may add a student's parents from the student detail page even
-    // though they do not have Livelihood write access. The beneficiary is
-    // linked to that student, which also grants read-only profile access.
+    // Adding a participant is permission-based: Livelihood/participants WRITE
+    // grants access to any role. Education staff may also add a student's
+    // parents from the student detail page even without Livelihood write
+    // access; the beneficiary is linked to that student, which grants read-only
+    // profile access. School scoping is enforced by canLinkStudent below.
     const hasLivelihoodWrite = await checkPermission(user, "dashboard", "livelihood", "WRITE");
     if (!hasLivelihoodWrite) {
       const canWriteEducation = await checkPermission(user, "dashboard", "education", "WRITE");
-      if (user.role.name !== "FELLOW" || !studentId || !canWriteEducation) {
-        return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
+      if (!studentId || !canWriteEducation) {
+        return NextResponse.json({ error: "Forbidden: Insufficient permissions to add participants" }, { status: 403 });
       }
-    }
-
-    if (
-      user.role.name !== "ADMIN" &&
-      user.role.name !== "FELLOW" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json({ error: "Forbidden: Admin, Fellow or Program Manager access only" }, { status: 403 });
     }
 
     if (studentId && !(await canLinkStudent(user, studentId))) {
@@ -252,7 +246,7 @@ export async function POST(req) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isFieldScopedRole(user)) {
       if (programId && !(await isLivelihoodProgramManaged(user.id, programId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
       }
