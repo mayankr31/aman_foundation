@@ -193,9 +193,13 @@ export async function PATCH(req, context) {
       select: {
         id: true,
         userId: true,
-        dateOfJoining: true,
-        managerId: true,
-        user: { select: { role: { select: { name: true } } } },
+        user: {
+          select: {
+            dateOfJoining: true,
+            managerId: true,
+            role: { select: { name: true } },
+          },
+        },
       },
     });
 
@@ -258,7 +262,7 @@ export async function PATCH(req, context) {
         ? "Date of leaving is required when a reason is provided."
         : null,
       validateDateOrder(
-        body.dateOfJoining !== undefined ? parseDate(body.dateOfJoining) : target.dateOfJoining,
+        body.dateOfJoining !== undefined ? parseDate(body.dateOfJoining) : target.user?.dateOfJoining,
         body.dateOfLeaving !== undefined ? parseDate(body.dateOfLeaving) : undefined,
         { startLabel: "Date of joining", endLabel: "Date of leaving" }
       ),
@@ -271,7 +275,7 @@ export async function PATCH(req, context) {
     let nextManagerId;
     if (body.managerId !== undefined) {
       nextManagerId = body.managerId || null;
-      const managerChanged = (target.managerId || null) !== nextManagerId;
+      const managerChanged = (target.user?.managerId || null) !== nextManagerId;
       if (nextManagerId && target.userId && nextManagerId === target.userId) {
         return NextResponse.json({ error: "A user cannot report to themselves" }, { status: 400 });
       }

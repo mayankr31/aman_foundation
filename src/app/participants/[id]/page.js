@@ -715,7 +715,11 @@ function BeneficiaryProfileDetailContent() {
     if (!confirm("Are you sure you want to delete this migration record?")) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch(`/api/beneficiaries/${id}/migrations/${recordId}`, { method: "DELETE", headers });
+      const res = await fetch(`/api/beneficiaries/${id}/migrations`, {
+        method: "DELETE",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ migrationId: recordId }),
+      });
       const json = await res.json();
       if (json.success) {
         loadBeneficiaryDetail();
