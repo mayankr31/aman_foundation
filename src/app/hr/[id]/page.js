@@ -15,7 +15,7 @@ import { DEFAULT_EMPLOYEE_DETAIL_TAB, getEmployeeDetailTabs } from "@/lib/profil
 import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { formatDate } from "@/lib/date";
 import { QUALIFICATIONS, getDefaultDepartment, getDepartmentOptions } from "@/lib/organization";
-import { formatRoleLabel } from "@/lib/roles";
+import { formatRoleLabel, isProgramStaffRole } from "@/lib/roles";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
 import { INDIA_STATES, getDistrictsForState, withCurrentOption } from "@/lib/indiaLocations";
 import { composeProfileAddress } from "@/lib/profileCompleteness";
@@ -71,7 +71,6 @@ const PERSONAL_FIELDS = [
 
 const EXIT_MANAGER_ROLES = ["ADMIN", "HR"];
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 function toDateInput(value) {
   if (!value) return "";
@@ -432,7 +431,7 @@ function HrEmployeeProfileContent() {
   const managedSchools = (employee.managedSchools || []).map((item) => item.school);
   const managedCentres = (employee.managedCentres || []).map((item) => item.centre);
   const managedPrograms = (employee.managedLivelihoodPrograms || []).map((item) => item.program);
-  const canEditAssignments = isAdmin && PROGRAM_ROLES.includes(employee.role?.name);
+  const canEditAssignments = isAdmin && isProgramStaffRole(employee?.role?.name);
 
   return (
     <div className="p-4 sm:p-6 md:p-10 flex-grow flex flex-col overflow-y-auto max-w-5xl mx-auto w-full">

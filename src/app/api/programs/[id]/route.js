@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isEducationProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, context) {
   try {
@@ -17,7 +17,7 @@ export async function GET(req, context) {
 
     const { id } = await context.params;
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isEducationProgramManaged(user.id, id))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isEducationProgramManaged(user.id, id))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 

@@ -13,8 +13,6 @@ import { formatRoleLabel } from "@/lib/roles";
 import PhotoLightbox from "@/components/PhotoLightbox";
 import EditProgramModal from "@/components/EditProgramModal";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export default function ProgramDetail() {
   const { id } = useParams();
   const router = useRouter();
@@ -189,7 +187,7 @@ export default function ProgramDetail() {
     setSearchManagerQ("");
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await fetch("/api/users?roles=" + PROGRAM_ROLES.join(","), { headers });
+      const res = await fetch("/api/users?permission=livelihood", { headers });
       const json = await res.json();
       if (json.success) setAllProgramManagers(json.data);
     } catch (err) {

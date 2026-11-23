@@ -28,10 +28,9 @@ import useAutoScrollActiveTab from "@/lib/useAutoScrollActiveTab";
 import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
 import { useSurveyTemplate } from "@/lib/useSurveyTemplate";
 import { getManagerCandidates } from "@/lib/roleHierarchy";
-import { ASSIGNMENT_ROLES } from "@/lib/roles";
+import { ASSIGNMENT_ROLES, isProgramStaffRole } from "@/lib/roles";
 import dynamic from "next/dynamic";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
@@ -385,7 +384,7 @@ function FellowProfileDetailContent() {
   const canEditPersonalDetails =
     user?.roleName === "ADMIN" ||
     user?.roleName === "HR" ||
-    (PROGRAM_ROLES.includes(user?.roleName) && can("education-fellows", "WRITE")) ||
+    (isProgramStaffRole(user?.roleName) && can("education-fellows", "WRITE")) ||
     (can("education-fellows", "WRITE") && fellowUser.managerId === user?.id);
   const canEditAssignments =
     user?.roleName === "ADMIN" ||
@@ -628,7 +627,7 @@ function FellowProfileDetailContent() {
                         >
                           {sheet.status}
                         </span>
-                        {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
+                        {(user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName)) && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -663,7 +662,7 @@ function FellowProfileDetailContent() {
             <div className="bg-surface-container-lowest rounded-xl p-6 shadow-ambient border border-outline-variant/10 space-y-6">
               <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                 <h3 className="section-title text-on-surface">Observational Debrief Conversation Records</h3>
-                {(user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
+                {(user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName)) && (
                   <button
                     onClick={() => setShowAddDebriefModal(true)}
                     className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 transition-colors shadow-md cursor-pointer"
@@ -851,7 +850,7 @@ function FellowProfileDetailContent() {
             <IndividualFeedbackView
               fellowId={fellow.id}
               token={token}
-              canManage={user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)}
+              canManage={user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName)}
             />
           )}
 

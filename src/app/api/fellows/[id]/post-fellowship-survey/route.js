@@ -8,8 +8,8 @@ import {
   NOTIFICATION_TYPES,
 } from "@/lib/notifications";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -47,7 +47,7 @@ export async function GET(req, { params }) {
 
     const isAdmin = user.role.name === "ADMIN";
     const isOwner = user.id === fellow.userId;
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
+    const isPm = isProgramStaffRole(user?.role?.name);
     const allowed = isAdmin || isOwner || (isPm && (await isFellowManaged(user.id, fellowId)));
     if (!allowed) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });

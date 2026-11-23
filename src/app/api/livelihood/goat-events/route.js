@@ -6,7 +6,6 @@ import { join } from "path";
 import crypto from "crypto";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "goat-events");
 
@@ -75,9 +74,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name) && user.role.name !== "FELLOW") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const formData = await req.formData();
     const beneficiaryGoatRearingId = formData.get("beneficiaryGoatRearingId");

@@ -4,12 +4,6 @@ import { authenticateUser } from "@/lib/auth";
 import { getActiveRatingCategories } from "@/lib/performanceCategories";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-function canManage(user) {
-  return user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
-}
-
 function slugify(label) {
   return (
     String(label)
@@ -28,13 +22,6 @@ export async function GET(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (!canManage(user)) {
-      return NextResponse.json(
-        { error: "Forbidden: Admin or Program Manager access only" },
-        { status: 403 }
-      );
-    }
-
     const categories = await getActiveRatingCategories();
     return NextResponse.json({ success: true, data: categories });
   } catch (err) {
@@ -50,13 +37,6 @@ export async function POST(req) {
 
     if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
-    }
-
-    if (!canManage(user)) {
-      return NextResponse.json(
-        { error: "Forbidden: Only managers can add rating categories" },
-        { status: 403 }
-      );
     }
 
     const body = await req.json();

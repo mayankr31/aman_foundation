@@ -4,12 +4,6 @@ import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { normalizeTypeConfig } from "@/lib/livelihoodTypeValidation";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-function canManage(user) {
-  return user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
-}
-
 export async function PATCH(req, { params }) {
   try {
     const { user, error } = await authenticateUser(req);
@@ -17,13 +11,6 @@ export async function PATCH(req, { params }) {
 
     if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
-    if (!canManage(user)) {
-      return NextResponse.json(
-        { error: "Forbidden: Admin or Program Manager access only" },
-        { status: 403 }
-      );
     }
 
     const { id } = await params;
@@ -113,13 +100,6 @@ export async function DELETE(req, { params }) {
 
     if (!(await checkPermission(user, "dashboard", "livelihood", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
-    }
-
-    if (!canManage(user)) {
-      return NextResponse.json(
-        { error: "Forbidden: Admin or Program Manager access only" },
-        { status: 403 }
-      );
     }
 
     const { id } = await params;

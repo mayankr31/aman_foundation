@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedFellowIds } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
@@ -15,12 +15,9 @@ export async function GET(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
 
     let fellowWhere = {};
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       const fellowIds = await getManagedFellowIds(user.id);
       fellowWhere = { id: { in: fellowIds } };
     }

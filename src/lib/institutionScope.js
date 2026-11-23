@@ -1,11 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import {
-  PROGRAM_ROLES,
   canAccessSchool as canAccessSchoolInScope,
   canAccessCentre as canAccessCentreInScope,
 } from "@/lib/scope";
-
-export { PROGRAM_ROLES };
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

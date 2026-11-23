@@ -7,8 +7,6 @@ import { canAssignPerson } from "@/lib/hierarchy";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 import { ASSIGNMENT_ROLES } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 async function resolveSchoolId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
   if (isUuid) return id;
@@ -92,8 +90,17 @@ export async function POST(req, context) {
     }
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
-    if (!target || !PROGRAM_ROLES.includes(target.role.name)) {
-      return NextResponse.json({ error: "Program Manager user not found" }, { status: 404 });
+    if (!target) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    if (target.status !== "ACTIVE") {
+      return NextResponse.json({ error: "Selected user is not active" }, { status: 400 });
+    }
+    if (!(await checkPermission(target, "dashboard", "education", "READ"))) {
+      return NextResponse.json(
+        { error: "This user's role does not have Education access" },
+        { status: 400 }
+      );
     }
 
     const assignment = await prisma.programManagerSchool.create({

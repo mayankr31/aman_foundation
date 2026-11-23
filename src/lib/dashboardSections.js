@@ -7,8 +7,7 @@ import {
   SELF_SERVICE_LINKS,
   TASK_LINKS,
 } from "@/lib/dashboardRegistry";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+import { isProgramStaffRole } from "@/lib/roles";
 
 const KPI_GROUP_BY_KEY = new Map(
   KPI_DEFINITIONS.map((kpi) => [kpi.key, kpi.group])
@@ -48,7 +47,7 @@ function makeSection(group, links) {
 export function getDefaultLinkKeys(role) {
   const isAdmin = role === "ADMIN";
   const isFellow = role === "FELLOW";
-  const isProgramRole = PROGRAM_ROLES.includes(role);
+  const isProgramRole = isProgramStaffRole(role);
 
   const keys = [];
 
@@ -212,7 +211,7 @@ function buildKpiConfig(role) {
     ];
   }
 
-  if (PROGRAM_ROLES.includes(role)) {
+  if (isProgramStaffRole(role)) {
     return [
       { key: "schools", label: "Managed Schools", icon: "school", tone: "emerald" },
       { key: "afterSchools", label: "Managed After Schools", icon: "cottage", tone: "emerald" },

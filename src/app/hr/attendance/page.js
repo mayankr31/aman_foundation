@@ -15,8 +15,8 @@ import {
   TASK_TIME_SLOT_LABELS,
   normalizeTaskTimeSlot,
 } from "@/lib/taskSlots";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 function logRecency(log) {
   return [log?.logdate || "", new Date(log?.checkInAt || log?.createdAt || 0).getTime()];
@@ -32,7 +32,7 @@ function isNewerLog(candidate, current) {
 export default function HrAttendanceLogs() {
   const router = useRouter();
   const { token, user } = useAuth();
-  const canReview = ["ADMIN", "HR", ...PROGRAM_ROLES].includes(user?.roleName);
+  const canReview = (user?.roleName === "ADMIN" || user?.roleName === "HR" || isProgramStaffRole(user?.roleName));
   
   const [attendanceLogs, setAttendanceLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

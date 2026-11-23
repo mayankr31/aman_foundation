@@ -18,8 +18,8 @@ import {
   typeKeyFromName,
   validateLeaveQuota,
 } from "@/lib/leaves";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
@@ -34,7 +34,7 @@ export async function GET(req) {
     let where;
     if (["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name)) {
       where = undefined;
-    } else if (PROGRAM_ROLES.includes(user.role?.name)) {
+    } else if (isProgramStaffRole(user?.role?.name)) {
       const team = (await getHierarchyScopedUserIds(user, { includeSelf: true })) || [user.id];
       where = { userId: { in: team.length ? team : [user.id] } };
     } else {

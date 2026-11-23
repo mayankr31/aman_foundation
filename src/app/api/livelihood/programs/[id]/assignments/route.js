@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isLivelihoodProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function POST(req, { params }) {
   try {
@@ -15,13 +15,6 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      !PROGRAM_ROLES.includes(user.role.name) &&
-      user.role.name !== "FELLOW"
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const { id: programId } = await params;
     const body = await req.json();
@@ -38,7 +31,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ error: "Program not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isLivelihoodProgramManaged(user.id, programId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isLivelihoodProgramManaged(user.id, programId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });
     }
 

@@ -1,5 +1,5 @@
 import { getSubordinateUserIds } from "@/lib/hierarchy";
-import { PROGRAM_ROLES, getManagedTeamUserIds } from "@/lib/scope";
+import { isProgramStaff, getManagedTeamUserIds } from "@/lib/scope";
 import { istDayEnd, istDayStart } from "@/lib/time";
 
 /**
@@ -16,7 +16,7 @@ export async function getTaskTeamUserIds(user, { includeSelf = true } = {}) {
   const ids = await getSubordinateUserIds(user.id, { includeSelf });
   if (ids.length > (includeSelf ? 1 : 0)) return ids;
 
-  if (PROGRAM_ROLES.includes(user.role?.name)) {
+  if (isProgramStaff(user)) {
     const team = await getManagedTeamUserIds(user.id);
     return [...new Set([...(includeSelf ? [user.id] : []), ...team])];
   }

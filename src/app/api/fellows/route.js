@@ -4,8 +4,8 @@ import { authenticateUser } from "@/lib/auth";
 import { getManagedSchoolIds, getManagedCentreIds } from "@/lib/scope";
 import { getSubordinateUserIds } from "@/lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
@@ -22,9 +22,9 @@ export async function GET(req) {
     // when they do not manage the fellow's school/centre.
     const allFellows =
       searchParams.get("all") === "1" &&
-      (user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name));
+      (user.role.name === "ADMIN" || isProgramStaffRole(user?.role?.name));
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !allFellows) {
+    if (isProgramStaffRole(user?.role?.name) && !allFellows) {
       const [schoolIds, centreIds, subordinateIds] = await Promise.all([
         getManagedSchoolIds(user.id),
         getManagedCentreIds(user.id),
@@ -90,10 +90,9 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isAdmin = user.role.name === "ADMIN";
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
-    if (!isAdmin && !isPm) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
+    const isPm = isProgramStaffRole(user?.role?.name);
+    if (user.role.name === "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Fellows cannot create fellow profiles" }, { status: 403 });
     }
 
     const body = await req.json();

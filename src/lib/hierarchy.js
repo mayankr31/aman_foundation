@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { PROGRAM_ROLES, getManagedTeamUserIds } from "@/lib/scope";
+import { isProgramStaff, getManagedTeamUserIds } from "@/lib/scope";
 
 /** Roles that participate in reporting-line based HR visibility. */
 export const HIERARCHY_ROLES = [
@@ -114,7 +114,7 @@ export async function getReportingScopeUserIds(
   });
   if (ids.length > (includeSelf ? 1 : 0)) return ids;
 
-  if (PROGRAM_ROLES.includes(user.role?.name)) {
+  if (isProgramStaff(user)) {
     const team = await getManagedTeamUserIds(user.id);
     return [...new Set([...(includeSelf ? [user.id] : []), ...team])];
   }
@@ -132,7 +132,7 @@ export async function getHierarchyScopedUserIds(user, { includeSelf = true, allo
   if (!user?.id) return [];
   if (user.role?.name === "ADMIN" || user.role?.name === "HR") return null; // null = unrestricted
 
-  if (!PROGRAM_ROLES.includes(user.role?.name)) {
+  if (!isProgramStaff(user)) {
     return includeSelf ? [user.id] : [];
   }
 
@@ -155,7 +155,7 @@ export async function canAccessUser(actor, targetUserId, { allowSelf = true } = 
   if (!actor?.id || !targetUserId) return false;
   if (actor.id === targetUserId) return allowSelf;
   if (actor.role?.name === "ADMIN" || actor.role?.name === "HR") return true;
-  if (!PROGRAM_ROLES.includes(actor.role?.name)) return false;
+  if (!isProgramStaff(actor)) return false;
 
   if (await isSubordinate(actor.id, targetUserId)) return true;
 

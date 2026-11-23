@@ -5,8 +5,6 @@ import { isAdmin } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
 import { notifyUsers, NOTIFICATION_TYPES } from "@/lib/notifications";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 // GET /api/livelihood/programs/[id]/program-managers
 export async function GET(req, { params }) {
   try {
@@ -64,8 +62,17 @@ export async function POST(req, { params }) {
     }
 
     const target = await prisma.user.findUnique({ where: { id: userId }, include: { role: true } });
-    if (!target || !PROGRAM_ROLES.includes(target.role.name)) {
-      return NextResponse.json({ error: "Program Manager user not found" }, { status: 404 });
+    if (!target) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    if (target.status !== "ACTIVE") {
+      return NextResponse.json({ error: "Selected user is not active" }, { status: 400 });
+    }
+    if (!(await checkPermission(target, "dashboard", "livelihood", "READ"))) {
+      return NextResponse.json(
+        { error: "This user's role does not have Livelihood access" },
+        { status: 400 }
+      );
     }
 
     const assignment = await prisma.programManagerLivelihoodProgram.create({

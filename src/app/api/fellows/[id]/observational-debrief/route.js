@@ -7,7 +7,6 @@ import crypto from "crypto";
 import { notifyUsers, getFellowUserId, NOTIFICATION_TYPES } from "@/lib/notifications";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "observational-debrief");
 
@@ -90,9 +89,6 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const { id } = await context.params;
     const fellowId = await resolveFellowId(id);
@@ -162,9 +158,6 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const { id } = await context.params;
     const fellowId = await resolveFellowId(id);

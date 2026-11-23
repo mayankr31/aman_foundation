@@ -18,8 +18,8 @@ import {
 } from "@/lib/validation";
 import { composeProfileAddress } from "@/lib/profileCompleteness";
 import { generateStudentId } from "@/lib/studentId";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
@@ -46,7 +46,7 @@ export async function GET(req) {
           }
         }
       };
-    } else if (PROGRAM_ROLES.includes(user.role.name)) {
+    } else if (isProgramStaffRole(user?.role?.name)) {
       const managed = await getManagedSchoolIds(user.id);
       if (schoolId && schoolId !== "All Schools") {
         if (!managed.includes(schoolId)) where.schoolId = { in: [] };
@@ -84,7 +84,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
+    const isPm = isProgramStaffRole(user?.role?.name);
     const isFellow = user.role.name === "FELLOW";
 
     const body = await req.json();

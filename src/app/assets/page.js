@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/lib/useAuth";
 import { formatDate } from "@/lib/date";
-import { formatRoleLabel } from "@/lib/roles";
+import { formatRoleLabel, isProgramStaffRole } from "@/lib/roles";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import {
@@ -22,13 +22,12 @@ import {
   AssetReturnModal,
 } from "@/components/assets/AssetModals";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function AssetsPage() {
   const { token, user, can, canDeleteRecords } = useAuth();
   const canWrite = can("assets", "WRITE");
   const isUnrestricted = user?.roleName === "ADMIN" || user?.roleName === "HR";
-  const canSeeTeam = canWrite || PROGRAM_ROLES.includes(user?.roleName);
+  const canSeeTeam = canWrite || isProgramStaffRole(user?.roleName);
 
   const [scope, setScope] = useState("mine");
   const [assets, setAssets] = useState([]);

@@ -11,8 +11,8 @@ import {
   normalizeEmailForSave,
   normalizeMobileForSave,
 } from "@/lib/validation";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const toNullableInt = (value) =>
   value === undefined || value === null || String(value).trim() === "" ? null : Number(value);
@@ -33,7 +33,7 @@ export async function GET(req) {
           fellow: { userId: user.id }
         }
       };
-    } else if (PROGRAM_ROLES.includes(user.role.name)) {
+    } else if (isProgramStaffRole(user?.role?.name)) {
       where.programManagers = {
         some: { userId: user.id }
       };

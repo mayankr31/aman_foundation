@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getHierarchyScopedUserIds } from "@/lib/hierarchy";
 import { checkPermission } from "@/lib/permissions";
+import { expandPageKeys } from "@/lib/permissionCatalog";
 import { generateEmployeeId } from "@/lib/employeeId";
 import { isManagerRoleAllowed } from "@/lib/roleHierarchy";
 import {
@@ -32,6 +33,8 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const roleFilter = searchParams.get("role");
     const rolesFilter = searchParams.get("roles");
+    const permissionFilter = searchParams.get("permission");
+    const permissionPages = permissionFilter ? expandPageKeys(permissionFilter) : null;
     const rolesList = rolesFilter
       ? rolesFilter.split(",").map((r) => r.trim()).filter(Boolean)
       : null;
@@ -45,7 +48,24 @@ export async function GET(req) {
       scopeWhere = { id: { in: team.length ? team : [user.id] } };
     }
 
-    const roleWhere = rolesList?.length
+    // `permission=livelihood` returns staff whose role can access that module.
+    // Global roles (Admin/HR) and Fellows are excluded because they are not
+    // assigned through the staff pickers.
+    const roleWhere = permissionPages?.length
+      ? {
+          role: {
+            name: { notIn: ["ADMIN", "HR", "FELLOW"] },
+            permissions: {
+              some: {
+                permission: {
+                  app: "dashboard",
+                  page: { in: permissionPages },
+                },
+              },
+            },
+          },
+        }
+      : rolesList?.length
       ? { role: { name: { in: rolesList } } }
       : roleFilter
       ? { role: { name: roleFilter } }
@@ -54,6 +74,7 @@ export async function GET(req) {
     const where = {
       ...(scopeWhere || {}),
       ...(roleWhere || {}),
+      ...(permissionPages?.length ? { status: "ACTIVE" } : {}),
     };
 
     const users = await prisma.user.findMany({

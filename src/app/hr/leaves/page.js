@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/useAuth";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
-import { formatRoleLabel } from "@/lib/roles";
+import { formatRoleLabel, isProgramStaffRole } from "@/lib/roles";
 import OnLeaveToday from "@/components/OnLeaveToday";
 import LeaveDetailsModal from "@/components/LeaveDetailsModal";
 import HolidayManagerModal from "@/components/holidays/HolidayManagerModal";
@@ -19,7 +19,6 @@ import {
   getPolicyFlagLabel,
 } from "@/lib/leavePolicy";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 const POLICY_ADMIN_ROLES = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"];
 const PERIOD_LOCKED_KEYS = ["COMP_OFF", "MATERNITY", "PATERNITY", "BEREAVEMENT", "LWP"];
 
@@ -115,7 +114,7 @@ export default function LeaveWorkflow() {
     setTimeout(() => setShowToast(false), 4000);
   };
 
-  const canReview = [...POLICY_ADMIN_ROLES, "HR", ...PROGRAM_ROLES].includes(currentUser?.roleName);
+  const canReview = (POLICY_ADMIN_ROLES.includes(currentUser?.roleName) || currentUser?.roleName === "ADMIN" || currentUser?.roleName === "HR" || isProgramStaffRole(currentUser?.roleName));
   const canManagePolicy = POLICY_ADMIN_ROLES.includes(currentUser?.roleName);
   const canManageHolidays = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(
     currentUser?.roleName

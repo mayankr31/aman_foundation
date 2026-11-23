@@ -3,12 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
-function canManage(user) {
-  return user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
-}
-
 // Soft-delete a category so historical scores remain stored but the column is
 // hidden from the form and table.
 export async function DELETE(req, context) {
@@ -18,13 +12,6 @@ export async function DELETE(req, context) {
 
     if (!(await checkPermission(user, "dashboard", "fellow-observations", "WRITE"))) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
-    }
-
-    if (!canManage(user)) {
-      return NextResponse.json(
-        { error: "Forbidden: Only managers can delete rating categories" },
-        { status: 403 }
-      );
     }
 
     const { id } = await context.params;

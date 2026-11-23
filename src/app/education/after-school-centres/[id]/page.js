@@ -16,8 +16,6 @@ import DateInput from "@/components/ui/DateInput";
 import { formatRoleLabel, ASSIGNMENT_ROLES } from "@/lib/roles";
 import { formatDate } from "@/lib/date";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 function InputField({ label, name, value, onChange, type = "text", required = false, options, error, hint, transform, ...rest }) {
   const inputClasses = `px-3 py-2 border rounded-lg bg-surface text-on-surface text-sm focus:outline-none focus:border-primary ${error ? "border-error" : "border-outline-variant"}`;
   const handleChange = (event) => {
@@ -161,7 +159,7 @@ export default function AfterSchoolCentreProfileDetail() {
       fetch("/api/programs", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllPrograms(j.data); });
     }
     if (modal === "managers") {
-      fetch("/api/users?roles=" + PROGRAM_ROLES.join(","), { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllProgramManagers(j.data); });
+      fetch("/api/users?permission=education", { headers: h }).then(r => r.json()).then(j => { if (j.success) setAllProgramManagers(j.data); });
     }
   }, [modal, token]);
 

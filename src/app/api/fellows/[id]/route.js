@@ -28,8 +28,8 @@ import {
   normalizeBankAccountForSave,
   normalizeEmailForSave,
 } from "@/lib/validation";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const FELLOW_DETAIL_INCLUDE = {
   user: {
@@ -110,7 +110,7 @@ async function canAccessFellowProfile(user, fellowId, action = "READ") {
   if (!(await checkPermission(user, "dashboard", "education", action))) return false;
   if (isAdmin(user) || user.role?.name === "HR") return true;
 
-  if (PROGRAM_ROLES.includes(user.role?.name) && (await isFellowManaged(user.id, fellowId))) {
+  if (isProgramStaffRole(user?.role?.name) && (await isFellowManaged(user.id, fellowId))) {
     return true;
   }
 

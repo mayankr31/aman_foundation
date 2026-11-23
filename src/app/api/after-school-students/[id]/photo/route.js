@@ -6,8 +6,8 @@ import { checkPermission } from "@/lib/permissions";
 import { writeFile, mkdir, unlink } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "after-school-student-photos");
 
@@ -55,7 +55,7 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
+    const isPm = isProgramStaffRole(user?.role?.name);
     const isFellow = user.role.name === "FELLOW";
 
     const { id } = await context.params;

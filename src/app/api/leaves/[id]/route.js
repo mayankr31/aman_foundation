@@ -13,8 +13,8 @@ import {
   typeKeyFromName,
   validateLeaveQuota,
 } from "@/lib/leaves";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function isPmTeamMember(managerUser, targetUserId) {
   if (managerUser.id === targetUserId) return true;
@@ -45,7 +45,7 @@ export async function GET(req, { params }) {
 
     const isAdminViewer = ["ADMIN", "HR", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
     const isFellowOrOther = !isAdminViewer;
-    if (PROGRAM_ROLES.includes(user.role?.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       if (!(await isPmTeamMember(user, leave.userId))) {
         return NextResponse.json({ error: "Forbidden: You do not have access to this leave request" }, { status: 403 });
       }
@@ -90,7 +90,7 @@ export async function PUT(req, { params }) {
 
     if (!isApprover) {
       if (isReviewRequest) {
-        if (PROGRAM_ROLES.includes(user.role?.name)) {
+        if (isProgramStaffRole(user?.role?.name)) {
           if (isOwner || !(await isPmTeamMember(user, existing.userId))) {
             return NextResponse.json({ error: "Forbidden: You can only approve leaves for your team" }, { status: 403 });
           }
@@ -105,7 +105,7 @@ export async function PUT(req, { params }) {
           );
         }
       } else if (
-        !PROGRAM_ROLES.includes(user.role?.name) ||
+        !isProgramStaffRole(user?.role?.name) ||
         !(await isPmTeamMember(user, existing.userId))
       ) {
         return NextResponse.json({ error: "Forbidden: You cannot edit this leave request" }, { status: 403 });
@@ -416,7 +416,7 @@ export async function DELETE(req, { params }) {
     const isOwner = existing.userId === user.id;
     const isAdmin = ["ADMIN", "EXECUTIVE_DIRECTOR", "SUPER_ADMIN"].includes(user.role?.name);
     let isPmTeam = false;
-    if (PROGRAM_ROLES.includes(user.role?.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       isPmTeam = await isPmTeamMember(user, existing.userId);
     }
     if (!isOwner && !isAdmin && !isPmTeam) {

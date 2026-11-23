@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { PROGRAM_ROLES } from "@/lib/scope";
 
 export const NOTIFICATION_TYPES = {
   LDJC_SUBMITTED: "LDJC_SUBMITTED",
@@ -107,7 +106,6 @@ export async function getProgramStaffForFellow(fellowId) {
     where: {
       id: { in: candidateUserIds },
       status: "ACTIVE",
-      role: { name: { in: PROGRAM_ROLES } },
     },
     select: { id: true },
   });

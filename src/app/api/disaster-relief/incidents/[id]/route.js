@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, context) {
   try {
@@ -40,9 +39,6 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for disaster-relief" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
 
     const { id } = await context.params;
     const body = await req.json();
@@ -107,9 +103,6 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for disaster-relief" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
 
     const { id } = await context.params;
 

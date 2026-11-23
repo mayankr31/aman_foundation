@@ -9,7 +9,6 @@ import { FELLOW_TABS } from "@/lib/fellowTabs";
 import { getHrPageLinks } from "@/lib/hrTabs";
 import { COLLECTION_PAGES } from "@/lib/permissionCatalog";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCollapse }) {
   const pathname = usePathname();
@@ -482,7 +481,7 @@ export default function Sidebar({ isOpen, onClose, collapsed = false, onToggleCo
           )}
 
           {/* Reimbursement Management - Admin/PM */}
-          {can("reimbursement-management") && (user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName)) && (
+          {can("reimbursement-management") && (
             <Link
               href="/reimbursements/manage"
               className={navItemClass(pathname === "/reimbursements/manage")}

@@ -13,6 +13,7 @@ const ROLE_LABELS = {
   PROGRAM_MANAGER: "Program Manager",
   PROGRAM_LEAD: "Program Lead",
   PROGRAM_DIRECTOR: "Program Director",
+  COMMUNITY_RESOURCE_PERSONS_CRP: "Community Resource Persons CRP",
 };
 
 /**
@@ -42,6 +43,40 @@ export function normalizeRoleCode(role) {
     .trim()
     .toUpperCase()
     .replace(/[\s-]+/g, "_");
+}
+
+/**
+ * Roles that see every record once their page permissions allow it.
+ * Every other role is limited to the records assigned to it.
+ */
+export const GLOBAL_ROLE_CODES = ["ADMIN", "HR"];
+
+/** True for the oversight roles that are never assignment-scoped. */
+export function isGlobalRoleName(role) {
+  return GLOBAL_ROLE_CODES.includes(normalizeRoleCode(role));
+}
+
+/**
+ * True for roles whose data access is limited to their assigned schools,
+ * centres and programs. Accepts either a role code or a role object.
+ */
+export function isFieldScopedRoleName(role) {
+  const code = normalizeRoleCode(
+    role && typeof role === "object" ? role.name : role
+  );
+  return Boolean(code) && !GLOBAL_ROLE_CODES.includes(code);
+}
+
+/**
+ * True for field staff who are assigned through the program-manager lists.
+ * Fellows are scoped through their fellowship assignments instead, so they are
+ * deliberately excluded here.
+ */
+export function isProgramStaffRole(role) {
+  const code = normalizeRoleCode(
+    role && typeof role === "object" ? role.name : role
+  );
+  return Boolean(code) && code !== "FELLOW" && !GLOBAL_ROLE_CODES.includes(code);
 }
 
 /** Turns a role object or stored role code into its display label. */

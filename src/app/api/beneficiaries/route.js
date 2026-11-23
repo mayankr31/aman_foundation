@@ -26,8 +26,8 @@ import {
   normalizeBankAccountForSave,
   normalizeIfscForSave,
 } from "@/lib/validation";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 // Resilience Index = average of the latest Adaptive, Absorptive and
 // Transformative capacity scores. Returns null until all three exist.
@@ -65,7 +65,7 @@ export async function GET(req) {
         mode: "insensitive"
       };
     }
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       where.livelihoodDetails = {
         some: { program: { programManagers: { some: { userId: user.id } } } },
       };

@@ -17,8 +17,8 @@ import {
   normalizeAadhaarForSave,
 } from "@/lib/validation";
 import { composeProfileAddress } from "@/lib/profileCompleteness";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveStudentId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -77,7 +77,7 @@ export async function GET(req, context) {
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
       }
-    } else if (PROGRAM_ROLES.includes(user.role.name)) {
+    } else if (isProgramStaffRole(user?.role?.name)) {
       const ok = await canPmAccess(studentId, user.id);
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
@@ -158,7 +158,7 @@ export async function PATCH(req, context) {
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
       }
-    } else if (PROGRAM_ROLES.includes(user.role.name)) {
+    } else if (isProgramStaffRole(user?.role?.name)) {
       const ok = await canPmAccess(studentId, user.id);
       if (!ok) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this student's centre" }, { status: 403 });
@@ -221,7 +221,7 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: validationMessage }, { status: 400 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && body.centreId) {
+    if (isProgramStaffRole(user?.role?.name) && body.centreId) {
       const managed = await getManagedCentreIds(user.id);
       if (!managed.includes(body.centreId)) {
         return NextResponse.json({ error: "Forbidden: You can only move students within your assigned centres" }, { status: 403 });

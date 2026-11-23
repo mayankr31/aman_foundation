@@ -6,8 +6,8 @@ import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import crypto from "crypto";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "livelihood-events");
 
@@ -45,7 +45,7 @@ export async function GET(req) {
     const where = {};
     if (livelihoodId) where.livelihoodId = livelihoodId;
     if (eventType) where.eventType = eventType;
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       where.livelihood = { program: { programManagers: { some: { userId: user.id } } } };
     }
 
@@ -79,13 +79,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      !PROGRAM_ROLES.includes(user.role.name) &&
-      user.role.name !== "FELLOW"
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const formData = await req.formData();
     const livelihoodId = formData.get("livelihoodId");
@@ -114,7 +107,7 @@ export async function POST(req) {
     }
 
     if (
-      PROGRAM_ROLES.includes(user.role.name) &&
+      isProgramStaffRole(user?.role?.name) &&
       !(await isLivelihoodProgramManaged(user.id, assignment.programId))
     ) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this program" }, { status: 403 });

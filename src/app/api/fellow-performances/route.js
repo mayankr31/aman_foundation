@@ -5,8 +5,8 @@ import { getManagedFellowIds, isFellowManaged } from "@/lib/scope";
 import { computeOverallScore } from "@/data/fellowPerformanceConstants";
 import { getActiveRatingCategories, isValidRating } from "@/lib/performanceCategories";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const LEGACY_RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
 
@@ -19,15 +19,9 @@ export async function GET(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json(
-        { error: "Forbidden: Admin or Program Manager access only" },
-        { status: 403 }
-      );
-    }
 
     let where = {};
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       const fellowIds = await getManagedFellowIds(user.id);
       where = { fellowId: { in: fellowIds } };
     }
@@ -59,12 +53,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json(
-        { error: "Forbidden: Only managers can create fellow performance records" },
-        { status: 403 }
-      );
-    }
 
     const body = await req.json();
     const {
@@ -101,7 +89,7 @@ export async function POST(req) {
       legacyRatings[key] = ratings[key] ?? null;
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, fellowId))) {
       return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
     }
 

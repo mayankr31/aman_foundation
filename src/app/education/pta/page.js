@@ -8,13 +8,13 @@ import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function PtaPrograms() {
   const { token, user } = useAuth();
   const isAdmin = user?.roleName === "ADMIN";
-  const canManageEvents = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
+  const canManageEvents = user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName);
   const [showAddModal, setShowAddModal] = useState(false);
   const [modalType, setModalType] = useState("Program"); // "Program" or "Event"
 

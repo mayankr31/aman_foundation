@@ -9,7 +9,6 @@ import {
 } from "@/lib/notifications";
 import { checkPermission } from "@/lib/permissions";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -80,12 +79,6 @@ export async function PATCH(req, context) {
 
     // Manager review action — admin/program_manager writes Q6, Q7, Q12, Q13
     if (action === "review") {
-      if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-        return NextResponse.json(
-          { error: "Forbidden: Only managers can write reviews" },
-          { status: 403 }
-        );
-      }
 
       const updated = await prisma.goalSheet.update({
         where: { id: ldjcId },

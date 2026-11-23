@@ -4,8 +4,8 @@ import { authenticateUser } from "@/lib/auth";
 import { isAdminOrPm, isFellowManaged } from "@/lib/scope";
 import { notifyUsers, getFellowUserId, NOTIFICATION_TYPES } from "@/lib/notifications";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function resolveFellowId(id) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -43,7 +43,7 @@ export async function GET(req, context) {
         return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
       }
 
-      if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
+      if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, fellowId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
       }
     }
@@ -84,7 +84,7 @@ export async function POST(req, context) {
       return NextResponse.json({ error: "Fellow not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, fellowId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, fellowId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this fellow" }, { status: 403 });
     }
 

@@ -5,8 +5,8 @@ import { isFellowManaged } from "@/lib/scope";
 import { computeOverallScore } from "@/data/fellowPerformanceConstants";
 import { getActiveRatingCategories, isValidRating } from "@/lib/performanceCategories";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const LEGACY_RATING_KEYS = ["lessonPlan", "culture", "lessonFlow", "content", "communityEngagement"];
 
@@ -36,7 +36,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Fellow performance record not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, performance.fellowId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, performance.fellowId))) {
       return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
     }
 
@@ -56,12 +56,6 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json(
-        { error: "Forbidden: Only managers can edit fellow performance records" },
-        { status: 403 }
-      );
-    }
 
     const { id } = await context.params;
     const existing = await findPerformance(id);
@@ -69,7 +63,7 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Fellow performance record not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, existing.fellowId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, existing.fellowId))) {
       return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
     }
 
@@ -77,7 +71,7 @@ export async function PATCH(req, context) {
     const updateData = {};
 
     if (body.fellowId) {
-      if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, body.fellowId))) {
+      if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, body.fellowId))) {
         return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
       }
       updateData.fellowId = body.fellowId;
@@ -154,12 +148,6 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for fellow-observations" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json(
-        { error: "Forbidden: Only managers can delete fellow performance records" },
-        { status: 403 }
-      );
-    }
 
     const { id } = await context.params;
     const existing = await findPerformance(id);
@@ -167,7 +155,7 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Fellow performance record not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isFellowManaged(user.id, existing.fellowId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isFellowManaged(user.id, existing.fellowId))) {
       return NextResponse.json({ error: "Forbidden: Fellow not in your scope" }, { status: 403 });
     }
 

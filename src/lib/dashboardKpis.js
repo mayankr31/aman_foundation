@@ -5,8 +5,7 @@ import {
   getManagedLivelihoodProgramIds,
   getManagedFellowIds,
 } from "@/lib/scope";
-
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
+import { isProgramStaffRole } from "@/lib/roles";
 
 const EMPTY_KPIS = {
   students: 0,
@@ -150,7 +149,7 @@ export async function getDashboardKpis(user) {
   if (role === "ADMIN") {
     return { role, kpis: await getAdminKpis() };
   }
-  if (PROGRAM_ROLES.includes(role)) {
+  if (isProgramStaffRole(role)) {
     return { role, kpis: await getProgramManagerKpis(user) };
   }
   if (role === "FELLOW") {

@@ -17,8 +17,8 @@ import {
   MATRIX_CELLS,
   MATRIX_COLORS,
 } from "@/data/pmReflectionConstants";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const LEVEL_STYLES = {
   Novice: "bg-red-100 text-red-700",
@@ -61,7 +61,7 @@ export default function FellowPmReflectionPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [exporting, setExporting] = useState(false);
 
-  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
+  const canManage = user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName);
 
   const filteredRows = rows.filter((row) => {
     if (!searchQuery.trim()) return true;

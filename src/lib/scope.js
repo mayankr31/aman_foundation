@@ -1,35 +1,31 @@
 import { prisma } from "@/lib/prisma";
-
-// Roles that share Program Manager scope/behaviour for now.
-export const PROGRAM_ROLES = [
-  "PROGRAM_MANAGER",
-  "ACCOUNTANT",
-  "PROGRAM_COORDINATOR",
-  "FIELD_EXECUTIVE",
-  "PROGRAM_DIRECTOR",
-  "PROGRAM_LEAD",
-  "CLASS_ASSISTANT",
-];
+import { isFieldScopedRoleName, isProgramStaffRole } from "@/lib/roles";
 
 export function isAdmin(user) {
   return user?.role?.name === "ADMIN";
 }
 
+/** True when the user is field staff scoped to their program assignments. */
+export function isProgramStaff(user) {
+  return isProgramStaffRole(user?.role?.name);
+}
+
+/** Backwards-compatible alias for the old PROGRAM_MANAGER-only check. */
 export function isProgramManager(user) {
-  return PROGRAM_ROLES.includes(user?.role?.name);
+  return isProgramStaff(user);
 }
 
 export function isAdminOrPm(user) {
-  return isAdmin(user) || isProgramManager(user);
+  return isAdmin(user) || isProgramStaff(user);
 }
 
 /**
- * Roles whose data access is limited to the schools/centres they are assigned
- * to. Every other role is unrestricted once it has the relevant page
- * permission; permissions are resolved by the caller.
+ * Roles whose data access is limited to the schools/centres/programs they are
+ * assigned to. Only ADMIN and HR see everything; every other role, including
+ * admin-created roles, is assignment-scoped.
  */
 export function isFieldScopedRole(user) {
-  return user?.role?.name === "FELLOW" || isProgramManager(user);
+  return isFieldScopedRoleName(user?.role?.name);
 }
 
 /** True when the user may act on the school (ADMIN, unrestricted role, or assigned). */

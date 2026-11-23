@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
 import { canAccessAfterSchoolStudent } from "@/lib/scope";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 function canManageTemplates(user) {
-  return user.role.name === "ADMIN" || PROGRAM_ROLES.includes(user.role.name);
+  return user.role.name === "ADMIN" || isProgramStaffRole(user?.role?.name);
 }
 
 export async function GET(req, context) {

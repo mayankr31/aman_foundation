@@ -11,8 +11,8 @@ import {
   normalizeEmailForSave,
   normalizeMobileForSave,
 } from "@/lib/validation";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const toOptionalInt = (value) => {
   if (value === undefined) return undefined;
@@ -59,7 +59,7 @@ export async function GET(req, context) {
       }
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       const isManaged = await prisma.programManagerAfterSchoolCentre.findFirst({
         where: { centreId, userId: user.id }
       });

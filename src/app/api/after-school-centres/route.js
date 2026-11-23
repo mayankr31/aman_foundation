@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { checkPermission } from "@/lib/permissions";
-import { getFellowIdByUserId, isProgramManager } from "@/lib/scope";
+import { getFellowIdByUserId, isProgramManager, getManagedCentreIds } from "@/lib/scope";
 import {
   validateEmail,
   validateMobile,
@@ -31,6 +31,9 @@ export async function GET(req) {
           fellow: { userId: user.id }
         }
       };
+    } else if (isProgramManager(user)) {
+      const managedCentreIds = await getManagedCentreIds(user.id);
+      where.id = { in: managedCentreIds };
     }
 
     const centres = await prisma.afterSchoolCentre.findMany({

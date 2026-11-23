@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isEducationProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 async function canPmManageEvent(userId, programId) {
   if (!programId) return false;
@@ -22,7 +22,7 @@ export async function GET(req, context) {
 
     const { id } = await context.params;
 
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       const ev = await prisma.programEvent.findUnique({ where: { id }, select: { programId: true } });
       if (!ev || !(await canPmManageEvent(user.id, ev.programId))) {
         return NextResponse.json({ error: "Forbidden: You are not assigned to this event's program" }, { status: 403 });
@@ -60,9 +60,6 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
 
     const { id } = await context.params;
     const body = await req.json();
@@ -72,7 +69,7 @@ export async function PATCH(req, context) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await canPmManageEvent(user.id, existing.programId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await canPmManageEvent(user.id, existing.programId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this event's program" }, { status: 403 });
     }
 
@@ -110,9 +107,6 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    if (user.role.name !== "ADMIN" && !PROGRAM_ROLES.includes(user.role.name)) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
-    }
 
     const { id } = await context.params;
     const existing = await prisma.programEvent.findUnique({ where: { id } });
@@ -120,7 +114,7 @@ export async function DELETE(req, context) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await canPmManageEvent(user.id, existing.programId))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await canPmManageEvent(user.id, existing.programId))) {
       return NextResponse.json({ error: "Forbidden: You are not assigned to this event's program" }, { status: 403 });
     }
 

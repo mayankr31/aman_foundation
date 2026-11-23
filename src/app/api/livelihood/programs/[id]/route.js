@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { isAdmin, isLivelihoodProgramManaged, getFellowIdByUserId, isLivelihoodProgramAssignedToFellow } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req, { params }) {
   try {
@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
     const { id } = await params;
 
     let allowed = isAdmin(user);
-    if (!allowed && PROGRAM_ROLES.includes(user.role.name)) {
+    if (!allowed && isProgramStaffRole(user?.role?.name)) {
       allowed = await isLivelihoodProgramManaged(user.id, id);
     }
     if (!allowed && user.role.name === "FELLOW") {
@@ -92,17 +92,10 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      !PROGRAM_ROLES.includes(user.role.name) &&
-      user.role.name !== "FELLOW"
-    ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
 
     const { id } = await params;
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
       return NextResponse.json(
         { error: "Forbidden: You are not assigned to this program" },
         { status: 403 }
@@ -154,19 +147,10 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for livelihood" }, { status: 403 });
     }
 
-    if (
-      user.role.name !== "ADMIN" &&
-      !PROGRAM_ROLES.includes(user.role.name)
-    ) {
-      return NextResponse.json(
-        { error: "Forbidden: Admin or Program Manager access only" },
-        { status: 403 }
-      );
-    }
 
     const { id } = await params;
 
-    if (PROGRAM_ROLES.includes(user.role.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
+    if (isProgramStaffRole(user?.role?.name) && !(await isLivelihoodProgramManaged(user.id, id))) {
       return NextResponse.json(
         { error: "Forbidden: You are not assigned to this program" },
         { status: 403 }

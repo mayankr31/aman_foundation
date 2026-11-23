@@ -11,8 +11,8 @@ import Pagination from "@/components/ui/Pagination";
 import DateInput from "@/components/ui/DateInput";
 import usePagination from "@/lib/usePagination";
 import { formatDate } from "@/lib/date";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export default function FellowPerformancePage() {
   const { token, user, isInitializing, canDeleteRecords } = useAuth();
@@ -34,7 +34,7 @@ export default function FellowPerformancePage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [exporting, setExporting] = useState(false);
 
-  const canManage = user?.roleName === "ADMIN" || PROGRAM_ROLES.includes(user?.roleName);
+  const canManage = user?.roleName === "ADMIN" || isProgramStaffRole(user?.roleName);
 
   useEffect(() => {
     if (user && !canManage) {

@@ -3,8 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { authenticateUser } from "@/lib/auth";
 import { getManagedEducationProgramIds, isEducationProgramManaged } from "@/lib/scope";
 import { checkPermission } from "@/lib/permissions";
+import { isProgramStaffRole } from "@/lib/roles";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 export async function GET(req) {
   try {
@@ -16,7 +16,7 @@ export async function GET(req) {
     }
 
     let where;
-    if (PROGRAM_ROLES.includes(user.role.name)) {
+    if (isProgramStaffRole(user?.role?.name)) {
       const managedProgramIds = await getManagedEducationProgramIds(user.id);
       where = { programId: { in: managedProgramIds } };
     }
@@ -45,10 +45,9 @@ export async function POST(req) {
       return NextResponse.json({ error: "Forbidden: Insufficient permissions for education" }, { status: 403 });
     }
 
-    const isAdmin = user.role.name === "ADMIN";
-    const isPm = PROGRAM_ROLES.includes(user.role.name);
-    if (!isAdmin && !isPm) {
-      return NextResponse.json({ error: "Forbidden: Admin or Program Manager access only" }, { status: 403 });
+    const isPm = isProgramStaffRole(user?.role?.name);
+    if (user.role.name === "FELLOW") {
+      return NextResponse.json({ error: "Forbidden: Fellows cannot create program events" }, { status: 403 });
     }
 
     const body = await req.json();

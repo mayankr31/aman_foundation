@@ -27,11 +27,10 @@ import FilePreviewImage from "@/components/files/FilePreviewImage";
 import Avatar from "@/components/ui/Avatar";
 import { exportEngagementSurveyPdf, exportPostFellowshipSurveyPdf } from "@/lib/surveyExport";
 import { useSurveyTemplate } from "@/lib/useSurveyTemplate";
-import { formatRoleLabel } from "@/lib/roles";
+import { formatRoleLabel, isProgramStaffRole } from "@/lib/roles";
 import { getMissingProfileFields } from "@/lib/profileCompleteness";
 import dynamic from "next/dynamic";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
 
 const PDFViewerModal = dynamic(() => import("@/components/PDFViewerModal"), { ssr: false });
 
@@ -429,8 +428,8 @@ function ProfilePageContent() {
   const managedPrograms = (profile.managedLivelihoodPrograms || []).map((m) => m.program);
   const canEditAssignments = isFellow
     ? currentUser?.roleName === "ADMIN" ||
-      (PROGRAM_ROLES.includes(currentUser?.roleName) && can("education-fellows", "WRITE"))
-    : currentUser?.roleName === "ADMIN" && PROGRAM_ROLES.includes(profile.role?.name);
+      (isProgramStaffRole(currentUser?.roleName) && can("education-fellows", "WRITE"))
+    : currentUser?.roleName === "ADMIN" && isProgramStaffRole(profile?.role?.name);
   const personalDob = profile.fellow?.dob || profile.dob;
   const personalGender = profile.fellow?.gender || profile.gender;
   const personalAddress = profile.fellow?.address || profile.address;

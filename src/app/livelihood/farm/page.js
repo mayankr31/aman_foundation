@@ -9,10 +9,8 @@ import EditProgramModal from "@/components/EditProgramModal";
 import Pagination from "@/components/ui/Pagination";
 import usePagination from "@/lib/usePagination";
 
-const PROGRAM_ROLES = ["PROGRAM_MANAGER", "ACCOUNTANT", "PROGRAM_COORDINATOR", "FIELD_EXECUTIVE", "PROGRAM_DIRECTOR", "PROGRAM_LEAD", "CLASS_ASSISTANT"];
-
 export default function FarmPrograms() {
-  const { token, canDeleteRecords, user } = useAuth();
+  const { token, canDeleteRecords, can } = useAuth();
   const { getTypeConfig, getTypesByCategory, refresh: refreshTypes } = useLivelihoodTypes(token);
   const [programs, setPrograms] = useState([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -34,7 +32,7 @@ export default function FarmPrograms() {
   // Edit program
   const [editProgram, setEditProgram] = useState(null);
 
-  const canEditPrograms = canDeleteRecords || PROGRAM_ROLES.includes(user?.roleName);
+  const canEditPrograms = canDeleteRecords || can("livelihood-farm", "WRITE");
 
   const farmTypes = getTypesByCategory("FARM");
 
